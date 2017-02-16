@@ -14,8 +14,7 @@ items:
   nameWithType: SerializerProvider
   fullName: System.Windows.Documents.Serialization.SerializerProvider
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Manages serialization plug-ins created, using  and , by manufacturers who have their own proprietary serialization formats.
   syntax:
     content: public sealed class SerializerProvider
   inheritance:
@@ -38,12 +37,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: Only fully trusted callers can create a <xref:System.Windows.Documents.Serialization.SerializerProvider>.
+  example:
+  - "The following examples show use of the <xref:System.Windows.Documents.Serialization.SerializerProvider> constructor.  \n  \n [!code-cs[DocumentSerialize#DocSerializeFileFilter](../../add/codesnippet/CSharp/DocumentSerialize/ThumbViewer.cs#docserializefilefilter)]  \n  \n [!code-cs[DocumentSerialize#DocSerializePlugIn](../../add/codesnippet/CSharp/DocumentSerialize/ThumbViewer.cs#docserializeplugin)]"
   syntax:
     content: public SerializerProvider ();
     parameters: []
   overload: System.Windows.Documents.Serialization.SerializerProvider.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -60,21 +62,30 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes an object derived from the abstract  class for the specified <xref:System.IO.Stream> that will use the specified descriptor.
+  remarks: Only fully trusted applications can call CreateSerializerWriter.
+  example:
+  - "The following example shows using CreateSerializerWriter to return a plug-in serialization writer for saving a file.  \n  \n [!code-cs[DocumentSerialize#DocSerializePlugIn](../../add/codesnippet/CSharp/DocumentSerialize/ThumbViewer.cs#docserializeplugin)]"
   syntax:
     content: public System.Windows.Documents.Serialization.SerializerWriter CreateSerializerWriter (System.Windows.Documents.Serialization.SerializerDescriptor serializerDescriptor, System.IO.Stream stream);
     parameters:
     - id: serializerDescriptor
       type: System.Windows.Documents.Serialization.SerializerDescriptor
-      description: To be added.
+      description: A  that contains serialization information for the .
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: The <xref:System.IO.Stream> to which the returned object writes.
     return:
       type: System.Windows.Documents.Serialization.SerializerWriter
-      description: To be added.
+      description: An object of a class derived from .
   overload: System.Windows.Documents.Serialization.SerializerProvider.CreateSerializerWriter*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: One of the parameters is null.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The serializerDescriptor is specifying the wrong version.  \n  \n -or-  \n  \n It is not registered.  \n  \n -or-  \n  \n The assembly file cannot be found.  \n  \n -or-  \n  \n The assembly cannot be loaded."
   platform:
   - net-11
   - net-20
@@ -91,14 +102,17 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of the installed plug-in serializers.
+  remarks: ''
+  example:
+  - "The following examples show using InstalledSerializers to enumerate the plug-in serializers when saving a file.  \n  \n [!code-cs[DocumentSerialize#DocSerializePlugIn](../../add/codesnippet/CSharp/DocumentSerialize/ThumbViewer.cs#docserializeplugin)]  \n  \n [!code-cs[DocumentSerialize#DocSerializeFileFilter](../../add/codesnippet/CSharp/DocumentSerialize/ThumbViewer.cs#docserializefilefilter)]"
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.Windows.Documents.Serialization.SerializerDescriptor> InstalledSerializers { get; }
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Windows.Documents.Serialization.SerializerDescriptor}
-      description: To be added.
+      description: A <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> of the  objects already registered.
   overload: System.Windows.Documents.Serialization.SerializerProvider.InstalledSerializers*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -115,18 +129,25 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a serializer plug-in.
+  remarks: "Only fully trusted callers can use this method.  \n  \n The method will interpret an already registered plug-in as the same one if it is the same in all these properties: <xref:System.Windows.Documents.Serialization.SerializerDescriptor.DisplayName%2A>, <xref:System.Windows.Documents.Serialization.SerializerDescriptor.AssemblyName%2A>, <xref:System.Windows.Documents.Serialization.SerializerDescriptor.AssemblyVersion%2A>, and <xref:System.Windows.Documents.Serialization.SerializerDescriptor.WinFXVersion%2A>."
   syntax:
     content: public static void RegisterSerializer (System.Windows.Documents.Serialization.SerializerDescriptor serializerDescriptor, bool overwrite);
     parameters:
     - id: serializerDescriptor
       type: System.Windows.Documents.Serialization.SerializerDescriptor
-      description: To be added.
+      description: The  for the plug-in.
     - id: overwrite
       type: System.Boolean
-      description: To be added.
+      description: "\n     to overwrite an existing registration for the same plug-in; otherwise, . See Remarks."
   overload: System.Windows.Documents.Serialization.SerializerProvider.RegisterSerializer*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    serializerDescriptor is null."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    overwrite is  and the plug-in is already registered."
   platform:
   - net-11
   - net-20
@@ -143,15 +164,22 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Deletes a serializer plug-in from the registry.
+  remarks: "Only fully trusted callers can use this method.  \n  \n The method will interpret a registered plug-in as the same one passed to this method only if it is the same in all these properties: <xref:System.Windows.Documents.Serialization.SerializerDescriptor.DisplayName%2A>, <xref:System.Windows.Documents.Serialization.SerializerDescriptor.AssemblyName%2A>, <xref:System.Windows.Documents.Serialization.SerializerDescriptor.AssemblyVersion%2A>, and <xref:System.Windows.Documents.Serialization.SerializerDescriptor.WinFXVersion%2A>."
   syntax:
     content: public static void UnregisterSerializer (System.Windows.Documents.Serialization.SerializerDescriptor serializerDescriptor);
     parameters:
     - id: serializerDescriptor
       type: System.Windows.Documents.Serialization.SerializerDescriptor
-      description: To be added.
+      description: The  for the plug-in.
   overload: System.Windows.Documents.Serialization.SerializerProvider.UnregisterSerializer*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    serializerDescriptor is null."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The plug-in is not registered. See **Remarks**.
   platform:
   - net-11
   - net-20
@@ -202,18 +230,27 @@ references:
   name: ReadOnlyCollection<SerializerDescriptor>
   nameWithType: ReadOnlyCollection<SerializerDescriptor>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Windows.Documents.Serialization.SerializerDescriptor>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.Windows.Documents.Serialization.SerializerDescriptor>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Windows.Documents.Serialization.SerializerDescriptor
+    name: SerializerDescriptor
+    nameWithType: SerializerDescriptor
+    fullName: SerializerDescriptor
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Documents.Serialization.SerializerProvider.RegisterSerializer(System.Windows.Documents.Serialization.SerializerDescriptor,System.Boolean)
   parent: System.Windows.Documents.Serialization.SerializerProvider
   isExternal: false
   name: RegisterSerializer(SerializerDescriptor,Boolean)
   nameWithType: SerializerProvider.RegisterSerializer(SerializerDescriptor,Boolean)
   fullName: System.Windows.Documents.Serialization.SerializerProvider.RegisterSerializer(SerializerDescriptor,Boolean)
-- uid: System.Windows.Documents.Serialization.SerializerDescriptor
-  parent: System.Windows.Documents.Serialization
-  isExternal: false
-  name: SerializerDescriptor
-  nameWithType: SerializerDescriptor
-  fullName: System.Windows.Documents.Serialization.SerializerDescriptor
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -226,12 +263,6 @@ references:
   name: UnregisterSerializer(SerializerDescriptor)
   nameWithType: SerializerProvider.UnregisterSerializer(SerializerDescriptor)
   fullName: System.Windows.Documents.Serialization.SerializerProvider.UnregisterSerializer(SerializerDescriptor)
-- uid: System.Windows.Documents.Serialization.SerializerDescriptor
-  parent: System.Windows.Documents.Serialization
-  isExternal: false
-  name: SerializerDescriptor
-  nameWithType: SerializerDescriptor
-  fullName: System.Windows.Documents.Serialization.SerializerDescriptor
 - uid: System.Windows.Documents.Serialization.SerializerProvider.#ctor*
   parent: System.Windows.Documents.Serialization.SerializerProvider
   isExternal: false

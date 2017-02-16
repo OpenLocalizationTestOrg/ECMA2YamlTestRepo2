@@ -16,8 +16,10 @@ items:
   nameWithType: Binder
   fullName: System.Reflection.Binder
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Selects a member from a list of candidates, and performs type conversion from actual argument type to formal argument type.
+  remarks: "Implementations of the Binder class are used by methods such as <xref:System.Type.InvokeMember%2A?displayProperty=fullName>, which selects from a set of possible members to execute, based on a set of parameter types and argument values; <xref:System.Type.GetMethod%2A?displayProperty=fullName>, which selects a method based on parameter types; and so on.  \n  \n A default implementation of the Binder class is provided by the <xref:System.Type.DefaultBinder%2A?displayProperty=fullName> property."
+  example:
+  - "The following example implements and demonstrates all members of the `Binder` class. The private method `CanConvertFrom` finds compatible types for a given type.  \n  \n [!code-cpp[Binder_1#1](../../add/codesnippet/CPP/t-system.reflection.binder_1.cpp)]\n [!code-vb[Binder_1#1](../../add/codesnippet/VisualBasic/t-system.reflection.binder_1.vb)]\n [!code-cs[Binder_1#1](../../add/codesnippet/CSharp/t-system.reflection.binder_1.cs)]"
   syntax:
     content: >-
       [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDual)]
@@ -45,12 +47,13 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: This constructor is called by the constructors of derived classes, to initialize state in this type.
   syntax:
     content: protected Binder ();
     parameters: []
   overload: System.Reflection.Binder.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -67,27 +70,37 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Selects a field from the given set of fields, based on the specified criteria.
+  remarks: "If `bindingAttr` does not include <xref:System.Reflection.BindingFlags?displayProperty=fullName>, the default binder implementation provided by <xref:System.Type.DefaultBinder%2A?displayProperty=fullName> simply returns the first element of `match`. No selection is done.  \n  \n This method controls the binding provided by <xref:System.Type.InvokeMember%2A?displayProperty=fullName>."
   syntax:
     content: public abstract System.Reflection.FieldInfo BindToField (System.Reflection.BindingFlags bindingAttr, System.Reflection.FieldInfo[] match, object value, System.Globalization.CultureInfo culture);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitwise combination of  values.
     - id: match
       type: System.Reflection.FieldInfo[]
-      description: To be added.
+      description: The set of fields that are candidates for matching. For example, when a  object is used by <xref:System.Type.InvokeMember%2A?displayProperty=fullName>, this parameter specifies the set of fields that reflection has determined to be possible matches, typically because they have the correct member name. The default implementation provided by <xref:System.Type.DefaultBinder%2A?displayProperty=fullName> changes the order of this array.
     - id: value
       type: System.Object
-      description: To be added.
+      description: The field value used to locate a matching field.
     - id: culture
       type: System.Globalization.CultureInfo
-      description: To be added.
+      description: "An instance of <xref:System.Globalization.CultureInfo> that is used to control the coercion of data types, in binder implementations that coerce types. If `culture` is , the <xref:System.Globalization.CultureInfo> for the current thread is used.  \n  \n Note   For example, if a binder implementation allows coercion of string values to numeric types, this parameter is necessary to convert a  that represents 1000 to a  value, because 1000 is represented differently by different cultures. The default binder does not do such string coercions."
     return:
       type: System.Reflection.FieldInfo
-      description: To be added.
+      description: The matching field.
   overload: System.Reflection.Binder.BindToField*
+  exceptions:
+  - type: System.Reflection.AmbiguousMatchException
+    commentId: T:System.Reflection.AmbiguousMatchException
+    description: For the default binder, bindingAttr includes , and match contains multiple fields that are equally good matches for value. For example, value contains a `MyClass` object that implements the `IMyClass` interface, and match contains a field of type `MyClass` and a field of type `IMyClass`.
+  - type: System.MissingFieldException
+    commentId: T:System.MissingFieldException
+    description: For the default binder, bindingAttr includes , and match contains no fields that can accept value.
+  - type: System.NullReferenceException
+    commentId: T:System.NullReferenceException
+    description: "For the default binder, bindingAttr includes , and match is  or an empty array.  \n  \n -or-  \n  \n bindingAttr includes , and value is ."
   platform:
   - net-11
   - net-20
@@ -104,36 +117,46 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Selects a method to invoke from the given set of methods, based on the supplied arguments.
+  remarks: "The default binder takes into account both parameters that have values and `params` arrays (`ParamArray` arrays in Visual Basic). Thus, it is possible to find a match in cases where `args` and `match` do not contain the same number of elements.  \n  \n The binder enables a client to map the array of arguments back to its original form if the argument array has been manipulated by BindToMethod. Use this remap capability to get back by-reference arguments when such arguments are present. When you pass arguments by name, the binder reorders the argument array. The `state` parameter keeps track of argument reordering, thus enabling the binder's <xref:System.Reflection.Binder.ReorderArgumentArray%2A> method to reorder the argument array to its original form.  \n  \n The BindToMethod method is used by the <xref:System.Type.InvokeMember%2A?displayProperty=fullName> method."
   syntax:
     content: public abstract System.Reflection.MethodBase BindToMethod (System.Reflection.BindingFlags bindingAttr, System.Reflection.MethodBase[] match, ref object[] args, System.Reflection.ParameterModifier[] modifiers, System.Globalization.CultureInfo culture, string[] names, out object state);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitwise combination of  values.
     - id: match
       type: System.Reflection.MethodBase[]
-      description: To be added.
+      description: The set of methods that are candidates for matching. For example, when a  object is used by <xref:System.Type.InvokeMember%2A?displayProperty=fullName>, this parameter specifies the set of methods that reflection has determined to be possible matches, typically because they have the correct member name. The default implementation provided by <xref:System.Type.DefaultBinder%2A?displayProperty=fullName> changes the order of this array.
     - id: args
       type: System.Object[]
-      description: To be added.
+      description: The arguments that are passed in. The binder can change the order of the arguments in this array; for example, the default binder changes the order of arguments if the `names` parameter is used to specify an order other than positional order. If a binder implementation coerces argument types, the types and values of the arguments can be changed as well.
     - id: modifiers
       type: System.Reflection.ParameterModifier[]
-      description: To be added.
+      description: An array of parameter modifiers that enable binding to work with parameter signatures in which the types have been modified. The default binder implementation does not use this parameter.
     - id: culture
       type: System.Globalization.CultureInfo
-      description: To be added.
+      description: "An instance of <xref:System.Globalization.CultureInfo> that is used to control the coercion of data types, in binder implementations that coerce types. If `culture` is , the <xref:System.Globalization.CultureInfo> for the current thread is used.  \n  \n Note   For example, if a binder implementation allows coercion of string values to numeric types, this parameter is necessary to convert a  that represents 1000 to a  value, because 1000 is represented differently by different cultures. The default binder does not do such string coercions."
     - id: names
       type: System.String[]
-      description: To be added.
+      description: The parameter names, if parameter names are to be considered when matching, or  if arguments are to be treated as purely positional. For example, parameter names must be used if arguments are not supplied in positional order.
     - id: state
       type: System.Object
-      description: To be added.
+      description: After the method returns, `state` contains a binder-provided object that keeps track of argument reordering. The binder creates this object, and the binder is the sole consumer of this object. If `state` is not  when  returns, you must pass `state` to the <xref:System.Reflection.Binder.ReorderArgumentArray%2A> method if you want to restore `args` to its original order, for example, so that you can retrieve the values of  parameters ( parameters in Visual Basic).
     return:
       type: System.Reflection.MethodBase
-      description: To be added.
+      description: The matching method.
   overload: System.Reflection.Binder.BindToMethod*
+  exceptions:
+  - type: System.Reflection.AmbiguousMatchException
+    commentId: T:System.Reflection.AmbiguousMatchException
+    description: For the default binder, match contains multiple methods that are equally good matches for args. For example, args contains a `MyClass` object that implements the `IMyClass` interface, and match contains a method that takes `MyClass` and a method that takes `IMyClass`.
+  - type: System.MissingMethodException
+    commentId: T:System.MissingMethodException
+    description: For the default binder, match contains no methods that can accept the arguments supplied in args.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: For the default binder, match is  or an empty array.
   platform:
   - net-11
   - net-20
@@ -150,24 +173,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Changes the type of the given  to the given .
+  remarks: "Reflection models the accessibility rules of the common type system. For example, if the caller is in the same assembly, the caller does not need special permissions for internal members. Otherwise, the caller needs <xref:System.Security.Permissions.ReflectionPermission>. This is consistent with lookup of members that are protected, private, and so on.  \n  \n The general principle is that `ChangeType` should perform only widening coercions, which never lose data. An example of a widening coercion is coercing a value that is a 32-bit signed integer to a value that is a 64-bit signed integer. This is distinguished from a narrowing coercion, which may lose data. An example of a narrowing coercion is coercing a 64-bit signed integer to a 32-bit signed integer.  \n  \n The following table lists the coercions performed by the default `ChangeType`.  \n  \n|Source type|Target type|  \n|-----------------|-----------------|  \n|Any type|Its base type.|  \n|Any type|The interface it implements.|  \n|Char|UInt16, UInt32, Int32, UInt64, Int64, Single, Double|  \n|Byte|Char, UInt16, Int16, UInt32, Int32, UInt64, Int64, Single, Double|  \n|SByte|Int16, Int32, Int64, Single, Double|  \n|UInt16|UInt32, Int32, UInt64, Int64, Single, Double|  \n|Int16|Int32, Int64, Single, Double|  \n|UInt32|UInt64, Int64, Single, Double|  \n|Int32|Int64, Single, Double|  \n|UInt64|Single, Double|  \n|Int64|Single, Double|  \n|Single|Double|  \n|Non-reference|By-reference.|"
   syntax:
     content: public abstract object ChangeType (object value, Type type, System.Globalization.CultureInfo culture);
     parameters:
     - id: value
       type: System.Object
-      description: To be added.
+      description: The object to change into a new .
     - id: type
       type: System.Type
-      description: To be added.
+      description: The new  that `value` will become.
     - id: culture
       type: System.Globalization.CultureInfo
-      description: To be added.
+      description: "An instance of <xref:System.Globalization.CultureInfo> that is used to control the coercion of data types. If `culture` is , the <xref:System.Globalization.CultureInfo> for the current thread is used.  \n  \n Note   For example, this parameter is necessary to convert a  that represents 1000 to a  value, because 1000 is represented differently by different cultures."
     return:
       type: System.Object
-      description: To be added.
+      description: An object that contains the given value as the new type.
   overload: System.Reflection.Binder.ChangeType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -184,18 +208,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Upon returning from <xref:System.Reflection.Binder.BindToMethod%2A>, restores the args argument to what it was when it came from .
+  remarks: The common language runtime calls this method if `state` is not `null` after a return from `BindToMethod`.
   syntax:
     content: public abstract void ReorderArgumentArray (ref object[] args, object state);
     parameters:
     - id: args
       type: System.Object[]
-      description: To be added.
+      description: The actual arguments that are passed in. Both the types and values of the arguments can be changed.
     - id: state
       type: System.Object
-      description: To be added.
+      description: A binder-provided object that keeps track of argument reordering.
   overload: System.Reflection.Binder.ReorderArgumentArray*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -212,27 +237,34 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Selects a method from the given set of methods, based on the argument type.
+  remarks: This method should return `null` if no method matches the criteria. This method controls the selection provided by the `GetConstructor` and `GetMethod` methods on `Type`.
   syntax:
     content: public abstract System.Reflection.MethodBase SelectMethod (System.Reflection.BindingFlags bindingAttr, System.Reflection.MethodBase[] match, Type[] types, System.Reflection.ParameterModifier[] modifiers);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitwise combination of  values.
     - id: match
       type: System.Reflection.MethodBase[]
-      description: To be added.
+      description: The set of methods that are candidates for matching. For example, when a  object is used by <xref:System.Type.InvokeMember%2A?displayProperty=fullName>, this parameter specifies the set of methods that reflection has determined to be possible matches, typically because they have the correct member name. The default implementation provided by <xref:System.Type.DefaultBinder%2A?displayProperty=fullName> changes the order of this array.
     - id: types
       type: System.Type[]
-      description: To be added.
+      description: The parameter types used to locate a matching method.
     - id: modifiers
       type: System.Reflection.ParameterModifier[]
-      description: To be added.
+      description: An array of parameter modifiers that enable binding to work with parameter signatures in which the types have been modified.
     return:
       type: System.Reflection.MethodBase
-      description: To be added.
+      description: The matching method, if found; otherwise, .
   overload: System.Reflection.Binder.SelectMethod*
+  exceptions:
+  - type: System.Reflection.AmbiguousMatchException
+    commentId: T:System.Reflection.AmbiguousMatchException
+    description: For the default binder, match contains multiple methods that are equally good matches for the parameter types described by types. For example, the array in types contains a <xref:System.Type> object for `MyClass` and the array in match contains a method that takes a base class of `MyClass` and a method that takes an interface that `MyClass` implements.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "For the default binder, match is  or an empty array.  \n  \n -or-  \n  \n An element of types derives from <xref:System.Type>, but is not of type ."
   platform:
   - net-11
   - net-20
@@ -249,30 +281,37 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Selects a property from the given set of properties, based on the specified criteria.
+  remarks: This method controls the selection provided by the `GetProperty` method on `Type`.
   syntax:
     content: public abstract System.Reflection.PropertyInfo SelectProperty (System.Reflection.BindingFlags bindingAttr, System.Reflection.PropertyInfo[] match, Type returnType, Type[] indexes, System.Reflection.ParameterModifier[] modifiers);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitwise combination of  values.
     - id: match
       type: System.Reflection.PropertyInfo[]
-      description: To be added.
+      description: The set of properties that are candidates for matching. For example, when a  object is used by <xref:System.Type.InvokeMember%2A?displayProperty=fullName>, this parameter specifies the set of properties that reflection has determined to be possible matches, typically because they have the correct member name. The default implementation provided by <xref:System.Type.DefaultBinder%2A?displayProperty=fullName> changes the order of this array.
     - id: returnType
       type: System.Type
-      description: To be added.
+      description: The return value the matching property must have.
     - id: indexes
       type: System.Type[]
-      description: To be added.
+      description: The index types of the property being searched for. Used for index properties such as the indexer for a class.
     - id: modifiers
       type: System.Reflection.ParameterModifier[]
-      description: To be added.
+      description: An array of parameter modifiers that enable binding to work with parameter signatures in which the types have been modified.
     return:
       type: System.Reflection.PropertyInfo
-      description: To be added.
+      description: The matching property.
   overload: System.Reflection.Binder.SelectProperty*
+  exceptions:
+  - type: System.Reflection.AmbiguousMatchException
+    commentId: T:System.Reflection.AmbiguousMatchException
+    description: For the default binder, match contains multiple properties that are equally good matches for returnType and indexes.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: For the default binder, match is  or an empty array.
   platform:
   - net-11
   - net-20
@@ -305,18 +344,20 @@ references:
   name: BindingFlags
   nameWithType: BindingFlags
   fullName: System.Reflection.BindingFlags
-- uid: System.Reflection.FieldInfo
+- uid: System.Reflection.FieldInfo[]
   parent: System.Reflection
   isExternal: true
   name: FieldInfo
   nameWithType: FieldInfo
   fullName: System.Reflection.FieldInfo[]
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
+  spec.csharp:
+  - uid: System.Reflection.FieldInfo
+    name: FieldInfo
+    nameWithType: FieldInfo
+    fullName: FieldInfo[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Globalization.CultureInfo
   parent: System.Globalization
   isExternal: true
@@ -335,132 +376,100 @@ references:
   name: MethodBase
   nameWithType: MethodBase
   fullName: System.Reflection.MethodBase
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
-- uid: System.Reflection.MethodBase
+- uid: System.Reflection.MethodBase[]
   parent: System.Reflection
   isExternal: true
   name: MethodBase
   nameWithType: MethodBase
   fullName: System.Reflection.MethodBase[]
-- uid: System.Object
+  spec.csharp:
+  - uid: System.Reflection.MethodBase
+    name: MethodBase
+    nameWithType: MethodBase
+    fullName: MethodBase[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Object[]
   parent: System
   isExternal: true
   name: Object
   nameWithType: Object
   fullName: System.Object[]
-- uid: System.Reflection.ParameterModifier
+  spec.csharp:
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Reflection.ParameterModifier[]
   parent: System.Reflection
   isExternal: false
   name: ParameterModifier
   nameWithType: ParameterModifier
   fullName: System.Reflection.ParameterModifier[]
-- uid: System.Globalization.CultureInfo
-  parent: System.Globalization
-  isExternal: true
-  name: CultureInfo
-  nameWithType: CultureInfo
-  fullName: System.Globalization.CultureInfo
-- uid: System.String
+  spec.csharp:
+  - uid: System.Reflection.ParameterModifier
+    name: ParameterModifier
+    nameWithType: ParameterModifier
+    fullName: ParameterModifier[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.String[]
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String[]
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.Binder.ChangeType(System.Object,System.Type,System.Globalization.CultureInfo)
   parent: System.Reflection.Binder
   isExternal: false
   name: ChangeType(Object,Type,CultureInfo)
   nameWithType: Binder.ChangeType(Object,Type,CultureInfo)
   fullName: System.Reflection.Binder.ChangeType(Object,Type,CultureInfo)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Type
   parent: System
   isExternal: true
   name: Type
   nameWithType: Type
   fullName: System.Type
-- uid: System.Globalization.CultureInfo
-  parent: System.Globalization
-  isExternal: true
-  name: CultureInfo
-  nameWithType: CultureInfo
-  fullName: System.Globalization.CultureInfo
 - uid: System.Reflection.Binder.ReorderArgumentArray(System.Object[]@,System.Object)
   parent: System.Reflection.Binder
   isExternal: false
   name: ReorderArgumentArray(Object[],Object)
   nameWithType: Binder.ReorderArgumentArray(Object[],Object)
   fullName: System.Reflection.Binder.ReorderArgumentArray(Object[],Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object[]
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Reflection.Binder.SelectMethod(System.Reflection.BindingFlags,System.Reflection.MethodBase[],System.Type[],System.Reflection.ParameterModifier[])
   parent: System.Reflection.Binder
   isExternal: false
   name: SelectMethod(BindingFlags,MethodBase[],Type[],ParameterModifier[])
   nameWithType: Binder.SelectMethod(BindingFlags,MethodBase[],Type[],ParameterModifier[])
   fullName: System.Reflection.Binder.SelectMethod(BindingFlags,MethodBase[],Type[],ParameterModifier[])
-- uid: System.Reflection.MethodBase
-  parent: System.Reflection
-  isExternal: true
-  name: MethodBase
-  nameWithType: MethodBase
-  fullName: System.Reflection.MethodBase
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
-- uid: System.Reflection.MethodBase
-  parent: System.Reflection
-  isExternal: true
-  name: MethodBase
-  nameWithType: MethodBase
-  fullName: System.Reflection.MethodBase[]
-- uid: System.Type
+- uid: System.Type[]
   parent: System
   isExternal: true
   name: Type
   nameWithType: Type
   fullName: System.Type[]
-- uid: System.Reflection.ParameterModifier
-  parent: System.Reflection
-  isExternal: false
-  name: ParameterModifier
-  nameWithType: ParameterModifier
-  fullName: System.Reflection.ParameterModifier[]
+  spec.csharp:
+  - uid: System.Type
+    name: Type
+    nameWithType: Type
+    fullName: Type[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.Binder.SelectProperty(System.Reflection.BindingFlags,System.Reflection.PropertyInfo[],System.Type,System.Type[],System.Reflection.ParameterModifier[])
   parent: System.Reflection.Binder
   isExternal: false
@@ -473,36 +482,20 @@ references:
   name: PropertyInfo
   nameWithType: PropertyInfo
   fullName: System.Reflection.PropertyInfo
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
-- uid: System.Reflection.PropertyInfo
+- uid: System.Reflection.PropertyInfo[]
   parent: System.Reflection
   isExternal: true
   name: PropertyInfo
   nameWithType: PropertyInfo
   fullName: System.Reflection.PropertyInfo[]
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type[]
-- uid: System.Reflection.ParameterModifier
-  parent: System.Reflection
-  isExternal: false
-  name: ParameterModifier
-  nameWithType: ParameterModifier
-  fullName: System.Reflection.ParameterModifier[]
+  spec.csharp:
+  - uid: System.Reflection.PropertyInfo
+    name: PropertyInfo
+    nameWithType: PropertyInfo
+    fullName: PropertyInfo[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.Binder.#ctor*
   parent: System.Reflection.Binder
   isExternal: false

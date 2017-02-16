@@ -15,8 +15,8 @@ items:
   nameWithType: HttpTaskAsyncHandler
   fullName: System.Web.HttpTaskAsyncHandler
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides methods that a derived task handler class can implement in order to process an asynchronous task.
+  remarks: TheHttpTaskAsyncHandler class provides a simplified way to handle asynchronous tasks without having to implement the <xref:System.Web.IHttpAsyncHandler.BeginProcessRequest%2A> and <xref:System.Web.IHttpAsyncHandler.EndProcessRequest%2A> methods.  To create a handler for an asynchronous task, you can override the <xref:System.Web.HttpTaskAsyncHandler.ProcessRequestAsync%2A> method and implement custom task handling code.
   syntax:
     content: 'public abstract class HttpTaskAsyncHandler : System.Web.IHttpAsyncHandler'
   inheritance:
@@ -40,12 +40,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web
-  summary: To be added.
-  remarks: To be added.
+  summary: Called from constructors in derived classes to initialize the  class.
   syntax:
     content: protected HttpTaskAsyncHandler ();
     parameters: []
   overload: System.Web.HttpTaskAsyncHandler.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -62,14 +62,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, gets a value that indicates whether the task handler class instance can be reused for another asynchronous task.
   syntax:
     content: public virtual bool IsReusable { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the handler can be reused; otherwise, .  The default is .
   overload: System.Web.HttpTaskAsyncHandler.IsReusable*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -86,15 +86,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, provides code that handles a synchronous task.
   syntax:
     content: public virtual void ProcessRequest (System.Web.HttpContext context);
     parameters:
     - id: context
       type: System.Web.HttpContext
-      description: To be added.
+      description: The HTTP context.
   overload: System.Web.HttpTaskAsyncHandler.ProcessRequest*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The method is implemented but does not provide any default handling for synchronous tasks.
   platform:
   - net-11
   - net-20
@@ -111,18 +114,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, provides code that handles an asynchronous task.
+  remarks: To create a custom handler for an asynchronous task, override the ProcessRequestAsync method.
   syntax:
     content: public abstract System.Threading.Tasks.Task ProcessRequestAsync (System.Web.HttpContext context);
     parameters:
     - id: context
       type: System.Web.HttpContext
-      description: To be added.
+      description: The HTTP context.
     return:
       type: System.Threading.Tasks.Task
-      description: To be added.
+      description: The asynchronous task.
   overload: System.Web.HttpTaskAsyncHandler.ProcessRequestAsync*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -140,24 +144,25 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web
-  summary: To be added.
-  remarks: To be added.
+  summary: Initiates asynchronous processing of a task in an HTTP task handler.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.HttpTaskAsyncHandler> instance is cast to an <xref:System.Web.IHttpAsyncHandler> interface.
   syntax:
     content: IAsyncResult IHttpAsyncHandler.BeginProcessRequest (System.Web.HttpContext context, AsyncCallback cb, object extraData);
     parameters:
     - id: context
       type: System.Web.HttpContext
-      description: To be added.
+      description: The HTTP context.
     - id: cb
       type: System.AsyncCallback
-      description: To be added.
+      description: The callback method to invoke when the method returns.
     - id: extraData
       type: System.Object
-      description: To be added.
+      description: Additional data for processing the task.
     return:
       type: System.IAsyncResult
-      description: To be added.
+      description: An object that contains status data about the asynchronous operation.
   overload: System.Web.HttpTaskAsyncHandler.System#Web#IHttpAsyncHandler#BeginProcessRequest*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -175,15 +180,16 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web
-  summary: To be added.
-  remarks: To be added.
+  summary: Ends asynchronous processing of a task in an HTTP task handler.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.HttpTaskAsyncHandler> instance is cast to an <xref:System.Web.IHttpAsyncHandler> interface.
   syntax:
     content: void IHttpAsyncHandler.EndProcessRequest (IAsyncResult result);
     parameters:
     - id: result
       type: System.IAsyncResult
-      description: To be added.
+      description: The status of the asynchronous operation.
   overload: System.Web.HttpTaskAsyncHandler.System#Web#IHttpAsyncHandler#EndProcessRequest*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -234,12 +240,6 @@ references:
   name: Task
   nameWithType: Task
   fullName: System.Threading.Tasks.Task
-- uid: System.Web.HttpContext
-  parent: System.Web
-  isExternal: false
-  name: HttpContext
-  nameWithType: HttpContext
-  fullName: System.Web.HttpContext
 - uid: System.Web.HttpTaskAsyncHandler.System#Web#IHttpAsyncHandler#BeginProcessRequest(System.Web.HttpContext,System.AsyncCallback,System.Object)
   parent: System.Web.HttpTaskAsyncHandler
   isExternal: false
@@ -252,36 +252,18 @@ references:
   name: IAsyncResult
   nameWithType: IAsyncResult
   fullName: System.IAsyncResult
-- uid: System.Web.HttpContext
-  parent: System.Web
-  isExternal: false
-  name: HttpContext
-  nameWithType: HttpContext
-  fullName: System.Web.HttpContext
 - uid: System.AsyncCallback
   parent: System
   isExternal: true
   name: AsyncCallback
   nameWithType: AsyncCallback
   fullName: System.AsyncCallback
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.HttpTaskAsyncHandler.System#Web#IHttpAsyncHandler#EndProcessRequest(System.IAsyncResult)
   parent: System.Web.HttpTaskAsyncHandler
   isExternal: false
   name: System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult)
   nameWithType: HttpTaskAsyncHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult)
   fullName: System.Web.HttpTaskAsyncHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.Web.HttpTaskAsyncHandler.#ctor*
   parent: System.Web.HttpTaskAsyncHandler
   isExternal: false

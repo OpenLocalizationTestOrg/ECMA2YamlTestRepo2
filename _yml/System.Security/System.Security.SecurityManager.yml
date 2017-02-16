@@ -25,8 +25,8 @@ items:
   nameWithType: SecurityManager
   fullName: System.Security.SecurityManager
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides the main access point for classes interacting with the security system. This class cannot be inherited.
+  remarks: Security provides methods to access and manipulate the security policy configuration. You cannot create instances of SecurityManager.
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -52,14 +52,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value indicating whether code must have  in order to execute.
+  remarks: "If this property is `false`, even code without <xref:System.Security.Permissions.SecurityPermissionFlag> can execute. Execution checking is expensive and can eliminate the advantages of lazy policy resolution. This property is provided to disable execution checking when needed.  \n  \n A change to this property is not persisted until <xref:System.Security.SecurityManager.SavePolicy%2A> is called. New processes will not be affected by the change until it is persisted in the registry."
   syntax:
     content: public static bool CheckExecutionRights { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if code must have  in order to execute; otherwise, .
   overload: System.Security.SecurityManager.CheckExecutionRights*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The code that calls this method does not have .
   platform:
   - net-11
   - net-20
@@ -76,15 +80,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the current thread requires a security context capture if its security state has to be re-created at a later point in time.
+  remarks: "You can use the CurrentThreadRequiresSecurityContextCapture method before you cache sensitive data that is obtained after successful security demands.  \n  \n If the <xref:System.Security.CodeAccessPermission.Assert%2A> method has been called higher on the stack, the data should not be cached without capturing the corresponding security context. Otherwise, sensitive data that is obtained under an <xref:System.Security.CodeAccessPermission.Assert%2A> may become available to code that is no longer be running with that <xref:System.Security.CodeAccessPermission.Assert%2A> in place.  \n  \n> [!IMPORTANT]\n>  The return value is reliable only when it is `false`, which means that the thread is guaranteed not to require a security context capture. The method may return true when a security context capture is not necessary, to avoid security vulnerabilities.  \n  \n CurrentThreadRequiresSecurityContextCapture is security-critical because its main use is to avoid unnecessary security context captures, which indicates that the code using it is security-sensitive and must be audited."
   syntax:
     content: public static bool CurrentThreadRequiresSecurityContextCapture ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the stack contains no partially trusted application domains, no partially trusted assemblies, and no currently active <xref:System.Security.CodeAccessPermission.PermitOnly%2A> or <xref:System.Security.CodeAccessPermission.Deny%2A> modifiers;  if the common language runtime cannot guarantee that the stack contains none of these.
   overload: System.Security.SecurityManager.CurrentThreadRequiresSecurityContextCapture*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -101,18 +106,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a permission set that is safe to grant to an application that has the provided evidence.
+  remarks: "> [!NOTE]\n>  In the [!INCLUDE[net_v40_long](../../add/includes/net-v40-long-md.md)], the host evidence in `evidence` must contain <xref:System.Security.Policy.Zone?displayProperty=fullName> evidence.  \n>   \n>  The following table shows the permission sets that are returned for each zone.  \n  \n|Zone|Permission set|  \n|----------|--------------------|  \n|<xref:System.Security.SecurityZone>|`FullTrust`|  \n|<xref:System.Security.SecurityZone>|`LocalIntranet`|  \n|<xref:System.Security.SecurityZone>|`Internet`|  \n|<xref:System.Security.SecurityZone>|`Internet`|  \n|<xref:System.Security.SecurityZone>|None|  \n|<xref:System.Security.SecurityZone>|None|  \n  \n Other evidence, such as <xref:System.Security.Policy.Url> or <xref:System.Security.Policy.Site>, may be considered.  \n  \n The returned permission set can be used by a sandbox to run the application. Note that this method does not specify policy, but helps a host to determine whether the permission set requested by an application is reasonable. This method can be used to map a zone to a sandbox."
+  example:
+  - "The following example shows how to use the GetStandardSandbox method to obtain the permission set for a sandboxed application. For more information about running an application in a sandbox, see [How to: Run Partially Trusted Code in a Sandbox](../Topic/How%20to:%20Run%20Partially%20Trusted%20Code%20in%20a%20Sandbox.md).  \n  \n [!code-vb[sandboxingApis#1](../../add/codesnippet/VisualBasic/2aad9996-0182-4c3d-a405-_1.vb)]\n [!code-cs[sandboxingApis#1](../../add/codesnippet/CSharp/2aad9996-0182-4c3d-a405-_1.cs)]"
   syntax:
     content: public static System.Security.PermissionSet GetStandardSandbox (System.Security.Policy.Evidence evidence);
     parameters:
     - id: evidence
       type: System.Security.Policy.Evidence
-      description: To be added.
+      description: The host evidence to match to a permission set.
     return:
       type: System.Security.PermissionSet
-      description: To be added.
+      description: A permission set that can be used as a grant set for the application that has the provided evidence.
   overload: System.Security.SecurityManager.GetStandardSandbox*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    evidence is ."
   platform:
   - net-11
   - net-20
@@ -129,18 +140,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the granted zone identity and URL identity permission sets for the current assembly.
+  remarks: "The recommended alternative to this method is to use the URL and Zone evidence for the executing assembly to call <xref:System.Security.SecurityManager.ResolvePolicy%2A> for each evidence type. The permission sets returned from the <xref:System.Security.SecurityManager.ResolvePolicy%2A> calls identify the permissions granted to the executing assembly based on its zone and URL of origin.  \n  \n> [!NOTE]\n>  This member makes a link demand for the ECMA public key, which is not a valid cryptographic key but a pseudo key. Within the .NET Framework the link demand for the ECMA pseudo key is automatically converted to a link demand for the Microsoft public key. The security exception is based on the Microsoft public key, not the ECMA pseudo key."
   syntax:
     content: public static void GetZoneAndOrigin (out System.Collections.ArrayList zone, out System.Collections.ArrayList origin);
     parameters:
     - id: zone
       type: System.Collections.ArrayList
-      description: To be added.
+      description: An output parameter that contains an  of granted <xref:System.Security.Permissions.ZoneIdentityPermissionAttribute.Zone%2A> objects.
     - id: origin
       type: System.Collections.ArrayList
-      description: To be added.
+      description: An output parameter that contains an  of granted  objects.
   overload: System.Security.SecurityManager.GetZoneAndOrigin*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The request for  failed.
   platform:
   - net-11
   - net-20
@@ -157,18 +172,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether a permission is granted to the caller.
+  remarks: Granting of permissions is determined by policy and is different from a demand subject to overrides, such as an assert. Also, IsGranted only tests the grant of the calling code assembly, independent of other callers on the stack.
   syntax:
     content: public static bool IsGranted (System.Security.IPermission perm);
     parameters:
     - id: perm
       type: System.Security.IPermission
-      description: To be added.
+      description: The permission to test against the grant of the caller.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the permissions granted to the caller include the permission perm; otherwise, .
   overload: System.Security.SecurityManager.IsGranted*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -185,8 +201,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static System.Security.Policy.PolicyLevel LoadPolicyLevelFromFile (string path, System.Security.PolicyLevelType type);
     parameters:
@@ -200,6 +214,16 @@ items:
       type: System.Security.Policy.PolicyLevel
       description: To be added.
   overload: System.Security.SecurityManager.LoadPolicyLevelFromFile*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The path parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The file indicated by the path parameter does not exist.
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: "The code that calls this method does not have .  \n  \n -or-  \n  \n The code that calls this method does not have .  \n  \n -or-  \n  \n The code that calls this method does not have .  \n  \n -or-  \n  \n The code that calls this method does not have ."
   platform:
   - net-11
   - net-20
@@ -216,21 +240,30 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Loads a  from the specified string.
   syntax:
     content: public static System.Security.Policy.PolicyLevel LoadPolicyLevelFromString (string str, System.Security.PolicyLevelType type);
     parameters:
     - id: str
       type: System.String
-      description: To be added.
+      description: The XML representation of a security policy level in the same form in which it appears in a configuration file.
     - id: type
       type: System.Security.PolicyLevelType
-      description: To be added.
+      description: One of the enumeration values that specifies the type of the policy level to be loaded.
     return:
       type: System.Security.Policy.PolicyLevel
-      description: To be added.
+      description: The loaded policy level.
   overload: System.Security.SecurityManager.LoadPolicyLevelFromString*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The str parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The str parameter is not valid.
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The code that calls this method does not have .
   platform:
   - net-11
   - net-20
@@ -247,8 +280,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static System.Collections.IEnumerator PolicyHierarchy ();
     parameters: []
@@ -256,6 +287,7 @@ items:
       type: System.Collections.IEnumerator
       description: To be added.
   overload: System.Security.SecurityManager.PolicyHierarchy*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -272,8 +304,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static System.Security.PermissionSet ResolvePolicy (System.Security.Policy.Evidence evidence);
     parameters:
@@ -284,6 +314,7 @@ items:
       type: System.Security.PermissionSet
       description: To be added.
   overload: System.Security.SecurityManager.ResolvePolicy*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -300,8 +331,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static System.Security.PermissionSet ResolvePolicy (System.Security.Policy.Evidence[] evidences);
     parameters:
@@ -312,6 +341,7 @@ items:
       type: System.Security.PermissionSet
       description: To be added.
   overload: System.Security.SecurityManager.ResolvePolicy*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -328,8 +358,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static System.Security.PermissionSet ResolvePolicy (System.Security.Policy.Evidence evidence, System.Security.PermissionSet reqdPset, System.Security.PermissionSet optPset, System.Security.PermissionSet denyPset, out System.Security.PermissionSet denied);
     parameters:
@@ -352,6 +380,7 @@ items:
       type: System.Security.PermissionSet
       description: To be added.
   overload: System.Security.SecurityManager.ResolvePolicy*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -368,8 +397,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static System.Collections.IEnumerator ResolvePolicyGroups (System.Security.Policy.Evidence evidence);
     parameters:
@@ -380,6 +407,7 @@ items:
       type: System.Collections.IEnumerator
       description: To be added.
   overload: System.Security.SecurityManager.ResolvePolicyGroups*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -396,8 +424,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static System.Security.PermissionSet ResolveSystemPolicy (System.Security.Policy.Evidence evidence);
     parameters:
@@ -408,6 +434,7 @@ items:
       type: System.Security.PermissionSet
       description: To be added.
   overload: System.Security.SecurityManager.ResolveSystemPolicy*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -424,12 +451,11 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static void SavePolicy ();
     parameters: []
   overload: System.Security.SecurityManager.SavePolicy*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -446,8 +472,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static void SavePolicyLevel (System.Security.Policy.PolicyLevel level);
     parameters:
@@ -455,6 +479,10 @@ items:
       type: System.Security.Policy.PolicyLevel
       description: To be added.
   overload: System.Security.SecurityManager.SavePolicyLevel*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The code that calls this method does not have .
   platform:
   - net-11
   - net-20
@@ -471,14 +499,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value indicating whether security is enabled.
+  remarks: "This property is used by the [Caspol.exe (Code Access Security Policy Tool)](../Topic/Caspol.exe%20\\(Code%20Access%20Security%20Policy%20Tool\\).md)  \n  \n `-security` (`-s`) option to turn off code-based security.  \n  \n SecurityEnabled provides a way for administrators to disable code access security. When code access security is disabled, all code access demands succeed. Effectively, this grants all code `FullTrust`. Disabling code access security bypasses the security system so that code might perform slightly better than the equivalent security policy granting `FullTrust` to all code. This property does not disable role-based security; therefore, <xref:System.Security.Permissions.PrincipalPermission> demands are not affected.  \n  \n> [!CAUTION]\n>  Disabling code access security makes the system vulnerable to attacks by malicious code such as viruses and worms. Disabling code access security does not automatically block managed code from running in any way. It only causes managed code to run without restriction by the code access security system, and should only be done with the most extreme caution. Turning off security to gain extra performance should only be done when other security measures have been taken to help protect system security. Examples of other security precautions include disconnecting from public networks, physically securing computers, and so on.  \n  \n A change to this property is not persisted in the registry until <xref:System.Security.SecurityManager.SavePolicy%2A> is called. New processes will not be affected by the change until it is persisted in the registry. Changing the value of this property in a running process does not necessarily change the state in the expected manner. To ensure changes have taken effect, you must call <xref:System.Security.SecurityManager.SavePolicy%2A> and start a new process."
   syntax:
     content: public static bool SecurityEnabled { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if security is enabled; otherwise, .
   overload: System.Security.SecurityManager.SecurityEnabled*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The code that calls this method does not have .
   platform:
   - net-11
   - net-20
@@ -505,12 +537,6 @@ references:
   name: CurrentThreadRequiresSecurityContextCapture()
   nameWithType: SecurityManager.CurrentThreadRequiresSecurityContextCapture()
   fullName: System.Security.SecurityManager.CurrentThreadRequiresSecurityContextCapture()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.SecurityManager.GetStandardSandbox(System.Security.Policy.Evidence)
   parent: System.Security.SecurityManager
   isExternal: false
@@ -541,24 +567,12 @@ references:
   name: ArrayList
   nameWithType: ArrayList
   fullName: System.Collections.ArrayList
-- uid: System.Collections.ArrayList
-  parent: System.Collections
-  isExternal: false
-  name: ArrayList
-  nameWithType: ArrayList
-  fullName: System.Collections.ArrayList
 - uid: System.Security.SecurityManager.IsGranted(System.Security.IPermission)
   parent: System.Security.SecurityManager
   isExternal: false
   name: IsGranted(IPermission)
   nameWithType: SecurityManager.IsGranted(IPermission)
   fullName: System.Security.SecurityManager.IsGranted(IPermission)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.IPermission
   parent: System.Security
   isExternal: false
@@ -595,24 +609,6 @@ references:
   name: LoadPolicyLevelFromString(String,PolicyLevelType)
   nameWithType: SecurityManager.LoadPolicyLevelFromString(String,PolicyLevelType)
   fullName: System.Security.SecurityManager.LoadPolicyLevelFromString(String,PolicyLevelType)
-- uid: System.Security.Policy.PolicyLevel
-  parent: System.Security.Policy
-  isExternal: false
-  name: PolicyLevel
-  nameWithType: PolicyLevel
-  fullName: System.Security.Policy.PolicyLevel
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Security.PolicyLevelType
-  parent: System.Security
-  isExternal: false
-  name: PolicyLevelType
-  nameWithType: PolicyLevelType
-  fullName: System.Security.PolicyLevelType
 - uid: System.Security.SecurityManager.PolicyHierarchy
   parent: System.Security.SecurityManager
   isExternal: false
@@ -631,114 +627,44 @@ references:
   name: ResolvePolicy(Evidence)
   nameWithType: SecurityManager.ResolvePolicy(Evidence)
   fullName: System.Security.SecurityManager.ResolvePolicy(Evidence)
-- uid: System.Security.PermissionSet
-  parent: System.Security
-  isExternal: false
-  name: PermissionSet
-  nameWithType: PermissionSet
-  fullName: System.Security.PermissionSet
-- uid: System.Security.Policy.Evidence
-  parent: System.Security.Policy
-  isExternal: false
-  name: Evidence
-  nameWithType: Evidence
-  fullName: System.Security.Policy.Evidence
 - uid: System.Security.SecurityManager.ResolvePolicy(System.Security.Policy.Evidence[])
   parent: System.Security.SecurityManager
   isExternal: false
   name: ResolvePolicy(Evidence[])
   nameWithType: SecurityManager.ResolvePolicy(Evidence[])
   fullName: System.Security.SecurityManager.ResolvePolicy(Evidence[])
-- uid: System.Security.PermissionSet
-  parent: System.Security
-  isExternal: false
-  name: PermissionSet
-  nameWithType: PermissionSet
-  fullName: System.Security.PermissionSet
-- uid: System.Security.Policy.Evidence
+- uid: System.Security.Policy.Evidence[]
   parent: System.Security.Policy
   isExternal: false
   name: Evidence
   nameWithType: Evidence
   fullName: System.Security.Policy.Evidence[]
+  spec.csharp:
+  - uid: System.Security.Policy.Evidence
+    name: Evidence
+    nameWithType: Evidence
+    fullName: Evidence[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Security.SecurityManager.ResolvePolicy(System.Security.Policy.Evidence,System.Security.PermissionSet,System.Security.PermissionSet,System.Security.PermissionSet,System.Security.PermissionSet@)
   parent: System.Security.SecurityManager
   isExternal: false
   name: ResolvePolicy(Evidence,PermissionSet,PermissionSet,PermissionSet,PermissionSet)
   nameWithType: SecurityManager.ResolvePolicy(Evidence,PermissionSet,PermissionSet,PermissionSet,PermissionSet)
   fullName: System.Security.SecurityManager.ResolvePolicy(Evidence,PermissionSet,PermissionSet,PermissionSet,PermissionSet)
-- uid: System.Security.PermissionSet
-  parent: System.Security
-  isExternal: false
-  name: PermissionSet
-  nameWithType: PermissionSet
-  fullName: System.Security.PermissionSet
-- uid: System.Security.Policy.Evidence
-  parent: System.Security.Policy
-  isExternal: false
-  name: Evidence
-  nameWithType: Evidence
-  fullName: System.Security.Policy.Evidence
-- uid: System.Security.PermissionSet
-  parent: System.Security
-  isExternal: false
-  name: PermissionSet
-  nameWithType: PermissionSet
-  fullName: System.Security.PermissionSet
-- uid: System.Security.PermissionSet
-  parent: System.Security
-  isExternal: false
-  name: PermissionSet
-  nameWithType: PermissionSet
-  fullName: System.Security.PermissionSet
-- uid: System.Security.PermissionSet
-  parent: System.Security
-  isExternal: false
-  name: PermissionSet
-  nameWithType: PermissionSet
-  fullName: System.Security.PermissionSet
-- uid: System.Security.PermissionSet
-  parent: System.Security
-  isExternal: false
-  name: PermissionSet
-  nameWithType: PermissionSet
-  fullName: System.Security.PermissionSet
 - uid: System.Security.SecurityManager.ResolvePolicyGroups(System.Security.Policy.Evidence)
   parent: System.Security.SecurityManager
   isExternal: false
   name: ResolvePolicyGroups(Evidence)
   nameWithType: SecurityManager.ResolvePolicyGroups(Evidence)
   fullName: System.Security.SecurityManager.ResolvePolicyGroups(Evidence)
-- uid: System.Collections.IEnumerator
-  parent: System.Collections
-  isExternal: true
-  name: IEnumerator
-  nameWithType: IEnumerator
-  fullName: System.Collections.IEnumerator
-- uid: System.Security.Policy.Evidence
-  parent: System.Security.Policy
-  isExternal: false
-  name: Evidence
-  nameWithType: Evidence
-  fullName: System.Security.Policy.Evidence
 - uid: System.Security.SecurityManager.ResolveSystemPolicy(System.Security.Policy.Evidence)
   parent: System.Security.SecurityManager
   isExternal: false
   name: ResolveSystemPolicy(Evidence)
   nameWithType: SecurityManager.ResolveSystemPolicy(Evidence)
   fullName: System.Security.SecurityManager.ResolveSystemPolicy(Evidence)
-- uid: System.Security.PermissionSet
-  parent: System.Security
-  isExternal: false
-  name: PermissionSet
-  nameWithType: PermissionSet
-  fullName: System.Security.PermissionSet
-- uid: System.Security.Policy.Evidence
-  parent: System.Security.Policy
-  isExternal: false
-  name: Evidence
-  nameWithType: Evidence
-  fullName: System.Security.Policy.Evidence
 - uid: System.Security.SecurityManager.SavePolicy
   parent: System.Security.SecurityManager
   isExternal: false
@@ -751,24 +677,12 @@ references:
   name: SavePolicyLevel(PolicyLevel)
   nameWithType: SecurityManager.SavePolicyLevel(PolicyLevel)
   fullName: System.Security.SecurityManager.SavePolicyLevel(PolicyLevel)
-- uid: System.Security.Policy.PolicyLevel
-  parent: System.Security.Policy
-  isExternal: false
-  name: PolicyLevel
-  nameWithType: PolicyLevel
-  fullName: System.Security.Policy.PolicyLevel
 - uid: System.Security.SecurityManager.SecurityEnabled
   parent: System.Security.SecurityManager
   isExternal: false
   name: SecurityEnabled
   nameWithType: SecurityManager.SecurityEnabled
   fullName: System.Security.SecurityManager.SecurityEnabled
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.SecurityManager.CheckExecutionRights*
   parent: System.Security.SecurityManager
   isExternal: false

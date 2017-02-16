@@ -28,8 +28,10 @@ items:
   nameWithType: LogStore
   fullName: System.IO.Log.LogStore
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a log-structured storage.
+  remarks: "The <xref:System.IO.Log.LogRecordSequence> class provides an implementation of the record sequence interface on top of a Common Log File System (CLFS) log. It works with the LogStore class, which provides an interface for directly manipulating and managing a CLFS log file. A log store provides append-only storage across a set of disk extents. The LogStore class represents this storage, and provides methods for adding and removing containers, setting policy, and creating archives. It does not provide methods for reading from and writing to the storage; these methods are provided by the <xref:System.IO.Log.LogRecordSequence> class.  \n  \n The relationship between the LogStore class and the <xref:System.IO.Log.LogRecordSequence> class is similar to the relationship between a disk file and a <xref:System.IO.FileStream> object. The disk file provides the actual storage and has attributes such as length and last access time, while the <xref:System.IO.FileStream> object provides a view on the file that can be used to read from it and write to it. Similarly, the LogStore class has attributes like a policy and a collection of disk extents, and the <xref:System.IO.Log.LogRecordSequence> class provides a record-oriented mechanism for reading and writing data.  \n  \n Unlike the file record sequence represented by the <xref:System.IO.Log.FileRecordSequence> class, a LogStore instance stores its data in a collection of disk extents, represented by <xref:System.IO.Log.LogExtent> instances. The extents in a given LogStore instance are all of uniform size, and space is added to and removed from a LogStore instance in extent increments. To add and remove log extents, use the <xref:System.IO.Log.LogExtentCollection.Add%2A> and <xref:System.IO.Log.LogExtentCollection.Remove%2A> methods of the <xref:System.IO.Log.LogExtentCollection> object, which can be returned by the <xref:System.IO.Log.LogStore.Extents%2A> property.  \n  \n A LogStore instance can have policies associated with it. These are represented by <xref:System.IO.Log.LogPolicy> instances that can be returned by the <xref:System.IO.Log.LogStore.Policy%2A> property. A policy dictates rules that the log will attempt to follow, such as maximum number of extents and minimum size, and instructions on growing or shrinking the LogStore under certain conditions. In addition, you can specify whether a LogStore instance can be archived. Policies are set per log and are volatile, which means that once every handle to the log is closed, the policy no longer exists."
+  example:
+  - "The following example shows how to archive a LogStore to an XML document.  \n  \n [!code-vb[logarchievesnapshot#0](../../add/codesnippet/VisualBasic/t-system.io.log.logstore_1.vb)]\n [!code-cs[logarchievesnapshot#0](../../add/codesnippet/CSharp/t-system.io.log.logstore_1.cs)]"
   syntax:
     content: 'public sealed class LogStore : IDisposable'
   inheritance:
@@ -53,15 +55,30 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class for the specified handle.
   syntax:
     content: public LogStore (Microsoft.Win32.SafeHandles.SafeFileHandle handle);
     parameters:
     - id: handle
       type: Microsoft.Win32.SafeHandles.SafeFileHandle
-      description: To be added.
+      description: A file handle for the log file that the current  object encapsulates.
   overload: System.IO.Log.LogStore.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    handle is ."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The log handle could not be bound to the thread pool.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Access for the specified log store is denied by the operating system.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The method was called after the sequence has been disposed of.
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: There is not enough memory to continue the execution of a program.
   platform:
   - net-11
   - net-20
@@ -78,18 +95,43 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified path and mode.
+  remarks: "Use this constructor to open a log store with the specified path and mode. The store is opened with read/write access, and shares read access.  \n  \n The `path` parameter should use the following syntax:  \n  \n `log:<physical log name>[::<log client name>]`  \n  \n where `<physical log name>` is a valid path to a log file, and `<log client name>` is a unique client identifier. A log store should be either a physical log store or a virtual log store, but not both. Once a log store has been created physically or virtually, it remains so for its lifetime. A physical log store is created by specifying only the physical log name. A virtual log store is created by specifying both the physical log name and the log client name.  \n  \n Clients that share the same physical log name share the same extents collection and policy."
   syntax:
     content: public LogStore (string path, System.IO.FileMode mode);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: A relative or absolute path for the base file of the log store to open.
     - id: mode
       type: System.IO.FileMode
-      description: To be added.
+      description: One of the  values that determines how to open or create the store.
   overload: System.IO.Log.LogStore.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is an empty string (\"\").  \n  \n -or-  \n  \n path contains only white space.  \n  \n -or-  \n  \n path contains one or more invalid characters."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    mode contains an invalid value."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: The file cannot be found.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: An I/O error occurs when opening the log store.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Access for the specified log store is denied by the operating system.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: "\n     cannot be used because the required Common Log File System (CLFS) component is not installed. Install the CLFS component if it is available for your platform or use the  class instead."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: There is not enough memory to continue the execution of a program.
   platform:
   - net-11
   - net-20
@@ -106,21 +148,46 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified path, mode, and access.
+  remarks: "Use this constructor to open a new log store with the specified path, mode, and access. The store is opened sharing read access.  \n  \n The `path` parameter should use the following syntax:  \n  \n `log:<physical log name>[::<log client name>]`  \n  \n where `<physical log name>` is a valid path to a log file, and `<log client name>` is a unique client identifier. A log store should be either a physical log store or a virtual log store, but not both. Once a log store has been created physically or virtually, it remains so for its lifetime. A physical log store is created by specifying only the physical log name. A virtual log store is created by specifying both the physical log name and the log client name.  \n  \n Clients that share the same physical log name share the same extents collection and policy."
   syntax:
     content: public LogStore (string path, System.IO.FileMode mode, System.IO.FileAccess access);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: A relative or absolute path for the base file of the log store to open.
     - id: mode
       type: System.IO.FileMode
-      description: To be added.
+      description: One of the  values that determines how to open or create the store.
     - id: access
       type: System.IO.FileAccess
-      description: To be added.
+      description: One of the  values that determines how the file can be accessed by the .
   overload: System.IO.Log.LogStore.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is an empty string (\"\").  \n  \n -or-  \n  \n path contains only white space.  \n  \n -or-  \n  \n path contains one or more invalid characters."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    mode contains an invalid value.  \n  \n -or  \n  \n access contains an invalid value."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: The file cannot be found.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: An I/O error occurs when opening the log store.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Access for the specified log store is denied by the operating system.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: "\n     cannot be used because the required Common Log File System (CLFS) component is not installed. Install the CLFS component if it is available for your platform or use the  class instead."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: There is not enough memory to continue the execution of a program.
   platform:
   - net-11
   - net-20
@@ -137,24 +204,49 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: "This constructor initializes a new <xref:System.IO.Log.LogStore> object that it opens with the specified path, mode, and access. The store is opened sharing the specified access.  \n  \n The `path` parameter should use the following syntax:  \n  \n `log:<physical log name>[::<log client name>]`  \n  \n where `<physical log name>` is a valid path to a log file, and `<log client name>` is a unique client identifier. A log store should be either a physical log store or a virtual log store, but not both. Once a log store has been created physically or virtually, it remains so for its lifetime. A physical log store is created by specifying only the physical log name. A virtual log store is created by specifying both the physical log name and the log client name.  \n  \n Clients that share the same physical log name share the same extents collection and policy."
   syntax:
     content: public LogStore (string path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: A relative or absolute path for the base file of the log store to open.
     - id: mode
       type: System.IO.FileMode
-      description: To be added.
+      description: One of the  values that determines how to open or create the store.
     - id: access
       type: System.IO.FileAccess
-      description: To be added.
+      description: One of the  values that determines how the file can be accessed by the .
     - id: share
       type: System.IO.FileShare
-      description: To be added.
+      description: One of the  values that determines how the log store will be shared among processes.
   overload: System.IO.Log.LogStore.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is an empty string (\"\").  \n  \n -or-  \n  \n path contains only white space.  \n  \n -or-  \n  \n path contains one or more invalid characters."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    mode contains an invalid value.  \n  \n -or  \n  \n access contains an invalid value.  \n  \n -or-  \n  \n share contains an invalid value."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: The file cannot be found.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: An I/O error occurs when opening the log store.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Access for the specified log store is denied by the operating system.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: "\n     cannot be used because the required Common Log File System (CLFS) component is not installed. Install the CLFS component if it is available for your platform or use the  class instead."
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: There is not enough memory to continue the execution of a program.
   platform:
   - net-11
   - net-20
@@ -171,27 +263,58 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: "This constructor initializes a new <xref:System.IO.Log.LogStore> object that it opens with the specified path, mode, and access. The store is opened sharing the specified access. The `path` parameter should follow the following syntax:  \n  \n `log:<physical log name>[::<log client name>]`  \n  \n where `<physical log name>` is a valid path to a log file, and `<log client name>` is a unique client identifier. A log store should be either a physical log store or a virtual log store, but not both. Once a log store has been created physically or virtually, it remains so for its lifetime. A physical log store is created by specifying only the physical log name. A virtual log store is created by specifying both the physical log name and the log client name.  \n  \n Clients that share the same physical log name share the same extents collection and policy."
   syntax:
     content: public LogStore (string path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share, System.Security.AccessControl.FileSecurity fileSecurity);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: A relative or absolute path for the base file of the log store to open.
     - id: mode
       type: System.IO.FileMode
-      description: To be added.
+      description: One of the  values that determines how to open or create the store.
     - id: access
       type: System.IO.FileAccess
-      description: To be added.
+      description: One of the  values that determines how the file can be accessed by the .
     - id: share
       type: System.IO.FileShare
-      description: To be added.
+      description: One of the  values that determines how the log store will be shared among processes.
     - id: fileSecurity
       type: System.Security.AccessControl.FileSecurity
-      description: To be added.
+      description: One of the  value that specifies the security to set on the newly created store if the store must be created.
   overload: System.IO.Log.LogStore.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The log store file name specified by path is not valid.  \n  \n -or-  \n  \n Mode is , which cannot be used without write access.  \n  \n -or-  \n  \n Mode is , which cannot be used without write access."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    mode contains an invalid value.  \n  \n -or  \n  \n access contains an invalid value.  \n  \n -or-  \n  \n share contains an invalid value."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: The file cannot be found.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: "An I/O error occurs when opening the log store.  \n  \n The file specified by path cannot be accessed because it is in use by another process.  \n  \n -or-  \n  \n The file specified by path cannot be created because the file or directory already exists.  \n  \n -or-  \n  \n The log handle could not be bound to the thread pool.  \n  \n -or-  \n  \n The specified log file format or version is invalid."
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: "\n     cannot be used because the required Common Log File System (CLFS) component is not installed. Install the CLFS component if it is available for your platform or use the  class instead."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The method was called after the sequence has been disposed of.
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: There is not enough memory to continue the execution of a program.
+  - type: System.IO.Log.SequenceFullException
+    commentId: T:System.IO.Log.SequenceFullException
+    description: The record sequence is full.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Access for the specified log store is denied by the operating system.
   platform:
   - net-11
   - net-20
@@ -208,14 +331,18 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether this  instance can be archived.
+  remarks: If a <xref:System.IO.Log.LogStore> is not archivable, calls to the <xref:System.IO.Log.LogStore.CreateLogArchiveSnapshot%2A> and <xref:System.IO.Log.LogStore.SetArchiveTail%2A> methods result in a <xref:System.NotSupportedException> being thrown.
   syntax:
     content: public bool Archivable { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if this  instance can be archived; otherwise, .
   overload: System.IO.Log.LogStore.Archivable*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The property was accessed after the sequence has been disposed of.
   platform:
   - net-11
   - net-20
@@ -232,14 +359,18 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the lowest sequence number that corresponds to a valid record in this  instance.
+  remarks: Valid sequence numbers are greater than or equal to BaseSequenceNumber and less than <xref:System.IO.Log.LogStore.LastSequenceNumber%2A>.
   syntax:
     content: public System.IO.Log.SequenceNumber BaseSequenceNumber { get; }
     return:
       type: System.IO.Log.SequenceNumber
-      description: To be added.
+      description: The lowest sequence number that corresponds to a valid record in this  instance.
   overload: System.IO.Log.LogStore.BaseSequenceNumber*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The property was accessed after the sequence has been disposed of.
   platform:
   - net-11
   - net-20
@@ -256,15 +387,42 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Takes a snapshot of the log store state for making a backup.
+  remarks: ''
+  example:
+  - "The following example shows how to archive a <xref:System.IO.Log.LogStore> to an XML document.  \n  \n [!code-vb[logarchievesnapshot#0](../../add/codesnippet/VisualBasic/m-system.io.log.logstore_1_1.vb)]\n [!code-cs[logarchievesnapshot#0](../../add/codesnippet/CSharp/m-system.io.log.logstore_1_1.cs)]"
   syntax:
     content: public System.IO.Log.LogArchiveSnapshot CreateLogArchiveSnapshot ();
     parameters: []
     return:
       type: System.IO.Log.LogArchiveSnapshot
-      description: To be added.
+      description: A  object that contains the state necessary to make an archive.
   overload: System.IO.Log.LogStore.CreateLogArchiveSnapshot*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The log store is not archivable.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The method was called after the sequence has been disposed of.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: An I/O error occurs when creating the archive snapshot.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An argument is not valid.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An invalid operation has been executed.
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: There is not enough memory to continue the execution of a program.
+  - type: System.IO.Log.SequenceFullException
+    commentId: T:System.IO.Log.SequenceFullException
+    description: The record sequence is full.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Access for the specified log store is denied by the operating system.
   platform:
   - net-11
   - net-20
@@ -281,21 +439,49 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Takes a snapshot of the log store state between the specified sequence numbers for making a backup.
+  remarks: The archive snapshot returned from this method encompasses information from either the base sequence number or the archive sequence number, whichever is lower, to the last sequence number. It is not inclusive for the last sequence number, which means that the archive only includes records up to but not including last. In addition, when using this method, the start SequenceNumber must be equal to the BaseSequenceNumber in order for the archive to be consistent.
   syntax:
     content: public System.IO.Log.LogArchiveSnapshot CreateLogArchiveSnapshot (System.IO.Log.SequenceNumber first, System.IO.Log.SequenceNumber last);
     parameters:
     - id: first
       type: System.IO.Log.SequenceNumber
-      description: To be added.
+      description: The starting sequence number in the range to archive.
     - id: last
       type: System.IO.Log.SequenceNumber
-      description: To be added.
+      description: The ending sequence number in the range to archive.
     return:
       type: System.IO.Log.LogArchiveSnapshot
-      description: To be added.
+      description: A  object that contains the state necessary to make an archive.
   overload: System.IO.Log.LogStore.CreateLogArchiveSnapshot*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    first or last is not between the base and last sequence numbers of this sequence."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    first is larger than last."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An invalid operation has been executed.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: An I/O error occurs when creating the archive snapshot.
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The log store is not archivable.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The method was called after the sequence has been disposed of.
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: There is not enough memory to continue the execution of a program.
+  - type: System.IO.Log.SequenceFullException
+    commentId: T:System.IO.Log.SequenceFullException
+    description: The record sequence is full.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Access for the specified log store is denied by the operating system.
   platform:
   - net-11
   - net-20
@@ -312,15 +498,30 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the log store.
   syntax:
     content: public static void Delete (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: A relative or absolute path for the base file of the log store to remove.
   overload: System.IO.Log.LogStore.Delete*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is an empty string (\"\").  \n  \n -or-  \n  \n path contains only white space.  \n  \n -or-  \n  \n path contains one or more invalid characters."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: The file cannot be found.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: An I/O error occurs when opening the log store.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Access for the specified log store is denied by the operating system.
   platform:
   - net-11
   - net-20
@@ -337,12 +538,16 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases all resources used by the .
+  remarks: "Call Dispose when you have finished using the <xref:System.IO.Log.LogStore>. The Dispose method leaves the <xref:System.IO.Log.LogStore> in an unusable state. After calling Dispose , you must release all references to the <xref:System.IO.Log.LogStore> so the garbage collector can reclaim the memory that the <xref:System.IO.Log.LogStore> was occupying.  \n  \n> [!NOTE]\n>  Always call Dispose before you release your last reference to the <xref:System.IO.Log.LogStore>. Otherwise, the resources it is using will not be freed until the garbage collector calls the <xref:System.IO.Log.LogStore> object's `Finalize` method."
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.IO.Log.LogStore.Dispose*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The method was called after the sequence has been disposed of.
   platform:
   - net-11
   - net-20
@@ -359,14 +564,15 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the collection of log extents that contain the data for this log store.
+  remarks: A <xref:System.IO.Log.LogStore> instance stores its data in a collection of disk extents, represented by <xref:System.IO.Log.LogExtent> instances. The extents in a given <xref:System.IO.Log.LogStore> instance are all of uniform size, and space is added to and removed from a <xref:System.IO.Log.LogStore> instance in extent increments. To add and remove log extents, use the <xref:System.IO.Log.LogExtentCollection.Add%2A>and<xref:System.IO.Log.LogExtentCollection.Remove%2A> methods of the <xref:System.IO.Log.LogExtentCollection> object, which is returned by this property.
   syntax:
     content: public System.IO.Log.LogExtentCollection Extents { get; }
     return:
       type: System.IO.Log.LogExtentCollection
-      description: To be added.
+      description: A  instance containing the collection of log extents that encapsulates data for this log store.
   overload: System.IO.Log.LogStore.Extents*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -383,14 +589,17 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of bytes available in the log store.
   syntax:
     content: public long FreeBytes { get; }
     return:
       type: System.Int64
-      description: To be added.
+      description: The number of bytes available in the log store.
   overload: System.IO.Log.LogStore.FreeBytes*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The property was accessed after the sequence has been disposed of.
   platform:
   - net-11
   - net-20
@@ -407,14 +616,14 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the operating system file handle for the log file that the current  instance encapsulates.
   syntax:
     content: public Microsoft.Win32.SafeHandles.SafeFileHandle Handle { get; }
     return:
       type: Microsoft.Win32.SafeHandles.SafeFileHandle
-      description: To be added.
+      description: The operating system file handle for the log file that the current  instance encapsulates.
   overload: System.IO.Log.LogStore.Handle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -431,14 +640,18 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, gets the sequence number of the next record to be appended to the log store.
+  remarks: Valid sequence numbers are greater than or equal to <xref:System.IO.Log.LogStore.BaseSequenceNumber%2A> and less than LastSequenceNumber.
   syntax:
     content: public System.IO.Log.SequenceNumber LastSequenceNumber { get; }
     return:
       type: System.IO.Log.SequenceNumber
-      description: To be added.
+      description: The sequence number of the next record to be appended to the log store.
   overload: System.IO.Log.LogStore.LastSequenceNumber*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The property was accessed after the sequence has been disposed of.
   platform:
   - net-11
   - net-20
@@ -455,14 +668,18 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the size of the log store, in bytes.
+  remarks: The size of the log store is the sum of the sizes of the log extents.
   syntax:
     content: public long Length { get; }
     return:
       type: System.Int64
-      description: To be added.
+      description: The size of the log store, in bytes.
   overload: System.IO.Log.LogStore.Length*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The property was accessed after the sequence has been disposed of.
   platform:
   - net-11
   - net-20
@@ -479,14 +696,15 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the policy associated with this log store.
+  remarks: You can use the <xref:System.IO.Log.LogPolicy> instance returned by this property to examine and manipulate the log policy associated with this <xref:System.IO.Log.LogStore>.
   syntax:
     content: public System.IO.Log.LogPolicy Policy { get; }
     return:
       type: System.IO.Log.LogPolicy
-      description: To be added.
+      description: A  instance representing the policy associated with this log store.
   overload: System.IO.Log.LogStore.Policy*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -503,15 +721,42 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the sequence number of the archive tail.
+  remarks: The smaller of the base sequence number and the archive tail determines the tail of the log.
+  example:
+  - "The following example shows how to archive a <xref:System.IO.Log.LogStore> to an XML document.  \n  \n [!code-vb[logarchievesnapshot#0](../../add/codesnippet/VisualBasic/m-system.io.log.logstore_0_1.vb)]\n [!code-cs[logarchievesnapshot#0](../../add/codesnippet/CSharp/m-system.io.log.logstore_0_1.cs)]"
   syntax:
     content: public void SetArchiveTail (System.IO.Log.SequenceNumber archiveTail);
     parameters:
     - id: archiveTail
       type: System.IO.Log.SequenceNumber
-      description: To be added.
+      description: The sequence number of the archive tail.
   overload: System.IO.Log.LogStore.SetArchiveTail*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    archiveTail is not between the base and last sequence numbers of this sequence."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    archiveTail is not valid for this sequence."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An invalid operation has been executed.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: An I/O error occurs when creating the archive snapshot.
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The log store is not archivable.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The method was called after the sequence has been disposed of.
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: There is not enough memory to continue the execution of a program.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Access for the specified log store is denied by the operating system.
   platform:
   - net-11
   - net-20
@@ -528,14 +773,14 @@ items:
   assemblies:
   - System.IO.Log
   namespace: System.IO.Log
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of log streams in this log store.
   syntax:
     content: public int StreamCount { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of log streams in this log store.
   overload: System.IO.Log.LogStore.StreamCount*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -580,18 +825,6 @@ references:
   name: LogStore(String,FileMode,FileAccess)
   nameWithType: LogStore.LogStore(String,FileMode,FileAccess)
   fullName: System.IO.Log.LogStore.LogStore(String,FileMode,FileAccess)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
 - uid: System.IO.FileAccess
   parent: System.IO
   isExternal: false
@@ -604,24 +837,6 @@ references:
   name: LogStore(String,FileMode,FileAccess,FileShare)
   nameWithType: LogStore.LogStore(String,FileMode,FileAccess,FileShare)
   fullName: System.IO.Log.LogStore.LogStore(String,FileMode,FileAccess,FileShare)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
-- uid: System.IO.FileAccess
-  parent: System.IO
-  isExternal: false
-  name: FileAccess
-  nameWithType: FileAccess
-  fullName: System.IO.FileAccess
 - uid: System.IO.FileShare
   parent: System.IO
   isExternal: false
@@ -634,30 +849,6 @@ references:
   name: LogStore(String,FileMode,FileAccess,FileShare,FileSecurity)
   nameWithType: LogStore.LogStore(String,FileMode,FileAccess,FileShare,FileSecurity)
   fullName: System.IO.Log.LogStore.LogStore(String,FileMode,FileAccess,FileShare,FileSecurity)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
-- uid: System.IO.FileAccess
-  parent: System.IO
-  isExternal: false
-  name: FileAccess
-  nameWithType: FileAccess
-  fullName: System.IO.FileAccess
-- uid: System.IO.FileShare
-  parent: System.IO
-  isExternal: false
-  name: FileShare
-  nameWithType: FileShare
-  fullName: System.IO.FileShare
 - uid: System.Security.AccessControl.FileSecurity
   parent: System.Security.AccessControl
   isExternal: false
@@ -706,36 +897,12 @@ references:
   name: CreateLogArchiveSnapshot(SequenceNumber,SequenceNumber)
   nameWithType: LogStore.CreateLogArchiveSnapshot(SequenceNumber,SequenceNumber)
   fullName: System.IO.Log.LogStore.CreateLogArchiveSnapshot(SequenceNumber,SequenceNumber)
-- uid: System.IO.Log.LogArchiveSnapshot
-  parent: System.IO.Log
-  isExternal: false
-  name: LogArchiveSnapshot
-  nameWithType: LogArchiveSnapshot
-  fullName: System.IO.Log.LogArchiveSnapshot
-- uid: System.IO.Log.SequenceNumber
-  parent: System.IO.Log
-  isExternal: false
-  name: SequenceNumber
-  nameWithType: SequenceNumber
-  fullName: System.IO.Log.SequenceNumber
-- uid: System.IO.Log.SequenceNumber
-  parent: System.IO.Log
-  isExternal: false
-  name: SequenceNumber
-  nameWithType: SequenceNumber
-  fullName: System.IO.Log.SequenceNumber
 - uid: System.IO.Log.LogStore.Delete(System.String)
   parent: System.IO.Log.LogStore
   isExternal: false
   name: Delete(String)
   nameWithType: LogStore.Delete(String)
   fullName: System.IO.Log.LogStore.Delete(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Log.LogStore.Dispose
   parent: System.IO.Log.LogStore
   isExternal: false
@@ -772,36 +939,18 @@ references:
   name: Handle
   nameWithType: LogStore.Handle
   fullName: System.IO.Log.LogStore.Handle
-- uid: Microsoft.Win32.SafeHandles.SafeFileHandle
-  parent: Microsoft.Win32.SafeHandles
-  isExternal: false
-  name: SafeFileHandle
-  nameWithType: SafeFileHandle
-  fullName: Microsoft.Win32.SafeHandles.SafeFileHandle
 - uid: System.IO.Log.LogStore.LastSequenceNumber
   parent: System.IO.Log.LogStore
   isExternal: false
   name: LastSequenceNumber
   nameWithType: LogStore.LastSequenceNumber
   fullName: System.IO.Log.LogStore.LastSequenceNumber
-- uid: System.IO.Log.SequenceNumber
-  parent: System.IO.Log
-  isExternal: false
-  name: SequenceNumber
-  nameWithType: SequenceNumber
-  fullName: System.IO.Log.SequenceNumber
 - uid: System.IO.Log.LogStore.Length
   parent: System.IO.Log.LogStore
   isExternal: false
   name: Length
   nameWithType: LogStore.Length
   fullName: System.IO.Log.LogStore.Length
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.IO.Log.LogStore.Policy
   parent: System.IO.Log.LogStore
   isExternal: false
@@ -820,12 +969,6 @@ references:
   name: SetArchiveTail(SequenceNumber)
   nameWithType: LogStore.SetArchiveTail(SequenceNumber)
   fullName: System.IO.Log.LogStore.SetArchiveTail(SequenceNumber)
-- uid: System.IO.Log.SequenceNumber
-  parent: System.IO.Log
-  isExternal: false
-  name: SequenceNumber
-  nameWithType: SequenceNumber
-  fullName: System.IO.Log.SequenceNumber
 - uid: System.IO.Log.LogStore.StreamCount
   parent: System.IO.Log.LogStore
   isExternal: false

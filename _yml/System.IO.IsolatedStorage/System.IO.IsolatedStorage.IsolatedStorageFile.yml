@@ -55,8 +55,10 @@ items:
   nameWithType: IsolatedStorageFile
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents an isolated storage area containing files and directories.
+  remarks: "This object corresponds to a specific isolated storage scope, where files represented by <xref:System.IO.IsolatedStorage.IsolatedStorageFileStream> objects exist. Applications can use isolated storage to save data in their own isolated portion of the file system, without having to specify a particular path within the file system. Since isolated stores are scoped to particular assemblies, most other managed code will not be able to access your code's data (highly trusted managed code and administration tools can access stores from other assemblies). Unmanaged code can access any isolated stores.  \n  \n For more information, see [Isolated Storage](../Topic/Isolated%20Storage.md).  \n  \n This type implements the <xref:System.IDisposable> interface. When you have finished using the type, you should dispose of it either directly or indirectly. To dispose of the type directly, call its <xref:System.IDisposable.Dispose%2A> method in a `try`/`catch` block. To dispose of it indirectly, use a language construct such as `using` (in C#) or `Using` (in Visual Basic). For more information, see the “Using an Object that Implements IDisposable” section in the <xref:System.IDisposable> interface topic.  \n  \n> [!IMPORTANT]\n>  Isolated storage is not available for [!INCLUDE[win8_appname_long](../../add/includes/win8-appname-long-md.md)] apps. Instead, use the application data classes in the `Windows.Storage` namespaces included in the [!INCLUDE[wrt](../../add/includes/wrt-md.md)] API to store local data and files. For more information, see [Application data](http://go.microsoft.com/fwlink/?LinkId=229175) in the Windows Dev Center."
+  example:
+  - "The following code example illustrates how to create files and directories in an isolated store. First, a store that is isolated by user, domain, and assembly is retrieved and placed in the `isoStore` variable. The <xref:System.IO.IsolatedStorage.IsolatedStorageFile.CreateDirectory%2A> method is then called to create directories, and two instances of the <xref:System.IO.IsolatedStorage.IsolatedStorageFileStream> class create files in these directories.  \n  \n [!code-cs[Conceptual.IsolatedStorage#1](../../add/codesnippet/CSharp/t-system.io.isolatedstor_1_1.cs)]\n [!code-vb[Conceptual.IsolatedStorage#1](../../add/codesnippet/VisualBasic/t-system.io.isolatedstor_1_1.vb)]"
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -97,14 +99,23 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that represents the amount of free space available for isolated storage.
   syntax:
     content: public override long AvailableFreeSpace { get; }
     return:
       type: System.Int64
-      description: To be added.
+      description: The available free space for isolated storage, in bytes.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.AvailableFreeSpace*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store is closed.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
   platform:
   - net-11
   - net-20
@@ -121,12 +132,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Closes a store previously opened with <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetStore%2A>, <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForAssembly%2A>, or <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForDomain%2A>.
+  remarks: ''
+  example:
+  - "The following code example demonstrates how to use the Close method. For the complete context of this example, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> overview.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_2_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/CPP/m-system.io.isolatedstor_2_1.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/CSharp/m-system.io.isolatedstor_2_1.cs)]"
   syntax:
     content: public void Close ();
     parameters: []
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.Close*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -143,18 +157,40 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Copies an existing file to a new file.
+  remarks: '`sourceFileName` and `destinationFileName` must specify different file names. Use the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.CopyFile%28System.String%2CSystem.String%2CSystem.Boolean%29?displayProperty=fullName> method overload to overwrite an existing file.'
   syntax:
     content: public void CopyFile (string sourceFileName, string destinationFileName);
     parameters:
     - id: sourceFileName
       type: System.String
-      description: To be added.
+      description: The name of the file to copy.
     - id: destinationFileName
       type: System.String
-      description: To be added.
+      description: The name of the destination file. This cannot be a directory or an existing file.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.CopyFile*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    sourceFileName or destinationFileName is a zero-length string, contains only white space, or contains one or more invalid characters defined by the <xref:System.IO.Path.GetInvalidPathChars%2A?displayProperty=fullName> method."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    sourceFileName or destinationFileName is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store has been closed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: "\n    sourceFileName was not found."
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: "\n    sourceFileName was not found."
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled.  \n  \n -or-  \n  \n destinationFileName exists.  \n  \n -or-  \n  \n An I/O error has occurred."
   platform:
   - net-11
   - net-20
@@ -171,21 +207,43 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Copies an existing file to a new file, and optionally overwrites an existing file.
+  remarks: '`sourceFileName` and `destinationFileName` can have the same file name if `overwrite` is `true`.'
   syntax:
     content: public void CopyFile (string sourceFileName, string destinationFileName, bool overwrite);
     parameters:
     - id: sourceFileName
       type: System.String
-      description: To be added.
+      description: The name of the file to copy.
     - id: destinationFileName
       type: System.String
-      description: To be added.
+      description: The name of the destination file. This cannot be a directory.
     - id: overwrite
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the destination file can be overwritten; otherwise, ."
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.CopyFile*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    sourceFileName or destinationFileName is a zero-length string, contains only white space, or contains one or more invalid characters defined by the <xref:System.IO.Path.GetInvalidPathChars%2A?displayProperty=fullName> method."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    sourceFileName or destinationFileName is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store has been closed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: "\n    sourceFileName was not found."
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: "\n    sourceFileName was not found."
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled.  \n  \n -or-  \n  \n An I/O error has occurred."
   platform:
   - net-11
   - net-20
@@ -202,15 +260,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a directory in the isolated storage scope.
+  remarks: 'The created directory initially contains no files. If the directory already exists, the CreateDirectory method returns without creating a new directory. The [How to: Create Files and Directories in Isolated Storage](../Topic/How%20to:%20Create%20Files%20and%20Directories%20in%20Isolated%20Storage.md) example demonstrates the use of the CreateDirectory method'
+  example:
+  - "The following code example demonstrates the CreateDirectory method. For the complete context of this example, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> overview.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#7](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_7_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#7](../../add/codesnippet/CPP/m-system.io.isolatedstor_7_1.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#7](../../add/codesnippet/CSharp/m-system.io.isolatedstor_7_1.cs)]"
   syntax:
     content: public void CreateDirectory (string dir);
     parameters:
     - id: dir
       type: System.String
-      description: To be added.
+      description: The relative path of the directory to create within the isolated storage scope.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.CreateDirectory*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The current code has insufficient permissions to create isolated storage directory.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The directory path is .
   platform:
   - net-11
   - net-20
@@ -227,18 +294,34 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a file in the isolated store.
+  remarks: This method is equivalent to using the <xref:System.IO.IsolatedStorage.IsolatedStorageFileStream.%23ctor%28System.String%2CSystem.IO.FileMode%2CSystem.IO.FileAccess%2CSystem.IO.FileShare%2CSystem.IO.IsolatedStorage.IsolatedStorageFile%29?displayProperty=fullName> constructor.
   syntax:
     content: public System.IO.IsolatedStorage.IsolatedStorageFileStream CreateFile (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The relative path of the file to create.
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFileStream
-      description: To be added.
+      description: A new isolated storage file.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.CreateFile*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is malformed."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The directory in path does not exist.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
   platform:
   - net-11
   - net-20
@@ -255,14 +338,23 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the current size of the isolated storage.
+  remarks: "Represents the total usage of all files and directories within the isolated storage scope.  \n  \n The current size cannot be accurately determined for stores that are participating in a roaming user profile. Because roaming profiles are often cached on multiple client machines and later synchronized with a server, quotas cannot be enforced for such stores and the current size is not reported.  \n  \n The [How to: Anticipate Out-of-Space Conditions with Isolated Storage](../Topic/How%20to:%20Anticipate%20Out-of-Space%20Conditions%20with%20Isolated%20Storage.md) example demonstrates the use of the CurrentSize property."
+  example:
+  - "The following code example demonstrates the CurrentSize property. For the complete context of this example, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> overview.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#5](../../add/codesnippet/VisualBasic/p-system.io.isolatedstor_5_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#5](../../add/codesnippet/CPP/p-system.io.isolatedstor_5_1.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#5](../../add/codesnippet/CSharp/p-system.io.isolatedstor_5_1.cs)]"
   syntax:
     content: public override ulong CurrentSize { get; }
     return:
       type: System.UInt64
-      description: To be added.
+      description: The total number of bytes of storage currently in use within the isolated storage scope.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.CurrentSize*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The property is unavailable. The current store has a roaming scope or is not open.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The current object size is undefined.
   platform:
   - net-11
   - net-20
@@ -279,15 +371,27 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Deletes a directory in the isolated storage scope.
+  remarks: "A directory must be empty before it is deleted. The deleted directory cannot be recovered once deleted.  \n  \n The [How to: Delete Files and Directories in Isolated Storage](../Topic/How%20to:%20Delete%20Files%20and%20Directories%20in%20Isolated%20Storage.md) example demonstrates the use of the DeleteDirectory method."
+  example:
+  - >-
+    [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#8](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_6_1.vb)]
+     [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#8](../../add/codesnippet/CPP/m-system.io.isolatedstor_6_1.cpp)]
+     [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#8](../../add/codesnippet/CSharp/m-system.io.isolatedstor_6_1.cs)]
   syntax:
     content: public void DeleteDirectory (string dir);
     parameters:
     - id: dir
       type: System.String
-      description: To be added.
+      description: The relative path of the directory to delete within the isolated storage scope.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.DeleteDirectory*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The directory could not be deleted.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The directory path was .
   platform:
   - net-11
   - net-20
@@ -304,15 +408,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Deletes a file in the isolated storage scope.
+  remarks: "The deleted file cannot be recovered once deleted.  \n  \n The [How to: Delete Files and Directories in Isolated Storage](../Topic/How%20to:%20Delete%20Files%20and%20Directories%20in%20Isolated%20Storage.md) example demonstrates the use of the DeleteFile method."
+  example:
+  - "The following code example uses the DeleteFile method to delete a number of files in isolated storage.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#6](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_11_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#6](../../add/codesnippet/CPP/m-system.io.isolatedstor_11_1.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#6](../../add/codesnippet/CSharp/m-system.io.isolatedstor_11_1.cs)]"
   syntax:
     content: public void DeleteFile (string file);
     parameters:
     - id: file
       type: System.String
-      description: To be added.
+      description: The relative path of the file to delete within the isolated storage scope.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.DeleteFile*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The target file is open or the path is incorrect.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The file path is .
   platform:
   - net-11
   - net-20
@@ -329,18 +442,30 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the specified path refers to an existing directory in the isolated store.
   syntax:
     content: public bool DirectoryExists (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path to test.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if path refers to an existing directory in the isolated store and is not ; otherwise, .
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.DirectoryExists*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store is closed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
   platform:
   - net-11
   - net-20
@@ -357,12 +482,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases all resources used by the .
+  remarks: "Call `Dispose` when you are finished using the <xref:System.IO.IsolatedStorage.IsolatedStorageFile>. The `Dispose` method leaves the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> in an unusable state. After calling `Dispose`, you must release all references to the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> so the garbage collector can reclaim the memory that <xref:System.IO.IsolatedStorage.IsolatedStorageFile> was occupying.  \n  \n> [!NOTE]\n>  Always call Dispose before you release your last reference to the <xref:System.IO.IsolatedStorage.IsolatedStorageFile>. Otherwise, the resources the <xref:System.IO.IsolatedStorage.IsolatedStorageFileStream> is using will not be freed until garbage collection calls the <xref:System.IO.IsolatedStorage.IsolatedStorageFileStream> object's <xref:System.Object.Finalize%2A> method."
+  example:
+  - "The following code example opens an isolated storage file, uses it to write information to a stream, closes the file, and then uses the Dispose method to release all resources.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_9_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/CPP/m-system.io.isolatedstor_9_1.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/CSharp/m-system.io.isolatedstor_9_1.cs)]"
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -379,18 +507,30 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the specified path refers to an existing file in the isolated store.
   syntax:
     content: public bool FileExists (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path and file name to test.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if path refers to an existing file in the isolated store and is not ; otherwise, .
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.FileExists*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store is closed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The isolated store has been removed.
   platform:
   - net-11
   - net-20
@@ -407,12 +547,12 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Allows an object to try to free resources and perform other cleanup operations before it is reclaimed by garbage collection.
   syntax:
     content: ~IsolatedStorageFile ();
     parameters: []
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.Finalize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -429,18 +569,34 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the creation date and time of a specified file or directory.
+  remarks: If the file described by path does not exist, this method returns 12:00 midnight, January 1, 1601 A.D. (C.E.) Coordinated Universal Time (UTC), adjusted to local time.
   syntax:
     content: public DateTimeOffset GetCreationTime (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path to the file or directory for which to obtain creation date and time information.
     return:
       type: System.DateTimeOffset
-      description: To be added.
+      description: The creation date and time for the specified file or directory. This value is expressed in local time.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetCreationTime*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is a zero-length string, contains only white space, or contains one or more invalid characters defined by the <xref:System.IO.Path.GetInvalidPathChars%2A?displayProperty=fullName> method."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store has been closed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
   platform:
   - net-11
   - net-20
@@ -457,15 +613,31 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Enumerates the directories at the root of an isolated store.
+  remarks: This method is equivalent to using the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetDirectoryNames%28System.String%29?displayProperty=fullName> method with "*" specified for the search pattern.
   syntax:
     content: public string[] GetDirectoryNames ();
     parameters: []
     return:
       type: System.String[]
-      description: To be added.
+      description: An array of relative paths of directories at the root of the isolated store. A zero-length array specifies that there are no directories at the root.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetDirectoryNames*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store is closed.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The isolated store has been removed.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Caller does not have permission to enumerate directories.
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: One or more directories are not found.
   platform:
   - net-11
   - net-20
@@ -482,18 +654,39 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Enumerates the directories in an isolated storage scope that match a given search pattern.
+  remarks: "Wildcard characters must only be in the final element of a `searchPattern`. For instance, \"directory1/*etc\\*\" is a valid search string, but \"\\*etc\\*/directory\" is not.  \n  \n The `searchPattern` \"Project\\Data*\" will give all subdirectories of Project beginning with Data in the isolated storage scope. The `searchPattern` \"\\*\" will return all directories located in the root. For complete description of search string criteria, see the <xref:System.IO.Directory> class.  \n  \n For information on getting file names, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetFileNames%2A> method.  \n  \n The [How to: Find Existing Files and Directories in Isolated Storage](../Topic/How%20to:%20Find%20Existing%20Files%20and%20Directories%20in%20Isolated%20Storage.md) example demonstrates the use of the GetDirectoryNames method."
+  example:
+  - "The following code example demonstrates the GetDirectoryNames method. For the complete context of this example, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> overview.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#16](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_14_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#16](../../add/codesnippet/CPP/m-system.io.isolatedstor_14_1.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#16](../../add/codesnippet/CSharp/m-system.io.isolatedstor_14_1.cs)]"
   syntax:
     content: public string[] GetDirectoryNames (string searchPattern);
     parameters:
     - id: searchPattern
       type: System.String
-      description: To be added.
+      description: A search pattern. Both single-character ("?") and multi-character ("*") wildcards are supported.
     return:
       type: System.String[]
-      description: To be added.
+      description: An array of the relative paths of directories in the isolated storage scope that match searchPattern. A zero-length array specifies that there are no directories that match.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetDirectoryNames*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    searchPattern is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store is closed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: Caller does not have permission to enumerate directories resolved from searchPattern.
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The directory or directories specified by searchPattern are not found.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The isolated store has been removed.
   platform:
   - net-11
   - net-20
@@ -510,18 +703,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the enumerator for the  stores within an isolated storage scope.
+  remarks: 'The [How to: Enumerate Stores for Isolated Storage](../Topic/How%20to:%20Enumerate%20Stores%20for%20Isolated%20Storage.md) example demonstrates the use of the GetEnumerator method.'
   syntax:
     content: public static System.Collections.IEnumerator GetEnumerator (System.IO.IsolatedStorage.IsolatedStorageScope scope);
     parameters:
     - id: scope
       type: System.IO.IsolatedStorage.IsolatedStorageScope
-      description: To be added.
+      description: Represents the  for which to return isolated stores.  and  are the only  combinations supported.
     return:
       type: System.Collections.IEnumerator
-      description: To be added.
+      description: Enumerator for the  stores within the specified isolated storage scope.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -538,15 +732,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Enumerates the file names at the root of an isolated store.
+  remarks: This method is equivalent to using the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetFileNames%28System.String%29?displayProperty=fullName> method with "*" specified for the search pattern.
   syntax:
     content: public string[] GetFileNames ();
     parameters: []
     return:
       type: System.String[]
-      description: To be added.
+      description: An array of relative paths of files at the root of the isolated store.  A zero-length array specifies that there are no files at the root.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetFileNames*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The isolated store has been removed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: File paths from the isolated store root cannot be determined.
   platform:
   - net-11
   - net-20
@@ -563,18 +767,33 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the file names that match a search pattern.
+  remarks: "The `searchPattern` \"Project\\Data*.txt\" will give all \".txt\" files beginning with Data in the Project directory of the isolated storage scope. For complete description of search pattern strings, see <xref:System.IO.Directory?displayProperty=fullName>.  \n  \n For information about how to find directory names, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetDirectoryNames%2A> method.  \n  \n The [How to: Find Existing Files and Directories in Isolated Storage](../Topic/How%20to:%20Find%20Existing%20Files%20and%20Directories%20in%20Isolated%20Storage.md) example demonstrates the use of the GetFileNames method."
+  example:
+  - "The following code example demonstrates the GetFileNames method. For the complete context of this example, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> overview.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#16](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_3_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#16](../../add/codesnippet/CPP/m-system.io.isolatedstor_3_1.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#16](../../add/codesnippet/CSharp/m-system.io.isolatedstor_3_1.cs)]"
   syntax:
     content: public string[] GetFileNames (string searchPattern);
     parameters:
     - id: searchPattern
       type: System.String
-      description: To be added.
+      description: A search pattern. Both single-character ("?") and multi-character ("*") wildcards are supported.
     return:
       type: System.String[]
-      description: To be added.
+      description: An array of relative paths of files in the isolated storage scope that match searchPattern. A zero-length array specifies that there are no files that match.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetFileNames*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    searchPattern is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The isolated store has been removed.
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The file path specified by searchPattern cannot be found.
   platform:
   - net-11
   - net-20
@@ -591,18 +810,34 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the date and time a specified file or directory was last accessed.
+  remarks: If the file described by `path` does not exist, this method returns 12:00 midnight, January 1, 1601 A.D. (C.E.) Coordinated Universal Time (UTC), adjusted to local time.
   syntax:
     content: public DateTimeOffset GetLastAccessTime (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path to the file or directory for which to obtain last access date and time information.
     return:
       type: System.DateTimeOffset
-      description: To be added.
+      description: The date and time that the specified file or directory was last accessed. This value is expressed in local time.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetLastAccessTime*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is a zero-length string, contains only white space, or contains one or more invalid characters defined by the <xref:System.IO.Path.GetInvalidPathChars%2A?displayProperty=fullName> method."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store has been closed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
   platform:
   - net-11
   - net-20
@@ -619,18 +854,34 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the date and time a specified file or directory was last written to.
+  remarks: If the file described by `path` does not exist, this method returns 12:00 midnight, January 1, 1601 A.D. (C.E.) Coordinated Universal Time (UTC), adjusted to local time.
   syntax:
     content: public DateTimeOffset GetLastWriteTime (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path to the file or directory for which to obtain last write date and time information.
     return:
       type: System.DateTimeOffset
-      description: To be added.
+      description: The date and time that the specified file or directory was last written to. This value is expressed in local time.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetLastWriteTime*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is a zero-length string, contains only white space, or contains one or more invalid characters defined by the <xref:System.IO.Path.GetInvalidPathChars%2A?displayProperty=fullName> method."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store has been closed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
   platform:
   - net-11
   - net-20
@@ -647,15 +898,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains machine-scoped isolated storage corresponding to the calling code's application identity.
+  remarks: "All assemblies associated with an application use the same isolated store when using this method.  \n  \n GetMachineStoreForApplication is functionally equivalent to the following code:  \n  \n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#18](../../add/codesnippet/CSharp/m-system.io.isolatedstor_5_1.cs)]\n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#18](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_5_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#18](../../add/codesnippet/CPP/m-system.io.isolatedstor_5_1.cpp)]"
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetMachineStoreForApplication ();
     parameters: []
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object corresponding to the isolated storage scope based on the calling code's application identity.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetMachineStoreForApplication*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The application identity of the caller could not be determined.  \n  \n -or-  \n  \n The granted permission set for the application domain could not be determined.  \n  \n -or-  \n  \n An isolated storage location cannot be initialized."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
   platform:
   - net-11
   - net-20
@@ -672,15 +930,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains machine-scoped isolated storage corresponding to the calling code's assembly identity.
+  remarks: "The same assembly within different applications always uses the same isolated store when using this method.  \n  \n GetMachineStoreForAssembly is functionally equivalent to the following code:  \n  \n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#19](../../add/codesnippet/CSharp/m-system.io.isolatedstor_12_1.cs)]\n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#19](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_12_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#19](../../add/codesnippet/CPP/m-system.io.isolatedstor_12_1.cpp)]  \n  \n> [!NOTE]\n>  Different assemblies running within the same application domain always have distinct isolated stores."
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetMachineStoreForAssembly ();
     parameters: []
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object corresponding to the isolated storage scope based on the calling code's assembly identity.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetMachineStoreForAssembly*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: An isolated storage location cannot be initialized.
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
   platform:
   - net-11
   - net-20
@@ -697,15 +962,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains machine-scoped isolated storage corresponding to the application domain identity and the assembly identity.
+  remarks: "The same assembly code will use different isolated stores when used in the context of different applications.  \n  \n GetMachineStoreForDomain is functionally equivalent to the following code:  \n  \n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#20](../../add/codesnippet/CSharp/m-system.io.isolatedstor_0_1.cs)]\n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#20](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_0_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#20](../../add/codesnippet/CPP/m-system.io.isolatedstor_0_1.cpp)]  \n  \n Different assemblies running within the same application domain always have distinct isolated stores.  \n  \n> [!NOTE]\n>  <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForDomain%2A> will return an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object without a quota if the application domain into which the assembly is installed does not have <xref:System.Security.Permissions.IsolatedStorageFilePermission>. Later attempts to create an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object using the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object that does not have a quota will fail with an <xref:System.IO.IsolatedStorage.IsolatedStorageException>."
+  example:
+  - "The following code example demonstrates the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForDomain%2A> method. For the complete context of this example, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> overview.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_0_2.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/CPP/m-system.io.isolatedstor_0_2.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/CSharp/m-system.io.isolatedstor_0_2.cs)]"
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetMachineStoreForDomain ();
     parameters: []
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object corresponding to the , based on a combination of the application domain identity and the assembly identity.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetMachineStoreForDomain*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The store failed to open.  \n  \n -or-  \n  \n The assembly specified has insufficient permissions to create isolated stores.  \n  \n -or-  \n  \n The permissions for the application domain cannot be determined.  \n  \n -or-  \n  \n An isolated storage location cannot be initialized."
   platform:
   - net-11
   - net-20
@@ -722,8 +996,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override System.Security.Permissions.IsolatedStoragePermission GetPermission (System.Security.PermissionSet ps);
     parameters:
@@ -734,6 +1006,7 @@ items:
       type: System.Security.Permissions.IsolatedStoragePermission
       description: To be added.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetPermission*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -750,21 +1023,37 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains isolated storage corresponding to the given application identity.
+  remarks: >-
+    > [!NOTE]
+
+    >  If the `scope` parameter is <xref:System.IO.IsolatedStorage.IsolatedStorageScope?displayProperty=fullName> and the application domain in which the assembly is installed does not have <xref:System.Security.Permissions.IsolatedStorageFilePermission>, the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetStore%2A> method will return an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object without a quota. Later attempts to create an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object using the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object that does not have a quota will fail with an <xref:System.IO.IsolatedStorage.IsolatedStorageException>.
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetStore (System.IO.IsolatedStorage.IsolatedStorageScope scope, object applicationIdentity);
     parameters:
     - id: scope
       type: System.IO.IsolatedStorage.IsolatedStorageScope
-      description: To be added.
+      description: A bitwise combination of the enumeration values.
     - id: applicationIdentity
       type: System.Object
-      description: To be added.
+      description: An object that contains evidence for the application identity.
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object that represents the parameters.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The  applicationIdentity identity has not been passed in.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The scope is invalid.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "An isolated storage location cannot be initialized.  \n  \n -or-  \n  \n scope contains the enumeration value , but the application identity of the caller cannot be determined,because the <xref:System.AppDomain.ActivationContext%2A> for  the current application domain returned .  \n  \n -or-  \n  \n scope contains the value , but the permissions for the application domain cannot be determined.  \n  \n -or-  \n  \n scope contains the value , but the permissions for the calling assembly cannot be determined."
   platform:
   - net-11
   - net-20
@@ -781,21 +1070,37 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains isolated storage corresponding to the isolation scope and the application identity object.
+  remarks: >-
+    > [!NOTE]
+
+    >  If the `scope` parameter is <xref:System.IO.IsolatedStorage.IsolatedStorageScope> and the application domain in which the assembly is installed does not have <xref:System.Security.Permissions.IsolatedStorageFilePermission>, the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetStore%2A> method will return an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object without a quota. Later attempts to create an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object using the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object that does not have a quota will fail with an <xref:System.IO.IsolatedStorage.IsolatedStorageException>.
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetStore (System.IO.IsolatedStorage.IsolatedStorageScope scope, Type applicationEvidenceType);
     parameters:
     - id: scope
       type: System.IO.IsolatedStorage.IsolatedStorageScope
-      description: To be added.
+      description: A bitwise combination of the enumeration values.
     - id: applicationEvidenceType
       type: System.Type
-      description: To be added.
+      description: An object that contains the application identity.
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object that represents the parameters.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The   applicationEvidence identity has not been passed in.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The scope is invalid.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "An isolated storage location cannot be initialized.  \n  \n -or-  \n  \n scope contains the enumeration value , but the application identity of the caller cannot be determined, because the <xref:System.AppDomain.ActivationContext%2A> for  the current application domain returned .  \n  \n -or-  \n  \n scope contains the value , but the permissions for the application domain cannot be determined.  \n  \n -or-  \n  \n scope contains the value , but the permissions for the calling assembly cannot be determined."
   platform:
   - net-11
   - net-20
@@ -812,24 +1117,37 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains the isolated storage corresponding to the given application domain and assembly evidence objects.
+  remarks: "This form of `GetStore` is most useful for administrative code that needs to open a store as if it were another assembly. The store is opened for the evidence provided and not for the currently executing assembly.  \n  \n> [!NOTE]\n>  If the `scope` parameter is <xref:System.IO.IsolatedStorage.IsolatedStorageScope> and the application domain in which the assembly is installed does not have <xref:System.Security.Permissions.IsolatedStorageFilePermission>, the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetStore%2A> method will return an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object without a quota. Later attempts to create an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object using the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object that does not have a quota will fail with an <xref:System.IO.IsolatedStorage.IsolatedStorageException>."
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetStore (System.IO.IsolatedStorage.IsolatedStorageScope scope, object domainIdentity, object assemblyIdentity);
     parameters:
     - id: scope
       type: System.IO.IsolatedStorage.IsolatedStorageScope
-      description: To be added.
+      description: A bitwise combination of the enumeration values.
     - id: domainIdentity
       type: System.Object
-      description: To be added.
+      description: An object that contains evidence for the application domain identity.
     - id: assemblyIdentity
       type: System.Object
-      description: To be added.
+      description: An object that contains evidence for the code assembly identity.
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object that represents the parameters.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "Neither domainIdentity nor assemblyIdentity has been passed in. This verifies that the correct constructor is being used.  \n  \n -or-  \n  \n Either domainIdentity or assemblyIdentity is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The scope is invalid.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "An isolated storage location cannot be initialized.  \n  \n -or-  \n  \n scope contains the enumeration value , but the application identity of the caller cannot be determined, because the <xref:System.AppDomain.ActivationContext%2A> for  the current application domain returned .  \n  \n -or-  \n  \n scope contains the value , but the permissions for the application domain cannot be determined.  \n  \n -or-  \n  \n scope contains the value , but the permissions for the calling assembly cannot be determined."
   platform:
   - net-11
   - net-20
@@ -846,24 +1164,36 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains isolated storage corresponding to the isolated storage scope given the application domain and assembly evidence types.
+  remarks: "This is the overload of GetStore most likely to be called from application code.  \n  \n This overload of GetStore opens an isolated store for the evidence types that are passed in.  \n  \n> [!NOTE]\n>  If the `scope` parameter is <xref:System.IO.IsolatedStorage.IsolatedStorageScope> and the application domain in which the assembly is installed does not have <xref:System.Security.Permissions.IsolatedStorageFilePermission>, the GetStore method will return an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object without a quota. Later attempts to create an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object using the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object that does not have a quota will fail with an <xref:System.IO.IsolatedStorage.IsolatedStorageException>."
+  example:
+  - "The following code example demonstrates the GetStore method. For the complete context of this example, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> overview.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#15](../../add/codesnippet/VisualBasic/ab394268-92aa-40b0-bda7-_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#15](../../add/codesnippet/CPP/ab394268-92aa-40b0-bda7-_1.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#15](../../add/codesnippet/CSharp/ab394268-92aa-40b0-bda7-_1.cs)]"
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetStore (System.IO.IsolatedStorage.IsolatedStorageScope scope, Type domainEvidenceType, Type assemblyEvidenceType);
     parameters:
     - id: scope
       type: System.IO.IsolatedStorage.IsolatedStorageScope
-      description: To be added.
+      description: A bitwise combination of the enumeration values.
     - id: domainEvidenceType
       type: System.Type
-      description: To be added.
+      description: The type of the  that you can chose from the list of  present in the domain of the calling application.  lets the  object choose the evidence.
     - id: assemblyEvidenceType
       type: System.Type
-      description: To be added.
+      description: The type of the  that you can chose from the list of  present in the domain of the calling application.  lets the  object choose the evidence.
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object that represents the parameters.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The scope is invalid.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The evidence type provided is missing in the assembly evidence list.  \n  \n -or-  \n  \n An isolated storage location cannot be initialized.  \n  \n -or-  \n  \n scope contains the enumeration value , but the application identity of the caller cannot be determined, because the <xref:System.AppDomain.ActivationContext%2A> for  the current application domain returned .  \n  \n -or-  \n  \n scope contains the value , but the permissions for the application domain cannot be determined.  \n  \n -or-  \n  \n scope contains , but the permissions for the calling assembly cannot be determined."
   platform:
   - net-11
   - net-20
@@ -880,30 +1210,48 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains isolated storage corresponding to the given application domain and the assembly evidence objects and types.
+  remarks: >-
+    > [!NOTE]
+
+    >  If the `scope` parameter is <xref:System.IO.IsolatedStorage.IsolatedStorageScope> and the application domain in which the assembly is installed does not have <xref:System.Security.Permissions.IsolatedStorageFilePermission>, the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.GetStore%2A> method will return an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object without a quota. Later attempts to create an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object using the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object that does not have a quota will fail with an <xref:System.IO.IsolatedStorage.IsolatedStorageException>.
+  example:
+  - "The following code example obtains storage based on publisher evidence.  \n  \n [!code-vb[System.IO.IsolatedStorage.GetStore#1](../../add/codesnippet/VisualBasic/1751b0ac-9718-419a-882a-_1.vb)]\n [!code-cs[System.IO.IsolatedStorage.GetStore#1](../../add/codesnippet/CSharp/1751b0ac-9718-419a-882a-_1.cs)]"
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetStore (System.IO.IsolatedStorage.IsolatedStorageScope scope, System.Security.Policy.Evidence domainEvidence, Type domainEvidenceType, System.Security.Policy.Evidence assemblyEvidence, Type assemblyEvidenceType);
     parameters:
     - id: scope
       type: System.IO.IsolatedStorage.IsolatedStorageScope
-      description: To be added.
+      description: A bitwise combination of the enumeration values.
     - id: domainEvidence
       type: System.Security.Policy.Evidence
-      description: To be added.
+      description: An object that contains the application domain identity.
     - id: domainEvidenceType
       type: System.Type
-      description: To be added.
+      description: The identity type to choose from the application domain evidence.
     - id: assemblyEvidence
       type: System.Security.Policy.Evidence
-      description: To be added.
+      description: An object that contains the code assembly identity.
     - id: assemblyEvidenceType
       type: System.Type
-      description: To be added.
+      description: The identity type to choose from the application code assembly evidence.
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object that represents the parameters.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The domainEvidence or assemblyEvidence identity has not been passed in.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The scope is invalid.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "An isolated storage location cannot be initialized.  \n  \n -or-  \n  \n scope contains the enumeration value , but the application identity of the caller cannot be determined, because the <xref:System.AppDomain.ActivationContext%2A> for  the current application domain returned .  \n  \n -or-  \n  \n scope contains the value , but the permissions for the application domain cannot be determined.  \n  \n -or-  \n  \n scope contains the value , but the permissions for the calling assembly cannot be determined."
   platform:
   - net-11
   - net-20
@@ -920,15 +1268,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains user-scoped isolated storage corresponding to the calling code's application identity.
+  remarks: "All assemblies associated with an application use the same isolated store when using this method. This method can be used only when the application identity can be determined - for example, when the application is published through ClickOnce deployment or is a Silverlight-based application. If you attempt to use this method outside a ClickOnce or Silverlight-based application, you will receive an <xref:System.IO.IsolatedStorage.IsolatedStorageException> exception, because the application identity of the caller cannot be determined.  \n  \n GetUserStoreForApplication is functionally equivalent to the following code:  \n  \n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#21](../../add/codesnippet/CSharp/m-system.io.isolatedstor_10_1.cs)]\n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#21](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_10_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#21](../../add/codesnippet/CPP/m-system.io.isolatedstor_10_1.cpp)]  \n  \n In this code, the `applicationIdentity` parameter for `GetStore(IsolatedStorageScope scope, Object applicationIdentity)` is `null`."
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetUserStoreForApplication ();
     parameters: []
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object corresponding to the isolated storage scope based on the calling code's assembly identity.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "An isolated storage location cannot be initialized.  \n  \n -or-  \n  \n The application identity of the caller cannot be determined, because the <xref:System.AppDomain.ActivationContext%2A> property returned .  \n  \n -or-  \n  \n The permissions for the application domain cannot be determined."
   platform:
   - net-11
   - net-20
@@ -945,15 +1300,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains user-scoped isolated storage corresponding to the calling code's assembly identity.
+  remarks: "The same assembly within different applications always uses the same isolated store when using this method.  \n  \n GetUserStoreForAssembly is functionally equivalent to the following code:  \n  \n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#22](../../add/codesnippet/CSharp/m-system.io.isolatedstor_15_1.cs)]\n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#22](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_15_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#22](../../add/codesnippet/CPP/m-system.io.isolatedstor_15_1.cpp)]  \n  \n> [!NOTE]\n>  Different assemblies running within the same application domain always have distinct isolated stores."
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetUserStoreForAssembly ();
     parameters: []
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object corresponding to the isolated storage scope based on the calling code's assembly identity.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForAssembly*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "An isolated storage location cannot be initialized.  \n  \n -or-  \n  \n The permissions for the calling assembly cannot be determined."
   platform:
   - net-11
   - net-20
@@ -970,15 +1332,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains user-scoped isolated storage corresponding to the application domain identity and assembly identity.
+  remarks: "The same assembly code will use different isolated stores when used in the context of different applications.  \n  \n GetUserStoreForDomain is functionally equivalent to the following code:  \n  \n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#23](../../add/codesnippet/CSharp/m-system.io.isolatedstor_1_1.cs)]\n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#23](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_1_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#23](../../add/codesnippet/CPP/m-system.io.isolatedstor_1_1.cpp)]  \n  \n Different assemblies running within the same application domain always have distinct isolated stores.  \n  \n> [!NOTE]\n>  GetUserStoreForDomain will return an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object without a quota if the application domain in which the assembly is installed does not have <xref:System.Security.Permissions.IsolatedStorageFilePermission>. Later attempts to create an <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object using the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> object that does not have a quota will fail with an <xref:System.IO.IsolatedStorage.IsolatedStorageException>."
+  example:
+  - "The following code example demonstrates the GetUserStoreForDomain method. For the complete context of this example, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> overview.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_1_2.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/CPP/m-system.io.isolatedstor_1_2.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#10](../../add/codesnippet/CSharp/m-system.io.isolatedstor_1_2.cs)]"
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetUserStoreForDomain ();
     parameters: []
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: An object corresponding to the , based on a combination of the application domain identity and the assembly identity.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForDomain*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: Sufficient isolated storage permissions have not been granted.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The store failed to open.  \n  \n -or-  \n  \n The assembly specified has insufficient permissions to create isolated stores.  \n  \n -or-  \n  \n An isolated storage location cannot be initialized.  \n  \n -or-  \n  \n The permissions for the application domain cannot be determined."
   platform:
   - net-11
   - net-20
@@ -995,15 +1366,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains a user-scoped isolated store for use by applications in a virtual host domain.
+  remarks: This method is supported only in Silverlight-based applications.
   syntax:
     content: public static System.IO.IsolatedStorage.IsolatedStorageFile GetUserStoreForSite ();
     parameters: []
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFile
-      description: To be added.
+      description: The isolated storage file that corresponds to the isolated storage scope based on the calling code's application identity.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForSite*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1020,18 +1392,37 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Enables an application to explicitly request a larger quota size, in bytes.
+  remarks: "The IncreaseQuotaTo method enables an application to explicitly request a larger quota size in bytes. The new quota size must not be smaller than the current quota size, because only quota increases are allowed.  \n  \n Whenever the IncreaseQuotaTo method is called, isolated storage calls the <xref:System.AppDomainManager.CheckSecuritySettings%2A> method.  \n  \n You can implement policy decisions by creating a custom <xref:System.AppDomainManager> object that overrides the <xref:System.AppDomainManager.CheckSecuritySettings%2A> method so that the object can perform policy decisions based on a <xref:System.IO.IsolatedStorage.IsolatedStorageSecurityState> object.  \n  \n If there is no custom <xref:System.AppDomainManager> object, the quota increase request is denied, because the default implementation for <xref:System.AppDomainManager.CheckSecuritySettings%2A> returns `false`.  \n  \n Currently, none of the hosts in the .NET Framework provide this customization, so IncreaseQuotaTo always returns `false`."
   syntax:
     content: public override bool IncreaseQuotaTo (long newQuotaSize);
     parameters:
     - id: newQuotaSize
       type: System.Int64
-      description: To be added.
+      description: The requested size, in bytes.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the new quota is accepted; otherwise, .
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.IncreaseQuotaTo*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    newQuotaSize is less than current quota size."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    newQuotaSize is less than zero, or less than or equal to the current quota size."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store has been closed.
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The current scope is not for an application user.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
   platform:
   - net-11
   - net-20
@@ -1048,14 +1439,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether isolated storage is enabled.
+  remarks: Isolated storage for full .NET Framework applications is always enabled.
   syntax:
     content: public static bool IsEnabled { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: in all cases.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.IsEnabled*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1072,14 +1464,23 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value representing the maximum amount of space available for isolated storage within the limits established by the quota.
+  remarks: "The number of bytes available is constrained by the isolated storage quota set by the administrator. Quota is configured in security policy on the basis of evidence, so the same code can receive a different quota if it is run with different evidence. For example, an application that is run locally and also from a share on an intranet would likely receive different quotas.  \n  \n The [How to: Anticipate Out-of-Space Conditions with Isolated Storage](../Topic/How%20to:%20Anticipate%20Out-of-Space%20Conditions%20with%20Isolated%20Storage.md) example demonstrates the use of the MaximumSize property."
+  example:
+  - "The following code example demonstrates the MaximumSize property. For the complete context of this example, see the <xref:System.IO.IsolatedStorage.IsolatedStorageFile> overview.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#5](../../add/codesnippet/VisualBasic/p-system.io.isolatedstor_2_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#5](../../add/codesnippet/CPP/p-system.io.isolatedstor_2_1.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#5](../../add/codesnippet/CSharp/p-system.io.isolatedstor_2_1.cs)]"
   syntax:
     content: public override ulong MaximumSize { get; }
     return:
       type: System.UInt64
-      description: To be added.
+      description: The limit of isolated storage space in bytes.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.MaximumSize*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The property is unavailable. MaximumSize cannot be determined without evidence from the assembly's creation. The evidence could not be determined when the object was created.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: An isolated storage error occurred.
   platform:
   - net-11
   - net-20
@@ -1096,18 +1497,37 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Moves a specified directory and its contents to a new location.
+  remarks: '`sourceFileName` and `destinationFileName` must specify different directory names.'
   syntax:
     content: public void MoveDirectory (string sourceDirectoryName, string destinationDirectoryName);
     parameters:
     - id: sourceDirectoryName
       type: System.String
-      description: To be added.
+      description: The name of the directory to move.
     - id: destinationDirectoryName
       type: System.String
-      description: To be added.
+      description: The path to the new location for `sourceDirectoryName`. This cannot be the path to an existing directory.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.MoveDirectory*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    sourceFileName or destinationFileName is a zero-length string, contains only white space, or contains one or more invalid characters defined by the <xref:System.IO.Path.GetInvalidPathChars%2A?displayProperty=fullName> method."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    sourceFileName or destinationFileName is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store has been closed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: "\n    sourceDirectoryName does not exist."
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled.  \n  \n -or-  \n  \n destinationDirectoryName already exists.  \n  \n -or-  \n  \n sourceDirectoryName and destinationDirectoryName refer to the same directory."
   platform:
   - net-11
   - net-20
@@ -1124,18 +1544,37 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Moves a specified file to a new location, and optionally lets you specify a new file name.
+  remarks: This method does not throw an exception if `sourceFileName` and `destinationFileName` are the same.
   syntax:
     content: public void MoveFile (string sourceFileName, string destinationFileName);
     parameters:
     - id: sourceFileName
       type: System.String
-      description: To be added.
+      description: The name of the file to move.
     - id: destinationFileName
       type: System.String
-      description: To be added.
+      description: The path to the new location for the file. If a file name is included, the moved file will have that name.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.MoveFile*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    sourceFileName or destinationFileName is a zero-length string, contains only white space, or contains one or more invalid characters defined by the <xref:System.IO.Path.GetInvalidPathChars%2A?displayProperty=fullName> method."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    sourceFileName or destinationFileName is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store has been closed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: "\n    sourceFileName was not found."
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
   platform:
   - net-11
   - net-20
@@ -1152,21 +1591,40 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a file in the specified mode.
+  remarks: This method is equivalent to using the <xref:System.IO.IsolatedStorage.IsolatedStorageFileStream.%23ctor%28System.String%2CSystem.IO.FileMode%2CSystem.IO.IsolatedStorage.IsolatedStorageFile%29?displayProperty=fullName> constructor.
   syntax:
     content: public System.IO.IsolatedStorage.IsolatedStorageFileStream OpenFile (string path, System.IO.FileMode mode);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The relative path of the file within the isolated store.
     - id: mode
       type: System.IO.FileMode
-      description: To be added.
+      description: One of the enumeration values that specifies how to open the file.
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFileStream
-      description: To be added.
+      description: A file that is opened in the specified mode, with read/write access, and is unshared.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.OpenFile*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is malformed."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The directory in path does not exist.
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: No file was found and the mode is set to .
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
   platform:
   - net-11
   - net-20
@@ -1183,24 +1641,43 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a file in the specified mode with the specified read/write access.
+  remarks: This method is equivalent to using the <xref:System.IO.IsolatedStorage.IsolatedStorageFileStream.%23ctor%28System.String%2CSystem.IO.FileMode%2CSystem.IO.FileAccess%2CSystem.IO.IsolatedStorage.IsolatedStorageFile%29?displayProperty=fullName> constructor.
   syntax:
     content: public System.IO.IsolatedStorage.IsolatedStorageFileStream OpenFile (string path, System.IO.FileMode mode, System.IO.FileAccess access);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The relative path of the file within the isolated store.
     - id: mode
       type: System.IO.FileMode
-      description: To be added.
+      description: One of the enumeration values that specifies how to open the file.
     - id: access
       type: System.IO.FileAccess
-      description: To be added.
+      description: One of the enumeration values that specifies whether the file will be opened with read, write, or read/write access.
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFileStream
-      description: To be added.
+      description: A file that is opened in the specified mode and access, and is unshared.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.OpenFile*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is malformed."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The directory in path does not exist.
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: No file was found and the mode is set to .
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
   platform:
   - net-11
   - net-20
@@ -1217,27 +1694,46 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a file in the specified mode, with the specified read/write access and sharing permission.
+  remarks: This method is equivalent to using the <xref:System.IO.IsolatedStorage.IsolatedStorageFileStream.%23ctor%28System.String%2CSystem.IO.FileMode%2CSystem.IO.FileAccess%2CSystem.IO.FileShare%2CSystem.IO.IsolatedStorage.IsolatedStorageFile%29?displayProperty=fullName> constructor.
   syntax:
     content: public System.IO.IsolatedStorage.IsolatedStorageFileStream OpenFile (string path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The relative path of the file within the isolated store.
     - id: mode
       type: System.IO.FileMode
-      description: To be added.
+      description: One of the enumeration values that specifies how to open or create the file.
     - id: access
       type: System.IO.FileAccess
-      description: To be added.
+      description: One of the enumeration values that specifies whether the file will be opened with read, write, or read/write access
     - id: share
       type: System.IO.FileShare
-      description: To be added.
+      description: A bitwise combination of enumeration values that specify the type of access other  objects have to this file.
     return:
       type: System.IO.IsolatedStorage.IsolatedStorageFileStream
-      description: To be added.
+      description: A file that is opened in the specified mode and access, and with the specified sharing options.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.OpenFile*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    path is malformed."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The directory in path does not exist.
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: No file was found and the mode is set to <xref:System.IO.FileInfo.Open%2A>.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
   platform:
   - net-11
   - net-20
@@ -1254,14 +1750,20 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that represents the maximum amount of space available for isolated storage.
   syntax:
     content: public override long Quota { get; }
     return:
       type: System.Int64
-      description: To be added.
+      description: The limit of isolated storage space, in bytes.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.Quota*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: "The isolated store has been removed.  \n  \n -or-  \n  \n Isolated storage is disabled."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
   platform:
   - net-11
   - net-20
@@ -1278,12 +1780,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the isolated storage scope and all its contents.
+  remarks: "> [!CAUTION]\n>  This method irrevocably removes the entire scope and all contained directories and files.  \n  \n If any of the directories or files in the store are in use, the removal attempt for the store fails and the store is marked for removal. Any subsequent attempts to modify the store throw an <xref:System.IO.IsolatedStorage.IsolatedStorageException>."
+  example:
+  - "The following code example uses the Remove method to delete the isolated storage file after its contents have been emptied. The [How to: Delete Stores in Isolated Storage](../Topic/How%20to:%20Delete%20Stores%20in%20Isolated%20Storage.md) example also demonstrates the use of the <xref:System.IO.IsolatedStorage.IsolatedStorageFile.Remove%2A> method.  \n  \n [!code-vb[System.IO.IsolatedStorage.IsolatedStorage#16](../../add/codesnippet/VisualBasic/m-system.io.isolatedstor_4_1.vb)]\n [!code-cpp[System.IO.IsolatedStorage.IsolatedStorage#16](../../add/codesnippet/CPP/m-system.io.isolatedstor_4_1.cpp)]\n [!code-cs[System.IO.IsolatedStorage.IsolatedStorage#16](../../add/codesnippet/CSharp/m-system.io.isolatedstor_4_1.cs)]"
   syntax:
     content: public override void Remove ();
     parameters: []
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.Remove*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The isolated store cannot be deleted.
   platform:
   - net-11
   - net-20
@@ -1300,15 +1808,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the specified isolated storage scope for all identities.
+  remarks: "> [!CAUTION]\n>  This method irrevocably removes the entire scope and all contained directories and files.  \n  \n If any of the directories or files in the store are in use, the removal attempt for the store fails and the store is marked for removal. Any subsequent attempts to modify the store throw an <xref:System.IO.IsolatedStorage.IsolatedStorageException>."
   syntax:
     content: public static void Remove (System.IO.IsolatedStorage.IsolatedStorageScope scope);
     parameters:
     - id: scope
       type: System.IO.IsolatedStorage.IsolatedStorageScope
-      description: To be added.
+      description: A bitwise combination of the  values.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.Remove*
+  exceptions:
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The isolated store cannot be removed.
   platform:
   - net-11
   - net-20
@@ -1325,14 +1837,23 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO.IsolatedStorage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that represents the amount of the space used for isolated storage.
   syntax:
     content: public override long UsedSize { get; }
     return:
       type: System.Int64
-      description: To be added.
+      description: The used isolated storage space, in bytes.
   overload: System.IO.IsolatedStorage.IsolatedStorageFile.UsedSize*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The isolated store has been closed.
+  - type: System.IO.IsolatedStorage.IsolatedStorageException
+    commentId: T:System.IO.IsolatedStorage.IsolatedStorageException
+    description: The isolated store has been removed.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The isolated store has been disposed.
   platform:
   - net-11
   - net-20
@@ -1371,30 +1892,12 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.CopyFile(System.String,System.String,System.Boolean)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: CopyFile(String,String,Boolean)
   nameWithType: IsolatedStorageFile.CopyFile(String,String,Boolean)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.CopyFile(String,String,Boolean)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -1407,12 +1910,6 @@ references:
   name: CreateDirectory(String)
   nameWithType: IsolatedStorageFile.CreateDirectory(String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.CreateDirectory(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.CreateFile(System.String)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
@@ -1425,12 +1922,6 @@ references:
   name: IsolatedStorageFileStream
   nameWithType: IsolatedStorageFileStream
   fullName: System.IO.IsolatedStorage.IsolatedStorageFileStream
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.CurrentSize
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
@@ -1449,42 +1940,18 @@ references:
   name: DeleteDirectory(String)
   nameWithType: IsolatedStorageFile.DeleteDirectory(String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.DeleteDirectory(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.DeleteFile(System.String)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: DeleteFile(String)
   nameWithType: IsolatedStorageFile.DeleteFile(String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.DeleteFile(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.DirectoryExists(System.String)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: DirectoryExists(String)
   nameWithType: IsolatedStorageFile.DirectoryExists(String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.DirectoryExists(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.Dispose
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
@@ -1497,18 +1964,6 @@ references:
   name: FileExists(String)
   nameWithType: IsolatedStorageFile.FileExists(String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.FileExists(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.Finalize
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
@@ -1527,42 +1982,32 @@ references:
   name: DateTimeOffset
   nameWithType: DateTimeOffset
   fullName: System.DateTimeOffset
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetDirectoryNames
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetDirectoryNames()
   nameWithType: IsolatedStorageFile.GetDirectoryNames()
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetDirectoryNames()
-- uid: System.String
+- uid: System.String[]
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetDirectoryNames(System.String)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetDirectoryNames(String)
   nameWithType: IsolatedStorageFile.GetDirectoryNames(String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetDirectoryNames(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetEnumerator(System.IO.IsolatedStorage.IsolatedStorageScope)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
@@ -1587,66 +2032,24 @@ references:
   name: GetFileNames()
   nameWithType: IsolatedStorageFile.GetFileNames()
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetFileNames()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetFileNames(System.String)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetFileNames(String)
   nameWithType: IsolatedStorageFile.GetFileNames(String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetFileNames(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetLastAccessTime(System.String)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetLastAccessTime(String)
   nameWithType: IsolatedStorageFile.GetLastAccessTime(String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetLastAccessTime(String)
-- uid: System.DateTimeOffset
-  parent: System
-  isExternal: true
-  name: DateTimeOffset
-  nameWithType: DateTimeOffset
-  fullName: System.DateTimeOffset
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetLastWriteTime(System.String)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetLastWriteTime(String)
   nameWithType: IsolatedStorageFile.GetLastWriteTime(String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetLastWriteTime(String)
-- uid: System.DateTimeOffset
-  parent: System
-  isExternal: true
-  name: DateTimeOffset
-  nameWithType: DateTimeOffset
-  fullName: System.DateTimeOffset
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetMachineStoreForApplication
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
@@ -1665,24 +2068,12 @@ references:
   name: GetMachineStoreForAssembly()
   nameWithType: IsolatedStorageFile.GetMachineStoreForAssembly()
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetMachineStoreForAssembly()
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetMachineStoreForDomain
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetMachineStoreForDomain()
   nameWithType: IsolatedStorageFile.GetMachineStoreForDomain()
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetMachineStoreForDomain()
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetPermission(System.Security.PermissionSet)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
@@ -1707,18 +2098,6 @@ references:
   name: GetStore(IsolatedStorageScope,Object)
   nameWithType: IsolatedStorageFile.GetStore(IsolatedStorageScope,Object)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore(IsolatedStorageScope,Object)
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
-- uid: System.IO.IsolatedStorage.IsolatedStorageScope
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageScope
-  nameWithType: IsolatedStorageScope
-  fullName: System.IO.IsolatedStorage.IsolatedStorageScope
 - uid: System.Object
   parent: System
   isExternal: true
@@ -1731,18 +2110,6 @@ references:
   name: GetStore(IsolatedStorageScope,Type)
   nameWithType: IsolatedStorageFile.GetStore(IsolatedStorageScope,Type)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore(IsolatedStorageScope,Type)
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
-- uid: System.IO.IsolatedStorage.IsolatedStorageScope
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageScope
-  nameWithType: IsolatedStorageScope
-  fullName: System.IO.IsolatedStorage.IsolatedStorageScope
 - uid: System.Type
   parent: System
   isExternal: true
@@ -1755,246 +2122,84 @@ references:
   name: GetStore(IsolatedStorageScope,Object,Object)
   nameWithType: IsolatedStorageFile.GetStore(IsolatedStorageScope,Object,Object)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore(IsolatedStorageScope,Object,Object)
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
-- uid: System.IO.IsolatedStorage.IsolatedStorageScope
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageScope
-  nameWithType: IsolatedStorageScope
-  fullName: System.IO.IsolatedStorage.IsolatedStorageScope
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore(System.IO.IsolatedStorage.IsolatedStorageScope,System.Type,System.Type)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetStore(IsolatedStorageScope,Type,Type)
   nameWithType: IsolatedStorageFile.GetStore(IsolatedStorageScope,Type,Type)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore(IsolatedStorageScope,Type,Type)
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
-- uid: System.IO.IsolatedStorage.IsolatedStorageScope
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageScope
-  nameWithType: IsolatedStorageScope
-  fullName: System.IO.IsolatedStorage.IsolatedStorageScope
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore(System.IO.IsolatedStorage.IsolatedStorageScope,System.Security.Policy.Evidence,System.Type,System.Security.Policy.Evidence,System.Type)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetStore(IsolatedStorageScope,Evidence,Type,Evidence,Type)
   nameWithType: IsolatedStorageFile.GetStore(IsolatedStorageScope,Evidence,Type,Evidence,Type)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetStore(IsolatedStorageScope,Evidence,Type,Evidence,Type)
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
-- uid: System.IO.IsolatedStorage.IsolatedStorageScope
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageScope
-  nameWithType: IsolatedStorageScope
-  fullName: System.IO.IsolatedStorage.IsolatedStorageScope
 - uid: System.Security.Policy.Evidence
   parent: System.Security.Policy
   isExternal: false
   name: Evidence
   nameWithType: Evidence
   fullName: System.Security.Policy.Evidence
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.Security.Policy.Evidence
-  parent: System.Security.Policy
-  isExternal: false
-  name: Evidence
-  nameWithType: Evidence
-  fullName: System.Security.Policy.Evidence
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetUserStoreForApplication()
   nameWithType: IsolatedStorageFile.GetUserStoreForApplication()
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication()
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForAssembly
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetUserStoreForAssembly()
   nameWithType: IsolatedStorageFile.GetUserStoreForAssembly()
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForAssembly()
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForDomain
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetUserStoreForDomain()
   nameWithType: IsolatedStorageFile.GetUserStoreForDomain()
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForDomain()
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForSite
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: GetUserStoreForSite()
   nameWithType: IsolatedStorageFile.GetUserStoreForSite()
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForSite()
-- uid: System.IO.IsolatedStorage.IsolatedStorageFile
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFile
-  nameWithType: IsolatedStorageFile
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFile
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.IncreaseQuotaTo(System.Int64)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: IncreaseQuotaTo(Int64)
   nameWithType: IsolatedStorageFile.IncreaseQuotaTo(Int64)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.IncreaseQuotaTo(Int64)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.IsEnabled
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: IsEnabled
   nameWithType: IsolatedStorageFile.IsEnabled
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.IsEnabled
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.MaximumSize
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: MaximumSize
   nameWithType: IsolatedStorageFile.MaximumSize
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.MaximumSize
-- uid: System.UInt64
-  parent: System
-  isExternal: true
-  name: UInt64
-  nameWithType: UInt64
-  fullName: System.UInt64
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.MoveDirectory(System.String,System.String)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: MoveDirectory(String,String)
   nameWithType: IsolatedStorageFile.MoveDirectory(String,String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.MoveDirectory(String,String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.MoveFile(System.String,System.String)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: MoveFile(String,String)
   nameWithType: IsolatedStorageFile.MoveFile(String,String)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.MoveFile(String,String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.OpenFile(System.String,System.IO.FileMode)
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: OpenFile(String,FileMode)
   nameWithType: IsolatedStorageFile.OpenFile(String,FileMode)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.OpenFile(String,FileMode)
-- uid: System.IO.IsolatedStorage.IsolatedStorageFileStream
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFileStream
-  nameWithType: IsolatedStorageFileStream
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFileStream
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.FileMode
   parent: System.IO
   isExternal: false
@@ -2007,24 +2212,6 @@ references:
   name: OpenFile(String,FileMode,FileAccess)
   nameWithType: IsolatedStorageFile.OpenFile(String,FileMode,FileAccess)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.OpenFile(String,FileMode,FileAccess)
-- uid: System.IO.IsolatedStorage.IsolatedStorageFileStream
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFileStream
-  nameWithType: IsolatedStorageFileStream
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFileStream
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
 - uid: System.IO.FileAccess
   parent: System.IO
   isExternal: false
@@ -2037,30 +2224,6 @@ references:
   name: OpenFile(String,FileMode,FileAccess,FileShare)
   nameWithType: IsolatedStorageFile.OpenFile(String,FileMode,FileAccess,FileShare)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.OpenFile(String,FileMode,FileAccess,FileShare)
-- uid: System.IO.IsolatedStorage.IsolatedStorageFileStream
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageFileStream
-  nameWithType: IsolatedStorageFileStream
-  fullName: System.IO.IsolatedStorage.IsolatedStorageFileStream
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
-- uid: System.IO.FileAccess
-  parent: System.IO
-  isExternal: false
-  name: FileAccess
-  nameWithType: FileAccess
-  fullName: System.IO.FileAccess
 - uid: System.IO.FileShare
   parent: System.IO
   isExternal: false
@@ -2073,12 +2236,6 @@ references:
   name: Quota
   nameWithType: IsolatedStorageFile.Quota
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.Quota
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.Remove
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
@@ -2091,24 +2248,12 @@ references:
   name: Remove(IsolatedStorageScope)
   nameWithType: IsolatedStorageFile.Remove(IsolatedStorageScope)
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.Remove(IsolatedStorageScope)
-- uid: System.IO.IsolatedStorage.IsolatedStorageScope
-  parent: System.IO.IsolatedStorage
-  isExternal: false
-  name: IsolatedStorageScope
-  nameWithType: IsolatedStorageScope
-  fullName: System.IO.IsolatedStorage.IsolatedStorageScope
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.UsedSize
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false
   name: UsedSize
   nameWithType: IsolatedStorageFile.UsedSize
   fullName: System.IO.IsolatedStorage.IsolatedStorageFile.UsedSize
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.IO.IsolatedStorage.IsolatedStorageFile.AvailableFreeSpace*
   parent: System.IO.IsolatedStorage.IsolatedStorageFile
   isExternal: false

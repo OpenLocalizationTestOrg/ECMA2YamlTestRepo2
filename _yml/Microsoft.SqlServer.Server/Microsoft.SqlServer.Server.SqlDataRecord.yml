@@ -92,8 +92,10 @@ items:
   nameWithType: SqlDataRecord
   fullName: Microsoft.SqlServer.Server.SqlDataRecord
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a single row of data and its metadata. This class cannot be inherited.
+  remarks: "This class is used together with <xref:Microsoft.SqlServer.Server.SqlPipe> to send result sets to the client from managed code stored-procedures.  \n  \n When writing common language runtime (CLR) applications, you should re-use existing `SqlDataRecord` objects instead of creating new ones every time. Creating many new `SqlDataRecord` objects could severely deplete memory and adversely affect performance."
+  example:
+  - "The following example shows how to create several <xref:Microsoft.SqlServer.Server.SqlMetaData> objects, which describe the column metadata of a record, and creating a SqlDataRecord.  The column values of the SqlDataRecord are set and the SqlDataRecord is sent to the calling program by using the <xref:Microsoft.SqlServer.Server.SqlContext> class.  \n  \n [!code-vb[DataWorks SqlDataRecord Samples#1](../../add/codesnippet/VisualBasic/t-microsoft.sqlserver.se_3_1.vb)]\n [!code-cs[DataWorks SqlDataRecord Samples#1](../../add/codesnippet/CSharp/t-microsoft.sqlserver.se_3_1.cs)]"
   syntax:
     content: 'public class SqlDataRecord : System.Data.IDataRecord'
   inheritance:
@@ -117,15 +119,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Inititializes a new  instance with the schema based on the array of  objects passed as an argument.
+  remarks: ''
+  example:
+  - "The following example shows how to create a new <xref:Microsoft.SqlServer.Server.SqlDataRecord> object from two  <xref:Microsoft.SqlServer.Server.SqlMetaData> objects, which indicate the column name and data type.  \n  \n [!code-vb[DataWorks SqlDataRecord Samples#2](../../add/codesnippet/VisualBasic/ebdc8b4b-5013-48cd-940b-_1.vb)]\n [!code-cs[DataWorks SqlDataRecord Samples#2](../../add/codesnippet/CSharp/ebdc8b4b-5013-48cd-940b-_1.cs)]"
   syntax:
     content: public SqlDataRecord (Microsoft.SqlServer.Server.SqlMetaData[] metaData);
     parameters:
     - id: metaData
       type: Microsoft.SqlServer.Server.SqlMetaData[]
-      description: To be added.
+      description: An array of  objects that describe each column in the .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The metaData is .
   platform:
   - net-11
   - net-20
@@ -142,14 +150,14 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of columns in the data row. This property is read-only.
   syntax:
     content: public virtual int FieldCount { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of columns in the data row as an integer.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.FieldCount*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -166,18 +174,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.Boolean>.
   syntax:
     content: public virtual bool GetBoolean (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Boolean
-      description: To be added.
+      description: The column value as a <xref:System.Boolean>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetBoolean*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -194,18 +211,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.Byte>.
   syntax:
     content: public virtual byte GetByte (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Byte
-      description: To be added.
+      description: The column value as a <xref:System.Byte>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetByte*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -222,30 +248,40 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as an array of <xref:System.Byte> objects.
+  remarks: "This method enables you to obtain a binary value either in a single call or in chunks. Getting the value in chunks is useful for large values or values of unknown size.  \n  \n To obtain the value in several chunks, allocate a byte array of the chunk-size and call GetBytes repeatedly, adjusting the `fieldOffset` parameter accordingly in each call."
   syntax:
     content: public virtual long GetBytes (int ordinal, long fieldOffset, byte[] buffer, int bufferOffset, int length);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: fieldOffset
       type: System.Int64
-      description: To be added.
+      description: The offset into the field value to start retrieving bytes.
     - id: buffer
       type: System.Byte[]
-      description: To be added.
+      description: The target buffer to which to copy bytes.
     - id: bufferOffset
       type: System.Int32
-      description: To be added.
+      description: The offset into the buffer to which to start copying bytes.
     - id: length
       type: System.Int32
-      description: To be added.
+      description: The number of bytes to copy to the buffer.
     return:
       type: System.Int64
-      description: To be added.
+      description: The number of bytes copied.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetBytes*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -262,18 +298,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.Char>.
   syntax:
     content: public virtual char GetChar (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Char
-      description: To be added.
+      description: The column value as a <xref:System.Char>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetChar*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -290,30 +335,40 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as an array of <xref:System.Char> objects.
+  remarks: "This method enables you to obtain a character value either in a single call or in chunks. Getting the value in chunks is useful for large values or values of unknown size.  \n  \n To obtain the value in several chunks, allocate a char array of the chunk-size and call GetChars repeatedly adjusting the `fieldOffset` parameter accordingly in each call."
   syntax:
     content: public virtual long GetChars (int ordinal, long fieldOffset, char[] buffer, int bufferOffset, int length);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: fieldOffset
       type: System.Int64
-      description: To be added.
+      description: The offset into the field value to start retrieving characters.
     - id: buffer
       type: System.Char[]
-      description: To be added.
+      description: The target buffer to copy chars to.
     - id: bufferOffset
       type: System.Int32
-      description: To be added.
+      description: The offset into the buffer to start copying chars to.
     - id: length
       type: System.Int32
-      description: To be added.
+      description: The number of chars to copy to the buffer.
     return:
       type: System.Int64
-      description: To be added.
+      description: The number of characters copied.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetChars*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -330,18 +385,25 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the name of the data type for the column specified by the ordinal argument.
+  remarks: This method returns the type name as known in the SQL Server type-system. For user-defined types (UDTs), it returns the three-part name that was used to register the type with SQL Server.
   syntax:
     content: public virtual string GetDataTypeName (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> that contains the data type of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetDataTypeName*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -358,18 +420,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.DateTime>.
   syntax:
     content: public virtual DateTime GetDateTime (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.DateTime
-      description: To be added.
+      description: The column value as a <xref:System.DateTime>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetDateTime*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -386,18 +457,18 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the specified column’s data as a <xref:System.DateTimeOffset>.
   syntax:
     content: public virtual DateTimeOffset GetDateTimeOffset (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.DateTimeOffset
-      description: To be added.
+      description: The value of the specified column as a <xref:System.DateTimeOffset>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetDateTimeOffset*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -414,18 +485,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.Decimal>.
   syntax:
     content: public virtual decimal GetDecimal (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Decimal
-      description: To be added.
+      description: The column value as a <xref:System.Decimal>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetDecimal*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -442,18 +522,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.Double>.
   syntax:
     content: public virtual double GetDouble (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Double
-      description: To be added.
+      description: The column value as a <xref:System.Double>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetDouble*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -470,18 +559,30 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a <xref:System.Type> object representing the common language runtime (CLR) type that maps to the SQL Server type of the column specified by the ordinal argument.
   syntax:
     content: public virtual Type GetFieldType (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Type
-      description: To be added.
+      description: The column type as a <xref:System.Type> object.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetFieldType*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.TypeLoadException
+    commentId: T:System.TypeLoadException
+    description: The column is of a user-defined type that is not available to the calling application domain.
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: The column is of a user-defined type that is not available to the calling application domain.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -498,18 +599,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual float GetFloat (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Single
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetFloat*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -526,18 +636,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.Guid>.
   syntax:
     content: public virtual Guid GetGuid (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Guid
-      description: To be added.
+      description: The column value as a <xref:System.Guid>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetGuid*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -554,18 +673,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.Int16>.
   syntax:
     content: public virtual short GetInt16 (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Int16
-      description: To be added.
+      description: The column value as a <xref:System.Int16>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetInt16*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -582,18 +710,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.Int32>.
   syntax:
     content: public virtual int GetInt32 (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Int32
-      description: To be added.
+      description: The column value as a <xref:System.Int32>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetInt32*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -610,18 +747,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.Int64>.
   syntax:
     content: public virtual long GetInt64 (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Int64
-      description: To be added.
+      description: The column value as a <xref:System.Int64>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetInt64*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.Data.SqlTypes.SqlNullValueException
+    commentId: T:System.Data.SqlTypes.SqlNullValueException
+    description: The column specified by ordinal is null.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -638,18 +784,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the name of the column specified by the ordinal argument.
   syntax:
     content: public virtual string GetName (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> containing the column name.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetName*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -666,18 +818,27 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the column ordinal specified by the column name.
   syntax:
     content: public virtual int GetOrdinal (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the column to look up.
     return:
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column as an integer.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetOrdinal*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The column name could not be found.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -694,18 +855,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlBinary GetSqlBinary (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlBinary
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlBinary*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -722,18 +889,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlBoolean GetSqlBoolean (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlBoolean
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlBoolean*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -750,18 +923,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlByte GetSqlByte (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlByte
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlByte*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -778,18 +957,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlBytes GetSqlBytes (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlBytes
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlBytes*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -806,18 +991,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlChars GetSqlChars (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlChars
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlChars*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -834,18 +1025,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlDateTime GetSqlDateTime (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlDateTime
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlDateTime*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -862,18 +1059,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlDecimal GetSqlDecimal (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlDecimal
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlDecimal*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -890,18 +1093,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlDouble GetSqlDouble (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlDouble
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlDouble*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -918,18 +1127,30 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a <xref:System.Type> object that represents the type (as a SQL Server type, defined in ) that maps to the SQL Server type of the column.
   syntax:
     content: public virtual Type GetSqlFieldType (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Type
-      description: To be added.
+      description: The column type as a <xref:System.Type> object.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlFieldType*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.TypeLoadException
+    commentId: T:System.TypeLoadException
+    description: The column is of a user-defined type that is not available to the calling application domain.
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: The column is of a user-defined type that is not available to the calling application domain.
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -946,18 +1167,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlGuid GetSqlGuid (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlGuid
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlGuid*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -974,18 +1201,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlInt16 GetSqlInt16 (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlInt16
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlInt16*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1002,18 +1235,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlInt32 GetSqlInt32 (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlInt32
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlInt32*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1030,18 +1269,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlInt64 GetSqlInt64 (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlInt64
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlInt64*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1058,18 +1303,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a  object, describing the metadata of the column specified by the column ordinal.
   syntax:
     content: public virtual Microsoft.SqlServer.Server.SqlMetaData GetSqlMetaData (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: Microsoft.SqlServer.Server.SqlMetaData
-      description: To be added.
+      description: The column metadata as a  object.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlMetaData*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1086,18 +1337,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlMoney GetSqlMoney (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlMoney
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlMoney*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1114,18 +1371,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlSingle GetSqlSingle (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlSingle
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlSingle*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1142,18 +1405,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlString GetSqlString (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlString
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlString*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1170,18 +1439,25 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the data value stored in the column, expressed as a SQL Server type, specified by the column ordinal.
+  remarks: For null values, a SQL Server type instance is returned where the <xref:System.Data.SqlTypes.INullable.IsNull%2A> property is true.
   syntax:
     content: public virtual object GetSqlValue (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Object
-      description: To be added.
+      description: The value of the column, expressed as a SQL Server type, as a <xref:System.Object>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlValue*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1198,18 +1474,25 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the values for all the columns in the record, expressed as SQL Server types, in an array.
+  remarks: "The SQL Server type values of the column are copied into the `values` array that is passed as a parameter. For null values, a Sql type instance is returned where the <xref:System.Data.SqlTypes.INullable.IsNull%2A> property is true.  \n  \n The length of the `values` array does not need to match the number of columns in the record. If the array length is greater than the number of columns, all of the column values are copied into the array; if it is less, only the array length number of column values are copied into the array, starting at the column value with ordinal 0."
   syntax:
     content: public virtual int GetSqlValues (object[] values);
     parameters:
     - id: values
       type: System.Object[]
-      description: To be added.
+      description: The array into which to copy the values column values.
     return:
       type: System.Int32
-      description: To be added.
+      description: An <xref:System.Int32> that indicates the number of columns copied.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlValues*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    values is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1226,18 +1509,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a .
   syntax:
     content: public virtual System.Data.SqlTypes.SqlXml GetSqlXml (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.SqlTypes.SqlXml
-      description: To be added.
+      description: The column value as a .
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlXml*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1254,18 +1543,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value for the column specified by the ordinal as a <xref:System.String>.
   syntax:
     content: public virtual string GetString (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.String
-      description: To be added.
+      description: The column value as a <xref:System.String>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetString*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1282,18 +1577,18 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the specified column’s data as a <xref:System.TimeSpan>.
   syntax:
     content: public virtual TimeSpan GetTimeSpan (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The value of the specified column as a <xref:System.TimeSpan>.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetTimeSpan*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1310,18 +1605,25 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the common language runtime (CLR) type value for the column specified by the ordinal argument.
+  remarks: For columns with null value, <xref:System.DBNull.Value> is returned.
   syntax:
     content: public virtual object GetValue (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Object
-      description: To be added.
+      description: The CLR type value of the column specified by the ordinal.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetValue*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1338,18 +1640,25 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the values for all the columns in the record, expressed as common language runtime (CLR) types, in an array.
+  remarks: "The CLR type values of the column are copied into the `values` array that is passed as a parameter. For columns with null value, <xref:System.DBNull.Value> is returned.  \n  \n The length of the `values` array does not need to match the number of columns in the record. If the array length is greater than the number of columns, all of the column values are copied into the array; if it is less, only the array length number of column values is copied into the array, starting at the column value with ordinal 0."
   syntax:
     content: public virtual int GetValues (object[] values);
     parameters:
     - id: values
       type: System.Object[]
-      description: To be added.
+      description: The array into which to copy the values column values.
     return:
       type: System.Int32
-      description: To be added.
+      description: An <xref:System.Int32> that indicates the number of columns copied.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.GetValues*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    values is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: There is a type mismatch.
   platform:
   - net-11
   - net-20
@@ -1366,18 +1675,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns true if the column specified by the column ordinal parameter is null.
   syntax:
     content: public virtual bool IsDBNull (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the column is null;  otherwise.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.IsDBNull*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1394,18 +1706,22 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the common language runtime (CLR) type value for the column specified by the column ordinal argument.
+  remarks: For columns with null value, <xref:System.DBNull.Value> is returned.
   syntax:
     content: public virtual object this[int ordinal] { get; }
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Object
-      description: To be added.
+      description: The CLR type value of the column specified by the ordinal.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.Item*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1422,18 +1738,19 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the common language runtime (CLR) type value for the column specified by the column name argument.
+  remarks: For columns with null value, <xref:System.DBNull.Value> is returned.
   syntax:
     content: public virtual object this[string name] { get; }
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the column.
     return:
       type: System.Object
-      description: To be added.
+      description: The CLR type value of the column specified by the name.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.Item*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1450,18 +1767,18 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.Boolean> value.
   syntax:
     content: public virtual void SetBoolean (int ordinal, bool value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Boolean
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetBoolean*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1478,18 +1795,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.Byte> value.
   syntax:
     content: public virtual void SetByte (int ordinal, byte value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Byte
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetByte*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1506,27 +1826,30 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified array of <xref:System.Byte> values.
   syntax:
     content: public virtual void SetBytes (int ordinal, long fieldOffset, byte[] buffer, int bufferOffset, int length);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: fieldOffset
       type: System.Int64
-      description: To be added.
+      description: The offset into the field value to start copying bytes.
     - id: buffer
       type: System.Byte[]
-      description: To be added.
+      description: The target buffer from which to copy bytes.
     - id: bufferOffset
       type: System.Int32
-      description: To be added.
+      description: The offset into the buffer from which to start copying bytes.
     - id: length
       type: System.Int32
-      description: To be added.
+      description: The number of bytes to copy from the buffer.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetBytes*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1543,18 +1866,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.Char> value.
   syntax:
     content: public virtual void SetChar (int ordinal, char value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Char
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetChar*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1571,27 +1897,30 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified array of <xref:System.Char> values.
   syntax:
     content: public virtual void SetChars (int ordinal, long fieldOffset, char[] buffer, int bufferOffset, int length);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: fieldOffset
       type: System.Int64
-      description: To be added.
+      description: The offset into the field value to start copying characters.
     - id: buffer
       type: System.Char[]
-      description: To be added.
+      description: The target buffer from which to copy chars.
     - id: bufferOffset
       type: System.Int32
-      description: To be added.
+      description: The offset into the buffer from which to start copying chars.
     - id: length
       type: System.Int32
-      description: To be added.
+      description: The number of chars to copy from the buffer.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetChars*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1608,18 +1937,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.DateTime> value.
   syntax:
     content: public virtual void SetDateTime (int ordinal, DateTime value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.DateTime
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetDateTime*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1636,18 +1968,18 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the value of the column specified to the <xref:System.DateTimeOffset> value.
   syntax:
     content: public virtual void SetDateTimeOffset (int ordinal, DateTimeOffset value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.DateTimeOffset
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetDateTimeOffset*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1664,15 +1996,15 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the value in the specified column to .
   syntax:
     content: public virtual void SetDBNull (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetDBNull*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1689,18 +2021,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.Decimal> value.
   syntax:
     content: public virtual void SetDecimal (int ordinal, decimal value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Decimal
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetDecimal*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1717,18 +2052,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.Double> value.
   syntax:
     content: public virtual void SetDouble (int ordinal, double value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Double
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetDouble*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1745,18 +2083,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetFloat (int ordinal, float value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Single
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetFloat*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1773,18 +2114,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.Guid> value.
   syntax:
     content: public virtual void SetGuid (int ordinal, Guid value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Guid
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetGuid*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1801,18 +2145,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.Int16> value.
   syntax:
     content: public virtual void SetInt16 (int ordinal, short value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Int16
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetInt16*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1829,18 +2176,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.Int32> value.
   syntax:
     content: public virtual void SetInt32 (int ordinal, int value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Int32
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetInt32*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1857,18 +2207,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.Int64> value.
   syntax:
     content: public virtual void SetInt64 (int ordinal, long value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Int64
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetInt64*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1885,18 +2238,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlBinary (int ordinal, System.Data.SqlTypes.SqlBinary value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlBinary
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlBinary*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1913,18 +2269,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlBoolean (int ordinal, System.Data.SqlTypes.SqlBoolean value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlBoolean
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlBoolean*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1941,18 +2300,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlByte (int ordinal, System.Data.SqlTypes.SqlByte value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlByte
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlByte*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1969,18 +2331,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlBytes (int ordinal, System.Data.SqlTypes.SqlBytes value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlBytes
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlBytes*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -1997,18 +2362,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlChars (int ordinal, System.Data.SqlTypes.SqlChars value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlChars
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlChars*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2025,18 +2393,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlDateTime (int ordinal, System.Data.SqlTypes.SqlDateTime value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlDateTime
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlDateTime*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2053,18 +2424,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlDecimal (int ordinal, System.Data.SqlTypes.SqlDecimal value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlDecimal
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlDecimal*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2081,18 +2455,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlDouble (int ordinal, System.Data.SqlTypes.SqlDouble value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlDouble
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlDouble*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2109,18 +2486,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlGuid (int ordinal, System.Data.SqlTypes.SqlGuid value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlGuid
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlGuid*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2137,18 +2517,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlInt16 (int ordinal, System.Data.SqlTypes.SqlInt16 value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlInt16
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlInt16*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2165,18 +2548,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlInt32 (int ordinal, System.Data.SqlTypes.SqlInt32 value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlInt32
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlInt32*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2193,18 +2579,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlInt64 (int ordinal, System.Data.SqlTypes.SqlInt64 value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlInt64
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlInt64*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2221,18 +2610,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlMoney (int ordinal, System.Data.SqlTypes.SqlMoney value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlMoney
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlMoney*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2249,18 +2641,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlSingle (int ordinal, System.Data.SqlTypes.SqlSingle value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlSingle
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlSingle*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2277,18 +2672,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlString (int ordinal, System.Data.SqlTypes.SqlString value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlString
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlString*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2305,18 +2703,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified  value.
   syntax:
     content: public virtual void SetSqlXml (int ordinal, System.Data.SqlTypes.SqlXml value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Data.SqlTypes.SqlXml
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlXml*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2333,18 +2734,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the data stored in the column to the specified <xref:System.String> value.
   syntax:
     content: public virtual void SetString (int ordinal, string value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.String
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetString*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2361,18 +2765,24 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the value of the column specified to the <xref:System.TimeSpan>.
   syntax:
     content: public virtual void SetTimeSpan (int ordinal, TimeSpan value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.TimeSpan
-      description: To be added.
+      description: The new value of the column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetTimeSpan*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal passed in is a negative number.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The <xref:System.TimeSpan> value passed in is greater than 24 hours in length.
   platform:
   - net-11
   - net-20
@@ -2389,18 +2799,22 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets a new value, expressed as a common language runtime (CLR) type, for the column specified by the column ordinal.
+  remarks: '`value` is a SQL type boxed as a <xref:System.Object> instance.'
   syntax:
     content: public virtual void SetValue (int ordinal, object value);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     - id: value
       type: System.Object
-      description: To be added.
+      description: The new value for the specified column.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetValue*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2417,18 +2831,25 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets new values for all of the columns in the . These values are expressed as common language runtime (CLR) types.
+  remarks: The length of values must match the number of columns in the <xref:Microsoft.SqlServer.Server.SqlDataRecord> instance.
   syntax:
     content: public virtual int SetValues (object[] values);
     parameters:
     - id: values
       type: System.Object[]
-      description: To be added.
+      description: The array of new values, expressed as CLR types boxed as <xref:System.Object> references, for the  instance.
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of column values set as an integer.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.SetValues*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    values is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The size of values does not match the number of columns in the  instance.
   platform:
   - net-11
   - net-20
@@ -2446,18 +2867,22 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Not supported in this release.
+  remarks: This method is not supported in this release, and throws <xref:System.NotSupportedException> if called.
   syntax:
     content: System.Data.IDataReader IDataRecord.GetData (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Data.IDataReader
-      description: To be added.
+      description: Always throws an exception.
   overload: Microsoft.SqlServer.Server.SqlDataRecord.System#Data#IDataRecord#GetData*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ordinal is less than 0 or greater than the number of columns (that is, <xref:Microsoft.SqlServer.Server.SqlDataRecord.FieldCount%2A>).
   platform:
   - net-11
   - net-20
@@ -2472,12 +2897,20 @@ references:
   name: SqlDataRecord(SqlMetaData[])
   nameWithType: SqlDataRecord.SqlDataRecord(SqlMetaData[])
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SqlDataRecord(SqlMetaData[])
-- uid: Microsoft.SqlServer.Server.SqlMetaData
+- uid: Microsoft.SqlServer.Server.SqlMetaData[]
   parent: Microsoft.SqlServer.Server
   isExternal: false
   name: SqlMetaData
   nameWithType: SqlMetaData
   fullName: Microsoft.SqlServer.Server.SqlMetaData[]
+  spec.csharp:
+  - uid: Microsoft.SqlServer.Server.SqlMetaData
+    name: SqlMetaData
+    nameWithType: SqlMetaData
+    fullName: SqlMetaData[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.FieldCount
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2502,12 +2935,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetByte(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2520,12 +2947,6 @@ references:
   name: Byte
   nameWithType: Byte
   fullName: System.Byte
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2538,36 +2959,20 @@ references:
   name: Int64
   nameWithType: Int64
   fullName: System.Int64
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetChar(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2580,54 +2985,26 @@ references:
   name: Char
   nameWithType: Char
   fullName: System.Char
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetChars(Int32,Int64,Char[],Int32,Int32)
   nameWithType: SqlDataRecord.GetChars(Int32,Int64,Char[],Int32,Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetChars(Int32,Int64,Char[],Int32,Int32)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Char
+- uid: System.Char[]
   parent: System
   isExternal: true
   name: Char
   nameWithType: Char
   fullName: System.Char[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
+  spec.csharp:
+  - uid: System.Char
+    name: Char
+    nameWithType: Char
+    fullName: Char[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetDataTypeName(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2640,12 +3017,6 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetDateTime(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2658,12 +3029,6 @@ references:
   name: DateTime
   nameWithType: DateTime
   fullName: System.DateTime
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetDateTimeOffset(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2676,12 +3041,6 @@ references:
   name: DateTimeOffset
   nameWithType: DateTimeOffset
   fullName: System.DateTimeOffset
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetDecimal(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2694,12 +3053,6 @@ references:
   name: Decimal
   nameWithType: Decimal
   fullName: System.Decimal
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetDouble(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2712,12 +3065,6 @@ references:
   name: Double
   nameWithType: Double
   fullName: System.Double
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetFieldType(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2730,12 +3077,6 @@ references:
   name: Type
   nameWithType: Type
   fullName: System.Type
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetFloat(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2748,12 +3089,6 @@ references:
   name: Single
   nameWithType: Single
   fullName: System.Single
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetGuid(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2766,12 +3101,6 @@ references:
   name: Guid
   nameWithType: Guid
   fullName: System.Guid
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetInt16(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2784,84 +3113,30 @@ references:
   name: Int16
   nameWithType: Int16
   fullName: System.Int16
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetInt32(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetInt32(Int32)
   nameWithType: SqlDataRecord.GetInt32(Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetInt32(Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetInt64(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetInt64(Int32)
   nameWithType: SqlDataRecord.GetInt64(Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetInt64(Int32)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetName(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetName(Int32)
   nameWithType: SqlDataRecord.GetName(Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetName(Int32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetOrdinal(System.String)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetOrdinal(String)
   nameWithType: SqlDataRecord.GetOrdinal(String)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetOrdinal(String)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlBinary(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2874,12 +3149,6 @@ references:
   name: SqlBinary
   nameWithType: SqlBinary
   fullName: System.Data.SqlTypes.SqlBinary
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlBoolean(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2892,12 +3161,6 @@ references:
   name: SqlBoolean
   nameWithType: SqlBoolean
   fullName: System.Data.SqlTypes.SqlBoolean
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlByte(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2910,12 +3173,6 @@ references:
   name: SqlByte
   nameWithType: SqlByte
   fullName: System.Data.SqlTypes.SqlByte
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlBytes(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2928,12 +3185,6 @@ references:
   name: SqlBytes
   nameWithType: SqlBytes
   fullName: System.Data.SqlTypes.SqlBytes
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlChars(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2946,12 +3197,6 @@ references:
   name: SqlChars
   nameWithType: SqlChars
   fullName: System.Data.SqlTypes.SqlChars
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlDateTime(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2964,12 +3209,6 @@ references:
   name: SqlDateTime
   nameWithType: SqlDateTime
   fullName: System.Data.SqlTypes.SqlDateTime
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlDecimal(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -2982,12 +3221,6 @@ references:
   name: SqlDecimal
   nameWithType: SqlDecimal
   fullName: System.Data.SqlTypes.SqlDecimal
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlDouble(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3000,30 +3233,12 @@ references:
   name: SqlDouble
   nameWithType: SqlDouble
   fullName: System.Data.SqlTypes.SqlDouble
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlFieldType(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetSqlFieldType(Int32)
   nameWithType: SqlDataRecord.GetSqlFieldType(Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlFieldType(Int32)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlGuid(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3036,12 +3251,6 @@ references:
   name: SqlGuid
   nameWithType: SqlGuid
   fullName: System.Data.SqlTypes.SqlGuid
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlInt16(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3054,12 +3263,6 @@ references:
   name: SqlInt16
   nameWithType: SqlInt16
   fullName: System.Data.SqlTypes.SqlInt16
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlInt32(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3072,12 +3275,6 @@ references:
   name: SqlInt32
   nameWithType: SqlInt32
   fullName: System.Data.SqlTypes.SqlInt32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlInt64(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3090,12 +3287,6 @@ references:
   name: SqlInt64
   nameWithType: SqlInt64
   fullName: System.Data.SqlTypes.SqlInt64
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlMetaData(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3108,12 +3299,6 @@ references:
   name: SqlMetaData
   nameWithType: SqlMetaData
   fullName: Microsoft.SqlServer.Server.SqlMetaData
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlMoney(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3126,12 +3311,6 @@ references:
   name: SqlMoney
   nameWithType: SqlMoney
   fullName: System.Data.SqlTypes.SqlMoney
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlSingle(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3144,12 +3323,6 @@ references:
   name: SqlSingle
   nameWithType: SqlSingle
   fullName: System.Data.SqlTypes.SqlSingle
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlString(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3162,48 +3335,32 @@ references:
   name: SqlString
   nameWithType: SqlString
   fullName: System.Data.SqlTypes.SqlString
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlValue(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetSqlValue(Int32)
   nameWithType: SqlDataRecord.GetSqlValue(Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlValue(Int32)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlValues(System.Object[])
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetSqlValues(Object[])
   nameWithType: SqlDataRecord.GetSqlValues(Object[])
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlValues(Object[])
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Object
+- uid: System.Object[]
   parent: System
   isExternal: true
   name: Object
   nameWithType: Object
   fullName: System.Object[]
+  spec.csharp:
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetSqlXml(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3216,30 +3373,12 @@ references:
   name: SqlXml
   nameWithType: SqlXml
   fullName: System.Data.SqlTypes.SqlXml
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetString(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetString(Int32)
   nameWithType: SqlDataRecord.GetString(Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetString(Int32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetTimeSpan(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -3252,762 +3391,246 @@ references:
   name: TimeSpan
   nameWithType: TimeSpan
   fullName: System.TimeSpan
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetValue(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetValue(Int32)
   nameWithType: SqlDataRecord.GetValue(Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetValue(Int32)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.GetValues(System.Object[])
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: GetValues(Object[])
   nameWithType: SqlDataRecord.GetValues(Object[])
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.GetValues(Object[])
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object[]
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.IsDBNull(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: IsDBNull(Int32)
   nameWithType: SqlDataRecord.IsDBNull(Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.IsDBNull(Int32)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.Item(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: Item(Int32)
   nameWithType: SqlDataRecord.Item(Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.Item(Int32)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.Item(System.String)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: Item(String)
   nameWithType: SqlDataRecord.Item(String)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.Item(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetBoolean(System.Int32,System.Boolean)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetBoolean(Int32,Boolean)
   nameWithType: SqlDataRecord.SetBoolean(Int32,Boolean)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetBoolean(Int32,Boolean)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetByte(System.Int32,System.Byte)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetByte(Int32,Byte)
   nameWithType: SqlDataRecord.SetByte(Int32,Byte)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetByte(Int32,Byte)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetBytes(Int32,Int64,Byte[],Int32,Int32)
   nameWithType: SqlDataRecord.SetBytes(Int32,Int64,Byte[],Int32,Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetBytes(Int32,Int64,Byte[],Int32,Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetChar(System.Int32,System.Char)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetChar(Int32,Char)
   nameWithType: SqlDataRecord.SetChar(Int32,Char)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetChar(Int32,Char)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Char
-  parent: System
-  isExternal: true
-  name: Char
-  nameWithType: Char
-  fullName: System.Char
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetChars(Int32,Int64,Char[],Int32,Int32)
   nameWithType: SqlDataRecord.SetChars(Int32,Int64,Char[],Int32,Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetChars(Int32,Int64,Char[],Int32,Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Char
-  parent: System
-  isExternal: true
-  name: Char
-  nameWithType: Char
-  fullName: System.Char[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetDateTime(System.Int32,System.DateTime)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetDateTime(Int32,DateTime)
   nameWithType: SqlDataRecord.SetDateTime(Int32,DateTime)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetDateTime(Int32,DateTime)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.DateTime
-  parent: System
-  isExternal: true
-  name: DateTime
-  nameWithType: DateTime
-  fullName: System.DateTime
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetDateTimeOffset(System.Int32,System.DateTimeOffset)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetDateTimeOffset(Int32,DateTimeOffset)
   nameWithType: SqlDataRecord.SetDateTimeOffset(Int32,DateTimeOffset)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetDateTimeOffset(Int32,DateTimeOffset)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.DateTimeOffset
-  parent: System
-  isExternal: true
-  name: DateTimeOffset
-  nameWithType: DateTimeOffset
-  fullName: System.DateTimeOffset
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetDBNull(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetDBNull(Int32)
   nameWithType: SqlDataRecord.SetDBNull(Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetDBNull(Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetDecimal(System.Int32,System.Decimal)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetDecimal(Int32,Decimal)
   nameWithType: SqlDataRecord.SetDecimal(Int32,Decimal)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetDecimal(Int32,Decimal)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Decimal
-  parent: System
-  isExternal: true
-  name: Decimal
-  nameWithType: Decimal
-  fullName: System.Decimal
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetDouble(System.Int32,System.Double)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetDouble(Int32,Double)
   nameWithType: SqlDataRecord.SetDouble(Int32,Double)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetDouble(Int32,Double)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetFloat(System.Int32,System.Single)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetFloat(Int32,Single)
   nameWithType: SqlDataRecord.SetFloat(Int32,Single)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetFloat(Int32,Single)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Single
-  parent: System
-  isExternal: true
-  name: Single
-  nameWithType: Single
-  fullName: System.Single
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetGuid(System.Int32,System.Guid)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetGuid(Int32,Guid)
   nameWithType: SqlDataRecord.SetGuid(Int32,Guid)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetGuid(Int32,Guid)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetInt16(System.Int32,System.Int16)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetInt16(Int32,Int16)
   nameWithType: SqlDataRecord.SetInt16(Int32,Int16)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetInt16(Int32,Int16)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int16
-  parent: System
-  isExternal: true
-  name: Int16
-  nameWithType: Int16
-  fullName: System.Int16
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetInt32(System.Int32,System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetInt32(Int32,Int32)
   nameWithType: SqlDataRecord.SetInt32(Int32,Int32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetInt32(Int32,Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetInt64(System.Int32,System.Int64)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetInt64(Int32,Int64)
   nameWithType: SqlDataRecord.SetInt64(Int32,Int64)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetInt64(Int32,Int64)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlBinary(System.Int32,System.Data.SqlTypes.SqlBinary)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlBinary(Int32,SqlBinary)
   nameWithType: SqlDataRecord.SetSqlBinary(Int32,SqlBinary)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlBinary(Int32,SqlBinary)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlBinary
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlBinary
-  nameWithType: SqlBinary
-  fullName: System.Data.SqlTypes.SqlBinary
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlBoolean(System.Int32,System.Data.SqlTypes.SqlBoolean)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlBoolean(Int32,SqlBoolean)
   nameWithType: SqlDataRecord.SetSqlBoolean(Int32,SqlBoolean)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlBoolean(Int32,SqlBoolean)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlBoolean
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlBoolean
-  nameWithType: SqlBoolean
-  fullName: System.Data.SqlTypes.SqlBoolean
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlByte(System.Int32,System.Data.SqlTypes.SqlByte)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlByte(Int32,SqlByte)
   nameWithType: SqlDataRecord.SetSqlByte(Int32,SqlByte)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlByte(Int32,SqlByte)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlByte
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlByte
-  nameWithType: SqlByte
-  fullName: System.Data.SqlTypes.SqlByte
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlBytes(System.Int32,System.Data.SqlTypes.SqlBytes)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlBytes(Int32,SqlBytes)
   nameWithType: SqlDataRecord.SetSqlBytes(Int32,SqlBytes)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlBytes(Int32,SqlBytes)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlBytes
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlBytes
-  nameWithType: SqlBytes
-  fullName: System.Data.SqlTypes.SqlBytes
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlChars(System.Int32,System.Data.SqlTypes.SqlChars)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlChars(Int32,SqlChars)
   nameWithType: SqlDataRecord.SetSqlChars(Int32,SqlChars)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlChars(Int32,SqlChars)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlChars
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlChars
-  nameWithType: SqlChars
-  fullName: System.Data.SqlTypes.SqlChars
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlDateTime(System.Int32,System.Data.SqlTypes.SqlDateTime)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlDateTime(Int32,SqlDateTime)
   nameWithType: SqlDataRecord.SetSqlDateTime(Int32,SqlDateTime)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlDateTime(Int32,SqlDateTime)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlDateTime
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlDateTime
-  nameWithType: SqlDateTime
-  fullName: System.Data.SqlTypes.SqlDateTime
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlDecimal(System.Int32,System.Data.SqlTypes.SqlDecimal)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlDecimal(Int32,SqlDecimal)
   nameWithType: SqlDataRecord.SetSqlDecimal(Int32,SqlDecimal)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlDecimal(Int32,SqlDecimal)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlDecimal
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlDecimal
-  nameWithType: SqlDecimal
-  fullName: System.Data.SqlTypes.SqlDecimal
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlDouble(System.Int32,System.Data.SqlTypes.SqlDouble)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlDouble(Int32,SqlDouble)
   nameWithType: SqlDataRecord.SetSqlDouble(Int32,SqlDouble)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlDouble(Int32,SqlDouble)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlDouble
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlDouble
-  nameWithType: SqlDouble
-  fullName: System.Data.SqlTypes.SqlDouble
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlGuid(System.Int32,System.Data.SqlTypes.SqlGuid)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlGuid(Int32,SqlGuid)
   nameWithType: SqlDataRecord.SetSqlGuid(Int32,SqlGuid)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlGuid(Int32,SqlGuid)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlGuid
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlGuid
-  nameWithType: SqlGuid
-  fullName: System.Data.SqlTypes.SqlGuid
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlInt16(System.Int32,System.Data.SqlTypes.SqlInt16)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlInt16(Int32,SqlInt16)
   nameWithType: SqlDataRecord.SetSqlInt16(Int32,SqlInt16)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlInt16(Int32,SqlInt16)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlInt16
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlInt16
-  nameWithType: SqlInt16
-  fullName: System.Data.SqlTypes.SqlInt16
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlInt32(System.Int32,System.Data.SqlTypes.SqlInt32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlInt32(Int32,SqlInt32)
   nameWithType: SqlDataRecord.SetSqlInt32(Int32,SqlInt32)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlInt32(Int32,SqlInt32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlInt32
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlInt32
-  nameWithType: SqlInt32
-  fullName: System.Data.SqlTypes.SqlInt32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlInt64(System.Int32,System.Data.SqlTypes.SqlInt64)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlInt64(Int32,SqlInt64)
   nameWithType: SqlDataRecord.SetSqlInt64(Int32,SqlInt64)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlInt64(Int32,SqlInt64)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlInt64
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlInt64
-  nameWithType: SqlInt64
-  fullName: System.Data.SqlTypes.SqlInt64
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlMoney(System.Int32,System.Data.SqlTypes.SqlMoney)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlMoney(Int32,SqlMoney)
   nameWithType: SqlDataRecord.SetSqlMoney(Int32,SqlMoney)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlMoney(Int32,SqlMoney)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlMoney
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlMoney
-  nameWithType: SqlMoney
-  fullName: System.Data.SqlTypes.SqlMoney
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlSingle(System.Int32,System.Data.SqlTypes.SqlSingle)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlSingle(Int32,SqlSingle)
   nameWithType: SqlDataRecord.SetSqlSingle(Int32,SqlSingle)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlSingle(Int32,SqlSingle)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlSingle
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlSingle
-  nameWithType: SqlSingle
-  fullName: System.Data.SqlTypes.SqlSingle
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlString(System.Int32,System.Data.SqlTypes.SqlString)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlString(Int32,SqlString)
   nameWithType: SqlDataRecord.SetSqlString(Int32,SqlString)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlString(Int32,SqlString)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlString
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlString
-  nameWithType: SqlString
-  fullName: System.Data.SqlTypes.SqlString
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlXml(System.Int32,System.Data.SqlTypes.SqlXml)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetSqlXml(Int32,SqlXml)
   nameWithType: SqlDataRecord.SetSqlXml(Int32,SqlXml)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetSqlXml(Int32,SqlXml)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.SqlTypes.SqlXml
-  parent: System.Data.SqlTypes
-  isExternal: false
-  name: SqlXml
-  nameWithType: SqlXml
-  fullName: System.Data.SqlTypes.SqlXml
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetString(System.Int32,System.String)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetString(Int32,String)
   nameWithType: SqlDataRecord.SetString(Int32,String)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetString(Int32,String)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetTimeSpan(System.Int32,System.TimeSpan)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetTimeSpan(Int32,TimeSpan)
   nameWithType: SqlDataRecord.SetTimeSpan(Int32,TimeSpan)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetTimeSpan(Int32,TimeSpan)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetValue(System.Int32,System.Object)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetValue(Int32,Object)
   nameWithType: SqlDataRecord.SetValue(Int32,Object)
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetValue(Int32,Object)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.SetValues(System.Object[])
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
   name: SetValues(Object[])
   nameWithType: SqlDataRecord.SetValues(Object[])
   fullName: Microsoft.SqlServer.Server.SqlDataRecord.SetValues(Object[])
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object[]
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.System#Data#IDataRecord#GetData(System.Int32)
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false
@@ -4020,12 +3643,6 @@ references:
   name: IDataReader
   nameWithType: IDataReader
   fullName: System.Data.IDataReader
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlDataRecord.#ctor*
   parent: Microsoft.SqlServer.Server.SqlDataRecord
   isExternal: false

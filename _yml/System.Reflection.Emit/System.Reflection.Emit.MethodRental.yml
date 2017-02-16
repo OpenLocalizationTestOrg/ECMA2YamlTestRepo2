@@ -16,8 +16,7 @@ items:
   nameWithType: MethodRental
   fullName: System.Reflection.Emit.MethodRental
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a fast way to swap method body implementation given a method of a class.
   syntax:
     content: >-
       [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.None)]
@@ -48,13 +47,13 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection.Emit
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies that the method should be just-in-time (JIT) compiled immediately.
   syntax:
     content: public const int JitImmediate = 1;
     return:
       type: System.Int32
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -71,13 +70,13 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection.Emit
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies that the method should be just-in-time (JIT) compiled when needed.
   syntax:
     content: public const int JitOnDemand = 0;
     return:
       type: System.Int32
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -94,27 +93,39 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection.Emit
-  summary: To be added.
-  remarks: To be added.
+  summary: Swaps the body of a method.
+  remarks: "You cannot use this method to swap the body of a global method.  \n  \n The method can only be called by the client that created the dynamic module that contains the type whose method's body is being swapped."
+  example:
+  - "The following example illustrates how to swap a method body for a new body. It also illustrates how to obtain a method token for an existing method and how to construct a blob of bytes representing the Microsoft Intermediate Language (MSIL) code to be passed to `SwapMethodBody`.  \n  \n [!code-cpp[Classic MethodRental.SwapMethodBody Example#1](../../add/codesnippet/CPP/cc436dde-ab12-4c7e-9169-_1.cpp)]\n [!code-cs[Classic MethodRental.SwapMethodBody Example#1](../../add/codesnippet/CSharp/cc436dde-ab12-4c7e-9169-_1.cs)]\n [!code-vb[Classic MethodRental.SwapMethodBody Example#1](../../add/codesnippet/VisualBasic/cc436dde-ab12-4c7e-9169-_1.vb)]"
   syntax:
     content: public static void SwapMethodBody (Type cls, int methodtoken, IntPtr rgIL, int methodSize, int flags);
     parameters:
     - id: cls
       type: System.Type
-      description: To be added.
+      description: The class containing the method.
     - id: methodtoken
       type: System.Int32
-      description: To be added.
+      description: The token for the method.
     - id: rgIL
       type: System.IntPtr
-      description: To be added.
+      description: A pointer to the method. This should include the method header.
     - id: methodSize
       type: System.Int32
-      description: To be added.
+      description: The size of the new method body in bytes.
     - id: flags
       type: System.Int32
-      description: To be added.
+      description: Flags that control the swapping. See the definitions of the constants.
   overload: System.Reflection.Emit.MethodRental.SwapMethodBody*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    cls is ."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The type cls is not complete.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    methodSize is less than one or greater than 4128767 (3effff hex)."
   platform:
   - net-11
   - net-20
@@ -132,27 +143,31 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection.Emit
-  summary: To be added.
-  remarks: To be added.
+  summary: Maps a set of names to a corresponding set of dispatch identifiers.
+  remarks: This method is for access to managed classes from unmanaged code, and should not be called from managed code. For more information about `IDispatch::GetIDsOfNames`, see the MSDN Library.
   syntax:
     content: void _MethodRental.GetIDsOfNames (ref Guid riid, IntPtr rgszNames, uint cNames, uint lcid, IntPtr rgDispId);
     parameters:
     - id: riid
       type: System.Guid
-      description: To be added.
+      description: Reserved for future use. Must be IID_NULL.
     - id: rgszNames
       type: System.IntPtr
-      description: To be added.
+      description: Passed-in array of names to be mapped.
     - id: cNames
       type: System.UInt32
-      description: To be added.
+      description: Count of the names to be mapped.
     - id: lcid
       type: System.UInt32
-      description: To be added.
+      description: The locale context in which to interpret the names.
     - id: rgDispId
       type: System.IntPtr
-      description: To be added.
+      description: Caller-allocated array which receives the IDs corresponding to the names.
   overload: System.Reflection.Emit.MethodRental.System#Runtime#InteropServices#_MethodRental#GetIDsOfNames*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: The method is called late-bound using the COM `IDispatch` interface.
   platform:
   - net-11
   - net-20
@@ -170,21 +185,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection.Emit
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the type information for an object, which can then be used to get the type information for an interface.
+  remarks: This method is for access to managed classes from unmanaged code, and should not be called from managed code. For more information about `IDispatch::GetTypeInfo`, see the MSDN Library.
   syntax:
     content: void _MethodRental.GetTypeInfo (uint iTInfo, uint lcid, IntPtr ppTInfo);
     parameters:
     - id: iTInfo
       type: System.UInt32
-      description: To be added.
+      description: The type information to return.
     - id: lcid
       type: System.UInt32
-      description: To be added.
+      description: The locale identifier for the type information.
     - id: ppTInfo
       type: System.IntPtr
-      description: To be added.
+      description: Receives a pointer to the requested type information object.
   overload: System.Reflection.Emit.MethodRental.System#Runtime#InteropServices#_MethodRental#GetTypeInfo*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: The method is called late-bound using the COM `IDispatch` interface.
   platform:
   - net-11
   - net-20
@@ -202,15 +221,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection.Emit
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the number of type information interfaces that an object provides (either 0 or 1).
+  remarks: This method is for access to managed classes from unmanaged code, and should not be called from managed code. For more information about `IDispatch::GetTypeInfoCount`, see the MSDN Library.
   syntax:
     content: void _MethodRental.GetTypeInfoCount (out uint pcTInfo);
     parameters:
     - id: pcTInfo
       type: System.UInt32
-      description: To be added.
+      description: Points to a location that receives the number of type information interfaces provided by the object.
   overload: System.Reflection.Emit.MethodRental.System#Runtime#InteropServices#_MethodRental#GetTypeInfoCount*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: The method is called late-bound using the COM `IDispatch` interface.
   platform:
   - net-11
   - net-20
@@ -228,36 +251,40 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection.Emit
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides access to properties and methods exposed by an object.
+  remarks: This method is for access to managed classes from unmanaged code, and should not be called from managed code. For more information about `IDispatch::Invoke`, see the MSDN Library.
   syntax:
     content: void _MethodRental.Invoke (uint dispIdMember, ref Guid riid, uint lcid, short wFlags, IntPtr pDispParams, IntPtr pVarResult, IntPtr pExcepInfo, IntPtr puArgErr);
     parameters:
     - id: dispIdMember
       type: System.UInt32
-      description: To be added.
+      description: Identifies the member.
     - id: riid
       type: System.Guid
-      description: To be added.
+      description: Reserved for future use. Must be IID_NULL.
     - id: lcid
       type: System.UInt32
-      description: To be added.
+      description: The locale context in which to interpret arguments.
     - id: wFlags
       type: System.Int16
-      description: To be added.
+      description: Flags describing the context of the call.
     - id: pDispParams
       type: System.IntPtr
-      description: To be added.
+      description: Pointer to a structure containing an array of arguments, an array of argument DISPIDs for named arguments, and counts for the number of elements in the arrays.
     - id: pVarResult
       type: System.IntPtr
-      description: To be added.
+      description: Pointer to the location where the result is to be stored.
     - id: pExcepInfo
       type: System.IntPtr
-      description: To be added.
+      description: Pointer to a structure that contains exception information.
     - id: puArgErr
       type: System.IntPtr
-      description: To be added.
+      description: The index of the first argument that has an error.
   overload: System.Reflection.Emit.MethodRental.System#Runtime#InteropServices#_MethodRental#Invoke*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: The method is called late-bound using the COM `IDispatch` interface.
   platform:
   - net-11
   - net-20
@@ -284,12 +311,6 @@ references:
   name: JitOnDemand
   nameWithType: MethodRental.JitOnDemand
   fullName: System.Reflection.Emit.MethodRental.JitOnDemand
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Reflection.Emit.MethodRental.SwapMethodBody(System.Type,System.Int32,System.IntPtr,System.Int32,System.Int32)
   parent: System.Reflection.Emit.MethodRental
   isExternal: false
@@ -302,30 +323,12 @@ references:
   name: Type
   nameWithType: Type
   fullName: System.Type
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.IntPtr
   parent: System
   isExternal: true
   name: IntPtr
   nameWithType: IntPtr
   fullName: System.IntPtr
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Reflection.Emit.MethodRental.System#Runtime#InteropServices#_MethodRental#GetIDsOfNames(System.Guid@,System.IntPtr,System.UInt32,System.UInt32,System.IntPtr)
   parent: System.Reflection.Emit.MethodRental
   isExternal: false
@@ -338,120 +341,36 @@ references:
   name: Guid
   nameWithType: Guid
   fullName: System.Guid
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.UInt32
   parent: System
   isExternal: true
   name: UInt32
   nameWithType: UInt32
   fullName: System.UInt32
-- uid: System.UInt32
-  parent: System
-  isExternal: true
-  name: UInt32
-  nameWithType: UInt32
-  fullName: System.UInt32
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.Reflection.Emit.MethodRental.System#Runtime#InteropServices#_MethodRental#GetTypeInfo(System.UInt32,System.UInt32,System.IntPtr)
   parent: System.Reflection.Emit.MethodRental
   isExternal: false
   name: System.Runtime.InteropServices._MethodRental.GetTypeInfo(UInt32,UInt32,IntPtr)
   nameWithType: MethodRental.System.Runtime.InteropServices._MethodRental.GetTypeInfo(UInt32,UInt32,IntPtr)
   fullName: System.Reflection.Emit.MethodRental.System.Runtime.InteropServices._MethodRental.GetTypeInfo(UInt32,UInt32,IntPtr)
-- uid: System.UInt32
-  parent: System
-  isExternal: true
-  name: UInt32
-  nameWithType: UInt32
-  fullName: System.UInt32
-- uid: System.UInt32
-  parent: System
-  isExternal: true
-  name: UInt32
-  nameWithType: UInt32
-  fullName: System.UInt32
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.Reflection.Emit.MethodRental.System#Runtime#InteropServices#_MethodRental#GetTypeInfoCount(System.UInt32@)
   parent: System.Reflection.Emit.MethodRental
   isExternal: false
   name: System.Runtime.InteropServices._MethodRental.GetTypeInfoCount(UInt32)
   nameWithType: MethodRental.System.Runtime.InteropServices._MethodRental.GetTypeInfoCount(UInt32)
   fullName: System.Reflection.Emit.MethodRental.System.Runtime.InteropServices._MethodRental.GetTypeInfoCount(UInt32)
-- uid: System.UInt32
-  parent: System
-  isExternal: true
-  name: UInt32
-  nameWithType: UInt32
-  fullName: System.UInt32
 - uid: System.Reflection.Emit.MethodRental.System#Runtime#InteropServices#_MethodRental#Invoke(System.UInt32,System.Guid@,System.UInt32,System.Int16,System.IntPtr,System.IntPtr,System.IntPtr,System.IntPtr)
   parent: System.Reflection.Emit.MethodRental
   isExternal: false
   name: System.Runtime.InteropServices._MethodRental.Invoke(UInt32,Guid,UInt32,Int16,IntPtr,IntPtr,IntPtr,IntPtr)
   nameWithType: MethodRental.System.Runtime.InteropServices._MethodRental.Invoke(UInt32,Guid,UInt32,Int16,IntPtr,IntPtr,IntPtr,IntPtr)
   fullName: System.Reflection.Emit.MethodRental.System.Runtime.InteropServices._MethodRental.Invoke(UInt32,Guid,UInt32,Int16,IntPtr,IntPtr,IntPtr,IntPtr)
-- uid: System.UInt32
-  parent: System
-  isExternal: true
-  name: UInt32
-  nameWithType: UInt32
-  fullName: System.UInt32
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
-- uid: System.UInt32
-  parent: System
-  isExternal: true
-  name: UInt32
-  nameWithType: UInt32
-  fullName: System.UInt32
 - uid: System.Int16
   parent: System
   isExternal: true
   name: Int16
   nameWithType: Int16
   fullName: System.Int16
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.Reflection.Emit.MethodRental.SwapMethodBody*
   parent: System.Reflection.Emit.MethodRental
   isExternal: false

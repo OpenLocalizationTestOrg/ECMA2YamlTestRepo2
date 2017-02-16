@@ -45,8 +45,10 @@ items:
   nameWithType: OdbcDataReader
   fullName: System.Data.Odbc.OdbcDataReader
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a way of reading a forward-only stream of data rows from a data source. This class cannot be inherited.
+  remarks: "To create an OdbcDataReader, you must call the <xref:System.Data.Odbc.OdbcCommand.ExecuteReader%2A> method of the <xref:System.Data.Odbc.OdbcCommand> object, instead of directly using a constructor.  \n  \n While the OdbcDataReader is being used, the associated <xref:System.Data.Odbc.OdbcConnection> is busy serving the OdbcDataReader, and no other operations can be performed on the <xref:System.Data.Odbc.OdbcConnection> other than closing it. This is the case until the <xref:System.Data.Odbc.OdbcDataReader.Close%2A> method of the OdbcDataReader is called. For example, you cannot retrieve output parameters until after you call <xref:System.Data.Odbc.OdbcDataReader.Close%2A>.  \n  \n Changes made to a result set by another process or thread while data is being read may be visible to the user of the OdbcDataReader. However, the precise behavior is both driver and timing dependent.  \n  \n <xref:System.Data.Odbc.OdbcDataReader.IsClosed%2A> and <xref:System.Data.Odbc.OdbcDataReader.RecordsAffected%2A> are the only properties that you can call after the OdbcDataReader is closed. Sometimes, you must call <xref:System.Data.Odbc.OdbcDataReader.Close%2A> before you can call <xref:System.Data.Odbc.OdbcDataReader.RecordsAffected%2A>."
+  example:
+  - "The following example creates an <xref:System.Data.Odbc.OdbcConnection>, an <xref:System.Data.Odbc.OdbcCommand>, and an OdbcDataReader. The example reads through the data, writing it out to the console. Finally, the example closes the OdbcDataReader, and then the <xref:System.Data.Odbc.OdbcConnection>.  \n  \n [!code-vb[Classic WebData OdbcDataReader#1](../../add/codesnippet/VisualBasic/t-system.data.odbc.odbcd_0_1.vb)]\n [!code-cs[Classic WebData OdbcDataReader#1](../../add/codesnippet/CSharp/t-system.data.odbc.odbcd_0_1.cs)]"
   syntax:
     content: 'public sealed class OdbcDataReader : System.Data.Common.DbDataReader'
   inheritance:
@@ -94,12 +96,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Closes the  object.
+  remarks: "You must explicitly call the Close method when you are finished using the <xref:System.Data.Odbc.OdbcDataReader> to use the associated <xref:System.Data.Odbc.OdbcConnection> for any other purpose.  \n  \n> [!CAUTION]\n>  Do not call `Close` or `Dispose` on a Connection, a DataReader, or any other managed object in the `Finalize` method of your class. In a finalizer, you should only release unmanaged resources that your class owns directly. If your class does not own any unmanaged resources, do not include a `Finalize` method in your class definition. For more information, see [Garbage Collection](../Topic/Garbage%20Collection.md)."
+  example:
+  - "The following example creates an <xref:System.Data.Odbc.OdbcConnection>, an <xref:System.Data.Odbc.OdbcCommand>, and an <xref:System.Data.Odbc.OdbcDataReader>. The example reads through the data, writing it out to the console. Finally, the example closes the <xref:System.Data.Odbc.OdbcDataReader>, and then the <xref:System.Data.Odbc.OdbcConnection>.  \n  \n [!code-cs[Classic WebData IDataReader.Read Example#1](../../add/codesnippet/CSharp/m-system.data.odbc.odbcd_4_1.cs)]\n [!code-vb[Classic WebData IDataReader.Read Example#1](../../add/codesnippet/VisualBasic/m-system.data.odbc.odbcd_4_1.vb)]"
   syntax:
     content: public override void Close ();
     parameters: []
   overload: System.Data.Odbc.OdbcDataReader.Close*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -116,14 +121,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates the depth of nesting for the current row.
+  remarks: The outermost table has a depth of zero.
   syntax:
     content: public override int Depth { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The depth of nesting for the current row.
   overload: System.Data.Odbc.OdbcDataReader.Depth*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -140,8 +146,6 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
@@ -149,6 +153,7 @@ items:
       type: System.Boolean
       description: To be added.
   overload: System.Data.Odbc.OdbcDataReader.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -165,14 +170,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of columns in the current row.
+  remarks: "Includes hidden fields. Use <xref:System.Data.Common.DbDataReader.VisibleFieldCount%2A> to exclude hidden fields.  \n  \n After you execute a query that does not return rows, FieldCount returns 0."
   syntax:
     content: public override int FieldCount { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: When not positioned in a valid record set, 0; otherwise the number of columns in the current record. The default is -1.
   overload: System.Data.Odbc.OdbcDataReader.FieldCount*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: There is no current connection to a data source.
   platform:
   - net-11
   - net-20
@@ -189,18 +198,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a Boolean.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported then the method call will fail.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override bool GetBoolean (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Boolean
-      description: To be added.
+      description: A Boolean that is the value of the column.
   overload: System.Data.Odbc.OdbcDataReader.GetBoolean*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -217,18 +230,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a byte.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported, the method call fails.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override byte GetByte (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Byte
-      description: To be added.
+      description: The value of the specified column as a byte.
   overload: System.Data.Odbc.OdbcDataReader.GetByte*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -245,30 +262,31 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Reads a stream of bytes from the specified column offset into the buffer as an array, starting at the particular buffer offset.
+  remarks: "GetBytes returns the number of available bytes in the field. Most of the time this is the exact length of the field. However, the number returned may be less than the true length of the field if GetBytes has already been used to obtain bytes from the field. This may be the case, for example, if the <xref:System.Data.Odbc.OdbcDataReader> is reading a large data structure into a buffer. For more information, see the `SequentialAccess` setting for <xref:System.Data.CommandBehavior>.  \n  \n If you pass a buffer that is a null value, GetBytes returns the length of the field in bytes.  \n  \n Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported then the method call will fail.  \n  \n> [!NOTE]\n>  No exception will be thrown if the value of `bufferIndex` is outside the array. No data will be read and the method will return 0."
   syntax:
     content: public override long GetBytes (int i, long dataIndex, byte[] buffer, int bufferIndex, int length);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     - id: dataIndex
       type: System.Int64
-      description: To be added.
+      description: The index within the field where the read operation is to start.
     - id: buffer
       type: System.Byte[]
-      description: To be added.
+      description: The buffer into which to read the stream of bytes.
     - id: bufferIndex
       type: System.Int32
-      description: To be added.
+      description: The index within the `buffer` where the write operation is to start.
     - id: length
       type: System.Int32
-      description: To be added.
+      description: The number of bytes to read.
     return:
       type: System.Int64
-      description: To be added.
+      description: The actual number of bytes read.
   overload: System.Data.Odbc.OdbcDataReader.GetBytes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -285,18 +303,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a character.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported, the method call fails.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override char GetChar (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Char
-      description: To be added.
+      description: The value of the specified column as a character.
   overload: System.Data.Odbc.OdbcDataReader.GetChar*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -313,30 +335,31 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Reads a stream of characters from the specified column offset into the buffer as an array, starting at the particular buffer offset.
+  remarks: "GetChars returns the number of available characters in the field. Most of the time this is the exact length of the field. However, the number returned may be less than the true length of the field if GetChars has already been used to obtain characters from the field. This may be the case, for example, if the <xref:System.Data.Odbc.OdbcDataReader> is reading a large data structure into a buffer. For more information, see the `SequentialAccess` setting for <xref:System.Data.CommandBehavior>.  \n  \n If you pass a buffer that is a null value, GetChars returns the length of the field in characters.  \n  \n Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported then the method call will fail.  \n  \n> [!NOTE]\n>  No exception will be thrown if the value of `bufferIndex` is outside the array. No data will be read and the method will return 0."
   syntax:
     content: public override long GetChars (int i, long dataIndex, char[] buffer, int bufferIndex, int length);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     - id: dataIndex
       type: System.Int64
-      description: To be added.
+      description: The index within the row where the read operation is to start.
     - id: buffer
       type: System.Char[]
-      description: To be added.
+      description: The buffer into which to copy data.
     - id: bufferIndex
       type: System.Int32
-      description: To be added.
+      description: The index within the `buffer` where the write operation is to start.
     - id: length
       type: System.Int32
-      description: To be added.
+      description: The number of characters to read.
     return:
       type: System.Int64
-      description: To be added.
+      description: The actual number of characters read.
   overload: System.Data.Odbc.OdbcDataReader.GetChars*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -353,18 +376,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the name of the source data type.
   syntax:
     content: public override string GetDataTypeName (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.String
-      description: To be added.
+      description: The name of the source data type.
   overload: System.Data.Odbc.OdbcDataReader.GetDataTypeName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -381,18 +404,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a <xref:System.DateTime> object.
   syntax:
     content: public DateTime GetDate (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.DateTime
-      description: To be added.
+      description: The value of the specified column as a <xref:System.DateTime> object.
   overload: System.Data.Odbc.OdbcDataReader.GetDate*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -409,18 +432,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a <xref:System.DateTime> object.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported then the method call will fail.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override DateTime GetDateTime (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.DateTime
-      description: To be added.
+      description: The value of the specified column as a <xref:System.DateTime> object.
   overload: System.Data.Odbc.OdbcDataReader.GetDateTime*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -437,18 +464,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a <xref:System.Decimal> object.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported then the method call will fail.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method.  \n  \n GetDecimal has a maximum precision of 28. Attempting to retrieve decimal data with a larger precision will cause an exception. One solution would be to change the query to cast the decimal type to either a smaller datatype or convert to string or binary."
   syntax:
     content: public override decimal GetDecimal (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Decimal
-      description: To be added.
+      description: The value of the specified column as a <xref:System.Decimal> object.
   overload: System.Data.Odbc.OdbcDataReader.GetDecimal*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -465,18 +496,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a double-precision floating-point number.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported, the method call fails.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override double GetDouble (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Double
-      description: To be added.
+      description: The value of the specified column as a double-precision floating-point number.
   overload: System.Data.Odbc.OdbcDataReader.GetDouble*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -493,15 +528,16 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an <xref:System.Collections.IEnumerator> that can be used to iterate through the rows in the data reader.
+  remarks: Although you can use this method to retrieve an explicit enumerator, in languages that support a `foreach` construct, it is simpler to use the looping construct directly in order to iterate through the rows in the data reader.
   syntax:
     content: public override System.Collections.IEnumerator GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.IEnumerator
-      description: To be added.
+      description: An <xref:System.Collections.IEnumerator> that can be used to iterate through the rows in the data reader.
   overload: System.Data.Odbc.OdbcDataReader.GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -518,18 +554,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the <xref:System.Type> that is the data type of the object.
   syntax:
     content: public override Type GetFieldType (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> that is the data type of the object.
   overload: System.Data.Odbc.OdbcDataReader.GetFieldType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -546,18 +582,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a single-precision floating-point number.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported then the method call will fail.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override float GetFloat (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Single
-      description: To be added.
+      description: The value of the specified column as a single-precision floating-point number.
   overload: System.Data.Odbc.OdbcDataReader.GetFloat*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -574,18 +614,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a globally unique identifier (GUID).
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported, the method call fails.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override Guid GetGuid (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Guid
-      description: To be added.
+      description: The value of the specified column as a GUID.
   overload: System.Data.Odbc.OdbcDataReader.GetGuid*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -602,18 +646,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a 16-bit signed integer.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported, the method call fails.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override short GetInt16 (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Int16
-      description: To be added.
+      description: The value of the specified column as a 16-bit signed integer.
   overload: System.Data.Odbc.OdbcDataReader.GetInt16*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -630,18 +678,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a 32-bit signed integer.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported, the method call fails.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override int GetInt32 (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Int32
-      description: To be added.
+      description: The value of the specified column as a 32-bit signed integer.
   overload: System.Data.Odbc.OdbcDataReader.GetInt32*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -658,18 +710,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a 64-bit signed integer.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported, the method call fails.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override long GetInt64 (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Int64
-      description: To be added.
+      description: The value of the specified column as a 64-bit signed integer.
   overload: System.Data.Odbc.OdbcDataReader.GetInt64*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -686,18 +742,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the name of the specified column.
   syntax:
     content: public override string GetName (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.String
-      description: To be added.
+      description: A string that is the name of the specified column.
   overload: System.Data.Odbc.OdbcDataReader.GetName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -714,18 +770,21 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the column ordinal, given the name of the column.
+  remarks: "GetOrdinal performs a case-sensitive lookup first. If it fails, a second case-insensitive search is made. The method throws an `IndexOutOfRange` exception if the zero-based column ordinal is not found.  \n  \n GetOrdinal is kana-width insensitive.  \n  \n Because ordinal-based lookups are more efficient than named lookups, it is inefficient to call GetOrdinal within a loop. Instead, call GetOrdinal one time and then assign the results to an integer variable for use within the loop."
+  example:
+  - "The following example demonstrates how to use the GetOrdinal method.  \n  \n [!code-vb[Classic WebData OdbcDataReader.GetOrdinal#1](../../add/codesnippet/VisualBasic/m-system.data.odbc.odbcd_3_1.vb)]\n [!code-cs[Classic WebData OdbcDataReader.GetOrdinal#1](../../add/codesnippet/CSharp/m-system.data.odbc.odbcd_3_1.cs)]"
   syntax:
     content: public override int GetOrdinal (string value);
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The name of the column.
     return:
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
   overload: System.Data.Odbc.OdbcDataReader.GetOrdinal*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -742,15 +801,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a  that describes the column metadata of the .
+  remarks: "The GetSchemaTable method returns metadata about each column in the following order:  \n  \n|DataReader column|Description|  \n|-----------------------|-----------------|  \n|ColumnName|The name of the column; this might not be unique. If the column name cannot be determined, a null value is returned. This name always reflects the most recent naming of the column in the current view or command text.|  \n|ColumnOrdinal|The zero-based ordinal of the column. This column cannot contain a null value.|  \n|ColumnSize|The maximum possible length of a value in the column. For columns that use a fixed-length data type, this is the size of the data type.|  \n|NumericPrecision|If <xref:System.Data.DbType> is a numeric data type, this is the maximum precision of the column. The precision depends on the definition of the column. If <xref:System.Data.DbType> is not a numeric data type, do not use the data in this column. If the underlying ODBC driver returns a precision value for a non-numeric data type, this value is used in the schema table.|  \n|NumericScale|If <xref:System.Data.DbType> is <xref:System.Data.DbType>, the number of digits to the right of the decimal point. Otherwise, this is a null value. If the underlying ODBC driver returns a precision value for a non-numeric data type, this value is used in the schema table.|  \n|DataType|Maps to the common language runtime type of <xref:System.Data.DbType>.|  \n|ProviderType|The underlying driver type.|  \n|IsLong|`true` if the column contains a Binary Long Object (BLOB) that contains very long data. The definition of very long data is driver-specific.|  \n|AllowDBNull|`true` if the consumer can set the column to a null value or if the driver cannot determine whether the consumer can set the column to a null value. Otherwise, `false`. A column may contain null values, even if it cannot be set to a null value.|  \n|IsReadOnly|`true` if the column cannot be modified; otherwise `false`.|  \n|IsRowVersion|Set if the column contains a persistent row identifier that cannot be written to, and has no meaningful value except to identity the row.|  \n|IsUnique|`true`: No two rows in the base table (the table returned in BaseTableName) can have the same value in this column. IsUnique is guaranteed to be `true` if the column represents a key by itself or if there is a constraint of type UNIQUE that applies only to this column.<br /><br /> `false`: The column can contain duplicate values in the base table. The default for this column is `false`.|  \n|IsKey|`true`: The column is one of a set of columns in the rowset that, taken together, uniquely identify the row. The set of columns with IsKey set to `true` must uniquely identify a row in the rowset. There is no requirement that this set of columns is a minimal set of columns. This set of columns may be generated from a base table primary key, a unique constraint, or a unique index.<br /><br /> `false`: The column is not required to uniquely identify the row.|  \n|IsAutoIncrement|`true` if the column assigns values to new rows in fixed increments; otherwise `false`. The default for this column is `false`.|  \n|BaseSchemaName|The name of the schema in the data source that contains the column. NULL if the base catalog name cannot be determined. The default for this column is a null value.|  \n|BaseCatalogName|The name of the catalog in the data store that contains the column. NULL if the base catalog name cannot be determined. The default for this column is a null value.|  \n|BaseTableName|The name of the table or view in the data store that contains the column. A null value if the base table name cannot be determined. The default of this column is a null value.|  \n|BaseColumnName|The name of the column in the data store. This might be different from the column name returned in the ColumnName column if an alias was used. A null value if the base column name cannot be determined or if the rowset column is derived, but not identical to, a column in the data store. The default for this column is a null value.|  \n  \n A row is returned for every column in the results set.  \n  \n The .NET Framework Data Provider for ODBC assumes that metadata information is available from an ODBC driver after one of **SQLPrepare**, **SQLExecute**, or **SQLExecuteDirect** functions are called. For \"SchemaOnly\" command behavior to work correctly, **SQLPrepare** must return the required metadata information. Not all ODBC drivers support this function or return metadata information. In these cases, part or all of the information in the SchemaTable will be missing. After calling **SQLPrepare**, The data provider calls the ODBC **SQLColAttribute** function to find the metadata information related to each column in the query results (for example, IsLong, IsUnique, AllowDBNull, BaseTableName, BaseColumnName). If the underlying driver does not return some of this information, the corresponding values in the SchemaTable will not be set correctly.  \n  \n The .NET Framework Data Provider for ODBC also calls **SQLPrimaryKeys** to retrieve the key information for every table. If the underlying ODBC driver does not support this function, the data provider calls **SQLStatistics** and chooses one of the unique indexes as the primary key for the table. This may not always give the results that you want.  \n  \n <xref:System.Data.Odbc.OdbcCommandBuilder> needs the correct identification of the primary keys of the table in order to work correctly. If the BaseTableName is not returned for every column in the query results, the .NET Framework Data Provider for ODBC tries to parse the SQL statement to find the table names involved in the query. This works with UPDATE, INSERT, DELETE and simple SELECT statements, but not with stored procedures or SELECT statements based on joins. If some or all the schema information is missing from this table, the <xref:System.Data.Odbc.OdbcCommandBuilder> will not work correctly, because it has insufficient schema information to automatically generate the correct INSERT, UPDATE, or DELETE statements.  \n  \n To make sure that metadata columns return the correct information, you must call <xref:System.Data.Odbc.OdbcCommand.ExecuteReader%2A> with the behavior parameter set to KeyInfo. Otherwise, some of the columns in the schema table may return default, null, or incorrect data.  \n  \n When you use ODBC.NET to Oracle via the ODBC driver, aliased key columns are not recognized as keys. This affects the IsKey and IsUnique columns in the schema table of the OdbcDataReader. It also affects the OdbcCommandBuilder's ability to generate updating logic. Consider not using an alias for a primary key column.  \n  \n> [!NOTE]\n>  The Microsoft Jet ODBC driver always returns unique index and primary key columns as nullable regardless of whether they are nullable or not. The driver also does not return primary key information; it only returns a list of unique indexes and their columns, including primary key columns, without differentiating among them."
   syntax:
     content: public override System.Data.DataTable GetSchemaTable ();
     parameters: []
     return:
       type: System.Data.DataTable
-      description: To be added.
+      description: A  that describes the column metadata.
   overload: System.Data.Odbc.OdbcDataReader.GetSchemaTable*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  is closed.
   platform:
   - net-11
   - net-20
@@ -767,18 +830,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a <xref:System.String>.
+  remarks: "Conversions are performed based on the underlying capabilities of the ODBC driver. If the conversion is not supported, the method call fails.  \n  \n Call <xref:System.Data.Odbc.OdbcDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override string GetString (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.String
-      description: To be added.
+      description: The value of the specified column as a <xref:System.String>.
   overload: System.Data.Odbc.OdbcDataReader.GetString*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -795,18 +862,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a <xref:System.TimeSpan> object.
   syntax:
     content: public TimeSpan GetTime (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The value of the specified column as a <xref:System.TimeSpan> object.
   overload: System.Data.Odbc.OdbcDataReader.GetTime*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -823,18 +890,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the column at the specified ordinal in its native format.
+  remarks: This method returns <xref:System.DBNull> for null database columns.
   syntax:
     content: public override object GetValue (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Object
-      description: To be added.
+      description: The value to return.
   overload: System.Data.Odbc.OdbcDataReader.GetValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -851,18 +919,23 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Populates an array of objects with the column values of the current row.
+  remarks: "For most applications, the <xref:System.Data.Odbc.OdbcDataReader.GetValues%2A> method provides an efficient means for retrieving all columns, instead of retrieving each column individually.  \n  \n You can pass an <xref:System.Object> array that contains fewer than the number of columns that are contained in the resulting row. Only the amount of data the <xref:System.Object> array holds is copied to the array. You can also pass an <xref:System.Object> array whose length is more than the number of columns that are contained in the resulting row.  \n  \n This method returns <xref:System.DBNull> for null database columns."
+  example:
+  - >-
+    [!code-vb[OdbcDataReader_GetValues#1](../../add/codesnippet/VisualBasic/m-system.data.odbc.odbcd_5_1.vb)]
+     [!code-cs[OdbcDataReader_GetValues#1](../../add/codesnippet/CSharp/m-system.data.odbc.odbcd_5_1.cs)]
   syntax:
     content: public override int GetValues (object[] values);
     parameters:
     - id: values
       type: System.Object[]
-      description: To be added.
+      description: An array of type <xref:System.Object> into which to copy the attribute columns.
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of instances of <xref:System.Object> in the array.
   overload: System.Data.Odbc.OdbcDataReader.GetValues*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -879,14 +952,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the  contains one or more rows.
   syntax:
     content: public override bool HasRows { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  contains one or more rows; otherwise .
   overload: System.Data.Odbc.OdbcDataReader.HasRows*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -903,14 +976,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the  is closed.
+  remarks: IsClosed and <xref:System.Data.Odbc.OdbcDataReader.RecordsAffected%2A> are the only properties that you can call after the <xref:System.Data.Odbc.OdbcDataReader> is closed.
   syntax:
     content: public override bool IsClosed { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  is closed; otherwise .
   overload: System.Data.Odbc.OdbcDataReader.IsClosed*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -927,18 +1001,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the column contains nonexistent or missing values.
+  remarks: To avoid raising an error, call this method to look for null column values before calling the typed Get methods (for example, <xref:System.Data.Odbc.OdbcDataReader.GetByte%2A>, <xref:System.Data.Odbc.OdbcDataReader.GetChar%2A>, and so on).
   syntax:
     content: public override bool IsDBNull (int i);
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the specified column value is equivalent to ; otherwise .
   overload: System.Data.Odbc.OdbcDataReader.IsDBNull*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -955,18 +1030,21 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column in its native format given the column ordinal.
   syntax:
     content: public override object this[int i] { get; }
     parameters:
     - id: i
       type: System.Int32
-      description: To be added.
+      description: The column ordinal.
     return:
       type: System.Object
-      description: To be added.
+      description: The value of the specified column in its native format.
   overload: System.Data.Odbc.OdbcDataReader.Item*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The index passed was outside the range of 0 through <xref:System.Data.IDataRecord.FieldCount%2A>.
   platform:
   - net-11
   - net-20
@@ -983,18 +1061,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column in its native format given the column name.
+  remarks: "A case-sensitive lookup is performed first. If it fails, a second case-insensitive search is made.  \n  \n This method is kana-width insensitive."
   syntax:
     content: public override object this[string value] { get; }
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The column name.
     return:
       type: System.Object
-      description: To be added.
+      description: The value of the specified column in its native format.
   overload: System.Data.Odbc.OdbcDataReader.Item*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: No column with the specified name was found.
   platform:
   - net-11
   - net-20
@@ -1011,15 +1093,16 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Advances the  to the next result when reading the results of batch SQL statements.
+  remarks: "Used to process multiple results that can be generated by executing batch SQL statements.  \n  \n By default, the <xref:System.Data.Odbc.OdbcDataReader> is positioned on the first result."
   syntax:
     content: public override bool NextResult ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if there are more result sets; otherwise .
   overload: System.Data.Odbc.OdbcDataReader.NextResult*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1036,15 +1119,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Advances the  to the next record.
+  remarks: "The default position of the <xref:System.Data.Odbc.OdbcDataReader> is before the first record. Therefore, you must call Read to start accessing any data.  \n  \n While the <xref:System.Data.Odbc.OdbcDataReader> is being used, the associated <xref:System.Data.Odbc.OdbcConnection> is busy serving it until you call <xref:System.Data.Odbc.OdbcDataReader.Close%2A>."
+  example:
+  - "The following example creates an <xref:System.Data.Odbc.OdbcConnection>, an <xref:System.Data.Odbc.OdbcCommand>, and an <xref:System.Data.Odbc.OdbcDataReader>. The example reads through the data, writing it out to the console. Finally, the example closes the <xref:System.Data.Odbc.OdbcDataReader>, and then the <xref:System.Data.Odbc.OdbcConnection>.  \n  \n [!code-cs[Classic WebData IDataReader.Read Example#1](../../add/codesnippet/CSharp/m-system.data.odbc.odbcd_0_1.cs)]\n [!code-vb[Classic WebData IDataReader.Read Example#1](../../add/codesnippet/VisualBasic/m-system.data.odbc.odbcd_0_1.vb)]"
   syntax:
     content: public override bool Read ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if there are more rows; otherwise .
   overload: System.Data.Odbc.OdbcDataReader.Read*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1061,14 +1147,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of rows changed, inserted, or deleted by execution of the SQL statement.
+  remarks: "The RecordsAffected property is not set until all rows are read and you close the <xref:System.Data.Odbc.OdbcDataReader>.  \n  \n The value of this property is cumulative. For example, if two records are inserted in batch mode, the value of RecordsAffected will be 2.  \n  \n <xref:System.Data.Odbc.OdbcDataReader.IsClosed%2A> and RecordsAffected are the only properties that you can call after the <xref:System.Data.Odbc.OdbcDataReader> is closed."
   syntax:
     content: public override int RecordsAffected { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of rows changed, inserted, or deleted. -1 for SELECT statements; 0 if no rows were affected, or the statement failed.
   overload: System.Data.Odbc.OdbcDataReader.RecordsAffected*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1113,30 +1200,12 @@ references:
   name: FieldCount
   nameWithType: OdbcDataReader.FieldCount
   fullName: System.Data.Odbc.OdbcDataReader.FieldCount
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetBoolean(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: GetBoolean(Int32)
   nameWithType: OdbcDataReader.GetBoolean(Int32)
   fullName: System.Data.Odbc.OdbcDataReader.GetBoolean(Int32)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetByte(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1149,12 +1218,6 @@ references:
   name: Byte
   nameWithType: Byte
   fullName: System.Byte
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1167,36 +1230,20 @@ references:
   name: Int64
   nameWithType: Int64
   fullName: System.Int64
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Data.Odbc.OdbcDataReader.GetChar(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1209,54 +1256,26 @@ references:
   name: Char
   nameWithType: Char
   fullName: System.Char
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: GetChars(Int32,Int64,Char[],Int32,Int32)
   nameWithType: OdbcDataReader.GetChars(Int32,Int64,Char[],Int32,Int32)
   fullName: System.Data.Odbc.OdbcDataReader.GetChars(Int32,Int64,Char[],Int32,Int32)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Char
+- uid: System.Char[]
   parent: System
   isExternal: true
   name: Char
   nameWithType: Char
   fullName: System.Char[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
+  spec.csharp:
+  - uid: System.Char
+    name: Char
+    nameWithType: Char
+    fullName: Char[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Data.Odbc.OdbcDataReader.GetDataTypeName(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1269,12 +1288,6 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetDate(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1287,30 +1300,12 @@ references:
   name: DateTime
   nameWithType: DateTime
   fullName: System.DateTime
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetDateTime(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: GetDateTime(Int32)
   nameWithType: OdbcDataReader.GetDateTime(Int32)
   fullName: System.Data.Odbc.OdbcDataReader.GetDateTime(Int32)
-- uid: System.DateTime
-  parent: System
-  isExternal: true
-  name: DateTime
-  nameWithType: DateTime
-  fullName: System.DateTime
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetDecimal(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1323,12 +1318,6 @@ references:
   name: Decimal
   nameWithType: Decimal
   fullName: System.Decimal
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetDouble(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1341,12 +1330,6 @@ references:
   name: Double
   nameWithType: Double
   fullName: System.Double
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetEnumerator
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1371,12 +1354,6 @@ references:
   name: Type
   nameWithType: Type
   fullName: System.Type
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetFloat(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1389,12 +1366,6 @@ references:
   name: Single
   nameWithType: Single
   fullName: System.Single
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetGuid(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1407,12 +1378,6 @@ references:
   name: Guid
   nameWithType: Guid
   fullName: System.Guid
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetInt16(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1425,84 +1390,30 @@ references:
   name: Int16
   nameWithType: Int16
   fullName: System.Int16
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetInt32(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: GetInt32(Int32)
   nameWithType: OdbcDataReader.GetInt32(Int32)
   fullName: System.Data.Odbc.OdbcDataReader.GetInt32(Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetInt64(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: GetInt64(Int32)
   nameWithType: OdbcDataReader.GetInt64(Int32)
   fullName: System.Data.Odbc.OdbcDataReader.GetInt64(Int32)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetName(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: GetName(Int32)
   nameWithType: OdbcDataReader.GetName(Int32)
   fullName: System.Data.Odbc.OdbcDataReader.GetName(Int32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetOrdinal(System.String)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: GetOrdinal(String)
   nameWithType: OdbcDataReader.GetOrdinal(String)
   fullName: System.Data.Odbc.OdbcDataReader.GetOrdinal(String)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Data.Odbc.OdbcDataReader.GetSchemaTable
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1521,18 +1432,6 @@ references:
   name: GetString(Int32)
   nameWithType: OdbcDataReader.GetString(Int32)
   fullName: System.Data.Odbc.OdbcDataReader.GetString(Int32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetTime(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1545,12 +1444,6 @@ references:
   name: TimeSpan
   nameWithType: TimeSpan
   fullName: System.TimeSpan
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetValue(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
@@ -1563,144 +1456,74 @@ references:
   name: Object
   nameWithType: Object
   fullName: System.Object
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.GetValues(System.Object[])
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: GetValues(Object[])
   nameWithType: OdbcDataReader.GetValues(Object[])
   fullName: System.Data.Odbc.OdbcDataReader.GetValues(Object[])
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Object
+- uid: System.Object[]
   parent: System
   isExternal: true
   name: Object
   nameWithType: Object
   fullName: System.Object[]
+  spec.csharp:
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Data.Odbc.OdbcDataReader.HasRows
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: HasRows
   nameWithType: OdbcDataReader.HasRows
   fullName: System.Data.Odbc.OdbcDataReader.HasRows
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Odbc.OdbcDataReader.IsClosed
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: IsClosed
   nameWithType: OdbcDataReader.IsClosed
   fullName: System.Data.Odbc.OdbcDataReader.IsClosed
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Odbc.OdbcDataReader.IsDBNull(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: IsDBNull(Int32)
   nameWithType: OdbcDataReader.IsDBNull(Int32)
   fullName: System.Data.Odbc.OdbcDataReader.IsDBNull(Int32)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.Item(System.Int32)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: Item(Int32)
   nameWithType: OdbcDataReader.Item(Int32)
   fullName: System.Data.Odbc.OdbcDataReader.Item(Int32)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.Item(System.String)
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: Item(String)
   nameWithType: OdbcDataReader.Item(String)
   fullName: System.Data.Odbc.OdbcDataReader.Item(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Data.Odbc.OdbcDataReader.NextResult
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: NextResult()
   nameWithType: OdbcDataReader.NextResult()
   fullName: System.Data.Odbc.OdbcDataReader.NextResult()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Odbc.OdbcDataReader.Read
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: Read()
   nameWithType: OdbcDataReader.Read()
   fullName: System.Data.Odbc.OdbcDataReader.Read()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Odbc.OdbcDataReader.RecordsAffected
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false
   name: RecordsAffected
   nameWithType: OdbcDataReader.RecordsAffected
   fullName: System.Data.Odbc.OdbcDataReader.RecordsAffected
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Odbc.OdbcDataReader.Close*
   parent: System.Data.Odbc.OdbcDataReader
   isExternal: false

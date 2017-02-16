@@ -7,8 +7,69 @@
   </AssemblyInfo>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Provides access to the column values within each row for a <see langword="DataReader" />, and is implemented by .NET Framework data providers that access relational databases.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The <xref:System.Data.IDataReader> and IDataRecord interfaces enable an inheriting class to implement a `DataReader` class. This provides a way of reading one or more forward-only streams of result sets. For more information about `DataReader` classes, see [Retrieving Data Using a DataReader](../Topic/Retrieving%20Data%20Using%20a%20DataReader.md).  
+  
+ An application does not create an instance of the IDataRecord interface directly, but creates an instance of a class that inherits IDataRecord. Typically, you do this by obtaining a `DataReader` through the `ExecuteReader` method of the `Command` object.  
+  
+ Classes that inherit IDataRecord must implement all inherited members, and typically define additional members to add provider-specific functionality.  
+  
+ Providers implementing a `DataReader` are required to expose data in common language runtime (CLR) types. Type coercion is defined for some types not included in the CLR. These values may be accessed as alternative types that comply with CLR types. As an example, the following table lists suggested mappings from OLE DB data types to CLR types, with alternative types in parentheses.  
+  
+|OLE DB type|CLR type|  
+|-----------------|--------------|  
+|DBTYPE_BOOL|Int16|  
+|DBTYPE_BSTR|string|  
+|DBTYPE_BYTES|byte[]|  
+|DBTYPE_CY|Decimal|  
+|DBTYPE_DATE|DateTime|  
+|DBTYPE_DBDATE|DateTime|  
+|DBTYPE_DBTIME|DateTime|  
+|DBTYPE_DBTIMESTAMP|DateTime|  
+|DBTYPE_DECIMAL|Decimal|  
+|DBTYPE_EMPTY|null|  
+|DBTYPE_ERROR|ExternalException|  
+|DBTYPE_FILETIME|DateTime|  
+|DBTYPE_GUID|Guid|  
+|DBTYPE_HCHAPTER|not supported|  
+|DBTYPE_I1|SByte|  
+|DBTYPE_I2|Int16|  
+|DBTYPE_I4|Int32|  
+|DBTYPE_I8|Int64|  
+|DBTYPE_IDISPATCH|object|  
+|DBTYPE_IUNKNOWN|object|  
+|DBTYPE_NULL|DBNull.Value|  
+|DBTYPE_NUMERIC|Decimal|  
+|DBTYPE_PROPVARIANT|object|  
+|DBTYPE_R4|Single|  
+|DBTYPE_R8|Double|  
+|DBTYPE_STR|string|  
+|DBTYPE_UDT|not supported|  
+|DBTYPE_UI1|byte (Int16)|  
+|DBTYPE_UI2|UInt16 (Int32)|  
+|DBTYPE_UI4|UInt32 (Int64)|  
+|DBTYPE_UI8|UInt64 (Decimal)|  
+|DBTYPE_VARIANT|object|  
+|DBTYPE_VARNUMERIC|not supported|  
+|DBTYPE_WSTR|string|  
+  
+   
+  
+## Examples  
+ The following example creates instances of the derived classes, <xref:System.Data.SqlClient.SqlConnection>, <xref:System.Data.SqlClient.SqlCommand>, and <xref:System.Data.SqlClient.SqlDataReader>. The example reads through the data, writing it out to the console. Finally, the example closes the <xref:System.Data.SqlClient.SqlDataReader>, and then the <xref:System.Data.SqlClient.SqlConnection>.  
+  
+ [!code-cs[Classic WebData SqlDataReader.Read Example#1](../../add/codesnippet/CSharp/t-system.data.idatarecord_1.cs)]
+ [!code-vb[Classic WebData SqlDataReader.Read Example#1](../../add/codesnippet/VisualBasic/t-system.data.idatarecord_1.vb)]  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName="FieldCount">
@@ -22,9 +83,18 @@
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets the number of columns in the current row.</summary>
+        <value>When not positioned in a valid recordset, 0; otherwise, the number of columns in the current record. The default is -1.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ After executing a query that does not return rows (for example, using the <xref:System.Data.IDbCommand.ExecuteNonQuery%2A> method), FieldCount returns -1.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>When not positioned in a valid recordset, 0; otherwise, the number of columns in the current record. The default is -1.</returns>
       </Docs>
     </Member>
     <Member MemberName="GetBoolean">
@@ -41,10 +111,20 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="i">The zero-based column ordinal.</param>
+        <summary>Gets the value of the specified column as a Boolean.</summary>
+        <returns>The value of the column.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ No conversions are performed. Therefore, the data retrieved must already be a Boolean; otherwise an exception is generated.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The value of the column.</value>
       </Docs>
     </Member>
     <Member MemberName="GetByte">
@@ -61,10 +141,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The zero-based column ordinal.</param>
+        <summary>Gets the 8-bit unsigned integer value of the specified column.</summary>
+        <returns>The 8-bit unsigned integer value of the specified column.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The 8-bit unsigned integer value of the specified column.</value>
       </Docs>
     </Member>
     <Member MemberName="GetBytes">
@@ -85,14 +168,28 @@
         <Parameter Name="length" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <param name="fieldOffset">To be added.</param>
-        <param name="buffer">To be added.</param>
-        <param name="bufferoffset">To be added.</param>
-        <param name="length">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="i">The zero-based column ordinal.</param>
+        <param name="fieldOffset">The index within the field from which to start the read operation.</param>
+        <param name="buffer">The buffer into which to read the stream of bytes.</param>
+        <param name="bufferoffset">The index for `buffer` to start the read operation.</param>
+        <param name="length">The number of bytes to read.</param>
+        <summary>Reads a stream of bytes from the specified column offset into the buffer as an array, starting at the given buffer offset.</summary>
+        <returns>The actual number of bytes read.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ GetBytes returns the number of available bytes in the field. Frequently this is the exact length of the field. However, the number returned may be less than the true length of the field if `GetBytes` has already been used to obtain bytes from the field.  
+  
+ If you pass a buffer that is `null`, GetBytes returns the length of the row in bytes.  
+  
+ No conversions are performed; therefore the data retrieved must already be a byte array.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The actual number of bytes read.</value>
       </Docs>
     </Member>
     <Member MemberName="GetChar">
@@ -109,10 +206,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The zero-based column ordinal.</param>
+        <summary>Gets the character value of the specified column.</summary>
+        <returns>The character value of the specified column.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The character value of the specified column.</value>
       </Docs>
     </Member>
     <Member MemberName="GetChars">
@@ -133,14 +233,28 @@
         <Parameter Name="length" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <param name="fieldoffset">To be added.</param>
-        <param name="buffer">To be added.</param>
-        <param name="bufferoffset">To be added.</param>
-        <param name="length">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="i">The zero-based column ordinal.</param>
+        <param name="fieldoffset">The index within the row from which to start the read operation.</param>
+        <param name="buffer">The buffer into which to read the stream of bytes.</param>
+        <param name="bufferoffset">The index for `buffer` to start the read operation.</param>
+        <param name="length">The number of bytes to read.</param>
+        <summary>Reads a stream of characters from the specified column offset into the buffer as an array, starting at the given buffer offset.</summary>
+        <returns>The actual number of characters read.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ GetChars returns the number of available characters in the field. Frequently this is the exact length of the field. However, the number returned may be less than the exact length of the field if `GetChars` has already been used to obtain characters from the field.  
+  
+ If you pass a buffer that is `null`, `GetChars` returns the length of the field in characters.  
+  
+ No conversions are performed; therefore the data retrieved must already be a character array.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The actual number of characters read.</value>
       </Docs>
     </Member>
     <Member MemberName="GetData">
@@ -157,10 +271,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Returns an <see cref="T:System.Data.IDataReader" /> for the specified column ordinal.</summary>
+        <returns>The <see cref="T:System.Data.IDataReader" /> for the specified column ordinal.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The <see cref="T:System.Data.IDataReader" /> for the specified column ordinal.</value>
       </Docs>
     </Member>
     <Member MemberName="GetDataTypeName">
@@ -177,10 +294,20 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the data type information for the specified field.</summary>
+        <returns>The data type information for the specified field.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The data type information can differ from the type information returned by `GetFieldType`, especially where the underlying data types do not map one for one to the runtime types supported by the language. (for example, `DataTypeName` may be "integer", while `Type.Name` may be "Int32".)  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The data type information for the specified field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetDateTime">
@@ -197,10 +324,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the date and time data value of the specified field.</summary>
+        <returns>The date and time data value of the specified field.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The date and time data value of the specified field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetDecimal">
@@ -217,10 +347,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the fixed-position numeric value of the specified field.</summary>
+        <returns>The fixed-position numeric value of the specified field.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The fixed-position numeric value of the specified field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetDouble">
@@ -237,10 +370,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the double-precision floating point number of the specified field.</summary>
+        <returns>The double-precision floating point number of the specified field.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The double-precision floating point number of the specified field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetFieldType">
@@ -257,10 +393,20 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the &lt;xref:System.Type&gt; information corresponding to the type of &lt;xref:System.Object&gt; that would be returned from &lt;xref:System.Data.IDataRecord.GetValue%2A&gt;.</summary>
+        <returns>The &lt;xref:System.Type&gt; information corresponding to the type of &lt;xref:System.Object&gt; that would be returned from &lt;xref:System.Data.IDataRecord.GetValue%2A&gt;.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This information can be used to increase performance by indicating the strongly-typed accessor to call. (for example, using `GetInt32` is roughly ten times faster than using `GetValue`.)  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The &lt;xref:System.Type&gt; information corresponding to the type of &lt;xref:System.Object&gt; that would be returned from &lt;xref:System.Data.IDataRecord.GetValue%2A&gt;.</value>
       </Docs>
     </Member>
     <Member MemberName="GetFloat">
@@ -277,10 +423,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the single-precision floating point number of the specified field.</summary>
+        <returns>The single-precision floating point number of the specified field.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The single-precision floating point number of the specified field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetGuid">
@@ -297,10 +446,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Returns the GUID value of the specified field.</summary>
+        <returns>The GUID value of the specified field.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The GUID value of the specified field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetInt16">
@@ -317,10 +469,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the 16-bit signed integer value of the specified field.</summary>
+        <returns>The 16-bit signed integer value of the specified field.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The 16-bit signed integer value of the specified field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetInt32">
@@ -337,10 +492,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the 32-bit signed integer value of the specified field.</summary>
+        <returns>The 32-bit signed integer value of the specified field.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The 32-bit signed integer value of the specified field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetInt64">
@@ -357,10 +515,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the 64-bit signed integer value of the specified field.</summary>
+        <returns>The 64-bit signed integer value of the specified field.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The 64-bit signed integer value of the specified field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetName">
@@ -377,10 +538,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the name for the field to find.</summary>
+        <returns>The name of the field or the empty string (""), if there is no value to return.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The name of the field or the empty string (""), if there is no value to return.</value>
       </Docs>
     </Member>
     <Member MemberName="GetOrdinal">
@@ -397,10 +561,29 @@
         <Parameter Name="name" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="name">The name of the field to find.</param>
+        <summary>Return the index of the named field.</summary>
+        <returns>The index of the named field.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `GetOrdinal` performs a case-sensitive lookup first. If it fails, a second case-insensitive search is made. `GetOrdinal` is kana-width insensitive. If the index of the named field is not found, an `IndexOutOfRangeException` is thrown.  
+  
+ Because ordinal-based lookups are more efficient than named lookups, it is inefficient to call `GetOrdinal` within a loop. Save time by calling `GetOrdinal` one time and assigning the results to an integer variable for use within the loop.  
+  
+   
+  
+## Examples  
+ The following example demonstrates how to use the inherited <xref:System.Data.Odbc.OdbcDataReader.GetOrdinal%2A> method.  
+  
+ [!code-vb[Classic WebData OdbcDataReader.GetOrdinal#1](../../add/codesnippet/VisualBasic/m-system.data.idatarecor_1.vb)]
+ [!code-cs[Classic WebData OdbcDataReader.GetOrdinal#1](../../add/codesnippet/CSharp/m-system.data.idatarecor_1.cs)]  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>The index of the named field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetString">
@@ -417,10 +600,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Gets the string value of the specified field.</summary>
+        <returns>The string value of the specified field.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The string value of the specified field.</value>
       </Docs>
     </Member>
     <Member MemberName="GetValue">
@@ -437,10 +623,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="i">The index of the field to find.</param>
+        <summary>Return the value of the specified field.</summary>
+        <returns>The &lt;xref:System.Object&gt; which will contain the field value upon return.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>The &lt;xref:System.Object&gt; which will contain the field value upon return.</value>
       </Docs>
     </Member>
     <Member MemberName="GetValues">
@@ -457,10 +646,21 @@
         <Parameter Name="values" Type="System.Object[]" />
       </Parameters>
       <Docs>
-        <param name="values">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="values">An array of &lt;xref:System.Object&gt; to copy the attribute fields into.</param>
+        <summary>Populates an array of objects with the column values of the current record.</summary>
+        <returns>The number of instances of &lt;xref:System.Object&gt; in the array.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ For most applications, the GetValues method provides an efficient means for retrieving all columns, instead of retrieving each column individually.  
+  
+ You can pass an <xref:System.Object> array that contains fewer than the number of columns that are contained in the resulting row. Only the amount of data the <xref:System.Object> array holds is copied to the array. You can also pass an <xref:System.Object> array whose length is more than the number of columns that are contained in the resulting row.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>The number of instances of &lt;xref:System.Object&gt; in the array.</value>
       </Docs>
     </Member>
     <Member MemberName="IsDBNull">
@@ -477,10 +677,22 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="i">The index of the field to find.</param>
+        <summary>Return whether the specified field is set to null.</summary>
+        <returns>
+          <see langword="true" /> if the specified field is set to null; otherwise, <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call this method to see if there are null column values before calling the typed get methods (for example, <xref:System.Data.SqlClient.SqlDataReader.GetByte%2A>, <xref:System.Data.SqlClient.SqlDataReader.GetChar%2A>, and so on) to avoid raising an error.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <value>
+          <see langword="true" /> if the specified field is set to null; otherwise, <see langword="false" />.</value>
       </Docs>
     </Member>
     <Member MemberName="Item">
@@ -497,10 +709,13 @@
         <Parameter Name="i" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="i">To be added.</param>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <param name="i">The zero-based index of the column to get.</param>
+        <summary>Gets the column located at the specified index.</summary>
+        <value>The column located at the specified index as an &lt;xref:System.Object&gt;.</value>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through &lt;xref:System.Data.IDataRecord.FieldCount%2A&gt;.</exception>
+        <threadsafe />
+        <returns>The column located at the specified index as an &lt;xref:System.Object&gt;.</returns>
       </Docs>
     </Member>
     <Member MemberName="Item">
@@ -517,10 +732,22 @@
         <Parameter Name="name" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <param name="name">The name of the column to find.</param>
+        <summary>Gets the column with the specified name.</summary>
+        <value>The column with the specified name as an &lt;xref:System.Object&gt;.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ A case-sensitive lookup is performed first. If it fails, a second case-insensitive search is made.  
+  
+ This method is kana-width insensitive.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">No column with the specified name was found.</exception>
+        <threadsafe />
+        <returns>The column with the specified name as an &lt;xref:System.Object&gt;.</returns>
       </Docs>
     </Member>
   </Members>

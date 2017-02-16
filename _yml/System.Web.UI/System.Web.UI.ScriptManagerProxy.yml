@@ -19,8 +19,8 @@ items:
   nameWithType: ScriptManagerProxy
   fullName: System.Web.UI.ScriptManagerProxy
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Enables nested components such as content pages and user controls to add script and service references to pages when a  control is already defined in a parent element.
+  remarks: "In this topic:  \n  \n-   [Introduction](#introduction)  \n  \n-   [Declarative Syntax](#declarative_syntax)  \n  \n<a name=\"introduction\"></a>   \n## Introduction  \n A Web page can contain only one <xref:System.Web.UI.ScriptManager> control, either directly on the page or indirectly inside a nested or parent component. The ScriptManagerProxy control lets you add scripts and services to content pages and to user controls if the master page or host page already contains a <xref:System.Web.UI.ScriptManager> control.  \n  \n When you use the ScriptManagerProxy control, you can add to the script and service collections defined by the <xref:System.Web.UI.ScriptManager> control. If you do not want to include specific scripts and services on every page that includes a particular <xref:System.Web.UI.ScriptManager> control, you can remove them from the <xref:System.Web.UI.ScriptManager> control. You can then add them to individual pages by using the ScriptManagerProxy control instead.  \n  \n<a name=\"declarative_syntax\"></a>   \n## Declarative Syntax  \n  \n```  \n<asp:ScriptManagerProxy  \n    AuthenticationService-Path=\"uri\"  \n    EnableTheming=\"True|False\"  \n    EnableViewState=\"True|False\"  \n    ID=\"string\"  \n    OnDataBinding=\"DataBinding event handler\"  \n    OnDisposed=\"Disposed event handler\"  \n    OnInit=\"Init event handler\"  \n    OnLoad=\"Load event handler\"  \n    OnPreRender=\"PreRender event handler\"  \n    OnUnload=\"Unload event handler\"  \n    ProfileService-LoadProperties=\"string\"  \n    ProfileService-Path=\"uri\"  \n    RoleService-LoadRoles=\"True|False\"  \n    RoleService-Path=\"uri\"  \n    runat=\"server\"  \n    SkinID=\"string\"  \n    Visible=\"True|False\"  \n>  \n        <AuthenticationService  \n            Path=\"uri\"  \n        />  \n        <ProfileService  \n            LoadProperties=\"string\"  \n            Path=\"uri\"  \n        />  \n        <RoleService  \n            LoadRoles=\"True|False\"  \n            Path=\"uri\"  \n        />  \n        <Scripts>  \n            <asp:ScriptReference  \n                Assembly=\"string\"  \n                IgnoreScriptPath=\"True|False\"  \n                Name=\"string\"  \n                NotifyScriptLoaded=\"True|False\"  \n                Path=\"string\"  \n                ResourceUICultures=\"string\"  \n                ScriptMode=\"Auto|Debug|Inherit|Release\"  \n            />  \n        </Scripts>  \n        <Services>  \n            <asp:ServiceReference  \n                InlineScript=\"True|False\"  \n                Path=\"string\"  \n            />  \n        </Services>  \n</asp:ScriptManagerProxy>  \n```"
   syntax:
     content: >-
       [System.ComponentModel.DefaultProperty("Scripts")]
@@ -164,12 +164,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: A page that contains a <xref:System.Web.UI.ScriptManagerProxy> control must also contain a valid <xref:System.Web.UI.ScriptManager> control. For example, if you are putting a <xref:System.Web.UI.ScriptManagerProxy> control on a content page, the page must reference a master page that contains a <xref:System.Web.UI.ScriptManager> control.
   syntax:
     content: public ScriptManagerProxy ();
     parameters: []
   overload: System.Web.UI.ScriptManagerProxy.#ctor*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "There is no  for the current page.  \n  \n \\- or -  \n  \n The current page is ."
   platform:
   - net-11
   - net-20
@@ -186,14 +190,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object that is associated with the current  instance.
+  remarks: "The <xref:System.Web.UI.AuthenticationServiceManager> object that is returned by this property represents the authentication service that is registered with the page.  \n  \n You can use the ASP.NET authentication service or use a custom authentication service. To use a custom service, you can register it by including a `AuthenticationService` element inside the `ScriptManagerProxy` element on the page. You can also programmatically configure the <xref:System.Web.UI.AuthenticationServiceManager> object."
   syntax:
     content: public System.Web.UI.AuthenticationServiceManager AuthenticationService { get; }
     return:
       type: System.Web.UI.AuthenticationServiceManager
-      description: To be added.
+      description: The  object for the current  instance.
   overload: System.Web.UI.ScriptManagerProxy.AuthenticationService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -210,14 +215,14 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a reference to the composite script that supports the content page.
   syntax:
     content: public System.Web.UI.CompositeScriptReference CompositeScript { get; }
     return:
       type: System.Web.UI.CompositeScriptReference
-      description: To be added.
+      description: A reference to the composite script.
   overload: System.Web.UI.ScriptManagerProxy.CompositeScript*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -234,13 +239,14 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the user clicks the browser's **Back** or **Forward** button.
+  remarks: When a user clicks the browser's **Back** button, the browser navigates through previously-viewed URLs, which can include URLs that contain history-point state data. If client code in the Web page detects that the URL contains history state data, it makes a request to the server page. This acts as a postback event, and the <xref:System.Web.UI.ScriptManagerProxy> server control raises the `Navigate` event. You can handle this event and re-create the page as required in the Web application by using the state data that is passed with the event.
   syntax:
     content: public event EventHandler<System.Web.UI.HistoryEventArgs> Navigate;
     return:
       type: System.EventHandler{System.Web.UI.HistoryEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -257,15 +263,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the base  event and registers the  control with the  control.
   syntax:
     content: protected override void OnInit (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: The event data.
   overload: System.Web.UI.ScriptManagerProxy.OnInit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -282,14 +288,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object that is associated with the current  instance.
+  remarks: "The <xref:System.Web.UI.ProfileServiceManager> object that is returned by this property represents the profile service that is registered with the page.  \n  \n You can use the ASP.NET profile service or use a custom profile service. To use a custom service, you can register it by including a `ProfileService` element inside the `ScriptManagerProxy` element on the page. You can also programmatically configure the <xref:System.Web.UI.ProfileServiceManager> object."
   syntax:
     content: public System.Web.UI.ProfileServiceManager ProfileService { get; }
     return:
       type: System.Web.UI.ProfileServiceManager
-      description: To be added.
+      description: The  object for the current  instance.
   overload: System.Web.UI.ScriptManagerProxy.ProfileService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -306,14 +313,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object that is associated with the current  instance.
+  remarks: "The <xref:System.Web.UI.RoleServiceManager> object that is returned by this property represents the role service that is registered with the page.  \n  \n You can use the ASP.NET role service or use a custom role service. To use a custom service, you can register it by including a `RoleService` element inside the `ScriptManagerProxy` element on the page. You can also programmatically configure the <xref:System.Web.UI.RoleServiceManager> object."
   syntax:
     content: public System.Web.UI.RoleServiceManager RoleService { get; }
     return:
       type: System.Web.UI.RoleServiceManager
-      description: To be added.
+      description: The  object for the current  instance.
   overload: System.Web.UI.ScriptManagerProxy.RoleService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -330,14 +338,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  object that contains a  object for each script file that is explicitly registered with the  control.
+  remarks: "The Scripts collection enables you to add script references to any scripts that are already registered with the <xref:System.Web.UI.ScriptManager> control.  \n  \n You can add script references to the Scripts collection declaratively by using the `ScriptReference` element. You can add script references programmatically by adding <xref:System.Web.UI.ScriptReference> objects to the Scripts collection.  \n  \n If a script is already registered with the <xref:System.Web.UI.ScriptManagerProxy> or <xref:System.Web.UI.ScriptManager> control, the script is not registered again."
   syntax:
     content: public System.Web.UI.ScriptReferenceCollection Scripts { get; }
     return:
       type: System.Web.UI.ScriptReferenceCollection
-      description: To be added.
+      description: A collection of  objects for each script file that the  control sends to the browser.
   overload: System.Web.UI.ScriptManagerProxy.Scripts*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -354,14 +363,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  object that contains a  object for each service that is explicitly registered with the  control.
+  remarks: "The Services collection enables you to add services to any services that are already registered with the <xref:System.Web.UI.ScriptManager> control.  \n  \n You can add service references to the Services collection declaratively by using the `ServiceReference` element. You can add service references programmatically by adding <xref:System.Web.UI.ServiceReference> objects to the Services collection.  \n  \n If a service is already registered with the <xref:System.Web.UI.ScriptManagerProxy> or <xref:System.Web.UI.ScriptManager> control, the service is not registered again."
   syntax:
     content: public System.Web.UI.ServiceReferenceCollection Services { get; }
     return:
       type: System.Web.UI.ServiceReferenceCollection
-      description: To be added.
+      description: A collection that contains an  object for each service that is registered with the  control.
   overload: System.Web.UI.ScriptManagerProxy.Services*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -378,14 +388,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Overrides the <xref:System.Web.UI.Control.Visible%2A> property inherited from the base  class to prevent setting this value.
+  remarks: The <xref:System.Web.UI.Control.Visible%2A> property is overridden in the <xref:System.Web.UI.ScriptManagerProxy> class to prevent setting this property. The Visible property returns `true` unless it is inside a container, such as a <xref:System.Web.UI.UserControl> whose <xref:System.Web.UI.Control.Visible%2A> property is set to `false`.
   syntax:
     content: public override bool Visible { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the control is rendered on the page; otherwise, .
   overload: System.Web.UI.ScriptManagerProxy.Visible*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: A value is assigned to the Visible property.
   platform:
   - net-11
   - net-20
@@ -436,6 +450,21 @@ references:
   name: EventHandler<HistoryEventArgs>
   nameWithType: EventHandler<HistoryEventArgs>
   fullName: System.EventHandler<System.Web.UI.HistoryEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Web.UI.HistoryEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.HistoryEventArgs
+    name: HistoryEventArgs
+    nameWithType: HistoryEventArgs
+    fullName: HistoryEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.UI.ScriptManagerProxy.OnInit(System.EventArgs)
   parent: System.Web.UI.ScriptManagerProxy
   isExternal: false

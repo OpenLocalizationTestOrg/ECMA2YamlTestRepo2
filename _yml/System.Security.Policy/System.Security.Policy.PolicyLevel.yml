@@ -31,8 +31,8 @@ items:
   nameWithType: PolicyLevel
   fullName: System.Security.Policy.PolicyLevel
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the security policy levels for the common language runtime. This class cannot be inherited.
+  remarks: "> [!IMPORTANT]\n>  Starting with the [!INCLUDE[net_v40_long](../../add/includes/net-v40-long-md.md)], the common language runtime (CLR) is moving away from providing security policy for computers. We recommend that you use [Windows Software Restriction Policies (SRP)](http://go.microsoft.com/fwlink/?LinkId=178101) or [AppLocker](http://go.microsoft.com/fwlink/?LinkId=178102) as a replacement for CLR security policy. The information in this topic applies to the .NET Framework version 3.5 and earlier; it does not apply to the [!INCLUDE[net_v40_short](../../add/includes/net-v40-short-md.md)] and later. For more information about this and other changes, see [Security Changes](../Topic/Security%20Changes%20in%20the%20.NET%20Framework.md).  \n  \n The highest level of security policy is enterprise-wide. Successive lower levels of hierarchy represent further policy restrictions, but can never grant more permissions than allowed by higher levels. The following policy levels are implemented:  \n  \n1.  Enterprise: Security policy for all managed code in an enterprise.  \n  \n2.  Machine: Security policy for all managed code run on the computer.  \n  \n3.  User: Security policy for all managed code run by the user.  \n  \n4.  Application domain: Security policy for all managed code in an application.  \n  \n A policy level consists of a set of code groups organized into a single rooted tree (see <xref:System.Security.Policy.CodeGroup>), a set of named permission sets that are referenced by the code groups to specify permissions to be granted to code belonging to the code group, and a list of fully-trusted assemblies.  \n  \n Use <xref:System.Security.SecurityManager.PolicyHierarchy%2A?displayProperty=fullName> to enumerate the policy levels."
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -58,15 +58,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a  corresponding to the specified  to the list of  objects used to determine whether an assembly is a member of the group of assemblies that should not be evaluated.
+  remarks: The AddFullTrustAssembly method is not supported in version 2.0 or later of the .NET Framework because the list of full trust assemblies is not used in those versions.
   syntax:
     content: public void AddFullTrustAssembly (System.Security.Policy.StrongName sn);
     parameters:
     - id: sn
       type: System.Security.Policy.StrongName
-      description: To be added.
+      description: The  used to create the  to add to the list of  objects used to determine whether an assembly is a member of the group of assemblies that should not be evaluated.
   overload: System.Security.Policy.PolicyLevel.AddFullTrustAssembly*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The sn parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The  specified by the sn parameter already has full trust.
   platform:
   - net-11
   - net-20
@@ -83,15 +90,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the specified  to the list of  objects used to determine whether an assembly is a member of the group of assemblies that should not be evaluated.
+  remarks: The AddFullTrustAssembly method is not supported in version 2.0 or later of the .NET Framework because the list of full trust assemblies is not used in those versions.
   syntax:
     content: public void AddFullTrustAssembly (System.Security.Policy.StrongNameMembershipCondition snMC);
     parameters:
     - id: snMC
       type: System.Security.Policy.StrongNameMembershipCondition
-      description: To be added.
+      description: The  to add to the list of  objects used to determine whether an assembly is a member of the group of assemblies that should not be evaluated.
   overload: System.Security.Policy.PolicyLevel.AddFullTrustAssembly*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The snMC parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The  specified by the snMC parameter already has full trust.
   platform:
   - net-11
   - net-20
@@ -108,15 +122,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a  to the current policy level.
+  remarks: Named permission sets are scoped by policy level.
   syntax:
     content: public void AddNamedPermissionSet (System.Security.NamedPermissionSet permSet);
     parameters:
     - id: permSet
       type: System.Security.NamedPermissionSet
-      description: To be added.
+      description: The  to add to the current policy level.
   overload: System.Security.Policy.PolicyLevel.AddNamedPermissionSet*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The permSet parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The permSet parameter has the same name as an existing  in the .
   platform:
   - net-11
   - net-20
@@ -133,21 +154,27 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Replaces a  in the current policy level with the specified .
   syntax:
     content: public System.Security.NamedPermissionSet ChangeNamedPermissionSet (string name, System.Security.PermissionSet pSet);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the  to replace.
     - id: pSet
       type: System.Security.PermissionSet
-      description: To be added.
+      description: The  that replaces the  specified by the `name` parameter.
     return:
       type: System.Security.NamedPermissionSet
-      description: To be added.
+      description: A copy of the  that was replaced.
   overload: System.Security.Policy.PolicyLevel.ChangeNamedPermissionSet*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The name parameter is .  \n  \n -or-  \n  \n The pSet parameter is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The name parameter is equal to the name of a reserved permission set.  \n  \n -or-  \n  \n The  specified by the pSet parameter cannot be found."
   platform:
   - net-11
   - net-20
@@ -164,15 +191,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new policy level for use at the application domain policy level.
+  remarks: This method creates a new <xref:System.Security.Policy.PolicyLevel> with the <xref:System.Security.Policy.PolicyLevel.Label%2A> "AppDomain". The new <xref:System.Security.Policy.PolicyLevel> will initially contain the same <xref:System.Security.NamedPermissionSet> objects as in the default computer policy, and will have a single root code group that grants `FullTrust` to all code.
   syntax:
     content: public static System.Security.Policy.PolicyLevel CreateAppDomainLevel ();
     parameters: []
     return:
       type: System.Security.Policy.PolicyLevel
-      description: To be added.
+      description: The newly created .
   overload: System.Security.Policy.PolicyLevel.CreateAppDomainLevel*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -189,15 +217,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Reconstructs a security object with a given state from an XML encoding.
   syntax:
     content: public void FromXml (System.Security.SecurityElement e);
     parameters:
     - id: e
       type: System.Security.SecurityElement
-      description: To be added.
+      description: The XML encoding to use to reconstruct the security object.
   overload: System.Security.Policy.PolicyLevel.FromXml*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The e parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The  specified by the e parameter is invalid.
   platform:
   - net-11
   - net-20
@@ -214,14 +248,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a list of  objects used to determine whether an assembly is a member of the group of assemblies used to evaluate security policy.
+  remarks: "FullTrustAssemblies are granted full trust during security policy evaluation of assemblies not in the list, but are not automatically granted full trust when directly evaluated by the security policy system.  \n  \n The FullTrustAssemblies property is not supported in version 2.0 or later of the .NET Framework because the list of full trust assemblies is not used in those versions."
   syntax:
     content: public System.Collections.IList FullTrustAssemblies { get; }
     return:
       type: System.Collections.IList
-      description: To be added.
+      description: A list of  objects used to determine whether an assembly is a member of the group of assemblies used to evaluate security policy. These assemblies are granted full trust during security policy evaluation of assemblies not in the list.
   overload: System.Security.Policy.PolicyLevel.FullTrustAssemblies*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -238,18 +273,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the  in the current policy level with the specified name.
   syntax:
     content: public System.Security.NamedPermissionSet GetNamedPermissionSet (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the  to find.
     return:
       type: System.Security.NamedPermissionSet
-      description: To be added.
+      description: The  in the current policy level with the specified name, if found; otherwise, .
   overload: System.Security.Policy.PolicyLevel.GetNamedPermissionSet*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
   platform:
   - net-11
   - net-20
@@ -266,14 +304,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a descriptive label for the policy level.
+  remarks: The label is used to help the administrator identify the policy level.
   syntax:
     content: public string Label { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The label associated with the policy level.
   overload: System.Security.Policy.PolicyLevel.Label*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -290,14 +329,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a list of named permission sets defined for the policy level.
   syntax:
     content: public System.Collections.IList NamedPermissionSets { get; }
     return:
       type: System.Collections.IList
-      description: To be added.
+      description: A list of named permission sets defined for the policy level.
   overload: System.Security.Policy.PolicyLevel.NamedPermissionSets*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -314,12 +353,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Replaces the configuration file for this  with the last backup (reflecting the state of policy prior to the last time it was saved) and returns it to the state of the last save.
+  remarks: "This method does not make modifications to the current <xref:System.Security.Policy.PolicyLevel>. Instead, it updates the <xref:System.Security.Policy.PolicyLevel> object's file and the <xref:System.Security.Policy.PolicyLevel> that the security system uses to evaluate policy.  \n  \n This method is used by the caspol -recover option (see [Caspol.exe (Code Access Security Policy Tool)](../Topic/Caspol.exe%20\\(Code%20Access%20Security%20Policy%20Tool\\).md))."
   syntax:
     content: public void Recover ();
     parameters: []
   overload: System.Security.Policy.PolicyLevel.Recover*
+  exceptions:
+  - type: System.Security.Policy.PolicyException
+    commentId: T:System.Security.Policy.PolicyException
+    description: The policy level does not have a valid configuration file.
   platform:
   - net-11
   - net-20
@@ -336,15 +379,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes an assembly with the specified  from the list of assemblies the policy level uses to evaluate policy.
+  remarks: The RemoveFullTrustAssembly method is not supported in version 2.0 or later of the .NET Framework because the list of full trust assemblies is not used in those versions.
   syntax:
     content: public void RemoveFullTrustAssembly (System.Security.Policy.StrongName sn);
     parameters:
     - id: sn
       type: System.Security.Policy.StrongName
-      description: To be added.
+      description: The  of the assembly to remove from the list of assemblies used to evaluate policy.
   overload: System.Security.Policy.PolicyLevel.RemoveFullTrustAssembly*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The sn parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The assembly with the  specified by the sn parameter does not have full trust.
   platform:
   - net-11
   - net-20
@@ -361,15 +411,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes an assembly with the specified  from the list of assemblies the policy level uses to evaluate policy.
+  remarks: The RemoveFullTrustAssembly method is not supported in version 2.0 or later of the .NET Framework because the list of full trust assemblies is not used in those versions.
   syntax:
     content: public void RemoveFullTrustAssembly (System.Security.Policy.StrongNameMembershipCondition snMC);
     parameters:
     - id: snMC
       type: System.Security.Policy.StrongNameMembershipCondition
-      description: To be added.
+      description: The  of the assembly to remove from the list of assemblies used to evaluate policy.
   overload: System.Security.Policy.PolicyLevel.RemoveFullTrustAssembly*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The snMC parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The  specified by the snMC parameter does not have full trust.
   platform:
   - net-11
   - net-20
@@ -386,18 +443,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the specified  from the current policy level.
   syntax:
     content: public System.Security.NamedPermissionSet RemoveNamedPermissionSet (System.Security.NamedPermissionSet permSet);
     parameters:
     - id: permSet
       type: System.Security.NamedPermissionSet
-      description: To be added.
+      description: The  to remove from the current policy level.
     return:
       type: System.Security.NamedPermissionSet
-      description: To be added.
+      description: The  that was removed.
   overload: System.Security.Policy.PolicyLevel.RemoveNamedPermissionSet*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The  specified by the permSet parameter was not found.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The permSet parameter is .
   platform:
   - net-11
   - net-20
@@ -414,18 +477,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the  with the specified name from the current policy level.
   syntax:
     content: public System.Security.NamedPermissionSet RemoveNamedPermissionSet (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the  to remove.
     return:
       type: System.Security.NamedPermissionSet
-      description: To be added.
+      description: The  that was removed.
   overload: System.Security.Policy.PolicyLevel.RemoveNamedPermissionSet*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The name parameter is equal to the name of a reserved permission set.  \n  \n -or-  \n  \n A  with the specified name cannot be found."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
   platform:
   - net-11
   - net-20
@@ -442,12 +511,13 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the current policy level to the default state.
+  remarks: The default state is different for each policy level.
   syntax:
     content: public void Reset ();
     parameters: []
   overload: System.Security.Policy.PolicyLevel.Reset*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -464,18 +534,27 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Resolves policy based on evidence for the policy level, and returns the resulting .
+  remarks: "Resolve is the basic policy evaluation operation for policy levels. Given a set of evidence as input, this method tests membership conditions of code groups starting at the root and working down as matched. The combination of permissions resulting from the matching code groups produces a <xref:System.Security.Policy.PolicyStatement> that is returned.  \n  \n In granting permissions to code, security policy uses the resolved policy statements for all applicable policy levels, together with the code request for permissions."
+  example:
+  - "The following code shows the use of the Resolve method. This code example is part of a larger example provided for the <xref:System.Security.Policy.PolicyLevel> class.  \n  \n [!code-cpp[system.Security.policy.policylevel#13](../../add/codesnippet/CPP/m-system.security.policy_27_1.cpp)]\n [!code-cs[system.Security.policy.policylevel#13](../../add/codesnippet/CSharp/m-system.security.policy_27_1.cs)]\n [!code-vb[system.Security.policy.policylevel#13](../../add/codesnippet/VisualBasic/m-system.security.policy_27_1.vb)]"
   syntax:
     content: public System.Security.Policy.PolicyStatement Resolve (System.Security.Policy.Evidence evidence);
     parameters:
     - id: evidence
       type: System.Security.Policy.Evidence
-      description: To be added.
+      description: The  used to resolve the .
     return:
       type: System.Security.Policy.PolicyStatement
-      description: To be added.
+      description: The resulting .
   overload: System.Security.Policy.PolicyLevel.Resolve*
+  exceptions:
+  - type: System.Security.Policy.PolicyException
+    commentId: T:System.Security.Policy.PolicyException
+    description: The policy level contains multiple matching code groups marked as exclusive.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The evidence parameter is .
   platform:
   - net-11
   - net-20
@@ -492,18 +571,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Resolves policy at the policy level and returns the root of a code group tree that matches the evidence.
+  remarks: "You can use this method to analyze the effect of the code groups in a policy level with respect to a certain set of evidence. For example, if the security policy is not granting an assembly the minimum code request permissions it needs, it can be difficult to tell by examination of the code groups exactly where the problem is.  \n  \n Since this method returns a code group that can have child code groups, it is possible for an administrator to examine the code group and its child code groups and determine which code groups match."
   syntax:
     content: public System.Security.Policy.CodeGroup ResolveMatchingCodeGroups (System.Security.Policy.Evidence evidence);
     parameters:
     - id: evidence
       type: System.Security.Policy.Evidence
-      description: To be added.
+      description: The  used to resolve policy.
     return:
       type: System.Security.Policy.CodeGroup
-      description: To be added.
+      description: A  representing the root of a tree of code groups matching the specified evidence.
   overload: System.Security.Policy.PolicyLevel.ResolveMatchingCodeGroups*
+  exceptions:
+  - type: System.Security.Policy.PolicyException
+    commentId: T:System.Security.Policy.PolicyException
+    description: The policy level contains multiple matching code groups marked as exclusive.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The evidence parameter is .
   platform:
   - net-11
   - net-20
@@ -520,14 +606,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the root code group for the policy level.
+  remarks: Every policy level has one root <xref:System.Security.Policy.CodeGroup>.
   syntax:
     content: public System.Security.Policy.CodeGroup RootCodeGroup { get; set; }
     return:
       type: System.Security.Policy.CodeGroup
-      description: To be added.
+      description: The  that is the root of the tree of policy level code groups.
   overload: System.Security.Policy.PolicyLevel.RootCodeGroup*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The value for RootCodeGroup is .
   platform:
   - net-11
   - net-20
@@ -544,14 +634,17 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the path where the policy file is stored.
+  remarks: ''
+  example:
+  - "The following code shows how to display the store location for a policy level. This code example is part of a larger example provided for the <xref:System.Security.Policy.PolicyLevel> class.  \n  \n [!code-cpp[system.Security.policy.policylevel#15](../../add/codesnippet/CPP/p-system.security.policy_12_1.cpp)]\n [!code-cs[system.Security.policy.policylevel#15](../../add/codesnippet/CSharp/p-system.security.policy_12_1.cs)]\n [!code-vb[system.Security.policy.policylevel#15](../../add/codesnippet/VisualBasic/p-system.security.policy_12_1.vb)]"
   syntax:
     content: public string StoreLocation { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The path where the policy file is stored, or  if the  does not have a storage location.
   overload: System.Security.Policy.PolicyLevel.StoreLocation*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -568,15 +661,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an XML encoding of the security object and its current state.
   syntax:
     content: public System.Security.SecurityElement ToXml ();
     parameters: []
     return:
       type: System.Security.SecurityElement
-      description: To be added.
+      description: An XML encoding of the security object, including any state information.
   overload: System.Security.Policy.PolicyLevel.ToXml*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -593,14 +686,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type of the policy level.
+  remarks: "The highest level of security policy is enterprise-wide. Successive lower levels of hierarchy represent further policy restrictions, but can never grant more permissions than allowed by higher levels. The policy levels in order are the following.  \n  \n1.  Enterprise  \n  \n2.  Machine  \n  \n3.  User  \n  \n4.  Application domain  \n  \n For more information, see <xref:System.Security.PolicyLevelType>."
   syntax:
     content: public System.Security.PolicyLevelType Type { get; }
     return:
       type: System.Security.PolicyLevelType
-      description: To be added.
+      description: One of the  values.
   overload: System.Security.Policy.PolicyLevel.Type*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -651,12 +745,6 @@ references:
   name: ChangeNamedPermissionSet(String,PermissionSet)
   nameWithType: PolicyLevel.ChangeNamedPermissionSet(String,PermissionSet)
   fullName: System.Security.Policy.PolicyLevel.ChangeNamedPermissionSet(String,PermissionSet)
-- uid: System.Security.NamedPermissionSet
-  parent: System.Security
-  isExternal: false
-  name: NamedPermissionSet
-  nameWithType: NamedPermissionSet
-  fullName: System.Security.NamedPermissionSet
 - uid: System.String
   parent: System
   isExternal: true
@@ -711,42 +799,18 @@ references:
   name: GetNamedPermissionSet(String)
   nameWithType: PolicyLevel.GetNamedPermissionSet(String)
   fullName: System.Security.Policy.PolicyLevel.GetNamedPermissionSet(String)
-- uid: System.Security.NamedPermissionSet
-  parent: System.Security
-  isExternal: false
-  name: NamedPermissionSet
-  nameWithType: NamedPermissionSet
-  fullName: System.Security.NamedPermissionSet
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Policy.PolicyLevel.Label
   parent: System.Security.Policy.PolicyLevel
   isExternal: false
   name: Label
   nameWithType: PolicyLevel.Label
   fullName: System.Security.Policy.PolicyLevel.Label
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Policy.PolicyLevel.NamedPermissionSets
   parent: System.Security.Policy.PolicyLevel
   isExternal: false
   name: NamedPermissionSets
   nameWithType: PolicyLevel.NamedPermissionSets
   fullName: System.Security.Policy.PolicyLevel.NamedPermissionSets
-- uid: System.Collections.IList
-  parent: System.Collections
-  isExternal: true
-  name: IList
-  nameWithType: IList
-  fullName: System.Collections.IList
 - uid: System.Security.Policy.PolicyLevel.Recover
   parent: System.Security.Policy.PolicyLevel
   isExternal: false
@@ -759,60 +823,24 @@ references:
   name: RemoveFullTrustAssembly(StrongName)
   nameWithType: PolicyLevel.RemoveFullTrustAssembly(StrongName)
   fullName: System.Security.Policy.PolicyLevel.RemoveFullTrustAssembly(StrongName)
-- uid: System.Security.Policy.StrongName
-  parent: System.Security.Policy
-  isExternal: false
-  name: StrongName
-  nameWithType: StrongName
-  fullName: System.Security.Policy.StrongName
 - uid: System.Security.Policy.PolicyLevel.RemoveFullTrustAssembly(System.Security.Policy.StrongNameMembershipCondition)
   parent: System.Security.Policy.PolicyLevel
   isExternal: false
   name: RemoveFullTrustAssembly(StrongNameMembershipCondition)
   nameWithType: PolicyLevel.RemoveFullTrustAssembly(StrongNameMembershipCondition)
   fullName: System.Security.Policy.PolicyLevel.RemoveFullTrustAssembly(StrongNameMembershipCondition)
-- uid: System.Security.Policy.StrongNameMembershipCondition
-  parent: System.Security.Policy
-  isExternal: false
-  name: StrongNameMembershipCondition
-  nameWithType: StrongNameMembershipCondition
-  fullName: System.Security.Policy.StrongNameMembershipCondition
 - uid: System.Security.Policy.PolicyLevel.RemoveNamedPermissionSet(System.Security.NamedPermissionSet)
   parent: System.Security.Policy.PolicyLevel
   isExternal: false
   name: RemoveNamedPermissionSet(NamedPermissionSet)
   nameWithType: PolicyLevel.RemoveNamedPermissionSet(NamedPermissionSet)
   fullName: System.Security.Policy.PolicyLevel.RemoveNamedPermissionSet(NamedPermissionSet)
-- uid: System.Security.NamedPermissionSet
-  parent: System.Security
-  isExternal: false
-  name: NamedPermissionSet
-  nameWithType: NamedPermissionSet
-  fullName: System.Security.NamedPermissionSet
-- uid: System.Security.NamedPermissionSet
-  parent: System.Security
-  isExternal: false
-  name: NamedPermissionSet
-  nameWithType: NamedPermissionSet
-  fullName: System.Security.NamedPermissionSet
 - uid: System.Security.Policy.PolicyLevel.RemoveNamedPermissionSet(System.String)
   parent: System.Security.Policy.PolicyLevel
   isExternal: false
   name: RemoveNamedPermissionSet(String)
   nameWithType: PolicyLevel.RemoveNamedPermissionSet(String)
   fullName: System.Security.Policy.PolicyLevel.RemoveNamedPermissionSet(String)
-- uid: System.Security.NamedPermissionSet
-  parent: System.Security
-  isExternal: false
-  name: NamedPermissionSet
-  nameWithType: NamedPermissionSet
-  fullName: System.Security.NamedPermissionSet
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Policy.PolicyLevel.Reset
   parent: System.Security.Policy.PolicyLevel
   isExternal: false
@@ -849,48 +877,24 @@ references:
   name: CodeGroup
   nameWithType: CodeGroup
   fullName: System.Security.Policy.CodeGroup
-- uid: System.Security.Policy.Evidence
-  parent: System.Security.Policy
-  isExternal: false
-  name: Evidence
-  nameWithType: Evidence
-  fullName: System.Security.Policy.Evidence
 - uid: System.Security.Policy.PolicyLevel.RootCodeGroup
   parent: System.Security.Policy.PolicyLevel
   isExternal: false
   name: RootCodeGroup
   nameWithType: PolicyLevel.RootCodeGroup
   fullName: System.Security.Policy.PolicyLevel.RootCodeGroup
-- uid: System.Security.Policy.CodeGroup
-  parent: System.Security.Policy
-  isExternal: false
-  name: CodeGroup
-  nameWithType: CodeGroup
-  fullName: System.Security.Policy.CodeGroup
 - uid: System.Security.Policy.PolicyLevel.StoreLocation
   parent: System.Security.Policy.PolicyLevel
   isExternal: false
   name: StoreLocation
   nameWithType: PolicyLevel.StoreLocation
   fullName: System.Security.Policy.PolicyLevel.StoreLocation
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Policy.PolicyLevel.ToXml
   parent: System.Security.Policy.PolicyLevel
   isExternal: false
   name: ToXml()
   nameWithType: PolicyLevel.ToXml()
   fullName: System.Security.Policy.PolicyLevel.ToXml()
-- uid: System.Security.SecurityElement
-  parent: System.Security
-  isExternal: false
-  name: SecurityElement
-  nameWithType: SecurityElement
-  fullName: System.Security.SecurityElement
 - uid: System.Security.Policy.PolicyLevel.Type
   parent: System.Security.Policy.PolicyLevel
   isExternal: false

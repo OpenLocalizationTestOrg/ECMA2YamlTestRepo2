@@ -16,8 +16,8 @@ items:
   nameWithType: CustomAce
   fullName: System.Security.AccessControl.CustomAce
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents an Access Control Entry (ACE) that is not defined by one of the members of the  enumeration.
+  remarks: A CustomAce object contains an ACE header and an opaque blob of data.
   syntax:
     content: 'public sealed class CustomAce : System.Security.AccessControl.GenericAce'
   inheritance:
@@ -53,21 +53,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: The `opaque` data is not cloned. The data should be cloned before calling this constructor if the caller does not trust the source of the data to not modify the data.
   syntax:
     content: public CustomAce (System.Security.AccessControl.AceType type, System.Security.AccessControl.AceFlags flags, byte[] opaque);
     parameters:
     - id: type
       type: System.Security.AccessControl.AceType
-      description: To be added.
+      description: Type of the new Access Control Entry (ACE). This value must be greater than .
     - id: flags
       type: System.Security.AccessControl.AceFlags
-      description: To be added.
+      description: Flags that specify information about the inheritance, inheritance propagation, and auditing conditions for the new ACE.
     - id: opaque
       type: System.Byte[]
-      description: To be added.
+      description: An array of byte values that contains the data for the new ACE. This value can be . The length of this array must not be greater than the value of the  field, and must be a multiple of four.
   overload: System.Security.AccessControl.CustomAce.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value of the type parameter is not greater than  or the length of the opaque array is either greater than the value of the  field or not a multiple of four.
   platform:
   - net-11
   - net-20
@@ -84,14 +88,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the length, in bytes, of the binary representation of the current  object. This length should be used before marshaling the ACL into a binary array with the <xref:System.Security.AccessControl.CustomAce.GetBinaryForm%2A> method.
   syntax:
     content: public override int BinaryLength { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The length, in bytes, of the binary representation of the current  object.
   overload: System.Security.AccessControl.CustomAce.BinaryLength*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -108,18 +112,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: To be added.
-  remarks: To be added.
+  summary: Marshals the contents of the  object into the specified byte array beginning at the specified offset.
   syntax:
     content: public override void GetBinaryForm (byte[] binaryForm, int offset);
     parameters:
     - id: binaryForm
       type: System.Byte[]
-      description: To be added.
+      description: The byte array into which the contents of the  is marshaled.
     - id: offset
       type: System.Int32
-      description: To be added.
+      description: The offset at which to start marshaling.
   overload: System.Security.AccessControl.CustomAce.GetBinaryForm*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    offset is negative or too high to allow the entire  to be copied into array."
   platform:
   - net-11
   - net-20
@@ -136,15 +143,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the opaque data associated with this  object.
   syntax:
     content: public byte[] GetOpaque ();
     parameters: []
     return:
       type: System.Byte[]
-      description: To be added.
+      description: An array of byte values that represents the opaque data associated with this  object.
   overload: System.Security.AccessControl.CustomAce.GetOpaque*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -161,13 +168,13 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the maximum allowed length of an opaque data blob for this  object.
   syntax:
     content: public static readonly int MaxOpaqueLength;
     return:
       type: System.Int32
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -184,14 +191,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the length of the opaque data associated with this  object.
   syntax:
     content: public int OpaqueLength { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The length of the opaque callback data.
   overload: System.Security.AccessControl.CustomAce.OpaqueLength*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -208,15 +215,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.AccessControl
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the opaque callback data associated with this  object.
   syntax:
     content: public void SetOpaque (byte[] opaque);
     parameters:
     - id: opaque
       type: System.Byte[]
-      description: To be added.
+      description: An array of byte values that represents the opaque callback data for this  object.
   overload: System.Security.AccessControl.CustomAce.SetOpaque*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -243,12 +250,20 @@ references:
   name: AceFlags
   nameWithType: AceFlags
   fullName: System.Security.AccessControl.AceFlags
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Security.AccessControl.CustomAce.BinaryLength
   parent: System.Security.AccessControl.CustomAce
   isExternal: false
@@ -267,66 +282,30 @@ references:
   name: GetBinaryForm(Byte[],Int32)
   nameWithType: CustomAce.GetBinaryForm(Byte[],Int32)
   fullName: System.Security.AccessControl.CustomAce.GetBinaryForm(Byte[],Int32)
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Security.AccessControl.CustomAce.GetOpaque
   parent: System.Security.AccessControl.CustomAce
   isExternal: false
   name: GetOpaque()
   nameWithType: CustomAce.GetOpaque()
   fullName: System.Security.AccessControl.CustomAce.GetOpaque()
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.AccessControl.CustomAce.MaxOpaqueLength
   parent: System.Security.AccessControl.CustomAce
   isExternal: false
   name: MaxOpaqueLength
   nameWithType: CustomAce.MaxOpaqueLength
   fullName: System.Security.AccessControl.CustomAce.MaxOpaqueLength
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Security.AccessControl.CustomAce.OpaqueLength
   parent: System.Security.AccessControl.CustomAce
   isExternal: false
   name: OpaqueLength
   nameWithType: CustomAce.OpaqueLength
   fullName: System.Security.AccessControl.CustomAce.OpaqueLength
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Security.AccessControl.CustomAce.SetOpaque(System.Byte[])
   parent: System.Security.AccessControl.CustomAce
   isExternal: false
   name: SetOpaque(Byte[])
   nameWithType: CustomAce.SetOpaque(Byte[])
   fullName: System.Security.AccessControl.CustomAce.SetOpaque(Byte[])
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.AccessControl.CustomAce.#ctor*
   parent: System.Security.AccessControl.CustomAce
   isExternal: false

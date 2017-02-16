@@ -14,8 +14,8 @@ items:
   nameWithType: DelegatingHandler
   fullName: System.Net.Http.DelegatingHandler
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: A type for HTTP handlers that delegate the processing of HTTP response messages to another handler, called the inner handler.
+  remarks: "This application normally instantiate this class and then set the inner handler or provide an inner handler in the constructor.  \n  \n Note that <xref:System.Net.Http.DelegatingHandler.InnerHandler%2A> property may be a delegating handler too. This approach allows the creation of handler stacks to process the HTTP response messages."
   syntax:
     content: 'public abstract class DelegatingHandler : System.Net.Http.HttpMessageHandler'
   inheritance:
@@ -40,12 +40,13 @@ items:
   assemblies:
   - System.Net.Http
   namespace: System.Net.Http
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new instance of the  class.
+  remarks: The inner handle can be set using the <xref:System.Net.Http.DelegatingHandler.InnerHandler%2A>.
   syntax:
     content: protected DelegatingHandler ();
     parameters: []
   overload: System.Net.Http.DelegatingHandler.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -62,15 +63,15 @@ items:
   assemblies:
   - System.Net.Http
   namespace: System.Net.Http
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new instance of the  class with a specific inner handler.
   syntax:
     content: protected DelegatingHandler (System.Net.Http.HttpMessageHandler innerHandler);
     parameters:
     - id: innerHandler
       type: System.Net.Http.HttpMessageHandler
-      description: To be added.
+      description: The inner handler which is responsible for processing the HTTP response messages.
   overload: System.Net.Http.DelegatingHandler.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -87,15 +88,15 @@ items:
   assemblies:
   - System.Net.Http
   namespace: System.Net.Http
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the unmanaged resources used by the , and optionally disposes of the managed resources.
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to releases only unmanaged resources."
   overload: System.Net.Http.DelegatingHandler.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -112,14 +113,15 @@ items:
   assemblies:
   - System.Net.Http
   namespace: System.Net.Http
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the inner handler which processes the HTTP response messages.
+  remarks: "This InnerHandler property can only be set before the class is used (the <xref:System.Net.Http.DelegatingHandler.SendAsync%2A> method is called).  \n  \n Note that InnerHandler property may be a delegating handler too, although this is uncommon. This approach allows the creation of handler stacks for the HTTP response messages."
   syntax:
     content: public System.Net.Http.HttpMessageHandler InnerHandler { get; set; }
     return:
       type: System.Net.Http.HttpMessageHandler
-      description: To be added.
+      description: The inner handler for HTTP response messages.
   overload: System.Net.Http.DelegatingHandler.InnerHandler*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -136,21 +138,25 @@ items:
   assemblies:
   - System.Net.Http
   namespace: System.Net.Http
-  summary: To be added.
-  remarks: To be added.
+  summary: Sends an HTTP request to the inner handler to send to the server as an asynchronous operation.
+  remarks: "This operation does not block. This overridable implementation of <xref:System.Net.Http.HttpClientHandler.SendAsync%2A> method forwards the HTTP request to the inner handler to send to the server as an asynchronous operation.  \n  \n The SendAsync method is mainly used by the system and not by applications. When this method is called, it calls the SendAsync method on the inner handler."
   syntax:
     content: protected override System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> SendAsync (System.Net.Http.HttpRequestMessage request, System.Threading.CancellationToken cancellationToken);
     parameters:
     - id: request
       type: System.Net.Http.HttpRequestMessage
-      description: To be added.
+      description: The HTTP request message to send to the server.
     - id: cancellationToken
       type: System.Threading.CancellationToken
-      description: To be added.
+      description: A cancellation token to cancel operation.
     return:
       type: System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}
-      description: To be added.
+      description: The task object representing the asynchronous operation.
   overload: System.Net.Http.DelegatingHandler.SendAsync*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The request was .
   platform:
   - net-11
   - net-20
@@ -171,12 +177,6 @@ references:
   name: DelegatingHandler(HttpMessageHandler)
   nameWithType: DelegatingHandler.DelegatingHandler(HttpMessageHandler)
   fullName: System.Net.Http.DelegatingHandler.DelegatingHandler(HttpMessageHandler)
-- uid: System.Net.Http.HttpMessageHandler
-  parent: System.Net.Http
-  isExternal: false
-  name: HttpMessageHandler
-  nameWithType: HttpMessageHandler
-  fullName: System.Net.Http.HttpMessageHandler
 - uid: System.Net.Http.DelegatingHandler.Dispose(System.Boolean)
   parent: System.Net.Http.DelegatingHandler
   isExternal: false
@@ -195,12 +195,6 @@ references:
   name: InnerHandler
   nameWithType: DelegatingHandler.InnerHandler
   fullName: System.Net.Http.DelegatingHandler.InnerHandler
-- uid: System.Net.Http.HttpMessageHandler
-  parent: System.Net.Http
-  isExternal: false
-  name: HttpMessageHandler
-  nameWithType: HttpMessageHandler
-  fullName: System.Net.Http.HttpMessageHandler
 - uid: System.Net.Http.DelegatingHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)
   parent: System.Net.Http.DelegatingHandler
   isExternal: false
@@ -213,6 +207,21 @@ references:
   name: Task<HttpResponseMessage>
   nameWithType: Task<HttpResponseMessage>
   fullName: System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage>
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    nameWithType: Task
+    fullName: Task<System.Net.Http.HttpResponseMessage>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Net.Http.HttpResponseMessage
+    name: HttpResponseMessage
+    nameWithType: HttpResponseMessage
+    fullName: HttpResponseMessage
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Net.Http.HttpRequestMessage
   parent: System.Net.Http
   isExternal: false

@@ -20,8 +20,8 @@ items:
   nameWithType: ProxyWebPart
   fullName: System.Web.UI.WebControls.WebParts.ProxyWebPart
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the base class for Web Parts controls that under certain conditions must replace other Web Parts controls on a page.
+  remarks: "ProxyWebPart is the base class for a set of Web Parts controls, such as <xref:System.Web.UI.WebControls.WebParts.UnauthorizedWebPart> and <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart>, that can be used as placeholders for other Web Parts controls on a page. Typically, a ProxyWebPart control will replace another Web Parts control when some type of error or failure has occurred. For example, when a user is not authorized to view a Web Parts control on a page, the intended Web Parts control is replaced with the <xref:System.Web.UI.WebControls.WebParts.UnauthorizedWebPart> control. When a Web Parts control cannot be loaded or a new instance of it cannot be created, the original Web Parts control is replaced with the <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart> control. If the intended Web Parts control later becomes available to the user, it will be restored to the page and the object derived from the ProxyWebPart class will be removed.  \n  \n The ProxyWebPart class does not save view state or control state. If a Web Parts control is replaced by a ProxyWebPart object and then later becomes available, its view state and control state will be empty.  \n  \n The ProxyWebPart object preserves personalization data for the Web Parts control that it replaced. If the original Web Parts control becomes available, its personalization data will be restored.  \n  \n When the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control saves personalization data, it does not save the properties of a ProxyWebPart object. Instead, it saves the properties of the control that the ProxyWebPart object replaced. If the original Web Parts control becomes available, the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control will automatically load it.  \n  \n The <xref:System.Web.UI.WebControls.WebParts.WebPartCollection> object contains the ProxyWebPart object. The ID of the intended Web Parts control can be retrieved from the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPart.OriginalID%2A> property or the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPart.GenericWebPartID%2A> property.  \n  \n If a ProxyWebPart object replaces a Web Parts control that is either the provider or consumer of a Web Parts connection, the connection is not activated but will not be deleted. If the original Web Parts control becomes available, the connection will be reactivated."
   syntax:
     content: >-
       [System.ComponentModel.ToolboxItem(false)]
@@ -237,15 +237,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class when a static Web Parts control (or server or user control) must be replaced.
+  remarks: This constructor is used to create a proxy Web Parts control to replace a static Web Parts control. To replace a dynamically created Web Parts control, use the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPart.%23ctor%28System.String%2CSystem.String%2CSystem.String%2CSystem.String%29> constructor to create the proxy Web Parts control.
   syntax:
     content: protected ProxyWebPart (System.Web.UI.WebControls.WebParts.WebPart webPart);
     parameters:
     - id: webPart
       type: System.Web.UI.WebControls.WebParts.WebPart
-      description: To be added.
+      description: The Web Parts control to be replaced.
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    webPart is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    webPart has an empty <xref:System.Web.UI.Control.ID%2A> property  \n  \n \\- or -  \n  \n webPart is an empty   \n  \n \\- or -  \n  \n webPart is of type  and its child control has an empty <xref:System.Web.UI.Control.ID%2A> property"
   platform:
   - net-11
   - net-20
@@ -262,24 +269,28 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class when a dynamic Web Parts control must be replaced.
+  remarks: This constructor is used to create a proxy Web Parts control to replace a dynamic Web Parts control. To replace a static Web Parts control, use the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPart.%23ctor%28System.Web.UI.WebControls.WebParts.WebPart%29> constructor to create a proxy Web Parts control.
   syntax:
     content: protected ProxyWebPart (string originalID, string originalTypeName, string originalPath, string genericWebPartID);
     parameters:
     - id: originalID
       type: System.String
-      description: To be added.
+      description: A string that is the control ID (not the unique ID) of the control to replace. If a  control is replaced, the ID is the ID of its child server control.
     - id: originalTypeName
       type: System.String
-      description: To be added.
+      description: A string that is the name of the <xref:System.Type> of the control to replace. If a  control is replaced, the type name is the type of its child server control.
     - id: originalPath
       type: System.String
-      description: To be added.
+      description: A string that contains the path to the user control to replace.
     - id: genericWebPartID
       type: System.String
-      description: To be added.
+      description: A string that returns the ID of a  control, if that type of control is being replaced. This is needed for controls that do not inherit from the  base class.
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    originalPath is specified but genericWebPartID is  or an empty string."
   platform:
   - net-11
   - net-20
@@ -296,14 +307,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the <xref:System.Web.UI.WebControls.WebParts.GenericWebPart.ID%2A> property from the generic Web Parts control replaced by a proxy Web Parts control.
+  remarks: When a <xref:System.Web.UI.WebControls.WebParts.ProxyWebPart> object replaces a <xref:System.Web.UI.WebControls.WebParts.GenericWebPart> control, this property contains the value from the <xref:System.Web.UI.WebControls.WebParts.GenericWebPart.ID%2A?displayProperty=fullName> property.
   syntax:
     content: public string GenericWebPartID { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A string containing the <xref:System.Web.UI.WebControls.WebParts.GenericWebPart.ID%2A> value.
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.GenericWebPartID*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -320,14 +332,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the programmatic identifier assigned to the Web Parts control.
+  remarks: The <xref:System.Web.UI.WebControls.WebParts.ProxyWebPart> object will contain the same value in its ID property as the control it replaced.
   syntax:
     content: public override sealed string ID { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> containing the identifier.
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.ID*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -344,15 +357,16 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Overrides <xref:System.Web.UI.Control.LoadControlState%2A> to prevent loading previously saved state for a  object.
+  remarks: The LoadControlState method overrides <xref:System.Web.UI.Control.LoadControlState%2A?displayProperty=fullName> to prevent loading the control state. The method does not load the control state or perform any other action.
   syntax:
     content: protected override void LoadControlState (object savedState);
     parameters:
     - id: savedState
       type: System.Object
-      description: To be added.
+      description: The previously saved state data.
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.LoadControlState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -369,15 +383,16 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Overrides <xref:System.Web.UI.Control.LoadViewState%2A> to prevent loading previously saved view state for a  object.
+  remarks: The LoadViewState method overrides <xref:System.Web.UI.Control.LoadViewState%2A?displayProperty=fullName> to prevent loading the view state. The method does not load the view state or perform any other action.
   syntax:
     content: protected override void LoadViewState (object savedState);
     parameters:
     - id: savedState
       type: System.Object
-      description: To be added.
+      description: The previously saved state data.
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.LoadViewState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -394,14 +409,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the <xref:System.Web.UI.Control.ID%2A> of the Web Parts control replaced by the proxy Web Parts control.
+  remarks: When a <xref:System.Web.UI.WebControls.WebParts.ProxyWebPart> object replaces a Web Parts control, the OriginalID property contains the <xref:System.Web.UI.Control.ID%2A> of the replaced control. If the replaced control is a <xref:System.Web.UI.WebControls.WebParts.GenericWebPart> object, this property contains the ID from the <xref:System.Web.UI.WebControls.WebParts.GenericWebPart.ChildControl%2A?displayProperty=fullName> property.
   syntax:
     content: public string OriginalID { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A string containing the <xref:System.Web.UI.Control.ID%2A> value of the Web Parts control replaced by the proxy Web Parts control.
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.OriginalID*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -418,14 +434,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the path to the user control being replaced.
   syntax:
     content: public string OriginalPath { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A string that contains the path to a user control being replaced.
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.OriginalPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -442,14 +458,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the <xref:System.Type> of the Web Parts control replaced by the proxy Web Parts control.
+  remarks: When a <xref:System.Web.UI.WebControls.WebParts.ProxyWebPart> object replaces a control, this property contains the <xref:System.Type> of the control that the proxy Web Parts control replaces.
   syntax:
     content: public string OriginalTypeName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A string containing the <xref:System.Type> of the control replaced by the proxy Web Parts control.
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.OriginalTypeName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -466,15 +483,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Saves any server control state changes that have occurred since the time the page was posted back to the server.
   syntax:
     content: protected override object SaveControlState ();
     parameters: []
     return:
       type: System.Object
-      description: To be added.
+      description: Returns the server control's current state. If there is no state associated with the control, this method returns .
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.SaveControlState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -491,15 +508,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Saves any state that was modified after the <xref:System.Web.UI.WebControls.Style.TrackViewState%2A> method was invoked.
   syntax:
     content: protected override object SaveViewState ();
     parameters: []
     return:
       type: System.Object
-      description: To be added.
+      description: An object that contains the current view state of the control; otherwise, if there is no view state associated with the control, .
   overload: System.Web.UI.WebControls.WebParts.ProxyWebPart.SaveViewState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -514,12 +531,6 @@ references:
   name: ProxyWebPart(WebPart)
   nameWithType: ProxyWebPart.ProxyWebPart(WebPart)
   fullName: System.Web.UI.WebControls.WebParts.ProxyWebPart.ProxyWebPart(WebPart)
-- uid: System.Web.UI.WebControls.WebParts.WebPart
-  parent: System.Web.UI.WebControls.WebParts
-  isExternal: false
-  name: WebPart
-  nameWithType: WebPart
-  fullName: System.Web.UI.WebControls.WebParts.WebPart
 - uid: System.Web.UI.WebControls.WebParts.ProxyWebPart.#ctor(System.String,System.String,System.String,System.String)
   parent: System.Web.UI.WebControls.WebParts.ProxyWebPart
   isExternal: false
@@ -532,48 +543,18 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.WebControls.WebParts.ProxyWebPart.GenericWebPartID
   parent: System.Web.UI.WebControls.WebParts.ProxyWebPart
   isExternal: false
   name: GenericWebPartID
   nameWithType: ProxyWebPart.GenericWebPartID
   fullName: System.Web.UI.WebControls.WebParts.ProxyWebPart.GenericWebPartID
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.WebControls.WebParts.ProxyWebPart.ID
   parent: System.Web.UI.WebControls.WebParts.ProxyWebPart
   isExternal: false
   name: ID
   nameWithType: ProxyWebPart.ID
   fullName: System.Web.UI.WebControls.WebParts.ProxyWebPart.ID
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.WebControls.WebParts.ProxyWebPart.LoadControlState(System.Object)
   parent: System.Web.UI.WebControls.WebParts.ProxyWebPart
   isExternal: false
@@ -592,72 +573,36 @@ references:
   name: LoadViewState(Object)
   nameWithType: ProxyWebPart.LoadViewState(Object)
   fullName: System.Web.UI.WebControls.WebParts.ProxyWebPart.LoadViewState(Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.WebControls.WebParts.ProxyWebPart.OriginalID
   parent: System.Web.UI.WebControls.WebParts.ProxyWebPart
   isExternal: false
   name: OriginalID
   nameWithType: ProxyWebPart.OriginalID
   fullName: System.Web.UI.WebControls.WebParts.ProxyWebPart.OriginalID
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.WebControls.WebParts.ProxyWebPart.OriginalPath
   parent: System.Web.UI.WebControls.WebParts.ProxyWebPart
   isExternal: false
   name: OriginalPath
   nameWithType: ProxyWebPart.OriginalPath
   fullName: System.Web.UI.WebControls.WebParts.ProxyWebPart.OriginalPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.WebControls.WebParts.ProxyWebPart.OriginalTypeName
   parent: System.Web.UI.WebControls.WebParts.ProxyWebPart
   isExternal: false
   name: OriginalTypeName
   nameWithType: ProxyWebPart.OriginalTypeName
   fullName: System.Web.UI.WebControls.WebParts.ProxyWebPart.OriginalTypeName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.WebControls.WebParts.ProxyWebPart.SaveControlState
   parent: System.Web.UI.WebControls.WebParts.ProxyWebPart
   isExternal: false
   name: SaveControlState()
   nameWithType: ProxyWebPart.SaveControlState()
   fullName: System.Web.UI.WebControls.WebParts.ProxyWebPart.SaveControlState()
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.WebControls.WebParts.ProxyWebPart.SaveViewState
   parent: System.Web.UI.WebControls.WebParts.ProxyWebPart
   isExternal: false
   name: SaveViewState()
   nameWithType: ProxyWebPart.SaveViewState()
   fullName: System.Web.UI.WebControls.WebParts.ProxyWebPart.SaveViewState()
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.WebControls.WebParts.ProxyWebPart.#ctor*
   parent: System.Web.UI.WebControls.WebParts.ProxyWebPart
   isExternal: false

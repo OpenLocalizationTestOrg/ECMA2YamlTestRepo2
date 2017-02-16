@@ -42,8 +42,8 @@ items:
   nameWithType: ContainerControl
   fullName: System.Windows.Forms.ContainerControl
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides focus-management functionality for controls that can function as a container for other controls.
+  remarks: "A ContainerControl represents a control that can function as a container for other controls and provides focus management. Controls that inherit from this class can track the active control they contain, even when the focus moves somewhere within a different container.  \n  \n ContainerControl objects provide a logical boundary for contained controls. The container control can capture the TAB key press and move focus to the next control in the collection.  \n  \n> [!NOTE]\n>  The container control does not receive focus; the focus is always set to the first child control in the collection of contained controls.  \n  \n You do not typically inherit directly from the ContainerControl class. <xref:System.Windows.Forms.Form>, <xref:System.Windows.Forms.UserControl>, and <xref:System.Windows.Forms.UpDownBase> classes inherit from ContainerControl."
   syntax:
     content: >-
       [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.AutoDispatch)]
@@ -463,12 +463,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: ''
+  example:
+  - "The following code example inherits from the <xref:System.Windows.Forms.ScrollableControl> class and implements the <xref:System.Windows.Forms.IContainerControl> interface. Implementation is added to the <xref:System.Windows.Forms.IContainerControl.ActiveControl%2A> property and the <xref:System.Windows.Forms.IContainerControl.ActivateControl%2A> method.  \n  \n [!code-cs[IContainerControl Implementation#1](../../add/codesnippet/CSharp/m-system.windows.forms.c_75_1.cs)]\n [!code-cpp[IContainerControl Implementation#1](../../add/codesnippet/CPP/m-system.windows.forms.c_75_1.cpp)]\n [!code-vb[IContainerControl Implementation#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.c_75_1.vb)]"
   syntax:
     content: public ContainerControl ();
     parameters: []
   overload: System.Windows.Forms.ContainerControl.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -485,14 +488,20 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the active control on the container control.
+  remarks: "The ActiveControl property activates or retrieves the active control on the container control.  \n  \n In order to receive a valid value from this property, the object that calls it must either contain or be contained in the control it is calling. If one form tries to call another form's ActiveControl properties, it will receive an undefined value. In this case, you need to define your own communication mechanism between the forms to pass this data."
+  example:
+  - "The following code example inherits from the <xref:System.Windows.Forms.ScrollableControl> class and implements the <xref:System.Windows.Forms.IContainerControl> interface. Implementation is added to the <xref:System.Windows.Forms.IContainerControl.ActiveControl%2A> property and the <xref:System.Windows.Forms.IContainerControl.ActivateControl%2A> method.  \n  \n [!code-cs[IContainerControl Implementation#1](../../add/codesnippet/CSharp/p-system.windows.forms.c_17_1.cs)]\n [!code-cpp[IContainerControl Implementation#1](../../add/codesnippet/CPP/p-system.windows.forms.c_17_1.cpp)]\n [!code-vb[IContainerControl Implementation#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.c_17_1.vb)]"
   syntax:
     content: public System.Windows.Forms.Control ActiveControl { get; set; }
     return:
       type: System.Windows.Forms.Control
-      description: To be added.
+      description: The  that is currently active on the .
   overload: System.Windows.Forms.ContainerControl.ActiveControl*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The  assigned could not be activated.
   platform:
   - net-11
   - net-20
@@ -509,15 +518,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Adjusts the scroll bars on the container based on the current control positions and the control currently selected.
   syntax:
     content: protected override void AdjustFormScrollbars (bool displayScrollbars);
     parameters:
     - id: displayScrollbars
       type: System.Boolean
-      description: To be added.
+      description: "\n     to show the scroll bars; otherwise, ."
   overload: System.Windows.Forms.ContainerControl.AdjustFormScrollbars*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -534,14 +543,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the dimensions that the control was designed to.
+  remarks: "The AutoScaleDimensions property represents the DPI or font setting of the screen that the control was scaled to or designed for. Specifically, at design time this property will be set by the Windows Forms designer to the value your monitor is currently using. Then, when the form loads at run time, if the <xref:System.Windows.Forms.ContainerControl.CurrentAutoScaleDimensions%2A> property is different from the AutoScaleDimensions, the <xref:System.Windows.Forms.ContainerControl.PerformAutoScale%2A> method will be called to perform scaling of the control and all of its children. Afterwards, AutoScaleDimensions will be updated to reflect the new scaling size.  \n  \n For more information about automatic scaling, see [Automatic Scaling in Windows Forms](../Topic/Automatic%20Scaling%20in%20Windows%20Forms.md)."
   syntax:
     content: public System.Drawing.SizeF AutoScaleDimensions { get; set; }
     return:
       type: System.Drawing.SizeF
-      description: To be added.
+      description: A  containing the dots per inch (DPI) or  size that the control was designed to.
   overload: System.Windows.Forms.ContainerControl.AutoScaleDimensions*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The width or height of the  value is less than 0 when setting this value.
   platform:
   - net-11
   - net-20
@@ -558,14 +571,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the scaling factor between the current and design-time automatic scaling dimensions.
+  remarks: "The AutoScaleFactor property represents the scaling factor between the <xref:System.Windows.Forms.ContainerControl.CurrentAutoScaleDimensions%2A> and <xref:System.Windows.Forms.ContainerControl.AutoScaleDimensions%2A> properties. This value is calculated when it is required. For example, if <xref:System.Windows.Forms.ContainerControl.CurrentAutoScaleDimensions%2A> is (192, 144) and <xref:System.Windows.Forms.ContainerControl.AutoScaleDimensions%2A> is (96, 96) then the AutoScaleFactor is (2.0, 1.5).  \n  \n For more information about automatic scaling, see [Automatic Scaling in Windows Forms](../Topic/Automatic%20Scaling%20in%20Windows%20Forms.md)."
   syntax:
     content: protected System.Drawing.SizeF AutoScaleFactor { get; }
     return:
       type: System.Drawing.SizeF
-      description: To be added.
+      description: A  containing the scaling ratio between the current and design-time scaling automatic scaling dimensions.
   overload: System.Windows.Forms.ContainerControl.AutoScaleFactor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -582,14 +596,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the automatic scaling mode of the control.
+  remarks: "The AutoScaleMode property specifies the current automatic scaling mode of this control. Scaling by <xref:System.Windows.Forms.AutoScaleMode> is useful if you want to have a control or form stretch or shrink according to the size of the fonts in the operating system, and should be used when the absolute size of the control or form does not matter. Scaling by <xref:System.Windows.Forms.AutoScaleMode> is useful when you want to size a control or form relative to the screen. For example, you may want to use dots per inch (DPI) scaling on a control displaying a chart or other graphic so that it always occupies a certain percentage of the screen.  \n  \n For more information about automatic scaling, see [Automatic Scaling in Windows Forms](../Topic/Automatic%20Scaling%20in%20Windows%20Forms.md)."
   syntax:
     content: public System.Windows.Forms.AutoScaleMode AutoScaleMode { get; set; }
     return:
       type: System.Windows.Forms.AutoScaleMode
-      description: To be added.
+      description: An  that represents the current scaling mode. The default is .
   overload: System.Windows.Forms.ContainerControl.AutoScaleMode*
+  exceptions:
+  - type: System.ComponentModel.InvalidEnumArgumentException
+    commentId: T:System.ComponentModel.InvalidEnumArgumentException
+    description: An  value that is not valid was used to set this property.
   platform:
   - net-11
   - net-20
@@ -606,14 +624,20 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether controls in this container will be automatically validated when the focus changes.
+  remarks: "The default value for AutoValidate will differ for each control. For more details on implicit validation, see [User Input Validation in Windows Forms](../Topic/User%20Input%20Validation%20in%20Windows%20Forms.md).  \n  \n Setting this property to a new value will raise the <xref:System.Windows.Forms.ContainerControl.AutoValidateChanged> event."
+  example:
+  - "The following code example turns off implicit validation for a form and all of its contained controls, and instead manually performs validation of all of the form's children when a mouse button is clicked.  \n  \n [!code-cs[ValidateChildren#1](../../add/codesnippet/CSharp/p-system.windows.forms.c_5_1.cs)]\n [!code-vb[ValidateChildren#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.c_5_1.vb)]"
   syntax:
     content: public virtual System.Windows.Forms.AutoValidate AutoValidate { get; set; }
     return:
       type: System.Windows.Forms.AutoValidate
-      description: To be added.
+      description: An  enumerated value that indicates whether contained controls are implicitly validated on focus change. The default is .
   overload: System.Windows.Forms.ContainerControl.AutoValidate*
+  exceptions:
+  - type: System.ComponentModel.InvalidEnumArgumentException
+    commentId: T:System.ComponentModel.InvalidEnumArgumentException
+    description: A  value that is not valid was used to set this property.
   platform:
   - net-11
   - net-20
@@ -630,13 +654,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the <xref:System.Windows.Forms.ContainerControl.AutoValidate%2A> property changes.
+  remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
+  example:
+  - "<xref:System.Windows.Forms.ContainerControl.AutoValidate%2A>  \n  \n <xref:System.Windows.Forms.ContainerControl.OnAutoValidateChanged%2A>"
   syntax:
     content: public event EventHandler AutoValidateChanged;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -653,14 +680,14 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the  for the control.
   syntax:
     content: public override System.Windows.Forms.BindingContext BindingContext { get; set; }
     return:
       type: System.Windows.Forms.BindingContext
-      description: To be added.
+      description: A  for the control.
   overload: System.Windows.Forms.ContainerControl.BindingContext*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -677,14 +704,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the <xref:System.Windows.Forms.Control.ImeMode%2A> property can be set to an active value, to enable IME support.
+  remarks: "In the [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)] and later, IME functionality is handled by the framework and native IME support for individual controls is disabled.  \n  \n A user control that derives from the <xref:System.Windows.Forms.ContainerControl> class can enable native IME support by overriding this property to return `true`. However, the application is then responsible for making sure that there are no conflicts between the native IME and the Windows Forms IME. This scenario is not supported."
   syntax:
     content: protected override bool CanEnableIme { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: in all cases.
   overload: System.Windows.Forms.ContainerControl.CanEnableIme*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -701,14 +729,14 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the required creation parameters when the control handle is created.
   syntax:
     content: protected override System.Windows.Forms.CreateParams CreateParams { get; }
     return:
       type: System.Windows.Forms.CreateParams
-      description: To be added.
+      description: A  that contains the required creation parameters when the handle to the control is created.
   overload: System.Windows.Forms.ContainerControl.CreateParams*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -725,14 +753,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the current run-time dimensions of the screen.
+  remarks: "The CurrentAutoScaleDimensions property represents the reference dimensions on the current screen. In contrast, the <xref:System.Windows.Forms.ContainerControl.AutoScaleDimensions%2A> property represents the design-time reference dimensions of the design environment for the current control, while the <xref:System.Windows.Forms.ContainerControl.AutoScaleFactor%2A> property is the ratio of the two.  \n  \n The interpretation of the dimension value depends on the <xref:System.Windows.Forms.ContainerControl.AutoScaleMode%2A> property in the following ways:  \n  \n-   If the mode is <xref:System.Windows.Forms.AutoScaleMode>, this property represents the resolution of the screen, in dots per inch.  \n  \n-   If the mode is <xref:System.Windows.Forms.AutoScaleMode>, this property represents the average font character size in pixels.  \n  \n If the <xref:System.Windows.Forms.ContainerControl.AutoScaleMode%2A> property is set to <xref:System.Windows.Forms.AutoScaleMode>, CurrentAutoScaleDimensions is set equal to <xref:System.Windows.Forms.ContainerControl.AutoScaleDimensions%2A>.  \n  \n For more information about automatic scaling, see [Automatic Scaling in Windows Forms](../Topic/Automatic%20Scaling%20in%20Windows%20Forms.md)."
   syntax:
     content: public System.Drawing.SizeF CurrentAutoScaleDimensions { get; }
     return:
       type: System.Drawing.SizeF
-      description: To be added.
+      description: A  containing the current dots per inch (DPI) or  size of the screen.
   overload: System.Windows.Forms.ContainerControl.CurrentAutoScaleDimensions*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: A Win32 device context could not be created for the current screen.
   platform:
   - net-11
   - net-20
@@ -749,15 +781,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the unmanaged resources used by the  and its child controls and optionally releases the managed resources.
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
   overload: System.Windows.Forms.ContainerControl.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -774,15 +806,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
+  remarks: "Raising an event invokes the event handler through a delegate. For more information, see [Events](../Topic/Handling%20and%20Raising%20Events.md).  \n  \n The OnAutoValidateChanged method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
   syntax:
     content: protected virtual void OnAutoValidateChanged (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: An <xref:System.EventArgs> that contains the event data.
   overload: System.Windows.Forms.ContainerControl.OnAutoValidateChanged*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -799,12 +832,12 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the <xref:System.Windows.Forms.Control.CreateControl%2A> method.
   syntax:
     content: protected override void OnCreateControl ();
     parameters: []
   overload: System.Windows.Forms.ContainerControl.OnCreateControl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -821,15 +854,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
+  remarks: "Changing the font used by a <xref:System.Windows.Forms.ContainerControl> will cause the layout to be recalculated and reapplied to the contained controls if the <xref:System.Windows.Forms.ContainerControl.AutoScaleMode%2A> property has a value of <xref:System.Windows.Forms.AutoScaleMode>.  \n  \n Raising an event invokes the event handler through a delegate. For more information, see [Events](../Topic/Handling%20and%20Raising%20Events.md).  \n  \n The OnFontChanged method also allows derived classes to handle the event without attaching a delegate. This is the preferred technique for handling the event in a derived class."
   syntax:
     content: protected override void OnFontChanged (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: An <xref:System.EventArgs> that contains the event data.
   overload: System.Windows.Forms.ContainerControl.OnFontChanged*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -846,15 +880,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected override void OnLayout (System.Windows.Forms.LayoutEventArgs e);
     parameters:
     - id: e
       type: System.Windows.Forms.LayoutEventArgs
-      description: To be added.
+      description: A  that contains the event data.
   overload: System.Windows.Forms.ContainerControl.OnLayout*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -871,15 +905,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected override void OnParentChanged (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: An <xref:System.EventArgs> that contains the event data.
   overload: System.Windows.Forms.ContainerControl.OnParentChanged*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -896,14 +930,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the form that the container control is assigned to.
+  remarks: ''
+  example:
+  - "The following code example shows how to create two forms: `Form1` and `Form2`. Set the <xref:System.Windows.Forms.Form.IsMdiContainer%2A> property of `Form1` to `true` and make it the <xref:System.Windows.Forms.Form.MdiParent%2A> of `Form2`. Next, create a button, `button1`, on each form. When the button on the parent form is clicked, the event handler displays the child form. When the button on the child form is clicked, the event handler displays the <xref:System.Windows.Forms.Control.Name%2A> property of its parent form. Use the following two code segments to overwrite `button1` event handlers in both forms.  \n  \n [!code-cs[ParentForm2#1](../../add/codesnippet/CSharp/p-system.windows.forms.c_81_1.cs)]\n [!code-cpp[ParentForm2#1](../../add/codesnippet/CPP/p-system.windows.forms.c_81_1.cpp)]\n [!code-vb[ParentForm2#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.c_81_1.vb)]  \n  \n [!code-vb[ParentForm2#2](../../add/codesnippet/VisualBasic/p-system.windows.forms.c_81_2.vb)]\n [!code-cpp[ParentForm2#2](../../add/codesnippet/CPP/p-system.windows.forms.c_81_2.cpp)]\n [!code-cs[ParentForm2#2](../../add/codesnippet/CSharp/p-system.windows.forms.c_81_2.cs)]"
   syntax:
     content: public System.Windows.Forms.Form ParentForm { get; }
     return:
       type: System.Windows.Forms.Form
-      description: To be added.
+      description: The  that the container control is assigned to. This property will return null if the control is hosted inside of Internet Explorer or in another hosting context where there is no parent form.
   overload: System.Windows.Forms.ContainerControl.ParentForm*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -920,12 +957,13 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Performs scaling of the container control and its children.
+  remarks: "An explicit call to the PerformAutoScale method is typically only required after programmatic changes to the layout during run time. PerformAutoScale is implicitly called from the <xref:System.Windows.Forms.ContainerControl.OnLayout%2A> method.  \n  \n PerformAutoScale is recursive; each child control, if it is a container, will have its version of this method called when the container's version executes.  \n  \n For more information about automatic scaling, see [Automatic Scaling in Windows Forms](../Topic/Automatic%20Scaling%20in%20Windows%20Forms.md)."
   syntax:
     content: public void PerformAutoScale ();
     parameters: []
   overload: System.Windows.Forms.ContainerControl.PerformAutoScale*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -942,21 +980,21 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a command key.
   syntax:
     content: protected override bool ProcessCmdKey (ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData);
     parameters:
     - id: msg
       type: System.Windows.Forms.Message
-      description: To be added.
+      description: A , passed by reference, that represents the window message to process.
     - id: keyData
       type: System.Windows.Forms.Keys
-      description: To be added.
+      description: One of the  values that represents the key to process.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the character was processed by the control; otherwise, .
   overload: System.Windows.Forms.ContainerControl.ProcessCmdKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -973,18 +1011,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a dialog character.
   syntax:
     content: protected override bool ProcessDialogChar (char charCode);
     parameters:
     - id: charCode
       type: System.Char
-      description: To be added.
+      description: The character to process.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the character was processed by the control; otherwise, .
   overload: System.Windows.Forms.ContainerControl.ProcessDialogChar*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1001,18 +1039,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a dialog key.
   syntax:
     content: protected override bool ProcessDialogKey (System.Windows.Forms.Keys keyData);
     parameters:
     - id: keyData
       type: System.Windows.Forms.Keys
-      description: To be added.
+      description: One of the  values that represents the key to process.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the key was processed by the control; otherwise, .
   overload: System.Windows.Forms.ContainerControl.ProcessDialogKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1029,18 +1067,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a mnemonic character.
   syntax:
     content: protected override bool ProcessMnemonic (char charCode);
     parameters:
     - id: charCode
       type: System.Char
-      description: To be added.
+      description: The character to process.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the character was processed as a mnemonic by the control; otherwise, .
   overload: System.Windows.Forms.ContainerControl.ProcessMnemonic*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1057,18 +1095,19 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Selects the next available control and makes it the active control.
+  remarks: A control with its <xref:System.Windows.Forms.Control.TabStop%2A> property set to `false` cannot be selected, so the next available control will be selected.
   syntax:
     content: protected virtual bool ProcessTabKey (bool forward);
     parameters:
     - id: forward
       type: System.Boolean
-      description: To be added.
+      description: "\n     to cycle forward through the controls in the ; otherwise, ."
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a control is selected; otherwise, .
   overload: System.Windows.Forms.ContainerControl.ProcessTabKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1085,18 +1124,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Activates a child control. Optionally specifies the direction in the tab order to select the control from.
   syntax:
     content: protected override void Select (bool directed, bool forward);
     parameters:
     - id: directed
       type: System.Boolean
-      description: To be added.
+      description: "\n     to specify the direction of the control to select; otherwise, ."
     - id: forward
       type: System.Boolean
-      description: To be added.
+      description: "\n     to move forward in the tab order;  to move backward in the tab order."
   overload: System.Windows.Forms.ContainerControl.Select*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1114,18 +1153,21 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Activates the specified control.
+  remarks: The `control` parameter must be a child of the container control.
+  example:
+  - "The following code example demonstrates how to inherit from the <xref:System.Windows.Forms.ScrollableControl> class and implement the <xref:System.Windows.Forms.IContainerControl> interface. Implementation is added to the <xref:System.Windows.Forms.IContainerControl.ActiveControl%2A> property and the <xref:System.Windows.Forms.IContainerControl.ActivateControl%2A> method.  \n  \n [!code-cs[IContainerControl Implementation#1](../../add/codesnippet/CSharp/51a3e820-05be-4d60-83df-_1.cs)]\n [!code-cpp[IContainerControl Implementation#1](../../add/codesnippet/CPP/51a3e820-05be-4d60-83df-_1.cpp)]\n [!code-vb[IContainerControl Implementation#1](../../add/codesnippet/VisualBasic/51a3e820-05be-4d60-83df-_1.vb)]"
   syntax:
     content: bool IContainerControl.ActivateControl (System.Windows.Forms.Control control);
     parameters:
     - id: control
       type: System.Windows.Forms.Control
-      description: To be added.
+      description: The  to activate.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the control is successfully activated; otherwise, .
   overload: System.Windows.Forms.ContainerControl.System#Windows#Forms#IContainerControl#ActivateControl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1142,12 +1184,13 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden by a derived class, updates which button is the default button.
+  remarks: The <xref:System.Windows.Forms.ContainerControl> class does not provide an implementation for the UpdateDefaultButton method. Classes that inherit this method must implement UpdateDefaultButton to update the default button.
   syntax:
     content: protected virtual void UpdateDefaultButton ();
     parameters: []
   overload: System.Windows.Forms.ContainerControl.UpdateDefaultButton*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1164,15 +1207,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Verifies the value of the control losing focus by causing the  and  events to occur, in that order.
+  remarks: The <xref:System.Windows.Forms.ContainerControl.Validate%2A> method validates the last child control that is not validated and its ancestors up through, but not including, the current container control. This overloaded version always performs validation, regardless of the value of the <xref:System.Windows.Forms.ContainerControl.AutoValidate%2A> property of the control's parent. Therefore use it to unconditionally force validation.
   syntax:
     content: public bool Validate ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if validation is successful; otherwise, . If called from the  or  event handlers, this method will always return .
   overload: System.Windows.Forms.ContainerControl.Validate*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1189,18 +1233,19 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Verifies the value of the control that is losing focus; conditionally dependent on whether automatic validation is turned on.
+  remarks: "The <xref:System.Windows.Forms.ContainerControl.Validate%2A> method validates the last child control that is not validated and its ancestors up through, but not including, the current container control. This overloaded version performs validation based on the following conditions:  \n  \n-   If the `checkAutoValidate` parameter is `true`, validation always occurs for child controls that are not validated.  \n  \n-   If the `checkAutoValidate` parameter is `false`, validation occurs only if the <xref:System.Windows.Forms.ContainerControl.AutoValidate%2A> property of the control's parent is enabled."
   syntax:
     content: public bool Validate (bool checkAutoValidate);
     parameters:
     - id: checkAutoValidate
       type: System.Boolean
-      description: To be added.
+      description: If , the value of the <xref:System.Windows.Forms.ContainerControl.AutoValidate%2A> property is used to determine if validation should be performed; if , validation is unconditionally performed.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if validation is successful; otherwise, . If called from the  or  event handlers, this method will always return .
   overload: System.Windows.Forms.ContainerControl.Validate*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1217,15 +1262,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Causes all of the child controls within a control that support validation to validate their data.
+  remarks: "ValidateChildren will descend a control's hierarchy and examine each control to see if it supports validation. If the control can be selected by the user and its <xref:System.Windows.Forms.Control.CausesValidation%2A> property is `true`, ValidateChildren will cause the <xref:System.Windows.Forms.Control.Validating> event to occur. If any of the controls cancel the <xref:System.Windows.Forms.Control.Validating> event, this method will return `false`; otherwise, it will return `true`.  \n  \n If a control is bound to a data source, and the <xref:System.Windows.Forms.Control.Validating> event occurs, it will cause the control to push its current data back to the data source.  \n  \n Calling ValidateChildren is equivalent to calling <xref:System.Windows.Forms.ContainerControl.ValidateChildren%2A> with a <xref:System.Windows.Forms.ValidationConstraints> of <xref:System.Windows.Forms.ValidationConstraints>."
+  example:
+  - "The following code example turns off implicit validation for a form and all of its contained controls, and instead manually performs validation of all of the form's children when a mouse button is clicked.  \n  \n [!code-cs[ValidateChildren#1](../../add/codesnippet/CSharp/m-system.windows.forms.c_7_1.cs)]\n [!code-vb[ValidateChildren#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.c_7_1.vb)]"
   syntax:
     content: public virtual bool ValidateChildren ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if all of the children validated successfully; otherwise, . If called from the  or  event handlers, this method will always return .
   overload: System.Windows.Forms.ContainerControl.ValidateChildren*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1242,18 +1290,21 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Causes all of the child controls within a control that support validation to validate their data.
+  remarks: "ValidateChildren will examine all the children of the current control, causing the <xref:System.Windows.Forms.Control.Validating> event to occur on a control if it meets the criteria spelled out by <xref:System.Windows.Forms.ValidationConstraints>.  \n  \n You may use several <xref:System.Windows.Forms.ValidationConstraints> parameters at once by combining them with a bitwise OR operator. Combining parameters with a bitwise OR operator will result in a logical AND operation. For example, calling `ValidateChildren(ValidationConstraints.ImmediateChildren | ValidationConstraints.Enabled)` will only raise the <xref:System.Windows.Forms.Control.Validating> event on controls that are both immediate children of the container AND are enabled.  \n  \n Regardless of which parameters you specify for this method, a control must have its <xref:System.Windows.Forms.Control.CausesValidation%2A> property set to `true` in order for its <xref:System.Windows.Forms.Control.Validating> event to occur. You should also set the <xref:System.Windows.Forms.ContainerControl.AutoValidate%2A> property of the control or of the control's container to `false` if you want validation to happen only when you call ValidateChildren, and not when the user shifts focus from the control.  \n  \n If a control is bound to a data source, and the <xref:System.Windows.Forms.Control.Validating> event occurs, it will cause the control to push its current data back to the data source.  \n  \n You cannot achieve the opposite effect of a <xref:System.Windows.Forms.ValidationConstraints> parameter by applying a bitwise negation operator. For example, if you supply the negative value of the <xref:System.Windows.Forms.ValidationConstraints> field to ValidateChildren, it will not validate all children that are not visible on the container. Supplying any negative parameter to ValidateChildren will have no effect on the container or its children."
+  example:
+  - "The following code example will only cause the <xref:System.Windows.Forms.Control.Validating> event to occur for immediate children of the form whose <xref:System.Windows.Forms.Control.Enabled%2A> property is `true`.  \n  \n [!code-vb[ValidateChildrenWithConstraints#1](../../add/codesnippet/VisualBasic/6ed19d03-32eb-43cf-9854-_1.vb)]\n [!code-cs[ValidateChildrenWithConstraints#1](../../add/codesnippet/CSharp/6ed19d03-32eb-43cf-9854-_1.cs)]"
   syntax:
     content: public virtual bool ValidateChildren (System.Windows.Forms.ValidationConstraints validationConstraints);
     parameters:
     - id: validationConstraints
       type: System.Windows.Forms.ValidationConstraints
-      description: To be added.
+      description: Places restrictions on which controls have their  event raised.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if all of the children validated successfully; otherwise, . If called from the  or  event handlers, this method will always return .
   overload: System.Windows.Forms.ContainerControl.ValidateChildren*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1270,15 +1321,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes Windows messages.
   syntax:
     content: protected override void WndProc (ref System.Windows.Forms.Message m);
     parameters:
     - id: m
       type: System.Windows.Forms.Message
-      description: To be added.
+      description: The Windows  to process.
   overload: System.Windows.Forms.ContainerControl.WndProc*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1335,12 +1386,6 @@ references:
   name: AutoScaleFactor
   nameWithType: ContainerControl.AutoScaleFactor
   fullName: System.Windows.Forms.ContainerControl.AutoScaleFactor
-- uid: System.Drawing.SizeF
-  parent: System.Drawing
-  isExternal: false
-  name: SizeF
-  nameWithType: SizeF
-  fullName: System.Drawing.SizeF
 - uid: System.Windows.Forms.ContainerControl.AutoScaleMode
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
@@ -1395,12 +1440,6 @@ references:
   name: CanEnableIme
   nameWithType: ContainerControl.CanEnableIme
   fullName: System.Windows.Forms.ContainerControl.CanEnableIme
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.ContainerControl.CreateParams
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
@@ -1419,24 +1458,12 @@ references:
   name: CurrentAutoScaleDimensions
   nameWithType: ContainerControl.CurrentAutoScaleDimensions
   fullName: System.Windows.Forms.ContainerControl.CurrentAutoScaleDimensions
-- uid: System.Drawing.SizeF
-  parent: System.Drawing
-  isExternal: false
-  name: SizeF
-  nameWithType: SizeF
-  fullName: System.Drawing.SizeF
 - uid: System.Windows.Forms.ContainerControl.Dispose(System.Boolean)
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
   name: Dispose(Boolean)
   nameWithType: ContainerControl.Dispose(Boolean)
   fullName: System.Windows.Forms.ContainerControl.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.ContainerControl.OnAutoValidateChanged(System.EventArgs)
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
@@ -1461,12 +1488,6 @@ references:
   name: OnFontChanged(EventArgs)
   nameWithType: ContainerControl.OnFontChanged(EventArgs)
   fullName: System.Windows.Forms.ContainerControl.OnFontChanged(EventArgs)
-- uid: System.EventArgs
-  parent: System
-  isExternal: true
-  name: EventArgs
-  nameWithType: EventArgs
-  fullName: System.EventArgs
 - uid: System.Windows.Forms.ContainerControl.OnLayout(System.Windows.Forms.LayoutEventArgs)
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
@@ -1485,12 +1506,6 @@ references:
   name: OnParentChanged(EventArgs)
   nameWithType: ContainerControl.OnParentChanged(EventArgs)
   fullName: System.Windows.Forms.ContainerControl.OnParentChanged(EventArgs)
-- uid: System.EventArgs
-  parent: System
-  isExternal: true
-  name: EventArgs
-  nameWithType: EventArgs
-  fullName: System.EventArgs
 - uid: System.Windows.Forms.ContainerControl.ParentForm
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
@@ -1515,12 +1530,6 @@ references:
   name: ProcessCmdKey(Message,Keys)
   nameWithType: ContainerControl.ProcessCmdKey(Message,Keys)
   fullName: System.Windows.Forms.ContainerControl.ProcessCmdKey(Message,Keys)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.Message
   parent: System.Windows.Forms
   isExternal: false
@@ -1539,12 +1548,6 @@ references:
   name: ProcessDialogChar(Char)
   nameWithType: ContainerControl.ProcessDialogChar(Char)
   fullName: System.Windows.Forms.ContainerControl.ProcessDialogChar(Char)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Char
   parent: System
   isExternal: true
@@ -1557,90 +1560,30 @@ references:
   name: ProcessDialogKey(Keys)
   nameWithType: ContainerControl.ProcessDialogKey(Keys)
   fullName: System.Windows.Forms.ContainerControl.ProcessDialogKey(Keys)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Forms.Keys
-  parent: System.Windows.Forms
-  isExternal: false
-  name: Keys
-  nameWithType: Keys
-  fullName: System.Windows.Forms.Keys
 - uid: System.Windows.Forms.ContainerControl.ProcessMnemonic(System.Char)
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
   name: ProcessMnemonic(Char)
   nameWithType: ContainerControl.ProcessMnemonic(Char)
   fullName: System.Windows.Forms.ContainerControl.ProcessMnemonic(Char)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Char
-  parent: System
-  isExternal: true
-  name: Char
-  nameWithType: Char
-  fullName: System.Char
 - uid: System.Windows.Forms.ContainerControl.ProcessTabKey(System.Boolean)
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
   name: ProcessTabKey(Boolean)
   nameWithType: ContainerControl.ProcessTabKey(Boolean)
   fullName: System.Windows.Forms.ContainerControl.ProcessTabKey(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.ContainerControl.Select(System.Boolean,System.Boolean)
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
   name: Select(Boolean,Boolean)
   nameWithType: ContainerControl.Select(Boolean,Boolean)
   fullName: System.Windows.Forms.ContainerControl.Select(Boolean,Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.ContainerControl.System#Windows#Forms#IContainerControl#ActivateControl(System.Windows.Forms.Control)
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
   name: System.Windows.Forms.IContainerControl.ActivateControl(Control)
   nameWithType: ContainerControl.System.Windows.Forms.IContainerControl.ActivateControl(Control)
   fullName: System.Windows.Forms.ContainerControl.System.Windows.Forms.IContainerControl.ActivateControl(Control)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Forms.Control
-  parent: System.Windows.Forms
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Windows.Forms.Control
 - uid: System.Windows.Forms.ContainerControl.UpdateDefaultButton
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
@@ -1653,54 +1596,24 @@ references:
   name: Validate()
   nameWithType: ContainerControl.Validate()
   fullName: System.Windows.Forms.ContainerControl.Validate()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.ContainerControl.Validate(System.Boolean)
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
   name: Validate(Boolean)
   nameWithType: ContainerControl.Validate(Boolean)
   fullName: System.Windows.Forms.ContainerControl.Validate(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.ContainerControl.ValidateChildren
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
   name: ValidateChildren()
   nameWithType: ContainerControl.ValidateChildren()
   fullName: System.Windows.Forms.ContainerControl.ValidateChildren()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.ContainerControl.ValidateChildren(System.Windows.Forms.ValidationConstraints)
   parent: System.Windows.Forms.ContainerControl
   isExternal: false
   name: ValidateChildren(ValidationConstraints)
   nameWithType: ContainerControl.ValidateChildren(ValidationConstraints)
   fullName: System.Windows.Forms.ContainerControl.ValidateChildren(ValidationConstraints)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.ValidationConstraints
   parent: System.Windows.Forms
   isExternal: false
@@ -1713,12 +1626,6 @@ references:
   name: WndProc(Message)
   nameWithType: ContainerControl.WndProc(Message)
   fullName: System.Windows.Forms.ContainerControl.WndProc(Message)
-- uid: System.Windows.Forms.Message
-  parent: System.Windows.Forms
-  isExternal: false
-  name: Message
-  nameWithType: Message
-  fullName: System.Windows.Forms.Message
 - uid: System.Windows.Forms.ContainerControl.#ctor*
   parent: System.Windows.Forms.ContainerControl
   isExternal: false

@@ -42,8 +42,8 @@ items:
   nameWithType: DesignSurface
   fullName: System.ComponentModel.Design.DesignSurface
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Presents a user interface for designing components.
+  remarks: "The DesignSurface class implements what the user perceives as a designer. DesignSurface is the user interface the user manipulates to change design-time features. DesignSurface provides a completely self-contained design surface.  \n  \n The DesignSurface class may be used as a stand-alone designer, or it may be coupled with the <xref:System.ComponentModel.Design.DesignSurfaceManager> class to provide a common implementation for an application that hosts multiple DesignSurface objects.  \n  \n The DesignSurface class can be used by itself, or the user can derive a new class from it and augment the behavior.  \n  \n The DesignSurface class provides several design-time services automatically. The DesignSurface class adds all of its services in its constructor. Most of these services can be overridden by replacing them in the protected <xref:System.ComponentModel.Design.DesignSurface.ServiceContainer%2A> property. To replace a service, override the constructor, call base, and make any changes through the protected <xref:System.ComponentModel.Design.DesignSurface.ServiceContainer%2A> property. All services that are added to the service container and that implement <xref:System.IDisposable> are disposed when the design surface is disposed. The default set of replaceable services that the DesignSurface class provides is shown in the following table.  \n  \n|Service|Description|  \n|-------------|-----------------|  \n|<xref:System.ComponentModel.Design.IExtenderProviderService>|Enables objects that are not part of the container’s components collection to provide their own extender providers.|  \n|<xref:System.ComponentModel.Design.IExtenderListService>|Used by <xref:System.ComponentModel.TypeDescriptor> to get a list of extender providers. With this service, extender providers can live outside of the container.|  \n|<xref:System.ComponentModel.Design.ITypeDescriptorFilterService>|Provides designer metadata hooks. This is the primary interface for metadata filtering.|  \n|<xref:System.ComponentModel.Design.ISelectionService>|Provides a way to select components in the designer.|  \n|<xref:System.ComponentModel.Design.IReferenceService>|Provides a way to get a name for objects, even when those objects are not sited.|  \n|DesignSurface|Offers the design surface itself as a service.|  \n|<xref:System.ComponentModel.Design.DesignerOptionService>|Provides a base class for getting and setting option values for a designer.|  \n  \n The following table shows the non-replaceable services provided by default.  \n  \n|Service|Description|  \n|-------------|-----------------|  \n|<xref:System.ComponentModel.Design.IComponentChangeService>|Raises events as changes are made to components.|  \n|<xref:System.ComponentModel.Design.IDesignerHost>|Controls access to types, services, and transactions. Master interface for designers.|  \n|<xref:System.ComponentModel.IContainer>|Owns the set of components that are being designed. Each designer has an <xref:System.ComponentModel.IContainer> that owns the components.|  \n|<xref:System.ComponentModel.Design.IServiceContainer>|Derives from <xref:System.IServiceProvider> and provides a way to add and remove services from the designer.|  \n  \n In addition to these services, the DesignSurface class also provides a single service that is available through a component’s site. This service is unique for each component. The following table shows the services that cannot be replaced.  \n  \n|Service|Description|  \n|-------------|-----------------|  \n|<xref:System.ComponentModel.Design.IDictionaryService>|A generic dictionary of key/value pairs that can be used to store arbitrary data about a component.|  \n|<xref:System.ComponentModel.INestedContainer>|A container that enables a component to add additional child components to the designer. These components will be part of the design surface, but will not participate in serialization. This is useful when you want to design a control that is capable of exposing a region of itself in a designer, but you do not want the region to participate in serialization.|  \n  \n In addition to <xref:System.ComponentModel.ISite>, the site also implements the following interfaces.  \n  \n> [!CAUTION]\n>  Check for the existence of these interfaces, rather than use indiscriminate casting, because other site implementations may not implement them.  \n  \n|Service|Description|  \n|-------------|-----------------|  \n|<xref:System.ComponentModel.Design.IServiceContainer>|Provides a way to get to the container of site-specific services. For example, <xref:System.ComponentModel.Design.IDictionaryService> is a site-specific service. With this service, you can add additional site-specific services.|"
   syntax:
     content: >-
       [System.Security.SecurityCritical]
@@ -71,12 +71,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public DesignSurface ();
     parameters: []
   overload: System.ComponentModel.Design.DesignSurface.#ctor*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -93,15 +96,19 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: When `parentProvide` is present, designers contained within the surface can retrieve services from the application.
   syntax:
     content: public DesignSurface (IServiceProvider parentProvider);
     parameters:
     - id: parentProvider
       type: System.IServiceProvider
-      description: To be added.
+      description: The parent service provider, or  if there is no parent used to resolve services.
   overload: System.ComponentModel.Design.DesignSurface.#ctor*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -118,15 +125,22 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: "When you use the DesignSurface constructor, it creates a simple designer loader that, in turn, creates a component of the given type and then ends the loading process. This is a straightforward way to create a designer, under the assumption that all saving of state will be done externally. Internally, this calls <xref:System.ComponentModel.Design.DesignSurface.BeginLoad%2A> and passes the root component type.  \n  \n> [!NOTE]\n>  The DesignSurface overload is not affected by <xref:System.Windows.Forms.Design.DesignerOptions>. The <xref:System.Windows.Forms.Design.DesignerOptions> must be in the service container before the design surface loads. If you need access to <xref:System.Windows.Forms.Design.DesignerOptions>, call the empty constructor, add the <xref:System.Windows.Forms.Design.DesignerOptions> to the <xref:System.ComponentModel.Design.DesignSurface.ServiceContainer%2A> and call <xref:System.ComponentModel.Design.DesignSurface.BeginLoad%2A> with `rootComponentType`."
   syntax:
     content: public DesignSurface (Type rootComponentType);
     parameters:
     - id: rootComponentType
       type: System.Type
-      description: To be added.
+      description: The type of root component to create.
   overload: System.ComponentModel.Design.DesignSurface.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rootComponent is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -143,18 +157,25 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: Using the DesignSurface constructor creates a simple designer loader that creates a component of the given type and then ends the loading process. This is a straightforward way to create a designer, under the assumption that all saving of state will be done externally. Internally, this calls <xref:System.ComponentModel.Design.DesignSurface.BeginLoad%2A> and passes the root component type.
   syntax:
     content: public DesignSurface (IServiceProvider parentProvider, Type rootComponentType);
     parameters:
     - id: parentProvider
       type: System.IServiceProvider
-      description: To be added.
+      description: The parent service provider, or  if there is no parent used to resolve services.
     - id: rootComponentType
       type: System.Type
-      description: To be added.
+      description: The type of root component to create.
   overload: System.ComponentModel.Design.DesignSurface.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rootComponent is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -171,15 +192,22 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins the loading process with the given designer loader.
+  remarks: "Designer loading can be asynchronous, so the loading may continue to progress after this call has returned. Attach an event handler to the <xref:System.ComponentModel.Design.IDesignerHost.LoadComplete> event to be notified when the design surface has completed loading.  \n  \n After <xref:System.ComponentModel.Design.DesignSurface.BeginLoad%2A> is called, you can immediately obtain the view for the designer, because designer loaders must provide at least the root component when loading asynchronously."
   syntax:
     content: public void BeginLoad (System.ComponentModel.Design.Serialization.DesignerLoader loader);
     parameters:
     - id: loader
       type: System.ComponentModel.Design.Serialization.DesignerLoader
-      description: To be added.
+      description: The designer loader to use for loading the designer.
   overload: System.ComponentModel.Design.DesignSurface.BeginLoad*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    loader is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -196,15 +224,22 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins the loading process.
+  remarks: "When `rootComponentType` is specified, a default designer loader that simply creates an instance of `rootComponentType` will be used. Designer loading can be asynchronous, so the loading may continue to progress after this call has returned. Attach an event handler to the <xref:System.ComponentModel.Design.IDesignerHost.LoadComplete> event to be notified when the design surface has completed loading.  \n  \n After BeginLoad is called, you can immediately obtain the view for the designer, because designer loaders must provide at least the root component when loading asynchronously.  \n  \n> [!NOTE]\n>  The BeginLoad method creates an instance of the component type and initializes a designer for this instance. The <xref:System.ComponentModel.Design.DesignSurface.Loaded> event is raised before this method returns."
   syntax:
     content: public void BeginLoad (Type rootComponentType);
     parameters:
     - id: rootComponentType
       type: System.Type
-      description: To be added.
+      description: The type of component to create in design mode.
   overload: System.ComponentModel.Design.DesignSurface.BeginLoad*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    rootComponentType is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -221,14 +256,18 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  implementation within the design surface.
+  remarks: The ComponentContainer property holds all objects that are currently in design mode. When components are added to ComponentContainer, their designer, if any, is loaded. The component is sited with a site that provides full access to the design surface.
   syntax:
     content: public System.ComponentModel.IContainer ComponentContainer { get; }
     return:
       type: System.ComponentModel.IContainer
-      description: To be added.
+      description: The  implementation within the design surface.
   overload: System.ComponentModel.Design.DesignSurface.ComponentContainer*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -245,18 +284,25 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of a component.
+  remarks: The CreateComponent method is called by the design surface’s <xref:System.ComponentModel.Design.IDesignerHost.CreateComponent%2A> method to create an instance of a component. The component should be created and added to the public container on the design surface.
   syntax:
     content: protected virtual System.ComponentModel.IComponent CreateComponent (Type componentType);
     parameters:
     - id: componentType
       type: System.Type
-      description: To be added.
+      description: The type of component to create.
     return:
       type: System.ComponentModel.IComponent
-      description: To be added.
+      description: The newly created component.
   overload: System.ComponentModel.Design.DesignSurface.CreateComponent*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    componentType is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -273,21 +319,28 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a designer when a component is added to the container.
+  remarks: "The CreateDesigner method is called by the design surface’s <xref:System.ComponentModel.IContainer> when a component is added to the container. This method creates a designer, but does not initialize it. When it returns, the designer is initialized by the container.  \n  \n CreateDesigner can create two different types of designers: root designers and normal designers. A root designer is a designer for the root component in the design surface, which by definition is the first component added to the container. Root designers differ from normal designers because they are responsible for the user interface presented to the end user. Root designers typically coordinate with the rest of the designers on a design surface to provide this interface.  \n  \n The default implementation of this method delegates to <xref:System.ComponentModel.TypeDescriptor>, passing in <xref:System.ComponentModel.Design.IRootDesigner> as the designer type for root designers, or <xref:System.ComponentModel.Design.IDesigner> for normal designers. You can override this method to request a specific type of designer."
   syntax:
     content: protected virtual System.ComponentModel.Design.IDesigner CreateDesigner (System.ComponentModel.IComponent component, bool rootDesigner);
     parameters:
     - id: component
       type: System.ComponentModel.IComponent
-      description: To be added.
+      description: The component for which the designer should be created.
     - id: rootDesigner
       type: System.Boolean
-      description: To be added.
+      description: "\n     to create a root designer;  to create a normal designer."
     return:
       type: System.ComponentModel.Design.IDesigner
-      description: To be added.
+      description: An instance of the requested designer, or  if no matching designer could be found.
   overload: System.ComponentModel.Design.DesignSurface.CreateDesigner*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    component is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -304,18 +357,25 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of the given type.
+  remarks: If `type` is an <xref:System.ComponentModel.IComponent>, CreateInstance searches for a constructor of type <xref:System.ComponentModel.IContainer> first, followed by an empty constructor.
   syntax:
     content: protected virtual object CreateInstance (Type type);
     parameters:
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type to create.
     return:
       type: System.Object
-      description: To be added.
+      description: The newly created object.
   overload: System.ComponentModel.Design.DesignSurface.CreateInstance*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    type is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -332,18 +392,25 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a container suitable for nesting controls or components.
+  remarks: Adding a component to a nested container creates its designer and makes it eligible for all services available from the design surface. Components added to nested containers do not participate in serialization.
   syntax:
     content: public System.ComponentModel.INestedContainer CreateNestedContainer (System.ComponentModel.IComponent owningComponent);
     parameters:
     - id: owningComponent
       type: System.ComponentModel.IComponent
-      description: To be added.
+      description: The component that manages the nested container.
     return:
       type: System.ComponentModel.INestedContainer
-      description: To be added.
+      description: The nested container.
   overload: System.ComponentModel.Design.DesignSurface.CreateNestedContainer*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    owningComponent is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -360,21 +427,28 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a container suitable for nesting controls or components.
+  remarks: "Adding a component to a nested container creates its designer and makes it eligible for all services available from the design surface. Components added to nested containers do not participate in serialization.  \n  \n You can provide an additional name for the CreateNestedContainer method by passing a value into `containerName`."
   syntax:
     content: public System.ComponentModel.INestedContainer CreateNestedContainer (System.ComponentModel.IComponent owningComponent, string containerName);
     parameters:
     - id: owningComponent
       type: System.ComponentModel.IComponent
-      description: To be added.
+      description: The component that manages the nested container.
     - id: containerName
       type: System.String
-      description: To be added.
+      description: An additional name for the nested container.
     return:
       type: System.ComponentModel.INestedContainer
-      description: To be added.
+      description: The nested container.
   overload: System.ComponentModel.Design.DesignSurface.CreateNestedContainer*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    owningComponent is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -391,12 +465,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the resources used by the .
+  remarks: "The public Dispose method follows the standard <xref:System.IDisposable> pattern. Calling this method destroys the design surface. The protected version of this method is `virtual` and follows the normal <xref:System.IDisposable> pattern.  \n  \n> [!NOTE]\n>  Because <xref:System.ComponentModel.Design.DesignSurface> does not have any native code to clean up, it does not have a finalizer that calls <xref:System.ComponentModel.Design.DesignSurface.Dispose%28System.Boolean%29>. If you need to call <xref:System.ComponentModel.Design.DesignSurface.Dispose%28System.Boolean%29>, you must add a finalizer yourself.  \n  \n Call Dispose when you are finished using the <xref:System.ComponentModel.Design.DesignSurface>. The Dispose method leaves the <xref:System.ComponentModel.Design.DesignSurface> in an unusable state. After calling Dispose, you must release all references to the <xref:System.ComponentModel.Design.DesignSurface> so the garbage collector can reclaim the memory that the <xref:System.ComponentModel.Design.DesignSurface> was occupying. For more information, see [Cleaning Up Unmanaged Resources](../Topic/Cleaning%20Up%20Unmanaged%20Resources.md) and [Implementing a Dispose Method](../Topic/Implementing%20a%20Dispose%20Method.md).  \n  \n> [!NOTE]\n>  Always call Dispose before you release your last reference to the <xref:System.ComponentModel.Design.DesignSurface>. Otherwise, the resources it is using will not be freed until the garbage collector calls the <xref:System.ComponentModel.Design.DesignSurface> object's `Finalize` method."
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.ComponentModel.Design.DesignSurface.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -413,15 +488,16 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the resources used by the .
+  remarks: "The public <xref:System.ComponentModel.Design.DesignSurface.Dispose> method follows the standard <xref:System.IDisposable> pattern. Calling this method destroys the design surface. The protected version of this method is `virtual` and follows the normal <xref:System.IDisposable> pattern.  \n  \n> [!NOTE]\n>  Because <xref:System.ComponentModel.Design.DesignSurface> does not have any native code to clean up, it does not have a finalizer that calls Dispose. If you need to call Dispose, you must add a finalizer yourself.  \n  \n This method is called by the public `Dispose()`method and the <xref:System.Object.Finalize%2A> method. `Dispose()` invokes the protected `Dispose(Boolean)` method with the `disposing` parameter set to `true`. <xref:System.Object.Finalize%2A> invokes `Dispose` with `disposing` set to `false`.  \n  \n When the `disposing` parameter is true, this method releases all resources held by any managed objects that this <xref:System.ComponentModel.Design.DesignSurface> references. This method invokes the `Dispose()` method of each referenced object."
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
   overload: System.ComponentModel.Design.DesignSurface.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -438,13 +514,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the design surface is disposed.
+  remarks: The surface is only disposed when the public <xref:System.ComponentModel.Design.DesignSurface.Dispose%2A> method on <xref:System.ComponentModel.Design.DesignSurface> is called.
   syntax:
     content: public event EventHandler Disposed;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -461,14 +538,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the **Design-time Error List** is loading.
   syntax:
     content: public bool DtelLoading { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the **Design-time Error List** is loading; otherwise, .
   overload: System.ComponentModel.Design.DesignSurface.DtelLoading*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -485,12 +562,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes changes to the design surface.
+  remarks: The Flush method can be called to push changes made to the design surface down to the serializer. This ensures that the design surface and its serialized state are synchronized. The actual implementation of this method is forwarded to the designer loader associated with design surface. The designer loader may choose to defer changes until Flush is called, or it may choose to keep the serialized data up to date with all user changes. The Flush method ensures that regardless of the model the designer loader chooses to use, the serialized state is synchronized with the actual design surface.
   syntax:
     content: public void Flush ();
     parameters: []
   overload: System.ComponentModel.Design.DesignSurface.Flush*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -507,13 +585,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a call is made to the <xref:System.ComponentModel.Design.DesignSurface.Flush%2A> method of .
+  remarks: The designer loader is flushed first, and then the Flushed event is raised.
   syntax:
     content: public event EventHandler Flushed;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -530,18 +609,19 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a service from the service container.
+  remarks: The GetService method retrieves a service in the design surface’s service container. In addition, this will forward to any service provider that was given to the design surface at construction time.
   syntax:
     content: public object GetService (Type serviceType);
     parameters:
     - id: serviceType
       type: System.Type
-      description: To be added.
+      description: The type of service to retrieve.
     return:
       type: System.Object
-      description: To be added.
+      description: An object that implements, or is a derived class of, serviceType, or  if the service does not exist in the service container.
   overload: System.ComponentModel.Design.DesignSurface.GetService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -558,14 +638,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the design surface is currently loaded.
   syntax:
     content: public bool IsLoaded { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the design surface is currently loaded; otherwise, .
   overload: System.ComponentModel.Design.DesignSurface.IsLoaded*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -582,13 +662,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the designer load has completed.
+  remarks: "The Loaded event is raised for successful loads as well as unsuccessful ones. If code in this event handler throws an exception, the designer is unloaded.  \n  \n The <xref:System.ComponentModel.Design.LoadedEventArgs> object can be used to determine if loading succeeded, and it can also provide a list of errors that occurred during the load.  \n  \n> [!NOTE]\n>  Errors can occur for successful loads as well, provided that the serialization system can tolerate errors."
   syntax:
     content: public event System.ComponentModel.Design.LoadedEventHandler Loaded;
     return:
       type: System.ComponentModel.Design.LoadedEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -605,14 +686,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a collection of loading errors or a void collection.
   syntax:
     content: public System.Collections.ICollection LoadErrors { get; }
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: A <xref:System.Collections.ICollection> of loading errors.
   overload: System.ComponentModel.Design.DesignSurface.LoadErrors*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -629,13 +710,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the designer is about to be loaded.
   syntax:
     content: public event EventHandler Loading;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -652,15 +733,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnLoaded (System.ComponentModel.Design.LoadedEventArgs e);
     parameters:
     - id: e
       type: System.ComponentModel.Design.LoadedEventArgs
-      description: To be added.
+      description: A  that contains the event data.
   overload: System.ComponentModel.Design.DesignSurface.OnLoaded*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -677,15 +758,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnLoading (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: An <xref:System.EventArgs> that contains the event data.
   overload: System.ComponentModel.Design.DesignSurface.OnLoading*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -702,15 +783,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnUnloaded (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: An <xref:System.EventArgs> that contains the event data.
   overload: System.ComponentModel.Design.DesignSurface.OnUnloaded*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -727,15 +808,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnUnloading (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: An <xref:System.EventArgs> that contains the event data.
   overload: System.ComponentModel.Design.DesignSurface.OnUnloading*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -752,15 +833,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnViewActivate (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: An <xref:System.EventArgs> that contains the event data.
   overload: System.ComponentModel.Design.DesignSurface.OnViewActivate*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -777,14 +858,18 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the service container.
+  remarks: At construction time, <xref:System.ComponentModel.Design.DesignSurface> adds default services into this service container. You can leave the default services in their present state, or you can remove them and replace them with your own. The default services are all demand-created, so there is no loss in performance for adding them at construction time.
   syntax:
     content: protected System.ComponentModel.Design.ServiceContainer ServiceContainer { get; }
     return:
       type: System.ComponentModel.Design.ServiceContainer
-      description: To be added.
+      description: The service container that provides all services to designers contained within the design surface.
   overload: System.ComponentModel.Design.DesignSurface.ServiceContainer*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -801,13 +886,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a designer has finished unloading.
   syntax:
     content: public event EventHandler Unloaded;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -824,13 +909,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a designer is about to unload.
+  remarks: When a designer unloads, the entire state for that designer is destroyed, including the designer’s view. The view should be unparented at this time.
   syntax:
     content: public event EventHandler Unloading;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -847,14 +933,26 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the view for the root designer.
+  remarks: "The <xref:System.ComponentModel.Design.DesignSurface.BeginLoad%2A> method must be called beforehand to start the loading process. It is possible to return a view before the designer loader finishes loading because the root designer, which supplies the view, is the first object created by the designer loader. If a view is unavailable, <xref:System.ComponentModel.Design.DesignSurface.BeginLoad%2A> raises an exception.  \n  \n The notion of a view technology is obsolete. But, it remains in the interfaces for root designers for backward compatibility. Its use is hidden from anyone using <xref:System.ComponentModel.Design.DesignSurface> objects. The View property hides view technologies by passing the supported technologies back into the root designer."
+  example:
+  - "The following code example shows how View hides view technologies.  \n  \n [C#]  \n  \n `IRootDesigner d;`  \n  \n `ViewTechnology[] supported = d.SupportedTechnologies;`  \n  \n `return d.GetView(supported[0]);`"
   syntax:
     content: public object View { get; }
     return:
       type: System.Object
-      description: To be added.
+      description: The view for the root designer.
   overload: System.ComponentModel.Design.DesignSurface.View*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The design surface is not loading, the designer loader has not yet created a root designer, or the design surface finished the load, but failed. More information may available in the <xref:System.Exception.InnerException%2A>.
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The designer loaded, but it does not offer a view compatible with this design surface.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  attached to the  has been disposed.
   platform:
   - net-11
   - net-20
@@ -871,13 +969,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the <xref:System.ComponentModel.Design.IDesignerHost.Activate%2A> method has been called on .
+  remarks: If you want to support the <xref:System.ComponentModel.Design.IDesignerHost.Activate%2A> method, your event handler should activate the window for this design surface.
   syntax:
     content: public event EventHandler ViewActivated;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -922,18 +1021,6 @@ references:
   name: DesignSurface(IServiceProvider,Type)
   nameWithType: DesignSurface.DesignSurface(IServiceProvider,Type)
   fullName: System.ComponentModel.Design.DesignSurface.DesignSurface(IServiceProvider,Type)
-- uid: System.IServiceProvider
-  parent: System
-  isExternal: true
-  name: IServiceProvider
-  nameWithType: IServiceProvider
-  fullName: System.IServiceProvider
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.ComponentModel.Design.DesignSurface.BeginLoad(System.ComponentModel.Design.Serialization.DesignerLoader)
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
@@ -952,12 +1039,6 @@ references:
   name: BeginLoad(Type)
   nameWithType: DesignSurface.BeginLoad(Type)
   fullName: System.ComponentModel.Design.DesignSurface.BeginLoad(Type)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.ComponentModel.Design.DesignSurface.ComponentContainer
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
@@ -982,12 +1063,6 @@ references:
   name: IComponent
   nameWithType: IComponent
   fullName: System.ComponentModel.IComponent
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.ComponentModel.Design.DesignSurface.CreateDesigner(System.ComponentModel.IComponent,System.Boolean)
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
@@ -1000,12 +1075,6 @@ references:
   name: IDesigner
   nameWithType: IDesigner
   fullName: System.ComponentModel.Design.IDesigner
-- uid: System.ComponentModel.IComponent
-  parent: System.ComponentModel
-  isExternal: false
-  name: IComponent
-  nameWithType: IComponent
-  fullName: System.ComponentModel.IComponent
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -1018,18 +1087,6 @@ references:
   name: CreateInstance(Type)
   nameWithType: DesignSurface.CreateInstance(Type)
   fullName: System.ComponentModel.Design.DesignSurface.CreateInstance(Type)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.ComponentModel.Design.DesignSurface.CreateNestedContainer(System.ComponentModel.IComponent)
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
@@ -1042,30 +1099,12 @@ references:
   name: INestedContainer
   nameWithType: INestedContainer
   fullName: System.ComponentModel.INestedContainer
-- uid: System.ComponentModel.IComponent
-  parent: System.ComponentModel
-  isExternal: false
-  name: IComponent
-  nameWithType: IComponent
-  fullName: System.ComponentModel.IComponent
 - uid: System.ComponentModel.Design.DesignSurface.CreateNestedContainer(System.ComponentModel.IComponent,System.String)
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
   name: CreateNestedContainer(IComponent,String)
   nameWithType: DesignSurface.CreateNestedContainer(IComponent,String)
   fullName: System.ComponentModel.Design.DesignSurface.CreateNestedContainer(IComponent,String)
-- uid: System.ComponentModel.INestedContainer
-  parent: System.ComponentModel
-  isExternal: false
-  name: INestedContainer
-  nameWithType: INestedContainer
-  fullName: System.ComponentModel.INestedContainer
-- uid: System.ComponentModel.IComponent
-  parent: System.ComponentModel
-  isExternal: false
-  name: IComponent
-  nameWithType: IComponent
-  fullName: System.ComponentModel.IComponent
 - uid: System.String
   parent: System
   isExternal: true
@@ -1084,12 +1123,6 @@ references:
   name: Dispose(Boolean)
   nameWithType: DesignSurface.Dispose(Boolean)
   fullName: System.ComponentModel.Design.DesignSurface.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ComponentModel.Design.DesignSurface.Disposed
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
@@ -1108,12 +1141,6 @@ references:
   name: DtelLoading
   nameWithType: DesignSurface.DtelLoading
   fullName: System.ComponentModel.Design.DesignSurface.DtelLoading
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ComponentModel.Design.DesignSurface.Flush
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
@@ -1126,42 +1153,18 @@ references:
   name: Flushed
   nameWithType: DesignSurface.Flushed
   fullName: System.ComponentModel.Design.DesignSurface.Flushed
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.ComponentModel.Design.DesignSurface.GetService(System.Type)
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
   name: GetService(Type)
   nameWithType: DesignSurface.GetService(Type)
   fullName: System.ComponentModel.Design.DesignSurface.GetService(Type)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.ComponentModel.Design.DesignSurface.IsLoaded
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
   name: IsLoaded
   nameWithType: DesignSurface.IsLoaded
   fullName: System.ComponentModel.Design.DesignSurface.IsLoaded
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ComponentModel.Design.DesignSurface.Loaded
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
@@ -1192,12 +1195,6 @@ references:
   name: Loading
   nameWithType: DesignSurface.Loading
   fullName: System.ComponentModel.Design.DesignSurface.Loading
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.ComponentModel.Design.DesignSurface.OnLoaded(System.ComponentModel.Design.LoadedEventArgs)
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
@@ -1228,36 +1225,18 @@ references:
   name: OnUnloaded(EventArgs)
   nameWithType: DesignSurface.OnUnloaded(EventArgs)
   fullName: System.ComponentModel.Design.DesignSurface.OnUnloaded(EventArgs)
-- uid: System.EventArgs
-  parent: System
-  isExternal: true
-  name: EventArgs
-  nameWithType: EventArgs
-  fullName: System.EventArgs
 - uid: System.ComponentModel.Design.DesignSurface.OnUnloading(System.EventArgs)
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
   name: OnUnloading(EventArgs)
   nameWithType: DesignSurface.OnUnloading(EventArgs)
   fullName: System.ComponentModel.Design.DesignSurface.OnUnloading(EventArgs)
-- uid: System.EventArgs
-  parent: System
-  isExternal: true
-  name: EventArgs
-  nameWithType: EventArgs
-  fullName: System.EventArgs
 - uid: System.ComponentModel.Design.DesignSurface.OnViewActivate(System.EventArgs)
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
   name: OnViewActivate(EventArgs)
   nameWithType: DesignSurface.OnViewActivate(EventArgs)
   fullName: System.ComponentModel.Design.DesignSurface.OnViewActivate(EventArgs)
-- uid: System.EventArgs
-  parent: System
-  isExternal: true
-  name: EventArgs
-  nameWithType: EventArgs
-  fullName: System.EventArgs
 - uid: System.ComponentModel.Design.DesignSurface.ServiceContainer
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
@@ -1276,48 +1255,24 @@ references:
   name: Unloaded
   nameWithType: DesignSurface.Unloaded
   fullName: System.ComponentModel.Design.DesignSurface.Unloaded
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.ComponentModel.Design.DesignSurface.Unloading
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
   name: Unloading
   nameWithType: DesignSurface.Unloading
   fullName: System.ComponentModel.Design.DesignSurface.Unloading
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.ComponentModel.Design.DesignSurface.View
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
   name: View
   nameWithType: DesignSurface.View
   fullName: System.ComponentModel.Design.DesignSurface.View
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ComponentModel.Design.DesignSurface.ViewActivated
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false
   name: ViewActivated
   nameWithType: DesignSurface.ViewActivated
   fullName: System.ComponentModel.Design.DesignSurface.ViewActivated
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.ComponentModel.Design.DesignSurface.#ctor*
   parent: System.ComponentModel.Design.DesignSurface
   isExternal: false

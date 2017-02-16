@@ -27,8 +27,10 @@ items:
   nameWithType: FileSystemInfo
   fullName: System.IO.FileSystemInfo
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides the base class for both  and  objects.
+  remarks: "The FileSystemInfo class contains methods that are common to file and directory manipulation. A FileSystemInfo object can represent either a file or a directory, thus serving as the basis for <xref:System.IO.FileInfo> or <xref:System.IO.DirectoryInfo> objects. Use this base class when parsing a lot of files and directories.  \n  \n A derived class can inherit from FileSystemInfo only if the derived class has the AllAccess permission from the <xref:System.Security.Permissions.FileIOPermissionAccess> enumeration.  \n  \n In members that accept a path, the path can refer to a file or just a directory. The specified path can also refer to a relative path or a Universal Naming Convention (UNC) path for a server and share name. For example, all the following are acceptable paths:  \n  \n-   \"c:\\\\\\MyDir\\\\\\MyFile.txt\" in C#, or \"c:\\MyDir\\MyFile.txt\" in Visual Basic.  \n  \n-   \"c:\\\\\\MyDir\" in C#, or \"c:\\MyDir\" in Visual Basic.  \n  \n-   \"MyDir\\\\\\MySubdir\" in C#, or \"MyDir\\MySubDir\" in Visual Basic.  \n  \n-   \"\\\\\\\\\\\\\\MyServer\\\\\\MyShare\" in C#, or \"\\\\\\MyServer\\MyShare\" in Visual Basic.  \n  \n For a list of common I/O tasks, see [Common I/O Tasks](../Topic/Common%20I-O%20Tasks.md)."
+  example:
+  - "The following example shows how to loop through all the files and directories, querying some information about each entry.  \n  \n [!code-cs[FileSystemInfo#1](../../add/codesnippet/CSharp/t-system.io.filesysteminfo_1.cs)]\n [!code-cpp[FileSystemInfo#1](../../add/codesnippet/CPP/t-system.io.filesysteminfo_1.cpp)]\n [!code-vb[FileSystemInfo#1](../../add/codesnippet/VisualBasic/t-system.io.filesysteminfo_1.vb)]"
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -60,12 +62,13 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: For a list of common I/O tasks, see [Common I/O Tasks](../Topic/Common%20I-O%20Tasks.md).
   syntax:
     content: protected FileSystemInfo ();
     parameters: []
   overload: System.IO.FileSystemInfo.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -82,18 +85,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with serialized data.
+  remarks: For a list of common I/O tasks, see [Common I/O Tasks](../Topic/Common%20I-O%20Tasks.md).
   syntax:
     content: protected FileSystemInfo (System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context);
     parameters:
     - id: info
       type: System.Runtime.Serialization.SerializationInfo
-      description: To be added.
+      description: The  that holds the serialized object data about the exception being thrown.
     - id: context
       type: System.Runtime.Serialization.StreamingContext
-      description: To be added.
+      description: The <xref:System.Runtime.Serialization.StreamingContext> that contains contextual information about the source or destination.
   overload: System.IO.FileSystemInfo.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The specified  is null.
   platform:
   - net-11
   - net-20
@@ -110,14 +117,32 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the attributes for the current file or directory.
+  remarks: "The value of the Attributes property is pre-cached if the current instance of the <xref:System.IO.FileSystemInfo> object was returned from any of the following <xref:System.IO.DirectoryInfo> methods:  \n  \n-   <xref:System.IO.DirectoryInfo.GetDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFileSystemInfos%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFileSystemInfos%2A>  \n  \n To get the latest value, call the <xref:System.IO.FileSystemInfo.Refresh%2A> method.  \n  \n The value of this property is a combination of the archive, compressed, directory, hidden, offline, read-only, system, and temporary file attribute flags.  \n  \n When you set this value, use the bitwise OR operator (`|` in C# or `Or` in Visual Basic) to apply more than one value. To retain any existing values in the Attributes property, include the value of the Attributes property in your assignment. For example:  \n  \n `exampleFile.Attributes = exampleFile.Attributes | FileAttributes.ReadOnly;`"
+  example:
+  - "The following example demonstrates the Attributes property. This code example is part of a larger example provided for the <xref:System.IO.FileSystemInfo> class.  \n  \n [!code-cs[FileSystemInfo#2](../../add/codesnippet/CSharp/p-system.io.filesystemin_3_1.cs)]\n [!code-cpp[FileSystemInfo#2](../../add/codesnippet/CPP/p-system.io.filesystemin_3_1.cpp)]\n [!code-vb[FileSystemInfo#2](../../add/codesnippet/VisualBasic/p-system.io.filesystemin_3_1.vb)]"
   syntax:
     content: public System.IO.FileAttributes Attributes { get; set; }
     return:
       type: System.IO.FileAttributes
-      description: To be added.
+      description: of the current .
   overload: System.IO.FileSystemInfo.Attributes*
+  exceptions:
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: The specified file does not exist.
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The specified path is invalid; for example, it is on an unmapped drive.
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have the required permission.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The caller attempts to set an invalid file attribute.  \n  \n -or-  \n  \n The user attempts to set an attribute value but does not have write permission."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: <xref:System.IO.FileSystemInfo.Refresh%2A> cannot initialize the data.
   platform:
   - net-11
   - net-20
@@ -134,14 +159,29 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the creation time of the current file or directory.
+  remarks: "**Note** This method may return an inaccurate value, because it uses native functions whose values may not be continuously updated by the operating system.  \n  \n The value of the CreationTime property is pre-cached if the current instance of the <xref:System.IO.FileSystemInfo> object was returned from any of the following <xref:System.IO.DirectoryInfo> methods:  \n  \n-   <xref:System.IO.DirectoryInfo.GetDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFileSystemInfos%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFileSystemInfos%2A>  \n  \n To get the latest value, call the <xref:System.IO.FileSystemInfo.Refresh%2A> method.  \n  \n If the file described in the <xref:System.IO.FileSystemInfo> object does not exist, this property will return 12:00 midnight, January 1, 1601 A.D. (C.E.) Coordinated Universal Time (UTC), adjusted to local time.  \n  \n NTFS-formatted drives may cache file meta-info, such as file creation time, for a short period of time. This process is known as file tunneling. As a result, it may be necessary to explicitly set the creation time of a file if you are overwriting or replacing an existing file.  \n  \n This property value is `null` if the file system containing the <xref:System.IO.FileSystemInfo> object does not support this information."
+  example:
+  - "The following example demonstrates the CreationTime property. This code example is part of a larger example provided for the <xref:System.IO.FileSystemInfo> class.  \n  \n [!code-cs[FileSystemInfo#2](../../add/codesnippet/CSharp/p-system.io.filesystemin_4_1.cs)]\n [!code-cpp[FileSystemInfo#2](../../add/codesnippet/CPP/p-system.io.filesystemin_4_1.cpp)]\n [!code-vb[FileSystemInfo#2](../../add/codesnippet/VisualBasic/p-system.io.filesystemin_4_1.vb)]"
   syntax:
     content: public DateTime CreationTime { get; set; }
     return:
       type: System.DateTime
-      description: To be added.
+      description: The creation date and time of the current  object.
   overload: System.IO.FileSystemInfo.CreationTime*
+  exceptions:
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: <xref:System.IO.FileSystemInfo.Refresh%2A> cannot initialize the data.
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The specified path is invalid; for example, it is on an unmapped drive.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: The current operating system is not Windows NT or later.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The caller attempts to set an invalid creation time.
   platform:
   - net-11
   - net-20
@@ -158,14 +198,27 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the creation time, in coordinated universal time (UTC), of the current file or directory.
+  remarks: "**Note** This method may return an inaccurate value, because it uses native functions whose values may not be continuously updated by the operating system.  \n  \n The value of the CreationTimeUtc property is pre-cached if the current instance of the <xref:System.IO.FileSystemInfo> object was returned from any of the following <xref:System.IO.DirectoryInfo> methods:  \n  \n-   <xref:System.IO.DirectoryInfo.GetDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFileSystemInfos%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFileSystemInfos%2A>  \n  \n To get the latest value, call the <xref:System.IO.FileSystemInfo.Refresh%2A> method.  \n  \n If the file described in the <xref:System.IO.FileSystemInfo> object does not exist, this property will return 12:00 midnight, January 1, 1601 A.D. (C.E.) Coordinated Universal Time (UTC).  \n  \n NTFS-formatted drives may cache file meta-info, such as file creation time, for a short period of time. This process is known as file tunneling. As a result, it may be necessary to explicitly set the creation time of a file if you are overwriting or replacing an existing file.  \n  \n This property value is `null` if the file system containing the <xref:System.IO.FileSystemInfo> object does not support this information."
   syntax:
     content: public DateTime CreationTimeUtc { get; set; }
     return:
       type: System.DateTime
-      description: To be added.
+      description: The creation date and time in UTC format of the current  object.
   overload: System.IO.FileSystemInfo.CreationTimeUtc*
+  exceptions:
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: <xref:System.IO.FileSystemInfo.Refresh%2A> cannot initialize the data.
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The specified path is invalid; for example, it is on an unmapped drive.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: The current operating system is not Windows NT or later.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The caller attempts to set an invalid access time.
   platform:
   - net-11
   - net-20
@@ -182,12 +235,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Deletes a file or directory.
   syntax:
     content: public abstract void Delete ();
     parameters: []
   overload: System.IO.FileSystemInfo.Delete*
+  exceptions:
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The specified path is invalid; for example, it is on an unmapped drive.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: 'There is an open handle on the file or directory, and the operating system is Windows XP or earlier. This open handle can result from enumerating directories and files. For more information, see [How to: Enumerate Directories and Files](../Topic/How%20to:%20Enumerate%20Directories%20and%20Files.md).'
   platform:
   - net-11
   - net-20
@@ -204,14 +263,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the file or directory exists.
+  remarks: For a list of common I/O tasks, see [Common I/O Tasks](../Topic/Common%20I-O%20Tasks.md).
   syntax:
     content: public abstract bool Exists { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the file or directory exists; otherwise, .
   overload: System.IO.FileSystemInfo.Exists*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -228,14 +288,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the string representing the extension part of the file.
+  remarks: "The `Extension` property returns the <xref:System.IO.FileSystemInfo> extension, including the period (.). For example, for a file c:\\NewFile.txt, this property returns \".txt\".  \n  \n The following table lists examples of other typical or related I/O tasks.  \n  \n|To do this...|See the example in this topic...|  \n|-------------------|--------------------------------------|  \n|Create a text file.|[How to: Write Text to a File](../Topic/How%20to:%20Write%20Text%20to%20a%20File.md)|  \n|Write to a text file.|[How to: Write Text to a File](../Topic/How%20to:%20Write%20Text%20to%20a%20File.md)|  \n|Read from a text file.|[How to: Read Text from a File](../Topic/How%20to:%20Read%20Text%20from%20a%20File.md)|  \n|Retrieve the fully qualified path of a file.|<xref:System.IO.Path.GetFullPath%2A>|  \n|Retrieve only the file name a path.|<xref:System.IO.Path.GetFileNameWithoutExtension%2A>|  \n|Retrieve only the directory name from a path.|<xref:System.IO.Path.GetDirectoryName%2A>|  \n|Change the extension of a file.|<xref:System.IO.Path.ChangeExtension%2A>|"
   syntax:
     content: public string Extension { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A string containing the  extension.
   overload: System.IO.FileSystemInfo.Extension*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -252,14 +313,23 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the full path of the directory or file.
+  remarks: "For example, for a file c:\\NewFile.txt, this property returns \"c:\\NewFile.txt\".  \n  \n For a list of common I/O tasks, see [Common I/O Tasks](../Topic/Common%20I-O%20Tasks.md)."
+  example:
+  - "The following example demonstrates the FullName property. This code example is part of a larger example provided for the <xref:System.IO.FileSystemInfo> class.  \n  \n [!code-cs[FileSystemInfo#2](../../add/codesnippet/CSharp/p-system.io.filesystemin_0_1.cs)]\n [!code-cpp[FileSystemInfo#2](../../add/codesnippet/CPP/p-system.io.filesystemin_0_1.cpp)]\n [!code-vb[FileSystemInfo#2](../../add/codesnippet/VisualBasic/p-system.io.filesystemin_0_1.vb)]"
   syntax:
     content: public virtual string FullName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A string containing the full path.
   overload: System.IO.FileSystemInfo.FullName*
+  exceptions:
+  - type: System.IO.PathTooLongException
+    commentId: T:System.IO.PathTooLongException
+    description: The fully qualified path and file name is 260 or more characters.
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have the required permission.
   platform:
   - net-11
   - net-20
@@ -276,13 +346,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the fully qualified path of the directory or file.
   syntax:
     content: protected string FullPath;
     return:
       type: System.String
       description: To be added.
+  exceptions:
+  - type: System.IO.PathTooLongException
+    commentId: T:System.IO.PathTooLongException
+    description: The fully qualified path is 260 or more characters.
   platform:
   - net-11
   - net-20
@@ -299,18 +372,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the  object with the file name and additional exception information.
+  remarks: For a list of common I/O tasks, see [Common I/O Tasks](../Topic/Common%20I-O%20Tasks.md).
   syntax:
     content: public virtual void GetObjectData (System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context);
     parameters:
     - id: info
       type: System.Runtime.Serialization.SerializationInfo
-      description: To be added.
+      description: The  that holds the serialized object data about the exception being thrown.
     - id: context
       type: System.Runtime.Serialization.StreamingContext
-      description: To be added.
+      description: The <xref:System.Runtime.Serialization.StreamingContext> that contains contextual information about the source or destination.
   overload: System.IO.FileSystemInfo.GetObjectData*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -327,14 +401,26 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the time the current file or directory was last accessed.
+  remarks: "**Note** This method may return an inaccurate value, because it uses native functions whose values may not be continuously updated by the operating system.  \n  \n If the file described in the <xref:System.IO.FileSystemInfo> object does not exist, this property will return 12:00 midnight, January 1, 1601 A.D. (C.E.) Coordinated Universal Time (UTC), adjusted to local time.  \n  \n The value of the <xref:System.IO.FileSystemInfo.LastAccessTimeUtc%2A> property is pre-cached if the current instance of the <xref:System.IO.FileSystemInfo> object was returned from any of the following <xref:System.IO.DirectoryInfo> methods:  \n  \n-   <xref:System.IO.DirectoryInfo.GetDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFileSystemInfos%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFileSystemInfos%2A>  \n  \n To get the latest value, call the <xref:System.IO.FileSystemInfo.Refresh%2A> method."
+  example:
+  - "The following code example demonstrates the updating of the LastAccessTime property through a \"touch\" operation. In this example, the file is \"touched\", updating the <xref:System.IO.FileSystemInfo.CreationTime%2A>, LastAccessTime and <xref:System.IO.FileSystemInfo.LastWriteTime%2A> properties to the current date and time.  \n  \n [!code-cs[System.IO.FileSystemInfo_touch#00](../../add/codesnippet/CSharp/p-system.io.filesystemin_2_1.cs)]\n [!code-vb[System.IO.FileSystemInfo_touch#00](../../add/codesnippet/VisualBasic/p-system.io.filesystemin_2_1.vb)]"
   syntax:
     content: public DateTime LastAccessTime { get; set; }
     return:
       type: System.DateTime
-      description: To be added.
+      description: The time that the current file or directory was last accessed.
   overload: System.IO.FileSystemInfo.LastAccessTime*
+  exceptions:
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: <xref:System.IO.FileSystemInfo.Refresh%2A> cannot initialize the data.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: The current operating system is not Windows NT or later.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The caller attempts to set an invalid access time
   platform:
   - net-11
   - net-20
@@ -351,14 +437,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the time, in coordinated universal time (UTC), that the current file or directory was last accessed.
+  remarks: "**Note** This method may return an inaccurate value, because it uses native functions whose values may not be continuously updated by the operating system.  \n  \n The value of the LastAccessTimeUtc property is pre-cached if the current instance of the <xref:System.IO.FileSystemInfo> object was returned from any of the following <xref:System.IO.DirectoryInfo> methods:  \n  \n-   <xref:System.IO.DirectoryInfo.GetDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFileSystemInfos%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFileSystemInfos%2A>  \n  \n To get the latest value, call the <xref:System.IO.FileSystemInfo.Refresh%2A> method.  \n  \n If the file described in the <xref:System.IO.FileSystemInfo> object does not exist, this property will return 12:00 midnight, January 1, 1601 A.D. (C.E.) Coordinated Universal Time (UTC).  \n  \n For a list of common I/O tasks, see [Common I/O Tasks](../Topic/Common%20I-O%20Tasks.md)."
   syntax:
     content: public DateTime LastAccessTimeUtc { get; set; }
     return:
       type: System.DateTime
-      description: To be added.
+      description: The UTC time that the current file or directory was last accessed.
   overload: System.IO.FileSystemInfo.LastAccessTimeUtc*
+  exceptions:
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: <xref:System.IO.FileSystemInfo.Refresh%2A> cannot initialize the data.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: The current operating system is not Windows NT or later.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The caller attempts to set an invalid access time.
   platform:
   - net-11
   - net-20
@@ -375,14 +471,26 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the time when the current file or directory was last written to.
+  remarks: "**Note** This method may return an inaccurate value, because it uses native functions whose values may not be continuously updated by the operating system.  \n  \n The value of the LastWriteTime property is pre-cached if the current instance of the <xref:System.IO.FileSystemInfo> object was returned from any of the following <xref:System.IO.DirectoryInfo> methods:  \n  \n-   <xref:System.IO.DirectoryInfo.GetDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFileSystemInfos%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFileSystemInfos%2A>  \n  \n To get the latest value, call the <xref:System.IO.FileSystemInfo.Refresh%2A> method.  \n  \n If the file described in the <xref:System.IO.FileSystemInfo> object does not exist, this property will return 12:00 midnight, January 1, 1601 A.D. (C.E.) Coordinated Universal Time (UTC), adjusted to local time.  \n  \n This property value is `null` if the file system containing the file does not support this information."
+  example:
+  - "The following code example demonstrates the updating of the LastWriteTime property through a \"touch\" operation. In this example, the file is \"touched\", updating the <xref:System.IO.FileSystemInfo.CreationTime%2A>, <xref:System.IO.FileSystemInfo.LastAccessTime%2A> and LastWriteTime properties to the current date and time.  \n  \n [!code-cs[System.IO.FileSystemInfo_touch#00](../../add/codesnippet/CSharp/p-system.io.filesystemin_1_1.cs)]\n [!code-vb[System.IO.FileSystemInfo_touch#00](../../add/codesnippet/VisualBasic/p-system.io.filesystemin_1_1.vb)]"
   syntax:
     content: public DateTime LastWriteTime { get; set; }
     return:
       type: System.DateTime
-      description: To be added.
+      description: The time the current file was last written.
   overload: System.IO.FileSystemInfo.LastWriteTime*
+  exceptions:
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: <xref:System.IO.FileSystemInfo.Refresh%2A> cannot initialize the data.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: The current operating system is not Windows NT or later.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The caller attempts to set an invalid write time.
   platform:
   - net-11
   - net-20
@@ -399,14 +507,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the time, in coordinated universal time (UTC), when the current file or directory was last written to.
+  remarks: "**Note** This method may return an inaccurate value, because it uses native functions whose values may not be continuously updated by the operating system.  \n  \n The value of the LastWriteTimeUtc property is pre-cached if the current instance of the <xref:System.IO.FileSystemInfo> object was returned from any of the following <xref:System.IO.DirectoryInfo> methods:  \n  \n-   <xref:System.IO.DirectoryInfo.GetDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.GetFileSystemInfos%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateDirectories%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFiles%2A>  \n  \n-   <xref:System.IO.DirectoryInfo.EnumerateFileSystemInfos%2A>  \n  \n To get the latest value, call the <xref:System.IO.FileSystemInfo.Refresh%2A> method.  \n  \n If the file described in the <xref:System.IO.FileSystemInfo> object does not exist, this property will return 12:00 midnight, January 1, 1601 A.D. (C.E.) Coordinated Universal Time (UTC).  \n  \n This property value is `null` if the file system containing the file does not support this information."
   syntax:
     content: public DateTime LastWriteTimeUtc { get; set; }
     return:
       type: System.DateTime
-      description: To be added.
+      description: The UTC time when the current file was last written to.
   overload: System.IO.FileSystemInfo.LastWriteTimeUtc*
+  exceptions:
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: <xref:System.IO.FileSystemInfo.Refresh%2A> cannot initialize the data.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: The current operating system is not Windows NT or later.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The caller attempts to set an invalid write time.
   platform:
   - net-11
   - net-20
@@ -423,14 +541,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: For files, gets the name of the file. For directories, gets the name of the last directory in the hierarchy if a hierarchy exists. Otherwise, the  property gets the name of the directory.
+  remarks: "For a directory, `Name` returns only the name of the parent directory, such as Dir, not c:\\Dir. For a subdirectory, `Name` returns only the name of the subdirectory, such as Sub1, not c:\\Dir\\Sub1.  \n  \n For a file, `Name` returns only the file name and file name extension, such as MyFile.txt, not c:\\Dir\\Myfile.txt."
   syntax:
     content: public abstract string Name { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A string that is the name of the parent directory, the name of the last directory in the hierarchy, or the name of a file, including the file name extension.
   overload: System.IO.FileSystemInfo.Name*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -447,13 +566,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: The path originally specified by the user, whether relative or absolute.
+  remarks: For a list of common I/O tasks, see [Common I/O Tasks](../Topic/Common%20I-O%20Tasks.md).
   syntax:
     content: protected string OriginalPath;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -470,12 +590,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.IO
-  summary: To be added.
-  remarks: To be added.
+  summary: Refreshes the state of the object.
+  remarks: "`FileSystemInfo.Refresh` takes a snapshot of the file from the current file system. `Refresh` cannot correct the underlying file system even if the file system returns incorrect or outdated information. This can happen on platforms such as Windows 98.  \n  \n Calls must be made to `Refresh` before attempting to get the attribute information, or the information will be outdated."
   syntax:
     content: public void Refresh ();
     parameters: []
   overload: System.IO.FileSystemInfo.Refresh*
+  exceptions:
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: A device such as a disk drive is not ready.
   platform:
   - net-11
   - net-20
@@ -538,12 +662,6 @@ references:
   name: CreationTimeUtc
   nameWithType: FileSystemInfo.CreationTimeUtc
   fullName: System.IO.FileSystemInfo.CreationTimeUtc
-- uid: System.DateTime
-  parent: System
-  isExternal: true
-  name: DateTime
-  nameWithType: DateTime
-  fullName: System.DateTime
 - uid: System.IO.FileSystemInfo.Delete
   parent: System.IO.FileSystemInfo
   isExternal: false
@@ -580,114 +698,54 @@ references:
   name: FullName
   nameWithType: FileSystemInfo.FullName
   fullName: System.IO.FileSystemInfo.FullName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.FileSystemInfo.FullPath
   parent: System.IO.FileSystemInfo
   isExternal: false
   name: FullPath
   nameWithType: FileSystemInfo.FullPath
   fullName: System.IO.FileSystemInfo.FullPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.FileSystemInfo.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
   parent: System.IO.FileSystemInfo
   isExternal: false
   name: GetObjectData(SerializationInfo,StreamingContext)
   nameWithType: FileSystemInfo.GetObjectData(SerializationInfo,StreamingContext)
   fullName: System.IO.FileSystemInfo.GetObjectData(SerializationInfo,StreamingContext)
-- uid: System.Runtime.Serialization.SerializationInfo
-  parent: System.Runtime.Serialization
-  isExternal: false
-  name: SerializationInfo
-  nameWithType: SerializationInfo
-  fullName: System.Runtime.Serialization.SerializationInfo
-- uid: System.Runtime.Serialization.StreamingContext
-  parent: System.Runtime.Serialization
-  isExternal: true
-  name: StreamingContext
-  nameWithType: StreamingContext
-  fullName: System.Runtime.Serialization.StreamingContext
 - uid: System.IO.FileSystemInfo.LastAccessTime
   parent: System.IO.FileSystemInfo
   isExternal: false
   name: LastAccessTime
   nameWithType: FileSystemInfo.LastAccessTime
   fullName: System.IO.FileSystemInfo.LastAccessTime
-- uid: System.DateTime
-  parent: System
-  isExternal: true
-  name: DateTime
-  nameWithType: DateTime
-  fullName: System.DateTime
 - uid: System.IO.FileSystemInfo.LastAccessTimeUtc
   parent: System.IO.FileSystemInfo
   isExternal: false
   name: LastAccessTimeUtc
   nameWithType: FileSystemInfo.LastAccessTimeUtc
   fullName: System.IO.FileSystemInfo.LastAccessTimeUtc
-- uid: System.DateTime
-  parent: System
-  isExternal: true
-  name: DateTime
-  nameWithType: DateTime
-  fullName: System.DateTime
 - uid: System.IO.FileSystemInfo.LastWriteTime
   parent: System.IO.FileSystemInfo
   isExternal: false
   name: LastWriteTime
   nameWithType: FileSystemInfo.LastWriteTime
   fullName: System.IO.FileSystemInfo.LastWriteTime
-- uid: System.DateTime
-  parent: System
-  isExternal: true
-  name: DateTime
-  nameWithType: DateTime
-  fullName: System.DateTime
 - uid: System.IO.FileSystemInfo.LastWriteTimeUtc
   parent: System.IO.FileSystemInfo
   isExternal: false
   name: LastWriteTimeUtc
   nameWithType: FileSystemInfo.LastWriteTimeUtc
   fullName: System.IO.FileSystemInfo.LastWriteTimeUtc
-- uid: System.DateTime
-  parent: System
-  isExternal: true
-  name: DateTime
-  nameWithType: DateTime
-  fullName: System.DateTime
 - uid: System.IO.FileSystemInfo.Name
   parent: System.IO.FileSystemInfo
   isExternal: false
   name: Name
   nameWithType: FileSystemInfo.Name
   fullName: System.IO.FileSystemInfo.Name
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.FileSystemInfo.OriginalPath
   parent: System.IO.FileSystemInfo
   isExternal: false
   name: OriginalPath
   nameWithType: FileSystemInfo.OriginalPath
   fullName: System.IO.FileSystemInfo.OriginalPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.FileSystemInfo.Refresh
   parent: System.IO.FileSystemInfo
   isExternal: false

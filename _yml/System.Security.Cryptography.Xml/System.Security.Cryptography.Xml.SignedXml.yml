@@ -63,8 +63,10 @@ items:
   nameWithType: SignedXml
   fullName: System.Security.Cryptography.Xml.SignedXml
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a wrapper on a core XML signature object to facilitate creating XML signatures.
+  remarks: "The SignedXml class is the .NET Framework implementation of the World Wide Web Consortium (W3C) [XML Signature Syntax and Processing Specification](http://www.w3.org/TR/xmldsig-core/), also known as XMLDSIG (XML Digital Signature).  XMLDSIG is a standards-based, interoperable way to sign and verify all or part of an XML document or other data that is addressable from a Uniform Resource Identifier (URI).  \n  \n Use the SignedXml class whenever you need to share signed XML data between applications or organizations in a standard way.  Any data signed using this class can be verified by any conforming implementation of the W3C specification for XMLDSIG.  \n  \n The SignedXml class allows you to create the following three kinds of XML digital signatures:  \n  \n|Signature Type|Description|  \n|--------------------|-----------------|  \n|Enveloped signature|The signature is contained within the XML element being signed.|  \n|Enveloping signature|The signed XML is contained within the <`Signature`> element.|  \n|Internal detached signature|The signature and signed XML are in the same document, but neither element contains the other.|  \n  \n There is also a fourth kind of signature called an external detached signature which is when the data and signature are in separate XML documents. External detached signatures are not supported by the SignedXml class.  \n  \n## The structure of an  XML Signature  \n XMLDSIG creates a <`Signature`> element, which contains a digital signature of an XML document or other data that is addressable from a URI.  The <`Signature`> element can optionally contain information about where to find a key that will verify the signature and which cryptographic algorithm was used for signing. The basic structure is as follows:  \n  \n```xml  \n  \n<Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\">  \n    <SignedInfo>  \n      <CanonicalizationMethod Algorithm=\"http://www.w3.org/TR/2001/REC-xml-c14n-20010315\"/>  \n      <SignatureMethod Algorithm=\"http://www.w3.org/2000/09/xmldsig#rsa-sha1\"/>  \n      <Reference URI=\"\">  \n        <Transforms>  \n          <Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"/>  \n        </Transforms>  \n        <DigestMethod Algorithm=\"http://www.w3.org/2000/09/xmldsig#sha1\"/>  \n        <DigestValue>Base64EncodedValue==</DigestValue>  \n      </Reference>  \n    </SignedInfo>  \n    <SignatureValue>AnotherBase64EncodedValue===</SignatureValue>  \n  </Signature>  \n  \n```  \n  \n The main parts of this structure are:  \n  \n The <`CanonicalizationMethod`> element  \n Specifies the rules for rewriting the `Signature` element from XML/text into bytes for signature validation. The default value in the .NET Framework is http://www.w3.org/TR/2001/REC-xml-c14n-20010315, which identifies a trustworthy algorithm. This element is represented by the <xref:System.Security.Cryptography.Xml.SignedInfo.CanonicalizationMethod%2A?displayProperty=fullName> property.  \n  \n The <`SignatureMethod`> element  \n Specifies the algorithm used for signature generation and validation, which was applied to the <`Signature`> element to produce the value in <`SignatureValue`>. In the example above, the value http://www.w3.org/2000/09/xmldsig#rsa-sha1 identifies an RSA PKCS1 SHA-1 signature. This element is represented by the <xref:System.Security.Cryptography.Xml.SignedXml.SignatureMethod%2A> property.  \n  \n The <`SignatureValue`> element  \n Specifies the cryptographic signature for the <`Signature`> element. If this signature does not verify, then some portion of the <`Signature`> block was tampered with, and the document is considered invalid. As long as the <`CanonicalizationMethod`> value is trustworthy, this value is highly resistant to tampering. This element is represented by the <xref:System.Security.Cryptography.Xml.SignedXml.SignatureValue%2A> property.  \n  \n The `URI` attribute of the <`Reference`> element  \n Specifies a data object using a URI reference. This attribute is represented by the <xref:System.Security.Cryptography.Xml.Reference.Uri%2A?displayProperty=fullName> property.  \n  \n-   Not specifying the `URI` attribute, that is, setting the  <xref:System.Security.Cryptography.Xml.Reference.Uri%2A?displayProperty=fullName> property to `null`, means that the receiving application is expected to know the identity of the object. In most cases, a `null` URI will result in an exception being thrown. Do not use a `null` URI, unless your application is interoperating with a protocol which requires it.  \n  \n-   Setting the `URI` attribute to an empty string indicates that the root element of the document is being signed, a form of enveloped signature.  \n  \n-   If the value of `URI` attribute starts with #, then the value must resolve to an element in the current document. This form can be used with any of the supported signature types (enveloped signature, enveloping signature or internal detached signature).  \n  \n-   Anything else is considered an external resource detached signature and is not supported by the SignedXml class.  \n  \n The <`Transforms`> element  \n Contains an ordered list of <`Transform`> elements that describe how the signer obtained the data object that was digested. A transform algorithm is similar to the canonicalization method, but instead of rewriting the <`Signature`> element, it rewrites the content identified by the `URI` attribute of the <`Reference`> element. The <`Transforms`> element is represented by the <xref:System.Security.Cryptography.Xml.TransformChain> class.  \n  \n-   Each transform algorithm is defined as taking either XML (an XPath node-set) or bytes as input. If the format of the current data differs from the transform input requirements, conversion rules are applied.  \n  \n-   Each transform algorithm is defined as producing either XML or bytes as the output.  \n  \n-   If the output of the last transform algorithm is not defined in bytes (or no transforms were specified), then the canonicalization method http://www.w3.org/TR/2001/REC-xml-c14n-20010315 is used as an implicit transform (even if a different algorithm was specified in the <`CanonicalizationMethod`> element).  \n  \n-   A value of http://www.w3.org/2000/09/xmldsig#enveloped-signature for the transform algorithm encodes a rule which is interpreted as remove the <`Signature`> element from the document. Otherwise, a verifier of an enveloped signature will digest the document, including the signature, but the signer would have digested the document before the signature was applied, leading to different answers.  \n  \n The <`DigestMethod`> element  \n Identifies the digest (cryptographic hash) method to apply on the transformed content identified by the `URI` attribute of the <`Reference`> element. This is represented by the <xref:System.Security.Cryptography.Xml.Reference.DigestMethod%2A?displayProperty=fullName> property.  \n  \n## Choosing a canonicalization method  \n Unless interoperating with a specification which requires the use of a different value, we recommend that you use the default canonicalization method in the .NET Framework which is the XML-C14N 1.0 algorithm, whose value is http://www.w3.org/TR/2001/REC-xml-c14n-20010315. The XML-C14N 1.0 algorithm is required to be supported by all implementations of XMLDSIG, particularly as it is an implicit final transform to apply.  \n  \n There are versions of canonicalization algorithms which support preserving comments. Comment-preserving canonicalization methods are not recommended because they violate the \"sign what is seen\" principle. That is, the comments in a <`Signature`> element will not alter the processing logic for how the signature is performed, merely what the signature value is. When combined with a weak signature algorithm, allowing the comments to be included gives an attacker unnecessary freedom to force a hash collision, making a tampered document appear legitimate.  In the .NET Framework, only built-in canonicalizers are supported by default. To support additional or custom canonicalizers, see the <xref:System.Security.Cryptography.Xml.SignedXml.SafeCanonicalizationMethods%2A> property. If the document uses a canonicalization method that is not in the collection represented by the <xref:System.Security.Cryptography.Xml.SignedXml.SafeCanonicalizationMethods%2A> property, then the <xref:System.Security.Cryptography.Xml.SignedXml.CheckSignature%2A> method will return `false`.  \n  \n> [!NOTE]\n>  An extremely defensive application can remove any values it does not expect signers to use from the <xref:System.Security.Cryptography.Xml.SignedXml.SafeCanonicalizationMethods%2A> collection.  \n  \n## Are the Reference values safe from tampering?  \n Yes, the <`Reference`> values are safe from tampering.  The .NET framework verifies the <`SignatureValue`> computation before processing any of the <`Reference`> values and their associated transforms, and will abort early to avoid potentially malicious processing instructions.  \n  \n## Choosing the elements to sign  \n We recommend that you use the value of \"\" for the `URI` attribute (or set the <xref:System.Security.Cryptography.Xml.Reference.Uri%2A> property to an empty string), if possible. This means the whole document is considered for the digest computation, which means the whole document is protected from tampering.  \n  \n It is very common to see `URI` values in the form of anchors such as #foo, referring to an element whose ID attribute is \"foo\". Unfortunately, it is easy for this to be tampered with because this includes only the content of the target element, not the context. Abusing this distinction is known as XML Signature Wrapping (XSW).  \n  \n If your application considers comments to be semantic (which is not common when dealing with XML), then you should use \"#xpointer(/)\" instead of \"\", and \"#xpointer(id('foo'))\" instead of \"#foo\". The #xpointer versions are interpreted as including comments, while the shortname forms are excluding comments.  \n  \n If you need to accept documents which are only partially protected and you want to ensure that you are reading the same content that the signature protected, use the <xref:System.Security.Cryptography.Xml.SignedXml.GetIdElement%2A> method.  \n  \n## Security considerations about the KeyInfo element  \n The data in the optional <`KeyInfo`> element (that is, the <xref:System.Security.Cryptography.Xml.SignedXml.KeyInfo%2A> property), which contains a key to validate the signature,  should not be trusted.  \n  \n In particular, when the <xref:System.Security.Cryptography.Xml.SignedXml.KeyInfo%2A> value represents a bare RSA, DSA or ECDSA public key,  the document could have been tampered with, despite the <xref:System.Security.Cryptography.Xml.SignedXml.CheckSignature%2A> method reporting that the signature is valid.  This can happen because the entity doing the tampering just has to generate a new key and re-sign the tampered document with that new key. So, unless your application verifies that the public key is an expected value, the document should be treated as if it were tampered with. This requires that your application examine the public key embedded within the document and verify it against a list of known values for the document context. For example, if the document could be understood to be issued by a known user, you'd check the key against a list of known keys used by that user.  \n  \n You can also verify the key after processing the document by using the <xref:System.Security.Cryptography.Xml.SignedXml.CheckSignatureReturningKey%2A> method, instead of using the <xref:System.Security.Cryptography.Xml.SignedXml.CheckSignature%2A> method. But, for the optimal security, you should verify the key beforehand.  \n  \n Alternately, consider trying the user's registered public keys, rather than reading what's in the <`KeyInfo`> element.  \n  \n## Security considerations about the X509Data element  \n The optional <`X509Data`> element is a child of the <`KeyInfo`> element and contains one or more X509 certificates or identifiers for X509 certificates. The data in the <`X509Data`> element should also not be inherently trusted.  \n  \n When verifying a document with the embedded <`X509Data`> element, the .NET Framework verifies only that the data resolves to an X509 certificate whose public key can be successfully used to validate the document signature. Unlike calling the <xref:System.Security.Cryptography.Xml.SignedXml.CheckSignature%2A> method with the `verifySignatureOnly` parameter set to `false`, no revocation check is performed, no chain trust is checked, and no expiration is verified. Even if your application extracts the certificate itself and passes it to the <xref:System.Security.Cryptography.Xml.SignedXml.CheckSignature%2A> method with the `verifySignatureOnly` parameter set to `false`, that is still not sufficient validation to prevent document tampering. The certificate still needs to be verified as being appropriate for the document being signed.  \n  \n Using an embedded signing certificate can provide useful key rotation strategies, whether in the <`X509Data`> section or in the document content. When using this approach an application should extract the certificate manually and perform validation similar to:  \n  \n-   The certificate was issued directly or via a chain by a Certificate Authority (CA) whose public certificate is embedded in the application.  \n  \n     Using the OS-provided trust list without additional checks, such as a known subject name, is not sufficient to prevent tampering in SignedXml.  \n  \n-   The certificate is verified to have not been expired at the time of document signing (or “now” for near real-time document processing).  \n  \n-   For long-lived certificates issued by a CA which supports revocation, verify the certificate was not revoked.  \n  \n-   The certificate subject is verified as being appropriate to the current document.  \n  \n## Choosing the transform algorithm  \n If you are interoperating with a specification which has dictated specific values (such as XrML), then you need to follow the specification.  If you have an enveloped signature (such as when signing the whole document), then you need to use http://www.w3.org/2000/09/xmldsig#enveloped-signature (represented by the <xref:System.Security.Cryptography.Xml.XmlDsigEnvelopedSignatureTransform> class). You can specify the implicit XML-C14N transform as well, but it's not necessary.  For an enveloping or detached signature, no transforms are required. The implicit XML-C14N transform takes care of everything.  \n  \n With the security updated introduced by the [Microsoft Security Bulletin MS16-035](https://technet.microsoft.com/en-us/library/security/ms16-035.aspx), the .NET Framework has restricted what transforms can be used in document verification by default, with untrusted transforms causing <xref:System.Security.Cryptography.Xml.SignedXml.CheckSignature%2A> to always return `false`. In particular, transforms which require additional input (specified as child elements in the XML) are no longer allowed due to their susceptibility of abuse by malicious users. The W3C advises avoiding the XPath and XSLT transforms, which are the two main transforms affected by these restrictions.  \n  \n## The problem with external references  \n If an application does not verify that external references seem appropriate for the current context, they can be abused in ways that provide for many security vulnerabilities (including Denial of Service, Distributed Reflection Denial of Service, Information Disclosure, Signature Bypass, and Remote Code Execution). Even if an application were to validate the external reference URI, there would remain a problem of the resource being loaded twice: once when your application reads it, and once when SignedXml reads it. Since there’s no guarantee that the application read and document verify steps have the same content, the signature does not provide trustworthiness.  \n  \n Given the risks of external references, SignedXml will throw an exception when an external reference is encountered.  For more information about this issue, see [KB article 3148821](https://support.microsoft.com/en-us/kb/3148821)."
+  example:
+  - "The following code example shows how to sign and verify an entire XML document using an enveloped signature.  \n  \n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/CSharp/t-system.security.crypto_96_1.cs)]\n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/CPP/t-system.security.crypto_96_1.cpp)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/VisualBasic/t-system.security.crypto_96_1.vb)]  \n  \n The following code example shows how to sign and verify a single element of an XML document using an enveloping signature.  \n  \n [!code-cpp[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CPP/t-system.security.crypto_96_2.cpp)]\n [!code-cs[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CSharp/t-system.security.crypto_96_2.cs)]\n [!code-vb[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/VisualBasic/t-system.security.crypto_96_2.vb)]"
   syntax:
     content: public class SignedXml
   inheritance:
@@ -87,12 +89,15 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: ''
+  example:
+  - "The following code example shows how to sign and verify an entire XML document using an enveloped signature.  \n  \n [!code-cs[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/CSharp/m-system.security.crypto_88_1.cs)]\n [!code-vb[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_88_1.vb)]\n [!code-cpp[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/CPP/m-system.security.crypto_88_1.cpp)]  \n  \n The following code example shows how to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cpp[XMLDSIG - Signature - Detached#1](../../add/codesnippet/CPP/m-system.security.crypto_88_2.cpp)]\n [!code-cs[XMLDSIG - Signature - Detached#1](../../add/codesnippet/CSharp/m-system.security.crypto_88_2.cs)]\n [!code-vb[XMLDSIG - Signature - Detached#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_88_2.vb)]  \n  \n The following code example shows how to sign and verify a single element of an XML document using an enveloping signature.  \n  \n [!code-cpp[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CPP/m-system.security.crypto_88_3.cpp)]\n [!code-cs[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CSharp/m-system.security.crypto_88_3.cs)]\n [!code-vb[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_88_3.vb)]"
   syntax:
     content: public SignedXml ();
     parameters: []
   overload: System.Security.Cryptography.Xml.SignedXml.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -109,15 +114,21 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class from the specified XML document.
+  remarks: ''
+  example:
+  - "The following code example shows how to sign and verify an entire XML document using an enveloped signature.  \n  \n [!code-cs[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/CSharp/m-system.security.crypto_111_1.cs)]\n [!code-vb[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_111_1.vb)]\n [!code-cpp[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/CPP/m-system.security.crypto_111_1.cpp)]  \n  \n The following code example shows how to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cpp[XMLDSIG - Signature - Detached#1](../../add/codesnippet/CPP/m-system.security.crypto_111_2.cpp)]\n [!code-cs[XMLDSIG - Signature - Detached#1](../../add/codesnippet/CSharp/m-system.security.crypto_111_2.cs)]\n [!code-vb[XMLDSIG - Signature - Detached#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_111_2.vb)]  \n  \n The following code example shows how to sign and verify a single element of an XML document using an enveloping signature.  \n  \n [!code-cpp[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CPP/m-system.security.crypto_111_3.cpp)]\n [!code-cs[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CSharp/m-system.security.crypto_111_3.cs)]\n [!code-vb[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_111_3.vb)]"
   syntax:
     content: public SignedXml (System.Xml.XmlDocument document);
     parameters:
     - id: document
       type: System.Xml.XmlDocument
-      description: To be added.
+      description: The  object to use to initialize the new instance of .
   overload: System.Security.Cryptography.Xml.SignedXml.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The document parameter is .  \n  \n -or-  \n  \n The document parameter contains a null <xref:System.Xml.XmlDocument.DocumentElement%2A> property."
   platform:
   - net-11
   - net-20
@@ -134,15 +145,18 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class from the specified  object.
   syntax:
     content: public SignedXml (System.Xml.XmlElement elem);
     parameters:
     - id: elem
       type: System.Xml.XmlElement
-      description: To be added.
+      description: The  object to use to initialize the new instance of .
   overload: System.Security.Cryptography.Xml.SignedXml.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The elem parameter is .
   platform:
   - net-11
   - net-20
@@ -159,15 +173,18 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a  object to the list of objects to be signed.
+  remarks: "The AddObject method adds an <`Object`> element that represents an object to be signed to the <`Signature`> element of an XML digital signature.  \n  \n The AddObject method internally calls the <xref:System.Security.Cryptography.Xml.Signature.AddObject%2A> method of the <xref:System.Security.Cryptography.Xml.Signature> object encapsulated by the <xref:System.Security.Cryptography.Xml.SignedXml> object.  You can also add a <xref:System.Security.Cryptography.Xml.DataObject> object by directly calling the <xref:System.Security.Cryptography.Xml.Signature.AddObject%2A> method from the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property.  \n  \n For more information about XML digital signatures, see the XMLDSIG specification available at www.w3.org/TR/xmldsig-core/."
+  example:
+  - "The following code example computes and XML signature.  \n  \n [!code-cs[System.Security.Cryptography.XML.SignedXml-AddObject-AddReference#1](../../add/codesnippet/CSharp/cc2302c9-707b-486f-888b-_1.cs)]\n [!code-cpp[System.Security.Cryptography.XML.SignedXml-AddObject-AddReference#1](../../add/codesnippet/CPP/cc2302c9-707b-486f-888b-_1.cpp)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml-AddObject-AddReference#1](../../add/codesnippet/VisualBasic/cc2302c9-707b-486f-888b-_1.vb)]"
   syntax:
     content: public void AddObject (System.Security.Cryptography.Xml.DataObject dataObject);
     parameters:
     - id: dataObject
       type: System.Security.Cryptography.Xml.DataObject
-      description: To be added.
+      description: The  object to add to the list of objects to be signed.
   overload: System.Security.Cryptography.Xml.SignedXml.AddObject*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -184,15 +201,18 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a  object to the  object that describes a digest method, digest value, and transform to use for creating an XML digital signature.
+  remarks: "The AddReference method adds a <`Reference`> element to the <xref:System.Security.Cryptography.Xml.SignedXml> object that describes a digest method, digest value, and transform to use for creating an XML digital signature.  The <`Reference`> element is a subelement of the <`SignedInfo`> element.  \n  \n The AddReference method internally calls the <xref:System.Security.Cryptography.Xml.SignedInfo.AddReference%2A> method of the <xref:System.Security.Cryptography.Xml.SignedInfo> object encapsulated by the <xref:System.Security.Cryptography.Xml.SignedXml> object.  You can also add a <xref:System.Security.Cryptography.Xml.Reference> object by directly calling the <xref:System.Security.Cryptography.Xml.SignedInfo.AddReference%2A> method from the <xref:System.Security.Cryptography.Xml.SignedXml.SignedInfo%2A> property.  \n  \n For more information about XML digital signatures, see the XMLDSIG specification available at www.w3.org/TR/xmldsig-core/."
+  example:
+  - "The following code example shows how to sign and verify an entire XML document using an enveloped signature.  \n  \n [!code-cs[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/CSharp/86d65b61-ebc7-4a08-b833-_1.cs)]\n [!code-vb[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/VisualBasic/86d65b61-ebc7-4a08-b833-_1.vb)]\n [!code-cpp[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/CPP/86d65b61-ebc7-4a08-b833-_1.cpp)]  \n  \n The following code example shows how to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cpp[XMLDSIG - Signature - Detached#1](../../add/codesnippet/CPP/86d65b61-ebc7-4a08-b833-_2.cpp)]\n [!code-cs[XMLDSIG - Signature - Detached#1](../../add/codesnippet/CSharp/86d65b61-ebc7-4a08-b833-_2.cs)]\n [!code-vb[XMLDSIG - Signature - Detached#1](../../add/codesnippet/VisualBasic/86d65b61-ebc7-4a08-b833-_2.vb)]  \n  \n The following code example shows how to sign and verify a single element of an XML document using an enveloping signature.  \n  \n [!code-cpp[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CPP/86d65b61-ebc7-4a08-b833-_3.cpp)]\n [!code-cs[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CSharp/86d65b61-ebc7-4a08-b833-_3.cs)]\n [!code-vb[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/VisualBasic/86d65b61-ebc7-4a08-b833-_3.vb)]"
   syntax:
     content: public void AddReference (System.Security.Cryptography.Xml.Reference reference);
     parameters:
     - id: reference
       type: System.Security.Cryptography.Xml.Reference
-      description: To be added.
+      description: The   object that describes a digest method, digest value, and transform to use for creating an XML digital signature.
   overload: System.Security.Cryptography.Xml.SignedXml.AddReference*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -209,15 +229,21 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property verifies using the public key in the signature.
+  remarks: "This method also computes the digest of the references and the value of the signature.  \n  \n If an XML document was signed with an X.509 signature, the CheckSignature method will search the \"AddressBook\" store for certificates suitable for the verification. For example, if the certificate is referenced by a Subject Key Identifier (SKI), the <xref:System.Security.Cryptography.Xml.SignedXml.CheckSignature%2A> method will select certificates with this SKI and try them one after another until it can verify the certificate."
+  example:
+  - "The following code example shows how to sign and verify an entire XML document using an enveloped signature.  \n  \n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/CSharp/m-system.security.crypto_17_1.cs)]\n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/CPP/m-system.security.crypto_17_1.cpp)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_17_1.vb)]  \n  \n The following code example shows how to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Detached#1](../../add/codesnippet/CPP/m-system.security.crypto_17_2.cpp)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Detached#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_17_2.vb)]\n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Detached#1](../../add/codesnippet/CSharp/m-system.security.crypto_17_2.cs)]  \n  \n The following code example shows how to sign and verify a single element of an XML document using an enveloping signature.  \n  \n [!code-cpp[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CPP/m-system.security.crypto_17_3.cpp)]\n [!code-cs[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CSharp/m-system.security.crypto_17_3.cs)]\n [!code-vb[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_17_3.vb)]"
   syntax:
     content: public bool CheckSignature ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property verifies; otherwise, .
   overload: System.Security.Cryptography.Xml.SignedXml.CheckSignature*
+  exceptions:
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: "The <xref:System.Security.Cryptography.AsymmetricAlgorithm.SignatureAlgorithm%2A> property of the public key in the signature does not match the <xref:System.Security.Cryptography.Xml.SignedXml.SignatureMethod%2A> property.  \n  \n -or-  \n  \n The signature description could not be created.  \n  \n -or  \n  \n The hash algorithm could not be created."
   platform:
   - net-11
   - net-20
@@ -234,18 +260,27 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property verifies for the specified key.
+  remarks: ''
+  example:
+  - "The following code example shows how to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Detached#1](../../add/codesnippet/CPP/3bad083a-16aa-4e4b-9114-_1.cpp)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Detached#1](../../add/codesnippet/VisualBasic/3bad083a-16aa-4e4b-9114-_1.vb)]\n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Detached#1](../../add/codesnippet/CSharp/3bad083a-16aa-4e4b-9114-_1.cs)]  \n  \n The following code example shows how to sign and verify an entire XML document using an enveloped signature.  \n  \n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/CSharp/3bad083a-16aa-4e4b-9114-_2.cs)]\n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/CPP/3bad083a-16aa-4e4b-9114-_2.cpp)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/VisualBasic/3bad083a-16aa-4e4b-9114-_2.vb)]"
   syntax:
     content: public bool CheckSignature (System.Security.Cryptography.AsymmetricAlgorithm key);
     parameters:
     - id: key
       type: System.Security.Cryptography.AsymmetricAlgorithm
-      description: To be added.
+      description: The implementation of the  property that holds the key to be used to verify the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property verifies for the specified key; otherwise, .
   overload: System.Security.Cryptography.Xml.SignedXml.CheckSignature*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The key parameter is .
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: "The <xref:System.Security.Cryptography.AsymmetricAlgorithm.SignatureAlgorithm%2A> property of the key parameter does not match the <xref:System.Security.Cryptography.Xml.SignedXml.SignatureMethod%2A> property.  \n  \n -or-  \n  \n The signature description could not be created.  \n  \n -or  \n  \n The hash algorithm could not be created."
   platform:
   - net-11
   - net-20
@@ -262,18 +297,27 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property verifies for the specified message authentication code (MAC) algorithm.
+  remarks: ''
+  example:
+  - "The following code example shows how to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Detached#1](../../add/codesnippet/CSharp/90ca4404-0fd2-4d7f-a2b2-_1.cs)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Detached#1](../../add/codesnippet/VisualBasic/90ca4404-0fd2-4d7f-a2b2-_1.vb)]\n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Detached#1](../../add/codesnippet/CPP/90ca4404-0fd2-4d7f-a2b2-_1.cpp)]  \n  \n The following code example shows how to sign and verify an entire XML document using an enveloping signature.  \n  \n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Envelope#1](../../add/codesnippet/CSharp/90ca4404-0fd2-4d7f-a2b2-_2.cs)]\n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Envelope#1](../../add/codesnippet/CPP/90ca4404-0fd2-4d7f-a2b2-_2.cpp)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Envelope#1](../../add/codesnippet/VisualBasic/90ca4404-0fd2-4d7f-a2b2-_2.vb)]"
   syntax:
     content: public bool CheckSignature (System.Security.Cryptography.KeyedHashAlgorithm macAlg);
     parameters:
     - id: macAlg
       type: System.Security.Cryptography.KeyedHashAlgorithm
-      description: To be added.
+      description: The implementation of  that holds the MAC to be used to verify the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property verifies for the specified MAC; otherwise, .
   overload: System.Security.Cryptography.Xml.SignedXml.CheckSignature*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The macAlg parameter is .
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: "The <xref:System.Security.Cryptography.HashAlgorithm.HashSize%2A> property of the specified  object is not valid.  \n  \n -or-  \n  \n The <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property is .  \n  \n -or-  \n  \n The cryptographic transform used to check the signature could not be created."
   platform:
   - net-11
   - net-20
@@ -290,21 +334,30 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property verifies for the specified  object and, optionally, whether the certificate is valid.
+  remarks: "In version 1.1 of the .NET Framework, the X.509 certificate is not verified.  In version 2.0 and later, the X.509 certificate is verified.  \n  \n In version 2.0 and later of the .NET Framework, the CheckSignature method will search the \"AddressBook\" store for certificates suitable for the verification. For example, if the certificate is referenced by a Subject Key Identifier (SKI), the CheckSignature method will select certificates with this SKI and try them one after another until it can verify the certificate."
+  example:
+  - "The following code example uses an X.509 certificate from a certificate store to sign and verify an XML document.  \n  \n [!code-vb[Security.Cryptography.Xml.SignedXml.CheckSignature(X509Certificate2,Boolean)#1](../../add/codesnippet/VisualBasic/e51a3b72-eabb-4d0b-b51a-_1.vb)]\n [!code-cs[Security.Cryptography.Xml.SignedXml.CheckSignature(X509Certificate2,Boolean)#1](../../add/codesnippet/CSharp/e51a3b72-eabb-4d0b-b51a-_1.cs)]"
   syntax:
     content: public bool CheckSignature (System.Security.Cryptography.X509Certificates.X509Certificate2 certificate, bool verifySignatureOnly);
     parameters:
     - id: certificate
       type: System.Security.Cryptography.X509Certificates.X509Certificate2
-      description: To be added.
+      description: The  object to use to verify the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property.
     - id: verifySignatureOnly
       type: System.Boolean
-      description: To be added.
+      description: "\n     to verify the signature only;  to verify both the signature and certificate."
     return:
       type: System.Boolean
-      description: To be added.
+      description: "if the signature is valid; otherwise, .  \n  \n -or-  \n  \n  if the signature and certificate are valid; otherwise, ."
   overload: System.Security.Cryptography.Xml.SignedXml.CheckSignature*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The certificate parameter is .
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: A signature description could not be created for the certificate parameter.
   platform:
   - net-11
   - net-20
@@ -321,18 +374,27 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property verifies using the public key in the signature.
+  remarks: ''
+  example:
+  - "The following code example shows how to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cpp[System.Security.Cryptography.XML.SignedXML_CheckReturnValue_Detached#1](../../add/codesnippet/CPP/193181f3-8100-4b63-8720-_1.cpp)]\n [!code-cs[System.Security.Cryptography.XML.SignedXML_CheckReturnValue_Detached#1](../../add/codesnippet/CSharp/193181f3-8100-4b63-8720-_1.cs)]\n [!code-vb[System.Security.Cryptography.XML.SignedXML_CheckReturnValue_Detached#1](../../add/codesnippet/VisualBasic/193181f3-8100-4b63-8720-_1.vb)]  \n  \n The following code example shows how to sign and verify an entire XML document using an enveloping signature.  \n  \n [!code-cpp[System.Security.Cryptography.XML.SignedXML_CheckReturnValue_Envelope#1](../../add/codesnippet/CPP/193181f3-8100-4b63-8720-_2.cpp)]\n [!code-cs[System.Security.Cryptography.XML.SignedXML_CheckReturnValue_Envelope#1](../../add/codesnippet/CSharp/193181f3-8100-4b63-8720-_2.cs)]\n [!code-vb[System.Security.Cryptography.XML.SignedXML_CheckReturnValue_Envelope#1](../../add/codesnippet/VisualBasic/193181f3-8100-4b63-8720-_2.vb)]"
   syntax:
     content: public bool CheckSignatureReturningKey (out System.Security.Cryptography.AsymmetricAlgorithm signingKey);
     parameters:
     - id: signingKey
       type: System.Security.Cryptography.AsymmetricAlgorithm
-      description: To be added.
+      description: When this method returns, contains the implementation of  that holds the public key in the signature. This parameter is passed uninitialized.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property verifies using the public key in the signature; otherwise, .
   overload: System.Security.Cryptography.Xml.SignedXml.CheckSignatureReturningKey*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The signingKey parameter is null.
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: "The <xref:System.Security.Cryptography.AsymmetricAlgorithm.SignatureAlgorithm%2A> property of the public key in the signature does not match the <xref:System.Security.Cryptography.Xml.SignedXml.SignatureMethod%2A> property.  \n  \n -or-  \n  \n The signature description could not be created.  \n  \n -or  \n  \n The hash algorithm could not be created."
   platform:
   - net-11
   - net-20
@@ -349,12 +411,18 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Computes an XML digital signature.
+  remarks: "The ComputeSignature method creates an XML digital signature and constructs many of the XML elements needed.  \n  \n You must set the data to be signed and the <xref:System.Security.Cryptography.Xml.SignedXml.SigningKey%2A> property before calling this method."
+  example:
+  - "The following code example shows how to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cs[System.Security.Cryptography.XML-XMLDsigDetached#1](../../add/codesnippet/CSharp/m-system.security.crypto_74_1.cs)]\n [!code-vb[System.Security.Cryptography.XML-XMLDsigDetached#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_74_1.vb)]\n [!code-cpp[System.Security.Cryptography.XML-XMLDsigDetached#1](../../add/codesnippet/CPP/m-system.security.crypto_74_1.cpp)]  \n  \n The following code example shows how to sign and verify an entire XML document using an enveloping signature.  \n  \n [!code-cs[System.Security.Cryptography.XML-XMLDsigEnvelope#1](../../add/codesnippet/CSharp/m-system.security.crypto_74_2.cs)]\n [!code-cpp[System.Security.Cryptography.XML-XMLDsigEnvelope#1](../../add/codesnippet/CPP/m-system.security.crypto_74_2.cpp)]\n [!code-vb[System.Security.Cryptography.XML-XMLDsigEnvelope#1](../../add/codesnippet/VisualBasic/m-system.security.crypto_74_2.vb)]"
   syntax:
     content: public void ComputeSignature ();
     parameters: []
   overload: System.Security.Cryptography.Xml.SignedXml.ComputeSignature*
+  exceptions:
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: "The <xref:System.Security.Cryptography.Xml.SignedXml.SigningKey%2A> property is .  \n  \n -or-  \n  \n The <xref:System.Security.Cryptography.Xml.SignedXml.SigningKey%2A> property is not a  object or  object.  \n  \n -or-  \n  \n The key could not be loaded."
   platform:
   - net-11
   - net-20
@@ -371,15 +439,24 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Computes an XML digital signature using the specified message authentication code (MAC) algorithm.
+  remarks: "The ComputeSignature method creates an XML digital signature using the specified MAC algorithm and constructs many of the XML elements needed.  \n  \n You must set the data to be signed before calling this method."
+  example:
+  - "The following code example shows how to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Detached#1](../../add/codesnippet/CSharp/a3e65477-6e59-4270-bb2f-_1.cs)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Detached#1](../../add/codesnippet/VisualBasic/a3e65477-6e59-4270-bb2f-_1.vb)]\n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Detached#1](../../add/codesnippet/CPP/a3e65477-6e59-4270-bb2f-_1.cpp)]  \n  \n The following code example shows how to sign and verify an entire XML document using an enveloping signature.  \n  \n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Envelope#1](../../add/codesnippet/CSharp/a3e65477-6e59-4270-bb2f-_2.cs)]\n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Envelope#1](../../add/codesnippet/CPP/a3e65477-6e59-4270-bb2f-_2.cpp)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-KeyedHash-Envelope#1](../../add/codesnippet/VisualBasic/a3e65477-6e59-4270-bb2f-_2.vb)]"
   syntax:
     content: public void ComputeSignature (System.Security.Cryptography.KeyedHashAlgorithm macAlg);
     parameters:
     - id: macAlg
       type: System.Security.Cryptography.KeyedHashAlgorithm
-      description: To be added.
+      description: A  object that holds the MAC to be used to compute the value of the <xref:System.Security.Cryptography.Xml.SignedXml.Signature%2A> property.
   overload: System.Security.Cryptography.Xml.SignedXml.ComputeSignature*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The macAlg parameter is .
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: "The  object specified by the macAlg parameter is not an instance of .  \n  \n -or-  \n  \n The <xref:System.Security.Cryptography.HashAlgorithm.HashSize%2A> property of the specified  object is not valid.  \n  \n -or-  \n  \n The cryptographic transform used to check the signature could not be created."
   platform:
   - net-11
   - net-20
@@ -396,14 +473,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets an  object that defines the XML encryption processing rules.
   syntax:
     content: public System.Security.Cryptography.Xml.EncryptedXml EncryptedXml { get; set; }
     return:
       type: System.Security.Cryptography.Xml.EncryptedXml
-      description: To be added.
+      description: An  object that defines the XML encryption processing rules.
   overload: System.Security.Cryptography.Xml.SignedXml.EncryptedXml*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -420,21 +497,21 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the  object with the specified ID from the specified  object.
   syntax:
     content: public virtual System.Xml.XmlElement GetIdElement (System.Xml.XmlDocument document, string idValue);
     parameters:
     - id: document
       type: System.Xml.XmlDocument
-      description: To be added.
+      description: The  object to retrieve the  object from.
     - id: idValue
       type: System.String
-      description: To be added.
+      description: The ID of the  object to retrieve from the  object.
     return:
       type: System.Xml.XmlElement
-      description: To be added.
+      description: The  object with the specified ID from the specified  object, or  if it could not be found.
   overload: System.Security.Cryptography.Xml.SignedXml.GetIdElement*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -451,15 +528,19 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the public key of a signature.
+  remarks: "The GetPublicKey method returns an <xref:System.Security.Cryptography.AsymmetricAlgorithm> object that contains a public key that can be used to verify an XML digital signature.  \n  \n The key must be either a <xref:System.Security.Cryptography.DSA> or an <xref:System.Security.Cryptography.RSA> key."
   syntax:
     content: protected virtual System.Security.Cryptography.AsymmetricAlgorithm GetPublicKey ();
     parameters: []
     return:
       type: System.Security.Cryptography.AsymmetricAlgorithm
-      description: To be added.
+      description: An  object that contains the public key of the signature, or  if the key cannot be found.
   overload: System.Security.Cryptography.Xml.SignedXml.GetPublicKey*
+  exceptions:
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: The <xref:System.Security.Cryptography.Xml.SignedXml.KeyInfo%2A> property is .
   platform:
   - net-11
   - net-20
@@ -476,15 +557,18 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the XML representation of a  object.
   syntax:
     content: public System.Xml.XmlElement GetXml ();
     parameters: []
     return:
       type: System.Xml.XmlElement
-      description: To be added.
+      description: The XML representation of the  object.
   overload: System.Security.Cryptography.Xml.SignedXml.GetXml*
+  exceptions:
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: "The <xref:System.Security.Cryptography.Xml.SignedXml.SignedInfo%2A> property is .  \n  \n -or-  \n  \n The <xref:System.Security.Cryptography.Xml.SignedXml.SignatureValue%2A> property is ."
   platform:
   - net-11
   - net-20
@@ -501,14 +585,17 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the  object of the current  object.
+  remarks: "The KeyInfo property represents the <`KeyInfo`> element of an XML digital signature using a <xref:System.Security.Cryptography.Xml.KeyInfo> object contained within the property.  The <`KeyInfo`> element is a subelement of the <`Signature`> element.  \n  \n Use the KeyInfo property to embed key-related information intended to help identify the key necessary for validating an XML document.  \n  \n For more information about the `<KeyInfo>` element, see the XMLDSIG specification, which is available at www.w3.org/TR/xmldsig-core/."
+  example:
+  - "The following code example uses the <xref:System.Security.Cryptography.Xml.KeyInfo> object when signing a resource represented by a Universal Resource Identifier (URI).  This example saves the signature in a new file.  \n  \n [!code-cs[System.Security.Cryptography.XML-XMLDsigDetached#1](../../add/codesnippet/CSharp/p-system.security.crypto_31_1.cs)]\n [!code-vb[System.Security.Cryptography.XML-XMLDsigDetached#1](../../add/codesnippet/VisualBasic/p-system.security.crypto_31_1.vb)]\n [!code-cpp[System.Security.Cryptography.XML-XMLDsigDetached#1](../../add/codesnippet/CPP/p-system.security.crypto_31_1.cpp)]  \n  \n The following code example uses the <xref:System.Security.Cryptography.Xml.KeyInfo> object when signing an XML document.  This example saves the signature in a new file.  \n  \n [!code-cs[System.Security.Cryptography.XML-XMLDsigEnvelope#1](../../add/codesnippet/CSharp/p-system.security.crypto_31_2.cs)]\n [!code-cpp[System.Security.Cryptography.XML-XMLDsigEnvelope#1](../../add/codesnippet/CPP/p-system.security.crypto_31_2.cpp)]\n [!code-vb[System.Security.Cryptography.XML-XMLDsigEnvelope#1](../../add/codesnippet/VisualBasic/p-system.security.crypto_31_2.vb)]"
   syntax:
     content: public System.Security.Cryptography.Xml.KeyInfo KeyInfo { get; set; }
     return:
       type: System.Security.Cryptography.Xml.KeyInfo
-      description: To be added.
+      description: The  object of the current  object.
   overload: System.Security.Cryptography.Xml.SignedXml.KeyInfo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -525,15 +612,24 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Loads a  state from an XML element.
+  remarks: ''
+  example:
+  - "The following code example shows how to use the LoadXml method to verify an XML document.  \n  \n [!code-cs[System.Security.Cryptography.XML-XMLDsigDetached#3](../../add/codesnippet/CSharp/m-system.security.crypto_14_1.cs)]\n [!code-vb[System.Security.Cryptography.XML-XMLDsigDetached#3](../../add/codesnippet/VisualBasic/m-system.security.crypto_14_1.vb)]\n [!code-cpp[System.Security.Cryptography.XML-XMLDsigDetached#3](../../add/codesnippet/CPP/m-system.security.crypto_14_1.cpp)]"
   syntax:
     content: public void LoadXml (System.Xml.XmlElement value);
     parameters:
     - id: value
       type: System.Xml.XmlElement
-      description: To be added.
+      description: The XML element to load the  state from.
   overload: System.Security.Cryptography.Xml.SignedXml.LoadXml*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The value parameter is .
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: "The value parameter does not contain a valid <xref:System.Security.Cryptography.Xml.SignedXml.SignatureValue%2A> property.  \n  \n -or-  \n  \n The value parameter does not contain a valid <xref:System.Security.Cryptography.Xml.SignedXml.SignedInfo%2A> property."
   platform:
   - net-11
   - net-20
@@ -550,13 +646,13 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the  object of the current  object.
   syntax:
     content: protected System.Security.Cryptography.Xml.Signature m_signature;
     return:
       type: System.Security.Cryptography.Xml.Signature
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -573,13 +669,13 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the name of the installed key to be used for signing the  object.
   syntax:
     content: protected string m_strSigningKeyName;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -596,14 +692,15 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the current  object.
+  remarks: The <xref:System.Xml.XmlResolver> class resolves external XML resources named by a Uniform Resource Identifier (URI). If you do not trust the source of the XML file, you might not want to allow the XML file to access computer resources named by the URI. You can use the Resolver property to control the level of access that XML files have to computer resources by specifying different <xref:System.Xml.XmlResolver> objects. If you do not want to allow any access, you can set this property to `null` (`Nothing` in Visual Basic).
   syntax:
     content: public System.Xml.XmlResolver Resolver { set; }
     return:
       type: System.Xml.XmlResolver
-      description: To be added.
+      description: The current  object. The defaults is a  object.
   overload: System.Security.Cryptography.Xml.SignedXml.Resolver*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -620,14 +717,15 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: "[Supported in the .NET Framework 4.5.1 and later versions]  \n  \n Gets the names of methods whose canonicalization algorithms are explicitly allowed."
+  remarks: Canonicalization methods convert an XML document to its canonical form. For more information about canonical XML, see [Canonical XML](http://www.w3.org/TR/xml-c14n) on the W3C website.
   syntax:
     content: public System.Collections.ObjectModel.Collection<string> SafeCanonicalizationMethods { get; }
     return:
       type: System.Collections.ObjectModel.Collection{System.String}
-      description: To be added.
+      description: A collection of the names of methods that safely produce canonical XML.
   overload: System.Security.Cryptography.Xml.SignedXml.SafeCanonicalizationMethods*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -644,14 +742,17 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object of the current  object.
+  remarks: "The Signature property represents the <`Signature`> element of an XML digital signature using a <xref:System.Security.Cryptography.Xml.Signature> object contained within the property.  The <`Signature`> element is the root element used for XML digital signature creation and verification.  \n  \n Use the Signature property to retrieve the <xref:System.Security.Cryptography.Xml.Signature> object used by the <xref:System.Security.Cryptography.Xml.SignedXml> object.  \n  \n For more information about the `<Signature>` element, see the XMLDSIG specification, which is available at www.w3.org/TR/xmldsig-core/."
+  example:
+  - "The following code example uses the Signature property to sign and verify an entire XML document using an enveloped signature.  \n  \n [!code-cs[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/CSharp/p-system.security.crypto_9_1.cs)]\n [!code-vb[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/VisualBasic/p-system.security.crypto_9_1.vb)]\n [!code-cpp[Cryptography.XML.Signature - Envelope#1](../../add/codesnippet/CPP/p-system.security.crypto_9_1.cpp)]  \n  \n The following code example uses the Signature property to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cpp[XMLDSIG - Signature - Detached#1](../../add/codesnippet/CPP/p-system.security.crypto_9_2.cpp)]\n [!code-cs[XMLDSIG - Signature - Detached#1](../../add/codesnippet/CSharp/p-system.security.crypto_9_2.cs)]\n [!code-vb[XMLDSIG - Signature - Detached#1](../../add/codesnippet/VisualBasic/p-system.security.crypto_9_2.vb)]"
   syntax:
     content: public System.Security.Cryptography.Xml.Signature Signature { get; }
     return:
       type: System.Security.Cryptography.Xml.Signature
-      description: To be added.
+      description: The  object of the current  object.
   overload: System.Security.Cryptography.Xml.SignedXml.Signature*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -668,14 +769,15 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a delegate that will be called to validate the format (not the cryptographic security) of an XML signature.
+  remarks: "This method can be used to ensure that only certain transforms are used, or that the signature uses a certain hash algorithm, and so on.  \n  \n Setting the property to `null` removes all signature format validation from the <xref:System.Security.Cryptography.Xml.SignedXml> object.  \n  \n You can also read the object's current delegate and chain to it if you want.  \n  \n If you are setting up a format validator, the delegate you supply will receive as an input parameter the <xref:System.Security.Cryptography.Xml.SignedXml> object being verified and returns a Boolean value – `true` if the format is acceptable, `false` if it is not. If the delegate returns `false` for any reason, the <xref:System.Security.Cryptography.Xml.SignedXml> object will report that the XML signature is not valid."
   syntax:
     content: public Func<System.Security.Cryptography.Xml.SignedXml,bool> SignatureFormatValidator { get; set; }
     return:
       type: System.Func{System.Security.Cryptography.Xml.SignedXml,System.Boolean}
-      description: To be added.
+      description: if the format is acceptable; otherwise, .
   overload: System.Security.Cryptography.Xml.SignedXml.SignatureFormatValidator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -692,14 +794,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the length of the signature for the current  object.
   syntax:
     content: public string SignatureLength { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The length of the signature for the current  object.
   overload: System.Security.Cryptography.Xml.SignedXml.SignatureLength*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -716,14 +818,15 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the signature method of the current  object.
+  remarks: "The SignatureMethod property represents the <`SignatureMethod`> element of an XML digital signature using a Uniform Resource Identifier (URI) string contained within the property. The <`SignatureMethod`> element is a subelement of the <`SignedInfo`> element.  \n  \n Use the SignatureMethod property to retrieve the <`SignatureMethod`> URI used by the <xref:System.Security.Cryptography.Xml.SignedXml> object. This property is read only. For more information about programmatically specifying a URI for the <`SignatureMethod`> element, see the <xref:System.Security.Cryptography.Xml.SignedInfo.SignatureMethod%2A> property.  \n  \n For more information about the `<SignatureMethod>` element, see the XMLDSIG specification, which is available at www.w3.org/TR/xmldsig-core/."
   syntax:
     content: public string SignatureMethod { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The signature method of the current  object.
   overload: System.Security.Cryptography.Xml.SignedXml.SignatureMethod*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -740,14 +843,15 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the signature value of the current  object.
+  remarks: "The SignatureValue property represents the <`SignatureValue`> element of an XML digital signature using an array of bytes contained within the property.  The <`SignatureValue`> element is a subelement of the <`Signature>` element.  \n  \n Use the SignatureValue property to retrieve the value of the XML digital signature.  This property is automatically populated when you make a successful call to the <xref:System.Security.Cryptography.Xml.SignedXml.ComputeSignature%2A> method.  \n  \n For more information about the `<SignatureValue>` element, see the XMLDSIG specification, which is available at www.w3.org/TR/xmldsig-core/."
   syntax:
     content: public byte[] SignatureValue { get; }
     return:
       type: System.Byte[]
-      description: To be added.
+      description: A byte array that contains the signature value of the current  object.
   overload: System.Security.Cryptography.Xml.SignedXml.SignatureValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -764,14 +868,15 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object of the current  object.
+  remarks: "The SignedInfo property represents the <`SignedInfo`> element of an XML digital signature using an array of bytes contained within the property.  The <`SignedInfo`> element is a subelement of the <`Signature>` element.  \n  \n Use the SignedInfo property to retrieve the <xref:System.Security.Cryptography.Xml.SignedInfo> object that is used by the <xref:System.Security.Cryptography.Xml.SignedXml> object to create an XML digital signature.  \n  \n For more information about the `<SignedInfo>` element, see the XMLDSIG specification, which is available at www.w3.org/TR/xmldsig-core/."
   syntax:
     content: public System.Security.Cryptography.Xml.SignedInfo SignedInfo { get; }
     return:
       type: System.Security.Cryptography.Xml.SignedInfo
-      description: To be added.
+      description: The  object of the current  object.
   overload: System.Security.Cryptography.Xml.SignedXml.SignedInfo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -788,14 +893,17 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the asymmetric algorithm key used for signing a  object.
+  remarks: Use the SigningKey property to specify the asymmetric key you want to use to create an XML digital signature.
+  example:
+  - "The following code example shows how to sign and verify an entire XML document using an enveloped signature.  \n  \n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/CSharp/p-system.security.crypto_40_1.cs)]\n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/CPP/p-system.security.crypto_40_1.cpp)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Envelope#1](../../add/codesnippet/VisualBasic/p-system.security.crypto_40_1.vb)]  \n  \n The following code example shows how to sign and verify a Uniform Resource Identifier (URI) addressable object using a detached signature.  \n  \n [!code-cpp[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Detached#1](../../add/codesnippet/CPP/p-system.security.crypto_40_2.cpp)]\n [!code-vb[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Detached#1](../../add/codesnippet/VisualBasic/p-system.security.crypto_40_2.vb)]\n [!code-cs[System.Security.Cryptography.XML.SignedXml.ComputeSig-Check-AsymetricAlg-Detached#1](../../add/codesnippet/CSharp/p-system.security.crypto_40_2.cs)]  \n  \n The following code example shows how to sign and verify a single element of an XML document using an enveloping signature.  \n  \n [!code-cpp[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CPP/p-system.security.crypto_40_3.cpp)]\n [!code-cs[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/CSharp/p-system.security.crypto_40_3.cs)]\n [!code-vb[Cryptography.XML.SignVerifyEnvelope - Specify Element#1](../../add/codesnippet/VisualBasic/p-system.security.crypto_40_3.vb)]"
   syntax:
     content: public System.Security.Cryptography.AsymmetricAlgorithm SigningKey { get; set; }
     return:
       type: System.Security.Cryptography.AsymmetricAlgorithm
-      description: To be added.
+      description: The asymmetric algorithm key used for signing the  object.
   overload: System.Security.Cryptography.Xml.SignedXml.SigningKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -812,14 +920,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the name of the installed key to be used for signing the  object.
   syntax:
     content: public string SigningKeyName { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The name of the installed key to be used for signing the  object.
   overload: System.Security.Cryptography.Xml.SignedXml.SigningKeyName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -836,13 +944,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the XML mode decryption transformation. This field is constant.
+  remarks: "The value of the XmlDecryptionTransformUrl field is \"http://www.w3.org/2002/07/decrypt#XML\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2002/07/decrypt#XML."
   syntax:
     content: public const string XmlDecryptionTransformUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -859,13 +968,16 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the base 64 transformation. This field is constant.
+  remarks: "The value of the XmlDsigBase64TransformUrl field is \"http://www.w3.org/2000/09/xmldsig#base64\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlDsigBase64Transform> class implements the transform described by the XmlDsigBase64TransformUrl field.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2000/09/xmldsig#base64."
+  example:
+  - "The following code example demonstrates how to use members of the <xref:System.Security.Cryptography.Xml.XmlDsigBase64Transform> class.  \n  \n [!code-cs[System.Security.Cryptography.Xml.XmlDsigBase64Transform#2](../../add/codesnippet/CSharp/f-system.security.crypto_0_1.cs)]\n [!code-vb[System.Security.Cryptography.Xml.XmlDsigBase64Transform#2](../../add/codesnippet/VisualBasic/f-system.security.crypto_0_1.vb)]\n [!code-cpp[System.Security.Cryptography.Xml.XmlDsigBase64Transform#2](../../add/codesnippet/CPP/f-system.security.crypto_0_1.cpp)]"
   syntax:
     content: public const string XmlDsigBase64TransformUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -882,13 +994,16 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the Canonical XML transformation. This field is constant.
+  remarks: "The value of the XmlDsigC14NTransformUrl field is \"http://www.w3.org/TR/2001/REC-xml-c14n-20010315\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlDsigC14NTransform> class implements the transform described by the XmlDsigC14NTransformUrl field.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/TR/2001/REC-xml-c14n-20010315.  \n  \n This field has the same value as the <xref:System.Security.Cryptography.Xml.SignedXml.XmlDsigCanonicalizationUrl> field."
+  example:
+  - "The following code example demonstrates how to call members of the <xref:System.Security.Cryptography.Xml.XmlDsigC14NTransform> class.  \n  \n [!code-cpp[System.Security.Cryptography.XML.XMLDsigC14NTransform#2](../../add/codesnippet/CPP/f-system.security.crypto_4_1.cpp)]\n [!code-cs[System.Security.Cryptography.XML.XMLDsigC14NTransform#2](../../add/codesnippet/CSharp/f-system.security.crypto_4_1.cs)]\n [!code-vb[System.Security.Cryptography.XML.XMLDsigC14NTransform#2](../../add/codesnippet/VisualBasic/f-system.security.crypto_4_1.vb)]"
   syntax:
     content: public const string XmlDsigC14NTransformUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -905,13 +1020,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the Canonical XML transformation, with comments. This field is constant.
+  remarks: "The value of the XmlDsigC14NWithCommentsTransformUrl field is \"http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments \".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlDsigC14NWithCommentsTransform> class implements the transform described by the XmlDsigC14NWithCommentsTransformUrl field.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments.  \n  \n This field has the same value as the <xref:System.Security.Cryptography.Xml.SignedXml.XmlDsigCanonicalizationWithCommentsUrl> field."
   syntax:
     content: public const string XmlDsigC14NWithCommentsTransformUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -928,13 +1044,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard canonicalization algorithm for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigCanonicalizationUrl field is \"http://www.w3.org/TR/2001/REC-xml-c14n-20010315\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlDsigC14NTransform> class implements the transform described by the XmlDsigCanonicalizationUrl field.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/TR/2001/REC-xml-c14n-20010315.  \n  \n This field has the same value as the <xref:System.Security.Cryptography.Xml.SignedXml.XmlDsigC14NTransformUrl> field."
   syntax:
     content: public const string XmlDsigCanonicalizationUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -951,13 +1068,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard canonicalization algorithm for XML digital signatures and includes comments. This field is constant.
+  remarks: "The value of the XmlDsigCanonicalizationWithCommentsUrl field is \"http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlDsigC14NWithCommentsTransform> class implements the transform described by the XmlDsigCanonicalizationWithCommentsUrl field.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments.  \n  \n This field has the same value as the <xref:System.Security.Cryptography.Xml.SignedXml.XmlDsigC14NWithCommentsTransformUrl> field."
   syntax:
     content: public const string XmlDsigCanonicalizationWithCommentsUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -974,13 +1092,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard  algorithm for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigDSAUrl field is \"http://www.w3.org/2000/09/xmldsig#dsa-sha1\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2000/09/xmldsig#dsa-sha1."
   syntax:
     content: public const string XmlDsigDSAUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -997,13 +1116,16 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for enveloped signature transformation. This field is constant.
+  remarks: "The value of the XmlDsigEnvelopedSignatureTransformUrl field is \"http://www.w3.org/2000/09/xmldsig#enveloped-signature\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlDsigEnvelopedSignatureTransform> class implements the transform described by the XmlDsigEnvelopedSignatureTransformUrl field.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2000/09/xmldsig#enveloped-signature."
+  example:
+  - "The following code example demonstrates how to use members of the <xref:System.Security.Cryptography.Xml.XmlDsigEnvelopedSignatureTransform> class.  \n  \n [!code-cs[System.Security.Cryptography.Xml.XmlDsigEnvelopedSignatureTransform#2](../../add/codesnippet/CSharp/62dc9f7e-cdc8-4569-bf73-_1.cs)]\n [!code-cpp[System.Security.Cryptography.Xml.XmlDsigEnvelopedSignatureTransform#2](../../add/codesnippet/CPP/62dc9f7e-cdc8-4569-bf73-_1.cpp)]\n [!code-vb[System.Security.Cryptography.Xml.XmlDsigEnvelopedSignatureTransform#2](../../add/codesnippet/VisualBasic/62dc9f7e-cdc8-4569-bf73-_1.vb)]"
   syntax:
     content: public const string XmlDsigEnvelopedSignatureTransformUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1020,13 +1142,16 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for exclusive XML canonicalization. This field is constant.
+  remarks: "The value of the XmlDsigExcC14NTransformUrl field is \"http://www.w3.org/2001/10/xml-exc-c14n#\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlDsigExcC14NTransform> class implements the transform described by the XmlDsigExcC14NTransformUrl field.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2001/10/xml-exc-c14n#."
+  example:
+  - "The following code example shows how to sign and verify an XML document using the <xref:System.Security.Cryptography.Xml.XmlDsigExcC14NTransform> class.  This sample creates an envelope signature.  \n  \n [!code-cs[Cryptography.Xml.XmlDsigExcC14NTransform#1](../../add/codesnippet/CSharp/f-system.security.crypto_9_1.cs)]\n [!code-cpp[Cryptography.Xml.XmlDsigExcC14NTransform#1](../../add/codesnippet/CPP/f-system.security.crypto_9_1.cpp)]\n [!code-vb[Cryptography.Xml.XmlDsigExcC14NTransform#1](../../add/codesnippet/VisualBasic/f-system.security.crypto_9_1.vb)]"
   syntax:
     content: public const string XmlDsigExcC14NTransformUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1043,13 +1168,16 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for exclusive XML canonicalization, with comments. This field is constant.
+  remarks: "The value of the XmlDsigExcC14NWithCommentsTransformUrl field is \"http://www.w3.org/2001/10/xml-exc-c14n#WithComments\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlDsigExcC14NWithCommentsTransform> class implements the transform described by the XmlDsigExcC14NWithCommentsTransformUrl field.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2001/10/xml-exc-c14n#WithComments."
+  example:
+  - "The following code example shows how to sign and verify an XML document using the <xref:System.Security.Cryptography.Xml.XmlDsigExcC14NWithCommentsTransform> class.  This sample creates an envelope signature.  \n  \n [!code-cs[Cryptography.Xml.XmlDsigExcC14NWithCommentsTransform#1](../../add/codesnippet/CSharp/15045a8f-c740-45e0-8c9c-_1.cs)]\n [!code-cpp[Cryptography.Xml.XmlDsigExcC14NWithCommentsTransform#1](../../add/codesnippet/CPP/15045a8f-c740-45e0-8c9c-_1.cpp)]\n [!code-vb[Cryptography.Xml.XmlDsigExcC14NWithCommentsTransform#1](../../add/codesnippet/VisualBasic/15045a8f-c740-45e0-8c9c-_1.vb)]"
   syntax:
     content: public const string XmlDsigExcC14NWithCommentsTransformUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1066,13 +1194,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard  algorithm for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigHMACSHA1Url field is \"http://www.w3.org/2000/09/xmldsig#hmac-sha1\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2000/09/xmldsig#hmac-sha1."
   syntax:
     content: public const string XmlDsigHMACSHA1Url;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1089,13 +1218,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard minimal canonicalization algorithm for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigMinimalCanonicalizationUrl field is \"http://www.w3.org/2000/09/xmldsig#minimal\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2000/09/xmldsig#minimal."
   syntax:
     content: public const string XmlDsigMinimalCanonicalizationUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1112,13 +1242,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard namespace for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigNamespaceUrl field is \"http://www.w3.org/2000/09/xmldsig#\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2000/09/xmldsig#."
   syntax:
     content: public const string XmlDsigNamespaceUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1135,13 +1266,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard  signature method for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigRSASHA1Url field is \"http://www.w3.org/2000/09/xmldsig#rsa-sha1\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2000/09/xmldsig#rsa-sha1."
   syntax:
     content: public const string XmlDsigRSASHA1Url;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1158,13 +1290,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the   SHA-256 signature method variation for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigRSASHA256Url field is \"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at [http://www.w3.org/2001/04/xmldsig-more#rsa-sha256](http://www.w3.org/2001/04/xmldsig-more)."
   syntax:
     content: public const string XmlDsigRSASHA256Url;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1181,13 +1314,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the   SHA-384 signature method variation for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigRSASHA384Url field is \"http://www.w3.org/2001/04/xmldsig-more#rsa-sha384\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at [http://www.w3.org/2001/04/xmldsig-more#rsa-sha384](http://www.w3.org/2001/04/xmldsig-more#rsa-sha384)."
   syntax:
     content: public const string XmlDsigRSASHA384Url;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1204,13 +1338,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the   SHA-512 signature method variation for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigRSASHA512Url field is \"http://www.w3.org/2001/04/xmldsig-more#rsa-sha512\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at [http://www.w3.org/2001/04/xmldsig-more#rsa-sha512](http://www.w3.org/2001/04/xmldsig-more#rsa-sha512)."
   syntax:
     content: public const string XmlDsigRSASHA512Url;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1227,13 +1362,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard  digest method for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigSHA1Url field is \"http://www.w3.org/2000/09/xmldsig#sha1\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/2000/09/xmldsig#sha1."
   syntax:
     content: public const string XmlDsigSHA1Url;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1250,13 +1386,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard  digest method for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigSHA256Url field is \"http://www.w3.org/2001/04/xmlenc#sha256\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at [http://www.w3.org/2001/04/xmlenc#sha256](http://www.w3.org/2001/04/xmlenc#sha256)."
   syntax:
     content: public const string XmlDsigSHA256Url;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1273,13 +1410,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard  digest method for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigSHA384Url field is \"http://www.w3.org/2001/04/xmldsig-more#sha384\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at [http://www.w3.org/2001/04/xmldsig-more#sha384](http://www.w3.org/2001/04/xmldsig-more#sha384)."
   syntax:
     content: public const string XmlDsigSHA384Url;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1296,13 +1434,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the standard  digest method for XML digital signatures. This field is constant.
+  remarks: "The value of the XmlDsigSHA512Url field is \"http://www.w3.org/2001/04/xmlenc#sha512\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at [http://www.w3.org/2001/04/xmlenc#sha512](http://www.w3.org/2001/04/xmlenc#sha512)."
   syntax:
     content: public const string XmlDsigSHA512Url;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1319,13 +1458,16 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the XML Path Language (XPath). This field is constant.
+  remarks: "The value of the XmlDsigXPathTransformUrl field is \"http://www.w3.org/TR/1999/REC-xpath-19991116\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlDsigXPathTransform> class implements the transform described by the XmlDsigXPathTransformUrl field.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/TR/1999/REC-xpath-19991116."
+  example:
+  - "The following code example demonstrates how to call members of the <xref:System.Security.Cryptography.Xml.XmlDsigXPathTransform> class.  \n  \n [!code-vb[System.Security.Cryptography.Xml.XmlDsigXPathTransform#2](../../add/codesnippet/VisualBasic/f-system.security.crypto_1_1.vb)]\n [!code-cs[System.Security.Cryptography.Xml.XmlDsigXPathTransform#2](../../add/codesnippet/CSharp/f-system.security.crypto_1_1.cs)]"
   syntax:
     content: public const string XmlDsigXPathTransformUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1342,13 +1484,16 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for XSLT transformations. This field is constant.
+  remarks: "The value of the XmlDsigXsltTransformUrl field is \"http://www.w3.org/TR/1999/REC-xslt-19991116\".  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlDsigXsltTransform> class implements the transform described by the XmlDsigXsltTransformUrl field.  \n  \n For more information, see the World Wide Web Consortium (W3C) specification at http://www.w3.org/TR/1999/REC-xslt-19991116."
+  example:
+  - "The following code example demonstrates how to use members of the <xref:System.Security.Cryptography.Xml.XmlDsigXsltTransform> class.  \n  \n [!code-cpp[System.Security.Cryptography.Xml.XmlDsigXsltTransform#2](../../add/codesnippet/CPP/f-system.security.crypto_3_1.cpp)]\n [!code-cs[System.Security.Cryptography.Xml.XmlDsigXsltTransform#2](../../add/codesnippet/CSharp/f-system.security.crypto_3_1.cs)]\n [!code-vb[System.Security.Cryptography.Xml.XmlDsigXsltTransform#2](../../add/codesnippet/VisualBasic/f-system.security.crypto_3_1.vb)]"
   syntax:
     content: public const string XmlDsigXsltTransformUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1365,13 +1510,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography.Xml
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the Uniform Resource Identifier (URI) for the license transform algorithm used to normalize XrML licenses for signatures.
+  remarks: "The value of the XmlLicenseTransformUrl field is \"urn:mpeg:mpeg21:2003:01-REL-R-NS:licenseTransform\"  \n  \n Use this field to conveniently supply a value to one of the URI attributes of an element used for XMLDSIG.  \n  \n The <xref:System.Security.Cryptography.Xml.XmlLicenseTransform> class implements the transform described by the XmlLicenseTransformUrl field."
   syntax:
     content: public const string XmlLicenseTransformUrl;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1452,12 +1598,6 @@ references:
   name: CheckSignature(AsymmetricAlgorithm)
   nameWithType: SignedXml.CheckSignature(AsymmetricAlgorithm)
   fullName: System.Security.Cryptography.Xml.SignedXml.CheckSignature(AsymmetricAlgorithm)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.Cryptography.AsymmetricAlgorithm
   parent: System.Security.Cryptography
   isExternal: false
@@ -1470,12 +1610,6 @@ references:
   name: CheckSignature(KeyedHashAlgorithm)
   nameWithType: SignedXml.CheckSignature(KeyedHashAlgorithm)
   fullName: System.Security.Cryptography.Xml.SignedXml.CheckSignature(KeyedHashAlgorithm)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.Cryptography.KeyedHashAlgorithm
   parent: System.Security.Cryptography
   isExternal: false
@@ -1488,42 +1622,18 @@ references:
   name: CheckSignature(X509Certificate2,Boolean)
   nameWithType: SignedXml.CheckSignature(X509Certificate2,Boolean)
   fullName: System.Security.Cryptography.Xml.SignedXml.CheckSignature(X509Certificate2,Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.Cryptography.X509Certificates.X509Certificate2
   parent: System.Security.Cryptography.X509Certificates
   isExternal: false
   name: X509Certificate2
   nameWithType: X509Certificate2
   fullName: System.Security.Cryptography.X509Certificates.X509Certificate2
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.Cryptography.Xml.SignedXml.CheckSignatureReturningKey(System.Security.Cryptography.AsymmetricAlgorithm@)
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: CheckSignatureReturningKey(AsymmetricAlgorithm)
   nameWithType: SignedXml.CheckSignatureReturningKey(AsymmetricAlgorithm)
   fullName: System.Security.Cryptography.Xml.SignedXml.CheckSignatureReturningKey(AsymmetricAlgorithm)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Security.Cryptography.AsymmetricAlgorithm
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: AsymmetricAlgorithm
-  nameWithType: AsymmetricAlgorithm
-  fullName: System.Security.Cryptography.AsymmetricAlgorithm
 - uid: System.Security.Cryptography.Xml.SignedXml.ComputeSignature
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
@@ -1536,12 +1646,6 @@ references:
   name: ComputeSignature(KeyedHashAlgorithm)
   nameWithType: SignedXml.ComputeSignature(KeyedHashAlgorithm)
   fullName: System.Security.Cryptography.Xml.SignedXml.ComputeSignature(KeyedHashAlgorithm)
-- uid: System.Security.Cryptography.KeyedHashAlgorithm
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: KeyedHashAlgorithm
-  nameWithType: KeyedHashAlgorithm
-  fullName: System.Security.Cryptography.KeyedHashAlgorithm
 - uid: System.Security.Cryptography.Xml.SignedXml.EncryptedXml
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
@@ -1560,18 +1664,6 @@ references:
   name: GetIdElement(XmlDocument,String)
   nameWithType: SignedXml.GetIdElement(XmlDocument,String)
   fullName: System.Security.Cryptography.Xml.SignedXml.GetIdElement(XmlDocument,String)
-- uid: System.Xml.XmlElement
-  parent: System.Xml
-  isExternal: false
-  name: XmlElement
-  nameWithType: XmlElement
-  fullName: System.Xml.XmlElement
-- uid: System.Xml.XmlDocument
-  parent: System.Xml
-  isExternal: false
-  name: XmlDocument
-  nameWithType: XmlDocument
-  fullName: System.Xml.XmlDocument
 - uid: System.String
   parent: System
   isExternal: true
@@ -1584,24 +1676,12 @@ references:
   name: GetPublicKey()
   nameWithType: SignedXml.GetPublicKey()
   fullName: System.Security.Cryptography.Xml.SignedXml.GetPublicKey()
-- uid: System.Security.Cryptography.AsymmetricAlgorithm
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: AsymmetricAlgorithm
-  nameWithType: AsymmetricAlgorithm
-  fullName: System.Security.Cryptography.AsymmetricAlgorithm
 - uid: System.Security.Cryptography.Xml.SignedXml.GetXml
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: GetXml()
   nameWithType: SignedXml.GetXml()
   fullName: System.Security.Cryptography.Xml.SignedXml.GetXml()
-- uid: System.Xml.XmlElement
-  parent: System.Xml
-  isExternal: false
-  name: XmlElement
-  nameWithType: XmlElement
-  fullName: System.Xml.XmlElement
 - uid: System.Security.Cryptography.Xml.SignedXml.KeyInfo
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
@@ -1620,12 +1700,6 @@ references:
   name: LoadXml(XmlElement)
   nameWithType: SignedXml.LoadXml(XmlElement)
   fullName: System.Security.Cryptography.Xml.SignedXml.LoadXml(XmlElement)
-- uid: System.Xml.XmlElement
-  parent: System.Xml
-  isExternal: false
-  name: XmlElement
-  nameWithType: XmlElement
-  fullName: System.Xml.XmlElement
 - uid: System.Security.Cryptography.Xml.SignedXml.m_signature
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
@@ -1644,12 +1718,6 @@ references:
   name: m_strSigningKeyName
   nameWithType: SignedXml.m_strSigningKeyName
   fullName: System.Security.Cryptography.Xml.SignedXml.m_strSigningKeyName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.Resolver
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
@@ -1674,18 +1742,27 @@ references:
   name: Collection<String>
   nameWithType: Collection<String>
   fullName: System.Collections.ObjectModel.Collection<System.String>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.Collection`1
+    name: Collection
+    nameWithType: Collection
+    fullName: Collection<System.String>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Security.Cryptography.Xml.SignedXml.Signature
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: Signature
   nameWithType: SignedXml.Signature
   fullName: System.Security.Cryptography.Xml.SignedXml.Signature
-- uid: System.Security.Cryptography.Xml.Signature
-  parent: System.Security.Cryptography.Xml
-  isExternal: false
-  name: Signature
-  nameWithType: Signature
-  fullName: System.Security.Cryptography.Xml.Signature
 - uid: System.Security.Cryptography.Xml.SignedXml.SignatureFormatValidator
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
@@ -1698,42 +1775,60 @@ references:
   name: Func<SignedXml,Boolean>
   nameWithType: Func<SignedXml,Boolean>
   fullName: System.Func<System.Security.Cryptography.Xml.SignedXml,System.Boolean>
+  spec.csharp:
+  - uid: System.Func`2
+    name: Func
+    nameWithType: Func
+    fullName: Func<System.Security.Cryptography.Xml.SignedXml,System.Boolean>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Security.Cryptography.Xml.SignedXml
+    name: SignedXml
+    nameWithType: SignedXml
+    fullName: SignedXml
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Boolean
+    name: Boolean
+    nameWithType: Boolean
+    fullName: Boolean
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Security.Cryptography.Xml.SignedXml.SignatureLength
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: SignatureLength
   nameWithType: SignedXml.SignatureLength
   fullName: System.Security.Cryptography.Xml.SignedXml.SignatureLength
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.SignatureMethod
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: SignatureMethod
   nameWithType: SignedXml.SignatureMethod
   fullName: System.Security.Cryptography.Xml.SignedXml.SignatureMethod
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.SignatureValue
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: SignatureValue
   nameWithType: SignedXml.SignatureValue
   fullName: System.Security.Cryptography.Xml.SignedXml.SignatureValue
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Security.Cryptography.Xml.SignedXml.SignedInfo
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
@@ -1752,312 +1847,156 @@ references:
   name: SigningKey
   nameWithType: SignedXml.SigningKey
   fullName: System.Security.Cryptography.Xml.SignedXml.SigningKey
-- uid: System.Security.Cryptography.AsymmetricAlgorithm
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: AsymmetricAlgorithm
-  nameWithType: AsymmetricAlgorithm
-  fullName: System.Security.Cryptography.AsymmetricAlgorithm
 - uid: System.Security.Cryptography.Xml.SignedXml.SigningKeyName
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: SigningKeyName
   nameWithType: SignedXml.SigningKeyName
   fullName: System.Security.Cryptography.Xml.SignedXml.SigningKeyName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDecryptionTransformUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDecryptionTransformUrl
   nameWithType: SignedXml.XmlDecryptionTransformUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDecryptionTransformUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigBase64TransformUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigBase64TransformUrl
   nameWithType: SignedXml.XmlDsigBase64TransformUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigBase64TransformUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigC14NTransformUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigC14NTransformUrl
   nameWithType: SignedXml.XmlDsigC14NTransformUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigC14NTransformUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigC14NWithCommentsTransformUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigC14NWithCommentsTransformUrl
   nameWithType: SignedXml.XmlDsigC14NWithCommentsTransformUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigC14NWithCommentsTransformUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigCanonicalizationUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigCanonicalizationUrl
   nameWithType: SignedXml.XmlDsigCanonicalizationUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigCanonicalizationUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigCanonicalizationWithCommentsUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigCanonicalizationWithCommentsUrl
   nameWithType: SignedXml.XmlDsigCanonicalizationWithCommentsUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigCanonicalizationWithCommentsUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigDSAUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigDSAUrl
   nameWithType: SignedXml.XmlDsigDSAUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigDSAUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigEnvelopedSignatureTransformUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigEnvelopedSignatureTransformUrl
   nameWithType: SignedXml.XmlDsigEnvelopedSignatureTransformUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigEnvelopedSignatureTransformUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigExcC14NTransformUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigExcC14NTransformUrl
   nameWithType: SignedXml.XmlDsigExcC14NTransformUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigExcC14NTransformUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigExcC14NWithCommentsTransformUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigExcC14NWithCommentsTransformUrl
   nameWithType: SignedXml.XmlDsigExcC14NWithCommentsTransformUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigExcC14NWithCommentsTransformUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigHMACSHA1Url
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigHMACSHA1Url
   nameWithType: SignedXml.XmlDsigHMACSHA1Url
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigHMACSHA1Url
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigMinimalCanonicalizationUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigMinimalCanonicalizationUrl
   nameWithType: SignedXml.XmlDsigMinimalCanonicalizationUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigMinimalCanonicalizationUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigNamespaceUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigNamespaceUrl
   nameWithType: SignedXml.XmlDsigNamespaceUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigNamespaceUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigRSASHA1Url
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigRSASHA1Url
   nameWithType: SignedXml.XmlDsigRSASHA1Url
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigRSASHA1Url
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigRSASHA256Url
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigRSASHA256Url
   nameWithType: SignedXml.XmlDsigRSASHA256Url
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigRSASHA256Url
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigRSASHA384Url
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigRSASHA384Url
   nameWithType: SignedXml.XmlDsigRSASHA384Url
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigRSASHA384Url
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigRSASHA512Url
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigRSASHA512Url
   nameWithType: SignedXml.XmlDsigRSASHA512Url
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigRSASHA512Url
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigSHA1Url
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigSHA1Url
   nameWithType: SignedXml.XmlDsigSHA1Url
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigSHA1Url
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigSHA256Url
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigSHA256Url
   nameWithType: SignedXml.XmlDsigSHA256Url
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigSHA256Url
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigSHA384Url
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigSHA384Url
   nameWithType: SignedXml.XmlDsigSHA384Url
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigSHA384Url
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigSHA512Url
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigSHA512Url
   nameWithType: SignedXml.XmlDsigSHA512Url
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigSHA512Url
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigXPathTransformUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigXPathTransformUrl
   nameWithType: SignedXml.XmlDsigXPathTransformUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigXPathTransformUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlDsigXsltTransformUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlDsigXsltTransformUrl
   nameWithType: SignedXml.XmlDsigXsltTransformUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlDsigXsltTransformUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.XmlLicenseTransformUrl
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false
   name: XmlLicenseTransformUrl
   nameWithType: SignedXml.XmlLicenseTransformUrl
   fullName: System.Security.Cryptography.Xml.SignedXml.XmlLicenseTransformUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.Xml.SignedXml.#ctor*
   parent: System.Security.Cryptography.Xml.SignedXml
   isExternal: false

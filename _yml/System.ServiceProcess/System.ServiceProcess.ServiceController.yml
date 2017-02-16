@@ -39,8 +39,10 @@ items:
   nameWithType: ServiceController
   fullName: System.ServiceProcess.ServiceController
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a Windows service and allows you to connect to a running or stopped service, manipulate it, or get information about it.
+  remarks: "You can use the ServiceController class to connect to and control the behavior of existing services. When you create an instance of the ServiceController class, you set its properties so it interacts with a specific Windows service. You can then use the class to start, stop, and otherwise manipulate the service.  \n  \n You will most likely use the ServiceController component in an administrative capacity. For example, you could create a Windows or Web application that sends custom commands to a service through the ServiceController instance. This would be useful, because the Service Control Manager (SCM) Microsoft Management Console snap-in does not support custom commands.  \n  \n After you create an instance of ServiceController, you must set two properties on it to identify the service with which it interacts: the computer name and the name of the service you want to control.  \n  \n> [!NOTE]\n>  By default, <xref:System.ServiceProcess.ServiceController.MachineName%2A> is set to the local computer, so you do not need to change it unless you want to set the instance to point to another computer.  \n  \n Generally, the service author writes code that customizes the action associated with a specific command. For example, a service can contain code to respond to an <xref:System.ServiceProcess.ServiceBase.OnPause%2A?displayProperty=fullName> command. In that case, the custom processing for the <xref:System.ServiceProcess.ServiceController.Pause%2A> task runs before the system pauses the service.  \n  \n The set of commands a service can process depends on its properties; for example, you can set the <xref:System.ServiceProcess.ServiceController.CanStop%2A> property for a service to `false`. This setting renders the `Stop` command unavailable on that particular service; it prevents you from stopping the service from the SCM by disabling the necessary button. If you try to stop the service from your code, the system raises an error and displays the error message \"Failed to stop `servicename`.\""
+  example:
+  - "The following example demonstrates the use of the ServiceController class to control the `SimpleService` service example.  \n  \n [!code-cs[ServiceControllerClass#1](../../add/codesnippet/CSharp/t-system.serviceprocess._6_1.cs)]\n [!code-vb[ServiceControllerClass#1](../../add/codesnippet/VisualBasic/t-system.serviceprocess._6_1.vb)]"
   syntax:
     content: >-
       [System.ComponentModel.Designer("System.ServiceProcess.Design.ServiceControllerDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
@@ -83,12 +85,12 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class that is not associated with a specific service.
   syntax:
     content: public ServiceController ();
     parameters: []
   overload: System.ServiceProcess.ServiceController.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -105,15 +107,21 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class that is associated with an existing service on the local computer.
+  remarks: ''
+  example:
+  - "The following example demonstrates the use of the ServiceController constructor to create a <xref:System.ServiceProcess.ServiceController> object that is used to control a sample service. This example is part of a larger example that is provided for the <xref:System.ServiceProcess.ServiceController> class.  \n  \n [!code-cs[ServiceControllerClass#2](../../add/codesnippet/CSharp/m-system.serviceprocess._0_1.cs)]\n [!code-vb[ServiceControllerClass#2](../../add/codesnippet/VisualBasic/m-system.serviceprocess._0_1.vb)]"
   syntax:
     content: public ServiceController (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name that identifies the service to the system. This can also be the display name for the service.
   overload: System.ServiceProcess.ServiceController.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    name is invalid."
   platform:
   - net-11
   - net-20
@@ -130,18 +138,22 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class that is associated with an existing service on the specified computer.
+  remarks: For the `machineName` parameter, you can use "." to represent the local computer.
   syntax:
     content: public ServiceController (string name, string machineName);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name that identifies the service to the system. This can also be the display name for the service.
     - id: machineName
       type: System.String
-      description: To be added.
+      description: The computer on which the service resides.
   overload: System.ServiceProcess.ServiceController.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    name is invalid.  \n  \n -or-  \n  \n machineName is invalid."
   platform:
   - net-11
   - net-20
@@ -158,14 +170,23 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the service can be paused and resumed.
+  remarks: ''
+  example:
+  - "The following example demonstrates the use of the CanPauseAndContinue property to determine whether a service can pause and continue. This example is part of a larger example that is provided for the <xref:System.ServiceProcess.ServiceController> class.  \n  \n [!code-cs[ServiceControllerClass#2](../../add/codesnippet/CSharp/p-system.serviceprocess._8_1.cs)]\n [!code-vb[ServiceControllerClass#2](../../add/codesnippet/VisualBasic/p-system.serviceprocess._8_1.vb)]"
   syntax:
     content: public bool CanPauseAndContinue { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the service can be paused; otherwise, .
   overload: System.ServiceProcess.ServiceController.CanPauseAndContinue*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -182,14 +203,23 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the service should be notified when the system is shutting down.
+  remarks: ''
+  example:
+  - "The following example demonstrates the use of the CanShutdown property to determine whether a service provides a handler for a shutdown event. This example is part of a larger example that is provided for the <xref:System.ServiceProcess.ServiceController> class.  \n  \n [!code-cs[ServiceControllerClass#2](../../add/codesnippet/CSharp/p-system.serviceprocess._6_1.cs)]\n [!code-vb[ServiceControllerClass#2](../../add/codesnippet/VisualBasic/p-system.serviceprocess._6_1.vb)]"
   syntax:
     content: public bool CanShutdown { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the service should be notified when the system is shutting down; otherwise, .
   overload: System.ServiceProcess.ServiceController.CanShutdown*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -206,14 +236,23 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the service can be stopped after it has started.
+  remarks: ''
+  example:
+  - "The following example demonstrates the use of the CanStop property to determine whether a service provides a handler for a stop event. This example is part of a larger example that is provided for the <xref:System.ServiceProcess.ServiceController> class.  \n  \n [!code-cs[ServiceControllerClass#2](../../add/codesnippet/CSharp/p-system.serviceprocess._1_1.cs)]\n [!code-vb[ServiceControllerClass#2](../../add/codesnippet/VisualBasic/p-system.serviceprocess._1_1.vb)]"
   syntax:
     content: public bool CanStop { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the service can be stopped and the <xref:System.ServiceProcess.ServiceBase.OnStop%2A> method called; otherwise, .
   overload: System.ServiceProcess.ServiceController.CanStop*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -230,12 +269,13 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Disconnects this  instance from the service and frees all the resources that the instance allocated.
+  remarks: Close releases all the handles associated with the <xref:System.ServiceProcess.ServiceController> instance.
   syntax:
     content: public void Close ();
     parameters: []
   overload: System.ServiceProcess.ServiceController.Close*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -252,12 +292,21 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Continues a service after it has been paused.
+  remarks: "When you call Continue for a service, its status is first changed to `ContinuePending` and then, when the Continue method returns, it is changed to `Running`.  \n  \n You cannot call Continue for the service until the service controller status is `Paused`."
+  example:
+  - "The following example demonstrates the use of the Continue method to continue a paused service. This example is part of a larger example that is provided for the <xref:System.ServiceProcess.ServiceController> class.  \n  \n [!code-cs[ServiceControllerClass#5](../../add/codesnippet/CSharp/m-system.serviceprocess._2_1.cs)]\n [!code-vb[ServiceControllerClass#5](../../add/codesnippet/VisualBasic/m-system.serviceprocess._2_1.vb)]"
   syntax:
     content: public void Continue ();
     parameters: []
   overload: System.ServiceProcess.ServiceController.Continue*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -274,14 +323,23 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the set of services that depends on the service associated with this  instance.
+  remarks: The DependentServices array represents the services that the system stops if your application calls <xref:System.ServiceProcess.ServiceController.Stop%2A> for this service.
+  example:
+  - "The following example uses the <xref:System.ServiceProcess.ServiceController> class to display the set of services that are dependent on the Event Log service.  \n  \n [!code-cs[ServiceController#3](../../add/codesnippet/CSharp/p-system.serviceprocess._4_1.cs)]\n [!code-cpp[ServiceController#3](../../add/codesnippet/CPP/p-system.serviceprocess._4_1.cpp)]\n [!code-vb[ServiceController#3](../../add/codesnippet/VisualBasic/p-system.serviceprocess._4_1.vb)]"
   syntax:
     content: public System.ServiceProcess.ServiceController[] DependentServices { get; }
     return:
       type: System.ServiceProcess.ServiceController[]
-      description: To be added.
+      description: An array of  instances, each of which is associated with a service that depends on this service.
   overload: System.ServiceProcess.ServiceController.DependentServices*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -298,14 +356,26 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a friendly name for the service.
+  remarks: You can set the DisplayName to an empty string (""), but setting the property to `null` throws an exception.
+  example:
+  - "The following example uses the <xref:System.ServiceProcess.ServiceController> class to display the set of services that are dependent on the Event Log service.  \n  \n [!code-cs[ServiceController#3](../../add/codesnippet/CSharp/p-system.serviceprocess._3_1.cs)]\n [!code-cpp[ServiceController#3](../../add/codesnippet/CPP/p-system.serviceprocess._3_1.cpp)]\n [!code-vb[ServiceController#3](../../add/codesnippet/VisualBasic/p-system.serviceprocess._3_1.vb)]"
   syntax:
     content: public string DisplayName { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The friendly name of the service, which can be used to identify the service.
   overload: System.ServiceProcess.ServiceController.DisplayName*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The DisplayName is .
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -322,15 +392,16 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the unmanaged resources used by the  and optionally releases the managed resources.
+  remarks: "This method is called by the public `Dispose()`method and the <xref:System.Object.Finalize%2A> method. `Dispose()` invokes the protected `Dispose(Boolean)` method with the `disposing` parameter set to `true`. <xref:System.Object.Finalize%2A> invokes `Dispose` with `disposing` set to `false`.  \n  \n When the `disposing` parameter is true, this method releases all resources held by any managed objects that this <xref:System.ServiceProcess.ServiceController> references. This method invokes the `Dispose()` method of each referenced object."
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
   overload: System.ServiceProcess.ServiceController.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -347,15 +418,24 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Executes a custom command on the service.
+  remarks: When you call ExecuteCommand, the status of the service does not change. If the service was started, the status remains `Running`. If the service was stopped, the status remains `Stopped`, and so on. To process the custom command, the service must override the <xref:System.ServiceProcess.ServiceBase.OnCustomCommand%2A> method and provide a handler for the command identified by the `command` parameter.
+  example:
+  - "The following code example shows the use of the ExecuteCommand method to execute custom commands in the `SimpleService` service example.  \n  \n [!code-cs[ServiceContoller_ExecuteCommand#1](../../add/codesnippet/CSharp/m-system.serviceprocess._5_1.cs)]\n [!code-vb[ServiceContoller_ExecuteCommand#1](../../add/codesnippet/VisualBasic/m-system.serviceprocess._5_1.vb)]"
   syntax:
     content: public void ExecuteCommand (int command);
     parameters:
     - id: command
       type: System.Int32
-      description: To be added.
+      description: An application-defined command flag that indicates which custom command to execute. The value must be between 128 and 256, inclusive.
   overload: System.ServiceProcess.ServiceController.ExecuteCommand*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -372,15 +452,21 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the device driver services on the local computer.
+  remarks: GetDevices returns only the device driver services from the local computer. To retrieve the non-device driver services or services that are not drivers, call the <xref:System.ServiceProcess.ServiceController.GetServices%2A> method. Together, the two methods provide access to all the services on a computer.
+  example:
+  - "The following example uses the <xref:System.ServiceProcess.ServiceController> class to display the device driver services on the local computer.  \n  \n [!code-cs[ServiceController#5](../../add/codesnippet/CSharp/m-system.serviceprocess._6_1.cs)]\n [!code-cpp[ServiceController#5](../../add/codesnippet/CPP/m-system.serviceprocess._6_1.cpp)]\n [!code-vb[ServiceController#5](../../add/codesnippet/VisualBasic/m-system.serviceprocess._6_1.vb)]"
   syntax:
     content: public static System.ServiceProcess.ServiceController[] GetDevices ();
     parameters: []
     return:
       type: System.ServiceProcess.ServiceController[]
-      description: To be added.
+      description: An array of type  in which each element is associated with a device driver service on the local computer.
   overload: System.ServiceProcess.ServiceController.GetDevices*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
   platform:
   - net-11
   - net-20
@@ -397,18 +483,25 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the device driver services on the specified computer.
+  remarks: <xref:System.ServiceProcess.ServiceController.GetDevices%2A> returns only the device driver services from the specified computer. To retrieve the non-device driver services or services that are not drivers, call the <xref:System.ServiceProcess.ServiceController.GetServices%2A> method. Together, the two methods provide access to all the services on a computer.
   syntax:
     content: public static System.ServiceProcess.ServiceController[] GetDevices (string machineName);
     parameters:
     - id: machineName
       type: System.String
-      description: To be added.
+      description: The computer from which to retrieve the device driver services.
     return:
       type: System.ServiceProcess.ServiceController[]
-      description: To be added.
+      description: An array of type  in which each element is associated with a device driver service on the specified computer.
   overload: System.ServiceProcess.ServiceController.GetDevices*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The machineName parameter has invalid syntax.
   platform:
   - net-11
   - net-20
@@ -425,15 +518,21 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves all the services on the local computer, except for the device driver services.
+  remarks: GetServices returns only the non-device driver services and the services that are not drivers from the local computer. To retrieve device driver services, call the <xref:System.ServiceProcess.ServiceController.GetDevices%2A> method. Together, the two methods provide access to all the services on a computer.
+  example:
+  - "The following example uses the <xref:System.ServiceProcess.ServiceController> class to display the services that are running on the local computer.  \n  \n [!code-cs[ServiceController#6](../../add/codesnippet/CSharp/m-system.serviceprocess._7_1.cs)]\n [!code-cpp[ServiceController#6](../../add/codesnippet/CPP/m-system.serviceprocess._7_1.cpp)]\n [!code-vb[ServiceController#6](../../add/codesnippet/VisualBasic/m-system.serviceprocess._7_1.vb)]"
   syntax:
     content: public static System.ServiceProcess.ServiceController[] GetServices ();
     parameters: []
     return:
       type: System.ServiceProcess.ServiceController[]
-      description: To be added.
+      description: An array of type  in which each element is associated with a service on the local computer.
   overload: System.ServiceProcess.ServiceController.GetServices*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
   platform:
   - net-11
   - net-20
@@ -450,18 +549,25 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves all the services on the specified computer, except for the device driver services.
+  remarks: <xref:System.ServiceProcess.ServiceController.GetServices%2A> returns only the non-device driver services and the services that are not drivers from the specified computer. To retrieve device driver services, call the <xref:System.ServiceProcess.ServiceController.GetDevices%2A> method. Together, the two methods provide access to all the services on a computer.
   syntax:
     content: public static System.ServiceProcess.ServiceController[] GetServices (string machineName);
     parameters:
     - id: machineName
       type: System.String
-      description: To be added.
+      description: The computer from which to retrieve the services.
     return:
       type: System.ServiceProcess.ServiceController[]
-      description: To be added.
+      description: An array of type  in which each element is associated with a service on the specified computer.
   overload: System.ServiceProcess.ServiceController.GetServices*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The machineName parameter has invalid syntax.
   platform:
   - net-11
   - net-20
@@ -478,14 +584,18 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the name of the computer on which this service resides.
+  remarks: The computer name is the name of the server that is running this service, without the preceding backslash characters (\\\\).
   syntax:
     content: public string MachineName { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The name of the computer that is running the service associated with this  instance. The default is the local computer (".").
   overload: System.ServiceProcess.ServiceController.MachineName*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The MachineName syntax is invalid.
   platform:
   - net-11
   - net-20
@@ -502,12 +612,21 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Suspends a service's operation.
+  remarks: You cannot call <xref:System.ServiceProcess.ServiceController.Continue%2A> for the service until the service controller status is `Paused`.
+  example:
+  - "The following example demonstrates the use of the Pause method to pause a service. This example is part of a larger example that is provided for the <xref:System.ServiceProcess.ServiceController> class.  \n  \n [!code-cs[ServiceControllerClass#4](../../add/codesnippet/CSharp/m-system.serviceprocess._4_1.cs)]\n [!code-vb[ServiceControllerClass#4](../../add/codesnippet/VisualBasic/m-system.serviceprocess._4_1.vb)]"
   syntax:
     content: public void Pause ();
     parameters: []
   overload: System.ServiceProcess.ServiceController.Pause*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -524,12 +643,15 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Refreshes property values by resetting the properties to their current values.
+  remarks: The Refresh method causes the <xref:System.ServiceProcess.ServiceController.ServicesDependedOn%2A>, <xref:System.ServiceProcess.ServiceController.DependentServices%2A>, and <xref:System.ServiceProcess.ServiceController.Status%2A> properties to be reset to their current values when they are next referenced.
+  example:
+  - "The following example demonstrates the use of the Refresh method to obtain the status of a service. The code instructs a service to pause, and then waits for the status to reflect the change. This example is part of a larger example that is provided for the <xref:System.ServiceProcess.ServiceController> class.  \n  \n [!code-cs[ServiceControllerClass#4](../../add/codesnippet/CSharp/m-system.serviceprocess._3_1.cs)]\n [!code-vb[ServiceControllerClass#4](../../add/codesnippet/VisualBasic/m-system.serviceprocess._3_1.vb)]"
   syntax:
     content: public void Refresh ();
     parameters: []
   overload: System.ServiceProcess.ServiceController.Refresh*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -546,14 +668,17 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the handle for the service.
   syntax:
     content: public System.Runtime.InteropServices.SafeHandle ServiceHandle { get; }
     return:
       type: System.Runtime.InteropServices.SafeHandle
-      description: To be added.
+      description: A <xref:System.Runtime.InteropServices.SafeHandle> that contains the handle for the service.
   overload: System.ServiceProcess.ServiceController.ServiceHandle*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -570,14 +695,24 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the name that identifies the service that this instance references.
+  remarks: "The ServiceName identifies the service to the Service Control Manager. Changing this property causes the <xref:System.ServiceProcess.ServiceController> instance to bind to another service, it does not change what the Service Control Manager's Microsoft Management Console snap-in displays.  \n  \n When you are implementing a custom service, the value of this property must be identical to the name recorded for the service in the <xref:System.ServiceProcess.ServiceInstaller.ServiceName%2A> property of the corresponding <xref:System.ServiceProcess.ServiceInstaller> class. In code, the ServiceName is usually set in the `main()` function of the executable.  \n  \n When you reset the ServiceName property, the method that sets the property sets this instance's <xref:System.ServiceProcess.ServiceController.DisplayName%2A> to an empty string (\"\")."
   syntax:
     content: public string ServiceName { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The name that identifies the service that this  instance references. The default is an empty string ("").
   overload: System.ServiceProcess.ServiceController.ServiceName*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The ServiceName is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The syntax of the ServiceName property is invalid.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -594,14 +729,23 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: The set of services that this service depends on.
+  remarks: If any service in the ServicesDependedOn array is not running, you will not be able to start this service.
+  example:
+  - "The following example uses the <xref:System.ServiceProcess.ServiceController> class to display the set of services that the Messenger service is dependent on.  \n  \n [!code-cs[ServiceController#4](../../add/codesnippet/CSharp/p-system.serviceprocess._2_1.cs)]\n [!code-cpp[ServiceController#4](../../add/codesnippet/CPP/p-system.serviceprocess._2_1.cpp)]\n [!code-vb[ServiceController#4](../../add/codesnippet/VisualBasic/p-system.serviceprocess._2_1.vb)]"
   syntax:
     content: public System.ServiceProcess.ServiceController[] ServicesDependedOn { get; }
     return:
       type: System.ServiceProcess.ServiceController[]
-      description: To be added.
+      description: An array of  instances, each of which is associated with a service that must be running for this service to run.
   overload: System.ServiceProcess.ServiceController.ServicesDependedOn*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -618,14 +762,23 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type of service that this object references.
+  remarks: The service type indicates how the service is used by the system. The value of the ServiceType property represents a set of flags combined using the bitwise OR operator.
+  example:
+  - "The following example uses the <xref:System.ServiceProcess.ServiceController> class to display the device driver services on the local computer.  \n  \n [!code-cs[ServiceController#5](../../add/codesnippet/CSharp/p-system.serviceprocess._9_1.cs)]\n [!code-cpp[ServiceController#5](../../add/codesnippet/CPP/p-system.serviceprocess._9_1.cpp)]\n [!code-vb[ServiceController#5](../../add/codesnippet/VisualBasic/p-system.serviceprocess._9_1.vb)]"
   syntax:
     content: public System.ServiceProcess.ServiceType ServiceType { get; }
     return:
       type: System.ServiceProcess.ServiceType
-      description: To be added.
+      description: One of the  values, used to indicate the network service type.
   overload: System.ServiceProcess.ServiceController.ServiceType*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -642,12 +795,21 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Starts the service, passing no arguments.
+  remarks: You cannot call <xref:System.ServiceProcess.ServiceController.Stop%2A> for the service until the service controller status is `Running`.
+  example:
+  - "The following example uses the <xref:System.ServiceProcess.ServiceController> class to check whether the Alerter service is stopped. If the service is stopped, the example starts the service and waits until the service status is set to <xref:System.ServiceProcess.ServiceControllerStatus>.  \n  \n [!code-cs[ServiceController#1](../../add/codesnippet/CSharp/m-system.serviceprocess._8_1.cs)]\n [!code-cpp[ServiceController#1](../../add/codesnippet/CPP/m-system.serviceprocess._8_1.cpp)]\n [!code-vb[ServiceController#1](../../add/codesnippet/VisualBasic/m-system.serviceprocess._8_1.vb)]"
   syntax:
     content: public void Start ();
     parameters: []
   overload: System.ServiceProcess.ServiceController.Start*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -664,15 +826,25 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Starts a service, passing the specified arguments.
+  remarks: You cannot call <xref:System.ServiceProcess.ServiceController.Stop%2A> for the service until the service controller status is `Running`.
   syntax:
     content: public void Start (string[] args);
     parameters:
     - id: args
       type: System.String[]
-      description: To be added.
+      description: An array of arguments to pass to the service when it starts.
   overload: System.ServiceProcess.ServiceController.Start*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service cannot be started.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    args is .  \n  \n -or-  \n  \n A member of the array is ."
   platform:
   - net-11
   - net-20
@@ -689,14 +861,17 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates how the service represented by the  object starts.
   syntax:
     content: public System.ServiceProcess.ServiceStartMode StartType { get; }
     return:
       type: System.ServiceProcess.ServiceStartMode
-      description: To be added.
+      description: A value that indicates how the service starts.
   overload: System.ServiceProcess.ServiceController.StartType*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
   platform:
   - net-11
   - net-20
@@ -713,14 +888,23 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the status of the service that is referenced by this instance.
+  remarks: The status indicates the current state of the service. The set of possible values includes several that indicate whether a state-changing command is pending.
+  example:
+  - "The following example uses the <xref:System.ServiceProcess.ServiceController> class to check the current status of the Telnet service. If the service is stopped, the example starts the service. If the service is running, the example stops the service.  \n  \n [!code-cs[ServiceController#2](../../add/codesnippet/CSharp/p-system.serviceprocess._0_1.cs)]\n [!code-cpp[ServiceController#2](../../add/codesnippet/CPP/p-system.serviceprocess._0_1.cpp)]\n [!code-vb[ServiceController#2](../../add/codesnippet/VisualBasic/p-system.serviceprocess._0_1.vb)]"
   syntax:
     content: public System.ServiceProcess.ServiceControllerStatus Status { get; }
     return:
       type: System.ServiceProcess.ServiceControllerStatus
-      description: To be added.
+      description: One of the  values that indicates whether the service is running, stopped, or paused, or whether a start, stop, pause, or continue command is pending.
   overload: System.ServiceProcess.ServiceController.Status*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -737,12 +921,21 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Stops this service and any services that are dependent on this service.
+  remarks: "If any services depend on this service for their operation, they will be stopped before this service is stopped. The <xref:System.ServiceProcess.ServiceController.DependentServices%2A> property contains the set of services that depend on this one.  \n  \n If you stop a service that this service depends on, call the Stop method on this service within the Stop method of the parent service. The <xref:System.ServiceProcess.ServiceController.ServicesDependedOn%2A> property contains the services that this service depends on."
+  example:
+  - "The following example uses the <xref:System.ServiceProcess.ServiceController> class to check the current status of the Telnet service. If the service is stopped, the example starts the service. If the service is running, the example stops the service.  \n  \n [!code-cs[ServiceController#2](../../add/codesnippet/CSharp/m-system.serviceprocess._1_1.cs)]\n [!code-cpp[ServiceController#2](../../add/codesnippet/CPP/m-system.serviceprocess._1_1.cpp)]\n [!code-vb[ServiceController#2](../../add/codesnippet/VisualBasic/m-system.serviceprocess._1_1.vb)]"
   syntax:
     content: public void Stop ();
     parameters: []
   overload: System.ServiceProcess.ServiceController.Stop*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error occurred when accessing a system API.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service was not found.
   platform:
   - net-11
   - net-20
@@ -759,15 +952,21 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Infinitely waits for the service to reach the specified status.
+  remarks: "Use WaitForStatus to suspend an application's processing until the service has reached the required status.  \n  \n> [!NOTE]\n>  The <xref:System.ServiceProcess.ServiceController.WaitForStatus%2A> method waits approximately 250 milliseconds between each status check.  <xref:System.ServiceProcess.ServiceController.WaitForStatus%2A> cannot detect the case of the observed service changing to the `desiredStatus` and then immediately to another status in that interval."
+  example:
+  - "The following example uses the <xref:System.ServiceProcess.ServiceController> class to check whether the Alerter service is stopped. If the service is stopped, the example starts the service and waits until the service status is set to <xref:System.ServiceProcess.ServiceControllerStatus>.  \n  \n [!code-cs[ServiceController#1](../../add/codesnippet/CSharp/82fc1460-0a6f-432e-81a5-_1.cs)]\n [!code-cpp[ServiceController#1](../../add/codesnippet/CPP/82fc1460-0a6f-432e-81a5-_1.cpp)]\n [!code-vb[ServiceController#1](../../add/codesnippet/VisualBasic/82fc1460-0a6f-432e-81a5-_1.vb)]"
   syntax:
     content: public void WaitForStatus (System.ServiceProcess.ServiceControllerStatus desiredStatus);
     parameters:
     - id: desiredStatus
       type: System.ServiceProcess.ServiceControllerStatus
-      description: To be added.
+      description: The status to wait for.
   overload: System.ServiceProcess.ServiceController.WaitForStatus*
+  exceptions:
+  - type: System.ComponentModel.InvalidEnumArgumentException
+    commentId: T:System.ComponentModel.InvalidEnumArgumentException
+    description: The desiredStatus parameter is not any of the values defined in the  enumeration.
   platform:
   - net-11
   - net-20
@@ -784,18 +983,25 @@ items:
   assemblies:
   - System.ServiceProcess
   namespace: System.ServiceProcess
-  summary: To be added.
-  remarks: To be added.
+  summary: Waits for the service to reach the specified status or for the specified time-out to expire.
+  remarks: "Use <xref:System.ServiceProcess.ServiceController.WaitForStatus%2A> to suspend an application's processing until the service has reached the required status.  \n  \n> [!NOTE]\n>  The <xref:System.ServiceProcess.ServiceController.WaitForStatus%2A> method waits approximately 250 milliseconds between each status check.  <xref:System.ServiceProcess.ServiceController.WaitForStatus%2A> cannot detect the case of the observed service changing to the `desiredStatus` and then immediately to another status in that interval."
   syntax:
     content: public void WaitForStatus (System.ServiceProcess.ServiceControllerStatus desiredStatus, TimeSpan timeout);
     parameters:
     - id: desiredStatus
       type: System.ServiceProcess.ServiceControllerStatus
-      description: To be added.
+      description: The status to wait for.
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: A <xref:System.TimeSpan> object specifying the amount of time to wait for the service to reach the specified status.
   overload: System.ServiceProcess.ServiceController.WaitForStatus*
+  exceptions:
+  - type: System.ComponentModel.InvalidEnumArgumentException
+    commentId: T:System.ComponentModel.InvalidEnumArgumentException
+    description: The desiredStatus parameter is not any of the values defined in the  enumeration.
+  - type: System.ServiceProcess.TimeoutException
+    commentId: T:System.ServiceProcess.TimeoutException
+    description: The value specified for the timeout parameter expires.
   platform:
   - net-11
   - net-20
@@ -828,18 +1034,6 @@ references:
   name: ServiceController(String,String)
   nameWithType: ServiceController.ServiceController(String,String)
   fullName: System.ServiceProcess.ServiceController.ServiceController(String,String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceProcess.ServiceController.CanPauseAndContinue
   parent: System.ServiceProcess.ServiceController
   isExternal: false
@@ -858,24 +1052,12 @@ references:
   name: CanShutdown
   nameWithType: ServiceController.CanShutdown
   fullName: System.ServiceProcess.ServiceController.CanShutdown
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ServiceProcess.ServiceController.CanStop
   parent: System.ServiceProcess.ServiceController
   isExternal: false
   name: CanStop
   nameWithType: ServiceController.CanStop
   fullName: System.ServiceProcess.ServiceController.CanStop
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ServiceProcess.ServiceController.Close
   parent: System.ServiceProcess.ServiceController
   isExternal: false
@@ -894,36 +1076,32 @@ references:
   name: DependentServices
   nameWithType: ServiceController.DependentServices
   fullName: System.ServiceProcess.ServiceController.DependentServices
-- uid: System.ServiceProcess.ServiceController
+- uid: System.ServiceProcess.ServiceController[]
   parent: System.ServiceProcess
   isExternal: false
   name: ServiceController
   nameWithType: ServiceController
   fullName: System.ServiceProcess.ServiceController[]
+  spec.csharp:
+  - uid: System.ServiceProcess.ServiceController
+    name: ServiceController
+    nameWithType: ServiceController
+    fullName: ServiceController[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.ServiceProcess.ServiceController.DisplayName
   parent: System.ServiceProcess.ServiceController
   isExternal: false
   name: DisplayName
   nameWithType: ServiceController.DisplayName
   fullName: System.ServiceProcess.ServiceController.DisplayName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceProcess.ServiceController.Dispose(System.Boolean)
   parent: System.ServiceProcess.ServiceController
   isExternal: false
   name: Dispose(Boolean)
   nameWithType: ServiceController.Dispose(Boolean)
   fullName: System.ServiceProcess.ServiceController.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ServiceProcess.ServiceController.ExecuteCommand(System.Int32)
   parent: System.ServiceProcess.ServiceController
   isExternal: false
@@ -942,72 +1120,30 @@ references:
   name: GetDevices()
   nameWithType: ServiceController.GetDevices()
   fullName: System.ServiceProcess.ServiceController.GetDevices()
-- uid: System.ServiceProcess.ServiceController
-  parent: System.ServiceProcess
-  isExternal: false
-  name: ServiceController
-  nameWithType: ServiceController
-  fullName: System.ServiceProcess.ServiceController[]
 - uid: System.ServiceProcess.ServiceController.GetDevices(System.String)
   parent: System.ServiceProcess.ServiceController
   isExternal: false
   name: GetDevices(String)
   nameWithType: ServiceController.GetDevices(String)
   fullName: System.ServiceProcess.ServiceController.GetDevices(String)
-- uid: System.ServiceProcess.ServiceController
-  parent: System.ServiceProcess
-  isExternal: false
-  name: ServiceController
-  nameWithType: ServiceController
-  fullName: System.ServiceProcess.ServiceController[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceProcess.ServiceController.GetServices
   parent: System.ServiceProcess.ServiceController
   isExternal: false
   name: GetServices()
   nameWithType: ServiceController.GetServices()
   fullName: System.ServiceProcess.ServiceController.GetServices()
-- uid: System.ServiceProcess.ServiceController
-  parent: System.ServiceProcess
-  isExternal: false
-  name: ServiceController
-  nameWithType: ServiceController
-  fullName: System.ServiceProcess.ServiceController[]
 - uid: System.ServiceProcess.ServiceController.GetServices(System.String)
   parent: System.ServiceProcess.ServiceController
   isExternal: false
   name: GetServices(String)
   nameWithType: ServiceController.GetServices(String)
   fullName: System.ServiceProcess.ServiceController.GetServices(String)
-- uid: System.ServiceProcess.ServiceController
-  parent: System.ServiceProcess
-  isExternal: false
-  name: ServiceController
-  nameWithType: ServiceController
-  fullName: System.ServiceProcess.ServiceController[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceProcess.ServiceController.MachineName
   parent: System.ServiceProcess.ServiceController
   isExternal: false
   name: MachineName
   nameWithType: ServiceController.MachineName
   fullName: System.ServiceProcess.ServiceController.MachineName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceProcess.ServiceController.Pause
   parent: System.ServiceProcess.ServiceController
   isExternal: false
@@ -1038,24 +1174,12 @@ references:
   name: ServiceName
   nameWithType: ServiceController.ServiceName
   fullName: System.ServiceProcess.ServiceController.ServiceName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceProcess.ServiceController.ServicesDependedOn
   parent: System.ServiceProcess.ServiceController
   isExternal: false
   name: ServicesDependedOn
   nameWithType: ServiceController.ServicesDependedOn
   fullName: System.ServiceProcess.ServiceController.ServicesDependedOn
-- uid: System.ServiceProcess.ServiceController
-  parent: System.ServiceProcess
-  isExternal: false
-  name: ServiceController
-  nameWithType: ServiceController
-  fullName: System.ServiceProcess.ServiceController[]
 - uid: System.ServiceProcess.ServiceController.ServiceType
   parent: System.ServiceProcess.ServiceController
   isExternal: false
@@ -1080,12 +1204,20 @@ references:
   name: Start(String[])
   nameWithType: ServiceController.Start(String[])
   fullName: System.ServiceProcess.ServiceController.Start(String[])
-- uid: System.String
+- uid: System.String[]
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.ServiceProcess.ServiceController.StartType
   parent: System.ServiceProcess.ServiceController
   isExternal: false
@@ -1122,24 +1254,12 @@ references:
   name: WaitForStatus(ServiceControllerStatus)
   nameWithType: ServiceController.WaitForStatus(ServiceControllerStatus)
   fullName: System.ServiceProcess.ServiceController.WaitForStatus(ServiceControllerStatus)
-- uid: System.ServiceProcess.ServiceControllerStatus
-  parent: System.ServiceProcess
-  isExternal: false
-  name: ServiceControllerStatus
-  nameWithType: ServiceControllerStatus
-  fullName: System.ServiceProcess.ServiceControllerStatus
 - uid: System.ServiceProcess.ServiceController.WaitForStatus(System.ServiceProcess.ServiceControllerStatus,System.TimeSpan)
   parent: System.ServiceProcess.ServiceController
   isExternal: false
   name: WaitForStatus(ServiceControllerStatus,TimeSpan)
   nameWithType: ServiceController.WaitForStatus(ServiceControllerStatus,TimeSpan)
   fullName: System.ServiceProcess.ServiceController.WaitForStatus(ServiceControllerStatus,TimeSpan)
-- uid: System.ServiceProcess.ServiceControllerStatus
-  parent: System.ServiceProcess
-  isExternal: false
-  name: ServiceControllerStatus
-  nameWithType: ServiceControllerStatus
-  fullName: System.ServiceProcess.ServiceControllerStatus
 - uid: System.TimeSpan
   parent: System
   isExternal: true

@@ -55,8 +55,10 @@ items:
   nameWithType: Application
   fullName: System.Windows.Forms.Application
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides  methods and properties to manage an application, such as methods to start and stop an application, to process Windows messages, and properties to get information about an application. This class cannot be inherited.
+  remarks: "The Application class has methods to start and stop applications and threads, and to process Windows messages, as follows:  \n  \n-   <xref:System.Windows.Forms.Application.Run%2A> starts an application message loop on the current thread and, optionally, makes a form visible.  \n  \n-   <xref:System.Windows.Forms.Application.Exit%2A> or <xref:System.Windows.Forms.Application.ExitThread%2A> stops a message loop.  \n  \n-   <xref:System.Windows.Forms.Application.DoEvents%2A> processes messages while your program is in a loop.  \n  \n-   <xref:System.Windows.Forms.Application.AddMessageFilter%2A> adds a message filter to the application message pump to monitor Windows messages.  \n  \n-   <xref:System.Windows.Forms.IMessageFilter> lets you stop an event from being raised or perform special operations before invoking an event handler.  \n  \n This class has <xref:System.Windows.Forms.Application.CurrentCulture%2A> and <xref:System.Windows.Forms.Application.CurrentInputLanguage%2A> properties to get or set culture information for the current thread.  \n  \n You cannot create an instance of this class."
+  example:
+  - "The following code example lists numbers in a list box on a form. Each time you click `button1`, the application adds another number to the list.  \n  \n The `Main` method calls <xref:System.Windows.Forms.Application.Run%2A> to start the application, which creates the form, `listBox1` and `button1`. When the user clicks `button1`, the `button1_Click` method displays a <xref:System.Windows.Forms.MessageBox>. If the user clicks `No` on the <xref:System.Windows.Forms.MessageBox>, the `button1_Click` method adds a number to the list. If the user clicks `Yes`, the application calls <xref:System.Windows.Forms.Application.Exit%2A> to process all remaining messages in the queue and then to quit.  \n  \n> [!NOTE]\n>  The call to <xref:System.Windows.Forms.Application.Exit%2A> will fail in partial trust.  \n  \n [!code-cpp[Classic Application Example#1](../../add/codesnippet/CPP/t-system.windows.forms.a_1_1.cpp)]\n [!code-vb[Classic Application Example#1](../../add/codesnippet/VisualBasic/t-system.windows.forms.a_1_1.vb)]\n [!code-cs[Classic Application Example#1](../../add/codesnippet/CSharp/t-system.windows.forms.a_1_1.cs)]"
   syntax:
     content: public sealed class Application
   inheritance:
@@ -79,15 +81,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a message filter to monitor Windows messages as they are routed to their destinations.
+  remarks: "Use a message filter to prevent specific events from being raised or to perform special operations for an event before it is passed to an event handler. Message filters are unique to a specific thread.  \n  \n To prevent a message from being dispatched, the `value` parameter instance that you pass to this method must override the <xref:System.Windows.Forms.IMessageFilter.PreFilterMessage%2A> method with the code to handle the message. The method must return `false`.  \n  \n> [!CAUTION]\n>  Adding message filters to the message pump for an application can degrade performance."
+  example:
+  - "The following code example creates a message filter called `TestMessageFilter`. This filter blocks all messages relating to the left mouse button. Before you can use a message filter, you must provide an implementation for the <xref:System.Windows.Forms.IMessageFilter> interface.  \n  \n [!code-cpp[Classic Application.RemoveMessageFilter Example#1](../../add/codesnippet/CPP/85e7b742-700d-4563-bce6-_1.cpp)]\n [!code-vb[Classic Application.RemoveMessageFilter Example#1](../../add/codesnippet/VisualBasic/85e7b742-700d-4563-bce6-_1.vb)]\n [!code-cs[Classic Application.RemoveMessageFilter Example#1](../../add/codesnippet/CSharp/85e7b742-700d-4563-bce6-_1.cs)]"
   syntax:
     content: public static void AddMessageFilter (System.Windows.Forms.IMessageFilter value);
     parameters:
     - id: value
       type: System.Windows.Forms.IMessageFilter
-      description: To be added.
+      description: The implementation of the  interface you want to install.
   overload: System.Windows.Forms.Application.AddMessageFilter*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -104,14 +109,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the caller can quit this application.
+  remarks: This property returns `false` if it is called from a <xref:System.Windows.Forms.Control> being hosted within a Web browser. Thus, the <xref:System.Windows.Forms.Control> cannot quit the <xref:System.Windows.Forms.Application>.
   syntax:
     content: public static bool AllowQuit { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the caller can quit this application; otherwise, .
   overload: System.Windows.Forms.Application.AllowQuit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -128,13 +134,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the application is about to shut down.
+  remarks: "You must attach the event handlers to the <xref:System.Windows.Forms.Application.Exit%2A> event to perform unhandled, required tasks before the application stops running. You can close files opened by this application, or dispose of objects that garbage collection did not reclaim.  \n  \n Because this is a static event, you must detach any event handlers attached to this event in the ApplicationExit event handler itself. If you do not detach these handlers, they will remain attached to the event and continue to consume memory."
+  example:
+  - "The following code example displays two forms and exits the application when both forms are closed. When the application starts and exits, the position of each form is remembered. This example demonstrates using the ApplicationExit event to know when the form positions should be persisted to the file, and when the `FileStream` should be closed.  \n  \n The class `MyApplicationContext` inherits from <xref:System.Windows.Forms.ApplicationContext> and keeps track of when each form is closed, and exits the current thread when they both are. The class remembers the position of each form when it is closed. When the ApplicationExit event occurs, the class writes the positions of each for the user to the file. The form position data is stored in a file titled `appdata.txt` that is created in the location determined by <xref:System.Windows.Forms.Application.UserAppDataPath%2A>. The `Main` method calls `Application.Run(context)` to start the application given the <xref:System.Windows.Forms.ApplicationContext>.  \n  \n This code is an excerpt from the example shown in the <xref:System.Windows.Forms.ApplicationContext> class overview. See <xref:System.Windows.Forms.ApplicationContext> for the whole code listing.  \n  \n [!code-vb[Application#5](../../add/codesnippet/VisualBasic/e-system.windows.forms.a_1_1.vb)]\n [!code-cpp[Application#5](../../add/codesnippet/CPP/e-system.windows.forms.a_1_1.cpp)]\n [!code-cs[Application#5](../../add/codesnippet/CSharp/e-system.windows.forms.a_1_1.cs)]"
   syntax:
     content: public static event EventHandler ApplicationExit;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -151,14 +160,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the path for the application data that is shared among all users.
+  remarks: "If a path does not exist, one is created in the following format:  \n  \n *Base Path*\\\\<xref:System.Windows.Forms.Application.CompanyName%2A>\\\\<xref:System.Windows.Forms.Application.ProductName%2A>\\\\<xref:System.Windows.Forms.Application.ProductVersion%2A>  \n  \n <xref:System.Windows.Forms.Application.ProductVersion%2A> first looks to see if the assembly containing the main executable has the `AssemblyInformationalVersion` attribute on it. If this attribute exists, it is used for both <xref:System.Windows.Forms.Application.ProductVersion%2A> and CommonAppDataPath. If this attribute does not exist, both properties use the version of the executable file instead.  \n  \n The path will be different depending on whether the Windows Forms application is deployed using [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)]. [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)] applications are stored in a per-user application cache in the C:\\Documents and Settings\\\\*username* directory. For more information, see [Accessing Local and Remote Data in ClickOnce Applications](../Topic/Accessing%20Local%20and%20Remote%20Data%20in%20ClickOnce%20Applications.md)."
   syntax:
     content: public static string CommonAppDataPath { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The path for the application data that is shared among all users.
   overload: System.Windows.Forms.Application.CommonAppDataPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -175,14 +185,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the registry key for the application data that is shared among all users.
+  remarks: "If the key does not exist, it is created in the following format:  \n  \n LocalMachine\\Software\\\\<xref:System.Windows.Forms.Application.CompanyName%2A>\\\\<xref:System.Windows.Forms.Application.ProductName%2A>\\\\<xref:System.Windows.Forms.Application.ProductVersion%2A>"
   syntax:
     content: public static Microsoft.Win32.RegistryKey CommonAppDataRegistry { get; }
     return:
       type: Microsoft.Win32.RegistryKey
-      description: To be added.
+      description: A  representing the registry key of the application data that is shared among all users.
   overload: System.Windows.Forms.Application.CommonAppDataRegistry*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -199,14 +210,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the company name associated with the application.
+  remarks: ''
+  example:
+  - "The following code example gets this property and displays its value in a text box. The example requires that `textBox1` has been placed on a form.  \n  \n [!code-cs[Classic Application.CompanyName Example#1](../../add/codesnippet/CSharp/p-system.windows.forms.a_6_1.cs)]\n [!code-cpp[Classic Application.CompanyName Example#1](../../add/codesnippet/CPP/p-system.windows.forms.a_6_1.cpp)]\n [!code-vb[Classic Application.CompanyName Example#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.a_6_1.vb)]"
   syntax:
     content: public static string CompanyName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The company name.
   overload: System.Windows.Forms.Application.CompanyName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -223,14 +237,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the culture information for the current thread.
+  remarks: ''
+  example:
+  - "The following code example gets this property and displays its value in a text box. The example requires that `textBox1` has been placed on a form.  \n  \n [!code-cpp[Classic Application.CurrentCulture Example#1](../../add/codesnippet/CPP/p-system.windows.forms.a_4_1.cpp)]\n [!code-cs[Classic Application.CurrentCulture Example#1](../../add/codesnippet/CSharp/p-system.windows.forms.a_4_1.cs)]\n [!code-vb[Classic Application.CurrentCulture Example#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.a_4_1.vb)]"
   syntax:
     content: public static System.Globalization.CultureInfo CurrentCulture { get; set; }
     return:
       type: System.Globalization.CultureInfo
-      description: To be added.
+      description: A <xref:System.Globalization.CultureInfo> representing the culture information for the current thread.
   overload: System.Windows.Forms.Application.CurrentCulture*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -247,14 +264,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the current input language for the current thread.
+  remarks: ''
+  example:
+  - "The following code example gets this property and displays its value in a text box. The example requires that `textBox1` has been placed on a form.  \n  \n [!code-vb[Classic Application.CurrentInputLanguage Example#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.a_8_1.vb)]\n [!code-cs[Classic Application.CurrentInputLanguage Example#1](../../add/codesnippet/CSharp/p-system.windows.forms.a_8_1.cs)]\n [!code-cpp[Classic Application.CurrentInputLanguage Example#1](../../add/codesnippet/CPP/p-system.windows.forms.a_8_1.cpp)]"
   syntax:
     content: public static System.Windows.Forms.InputLanguage CurrentInputLanguage { get; set; }
     return:
       type: System.Windows.Forms.InputLanguage
-      description: To be added.
+      description: An  representing the current input language for the current thread.
   overload: System.Windows.Forms.Application.CurrentInputLanguage*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -271,12 +291,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes all Windows messages currently in the message queue.
+  remarks: "When you run a Windows Form, it creates the new form, which then waits for events to handle. Each time the form handles an event, it processes all the code associated with that event. All other events wait in the queue. While your code handles the event, your application does not respond. For example, the window does not repaint if another window is dragged on top.  \n  \n If you call DoEvents in your code, your application can handle the other events. For example, if you have a form that adds data to a <xref:System.Windows.Forms.ListBox> and add DoEvents to your code, your form repaints when another window is dragged over it. If you remove DoEvents from your code, your form will not repaint until the click event handler of the button is finished executing. For more information on messaging, see [User Input in Windows Forms](../Topic/User%20Input%20in%20Windows%20Forms.md).  \n  \n Unlike Visual Basic 6.0, the DoEvents method does not call the <xref:System.Threading.Thread.Sleep%2A?displayProperty=fullName> method.  \n  \n Typically, you use this method in a loop to process messages.  \n  \n> [!CAUTION]\n>  Calling this method causes the current thread to be suspended while all waiting window messages are processed. If a message causes an event to be triggered, then other areas of your application code may execute. This can cause your application to exhibit unexpected behaviors that are difficult to debug. If you perform operations or computations that take a long time, it is often preferable to perform those operations on a new thread. For more information about asynchronous programming, see [Asynchronous Programming Model (APM)](../Topic/Asynchronous%20Programming%20Model%20\\(APM\\).md)."
+  example:
+  - "The following code example demonstrates using the DoEvents method. When the example runs, a user can select graphics files from an <xref:System.Windows.Forms.OpenFileDialog>. The selected files are displayed in the form. The DoEvents method forces a repaint of the form for each graphics file opened. To run this example, paste the following code in a form containing a <xref:System.Windows.Forms.PictureBox> named `PictureBox1`, an <xref:System.Windows.Forms.OpenFileDialog> named `OpenFileDialog1`, and a button named `fileButton`. Call the `InitializePictureBox` and `InitializeOpenFileDialog` methods from the form's constructor or `Load` method.  \n  \n> [!NOTE]\n>  In [!INCLUDE[vsprvs](../../add/includes/vsprvs-md.md)], if you add an <xref:System.Windows.Forms.OpenFileDialog> to your form by using a drag operation, you will have to modify the following `InitializeOpenFileDialog` method by removing the line that creates a new instance of <xref:System.Windows.Forms.OpenFileDialog>.  \n  \n The example also requires that the <xref:System.Windows.Forms.Control.Click?displayProperty=fullName> event of the <xref:System.Windows.Forms.Button> control and the <xref:System.Windows.Forms.FileDialog.FileOk> event of the <xref:System.Windows.Forms.OpenFileDialog> are connected to the event handlers defined in the example. When the example is running, display the dialog box by clicking the button.  \n  \n [!code-cs[System.Windows.Forms.FileDialog#1](../../add/codesnippet/CSharp/m-system.windows.forms.a_9_1.cs)]\n [!code-cpp[System.Windows.Forms.FileDialog#1](../../add/codesnippet/CPP/m-system.windows.forms.a_9_1.cpp)]\n [!code-vb[System.Windows.Forms.FileDialog#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.a_9_1.vb)]"
   syntax:
     content: public static void DoEvents ();
     parameters: []
   overload: System.Windows.Forms.Application.DoEvents*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -293,12 +316,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Enables visual styles for the application.
+  remarks: "This method enables visual styles for the application. Visual styles are the colors, fonts, and other visual elements that form an operating system theme. Controls will draw with visual styles if the control and the operating system support it. To have an effect, EnableVisualStyles must be called before creating any controls in the application; typically, EnableVisualStyles is the first line in the `Main` function. A separate manifest is not required to enable visual styles when calling EnableVisualStyles.  \n  \n> [!NOTE]\n>  Prior to the .NET Framework 2.0, the `FlatStyle` property of some controls, such as controls that derive from <xref:System.Windows.Forms.ButtonBase>, had to be set to <xref:System.Windows.Forms.FlatStyle?displayProperty=fullName> in order for the controls to be drawn with visual styles. In applications written with the .NET Framework 2.0, this is no longer necessary.  \n  \n> [!NOTE]\n>  This method will have no effect for controls hosted in Internet Explorer."
+  example:
+  - "The following code example demonstrates calling EnableVisualStyles in the `Main` function to enable visual styles for the application.  \n  \n [!code-cpp[System.Windows.Forms.Application.EnableVisualStyles#1](../../add/codesnippet/CPP/m-system.windows.forms.a_2_1.cpp)]\n [!code-vb[System.Windows.Forms.Application.EnableVisualStyles#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.a_2_1.vb)]\n [!code-cs[System.Windows.Forms.Application.EnableVisualStyles#1](../../add/codesnippet/CSharp/m-system.windows.forms.a_2_1.cs)]"
   syntax:
     content: public static void EnableVisualStyles ();
     parameters: []
   overload: System.Windows.Forms.Application.EnableVisualStyles*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -315,13 +341,19 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the application is about to enter a modal state.
+  remarks: >-
+    > [!CAUTION]
+
+    >  Because this is a static event, you must detach your event handlers when your application is disposed, or memory leaks will result.
+  example:
+  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the EnterThreadModal event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a Windows Forms and ensure that the event handler is associated with the EnterThreadModal event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#3](../../add/codesnippet/CSharp/e-system.windows.forms.a_2_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#3](../../add/codesnippet/VisualBasic/e-system.windows.forms.a_2_1.vb)]"
   syntax:
     content: public static event EventHandler EnterThreadModal;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -338,14 +370,14 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the path for the executable file that started the application, including the executable name.
   syntax:
     content: public static string ExecutablePath { get; }
     return:
       type: System.String
-      description: To be added.
+      description: "The path and executable name for the executable file that started the application.  \n  \n This path will be different depending on whether the Windows Forms application is deployed using [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)]. [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)] applications are stored in a per-user application cache in the C:\\Documents and Settings\\\\*username* directory. For more information, see [Accessing Local and Remote Data in ClickOnce Applications](../Topic/Accessing%20Local%20and%20Remote%20Data%20in%20ClickOnce%20Applications.md)."
   overload: System.Windows.Forms.Application.ExecutablePath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -362,12 +394,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Informs all message pumps that they must terminate, and then closes all application windows after the messages have been processed.
+  remarks: "The Exit method stops all running message loops on all threads and closes all windows of the application. This method does not necessarily force the application to exit. The Exit method is typically called from within a message loop, and forces <xref:System.Windows.Forms.Application.Run%2A> to return. To exit a message loop for the current thread only, call <xref:System.Windows.Forms.Application.ExitThread%2A>.  \n  \n Exit raises the following events and performs the associated conditional actions:  \n  \n-   A <xref:System.Windows.Forms.Form.FormClosing> event is raised for every form represented by the <xref:System.Windows.Forms.Application.OpenForms%2A> property. This event can be canceled by setting the <xref:System.ComponentModel.CancelEventArgs.Cancel%2A> property of their <xref:System.Windows.Forms.FormClosingEventArgs> parameter to `true`.  \n  \n-   If one of more of the handlers cancels the event, then Exit returns without further action. Otherwise, a <xref:System.Windows.Forms.Form.FormClosed> event is raised for every open form, then all running message loops and forms are closed.  \n  \n> [!NOTE]\n>  The Exit method does not raise the <xref:System.Windows.Forms.Form.Closed> and <xref:System.Windows.Forms.Form.Closing> events, which are obsolete as of [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)]."
+  example:
+  - "The following code example lists numbers in a list box on a form. Each time you click `button1`, the application adds another number to the list.  \n  \n The `Main` method calls <xref:System.Windows.Forms.Application.Run%2A> to start the application, which creates the form, `listBox1`, and `button1`. When the user clicks `button1`, the `button1_Click` method adds numbers one to three to the list box, and displays a <xref:System.Windows.Forms.MessageBox>. If the user clicks **No** on the <xref:System.Windows.Forms.MessageBox>, the `button1_Click` method adds another number to the list. If the user clicks **Yes**, the application calls Exit, to process all remaining messages in the queue and then to quit.  \n  \n The example requires that `listBox1` and `button1` have been instantiated and placed on a form.  \n  \n [!code-cs[Classic Application.Exit Example#1](../../add/codesnippet/CSharp/m-system.windows.forms.a_6_1.cs)]\n [!code-cpp[Classic Application.Exit Example#1](../../add/codesnippet/CPP/m-system.windows.forms.a_6_1.cpp)]\n [!code-vb[Classic Application.Exit Example#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.a_6_1.vb)]"
   syntax:
     content: public static void Exit ();
     parameters: []
   overload: System.Windows.Forms.Application.Exit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -384,15 +419,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Informs all message pumps that they must terminate, and then closes all application windows after the messages have been processed.
   syntax:
     content: public static void Exit (System.ComponentModel.CancelEventArgs e);
     parameters:
     - id: e
       type: System.ComponentModel.CancelEventArgs
-      description: To be added.
+      description: Returns whether any  within the application cancelled the exit.
   overload: System.Windows.Forms.Application.Exit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -409,12 +444,13 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Exits the message loop on the current thread and closes all windows on the thread.
+  remarks: Use this method to exit the message loop of the current thread. This method causes the call to <xref:System.Windows.Forms.Application.Run%2A> for the current thread to return. To exit the entire application, call <xref:System.Windows.Forms.Application.Exit%2A>.
   syntax:
     content: public static void ExitThread ();
     parameters: []
   overload: System.Windows.Forms.Application.ExitThread*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -431,18 +467,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Runs any filters against a window message, and returns a copy of the modified message.
   syntax:
     content: public static bool FilterMessage (ref System.Windows.Forms.Message message);
     parameters:
     - id: message
       type: System.Windows.Forms.Message
-      description: To be added.
+      description: The Windows event message to filter.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the filters were processed; otherwise, .
   overload: System.Windows.Forms.Application.FilterMessage*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -459,13 +495,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the application finishes processing and is about to enter the idle state.
+  remarks: "If you have tasks that you must perform before the thread becomes idle, attach them to this event.  \n  \n> [!CAUTION]\n>  Because this is a static event, you must detach your event handlers when your application is disposed, or memory leaks will result."
+  example:
+  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the Idle event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a Windows Form and make sure that the event handler is associated with the Idle event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#2](../../add/codesnippet/CSharp/e-system.windows.forms.a_0_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#2](../../add/codesnippet/VisualBasic/e-system.windows.forms.a_0_1.vb)]"
   syntax:
     content: public static event EventHandler Idle;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -482,13 +521,19 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the application is about to leave a modal state.
+  remarks: >-
+    > [!CAUTION]
+
+    >  Because this is a static event, you must detach your event handlers when your application is disposed, or memory leaks will result.
+  example:
+  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the LeaveThreadModal event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a Windows Forms and ensure that the event handler is associated with the LeaveThreadModal event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#4](../../add/codesnippet/CSharp/e-system.windows.forms.a_4_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#4](../../add/codesnippet/VisualBasic/e-system.windows.forms.a_4_1.vb)]"
   syntax:
     content: public static event EventHandler LeaveThreadModal;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -505,14 +550,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the path for the application data of a local, non-roaming user.
+  remarks: "A local user is one whose user profile is stored on the system on which the user logged on. If a path does not exist, one is created in the following format:  \n  \n *Base Path*\\\\<xref:System.Windows.Forms.Application.CompanyName%2A>\\\\<xref:System.Windows.Forms.Application.ProductName%2A>\\\\<xref:System.Windows.Forms.Application.ProductVersion%2A>  \n  \n A typical base path is C:\\Documents and Settings\\\\*username*\\Local Settings\\Application Data. This path will be different, however, if the Windows Forms application is deployed by using [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)]. [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)] creates its own application data directory that is isolated from all other applications. For more information, see [Accessing Local and Remote Data in ClickOnce Applications](../Topic/Accessing%20Local%20and%20Remote%20Data%20in%20ClickOnce%20Applications.md)."
+  example:
+  - "The following code example displays two forms and exits the application when both forms are closed. When the application starts and exits, the position of each form is remembered. Although this example demonstrates using the <xref:System.Windows.Forms.Application.UserAppDataPath%2A> property to store application data for the user, the LocalUserAppDataPath can be used instead.  \n  \n The `MyApplicationContext` class inherits from <xref:System.Windows.Forms.ApplicationContext> and keeps track when each form is closed, and exits the current thread when they both are. The class stores the positions of each form for the user. The form position data is stored in a file titled `Appdata.txt` that is created in the location determined by <xref:System.Windows.Forms.Application.UserAppDataPath%2A>. The `Main` method calls `Application.Run(context)` to start the application given the <xref:System.Windows.Forms.ApplicationContext>.  \n  \n This code is an excerpt from the example shown in the <xref:System.Windows.Forms.ApplicationContext> class overview. Some code is not shown for the purpose of brevity. See <xref:System.Windows.Forms.ApplicationContext> for the whole code listing.  \n  \n [!code-vb[Application#5](../../add/codesnippet/VisualBasic/p-system.windows.forms.a_5_1.vb)]\n [!code-cpp[Application#5](../../add/codesnippet/CPP/p-system.windows.forms.a_5_1.cpp)]\n [!code-cs[Application#5](../../add/codesnippet/CSharp/p-system.windows.forms.a_5_1.cs)]"
   syntax:
     content: public static string LocalUserAppDataPath { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The path for the application data of a local, non-roaming user.
   overload: System.Windows.Forms.Application.LocalUserAppDataPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -529,14 +577,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether a message loop exists on this thread.
+  remarks: When hosting Windows Forms in other environments, such as unmanaged applications, this property will always return `false`. Use <xref:System.Windows.Forms.Application.RegisterMessageLoop%2A> to instruct Windows Forms if the hosting environment still has an active message loop.
   syntax:
     content: public static bool MessageLoop { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a message loop exists; otherwise, .
   overload: System.Windows.Forms.Application.MessageLoop*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -553,15 +602,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes OLE on the current thread.
+  remarks: "Call this method before calling any `Microsoft.Win32` method that requires OLE. OleRequired first checks to see if OLE has been initialized on the current thread. If not, it initializes the thread for OLE.  \n  \n> [!NOTE]\n>  Unless a thread calls OLE methods directly, you do not need to call this method."
   syntax:
     content: public static System.Threading.ApartmentState OleRequired ();
     parameters: []
     return:
       type: System.Threading.ApartmentState
-      description: To be added.
+      description: One of the  values.
   overload: System.Windows.Forms.Application.OleRequired*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -578,15 +628,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
+  remarks: "Call OnThreadException to raise an exception that will halt processing of the application.  \n  \n The <xref:System.Windows.Forms.Application> class has a <xref:System.Windows.Forms.Application.ThreadException> event. You can attach an event handler to this event to do whatever custom processing you need for unhandled exceptions. If you do not attach an event handler, OnThreadException will execute the default behavior, which involves displaying a dialog box to inform the user that there has been an error.  \n  \n OnThreadException only implements default exception behavior for unhandled exceptions that occur on threads owned by Windows Forms. Unhandled exceptions on other threads are handled by the <xref:System.AppDomain.UnhandledException> event."
   syntax:
     content: public static void OnThreadException (Exception t);
     parameters:
     - id: t
       type: System.Exception
-      description: To be added.
+      description: An <xref:System.Exception> that represents the exception that was thrown.
   overload: System.Windows.Forms.Application.OnThreadException*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -603,14 +654,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of open forms owned by the application.
+  remarks: The OpenForms property represents a read-only collection of forms owned by the application. This collection can be searched by index position or by the <xref:System.Windows.Forms.Control.Name%2A> of the <xref:System.Windows.Forms.Form>.
   syntax:
     content: public static System.Windows.Forms.FormCollection OpenForms { get; }
     return:
       type: System.Windows.Forms.FormCollection
-      description: To be added.
+      description: A  containing all the currently open forms owned by this application.
   overload: System.Windows.Forms.Application.OpenForms*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -627,14 +679,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the product name associated with this application.
+  remarks: '`ProductName` is taken from the metadata of the assembly containing the main form of the current application. You can set it by setting <xref:System.Reflection.AssemblyProductAttribute> inside of your assembly manifest. For more information, see [Assembly Manifest](../Topic/Assembly%20Manifest.md).'
+  example:
+  - "The following code example gets this property and displays its value in a text box. The example requires that `textBox1` has been placed on a form.  \n  \n [!code-cpp[Classic Application.ProductName Example#1](../../add/codesnippet/CPP/p-system.windows.forms.a_1_1.cpp)]\n [!code-vb[Classic Application.ProductName Example#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.a_1_1.vb)]\n [!code-cs[Classic Application.ProductName Example#1](../../add/codesnippet/CSharp/p-system.windows.forms.a_1_1.cs)]"
   syntax:
     content: public static string ProductName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The product name.
   overload: System.Windows.Forms.Application.ProductName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -651,14 +706,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the product version associated with this application.
+  remarks: "Typically, a version number displays as *major number*.*minor number*.*build number*.*private part number*. You can set it explicitly by setting the assembly version within your assembly manifest. For more information, see [Assembly Manifest](../Topic/Assembly%20Manifest.md).  \n  \n ProductVersion first looks to see if the assembly containing the main executable has the `AssemblyInformationalVersion` attribute on it. If this attribute exists, it is used for both ProductVersion and <xref:System.Windows.Forms.Application.CommonAppDataPath%2A>. If this attribute does not exist, both properties use the version of the executable file instead."
+  example:
+  - "The following code example gets this property and displays its value in a text box. The example requires that `textBox1` has been placed on a form.  \n  \n [!code-cpp[Classic Application.ProductVersion Example#1](../../add/codesnippet/CPP/p-system.windows.forms.a_3_1.cpp)]\n [!code-cs[Classic Application.ProductVersion Example#1](../../add/codesnippet/CSharp/p-system.windows.forms.a_3_1.cs)]\n [!code-vb[Classic Application.ProductVersion Example#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.a_3_1.vb)]"
   syntax:
     content: public static string ProductVersion { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The product version.
   overload: System.Windows.Forms.Application.ProductVersion*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -675,15 +733,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event in hosted scenarios.
+  remarks: This method is used when hosting Windows Forms in another environment, such as an unmanaged application. You should call RaiseIdle when the hosting application enters an idle state. This enables some Windows Forms controls and components to do important background work while the user is not interacting with the application.
   syntax:
     content: public static void RaiseIdle (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: The <xref:System.EventArgs> objects to pass to the  event.
   overload: System.Windows.Forms.Application.RaiseIdle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -700,8 +759,6 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static void RegisterMessageLoop (System.Windows.Forms.Application.MessageLoopCallback callback);
     parameters:
@@ -709,6 +766,7 @@ items:
       type: System.Windows.Forms.Application.MessageLoopCallback
       description: To be added.
   overload: System.Windows.Forms.Application.RegisterMessageLoop*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -725,15 +783,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes a message filter from the message pump of the application.
+  remarks: You can remove a message filter when you no longer want to capture Windows messages before they are dispatched.
+  example:
+  - "Before you can use a message filter, you must provide an implementation for the <xref:System.Windows.Forms.IMessageFilter> interface. The following class creates a message filter called `TestMessageFilter`. This filter blocks all messages relating to the left mouse button.  \n  \n [!code-cpp[Classic Application.RemoveMessageFilter Example#1](../../add/codesnippet/CPP/8349f388-56c8-4b5d-ba4a-_1.cpp)]\n [!code-vb[Classic Application.RemoveMessageFilter Example#1](../../add/codesnippet/VisualBasic/8349f388-56c8-4b5d-ba4a-_1.vb)]\n [!code-cs[Classic Application.RemoveMessageFilter Example#1](../../add/codesnippet/CSharp/8349f388-56c8-4b5d-ba4a-_1.cs)]"
   syntax:
     content: public static void RemoveMessageFilter (System.Windows.Forms.IMessageFilter value);
     parameters:
     - id: value
       type: System.Windows.Forms.IMessageFilter
-      description: To be added.
+      description: The implementation of the  to remove from the application.
   overload: System.Windows.Forms.Application.RemoveMessageFilter*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -750,14 +811,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value specifying whether the current application is drawing controls with visual styles.
+  remarks: "If you are drawing a custom control, use this property to decide whether to draw the control with or without visual styles, so that its appearance is consistent with other controls in the application.  \n  \n The following table shows the four conditions that must exist for RenderWithVisualStyles to return `true`.  \n  \n|Condition|Description|  \n|---------------|-----------------|  \n|The operating system supports visual styles|To verify this condition separately, use the <xref:System.Windows.Forms.VisualStyles.VisualStyleInformation.IsSupportedByOS%2A> property of the <xref:System.Windows.Forms.VisualStyles.VisualStyleInformation> class.|  \n|The user has enabled visual styles in the operating system|To verify this condition separately, use the <xref:System.Windows.Forms.VisualStyles.VisualStyleInformation.IsEnabledByUser%2A> property of the <xref:System.Windows.Forms.VisualStyles.VisualStyleInformation> class.|  \n|Visual styles are enabled in the application|Visual styles can be enabled in an application by calling the <xref:System.Windows.Forms.Application.EnableVisualStyles> method or by using an application manifest that specifies that ComCtl32.dll version 6 or later will be used to draw controls.|  \n|Visual styles are being used to draw the client area of application windows|To verify this condition separately, use the <xref:System.Windows.Forms.Application.VisualStyleState%2A> property of the <xref:System.Windows.Forms.Application> class and verify that it has the value <xref:System.Windows.Forms.VisualStyles.VisualStyleState?displayProperty=fullName> or <xref:System.Windows.Forms.VisualStyles.VisualStyleState?displayProperty=fullName>.|"
   syntax:
     content: public static bool RenderWithVisualStyles { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if visual styles are enabled for controls in the client area of application windows; otherwise, .
   overload: System.Windows.Forms.Application.RenderWithVisualStyles*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -774,12 +836,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Shuts down the application and starts a new instance immediately.
+  remarks: "The most common reason for calling `Restart` is to start a new version of the application that you have downloaded through [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)] using the `Update` or `UpdateAsync` method.  \n  \n Applications are restarted in the context in which they were initially run. If your application was started using a URL pointing directly to the application's main executable file, it will be restarted using the same URL. If your application is a [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)] application, it will be restarted using [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)].  \n  \n If your application was originally supplied command-line options when it first executed, Restart will launch the application again with the same options."
   syntax:
     content: public static void Restart ();
     parameters: []
   overload: System.Windows.Forms.Application.Restart*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: Your code is not a Windows Forms application. You cannot call this method in this context.
   platform:
   - net-11
   - net-20
@@ -796,12 +862,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins running a standard application message loop on the current thread, without a form.
+  remarks: "In a Win32-based or Windows Forms application, a message loop is a routine in code that processes user events, such as mouse clicks and keyboard strokes. Every running Windows-based application requires an active message loop, called the main message loop. When the main message loop is closed, the application exits. In Windows Forms, this loop is closed when the <xref:System.Windows.Forms.Application.Exit%2A> method is called, or when the <xref:System.Windows.Forms.Application.ExitThread%2A> method is called on the thread that is running the main message loop.  \n  \n Most Windows Forms developers will not need to use this version of the method. You should use the <xref:System.Windows.Forms.Application.Run%28System.Windows.Forms.Form%29> overload to start an application with a main form, so that the application terminates when the main form is closed. For all other situations, use the <xref:System.Windows.Forms.Application.Run%28System.Windows.Forms.ApplicationContext%29> overload, which supports supplying an <xref:System.Windows.Forms.ApplicationContext> object for better control over the lifetime of the application."
   syntax:
     content: public static void Run ();
     parameters: []
   overload: System.Windows.Forms.Application.Run*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A main message loop is already running on this thread.
   platform:
   - net-11
   - net-20
@@ -818,15 +888,21 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins running a standard application message loop on the current thread, with an .
+  remarks: The message loop runs until <xref:System.Windows.Forms.Application.Exit%2A> or <xref:System.Windows.Forms.Application.ExitThread%2A> is called or the <xref:System.Windows.Forms.Application.ThreadExit> event is raised on the context object.
+  example:
+  - "The example displays two forms and exits the application when both forms are closed. When the application starts and exits, the position of each form is remembered. This example demonstrates how to use an <xref:System.Windows.Forms.ApplicationContext>, along with the `Application.Run(context)` method, to display multiple forms when the application starts.  \n  \n The class `MyApplicationContext` inherits from <xref:System.Windows.Forms.ApplicationContext> and keeps track when each form is closed, and exits the current thread when they both are. The class stores the positions of each form for the user. The form position data is stored in a file titled `Appdata.txt` that is created in the location determined by <xref:System.Windows.Forms.Application.UserAppDataPath%2A>. The `Main` method calls `Application.Run(context)` to start the application given the <xref:System.Windows.Forms.ApplicationContext>.  \n  \n The code for the `AppForm1` and `AppForm2` forms is not shown for the purpose of brevity. See the <xref:System.Windows.Forms.ApplicationContext> class overview for the whole code listing.  \n  \n [!code-vb[Application#2](../../add/codesnippet/VisualBasic/m-system.windows.forms.a_4_1.vb)]\n [!code-cpp[Application#2](../../add/codesnippet/CPP/m-system.windows.forms.a_4_1.cpp)]\n [!code-cs[Application#2](../../add/codesnippet/CSharp/m-system.windows.forms.a_4_1.cs)]"
   syntax:
     content: public static void Run (System.Windows.Forms.ApplicationContext context);
     parameters:
     - id: context
       type: System.Windows.Forms.ApplicationContext
-      description: To be added.
+      description: An  in which the application is run.
   overload: System.Windows.Forms.Application.Run*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A main message loop is already running on this thread.
   platform:
   - net-11
   - net-20
@@ -843,15 +919,21 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins running a standard application message loop on the current thread, and makes the specified form visible.
+  remarks: "Typically, the main function of an application calls this method and passes to it the main window of the application.  \n  \n This method adds an event handler to the `mainForm` parameter for the <xref:System.Windows.Forms.Form.Closed> event. The event handler calls <xref:System.Windows.Forms.Application.ExitThread%2A> to clean up the application.  \n  \n> [!NOTE]\n>  The <xref:System.Windows.Forms.Control.Dispose%2A> method of the <xref:System.Windows.Forms.Form> class will be called prior to the return of this method."
+  example:
+  - "The following code example lists numbers in a list box on a form. Each time you click `button1`, the application adds another number to the list.  \n  \n The `Main` method calls <xref:System.Windows.Forms.Application.Run%2A> to start the application, which creates the form, `listBox1`, and `button1`. When the user clicks `button1`, the `button1_Click` method adds numbers one to three to the list box, and displays a <xref:System.Windows.Forms.MessageBox>. If the user clicks **No** on the <xref:System.Windows.Forms.MessageBox>, the `button1_Click` method adds another number to the list. If the user clicks **Yes**, the application calls <xref:System.Windows.Forms.Application.Exit%2A> to process all remaining messages in the queue and then to quit.  \n  \n The example requires that `listBox1` and `button1` have been created and placed on a form.  \n  \n [!code-cs[Classic Application.Exit Example#1](../../add/codesnippet/CSharp/m-system.windows.forms.a_5_1.cs)]\n [!code-cpp[Classic Application.Exit Example#1](../../add/codesnippet/CPP/m-system.windows.forms.a_5_1.cpp)]\n [!code-vb[Classic Application.Exit Example#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.a_5_1.vb)]"
   syntax:
     content: public static void Run (System.Windows.Forms.Form mainForm);
     parameters:
     - id: mainForm
       type: System.Windows.Forms.Form
-      description: To be added.
+      description: A  that represents the form to make visible.
   overload: System.Windows.Forms.Application.Run*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A main message loop is already running on the current thread.
   platform:
   - net-11
   - net-20
@@ -868,14 +950,14 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the format string to apply to top-level window captions when they are displayed with a warning banner.
   syntax:
     content: public static string SafeTopLevelCaptionFormat { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The format string to apply to top-level window captions.
   overload: System.Windows.Forms.Application.SafeTopLevelCaptionFormat*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -892,15 +974,21 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the application-wide default for the `UseCompatibleTextRendering` property defined on certain controls.
+  remarks: "Certain Windows Forms controls can render their text using either the <xref:System.Windows.Forms.TextRenderer> class, which is based on the [!INCLUDE[ndptecgdi](../../add/includes/ndptecgdi-md.md)] graphics library, or the <xref:System.Drawing.Graphics> class, which is based on the [!INCLUDE[ndptecgdiplus](../../add/includes/ndptecgdiplus-md.md)] graphics library. This change was made in the [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)] because of performance and localization issues with [!INCLUDE[ndptecgdiplus](../../add/includes/ndptecgdiplus-md.md)]. Use SetCompatibleTextRenderingDefault to set the default value of the `UseCompatibleTextRendering` property for controls that support it.  \n  \n The `UseCompatibleTextRendering` property is intended to provide visual compatibility between Windows Forms controls that render text using the <xref:System.Windows.Forms.TextRenderer> class and [!INCLUDE[net_v10_short](../../add/includes/net-v10-short-md.md)] and [!INCLUDE[net_v11_short](../../add/includes/net-v11-short-md.md)] applications that perform custom text rendering using the <xref:System.Drawing.Graphics> class. In most cases, if your application is not being upgraded from [!INCLUDE[net_v10_short](../../add/includes/net-v10-short-md.md)] or [!INCLUDE[net_v11_short](../../add/includes/net-v11-short-md.md)], it is recommended that you leave `UseCompatibleTextRendering` set to the default value of `false`.  \n  \n The [!INCLUDE[ndptecgdi](../../add/includes/ndptecgdi-md.md)] based <xref:System.Windows.Forms.TextRenderer> class was introduced in the [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)] to improve performance, make text look better, and improve support for international fonts. In earlier versions of the [!INCLUDE[dnprdnshort](../../add/includes/dnprdnshort-md.md)], the [!INCLUDE[ndptecgdiplus](../../add/includes/ndptecgdiplus-md.md)] based <xref:System.Drawing.Graphics> class was used to perform all text rendering. [!INCLUDE[ndptecgdi](../../add/includes/ndptecgdi-md.md)] calculates character spacing and word wrapping differently from [!INCLUDE[ndptecgdiplus](../../add/includes/ndptecgdiplus-md.md)]. In a Windows Forms application that uses the <xref:System.Drawing.Graphics> class to render text, this could cause the text for controls that use <xref:System.Windows.Forms.TextRenderer> to appear different from the other text in the application. To resolve this incompatibility, you can set the `UseCompatibleTextRendering` property to `true`. To set `UseCompatibleTextRendering` to `true` for all supported controls in the application, call the SetCompatibleTextRenderingDefault method with a parameter of `true`.  \n  \n You should never call this method if your Windows Forms code is hosted in another application, such as Internet Explorer. Only call this method in stand-alone Windows Forms applications."
+  example:
+  - "> [!IMPORTANT]\n>  To set the default value for `UseCompatibleTextRendering` in [!INCLUDE[vbprvblong](../../add/includes/vbprvblong-md.md)] or later, see <xref:Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.UseCompatibleTextRendering%2A?displayProperty=fullName>.  \n  \n In [!INCLUDE[csprcslong](../../add/includes/csprcslong-md.md)] or later, a call to SetCompatibleTextRenderingDefault is automatically generated in the Program.cs file. To change the text rendering default, modify the generated code.  \n  \n```scr  \nstatic class Program  \n{  \n    /// <summary>  \n    /// The main entry point for the application.  \n    /// </summary>  \n    [STAThread]  \n    static void Main()  \n    {  \n        Application.EnableVisualStyles();  \n        Application.SetCompatibleTextRenderingDefault(false);  \n        Application.Run(new Form1());  \n    }  \n}  \n```"
   syntax:
     content: public static void SetCompatibleTextRenderingDefault (bool defaultValue);
     parameters:
     - id: defaultValue
       type: System.Boolean
-      description: To be added.
+      description: The default value to use for new controls. If , new controls that support `UseCompatibleTextRendering` use the [!INCLUDE[ndptecgdiplus](../../add/includes/ndptecgdiplus-md.md)] based  class for text rendering; if , new controls use the [!INCLUDE[ndptecgdi](../../add/includes/ndptecgdi-md.md)] based  class.
   overload: System.Windows.Forms.Application.SetCompatibleTextRenderingDefault*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: You can only call this method before the first window is created by your Windows Forms application.
   platform:
   - net-11
   - net-20
@@ -917,24 +1005,25 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Suspends or hibernates the system, or requests that the system be suspended or hibernated.
+  remarks: If an application does not respond to a suspend request within 20 seconds, Windows determines that it is in a non-responsive state, and that the application can either be put to sleep or terminated. Once an application responds to a suspend request, however, it can take whatever time it needs to clean up resources and shut down active processes.
   syntax:
     content: public static bool SetSuspendState (System.Windows.Forms.PowerState state, bool force, bool disableWakeEvent);
     parameters:
     - id: state
       type: System.Windows.Forms.PowerState
-      description: To be added.
+      description: A  indicating the power activity mode to which to transition.
     - id: force
       type: System.Boolean
-      description: To be added.
+      description: "\n     to force the suspended mode immediately;  to cause Windows to send a suspend request to every application."
     - id: disableWakeEvent
       type: System.Boolean
-      description: To be added.
+      description: "\n     to disable restoring the system's power status to active on a wake event,  to enable restoring the system's power status to active on a wake event."
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the system is being suspended, otherwise, .
   overload: System.Windows.Forms.Application.SetSuspendState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -951,15 +1040,21 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Instructs the application how to respond to unhandled exceptions.
+  remarks: "It is often not feasible to catch all of the exceptions thrown by Windows Forms. Using this method, you can instruct your application whether it should catch all unhandled exceptions thrown by Windows Forms components and continue operating, or whether it should expose them to the user and halt execution.  \n  \n Call SetUnhandledExceptionMode before you instantiate the main form of your application using the <xref:System.Windows.Forms.Application.Run%2A> method.  \n  \n To catch exceptions that occur in threads not created and owned by Windows Forms, use the <xref:System.AppDomain.UnhandledException> event handler."
+  example:
+  - "The following code example sets event handlers for exceptions that occur on Windows Forms threads and exceptions that occur on other threads. It sets SetUnhandledExceptionMode so that all exceptions are handled by the application, regardless of the settings in the application's user configuration file. It uses the <xref:System.Windows.Forms.Application.ThreadException> event to handle UI thread exceptions, and the <xref:System.AppDomain.UnhandledException> event to handle non-UI thread exceptions. Since <xref:System.AppDomain.UnhandledException> cannot prevent an application from terminating, the example simply logs the error in the application event log before termination.  \n  \n This example assumes that you have defined two <xref:System.Windows.Forms.Button> controls, `button1` and `button2`, on your <xref:System.Windows.Forms.Form> class.  \n  \n [!code-cpp[Classic Application.ThreadException Example#1](../../add/codesnippet/CPP/7dc231c1-50c2-4f15-acfe-_1.cpp)]\n [!code-cs[Classic Application.ThreadException Example#1](../../add/codesnippet/CSharp/7dc231c1-50c2-4f15-acfe-_1.cs)]\n [!code-vb[Classic Application.ThreadException Example#1](../../add/codesnippet/VisualBasic/7dc231c1-50c2-4f15-acfe-_1.vb)]"
   syntax:
     content: public static void SetUnhandledExceptionMode (System.Windows.Forms.UnhandledExceptionMode mode);
     parameters:
     - id: mode
       type: System.Windows.Forms.UnhandledExceptionMode
-      description: To be added.
+      description: An  value describing how the application should behave if an exception is thrown without being caught.
   overload: System.Windows.Forms.Application.SetUnhandledExceptionMode*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: You cannot set the exception mode after the application has created its first window.
   platform:
   - net-11
   - net-20
@@ -976,18 +1071,24 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Instructs the application how to respond to unhandled exceptions, optionally applying thread-specific behavior.
+  remarks: "It is often not feasible to catch all of the exceptions thrown by Windows Forms. Using this method, you can instruct your application whether it should catch all unhandled exceptions thrown by Windows Forms components and continue operating, or whether it should expose them to the user and halt execution.  \n  \n Call <xref:System.Windows.Forms.Application.SetUnhandledExceptionMode%2A> before you instantiate the main form of your application using the <xref:System.Windows.Forms.Application.Run%2A> method.  \n  \n When `threadScope` is `true`, the thread exception mode is set. The thread exception mode overrides the application exception mode if `mode` is not set to <xref:System.Windows.Forms.UnhandledExceptionMode>.  \n  \n When `threadScope` is `false`, the application exception mode is set. The application exception mode is used for all threads that have the <xref:System.Windows.Forms.UnhandledExceptionMode> mode. Setting the application exception mode does not affect the setting of the current thread.  \n  \n To catch exceptions that occur in threads not created and owned by Windows Forms, use the <xref:System.AppDomain.UnhandledException> event handler."
+  example:
+  - "The following code example sets event handlers for exceptions that occur on Windows Forms threads and exceptions that occur on other threads. It sets <xref:System.Windows.Forms.Application.SetUnhandledExceptionMode%2A> so that all exceptions are handled by the application, regardless of the settings in the application's user configuration file. It uses the <xref:System.Windows.Forms.Application.ThreadException> event to handle UI thread exceptions, and the <xref:System.AppDomain.UnhandledException> event to handle non-UI thread exceptions. Since <xref:System.AppDomain.UnhandledException> cannot prevent an application from terminating, the example simply logs the error in the application event log before termination.  \n  \n This example assumes that you have defined two <xref:System.Windows.Forms.Button> controls, `button1` and `button2`, on your <xref:System.Windows.Forms.Form> class.  \n  \n [!code-cpp[Classic Application.ThreadException Example#1](../../add/codesnippet/CPP/8cbd5ae0-958c-4db7-ae6d-_1.cpp)]\n [!code-cs[Classic Application.ThreadException Example#1](../../add/codesnippet/CSharp/8cbd5ae0-958c-4db7-ae6d-_1.cs)]\n [!code-vb[Classic Application.ThreadException Example#1](../../add/codesnippet/VisualBasic/8cbd5ae0-958c-4db7-ae6d-_1.vb)]"
   syntax:
     content: public static void SetUnhandledExceptionMode (System.Windows.Forms.UnhandledExceptionMode mode, bool threadScope);
     parameters:
     - id: mode
       type: System.Windows.Forms.UnhandledExceptionMode
-      description: To be added.
+      description: An  value describing how the application should behave if an exception is thrown without being caught.
     - id: threadScope
       type: System.Boolean
-      description: To be added.
+      description: "\n     to set the thread exception mode; otherwise, ."
   overload: System.Windows.Forms.Application.SetUnhandledExceptionMode*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: You cannot set the exception mode after the application has created its first window.
   platform:
   - net-11
   - net-20
@@ -1004,14 +1105,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the path for the executable file that started the application, not including the executable name.
+  remarks: ''
+  example:
+  - "The following code example gets this property and displays its value in a text box. The example requires that `textBox1` has been placed on a form.  \n  \n [!code-cpp[Classic Application.StartupPath Example#1](../../add/codesnippet/CPP/p-system.windows.forms.a_11_1.cpp)]\n [!code-cs[Classic Application.StartupPath Example#1](../../add/codesnippet/CSharp/p-system.windows.forms.a_11_1.cs)]\n [!code-vb[Classic Application.StartupPath Example#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.a_11_1.vb)]"
   syntax:
     content: public static string StartupPath { get; }
     return:
       type: System.String
-      description: To be added.
+      description: "The path for the executable file that started the application.  \n  \n This path will be different depending on whether the Windows Forms application is deployed using [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)]. [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)] applications are stored in a per-user application cache in the C:\\Documents and Settings\\\\*username* directory. For more information, see [Accessing Local and Remote Data in ClickOnce Applications](../Topic/Accessing%20Local%20and%20Remote%20Data%20in%20ClickOnce%20Applications.md)."
   overload: System.Windows.Forms.Application.StartupPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1028,13 +1132,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when an untrapped thread exception is thrown.
+  remarks: "This event allows your Windows Forms application to handle otherwise unhandled exceptions that occur in Windows Forms threads. Attach your event handlers to the ThreadException event to deal with these exceptions, which will leave your application in an unknown state. Where possible, exceptions should be handled by a structured exception handling block.  \n  \n You can change whether this callback is used for unhandled Windows Forms thread exceptions by setting <xref:System.Windows.Forms.Application.SetUnhandledExceptionMode%2A>. To catch exceptions that occur in threads not created and owned by Windows Forms, use the <xref:System.AppDomain.UnhandledException> event handler.  \n  \n> [!NOTE]\n>  To guarantee that no activations of this event are missed, you must attach a handler before you call <xref:System.Windows.Application.Run%2A?displayProperty=fullName>.  \n  \n> [!CAUTION]\n>  Because this is a static event, you must detach your event handlers when your application is disposed, or memory leaks will result."
+  example:
+  - "The following code example sets event handlers for exceptions that occur on Windows Forms threads and exceptions that occur on other threads. It sets <xref:System.Windows.Forms.Application.SetUnhandledExceptionMode%2A> so that all exceptions are handled by the application, regardless of the settings in the application's user configuration file. It uses the ThreadException event to handle UI thread exceptions, and the <xref:System.AppDomain.UnhandledException> event to handle non-UI thread exceptions. Since <xref:System.AppDomain.UnhandledException> cannot prevent an application from terminating, the example simply logs the error in the application event log before termination.  \n  \n This example assumes that you have defined two <xref:System.Windows.Forms.Button> controls, `button1` and `button2`, on your <xref:System.Windows.Forms.Form> class.  \n  \n [!code-cpp[Classic Application.ThreadException Example#1](../../add/codesnippet/CPP/e-system.windows.forms.a_3_1.cpp)]\n [!code-cs[Classic Application.ThreadException Example#1](../../add/codesnippet/CSharp/e-system.windows.forms.a_3_1.cs)]\n [!code-vb[Classic Application.ThreadException Example#1](../../add/codesnippet/VisualBasic/e-system.windows.forms.a_3_1.vb)]"
   syntax:
     content: public static event System.Threading.ThreadExceptionEventHandler ThreadException;
     return:
       type: System.Threading.ThreadExceptionEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1051,13 +1158,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a thread is about to shut down. When the main thread for an application is about to be shut down, this event is raised first, followed by an  event.
+  remarks: "You must attach the event handlers to the ThreadExit event to perform any unhandled, required tasks before the thread stops running. Close files opened by this thread, or dispose of objects that the garbage collector did not reclaim.  \n  \n> [!CAUTION]\n>  Because this is a static event, you must detach your event handlers when your application is disposed, or memory leaks will result."
+  example:
+  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the ThreadExit event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a Windows Forms and ensure that the event handler is associated with the ThreadExit event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#6](../../add/codesnippet/CSharp/e-system.windows.forms.a_6_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#6](../../add/codesnippet/VisualBasic/e-system.windows.forms.a_6_1.vb)]"
   syntax:
     content: public static event EventHandler ThreadExit;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1074,12 +1184,12 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Unregisters the message loop callback made with <xref:System.Windows.Forms.Application.RegisterMessageLoop%2A>.
   syntax:
     content: public static void UnregisterMessageLoop ();
     parameters: []
   overload: System.Windows.Forms.Application.UnregisterMessageLoop*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1096,14 +1206,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the path for the application data of a user.
+  remarks: "If a path does not exist, one is created in the following format:  \n  \n *Base Path*\\\\<xref:System.Windows.Forms.Application.CompanyName%2A>\\\\<xref:System.Windows.Forms.Application.ProductName%2A>\\\\<xref:System.Windows.Forms.Application.ProductVersion%2A>  \n  \n Data stored in this path is part of user profile that is enabled for roaming. A roaming user works on more than one computer in a network. The user profile for a roaming user is kept on a server on the network and is loaded onto a system when the user logs on. For a user profile to be considered for roaming, the operating system must support roaming profiles and it must be enabled.  \n  \n A typical base path is C:\\Documents and Settings\\\\*username*\\Application Data. This path will be different, however, if the Windows Forms application is deployed by using [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)]. [!INCLUDE[ndptecclick](../../add/includes/ndptecclick-md.md)] creates its own application data directory that is isolated from all other applications. For more information, see [Accessing Local and Remote Data in ClickOnce Applications](../Topic/Accessing%20Local%20and%20Remote%20Data%20in%20ClickOnce%20Applications.md)."
+  example:
+  - "The following code example displays two forms and exits the application when both forms are closed. When the application starts and exits, the position of each form is remembered. This example demonstrates using the UserAppDataPath property to store application data for the user.  \n  \n The class `MyApplicationContext` inherits from <xref:System.Windows.Forms.ApplicationContext> and keeps track when each form is closed, and exits the current thread when they both are. The class stores the positions of each form for the user. The form position data is stored in a file titled `Appdata.txt` that is created in the location determined by UserAppDataPath. The `Main` method calls `Application.Run(context)` to start the application given the <xref:System.Windows.Forms.ApplicationContext>.  \n  \n This code is an excerpt from the example shown in the <xref:System.Windows.Forms.ApplicationContext> class overview. Some code is not shown for the purpose of brevity. See <xref:System.Windows.Forms.ApplicationContext> for the whole code listing.  \n  \n [!code-vb[Application#5](../../add/codesnippet/VisualBasic/p-system.windows.forms.a_12_1.vb)]\n [!code-cpp[Application#5](../../add/codesnippet/CPP/p-system.windows.forms.a_12_1.cpp)]\n [!code-cs[Application#5](../../add/codesnippet/CSharp/p-system.windows.forms.a_12_1.cs)]"
   syntax:
     content: public static string UserAppDataPath { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The path for the application data of a user.
   overload: System.Windows.Forms.Application.UserAppDataPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1120,14 +1233,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the registry key for the application data of a user.
+  remarks: "If the key does not exist, it is created in the following format:  \n  \n CurrentUser\\Software\\\\<xref:System.Windows.Forms.Application.CompanyName%2A>\\\\<xref:System.Windows.Forms.Application.ProductName%2A>\\\\<xref:System.Windows.Forms.Application.ProductVersion%2A>  \n  \n Data stored in this key is part of user profile that is enabled for roaming. A roaming user works on more than one computer in a network. The user profile for a roaming user is kept on a server on the network and is loaded onto a system when the user logs on. For a user profile to be considered for roaming, the operating system must support roaming profiles and it must be enabled."
   syntax:
     content: public static Microsoft.Win32.RegistryKey UserAppDataRegistry { get; }
     return:
       type: Microsoft.Win32.RegistryKey
-      description: To be added.
+      description: A  representing the registry key for the application data specific to the user.
   overload: System.Windows.Forms.Application.UserAppDataRegistry*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1144,14 +1258,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets whether the wait cursor is used for all open forms of the application.
+  remarks: When this property is set to `true`, the <xref:System.Windows.Forms.Control.UseWaitCursor%2A> property of all open forms in the application will be set to `true`. This call will not return until this property has been set on all forms. Use this property when you have a long-running operation, and want to indicate in all application forms that the operation is still processing.
   syntax:
     content: public static bool UseWaitCursor { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: is the wait cursor is used for all open forms; otherwise, .
   overload: System.Windows.Forms.Application.UseWaitCursor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1168,14 +1283,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that specifies how visual styles are applied to application windows.
+  remarks: This VisualStyleState property determines whether visual styles are enabled in client areas or nonclient areas of application windows. Generally, this property should be set within the main form's constructor or <xref:System.Windows.Forms.Form.Load> event handler.
+  example:
+  - "The following code example sets the VisualStyleState property to one of the <xref:System.Windows.Forms.VisualStyles.VisualStyleState?displayProperty=fullName> values within the <xref:System.Windows.Forms.Control.Click> event handler for a <xref:System.Windows.Forms.Button> control. This code example is part of a larger example provided for the <xref:System.Windows.Forms.VisualStyles.VisualStyleState?displayProperty=fullName> enumeration.  \n  \n [!code-cpp[System.Windows.Forms.VisualStyles.VisualStyleState#10](../../add/codesnippet/CPP/p-system.windows.forms.a_0_1.cpp)]\n [!code-cs[System.Windows.Forms.VisualStyles.VisualStyleState#10](../../add/codesnippet/CSharp/p-system.windows.forms.a_0_1.cs)]\n [!code-vb[System.Windows.Forms.VisualStyles.VisualStyleState#10](../../add/codesnippet/VisualBasic/p-system.windows.forms.a_0_1.vb)]"
   syntax:
     content: public static System.Windows.Forms.VisualStyles.VisualStyleState VisualStyleState { get; set; }
     return:
       type: System.Windows.Forms.VisualStyles.VisualStyleState
-      description: To be added.
+      description: A bitwise combination of the  values.
   overload: System.Windows.Forms.Application.VisualStyleState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1250,12 +1368,6 @@ references:
   name: CompanyName
   nameWithType: Application.CompanyName
   fullName: System.Windows.Forms.Application.CompanyName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Application.CurrentCulture
   parent: System.Windows.Forms.Application
   isExternal: false
@@ -1298,24 +1410,12 @@ references:
   name: EnterThreadModal
   nameWithType: Application.EnterThreadModal
   fullName: System.Windows.Forms.Application.EnterThreadModal
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.Windows.Forms.Application.ExecutablePath
   parent: System.Windows.Forms.Application
   isExternal: false
   name: ExecutablePath
   nameWithType: Application.ExecutablePath
   fullName: System.Windows.Forms.Application.ExecutablePath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Application.Exit
   parent: System.Windows.Forms.Application
   isExternal: false
@@ -1346,12 +1446,6 @@ references:
   name: FilterMessage(Message)
   nameWithType: Application.FilterMessage(Message)
   fullName: System.Windows.Forms.Application.FilterMessage(Message)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.Message
   parent: System.Windows.Forms
   isExternal: false
@@ -1364,48 +1458,24 @@ references:
   name: Idle
   nameWithType: Application.Idle
   fullName: System.Windows.Forms.Application.Idle
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.Windows.Forms.Application.LeaveThreadModal
   parent: System.Windows.Forms.Application
   isExternal: false
   name: LeaveThreadModal
   nameWithType: Application.LeaveThreadModal
   fullName: System.Windows.Forms.Application.LeaveThreadModal
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.Windows.Forms.Application.LocalUserAppDataPath
   parent: System.Windows.Forms.Application
   isExternal: false
   name: LocalUserAppDataPath
   nameWithType: Application.LocalUserAppDataPath
   fullName: System.Windows.Forms.Application.LocalUserAppDataPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Application.MessageLoop
   parent: System.Windows.Forms.Application
   isExternal: false
   name: MessageLoop
   nameWithType: Application.MessageLoop
   fullName: System.Windows.Forms.Application.MessageLoop
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.Application.OleRequired
   parent: System.Windows.Forms.Application
   isExternal: false
@@ -1448,24 +1518,12 @@ references:
   name: ProductName
   nameWithType: Application.ProductName
   fullName: System.Windows.Forms.Application.ProductName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Application.ProductVersion
   parent: System.Windows.Forms.Application
   isExternal: false
   name: ProductVersion
   nameWithType: Application.ProductVersion
   fullName: System.Windows.Forms.Application.ProductVersion
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Application.RaiseIdle(System.EventArgs)
   parent: System.Windows.Forms.Application
   isExternal: false
@@ -1496,24 +1554,12 @@ references:
   name: RemoveMessageFilter(IMessageFilter)
   nameWithType: Application.RemoveMessageFilter(IMessageFilter)
   fullName: System.Windows.Forms.Application.RemoveMessageFilter(IMessageFilter)
-- uid: System.Windows.Forms.IMessageFilter
-  parent: System.Windows.Forms
-  isExternal: false
-  name: IMessageFilter
-  nameWithType: IMessageFilter
-  fullName: System.Windows.Forms.IMessageFilter
 - uid: System.Windows.Forms.Application.RenderWithVisualStyles
   parent: System.Windows.Forms.Application
   isExternal: false
   name: RenderWithVisualStyles
   nameWithType: Application.RenderWithVisualStyles
   fullName: System.Windows.Forms.Application.RenderWithVisualStyles
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.Application.Restart
   parent: System.Windows.Forms.Application
   isExternal: false
@@ -1556,54 +1602,24 @@ references:
   name: SafeTopLevelCaptionFormat
   nameWithType: Application.SafeTopLevelCaptionFormat
   fullName: System.Windows.Forms.Application.SafeTopLevelCaptionFormat
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(System.Boolean)
   parent: System.Windows.Forms.Application
   isExternal: false
   name: SetCompatibleTextRenderingDefault(Boolean)
   nameWithType: Application.SetCompatibleTextRenderingDefault(Boolean)
   fullName: System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState,System.Boolean,System.Boolean)
   parent: System.Windows.Forms.Application
   isExternal: false
   name: SetSuspendState(PowerState,Boolean,Boolean)
   nameWithType: Application.SetSuspendState(PowerState,Boolean,Boolean)
   fullName: System.Windows.Forms.Application.SetSuspendState(PowerState,Boolean,Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.PowerState
   parent: System.Windows.Forms
   isExternal: false
   name: PowerState
   nameWithType: PowerState
   fullName: System.Windows.Forms.PowerState
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.Application.SetUnhandledExceptionMode(System.Windows.Forms.UnhandledExceptionMode)
   parent: System.Windows.Forms.Application
   isExternal: false
@@ -1622,30 +1638,12 @@ references:
   name: SetUnhandledExceptionMode(UnhandledExceptionMode,Boolean)
   nameWithType: Application.SetUnhandledExceptionMode(UnhandledExceptionMode,Boolean)
   fullName: System.Windows.Forms.Application.SetUnhandledExceptionMode(UnhandledExceptionMode,Boolean)
-- uid: System.Windows.Forms.UnhandledExceptionMode
-  parent: System.Windows.Forms
-  isExternal: false
-  name: UnhandledExceptionMode
-  nameWithType: UnhandledExceptionMode
-  fullName: System.Windows.Forms.UnhandledExceptionMode
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.Application.StartupPath
   parent: System.Windows.Forms.Application
   isExternal: false
   name: StartupPath
   nameWithType: Application.StartupPath
   fullName: System.Windows.Forms.Application.StartupPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Application.ThreadException
   parent: System.Windows.Forms.Application
   isExternal: false
@@ -1664,12 +1662,6 @@ references:
   name: ThreadExit
   nameWithType: Application.ThreadExit
   fullName: System.Windows.Forms.Application.ThreadExit
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.Windows.Forms.Application.UnregisterMessageLoop
   parent: System.Windows.Forms.Application
   isExternal: false
@@ -1682,36 +1674,18 @@ references:
   name: UserAppDataPath
   nameWithType: Application.UserAppDataPath
   fullName: System.Windows.Forms.Application.UserAppDataPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Application.UserAppDataRegistry
   parent: System.Windows.Forms.Application
   isExternal: false
   name: UserAppDataRegistry
   nameWithType: Application.UserAppDataRegistry
   fullName: System.Windows.Forms.Application.UserAppDataRegistry
-- uid: Microsoft.Win32.RegistryKey
-  parent: Microsoft.Win32
-  isExternal: false
-  name: RegistryKey
-  nameWithType: RegistryKey
-  fullName: Microsoft.Win32.RegistryKey
 - uid: System.Windows.Forms.Application.UseWaitCursor
   parent: System.Windows.Forms.Application
   isExternal: false
   name: UseWaitCursor
   nameWithType: Application.UseWaitCursor
   fullName: System.Windows.Forms.Application.UseWaitCursor
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Forms.Application.VisualStyleState
   parent: System.Windows.Forms.Application
   isExternal: false

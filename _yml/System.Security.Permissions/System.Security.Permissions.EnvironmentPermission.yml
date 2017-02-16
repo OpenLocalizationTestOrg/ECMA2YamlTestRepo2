@@ -21,8 +21,8 @@ items:
   nameWithType: EnvironmentPermission
   fullName: System.Security.Permissions.EnvironmentPermission
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Controls access to system and user environment variables. This class cannot be inherited.
+  remarks: "Environment variable names are designated by one or more case-insensitive name lists separated by semicolons, with separate lists for read and write access to the named variables. Write access includes the ability to create and delete environment variables as well as to change existing values.  \n  \n> [!NOTE]\n>  In versions of the .NET Framework before the [!INCLUDE[net_v40_long](../../add/includes/net-v40-long-md.md)], you could use the <xref:System.Security.CodeAccessPermission.Deny%2A?displayProperty=fullName> method to prevent inadvertent access to system resources by trusted code. <xref:System.Security.CodeAccessPermission.Deny%2A> is now obsolete, and access to resources is now determined solely by the granted permission set for an assembly. To limit access to files, you must run partially trusted code in a sandbox and assign it permissions only to resources that the code is allowed to access. For information about running an application in a sandbox, see [How to: Run Partially Trusted Code in a Sandbox](../Topic/How%20to:%20Run%20Partially%20Trusted%20Code%20in%20a%20Sandbox.md)."
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -61,15 +61,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with either restricted or unrestricted permission as specified.
+  remarks: Creates either fully restricted (`None`) or `Unrestricted` access to all environment variables.
   syntax:
     content: public EnvironmentPermission (System.Security.Permissions.PermissionState state);
     parameters:
     - id: state
       type: System.Security.Permissions.PermissionState
-      description: To be added.
+      description: One of the  values.
   overload: System.Security.Permissions.EnvironmentPermission.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The state parameter is not a valid value of .
   platform:
   - net-11
   - net-20
@@ -86,18 +90,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified access to the specified environment variables.
+  remarks: This constructor allows only one of the <xref:System.Security.Permissions.EnvironmentPermissionAccess> values to be specified. This access applies to all listed environment variables. Use <xref:System.Security.Permissions.EnvironmentPermission.AddPathList%2A> to define complex permissions.
   syntax:
     content: public EnvironmentPermission (System.Security.Permissions.EnvironmentPermissionAccess flag, string pathList);
     parameters:
     - id: flag
       type: System.Security.Permissions.EnvironmentPermissionAccess
-      description: To be added.
+      description: One of the  values.
     - id: pathList
       type: System.String
-      description: To be added.
+      description: A list of environment variables (semicolon-separated) to which access is granted.
   overload: System.Security.Permissions.EnvironmentPermission.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The pathList parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The flag parameter is not a valid value of .
   platform:
   - net-11
   - net-20
@@ -114,18 +125,27 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds access for the specified environment variables to the existing state of the permission.
+  remarks: Use this method to modify environment variable access by adding to the state of the current permission.
+  example:
+  - "The following code example shows the use of the AddPathList method.  \n  \n [!code-cs[System.Security.Permissions.EnvironmentPermission#7](../../add/codesnippet/CSharp/97f503ab-acc2-4cf5-9580-_1.cs)]\n [!code-vb[System.Security.Permissions.EnvironmentPermission#7](../../add/codesnippet/VisualBasic/97f503ab-acc2-4cf5-9580-_1.vb)]"
   syntax:
     content: public void AddPathList (System.Security.Permissions.EnvironmentPermissionAccess flag, string pathList);
     parameters:
     - id: flag
       type: System.Security.Permissions.EnvironmentPermissionAccess
-      description: To be added.
+      description: One of the  values.
     - id: pathList
       type: System.String
-      description: To be added.
+      description: A list of environment variables (semicolon-separated).
   overload: System.Security.Permissions.EnvironmentPermission.AddPathList*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The pathList parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The flag parameter is not a valid value of .
   platform:
   - net-11
   - net-20
@@ -142,15 +162,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates and returns an identical copy of the current permission.
+  remarks: A copy of a permission represents the same access to resources as the original permission.
   syntax:
     content: public override System.Security.IPermission Copy ();
     parameters: []
     return:
       type: System.Security.IPermission
-      description: To be added.
+      description: A copy of the current permission.
   overload: System.Security.Permissions.EnvironmentPermission.Copy*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -167,15 +188,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Reconstructs a permission with a specified state from an XML encoding.
   syntax:
     content: public override void FromXml (System.Security.SecurityElement esd);
     parameters:
     - id: esd
       type: System.Security.SecurityElement
-      description: To be added.
+      description: The XML encoding to use to reconstruct the permission.
   overload: System.Security.Permissions.EnvironmentPermission.FromXml*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The esd parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The esd parameter is not a valid permission element.  \n  \n -or-  \n  \n The esd parameter's version number is not valid."
   platform:
   - net-11
   - net-20
@@ -192,18 +219,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets all environment variables with the specified .
+  remarks: "Use this method to get the state of the current permission. To get both `Read` and `Write` access states requires two calls to this method.  \n  \n> [!NOTE]\n>  The `flag` parameter is limited to the values of <xref:System.Security.Permissions.EnvironmentPermissionAccess>, which represent single types of environment variable access. Those values are <xref:System.Security.Permissions.EnvironmentPermissionAccess> and <xref:System.Security.Permissions.EnvironmentPermissionAccess>. The values acceptable to `flag` do not include <xref:System.Security.Permissions.EnvironmentPermissionAccess> and <xref:System.Security.Permissions.EnvironmentPermissionAccess>, which do not represent single types of environment variable access."
+  example:
+  - "The following code example shows the use of the GetPathList method. This code example is part of a larger example provided for the <xref:System.Security.Permissions.EnvironmentPermission> class.  \n  \n [!code-cs[System.Security.Permissions.EnvironmentPermission#7](../../add/codesnippet/CSharp/c702179e-cf71-4c94-8741-_1.cs)]\n [!code-vb[System.Security.Permissions.EnvironmentPermission#7](../../add/codesnippet/VisualBasic/c702179e-cf71-4c94-8741-_1.vb)]"
   syntax:
     content: public string GetPathList (System.Security.Permissions.EnvironmentPermissionAccess flag);
     parameters:
     - id: flag
       type: System.Security.Permissions.EnvironmentPermissionAccess
-      description: To be added.
+      description: One of the  values that represents a single type of environment variable access.
     return:
       type: System.String
-      description: To be added.
+      description: A list of environment variables (semicolon-separated) for the selected flag.
   overload: System.Security.Permissions.EnvironmentPermission.GetPathList*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    flag is not a valid value of .  \n  \n -or-  \n  \n flag is , which represents more than one type of environment variable access, or , which does not represent any type of environment variable access."
   platform:
   - net-11
   - net-20
@@ -220,18 +253,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates and returns a permission that is the intersection of the current permission and the specified permission.
+  remarks: The intersection of two permissions is a permission that describes the state they both describe in common. Only a demand that passes both original permissions will pass the intersection.
   syntax:
     content: public override System.Security.IPermission Intersect (System.Security.IPermission target);
     parameters:
     - id: target
       type: System.Security.IPermission
-      description: To be added.
+      description: A permission to intersect with the current permission. It must be of the same type as the current permission.
     return:
       type: System.Security.IPermission
-      description: To be added.
+      description: A new permission that represents the intersection of the current permission and the specified permission. This new permission is  if the intersection is empty.
   overload: System.Security.Permissions.EnvironmentPermission.Intersect*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The target parameter is not  and is not of the same type as the current permission.
   platform:
   - net-11
   - net-20
@@ -248,18 +285,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the current permission is a subset of the specified permission.
+  remarks: The current permission is a subset of the specified permission if the current permission specifies a state that is wholly contained by the specified permission. For example, a permission that represents access to C:\example.txt is a subset of a permission that represents access to C:\\. If this method returns `true`, the current permission represents no more access to the protected resource than does the specified permission.
   syntax:
     content: public override bool IsSubsetOf (System.Security.IPermission target);
     parameters:
     - id: target
       type: System.Security.IPermission
-      description: To be added.
+      description: A permission that is to be tested for the subset relationship. This permission must be of the same type as the current permission.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the current permission is a subset of the specified permission; otherwise, .
   overload: System.Security.Permissions.EnvironmentPermission.IsSubsetOf*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The target parameter is not  and is not of the same type as the current permission.
   platform:
   - net-11
   - net-20
@@ -276,15 +317,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value indicating whether the current permission is unrestricted.
+  remarks: An unrestricted permission represents the union of all possible states of the permission.
   syntax:
     content: public bool IsUnrestricted ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the current permission is unrestricted; otherwise, .
   overload: System.Security.Permissions.EnvironmentPermission.IsUnrestricted*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -301,18 +343,27 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the specified access to the specified environment variables to the existing state of the permission.
+  remarks: The previous state of the current permission is overwritten.
+  example:
+  - "The following code example shows the use of the SetPathList method. This code example is part of a larger example provided for the <xref:System.Security.Permissions.EnvironmentPermission> class.  \n  \n [!code-cs[System.Security.Permissions.EnvironmentPermission#7](../../add/codesnippet/CSharp/9109858e-344e-4281-8d77-_1.cs)]\n [!code-vb[System.Security.Permissions.EnvironmentPermission#7](../../add/codesnippet/VisualBasic/9109858e-344e-4281-8d77-_1.vb)]"
   syntax:
     content: public void SetPathList (System.Security.Permissions.EnvironmentPermissionAccess flag, string pathList);
     parameters:
     - id: flag
       type: System.Security.Permissions.EnvironmentPermissionAccess
-      description: To be added.
+      description: One of the  values.
     - id: pathList
       type: System.String
-      description: To be added.
+      description: A list of environment variables (semicolon-separated).
   overload: System.Security.Permissions.EnvironmentPermission.SetPathList*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The pathList parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The flag parameter is not a valid value of .
   platform:
   - net-11
   - net-20
@@ -329,15 +380,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an XML encoding of the permission and its current state.
   syntax:
     content: public override System.Security.SecurityElement ToXml ();
     parameters: []
     return:
       type: System.Security.SecurityElement
-      description: To be added.
+      description: An XML encoding of the permission, including any state information.
   overload: System.Security.Permissions.EnvironmentPermission.ToXml*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -354,18 +405,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security.Permissions
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a permission that is the union of the current permission and the specified permission.
+  remarks: The result of a call to Union is a permission that represents all the states represented by both the current permission and the specified permission. Any demand that passes either permission passes their union.
   syntax:
     content: public override System.Security.IPermission Union (System.Security.IPermission other);
     parameters:
     - id: other
       type: System.Security.IPermission
-      description: To be added.
+      description: A permission to combine with the current permission. It must be of the same type as the current permission.
     return:
       type: System.Security.IPermission
-      description: To be added.
+      description: A new permission that represents the union of the current permission and the specified permission.
   overload: System.Security.Permissions.EnvironmentPermission.Union*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The other parameter is not  and is not of the same type as the current permission.
   platform:
   - net-11
   - net-20
@@ -410,18 +465,6 @@ references:
   name: AddPathList(EnvironmentPermissionAccess,String)
   nameWithType: EnvironmentPermission.AddPathList(EnvironmentPermissionAccess,String)
   fullName: System.Security.Permissions.EnvironmentPermission.AddPathList(EnvironmentPermissionAccess,String)
-- uid: System.Security.Permissions.EnvironmentPermissionAccess
-  parent: System.Security.Permissions
-  isExternal: false
-  name: EnvironmentPermissionAccess
-  nameWithType: EnvironmentPermissionAccess
-  fullName: System.Security.Permissions.EnvironmentPermissionAccess
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Permissions.EnvironmentPermission.Copy
   parent: System.Security.Permissions.EnvironmentPermission
   isExternal: false
@@ -452,36 +495,12 @@ references:
   name: GetPathList(EnvironmentPermissionAccess)
   nameWithType: EnvironmentPermission.GetPathList(EnvironmentPermissionAccess)
   fullName: System.Security.Permissions.EnvironmentPermission.GetPathList(EnvironmentPermissionAccess)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Security.Permissions.EnvironmentPermissionAccess
-  parent: System.Security.Permissions
-  isExternal: false
-  name: EnvironmentPermissionAccess
-  nameWithType: EnvironmentPermissionAccess
-  fullName: System.Security.Permissions.EnvironmentPermissionAccess
 - uid: System.Security.Permissions.EnvironmentPermission.Intersect(System.Security.IPermission)
   parent: System.Security.Permissions.EnvironmentPermission
   isExternal: false
   name: Intersect(IPermission)
   nameWithType: EnvironmentPermission.Intersect(IPermission)
   fullName: System.Security.Permissions.EnvironmentPermission.Intersect(IPermission)
-- uid: System.Security.IPermission
-  parent: System.Security
-  isExternal: false
-  name: IPermission
-  nameWithType: IPermission
-  fullName: System.Security.IPermission
-- uid: System.Security.IPermission
-  parent: System.Security
-  isExternal: false
-  name: IPermission
-  nameWithType: IPermission
-  fullName: System.Security.IPermission
 - uid: System.Security.Permissions.EnvironmentPermission.IsSubsetOf(System.Security.IPermission)
   parent: System.Security.Permissions.EnvironmentPermission
   isExternal: false
@@ -494,72 +513,30 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Security.IPermission
-  parent: System.Security
-  isExternal: false
-  name: IPermission
-  nameWithType: IPermission
-  fullName: System.Security.IPermission
 - uid: System.Security.Permissions.EnvironmentPermission.IsUnrestricted
   parent: System.Security.Permissions.EnvironmentPermission
   isExternal: false
   name: IsUnrestricted()
   nameWithType: EnvironmentPermission.IsUnrestricted()
   fullName: System.Security.Permissions.EnvironmentPermission.IsUnrestricted()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.Permissions.EnvironmentPermission.SetPathList(System.Security.Permissions.EnvironmentPermissionAccess,System.String)
   parent: System.Security.Permissions.EnvironmentPermission
   isExternal: false
   name: SetPathList(EnvironmentPermissionAccess,String)
   nameWithType: EnvironmentPermission.SetPathList(EnvironmentPermissionAccess,String)
   fullName: System.Security.Permissions.EnvironmentPermission.SetPathList(EnvironmentPermissionAccess,String)
-- uid: System.Security.Permissions.EnvironmentPermissionAccess
-  parent: System.Security.Permissions
-  isExternal: false
-  name: EnvironmentPermissionAccess
-  nameWithType: EnvironmentPermissionAccess
-  fullName: System.Security.Permissions.EnvironmentPermissionAccess
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Permissions.EnvironmentPermission.ToXml
   parent: System.Security.Permissions.EnvironmentPermission
   isExternal: false
   name: ToXml()
   nameWithType: EnvironmentPermission.ToXml()
   fullName: System.Security.Permissions.EnvironmentPermission.ToXml()
-- uid: System.Security.SecurityElement
-  parent: System.Security
-  isExternal: false
-  name: SecurityElement
-  nameWithType: SecurityElement
-  fullName: System.Security.SecurityElement
 - uid: System.Security.Permissions.EnvironmentPermission.Union(System.Security.IPermission)
   parent: System.Security.Permissions.EnvironmentPermission
   isExternal: false
   name: Union(IPermission)
   nameWithType: EnvironmentPermission.Union(IPermission)
   fullName: System.Security.Permissions.EnvironmentPermission.Union(IPermission)
-- uid: System.Security.IPermission
-  parent: System.Security
-  isExternal: false
-  name: IPermission
-  nameWithType: IPermission
-  fullName: System.Security.IPermission
-- uid: System.Security.IPermission
-  parent: System.Security
-  isExternal: false
-  name: IPermission
-  nameWithType: IPermission
-  fullName: System.Security.IPermission
 - uid: System.Security.Permissions.EnvironmentPermission.#ctor*
   parent: System.Security.Permissions.EnvironmentPermission
   isExternal: false

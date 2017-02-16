@@ -15,8 +15,8 @@ items:
   nameWithType: PersistenceIOParticipant
   fullName: System.Activities.Persistence.PersistenceIOParticipant
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: A derived vclass of the  class with methods that perform input and output operations in addition to the persisting and loading of workflow instances through the persistence process.
+  remarks: "A host executes the following steps (or stages) when persisting an instance:  \n  \n1.  Collects values to be persisted.  \n  \n2.  Maps fields of monolithic structured values to individual values.  \n  \n3.  Issues the <xref:System.Activities.DurableInstancing.SaveWorkflowCommand> to the persistence provider.  \n  \n4.  Performs I/O under the persistence transaction.  \n  \n A host completes a stage before beginning the next stage. For example when persisting, the host collects values from all the persistence participants before moving to the second stage. In the second stage, the host provides all the values collected in the first stage to all persistence participants in the second stage for mapping. In the third stage, the host provides all the collected values in the first and second stages to the persistence provider when invoking the <xref:System.Activities.DurableInstancing.SaveWorkflowCommand>. Then in the fourth stage, the host provides all the collected values to all the persistence IO participants under the persistence transaction.  \n  \n A host executes the following stages when loading a persistence instance:  \n  \n1.  Issues the <xref:System.Activities.DurableInstancing.LoadWorkflowCommand> and <xref:System.Activities.DurableInstancing.LoadWorkflowByInstanceKeyCommand> to the persistence provider.  \n  \n2.  Performs I/O under the persistence transaction.  \n  \n3.  Publishes the loaded values.  \n  \n At the highest level, workflow instance extensions that derive from the <xref:System.Activities.Persistence.PersistenceParticipant> class can participate in the first (Collect) and second (Map) stages of persisting process and the third stage (Publish) of loading process.  Workflow instance extensions deriving from the PersistenceIOParticipant class can additionally participate in the fourth stage of the persisting process and the second stage of the loading process (I/O)."
   syntax:
     content: 'public abstract class PersistenceIOParticipant : System.Activities.Persistence.PersistenceParticipant'
   inheritance:
@@ -43,18 +43,18 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities.Persistence
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes an instance of the  class.
   syntax:
     content: protected PersistenceIOParticipant (bool isSaveTransactionRequired, bool isLoadTransactionRequired);
     parameters:
     - id: isSaveTransactionRequired
       type: System.Boolean
-      description: To be added.
+      description: "\n     if a transaction is required for the Save operation. If the  object is created with this parameter set to ,  Transaction.Current is guaranteed to be set when BeginOnSave is invoked. The transaction is shared between the persistence provider, all PersistenceIOParticipant extensions, and potentially other transaction participants."
     - id: isLoadTransactionRequired
       type: System.Boolean
-      description: To be added.
+      description: "\n     if a transaction is required for the Load operation. If the  object is created with this parameter set to ,  Transaction.Current is guaranteed to be set  when BeginOnLoad is invoked. The transaction is shared between the persistence provider, all PersistenceIOParticipant extensions, and potentially other transaction participants."
   overload: System.Activities.Persistence.PersistenceIOParticipant.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -71,12 +71,13 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities.Persistence
-  summary: To be added.
-  remarks: To be added.
+  summary: Aborts the pending IO (Load or Save) operation.
+  remarks: Derived classes that override BeginOnSave or BeginOnLoad and might not always complete immediately must override Abort. If Abort is invoked, any pending IO operations must be canceled. If an operation is canceled in this way, the corresponding End method should throw OperationCanceledException.
   syntax:
     content: protected abstract void Abort ();
     parameters: []
   overload: System.Activities.Persistence.PersistenceIOParticipant.Abort*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -93,27 +94,27 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities.Persistence
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins an asynchronous operation to load additional state in conjunction with an instance being loaded from the instance store.
   syntax:
     content: protected virtual IAsyncResult BeginOnLoad (System.Collections.Generic.IDictionary<System.Xml.Linq.XName,object> readWriteValues, TimeSpan timeout, AsyncCallback callback, object state);
     parameters:
     - id: readWriteValues
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Object}
-      description: To be added.
+      description: A dictionary of read-write values loaded by the persistence provider. This corresponds to the set of read-write values passed to BeginOnSave in the most recent persistence episode for this instance.
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: The time span within which the operation should be completed without timing out.
     - id: callback
       type: System.AsyncCallback
-      description: To be added.
+      description: The asynchronous callback delegate that receives notification of the completion of the asynchronous Load operation.
     - id: state
       type: System.Object
-      description: To be added.
+      description: The state information associated with the asynchronous operation.
     return:
       type: System.IAsyncResult
-      description: To be added.
+      description: The status of an asynchronous operation.
   overload: System.Activities.Persistence.PersistenceIOParticipant.BeginOnLoad*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -130,30 +131,30 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities.Persistence
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins an asynchronous operation to save additional state in conjunction with an instance being persisted to the instance store.
   syntax:
     content: protected virtual IAsyncResult BeginOnSave (System.Collections.Generic.IDictionary<System.Xml.Linq.XName,object> readWriteValues, System.Collections.Generic.IDictionary<System.Xml.Linq.XName,object> writeOnlyValues, TimeSpan timeout, AsyncCallback callback, object state);
     parameters:
     - id: readWriteValues
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Object}
-      description: To be added.
+      description: A dictionary of read-write values collected in the CollectValues and MapValues stages.
     - id: writeOnlyValues
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Object}
-      description: To be added.
+      description: A dictionary of write-only values collected in the CollectValues and MapValues stages.
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: The time span within which the operation should be completed without timing out.
     - id: callback
       type: System.AsyncCallback
-      description: To be added.
+      description: The asynchronous callback delegate that receives notification of the completion of the asynchronous operation.
     - id: state
       type: System.Object
-      description: To be added.
+      description: The state information associated with the asynchronous operation.
     return:
       type: System.IAsyncResult
-      description: To be added.
+      description: The status of an asynchronous operation.
   overload: System.Activities.Persistence.PersistenceIOParticipant.BeginOnSave*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -170,15 +171,15 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities.Persistence
-  summary: To be added.
-  remarks: To be added.
+  summary: Completes the asynchronous Load operation.
   syntax:
     content: protected virtual void EndOnLoad (IAsyncResult result);
     parameters:
     - id: result
       type: System.IAsyncResult
-      description: To be added.
+      description: The asynchronous result returned by a call to the <xref:System.Activities.Persistence.PersistenceIOParticipant.BeginOnSave%2A> method.
   overload: System.Activities.Persistence.PersistenceIOParticipant.EndOnLoad*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -195,15 +196,15 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities.Persistence
-  summary: To be added.
-  remarks: To be added.
+  summary: Completes the asynchronous Save operation.
   syntax:
     content: protected virtual void EndOnSave (IAsyncResult result);
     parameters:
     - id: result
       type: System.IAsyncResult
-      description: To be added.
+      description: The asynchronous result returned by a call to the <xref:System.Activities.Persistence.PersistenceIOParticipant.BeginOnSave%2A> method.
   overload: System.Activities.Persistence.PersistenceIOParticipant.EndOnSave*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -224,12 +225,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Activities.Persistence.PersistenceIOParticipant.Abort
   parent: System.Activities.Persistence.PersistenceIOParticipant
   isExternal: false
@@ -254,6 +249,28 @@ references:
   name: IDictionary<XName,Object>
   nameWithType: IDictionary<XName,Object>
   fullName: System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Object>
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.Xml.Linq.XName,System.Object>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Xml.Linq.XName
+    name: XName
+    nameWithType: XName
+    fullName: XName
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.TimeSpan
   parent: System
   isExternal: true
@@ -278,66 +295,18 @@ references:
   name: BeginOnSave(IDictionary<XName,Object>,IDictionary<XName,Object>,TimeSpan,AsyncCallback,Object)
   nameWithType: PersistenceIOParticipant.BeginOnSave(IDictionary<XName,Object>,IDictionary<XName,Object>,TimeSpan,AsyncCallback,Object)
   fullName: System.Activities.Persistence.PersistenceIOParticipant.BeginOnSave(IDictionary<XName,Object>,IDictionary<XName,Object>,TimeSpan,AsyncCallback,Object)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
-- uid: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Object}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IDictionary<XName,Object>
-  nameWithType: IDictionary<XName,Object>
-  fullName: System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Object>
-- uid: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Object}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IDictionary<XName,Object>
-  nameWithType: IDictionary<XName,Object>
-  fullName: System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Object>
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
-- uid: System.AsyncCallback
-  parent: System
-  isExternal: true
-  name: AsyncCallback
-  nameWithType: AsyncCallback
-  fullName: System.AsyncCallback
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Activities.Persistence.PersistenceIOParticipant.EndOnLoad(System.IAsyncResult)
   parent: System.Activities.Persistence.PersistenceIOParticipant
   isExternal: false
   name: EndOnLoad(IAsyncResult)
   nameWithType: PersistenceIOParticipant.EndOnLoad(IAsyncResult)
   fullName: System.Activities.Persistence.PersistenceIOParticipant.EndOnLoad(IAsyncResult)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.Activities.Persistence.PersistenceIOParticipant.EndOnSave(System.IAsyncResult)
   parent: System.Activities.Persistence.PersistenceIOParticipant
   isExternal: false
   name: EndOnSave(IAsyncResult)
   nameWithType: PersistenceIOParticipant.EndOnSave(IAsyncResult)
   fullName: System.Activities.Persistence.PersistenceIOParticipant.EndOnSave(IAsyncResult)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.Activities.Persistence.PersistenceIOParticipant.#ctor*
   parent: System.Activities.Persistence.PersistenceIOParticipant
   isExternal: false

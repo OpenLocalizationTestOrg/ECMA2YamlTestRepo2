@@ -12,8 +12,8 @@ items:
   nameWithType: IPendingWork
   fullName: System.Workflow.Runtime.IPendingWork
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides methods to participate in a work batch.
+  remarks: "> [!NOTE]\n>  [!INCLUDE[DeprecatedContent](../../add/includes/deprecatedcontent-md.md)]  \n  \n The IPendingWork interface is provided for services that want to participate in the workflow runtime engine batching mechanism. The batching mechanism is especially useful for services that use a durable store. It is often important in these cases to maintain consistency between the durable store used by the service and the internal state of the workflow runtime engine.  \n  \n If you want your service to participate in workflow transaction batching provided by the <xref:System.Workflow.Runtime.Hosting.WorkflowCommitWorkBatchService>, you must implement the methods defined by the IPendingWork interface. The workflow runtime engine will call the <xref:System.Workflow.Runtime.IPendingWork.Commit%2A> method on your service to commit the batch.  \n  \n The <xref:System.Workflow.Runtime.Hosting.SqlWorkflowPersistenceService> class implements the IPendingWork interface."
   syntax:
     content: >-
       [System.Obsolete("The System.Workflow.* types are deprecated.  Instead, please use the new types from System.Activities.*")]
@@ -36,18 +36,19 @@ items:
   assemblies:
   - System.Workflow.Runtime
   namespace: System.Workflow.Runtime
-  summary: To be added.
-  remarks: To be added.
+  summary: Commits the list of work items by using the specified  object.
+  remarks: The workflow runtime engine calls the Commit method when its semantics dictate that the pending work in the work batch should be committed. When it reaches a commit point, the workflow runtime engine calls the Commit method on each <xref:System.Workflow.Runtime.IPendingWork> object in its work batch; the workflow runtime engine passes the Commit method the collection of items associated with that <xref:System.Workflow.Runtime.IPendingWork> object. Either all of the work in a batch succeeds or none of it succeeds. You should throw an exception if any of the work items passed to the Commit method in your implementation cannot be committed. Depending on your implementation, you may want to perform some rollback in your Commit method if it cannot commit its work items. If the workflow runtime engine successfully commits all of the work in the work batch, it calls <xref:System.Workflow.Runtime.IPendingWork.Complete%2A> with the `succeeded` parameter set to `true`; otherwise, it calls <xref:System.Workflow.Runtime.IPendingWork.Complete%2A> with `succeeded` set to `false`.
   syntax:
     content: public void Commit (System.Transactions.Transaction transaction, System.Collections.ICollection items);
     parameters:
     - id: transaction
       type: System.Transactions.Transaction
-      description: To be added.
+      description: The  associated with the pending work.
     - id: items
       type: System.Collections.ICollection
-      description: To be added.
+      description: The work items to be committed.
   overload: System.Workflow.Runtime.IPendingWork.Commit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -64,18 +65,19 @@ items:
   assemblies:
   - System.Workflow.Runtime
   namespace: System.Workflow.Runtime
-  summary: To be added.
-  remarks: To be added.
+  summary: Called when the transaction has completed.
+  remarks: If `succeeded` is `true`, the transaction succeeded and any resources used by the work batch may be released. If `succeeded` is `false`, the transaction failed. Depending on your implementation, you can perform any appropriate roll back on the work in the work batch when the transaction fails.
   syntax:
     content: public void Complete (bool succeeded, System.Collections.ICollection items);
     parameters:
     - id: succeeded
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the transaction succeeded; otherwise, ."
     - id: items
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> of work items.
   overload: System.Workflow.Runtime.IPendingWork.Complete*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -92,18 +94,19 @@ items:
   assemblies:
   - System.Workflow.Runtime
   namespace: System.Workflow.Runtime
-  summary: To be added.
-  remarks: To be added.
+  summary: Allows the items in the work batch to assert whether they must commit immediately.
+  remarks: If MustCommit returns `false`, the work can be postponed to a future commit point. If any of the items must be committed, then return `true` and all items will be committed at the current commit point. For a discussion about possible commit points, see the <xref:System.Workflow.Runtime.Hosting.SqlWorkflowPersistenceService> class.
   syntax:
     content: public bool MustCommit (System.Collections.ICollection items);
     parameters:
     - id: items
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> of work items.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if any item in the collection must be committed immediately; otherwise, .
   overload: System.Workflow.Runtime.IPendingWork.MustCommit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -139,30 +142,12 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Collections.ICollection
-  parent: System.Collections
-  isExternal: true
-  name: ICollection
-  nameWithType: ICollection
-  fullName: System.Collections.ICollection
 - uid: System.Workflow.Runtime.IPendingWork.MustCommit(System.Collections.ICollection)
   parent: System.Workflow.Runtime.IPendingWork
   isExternal: false
   name: MustCommit(ICollection)
   nameWithType: IPendingWork.MustCommit(ICollection)
   fullName: System.Workflow.Runtime.IPendingWork.MustCommit(ICollection)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Collections.ICollection
-  parent: System.Collections
-  isExternal: true
-  name: ICollection
-  nameWithType: ICollection
-  fullName: System.Collections.ICollection
 - uid: System.Workflow.Runtime.IPendingWork.Commit*
   parent: System.Workflow.Runtime.IPendingWork
   isExternal: false

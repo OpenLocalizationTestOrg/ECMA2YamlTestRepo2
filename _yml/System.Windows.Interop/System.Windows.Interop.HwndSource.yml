@@ -48,8 +48,8 @@ items:
   nameWithType: HwndSource
   fullName: System.Windows.Interop.HwndSource
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Presents [!INCLUDE[TLA#tla_winclient](../../add/includes/tlasharptla-winclient-md.md)] content in a [!INCLUDE[TLA#tla_win32](../../add/includes/tlasharptla-win32-md.md)] window.
+  remarks: "> [!IMPORTANT]\n>  Many members of this class are unavailable in the Internet security zone.  \n  \n An HwndSource implements a [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] window that can contain [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] content. The [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] content in the window is arranged, measured, and rendered; and is interactive to input. Because the HwndSource is specifically designed to interoperate with [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)], this class exposes several low-level [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] features. You can use this class to do the following:  \n  \n-   Specify window styles, window class styles, and extended window styles.  \n  \n-   Hook the window procedure.  \n  \n-   Provide access to the window handle (HWND).  \n  \n-   Destroy the window.  \n  \n The HwndSource class is designed for general interoperability and is not designed as a managed HWND wrapper. In general, it does not provide managed methods for manipulating the window or properties for inspecting its state. Instead, the HwndSource class provides access to the [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] window handle (HWND) through the <xref:System.Windows.Interop.HwndSource.Handle%2A> property, which can be passed by means of PInvoke techniques to [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] [!INCLUDE[TLA2#tla_api#plural](../../add/includes/tla2sharptla-apisharpplural-md.md)] in order to manipulate the window.  \n  \n **Construction**  \n  \n Many aspects of the HwndSource can only be specified at construction time. To create an HwndSource, first create an <xref:System.Windows.Interop.HwndSourceParameters> structure and populate it with the desired parameters. These parameters include the following:  \n  \n-   The class, window, and extended window styles. You must use PInvoke to change the styles after the window is created. Not all styles can be changed after the window is created. Consult the [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] documentation before changing window styles.  \n  \n-   The initial position of the window.  \n  \n-   The initial size of the window, which includes whether the size is specified or should be determined from the determined size of the [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] content.  \n  \n-   The parent window.  \n  \n-   The <xref:System.Windows.Interop.HwndSourceHook> to include in the window procedure chain. If you specify a hook at construction time, it receives all messages for the window. You can use <xref:System.Windows.Interop.HwndSource.AddHook%2A> to add a hook after the window is created.  \n  \n-   The transparency settings. A top-level window can be configured to blend with the other windows on the desktop according to the per-pixel transparency of the [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] content. To enable this, set the <xref:System.Windows.Interop.HwndSourceParameters.UsesPerPixelOpacity%2A> property in the <xref:System.Windows.Interop.HwndSourceParameters> to `true`. This property can only be specified at construction time, and only through the <xref:System.Windows.Interop.HwndSource.%23ctor%28System.Windows.Interop.HwndSourceParameters%29> constructor signature, and it imposes several limitations.  \n  \n After you populate the <xref:System.Windows.Interop.HwndSourceParameters> structure, pass it to the <xref:System.Windows.Interop.HwndSource.%23ctor%28System.Windows.Interop.HwndSourceParameters%29> constructor for the HwndSource.  \n  \n **Object Lifetime**  \n  \n An HwndSource is a regular [!INCLUDE[TLA#tla_clr](../../add/includes/tlasharptla-clr-md.md)] object, and its lifetime is managed by the garbage collector. Because the HwndSource represents an unmanaged resource, HwndSource implements <xref:System.IDisposable>. Synchronously calling <xref:System.Windows.Interop.HwndSource.Dispose%2A> immediately destroys the [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] window if called from the owner thread. If called from another thread, the [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] window is destroyed asynchronously. Calling <xref:System.Windows.Interop.HwndSource.Dispose%2A> explicitly from the interoperating code might be necessary for certain interoperation scenarios.  \n  \n **Window Procedures**  \n  \n The HwndSource class implements its own window procedure. This window procedure is used to process important window messages, such as those related to layout, rendering, and input. However, you can also hook the window procedure for your own use. You can specify your own hook during construction by setting the <xref:System.Windows.Interop.HwndSourceParameters.HwndSourceHook%2A?displayProperty=fullName> property, or you can also use <xref:System.Windows.Interop.HwndSource.AddHook%2A> and <xref:System.Windows.Interop.HwndSource.RemoveHook%2A> to add and remove hooks after the window is created. The hooks are called by last-in first-out order, which enables your hooks to execute before the built-in processing. The actual hooks are held by a weak reference. Therefore, make sure that you manage the lifetime of your hook delegate.  \n  \n For more information about HwndSource and other interoperation classes, see [WPF and Win32 Interoperation](../Topic/WPF%20and%20Win32%20Interoperation.md).  \n  \n Notice how the constructors for HwndSource take parameters that resemble the parameters for [!INCLUDE[TLA#tla_win32](../../add/includes/tlasharptla-win32-md.md)] functions such as [CreateWindowEx](http://go.microsoft.com/fwlink/?LinkID=98462).  \n  \n Scale transformations should not be applied to the <xref:System.Windows.Interop.HwndSource.RootVisual%2A> of an HwndSource. See Remarks for <xref:System.Windows.Interop.HwndSource.RootVisual%2A>."
   syntax:
     content: 'public class HwndSource : System.Windows.PresentationSource, IDisposable, System.Windows.Interop.IKeyboardInputSink, System.Windows.Interop.IWin32Window'
   inheritance:
@@ -90,15 +90,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class by using a structure that contains the initial settings.
+  remarks: "> [!IMPORTANT]\n>  This method is not available in the Internet security zone.  \n  \n This constructor signature might be more convenient in certain situations, because the default structure contains some appropriate initial default values.  \n  \n> [!IMPORTANT]\n>  If you use this signature, do not use the default <xref:System.Windows.Interop.HwndSourceParameters> constructor to construct the <xref:System.Windows.Interop.HwndSourceParameters> structure for the `parameters` value. You must use the <xref:System.Windows.Interop.HwndSourceParameters> constructor that enables you to specify an initial window name. If you use the default <xref:System.Windows.Interop.HwndSourceParameters> constructor and create an <xref:System.Windows.Interop.HwndSource> with it, that <xref:System.Windows.Interop.HwndSource> does not display because an initial window name is a construction requirement for the represented HWND."
   syntax:
     content: public HwndSource (System.Windows.Interop.HwndSourceParameters parameters);
     parameters:
     - id: parameters
       type: System.Windows.Interop.HwndSourceParameters
-      description: To be added.
+      description: A structure that contains the parameters that are required to create the window.
   overload: System.Windows.Interop.HwndSource.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -115,33 +116,37 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a specified class style, style, extended style, x-y position, name, and parent window.
+  remarks: >-
+    > [!IMPORTANT]
+
+    >  This method is not available in the Internet security zone.
   syntax:
     content: public HwndSource (int classStyle, int style, int exStyle, int x, int y, string name, IntPtr parent);
     parameters:
     - id: classStyle
       type: System.Int32
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_win32](../../add/includes/tlasharptla-win32-md.md)] class styles for the window.
     - id: style
       type: System.Int32
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] styles for the window.
     - id: exStyle
       type: System.Int32
-      description: To be added.
+      description: The extended [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] styles for the window.
     - id: x
       type: System.Int32
-      description: To be added.
+      description: The position of the window's left edge.
     - id: y
       type: System.Int32
-      description: To be added.
+      description: The position of the window's upper edge.
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the window.
     - id: parent
       type: System.IntPtr
-      description: To be added.
+      description: The handle of the window's parent window.
   overload: System.Windows.Interop.HwndSource.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -158,39 +163,43 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a specified class style, style, extended style, x-y position, width, height, name, and parent window.
+  remarks: >-
+    > [!IMPORTANT]
+
+    >  This method is not available in the Internet security zone.
   syntax:
     content: public HwndSource (int classStyle, int style, int exStyle, int x, int y, int width, int height, string name, IntPtr parent);
     parameters:
     - id: classStyle
       type: System.Int32
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_win32](../../add/includes/tlasharptla-win32-md.md)] class styles for the window.
     - id: style
       type: System.Int32
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] styles for the window.
     - id: exStyle
       type: System.Int32
-      description: To be added.
+      description: The extended [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] styles for the window.
     - id: x
       type: System.Int32
-      description: To be added.
+      description: The position of the window's left edge.
     - id: y
       type: System.Int32
-      description: To be added.
+      description: The position of the window's upper edge.
     - id: width
       type: System.Int32
-      description: To be added.
+      description: The width of the window.
     - id: height
       type: System.Int32
-      description: To be added.
+      description: The height of the window.
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the window.
     - id: parent
       type: System.IntPtr
-      description: To be added.
+      description: The handle of the window's parent window.
   overload: System.Windows.Interop.HwndSource.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -207,42 +216,46 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a specified class style, style, extended style, x-y position, width, height, name, and parent window, and by specifying whether the window is autosized.
+  remarks: >-
+    > [!IMPORTANT]
+
+    >  This method is not available in the Internet security zone.
   syntax:
     content: public HwndSource (int classStyle, int style, int exStyle, int x, int y, int width, int height, string name, IntPtr parent, bool adjustSizingForNonClientArea);
     parameters:
     - id: classStyle
       type: System.Int32
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_win32](../../add/includes/tlasharptla-win32-md.md)] class styles for the window.
     - id: style
       type: System.Int32
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] styles for the window.
     - id: exStyle
       type: System.Int32
-      description: To be added.
+      description: The extended [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] styles for the window.
     - id: x
       type: System.Int32
-      description: To be added.
+      description: The position of the window's left edge.
     - id: y
       type: System.Int32
-      description: To be added.
+      description: The position of the window's upper edge.
     - id: width
       type: System.Int32
-      description: To be added.
+      description: The width of the window.
     - id: height
       type: System.Int32
-      description: To be added.
+      description: The height of the window.
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the window.
     - id: parent
       type: System.IntPtr
-      description: To be added.
+      description: The handle of the window's parent window.
     - id: adjustSizingForNonClientArea
       type: System.Boolean
-      description: To be added.
+      description: "\n     to have the layout manager include the non-client area for sizing; otherwise, ."
   overload: System.Windows.Interop.HwndSource.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -259,14 +272,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value that determines whether to acquire Win32 focus for the WPF containing window for this .
+  remarks: "This value is set when you create the <xref:System.Windows.Interop.HwndSource> by setting the <xref:System.Windows.Interop.HwndSourceParameters.AcquireHwndFocusInMenuMode%2A> parameter.  \n  \n The default value is determined by the <xref:System.Windows.Interop.HwndSource.DefaultAcquireHwndFocusInMenuMode%2A> property."
   syntax:
     content: public bool AcquireHwndFocusInMenuMode { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: to acquire Win32 focus for the WPF containing window when the user interacts with menus; otherwise, .
   overload: System.Windows.Interop.HwndSource.AcquireHwndFocusInMenuMode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -283,15 +297,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds an event handler that receives all window messages.
+  remarks: "> [!IMPORTANT]\n>  This method is not available in the Internet security zone.  \n  \n Most [!INCLUDE[TLA#tla_win32](../../add/includes/tlasharptla-win32-md.md)] messages that reach the <xref:System.Windows.Interop.HwndSource> have an approximate [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] equivalent. You use AddHook to handle the cases where the message has no [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] equivalent.  \n  \n The <xref:System.Windows.Interop.HwndSourceHook> delegate resembles the parameter profile of a [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] main window procedure. All window messages that the main window procedure of the <xref:System.Windows.Interop.HwndSource> parent window receives are also forwarded to the <xref:System.Windows.Interop.HwndSourceHook> delegates.  \n  \n Hooks are called in the order that they were added. If any hook returns `handled`=`true` for a message, the hooks after it in the call order are not called for that message."
   syntax:
     content: public void AddHook (System.Windows.Interop.HwndSourceHook hook);
     parameters:
     - id: hook
       type: System.Windows.Interop.HwndSourceHook
-      description: To be added.
+      description: The handler implementation (based on the  delegate) that receives the window messages.
   overload: System.Windows.Interop.HwndSource.AddHook*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -308,13 +323,14 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when layout causes the  to automatically resize.
+  remarks: The native behavior of <xref:System.Windows.Interop.HwndSource> is to automatically resize content and the window region based on changes reported through the [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] layout system. The window does not resize if it is currently minimized or if <xref:System.Windows.Interop.HwndSource.SizeToContent%2A> is set to <xref:System.Windows.SizeToContent>.
   syntax:
     content: public event System.Windows.AutoResizedEventHandler AutoResized;
     return:
       type: System.Windows.AutoResizedEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -331,14 +347,14 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a sequence of registered input sinks.
   syntax:
     content: public System.Collections.Generic.IEnumerable<System.Windows.Interop.IKeyboardInputSink> ChildKeyboardInputSinks { get; }
     return:
       type: System.Collections.Generic.IEnumerable{System.Windows.Interop.IKeyboardInputSink}
-      description: To be added.
+      description: An enumeration of keyboard input sinks.
   overload: System.Windows.Interop.HwndSource.ChildKeyboardInputSinks*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -355,14 +371,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the visual manager for the hosted window.
+  remarks: Override <xref:System.Windows.Interop.HwndSource.GetCompositionTargetCore%2A> in order to override the value that CompositionTarget returns.
   syntax:
     content: public System.Windows.Interop.HwndTarget CompositionTarget { get; }
     return:
       type: System.Windows.Interop.HwndTarget
-      description: To be added.
+      description: The visual manager.
   overload: System.Windows.Interop.HwndSource.CompositionTarget*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -379,15 +396,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the window handle for the . The window handle is packaged as part of a  structure.
+  remarks: "You can use the handle that is obtained from CreateHandleRef to reference the <xref:System.Windows.Interop.HwndSource> from [!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] code. Use the handle for operations such as message handling and window behavior.  \n  \n To get just the handle, use <xref:System.Windows.Interop.HwndSource.Handle%2A>."
   syntax:
     content: public System.Runtime.InteropServices.HandleRef CreateHandleRef ();
     parameters: []
     return:
       type: System.Runtime.InteropServices.HandleRef
-      description: To be added.
+      description: A structure that contains the window handle for this .
   overload: System.Windows.Interop.HwndSource.CreateHandleRef*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -404,14 +422,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the default <xref:System.Windows.Interop.HwndSource.AcquireHwndFocusInMenuMode%2A> value for new instances of .
+  remarks: New instances of <xref:System.Windows.Interop.HwndSource> have <xref:System.Windows.Interop.HwndSource.AcquireHwndFocusInMenuMode%2A> set to this default value, unless a different value is passed as a parameter to the <xref:System.Windows.Interop.HwndSource> constructor for a specific instance, by using the <xref:System.Windows.Interop.HwndSourceParameters.AcquireHwndFocusInMenuMode%2A> property.
   syntax:
     content: public static bool DefaultAcquireHwndFocusInMenuMode { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: to acquire Win32 focus for the WPF containing window when the user interacts with menus; otherwise, . The default is .
   overload: System.Windows.Interop.HwndSource.DefaultAcquireHwndFocusInMenuMode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -428,12 +447,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases all managed resources that are used by the , and raises the  event.
+  remarks: "> [!IMPORTANT]\n>  This method is not available in the Internet security zone.  \n  \n Dispose initiates related cleanup work for the HWND. If Dispose is called through a thread that is different from the main UI thread, the cleanup work may be deferred until it can be posted to the main UI thread.  \n  \n Calling Dispose explicitly from the interoperating code might be necessary for certain interoperation scenarios, because an <xref:System.Windows.Interop.HwndSource> in some interoperation scenarios can generate several references to it across the interoperation boundaries that might prevent timely garbage collection."
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.Windows.Interop.HwndSource.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -450,13 +470,14 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the <xref:System.Windows.Interop.HwndSource.Dispose%2A> method is called on this object.
+  remarks: "The Disposed event is raised before any resources are released by the <xref:System.Windows.Interop.HwndSource>. The Disposed event indicates that the object that raises the event is about to have all references to it removed.  \n  \n Use Disposed and the <xref:System.Windows.Interop.HwndSource.IsDisposed%2A> property to avoid calling <xref:System.Windows.Interop.HwndSource.Dispose%2A> twice (which raises an exception)."
   syntax:
     content: public event EventHandler Disposed;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -473,13 +494,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the DPI of the monitor of this Hwnd has changed, or the Hwnd is moved to a monitor with a different DPI.
   syntax:
     content: public event System.Windows.HwndDpiChangedEventHandler DpiChanged;
     return:
       type: System.Windows.HwndDpiChangedEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -496,18 +517,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the  object of the specified window.
+  remarks: "> [!IMPORTANT]\n>  This method is not available in the Internet security zone, or for partial trust in general.  \n  \n You can use this method to return an <xref:System.Windows.Interop.HwndSource> for a window that is not explicitly an interoperation window. The procedure for this is:  \n  \n1.  Create a <xref:System.Windows.Interop.WindowInteropHelper> instance (providing the main <xref:System.Windows.Window> as a constructor parameter).  \n  \n2.  Get the value of the <xref:System.Windows.Interop.WindowInteropHelper.Handle%2A> property from that <xref:System.Windows.Interop.WindowInteropHelper> instance.  \n  \n3.  Pass that HWND value as a parameter to FromHwnd.  \n  \n This technique can be useful if you then want to add general <xref:System.Windows.Interop.HwndSource.AddHook%2A> message processing to the window. However, whenever you create an <xref:System.Windows.Interop.HwndSource>, you are also responsible for destroying it. This is true even if the <xref:System.Windows.Application> object for an application <xref:System.Windows.Interop.HwndSource> is disposed. For more information, see Remarks on <xref:System.Windows.Interop.HwndSource>."
   syntax:
     content: public static System.Windows.Interop.HwndSource FromHwnd (IntPtr hwnd);
     parameters:
     - id: hwnd
       type: System.IntPtr
-      description: To be added.
+      description: The provided window handle.
     return:
       type: System.Windows.Interop.HwndSource
-      description: To be added.
+      description: The  object for the window that is specified by the hwnd window handle.
   overload: System.Windows.Interop.HwndSource.FromHwnd*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -524,15 +546,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the visual target of the window.
+  remarks: The default implementation returns the same result as <xref:System.Windows.Interop.HwndSource.CompositionTarget%2A>.
   syntax:
     content: protected override System.Windows.Media.CompositionTarget GetCompositionTargetCore ();
     parameters: []
     return:
       type: System.Windows.Media.CompositionTarget
-      description: To be added.
+      description: Returns the visual target of the window.
   overload: System.Windows.Interop.HwndSource.GetCompositionTargetCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -549,14 +572,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the window handle for this .
+  remarks: >-
+    > [!IMPORTANT]
+
+    >  This property is not available in the Internet security zone.
   syntax:
     content: public IntPtr Handle { get; }
     return:
       type: System.IntPtr
-      description: To be added.
+      description: The window handle.
   overload: System.Windows.Interop.HwndSource.Handle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -573,15 +600,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the sink or one of its contained components has focus.
   syntax:
     content: protected virtual bool HasFocusWithinCore ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the sink or one of its contained components has focus; otherwise, .
   overload: System.Windows.Interop.HwndSource.HasFocusWithinCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -598,14 +625,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether <xref:System.Windows.Interop.HwndSource.Dispose%2A> has been called on this .
+  remarks: <xref:System.Windows.Interop.HwndSource.Dispose%2A> initiates related cleanup work for the HWND. If <xref:System.Windows.Interop.HwndSource.Dispose%2A> is called through a thread that is different from the main UI thread, the cleanup work may be deferred until it can be posted to the main UI thread. The <xref:System.Windows.Interop.HwndSource.Disposed> event is raised and the value of IsDisposed becomes `false` as soon as <xref:System.Windows.Interop.HwndSource.Dispose%2A> is called. During this time, if you call <xref:System.Windows.Interop.HwndSource.Dispose%2A> again, <xref:System.Windows.Interop.HwndSource.Dispose%2A> raises an exception.
   syntax:
     content: public override bool IsDisposed { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the object has had <xref:System.Windows.Interop.HwndSource.Dispose%2A> called on it; otherwise, .
   overload: System.Windows.Interop.HwndSource.IsDisposed*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -622,14 +650,14 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a reference to the component's container's  interface.
   syntax:
     content: protected System.Windows.Interop.IKeyboardInputSite KeyboardInputSiteCore { get; set; }
     return:
       type: System.Windows.Interop.IKeyboardInputSite
-      description: To be added.
+      description: A reference to the container's  interface; or  if no site is assigned. The default is .
   overload: System.Windows.Interop.HwndSource.KeyboardInputSiteCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -646,15 +674,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Called when the DPI is going to change for the window.
+  remarks: "If the user handles this event,         WPF does not scale any visuals.  \n  \n> [!IMPORTANT]\n>  This method accesses critical data <xref:System.Windows.Interop.HwndTarget>."
   syntax:
     content: protected virtual void OnDpiChanged (System.Windows.HwndDpiChangedEventArgs e);
     parameters:
     - id: e
       type: System.Windows.HwndDpiChangedEventArgs
-      description: To be added.
+      description: The event arguments
   overload: System.Windows.Interop.HwndSource.OnDpiChanged*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -671,21 +700,24 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Called when one of the mnemonics (access keys) for this sink is invoked.
   syntax:
     content: protected virtual bool OnMnemonicCore (ref System.Windows.Interop.MSG msg, System.Windows.Input.ModifierKeys modifiers);
     parameters:
     - id: msg
       type: System.Windows.Interop.MSG
-      description: To be added.
+      description: The message for the mnemonic and associated data.
     - id: modifiers
       type: System.Windows.Input.ModifierKeys
-      description: To be added.
+      description: Modifier keys.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the message was handled; otherwise, .
   overload: System.Windows.Interop.HwndSource.OnMnemonicCore*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    msg is not WM_KEYDOWN, WM_SYSKEYDOWN, WM_CHAR, or WM_DEADCHAR."
   platform:
   - net-11
   - net-20
@@ -702,18 +734,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers the  interface of a contained component.
   syntax:
     content: protected System.Windows.Interop.IKeyboardInputSite RegisterKeyboardInputSinkCore (System.Windows.Interop.IKeyboardInputSink sink);
     parameters:
     - id: sink
       type: System.Windows.Interop.IKeyboardInputSink
-      description: To be added.
+      description: The  sink of the contained component.
     return:
       type: System.Windows.Interop.IKeyboardInputSite
-      description: To be added.
+      description: The  site of the contained component.
   overload: System.Windows.Interop.HwndSource.RegisterKeyboardInputSinkCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -730,15 +762,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the event handlers that were added by <xref:System.Windows.Interop.HwndSource.AddHook%2A>.
+  remarks: >-
+    > [!IMPORTANT]
+
+    >  This method is not available in the Internet security zone.
   syntax:
     content: public void RemoveHook (System.Windows.Interop.HwndSourceHook hook);
     parameters:
     - id: hook
       type: System.Windows.Interop.HwndSourceHook
-      description: To be added.
+      description: The event handler to remove.
   overload: System.Windows.Interop.HwndSource.RemoveHook*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -755,14 +791,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  for the window.
+  remarks: This property can be set only in the <xref:System.Windows.Interop.HwndSource.%23ctor%28System.Windows.Interop.HwndSourceParameters%29?displayProperty=fullName> constructor by using the <xref:System.Windows.Interop.HwndSourceParameters.RestoreFocusMode%2A?displayProperty=fullName> property.
   syntax:
     content: public System.Windows.Input.RestoreFocusMode RestoreFocusMode { get; }
     return:
       type: System.Windows.Input.RestoreFocusMode
-      description: To be added.
+      description: The  for the window.
   overload: System.Windows.Interop.HwndSource.RestoreFocusMode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -779,14 +816,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the <xref:System.Windows.Media.CompositionTarget.RootVisual%2A> of the window.
+  remarks: "Use this property to connect a <xref:System.Windows.Controls.Page> or another root visual to the <xref:System.Windows.Interop.HwndSource>.  \n  \n Scale transformations should not be applied to the RootVisual of an <xref:System.Windows.Interop.HwndSource> because this can disable <xref:System.Windows.Interop.HwndSource.SizeToContent%2A> behavior. The content will scale, but the enclosing window will not. Instead of applying the transformation to the object that is the RootVisual, apply the transformation to an object that is a child element of the RootVisual. You might need to add an extra enclosing element to the [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] content, such as a panel, in order to provide a scaleable object.  \n  \n You can add a <xref:System.Windows.Window> as the root visual, but only as a top-level window (with WS_OVERLAPPED), not as a child window."
   syntax:
     content: public override System.Windows.Media.Visual RootVisual { get; set; }
     return:
       type: System.Windows.Media.Visual
-      description: To be added.
+      description: The root visual object of the window.
   overload: System.Windows.Interop.HwndSource.RootVisual*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -803,14 +841,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Get or sets whether and how the window is sized to its content.
+  remarks: "End users might indirectly set this property through application UI, if that functionality is exposed by the application.  \n  \n Scale transformations should not be applied to the <xref:System.Windows.Interop.HwndSource.RootVisual%2A> of an <xref:System.Windows.Interop.HwndSource>, because this can disable SizeToContent behavior. See Remarks for <xref:System.Windows.Interop.HwndSource.RootVisual%2A>."
   syntax:
     content: public System.Windows.SizeToContent SizeToContent { get; set; }
     return:
       type: System.Windows.SizeToContent
-      description: To be added.
+      description: One of the enumeration values. The default value is , which specifies that the window is not sized to its content.
   overload: System.Windows.Interop.HwndSource.SizeToContent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -827,13 +866,14 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the value of the <xref:System.Windows.Interop.HwndSource.SizeToContent%2A> property changes.
+  remarks: The SizeToContentChanged event is only raised when user interaction causes the change. If you set <xref:System.Windows.Window.SizeToContent%2A> in code, the SizeToContentChanged event is not raised.
   syntax:
     content: public event EventHandler SizeToContentChanged;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -851,15 +891,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Windows.Media.FamilyTypefaceCollection.System%23Collections%23IList%23Remove%2A>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Windows.Interop.HwndSource> instance is cast to an <xref:System.Windows.Interop.IKeyboardInputSink> interface.
   syntax:
     content: bool IKeyboardInputSink.HasFocusWithin ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the sink or one of its contained components has focus; otherwise, .
   overload: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#HasFocusWithin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -877,14 +918,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Windows.Interop.IKeyboardInputSink.KeyboardInputSite%2A>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Windows.Interop.HwndSource> instance is cast to an <xref:System.Windows.Interop.IKeyboardInputSink> interface.
   syntax:
     content: System.Windows.Interop.IKeyboardInputSite System.Windows.Interop.IKeyboardInputSink.KeyboardInputSite { get; set; }
     return:
       type: System.Windows.Interop.IKeyboardInputSite
-      description: To be added.
+      description: A reference to the container's  interface.
   overload: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#KeyboardInputSite*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -902,21 +944,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Windows.Interop.IKeyboardInputSink.OnMnemonic%2A>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Windows.Interop.HwndSource> instance is cast to an <xref:System.Windows.Interop.IKeyboardInputSink> interface.
   syntax:
     content: bool IKeyboardInputSink.OnMnemonic (ref System.Windows.Interop.MSG msg, System.Windows.Input.ModifierKeys modifiers);
     parameters:
     - id: msg
       type: System.Windows.Interop.MSG
-      description: To be added.
+      description: The message for the mnemonic and associated data. Do not modify this message structure. It is passed by reference for performance reasons only.
     - id: modifiers
       type: System.Windows.Input.ModifierKeys
-      description: To be added.
+      description: Modifier keys.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the message was handled; otherwise, .
   overload: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#OnMnemonic*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -934,18 +977,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Windows.Interop.IKeyboardInputSink.RegisterKeyboardInputSink%2A>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Windows.Interop.HwndSource> instance is cast to an <xref:System.Windows.Interop.IKeyboardInputSink> interface.
   syntax:
     content: System.Windows.Interop.IKeyboardInputSite IKeyboardInputSink.RegisterKeyboardInputSink (System.Windows.Interop.IKeyboardInputSink sink);
     parameters:
     - id: sink
       type: System.Windows.Interop.IKeyboardInputSink
-      description: To be added.
+      description: The  sink of the contained component.
     return:
       type: System.Windows.Interop.IKeyboardInputSite
-      description: To be added.
+      description: The  site of the contained component.
   overload: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#RegisterKeyboardInputSink*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -963,18 +1007,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Windows.Interop.IKeyboardInputSink.TabInto%2A>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Windows.Interop.HwndSource> instance is cast to an <xref:System.Windows.Interop.IKeyboardInputSink> interface.
   syntax:
     content: bool IKeyboardInputSink.TabInto (System.Windows.Input.TraversalRequest request);
     parameters:
     - id: request
       type: System.Windows.Input.TraversalRequest
-      description: To be added.
+      description: Specifies whether focus should be set to the first or the last tab stop.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the focus has been set as requested; , if there are no tab stops.
   overload: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#TabInto*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -992,21 +1037,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Windows.Interop.IKeyboardInputSink.TranslateAccelerator%2A>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Windows.Interop.HwndSource> instance is cast to an <xref:System.Windows.Interop.IKeyboardInputSink> interface.
   syntax:
     content: bool IKeyboardInputSink.TranslateAccelerator (ref System.Windows.Interop.MSG msg, System.Windows.Input.ModifierKeys modifiers);
     parameters:
     - id: msg
       type: System.Windows.Interop.MSG
-      description: To be added.
+      description: The message and associated data. Do not modify this structure. It is passed by reference for performance reasons only.
     - id: modifiers
       type: System.Windows.Input.ModifierKeys
-      description: To be added.
+      description: Modifier keys.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the message was handled by the method implementation; otherwise, .
   overload: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#TranslateAccelerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1024,21 +1070,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Windows.Interop.IKeyboardInputSink.TranslateChar%2A>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Windows.Interop.HwndSource> instance is cast to an <xref:System.Windows.Interop.IKeyboardInputSink> interface.
   syntax:
     content: bool IKeyboardInputSink.TranslateChar (ref System.Windows.Interop.MSG msg, System.Windows.Input.ModifierKeys modifiers);
     parameters:
     - id: msg
       type: System.Windows.Interop.MSG
-      description: To be added.
+      description: The message and associated data. Do not modify this structure. It is passed by reference for performance reasons only.
     - id: modifiers
       type: System.Windows.Input.ModifierKeys
-      description: To be added.
+      description: Modifier keys.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the message was processed and <xref:System.Windows.Interop.IKeyboardInputSink.OnMnemonic%2A> should not be called; otherwise, .
   overload: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#TranslateChar*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1055,18 +1102,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets focus on either the first tab stop or the last tab stop of the sink.
   syntax:
     content: protected virtual bool TabIntoCore (System.Windows.Input.TraversalRequest request);
     parameters:
     - id: request
       type: System.Windows.Input.TraversalRequest
-      description: To be added.
+      description: Specifies whether focus should be set to the first or the last tab stop.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the focus has been set as requested; , if there are no tab stops.
   overload: System.Windows.Interop.HwndSource.TabIntoCore*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    request is ."
   platform:
   - net-11
   - net-20
@@ -1083,21 +1133,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes keyboard input at the key-down message level.
   syntax:
     content: protected virtual bool TranslateAcceleratorCore (ref System.Windows.Interop.MSG msg, System.Windows.Input.ModifierKeys modifiers);
     parameters:
     - id: msg
       type: System.Windows.Interop.MSG
-      description: To be added.
+      description: The message and associated data. Do not modify this structure. It is passed by reference for performance reasons only.
     - id: modifiers
       type: System.Windows.Input.ModifierKeys
-      description: To be added.
+      description: Modifier keys.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the message was handled by the method implementation; otherwise, .
   overload: System.Windows.Interop.HwndSource.TranslateAcceleratorCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1114,21 +1164,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes WM_CHAR, WM_SYSCHAR, WM_DEADCHAR, and WM_SYSDEADCHAR input messages before the <xref:System.Windows.Interop.IKeyboardInputSink.OnMnemonic%2A> method is called.
   syntax:
     content: protected virtual bool TranslateCharCore (ref System.Windows.Interop.MSG msg, System.Windows.Input.ModifierKeys modifiers);
     parameters:
     - id: msg
       type: System.Windows.Interop.MSG
-      description: To be added.
+      description: The message and associated data. Do not modify this structure. It is passed by reference for performance reasons only.
     - id: modifiers
       type: System.Windows.Input.ModifierKeys
-      description: To be added.
+      description: Modifier keys.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the message was processed and <xref:System.Windows.Interop.IKeyboardInputSink.OnMnemonic%2A> should not be called; otherwise, .
   overload: System.Windows.Interop.HwndSource.TranslateCharCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1145,14 +1195,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that declares whether the per-pixel opacity of the source window content is respected.
+  remarks: When you enable per-pixel opacity, the system no longer draws the non-client area. This is because the intended purpose of UsesPerPixelOpacity is to show non-rectangular top-level UI that works in interoperation scenarios. Therefore, showing the rectangular non-client area defeats that purpose.
   syntax:
     content: public bool UsesPerPixelOpacity { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the system uses per-pixel opacity; otherwise, .
   overload: System.Windows.Interop.HwndSource.UsesPerPixelOpacity*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1185,30 +1236,6 @@ references:
   name: Int32
   nameWithType: Int32
   fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.String
   parent: System
   isExternal: true
@@ -1227,120 +1254,12 @@ references:
   name: HwndSource(Int32,Int32,Int32,Int32,Int32,Int32,Int32,String,IntPtr)
   nameWithType: HwndSource.HwndSource(Int32,Int32,Int32,Int32,Int32,Int32,Int32,String,IntPtr)
   fullName: System.Windows.Interop.HwndSource.HwndSource(Int32,Int32,Int32,Int32,Int32,Int32,Int32,String,IntPtr)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.Windows.Interop.HwndSource.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.String,System.IntPtr,System.Boolean)
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: HwndSource(Int32,Int32,Int32,Int32,Int32,Int32,Int32,String,IntPtr,Boolean)
   nameWithType: HwndSource.HwndSource(Int32,Int32,Int32,Int32,Int32,Int32,Int32,String,IntPtr,Boolean)
   fullName: System.Windows.Interop.HwndSource.HwndSource(Int32,Int32,Int32,Int32,Int32,Int32,Int32,String,IntPtr,Boolean)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -1353,12 +1272,6 @@ references:
   name: AcquireHwndFocusInMenuMode
   nameWithType: HwndSource.AcquireHwndFocusInMenuMode
   fullName: System.Windows.Interop.HwndSource.AcquireHwndFocusInMenuMode
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Interop.HwndSource.AddHook(System.Windows.Interop.HwndSourceHook)
   parent: System.Windows.Interop.HwndSource
   isExternal: false
@@ -1395,6 +1308,21 @@ references:
   name: IEnumerable<IKeyboardInputSink>
   nameWithType: IEnumerable<IKeyboardInputSink>
   fullName: System.Collections.Generic.IEnumerable<System.Windows.Interop.IKeyboardInputSink>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Windows.Interop.IKeyboardInputSink>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Windows.Interop.IKeyboardInputSink
+    name: IKeyboardInputSink
+    nameWithType: IKeyboardInputSink
+    fullName: IKeyboardInputSink
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Interop.HwndSource.CompositionTarget
   parent: System.Windows.Interop.HwndSource
   isExternal: false
@@ -1425,12 +1353,6 @@ references:
   name: DefaultAcquireHwndFocusInMenuMode
   nameWithType: HwndSource.DefaultAcquireHwndFocusInMenuMode
   fullName: System.Windows.Interop.HwndSource.DefaultAcquireHwndFocusInMenuMode
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Interop.HwndSource.Dispose
   parent: System.Windows.Interop.HwndSource
   isExternal: false
@@ -1473,12 +1395,6 @@ references:
   name: HwndSource
   nameWithType: HwndSource
   fullName: System.Windows.Interop.HwndSource
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.Windows.Interop.HwndSource.GetCompositionTargetCore
   parent: System.Windows.Interop.HwndSource
   isExternal: false
@@ -1497,36 +1413,18 @@ references:
   name: Handle
   nameWithType: HwndSource.Handle
   fullName: System.Windows.Interop.HwndSource.Handle
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.Windows.Interop.HwndSource.HasFocusWithinCore
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: HasFocusWithinCore()
   nameWithType: HwndSource.HasFocusWithinCore()
   fullName: System.Windows.Interop.HwndSource.HasFocusWithinCore()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Interop.HwndSource.IsDisposed
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: IsDisposed
   nameWithType: HwndSource.IsDisposed
   fullName: System.Windows.Interop.HwndSource.IsDisposed
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Interop.HwndSource.KeyboardInputSiteCore
   parent: System.Windows.Interop.HwndSource
   isExternal: false
@@ -1557,12 +1455,6 @@ references:
   name: OnMnemonicCore(MSG,ModifierKeys)
   nameWithType: HwndSource.OnMnemonicCore(MSG,ModifierKeys)
   fullName: System.Windows.Interop.HwndSource.OnMnemonicCore(MSG,ModifierKeys)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Interop.MSG
   parent: System.Windows.Interop
   isExternal: false
@@ -1581,12 +1473,6 @@ references:
   name: RegisterKeyboardInputSinkCore(IKeyboardInputSink)
   nameWithType: HwndSource.RegisterKeyboardInputSinkCore(IKeyboardInputSink)
   fullName: System.Windows.Interop.HwndSource.RegisterKeyboardInputSinkCore(IKeyboardInputSink)
-- uid: System.Windows.Interop.IKeyboardInputSite
-  parent: System.Windows.Interop
-  isExternal: false
-  name: IKeyboardInputSite
-  nameWithType: IKeyboardInputSite
-  fullName: System.Windows.Interop.IKeyboardInputSite
 - uid: System.Windows.Interop.IKeyboardInputSink
   parent: System.Windows.Interop
   isExternal: false
@@ -1599,12 +1485,6 @@ references:
   name: RemoveHook(HwndSourceHook)
   nameWithType: HwndSource.RemoveHook(HwndSourceHook)
   fullName: System.Windows.Interop.HwndSource.RemoveHook(HwndSourceHook)
-- uid: System.Windows.Interop.HwndSourceHook
-  parent: System.Windows.Interop
-  isExternal: false
-  name: HwndSourceHook
-  nameWithType: HwndSourceHook
-  fullName: System.Windows.Interop.HwndSourceHook
 - uid: System.Windows.Interop.HwndSource.RestoreFocusMode
   parent: System.Windows.Interop.HwndSource
   isExternal: false
@@ -1647,90 +1527,36 @@ references:
   name: SizeToContentChanged
   nameWithType: HwndSource.SizeToContentChanged
   fullName: System.Windows.Interop.HwndSource.SizeToContentChanged
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#HasFocusWithin
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: System.Windows.Interop.IKeyboardInputSink.HasFocusWithin()
   nameWithType: HwndSource.System.Windows.Interop.IKeyboardInputSink.HasFocusWithin()
   fullName: System.Windows.Interop.HwndSource.System.Windows.Interop.IKeyboardInputSink.HasFocusWithin()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#KeyboardInputSite
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: System.Windows.Interop.IKeyboardInputSink.KeyboardInputSite
   nameWithType: HwndSource.System.Windows.Interop.IKeyboardInputSink.KeyboardInputSite
   fullName: System.Windows.Interop.HwndSource.System.Windows.Interop.IKeyboardInputSink.KeyboardInputSite
-- uid: System.Windows.Interop.IKeyboardInputSite
-  parent: System.Windows.Interop
-  isExternal: false
-  name: IKeyboardInputSite
-  nameWithType: IKeyboardInputSite
-  fullName: System.Windows.Interop.IKeyboardInputSite
 - uid: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#OnMnemonic(System.Windows.Interop.MSG@,System.Windows.Input.ModifierKeys)
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: System.Windows.Interop.IKeyboardInputSink.OnMnemonic(MSG,ModifierKeys)
   nameWithType: HwndSource.System.Windows.Interop.IKeyboardInputSink.OnMnemonic(MSG,ModifierKeys)
   fullName: System.Windows.Interop.HwndSource.System.Windows.Interop.IKeyboardInputSink.OnMnemonic(MSG,ModifierKeys)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Interop.MSG
-  parent: System.Windows.Interop
-  isExternal: false
-  name: MSG
-  nameWithType: MSG
-  fullName: System.Windows.Interop.MSG
-- uid: System.Windows.Input.ModifierKeys
-  parent: System.Windows.Input
-  isExternal: false
-  name: ModifierKeys
-  nameWithType: ModifierKeys
-  fullName: System.Windows.Input.ModifierKeys
 - uid: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#RegisterKeyboardInputSink(System.Windows.Interop.IKeyboardInputSink)
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: System.Windows.Interop.IKeyboardInputSink.RegisterKeyboardInputSink(IKeyboardInputSink)
   nameWithType: HwndSource.System.Windows.Interop.IKeyboardInputSink.RegisterKeyboardInputSink(IKeyboardInputSink)
   fullName: System.Windows.Interop.HwndSource.System.Windows.Interop.IKeyboardInputSink.RegisterKeyboardInputSink(IKeyboardInputSink)
-- uid: System.Windows.Interop.IKeyboardInputSite
-  parent: System.Windows.Interop
-  isExternal: false
-  name: IKeyboardInputSite
-  nameWithType: IKeyboardInputSite
-  fullName: System.Windows.Interop.IKeyboardInputSite
-- uid: System.Windows.Interop.IKeyboardInputSink
-  parent: System.Windows.Interop
-  isExternal: false
-  name: IKeyboardInputSink
-  nameWithType: IKeyboardInputSink
-  fullName: System.Windows.Interop.IKeyboardInputSink
 - uid: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#TabInto(System.Windows.Input.TraversalRequest)
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: System.Windows.Interop.IKeyboardInputSink.TabInto(TraversalRequest)
   nameWithType: HwndSource.System.Windows.Interop.IKeyboardInputSink.TabInto(TraversalRequest)
   fullName: System.Windows.Interop.HwndSource.System.Windows.Interop.IKeyboardInputSink.TabInto(TraversalRequest)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Input.TraversalRequest
   parent: System.Windows.Input
   isExternal: false
@@ -1743,126 +1569,36 @@ references:
   name: System.Windows.Interop.IKeyboardInputSink.TranslateAccelerator(MSG,ModifierKeys)
   nameWithType: HwndSource.System.Windows.Interop.IKeyboardInputSink.TranslateAccelerator(MSG,ModifierKeys)
   fullName: System.Windows.Interop.HwndSource.System.Windows.Interop.IKeyboardInputSink.TranslateAccelerator(MSG,ModifierKeys)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Interop.MSG
-  parent: System.Windows.Interop
-  isExternal: false
-  name: MSG
-  nameWithType: MSG
-  fullName: System.Windows.Interop.MSG
-- uid: System.Windows.Input.ModifierKeys
-  parent: System.Windows.Input
-  isExternal: false
-  name: ModifierKeys
-  nameWithType: ModifierKeys
-  fullName: System.Windows.Input.ModifierKeys
 - uid: System.Windows.Interop.HwndSource.System#Windows#Interop#IKeyboardInputSink#TranslateChar(System.Windows.Interop.MSG@,System.Windows.Input.ModifierKeys)
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: System.Windows.Interop.IKeyboardInputSink.TranslateChar(MSG,ModifierKeys)
   nameWithType: HwndSource.System.Windows.Interop.IKeyboardInputSink.TranslateChar(MSG,ModifierKeys)
   fullName: System.Windows.Interop.HwndSource.System.Windows.Interop.IKeyboardInputSink.TranslateChar(MSG,ModifierKeys)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Interop.MSG
-  parent: System.Windows.Interop
-  isExternal: false
-  name: MSG
-  nameWithType: MSG
-  fullName: System.Windows.Interop.MSG
-- uid: System.Windows.Input.ModifierKeys
-  parent: System.Windows.Input
-  isExternal: false
-  name: ModifierKeys
-  nameWithType: ModifierKeys
-  fullName: System.Windows.Input.ModifierKeys
 - uid: System.Windows.Interop.HwndSource.TabIntoCore(System.Windows.Input.TraversalRequest)
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: TabIntoCore(TraversalRequest)
   nameWithType: HwndSource.TabIntoCore(TraversalRequest)
   fullName: System.Windows.Interop.HwndSource.TabIntoCore(TraversalRequest)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Input.TraversalRequest
-  parent: System.Windows.Input
-  isExternal: false
-  name: TraversalRequest
-  nameWithType: TraversalRequest
-  fullName: System.Windows.Input.TraversalRequest
 - uid: System.Windows.Interop.HwndSource.TranslateAcceleratorCore(System.Windows.Interop.MSG@,System.Windows.Input.ModifierKeys)
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: TranslateAcceleratorCore(MSG,ModifierKeys)
   nameWithType: HwndSource.TranslateAcceleratorCore(MSG,ModifierKeys)
   fullName: System.Windows.Interop.HwndSource.TranslateAcceleratorCore(MSG,ModifierKeys)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Interop.MSG
-  parent: System.Windows.Interop
-  isExternal: false
-  name: MSG
-  nameWithType: MSG
-  fullName: System.Windows.Interop.MSG
-- uid: System.Windows.Input.ModifierKeys
-  parent: System.Windows.Input
-  isExternal: false
-  name: ModifierKeys
-  nameWithType: ModifierKeys
-  fullName: System.Windows.Input.ModifierKeys
 - uid: System.Windows.Interop.HwndSource.TranslateCharCore(System.Windows.Interop.MSG@,System.Windows.Input.ModifierKeys)
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: TranslateCharCore(MSG,ModifierKeys)
   nameWithType: HwndSource.TranslateCharCore(MSG,ModifierKeys)
   fullName: System.Windows.Interop.HwndSource.TranslateCharCore(MSG,ModifierKeys)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Interop.MSG
-  parent: System.Windows.Interop
-  isExternal: false
-  name: MSG
-  nameWithType: MSG
-  fullName: System.Windows.Interop.MSG
-- uid: System.Windows.Input.ModifierKeys
-  parent: System.Windows.Input
-  isExternal: false
-  name: ModifierKeys
-  nameWithType: ModifierKeys
-  fullName: System.Windows.Input.ModifierKeys
 - uid: System.Windows.Interop.HwndSource.UsesPerPixelOpacity
   parent: System.Windows.Interop.HwndSource
   isExternal: false
   name: UsesPerPixelOpacity
   nameWithType: HwndSource.UsesPerPixelOpacity
   fullName: System.Windows.Interop.HwndSource.UsesPerPixelOpacity
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Interop.HwndSource.#ctor*
   parent: System.Windows.Interop.HwndSource
   isExternal: false

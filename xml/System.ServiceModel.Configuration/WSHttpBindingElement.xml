@@ -10,8 +10,18 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Represents an interoperable binding that supports distributed transactions and secure, reliable sessions.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The wsHttpBinding is a secure, reliable, interoperable binding suitable for non-duplex service contracts. The binding implements the following specifications: WS-ReliableMessaging for reliability and WS-Security for message security and authentication. The transport is HTTP and message encoding is Text/XML encoding.  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -23,8 +33,11 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Initializes a new instance of the <see cref="T:System.ServiceModel.Configuration.WSHttpBindingElement" /> class.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -38,9 +51,12 @@
         <Parameter Name="name" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="name">The configuration name of the binding. This value should be unique because it is used as identification for the binding.</param>
+        <summary>Initializes a new instance of the <see cref="T:System.ServiceModel.Configuration.WSHttpBindingElement" /> class.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="AllowCookies">
@@ -59,9 +75,52 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets a value that indicates whether the WCF client will automatically store and resend any cookies sent by a single web service.</summary>
+        <value>
+          <see langword="True" /> if automatic cookies processing is required; otherwise, <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Setting AllowCookies to `true` is useful when a client is interacting with one web service that uses cookies.  If you are accessing multiple services with the same cookie, set AllowCookies to `false` and you will have to manually add the cookie header to each outgoing message. The following code shows how to do this:  
+  
+```c#  
+MyWebServiceClient client = new MyWebServiceClient();  
+  
+        using (new OperationContextScope(client.InnerChannel))  
+        {  
+            client.DoSomething();  
+  
+            // Extract the cookie embedded in the received web service response  
+            // and stores it locally  
+            HttpResponseMessageProperty response = (HttpResponseMessageProperty)  
+            OperationContext.Current.IncomingMessageProperties[  
+                HttpResponseMessageProperty.Name];  
+            sharedCookie = response.Headers["Set-Cookie"];  
+        }  
+  
+        MyOtherWebServiceClient otherClient = new MyOtherWebServiceClient();  
+  
+        using (new OperationContextScope(otherClient.InnerChannel))  
+        {  
+            // Embeds the extracted cookie in the next web service request  
+            // Note that we manually have to create the request object since  
+            // since it doesn't exist yet at this stage   
+            HttpRequestMessageProperty request = new HttpRequestMessageProperty();  
+            request.Headers["Cookie"] = sharedCookie;  
+            OperationContext.Current.OutgoingMessageProperties[  
+                HttpRequestMessageProperty.Name] = request;  
+  
+            otherClient.DoSomethingElse();  
+        }  
+  
+```  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>
+          <see langword="True" /> if automatic cookies processing is required; otherwise, <see langword="false" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="BindingElementType">
@@ -75,9 +134,11 @@
         <ReturnType>System.Type</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Gets the type of this binding element.</summary>
+        <value>The &lt;xref:System.Type&gt; of this binding element.</value>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>The &lt;xref:System.Type&gt; of this binding element.</returns>
       </Docs>
     </Member>
     <Member MemberName="InitializeFrom">
@@ -94,9 +155,12 @@
         <Parameter Name="binding" Type="System.ServiceModel.Channels.Binding" />
       </Parameters>
       <Docs>
-        <param name="binding">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="binding">A binding element.</param>
+        <summary>Initializes this binding configuration element with the content of the specified binding element.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="OnApplyConfiguration">
@@ -113,9 +177,12 @@
         <Parameter Name="binding" Type="System.ServiceModel.Channels.Binding" />
       </Parameters>
       <Docs>
-        <param name="binding">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="binding">A collection of binding elements.</param>
+        <summary>Called when the content of a specified binding collection is applied to this binding configuration element.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Properties">
@@ -129,9 +196,11 @@
         <ReturnType>System.Configuration.ConfigurationPropertyCollection</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Gets a <see cref="T:System.Configuration.ConfigurationPropertyCollection" /> instance that contains a collection of <see cref="T:System.Configuration.ConfigurationProperty" /> objects that can be attributes or <see cref="T:System.Configuration.ConfigurationElement" /> objects of this configuration element.</summary>
+        <value>A <see cref="T:System.Configuration.ConfigurationPropertyCollection" /> instance that contains a collection of <see cref="T:System.Configuration.ConfigurationProperty" /> objects that can be attributes or <see cref="T:System.Configuration.ConfigurationElement" /> objects of this configuration element.</value>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>A <see cref="T:System.Configuration.ConfigurationPropertyCollection" /> instance that contains a collection of <see cref="T:System.Configuration.ConfigurationProperty" /> objects that can be attributes or <see cref="T:System.Configuration.ConfigurationElement" /> objects of this configuration element.</returns>
       </Docs>
     </Member>
     <Member MemberName="Security">
@@ -150,9 +219,11 @@
         <ReturnType>System.ServiceModel.Configuration.WSHttpSecurityElement</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Gets the type of security to be used with this binding.</summary>
+        <value>The <see cref="T:System.ServiceModel.Configuration.WSHttpSecurityElement" /> that is used with this binding.</value>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>The <see cref="T:System.ServiceModel.Configuration.WSHttpSecurityElement" /> that is used with this binding.</returns>
       </Docs>
     </Member>
   </Members>

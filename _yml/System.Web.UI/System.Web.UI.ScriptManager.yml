@@ -97,8 +97,10 @@ items:
   nameWithType: ScriptManager
   fullName: System.Web.UI.ScriptManager
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Manages ASP.NET Ajax script libraries and script files, partial-page rendering, and client proxy class generation for Web and application services.
+  remarks: "In this topic:  \n  \n-   [Introduction](#introduction)  \n  \n-   [Partial-Page Rendering](#partial_page_rendering)  \n  \n-   [Using the ScriptManager Control with Master Pages, User Controls, and Other Child Components](#using_the_scriptmanager_control_with_master_pages__user_controls__and_other_child_components)  \n  \n-   [Script Management and Registration](#script_management_and_registration)  \n  \n-   [Web Service References](#web_service_references)  \n  \n-   [Localization](#localization)  \n  \n-   [Error Handling](#error_handling)  \n  \n-   [Declarative Syntax](#declarative_syntax)  \n  \n<a name=\"introduction\"></a>   \n## Introduction  \n The ScriptManager control is central to Ajax functionality in ASP.NET. The control manages all ASP.NET Ajax resources on a page. This includes downloading [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] scripts to the browser and coordinating partial-page updates that are enabled by using <xref:System.Web.UI.UpdatePanel> controls. In addition, the ScriptManager control enables you to do the following:  \n  \n-   Register script that is compatible with partial-page updates. In order to manage dependencies between your script and the core library, any script that you register is loaded after the [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] script.  \n  \n-   Specify whether release or debug scripts are sent to the browser.  \n  \n-   Provide access to Web service methods from script by registering Web services with the ScriptManager control.  \n  \n-   Provide access to ASP.NET authentication, role, and profile application services from client script by registering these services with the ScriptManager control.  \n  \n-   Enable culture-specific display of ECMAScript (JavaScript) , , and  functions in the browser.  \n  \n-   Access localization resources for embedded script files or for stand-alone script files by using the <xref:System.Web.UI.ScriptReferenceBase.ResourceUICultures%2A> property of the <xref:System.Web.UI.ScriptReference> control.  \n  \n-   Register server controls that implement the <xref:System.Web.UI.IExtenderControl> or <xref:System.Web.UI.IScriptControl> interfaces with the ScriptManager control so that script required by client components and behaviors is rendered.  \n  \n<a name=\"partial_page_rendering\"></a>   \n## Partial-Page Rendering  \n The ability of an ASP.NET page to support partial-page rendering is controlled by the following factors:  \n  \n-   The ScriptManager control's <xref:System.Web.UI.ScriptManager.EnablePartialRendering%2A> property must be `true` (the default value).  \n  \n-   There must be at least one <xref:System.Web.UI.UpdatePanel> control on the page.  \n  \n-   The <xref:System.Web.UI.ScriptManager.SupportsPartialRendering%2A> property must be `true` (the default value). If the <xref:System.Web.UI.ScriptManager.SupportsPartialRendering%2A> property is not set explicitly, its value is based on browser capabilities.  \n  \n You can override the value of the <xref:System.Web.UI.ScriptManager.EnablePartialRendering%2A> property at run time during or before the page's <xref:System.Web.UI.Control.Init> event. If you try to change this property after the page's <xref:System.Web.UI.Control.Init> event has occurred, an <xref:System.InvalidOperationException> exception is thrown.  \n  \n When partial-page rendering is supported, the ScriptManager control renders script to enable asynchronous postbacks and partial-page updates. The regions of the page to be updated are designated by using <xref:System.Web.UI.UpdatePanel> controls. The ScriptManager control handles the asynchronous postbacks and refreshes only the regions of the page that have to be updated. For more information about partial-page rendering, see [Partial-Page Rendering Overview](../Topic/Partial-Page%20Rendering%20Overview.md). For more information about the conditions that cause an update, see [UpdatePanel Control Overview](../Topic/UpdatePanel%20Control%20Overview.md).  \n  \n<a name=\"using_the_scriptmanager_control_with_master_pages__user_controls__and_other_child_components\"></a>   \n## Using the ScriptManager Control with Master Pages, User Controls, and Other Child Components  \n A page can contain only one ScriptManager control in its hierarchy. To register services and scripts for nested pages, user controls, or components when the parent page already has a ScriptManager control, use the <xref:System.Web.UI.ScriptManagerProxy> control. For more information, see [Using the UpdatePanel Control with Master Pages](../Topic/Using%20the%20ASP.NET%20UpdatePanel%20Control%20with%20Master%20Pages.md)  \n  \n<a name=\"script_management_and_registration\"></a>   \n## Script Management and Registration  \n The ScriptManager control enables you to register script that is then rendered as part of the page. The ScriptManager control registration methods can be broken into the following three categories:  \n  \n-   Registration methods that guarantee that script dependencies on the [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] are maintained.  \n  \n-   Registration methods that are not dependent on the [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)], but that are compatible with <xref:System.Web.UI.UpdatePanel> controls.  \n  \n-   Registration methods that support working with <xref:System.Web.UI.UpdatePanel> controls.  \n  \n For more information about how to create and use Ajax script in ASP.NET, see [Creating Custom Client Script by Using the Microsoft Ajax Library](../Topic/Creating%20Custom%20Client%20Script%20by%20Using%20the%20Microsoft%20Ajax%20Library.md).  \n  \n### Registering Script That Is Dependent on the Microsoft Ajax Library  \n You can use the following methods to register script files in a way that guarantees that any dependencies on the [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] are maintained.  \n  \n|Method|Definition|  \n|------------|----------------|  \n|<xref:System.Web.UI.ScriptManager.RegisterScriptControl%2A>|Registers a server control that implements the <xref:System.Web.UI.IScriptControl> interface that is used to define a  client object. The ScriptManager control renders script that supports the client object.|  \n|<xref:System.Web.UI.ScriptManager.RegisterExtenderControl%2A>|Registers a server control that implements the <xref:System.Web.UI.IExtenderControl> interface that is used to define a  client object. The ScriptManager control renders script that supports the client object.|  \n  \n### Registering Partial-Page Update Compatible Scripts  \n You can use the following methods to register script files that are not dependent on the [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] but that are compatible with <xref:System.Web.UI.UpdatePanel> controls. These methods correspond to similar methods of the <xref:System.Web.UI.ClientScriptManager> control. If you are rendering script for use inside an <xref:System.Web.UI.UpdatePanel> control, make sure that you call the methods of the ScriptManager control.  \n  \n|Method|Definition|  \n|------------|----------------|  \n|<xref:System.Web.UI.ScriptManager.RegisterArrayDeclaration%2A>|Adds a value to a JavaScript array. If the array does not exist, it is created.|  \n|<xref:System.Web.UI.ScriptManager.RegisterClientScriptBlock%2A>|Renders a `script` element after the page's opening `<form>` tag. The script is specified as a string parameter.|  \n|<xref:System.Web.UI.ScriptManager.RegisterClientScriptInclude%2A>|Renders a `script` element after the page's opening `<form>` tag. The script content is specified by setting the `src` attribute to a URL that points to a script file.|  \n|<xref:System.Web.UI.ScriptManager.RegisterClientScriptResource%2A>|Renders a `script` element after the page's opening `<form>` tag. The script content is specified with a resource name in an assembly. The `src` attribute is automatically populated with a URL by a call to an HTTP handler that retrieves the named script from the assembly.|  \n|<xref:System.Web.UI.ScriptManager.RegisterExpandoAttribute%2A>|Renders a custom name/value attribute pair (an expando) in the markup for a specified control.|  \n|<xref:System.Web.UI.ScriptManager.RegisterHiddenField%2A>|Renders a hidden field.|  \n|<xref:System.Web.UI.ScriptManager.RegisterOnSubmitStatement%2A>|Registers a script that is executed in response to the `form` element's `submit` event. The `onSubmit` attribute references the specified script.|  \n|<xref:System.Web.UI.ScriptManager.RegisterStartupScript%2A>|Renders a startup script block just before the page's closing `</form>` tag. The script to render is specified as a string parameter.|  \n  \n When you register methods, you specify a type/key pair for that script. If a script with the same type/key pair is already registered, a new script is not registered. Similarly, if you register a script with a type/resource name pair that already exists, the `script` element that references the resource is not added again. When you register an expando attribute of a previously registered attribute, an exception is thrown. Duplicate registration of array values is allowed.  \n  \n When you call the <xref:System.Web.UI.ScriptManager.RegisterClientScriptInclude%2A> or the <xref:System.Web.UI.ScriptManager.RegisterClientScriptResource%2A> method, avoid registering script that executes inline functions. Instead, register script that contains function definitions like event handlers or custom class definitions for your application.  \n  \n### Registration Methods for UpdatePanel Controls  \n You can use the following methods to customize partial-page updates when you use <xref:System.Web.UI.UpdatePanel> controls.  \n  \n|Method|Definition|  \n|------------|----------------|  \n|<xref:System.Web.UI.ScriptManager.RegisterAsyncPostBackControl%2A>|Registers a control as a trigger for asynchronous postbacks.|  \n|<xref:System.Web.UI.ScriptManager.RegisterDataItem%2A>|Sends custom data to controls during partial-page rendering.|  \n|<xref:System.Web.UI.ScriptManager.RegisterDispose%2A>|Registers a dispose script for a control that is inside an <xref:System.Web.UI.UpdatePanel> control. The script is executed when the <xref:System.Web.UI.UpdatePanel> control is updated or deleted. The dispose method is used for client components that are part of the [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] and that have to free resources when a component is no longer used.|  \n|<xref:System.Web.UI.ScriptManager.RegisterPostBackControl%2A>|Registers a control as a trigger for a full postback. This method is used for controls inside an <xref:System.Web.UI.UpdatePanel> control that would otherwise perform asynchronous postbacks.|  \n  \n<a name=\"web_service_references\"></a>   \n## Web Service References  \n You can register a Web service to be called from client script by creating a <xref:System.Web.UI.ServiceReference> object and adding it to the <xref:System.Web.UI.ScriptManager.Services%2A> collection of the ScriptManager control. ASP.NET generates a client proxy object for each <xref:System.Web.UI.ServiceReference> object in the <xref:System.Web.UI.ScriptManager.Services%2A> collection. You can programmatically add <xref:System.Web.UI.ServiceReference> objects to the <xref:System.Web.UI.ScriptManager.Services%2A> collection to register Web services at run time.  \n  \n For more information about how to access Web services in script, see [Exposing Web Services to Client Script in ASP.NET AJAX](http://msdn.microsoft.com/en-us/fe3f6e9e-0acd-44c9-bf0f-0a8598fc13b8) and [Calling Web Services from Client Script in ASP.NET AJAX](http://msdn.microsoft.com/en-us/fc06c224-f01a-45be-94af-bd71afbc07b0).  \n  \n<a name=\"localization\"></a>   \n## Localization  \n The ScriptManager control generates references in the rendered page that point to the appropriate localized script files, which are either script files embedded in assemblies or stand-alone script files.  \n  \n When the <xref:System.Web.UI.ScriptManager.EnableScriptLocalization%2A> property is set to `true`, the ScriptManager control retrieves localized resources (such as localized strings) for the current culture, if they exist. The ScriptManager control provides the following functionality for using localized resources:  \n  \n-   **Script files that are embedded in an assembly**. The ScriptManager control determines which culture-specific or fallback-culture script file to send to the browser. It does this by using the culture-specific <xref:System.Resources.NeutralResourcesLanguageAttribute> assembly attribute, the resources packaged with the assembly, and the UI culture of the browser (if any).  \n  \n-   **Stand-alone script files**. The ScriptManager control defines the list of UI cultures that are supported by using the <xref:System.Web.UI.ScriptReferenceBase.ResourceUICultures%2A> property of the <xref:System.Web.UI.ScriptReference> object.  \n  \n-   **In debug mode**. The ScriptManager control tries to render a culture-specific script file that contains debug information. For example, if the page is in debug mode and the current culture is set to en-MX, the control renders a script file that has a name such as `scriptname`.en-MX.debug.js, if the file exists. If the file does not exist, the debug file for the appropriate fallback culture is rendered  \n  \n For more information about how to localize resources, see [Localizing Resources for Component Libraries Overview](../Topic/Localizing%20Resources%20for%20Component%20Libraries%20Overview.md).  \n  \n<a name=\"error_handling\"></a>   \n## Error Handling  \n When a page error occurs during asynchronous postbacks, the <xref:System.Web.UI.ScriptManager.AsyncPostBackError> event is raised. The way in which errors on the server are sent to the client depends on the <xref:System.Web.UI.ScriptManager.AllowCustomErrorsRedirect%2A> property, the <xref:System.Web.UI.ScriptManager.AsyncPostBackErrorMessage%2A> property, and the custom errors section of the Web.config file. For more information, see [Customizing Error Handling for UpdatePanel Controls](../Topic/Customizing%20Error%20Handling%20for%20ASP.NET%20UpdatePanel%20Controls.md).  \n  \n<a name=\"declarative_syntax\"></a>   \n## Declarative Syntax  \n  \n```  \n<asp:ScriptManager  \n    AllowCustomErrorsRedirect=\"True|False\"  \n    AsyncPostBackErrorMessage=\"string\"  \n    AsyncPostBackTimeout=\"integer\"  \n    AuthenticationService-Path=\"uri\"  \n    EnablePageMethods=\"True|False\"  \n    EnablePartialRendering=\"True|False\"  \n    EnableScriptGlobalization=\"True|False\"  \n    EnableScriptLocalization=\"True|False\"  \n    EnableTheming=\"True|False\"  \n    EnableViewState=\"True|False\"  \n    ID=\"string\"  \n    LoadScriptsBeforeUI=\"True|False\"  \n    OnAsyncPostBackError=\"AsyncPostBackError event handler\"  \n    OnDataBinding=\"DataBinding event handler\"  \n    OnDisposed=\"Disposed event handler\"  \n    OnInit=\"Init event handler\"  \n    OnLoad=\"Load event handler\"  \n    OnPreRender=\"PreRender event handler\"  \n    OnResolveScriptReference=\"ResolveScriptReference event handler\"  \n    OnUnload=\"Unload event handler\"  \n    ProfileService-LoadProperties=\"string\"  \n    ProfileService-Path=\"uri\"  \n    RoleService-LoadRoles=\"True|False\"  \n    RoleService-Path=\"uri\"  \n    runat=\"server\"  \n    ScriptMode=\"Auto|Inherit|Debug|Release\"  \n    ScriptPath=\"string\"  \n    SkinID=\"string\"  \n    SupportsPartialRendering=\"True|False\"  \n    Visible=\"True|False\"  \n>  \n        <AuthenticationService  \n            Path=\"uri\"  \n        />  \n        <ProfileService  \n            LoadProperties=\"string\"  \n            Path=\"uri\"  \n        />  \n        <RoleService  \n            LoadRoles=\"True|False\"  \n            Path=\"uri\"  \n        />  \n        <Scripts>  \n            <asp:ScriptReference  \n                Assembly=\"string\"  \n                IgnoreScriptPath=\"True|False\"  \n                Name=\"string\"  \n                NotifyScriptLoaded=\"True|False\"  \n                Path=\"string\"  \n                ResourceUICultures=\"string\"  \n                ScriptMode=\"Auto|Debug|Inherit|Release\"  \n            />  \n        </Scripts>  \n        <Services>  \n            <asp:ServiceReference  \n                InlineScript=\"True|False\"  \n                Path=\"string\"  \n            />  \n        </Services>  \n</asp:ScriptManager>  \n```"
+  example:
+  - "The following examples show different scenarios for using the ScriptManager control.  \n  \n **Enabling Partial-Page Updates**  \n  \n The following example shows how to use the ScriptManager control to enable partial-page updates. In this example, a <xref:System.Web.UI.WebControls.Calendar> and a <xref:System.Web.UI.WebControls.DropDownList> control are inside an <xref:System.Web.UI.UpdatePanel> control. By default, the value of the <xref:System.Web.UI.UpdatePanel.UpdateMode%2A> property is <xref:System.Web.UI.UpdatePanelUpdateMode>, and the value of the <xref:System.Web.UI.UpdatePanel.ChildrenAsTriggers%2A> property is `true`. Therefore, child controls of the panel cause an asynchronous postback.  \n  \n [!code-vb[System.Web.UI.UpdatePanel#1](../../add/codesnippet/VisualBasic/t-system.web.ui.scriptma_1.aspx)]\n [!code-cs[System.Web.UI.UpdatePanel#1](../../add/codesnippet/CSharp/t-system.web.ui.scriptma_1.aspx)]  \n  \n **Handling Partial-Page Update Errors and Registering Script**  \n  \n The following example shows how to provide custom error handling during partial-page updates. By default, when an error occurs during partial-page updates, a JavaScript message box is displayed. This example demonstrates how to use custom error handling by providing a handler for the <xref:System.Web.UI.ScriptManager.AsyncPostBackError> event, and by setting the <xref:System.Web.UI.ScriptManager.AsyncPostBackErrorMessage%2A> property in the event handler. You can also set the <xref:System.Web.UI.ScriptManager.AllowCustomErrorsRedirect%2A> property to specify how the custom errors section of the Web.config file is used when an error occurs during partial-page updates. In this example, the default value of the <xref:System.Web.UI.ScriptManager.AllowCustomErrorsRedirect%2A> property is used. This means that if the Web.config file contains a  element, that element determines how errors are displayed. For more information, see [customErrors Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/288c32e2-df1f-4548-abda-de6b4cb989a6).  \n  \n [!code-vb[System.Web.UI.ScriptManager.OnAsyncPostBackError#1](../../add/codesnippet/VisualBasic/t-system.web.ui.scriptma_2.aspx)]\n [!code-cs[System.Web.UI.ScriptManager.OnAsyncPostBackError#1](../../add/codesnippet/CSharp/t-system.web.ui.scriptma_2.aspx)]  \n  \n **Globalizing the Date and Time That Are Displayed in the Browser**  \n  \n The following example shows how to set the <xref:System.Web.UI.ScriptManager.EnableScriptGlobalization%2A> property so that client script can display a culture-specific date and time in the browser. In the example, the `Culture` attribute of the  directive is set to `auto`. As a result, the first language that is specified in the current browser settings determines the culture and UI culture for the page. For more information, see [How to: Set the Culture and UI Culture for ASP.NET Web Page Globalization](../Topic/How%20to:%20Set%20the%20Culture%20and%20UI%20Culture%20for%20ASP.NET%20Web%20Page%20Globalization.md).  \n  \n [!code-vb[System.Web.UI.ScriptManager.EnableScriptGlobalization#1](../../add/codesnippet/VisualBasic/t-system.web.ui.scriptma_3.aspx)]\n [!code-cs[System.Web.UI.ScriptManager.EnableScriptGlobalization#1](../../add/codesnippet/CSharp/t-system.web.ui.scriptma_3.aspx)]"
   syntax:
     content: >-
       [System.ComponentModel.DefaultProperty("Scripts")]
@@ -242,12 +244,13 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: This constructor initializes the internal fields that are used by the <xref:System.Web.UI.ScriptManager> control to track page, control, and deployment information.
   syntax:
     content: public ScriptManager ();
     parameters: []
   overload: System.Web.UI.ScriptManager.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -264,18 +267,19 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a history point and adds it to the browser's history stack, using the specified state data collection and state title.
+  remarks: "Use this method to create a history point when you want to save more than one key/value pair for the state data. When you create a history point, serialized and encrypted data is appended to the URL of the Web page and an entry is included in the browser's history stack. If the `title` parameter is `null`, the title of the Web page is used as the title of the state entry in the history stack.  \n  \n You can use the state data to re-create the page when any subsequent server navigation event is raised. For more information, see [Managing Browser History Using Server Controls](../Topic/Managing%20Browser%20History%20Using%20ASP.NET%20Server%20Controls.md)."
   syntax:
     content: public void AddHistoryPoint (System.Collections.Specialized.NameValueCollection state, string title);
     parameters:
     - id: state
       type: System.Collections.Specialized.NameValueCollection
-      description: To be added.
+      description: A collection of key/value pairs that contain the data for the state.
     - id: title
       type: System.String
-      description: To be added.
+      description: The text that will be added to the browser's history stack as the title for this state.
   overload: System.Web.UI.ScriptManager.AddHistoryPoint*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -292,18 +296,19 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a history point and adds it to the browser's history stack, using the specified state key and state value.
+  remarks: "Use this method to create a history point when you only want to save a value to identify the state. When you create a history point, serialized and encrypted data is appended to the URL of the Web page and an entry is included in the browser's history stack. The title of the Web page is used as the title of the state entry in the history stack.  \n  \n You can use the state data to re-create the page when any subsequent server navigation event is raised. For more information, see [Managing Browser History Using Server Controls](../Topic/Managing%20Browser%20History%20Using%20ASP.NET%20Server%20Controls.md)."
   syntax:
     content: public void AddHistoryPoint (string key, string value);
     parameters:
     - id: key
       type: System.String
-      description: To be added.
+      description: The key part of the key/value pair that identifies the state of the Web page.
     - id: value
       type: System.String
-      description: To be added.
+      description: The value part of the key/value pair that identifies the state of the Web page.
   overload: System.Web.UI.ScriptManager.AddHistoryPoint*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -320,21 +325,22 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a history point and adds it to the browser's history stack, using the specified state key, state value, and state title.
+  remarks: "Use this method to create a history point when you want to save a value to identify the state and a title for the state. When you create a history point, serialized and encrypted data is appended to the URL of the Web page and an entry is included in the browser's history stack. If the `title` parameter is `null`, the title of the Web page is used as the title of the state entry in the history stack.  \n  \n You can use the state data to re-create the page when any subsequent server navigation event is raised. For more information, see [Managing Browser History Using Server Controls](../Topic/Managing%20Browser%20History%20Using%20ASP.NET%20Server%20Controls.md)."
   syntax:
     content: public void AddHistoryPoint (string key, string value, string title);
     parameters:
     - id: key
       type: System.String
-      description: To be added.
+      description: The key part of the key/value pair that identifies the state of the Web page.
     - id: value
       type: System.String
-      description: To be added.
+      description: The value part of the key/value pair that identifies the state of the Web page.
     - id: title
       type: System.String
-      description: To be added.
+      description: The text that will be added to the browser's history stack as the title for this state.
   overload: System.Web.UI.ScriptManager.AddHistoryPoint*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -351,14 +357,14 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the Ajax framework assembly that components on the page use.
   syntax:
     content: public virtual System.Reflection.Assembly AjaxFrameworkAssembly { get; }
     return:
       type: System.Reflection.Assembly
-      description: To be added.
+      description: The Ajax framework assembly.
   overload: System.Web.UI.ScriptManager.AjaxFrameworkAssembly*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -375,14 +381,17 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that specifies how client scripts of the [!INCLUDE[ajax_current_ext](../../add/includes/ajax-current-ext-md.md)] client library will be included on the client.
+  remarks: Use the AjaxFrameworkMode property to enable all [!INCLUDE[ajax_current_ext](../../add/includes/ajax-current-ext-md.md)] script files, to disable all [!INCLUDE[ajax_current_ext](../../add/includes/ajax-current-ext-md.md)] script files, or to explicitly include individual script files.
+  example:
+  - "The following example shows how to set the AjaxFrameworkMode property to `Explicit` in order to indicate that scripts can be explicitly specified.  \n  \n```  \n<asp:ScriptManager ID=\"sm1\" AjaxFrameworkMode=\"Explicit\" runat=\"server\">   \n<Scripts>   \n    <asp:ScriptReference Name=\"MicrosoftAjaxCore.js\" />   \n    <asp:ScriptReference Name=\"MicrosoftAjaxComponentModel.js\" />    \n    <asp:ScriptReference Name=\"MicrosoftAjaxSerialization.js\" />   \n    <asp:ScriptReference Name=\"MicrosoftAjaxNetwork.js\" />       \n</Scripts>   \n</asp:ScriptManager>  \n```"
   syntax:
     content: public System.Web.UI.AjaxFrameworkMode AjaxFrameworkMode { get; set; }
     return:
       type: System.Web.UI.AjaxFrameworkMode
-      description: To be added.
+      description: An  enumeration value.
   overload: System.Web.UI.ScriptManager.AjaxFrameworkMode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -399,14 +408,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that determines whether the custom errors section of the Web.config file is used during an error in an asynchronous postback.
+  remarks: The <xref:System.Web.UI.ScriptManager.AsyncPostBackError> event is raised when there is a page error during asynchronous postbacks. How errors on the server are sent to the client depends on the AllowCustomErrorsRedirect property, the <xref:System.Web.UI.ScriptManager.AsyncPostBackErrorMessage%2A> property, and the custom errors section of the Web.config file.
   syntax:
     content: public bool AllowCustomErrorsRedirect { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the custom errors setting in the Web.config file is used to determine error behavior during asynchronous postbacks; otherwise, . The default is .
   overload: System.Web.UI.ScriptManager.AllowCustomErrorsRedirect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -423,13 +433,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when there is a page error during an asynchronous postback.
+  remarks: The AsyncPostBackError event is raised when there is a page error during asynchronous postbacks. How errors on the server are sent to the client depends on the <xref:System.Web.UI.ScriptManager.AllowCustomErrorsRedirect%2A> property, the <xref:System.Web.UI.ScriptManager.AsyncPostBackErrorMessage%2A> property, and the custom errors section of the Web.config file.
+  example:
+  - "The following example shows how to handle the AsyncPostBackError event to set the <xref:System.Web.UI.ScriptManager.AsyncPostBackErrorMessage%2A> property (which is sent to the client) to the server exception error message.  \n  \n [!code-vb[System.Web.UI.ScriptManager.AsyncPostBackErrorMessage#1](../../add/codesnippet/VisualBasic/e-system.web.ui.scriptma_1.aspx)]\n [!code-cs[System.Web.UI.ScriptManager.AsyncPostBackErrorMessage#1](../../add/codesnippet/CSharp/e-system.web.ui.scriptma_1.aspx)]"
   syntax:
     content: public event EventHandler<System.Web.UI.AsyncPostBackErrorEventArgs> AsyncPostBackError;
     return:
       type: System.EventHandler{System.Web.UI.AsyncPostBackErrorEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -446,14 +459,17 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the error message that is sent to the client when an unhandled server exception occurs during an asynchronous postback.
+  remarks: The <xref:System.Web.UI.ScriptManager.AsyncPostBackError> event is raised when there is a page error during asynchronous postbacks. How errors on the server are sent to the client depends on the <xref:System.Web.UI.ScriptManager.AllowCustomErrorsRedirect%2A> property, the AsyncPostBackErrorMessage property, and the custom errors section of the Web.config file.
+  example:
+  - "The following example shows how to handle the <xref:System.Web.UI.ScriptManager.AsyncPostBackError> event to set the AsyncPostBackErrorMessage property (which is sent to the client) to the server exception error message.  \n  \n [!code-vb[System.Web.UI.ScriptManager.AsyncPostBackErrorMessage#1](../../add/codesnippet/VisualBasic/p-system.web.ui.scriptma_1.aspx)]\n [!code-cs[System.Web.UI.ScriptManager.AsyncPostBackErrorMessage#1](../../add/codesnippet/CSharp/p-system.web.ui.scriptma_1.aspx)]"
   syntax:
     content: public string AsyncPostBackErrorMessage { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The error message. The default is an empty string ("").
   overload: System.Web.UI.ScriptManager.AsyncPostBackErrorMessage*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -470,14 +486,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the unique ID of the control that caused the asynchronous postback.
+  remarks: "The AsyncPostBackSourceElementID property contains the value of the control ID that caused the asynchronous postback, which can be one of the following:  \n  \n-   A postback from a control that is inside an <xref:System.Web.UI.UpdatePanel> control whose <xref:System.Web.UI.UpdatePanel.ChildrenAsTriggers%2A> property is set to `true` (the default).  \n  \n-   A postback from a control that is a trigger for an <xref:System.Web.UI.UpdatePanel> control.  \n  \n-   A postback from a control that is registered by calling the <xref:System.Web.UI.ScriptManager.RegisterAsyncPostBackControl%2A> method of the <xref:System.Web.UI.ScriptManager> control."
   syntax:
     content: public string AsyncPostBackSourceElementID { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The unique ID of a control, if the control has an ID; otherwise, an empty string ("").
   overload: System.Web.UI.ScriptManager.AsyncPostBackSourceElementID*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -494,14 +511,14 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates the time, in seconds, before asynchronous postbacks time out if no response is received.
   syntax:
     content: public int AsyncPostBackTimeout { get; set; }
     return:
       type: System.Int32
-      description: To be added.
+      description: An integer that represents the time-out in seconds. The default value is 90 seconds.
   overload: System.Web.UI.ScriptManager.AsyncPostBackTimeout*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -518,14 +535,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object that is associated with the current  instance.
+  remarks: "The <xref:System.Web.UI.AuthenticationServiceManager> object that is returned by this property represents the authentication service that is registered with the page. The authentication service can be defined in the <xref:System.Web.UI.ScriptManager> control or in an associated <xref:System.Web.UI.ScriptManagerProxy> control.  \n  \n You can use the ASP.NET authentication service or use a custom authentication service. You can add the custom service in markup by including an `AuthenticationService` element inside the `asp:ScriptManager` element on the page, as shown in the following example.  \n  \n```  \n<asp:ScriptManager ID=\"SM1\" runat=\"server\">  \n  <AuthenticationService Path=\"MyAuthenticationService.asmx\" />  \n</asp:ScriptManager>  \n```  \n  \n You can also programmatically configure the <xref:System.Web.UI.AuthenticationServiceManager> object. Services are registered with the <xref:System.Web.UI.ScriptManager> control during the page's <xref:System.Web.UI.Control.PreRender> life-cycle stage."
   syntax:
     content: public System.Web.UI.AuthenticationServiceManager AuthenticationService { get; }
     return:
       type: System.Web.UI.AuthenticationServiceManager
-      description: To be added.
+      description: The  object for the current  instance.
   overload: System.Web.UI.ScriptManager.AuthenticationService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -542,14 +560,14 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the name of the method that handles the [Sys.Application.navigate](../Topic/Sys.Application.navigate%20Event.md) event on the client.
   syntax:
     content: public string ClientNavigateHandler { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The name of the method that handles the [Sys.Application.navigate](../Topic/Sys.Application.navigate%20Event.md) event on the client.
   overload: System.Web.UI.ScriptManager.ClientNavigateHandler*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -566,14 +584,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a reference to the composite script that supports the Web page.
+  remarks: For more information, see [Combining Client Scripts into a Composite Script](http://msdn.microsoft.com/en-us/d0f608d0-b4c8-4795-990b-ede68c1239b3).
   syntax:
     content: public System.Web.UI.CompositeScriptReference CompositeScript { get; }
     return:
       type: System.Web.UI.CompositeScriptReference
-      description: To be added.
+      description: A reference to the composite script.
   overload: System.Web.UI.ScriptManager.CompositeScript*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -590,14 +609,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a URL to a blank Web page.
+  remarks: The EmptyPageUrl property supports Ajax browser history.
   syntax:
     content: public virtual string EmptyPageUrl { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The URL to use if the target Web page is empty.
   overload: System.Web.UI.ScriptManager.EmptyPageUrl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -614,14 +634,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the current page loads client script references from CDN (Content Delivery Network) paths.
+  remarks: Do not set this property to `true` if you set <xref:System.Web.UI.ScriptManager.LoadScriptsBeforeUI%2A> to `true` already.
   syntax:
     content: public bool EnableCdn { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if client script references are loaded from CDN paths, otherwise, .
   overload: System.Web.UI.ScriptManager.EnableCdn*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -638,14 +659,14 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Enables local copy of a script to load in the event that the CDN (Content Delivery Network) is unavailable.
   syntax:
     content: public bool EnableCdnFallback { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the fallback CDN value is enabled; otherwise, .
   overload: System.Web.UI.ScriptManager.EnableCdnFallback*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -662,14 +683,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether the Web page supports history point management.
+  remarks: Use the EnableHistory property to enable history management in a Web page.
   syntax:
     content: public bool EnableHistory { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the Web page supports adding history points to the browser's history stack; otherwise, .
   overload: System.Web.UI.ScriptManager.EnableHistory*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -686,14 +708,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether public static page methods in an ASP.NET page can be called from client script.
+  remarks: "You can add static page methods to an ASP.NET page and mark them as Web methods. You can then call these methods from script as if they were part of a Web service, but without creating a separate .asmx file. To create Web methods on a page, import the <xref:System.Web.Services> namespace and add a <xref:System.Web.Services.WebMethodAttribute> attribute to each static method that you want to expose. The methods must be marked public.  \n  \n For more information, see [Exposing Web Services to Client Script in ASP.NET AJAX](http://msdn.microsoft.com/en-us/fe3f6e9e-0acd-44c9-bf0f-0a8598fc13b8)."
   syntax:
     content: public bool EnablePageMethods { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if static page methods on an ASP.NET page can be called from client script as Web methods; otherwise, . The default is .
   overload: System.Web.UI.ScriptManager.EnablePageMethods*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -710,14 +733,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that enables partial rendering of a page, which in turn enables you to update regions of the page individually by using  controls.
+  remarks: "Even if the EnablePartialRendering property is `true`, partial-page rendering might not occur. The browser might not support partial-page rendering, or the <xref:System.Web.UI.ScriptManager.SupportsPartialRendering%2A> property is set to `false`.  \n  \n You can override the value of the EnablePartialRendering property at run time during or before the page's <xref:System.Web.UI.Control.Init> event. If you try to change this property after the page's <xref:System.Web.UI.Control.Init> event has occurred, an <xref:System.InvalidOperationException> exception is thrown."
   syntax:
     content: public bool EnablePartialRendering { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if partial rendering is enabled and full-page updates are suppressed; otherwise, . The default is .
   overload: System.Web.UI.ScriptManager.EnablePartialRendering*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The EnablePartialRendering property is set after the page's  event occurs.
   platform:
   - net-11
   - net-20
@@ -734,14 +761,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether the  control renders script that supports parsing and formatting of culture-specific information.
+  remarks: When the EnableScriptGlobalization property is set to `true`, globalized ECMAScript (JavaScript) functions such as the  method display culture-specific information. The culture can be set in the browser, in server code, or in the Web site's configuration file.
   syntax:
     content: public bool EnableScriptGlobalization { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if culture-specific information can be displayed; otherwise, . The default value is .
   overload: System.Web.UI.ScriptManager.EnableScriptGlobalization*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -758,14 +786,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether the  control renders localized versions of script files.
+  remarks: "When the EnableScriptLocalization property is set to `true`, the <xref:System.Web.UI.ScriptManager> object will retrieve script files for the current culture if they exist. For example, a page might specify a script file that is named CustomScript.js. If the culture is set to fr-CA, the <xref:System.Web.UI.ScriptManager> object will try to retrieve a script file that is named CustomScript.fr-CA.js.  \n  \n> [!NOTE]\n>  To prevent a script file from being rendered two times, the EnableScriptLocalization property must not be modified during an asynchronous postback."
   syntax:
     content: public bool EnableScriptLocalization { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if localized script files will be rendered; otherwise, . The default value is .
   overload: System.Web.UI.ScriptManager.EnableScriptLocalization*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -782,14 +811,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether to encrypt the history state string.
+  remarks: >-
+    > [!WARNING]
+
+    >  This property should ***never*** be set to `false` on a production web site.
   syntax:
     content: public bool EnableSecureHistoryState { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the history state string should be encrypted; otherwise, . The default value is .
   overload: System.Web.UI.ScriptManager.EnableSecureHistoryState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -806,18 +839,22 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  instance for a given  object.
+  remarks: Use this static method to determine whether a <xref:System.Web.UI.ScriptManager> control is on a page, or to access the properties and methods of a <xref:System.Web.UI.ScriptManager> control when you do not know its ID.
   syntax:
     content: public static System.Web.UI.ScriptManager GetCurrent (System.Web.UI.Page page);
     parameters:
     - id: page
       type: System.Web.UI.Page
-      description: To be added.
+      description: The page instance to retrieve the  from.
     return:
       type: System.Web.UI.ScriptManager
-      description: To be added.
+      description: The current  instance for the selected  object, or  if no instance is defined.
   overload: System.Web.UI.ScriptManager.GetCurrent*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    page is ."
   platform:
   - net-11
   - net-20
@@ -834,15 +871,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a read-only collection of ECMAScript (JavaScript) array declarations that were previously registered with the  object.
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredArrayDeclaration> GetRegisteredArrayDeclarations ();
     parameters: []
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Web.UI.RegisteredArrayDeclaration}
-      description: To be added.
+      description: A generic collection that contains the array declarations.
   overload: System.Web.UI.ScriptManager.GetRegisteredArrayDeclarations*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -859,15 +896,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a read-only collection of client script blocks that were previously registered with the  control.
+  remarks: Client script blocks are registered with the <xref:System.Web.UI.ScriptManager> control for use with a control that is inside an <xref:System.Web.UI.UpdatePanel> control.
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredScript> GetRegisteredClientScriptBlocks ();
     parameters: []
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Web.UI.RegisteredScript}
-      description: To be added.
+      description: A generic collection that contains client script blocks.
   overload: System.Web.UI.ScriptManager.GetRegisteredClientScriptBlocks*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -884,15 +922,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a read-only collection of  scripts that were previously registered with the  object.
+  remarks: A `dispose` script executes when the <xref:System.Web.UI.UpdatePanel> control is updated or deleted.
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredDisposeScript> GetRegisteredDisposeScripts ();
     parameters: []
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Web.UI.RegisteredDisposeScript}
-      description: To be added.
+      description: A generic collection that contains  scripts.
   overload: System.Web.UI.ScriptManager.GetRegisteredDisposeScripts*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -909,15 +948,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a read-only collection of custom (expando) attributes that were previously registered with the  object.
+  remarks: A custom attribute is a name/value pair that can be read and set by client script.
+  example:
+  - "<xref:System.Web.UI.ClientScriptManager.RegisterExpandoAttribute%2A>  \n  \n <xref:System.Web.UI.ScriptManager.RegisterExpandoAttribute%2A>  \n  \n <xref:System.Web.UI.RegisteredExpandoAttribute>"
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredExpandoAttribute> GetRegisteredExpandoAttributes ();
     parameters: []
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Web.UI.RegisteredExpandoAttribute}
-      description: To be added.
+      description: A generic collection that contains custom attributes.
   overload: System.Web.UI.ScriptManager.GetRegisteredExpandoAttributes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -934,15 +976,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a read-only collection of hidden fields that were previously registered with the  object.
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredHiddenField> GetRegisteredHiddenFields ();
     parameters: []
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Web.UI.RegisteredHiddenField}
-      description: To be added.
+      description: A generic collection that contains hidden fields.
   overload: System.Web.UI.ScriptManager.GetRegisteredHiddenFields*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -959,15 +1001,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a read-only collection of  statements that were previously registered with the  object.
+  remarks: An `onsubmit` statement is ECMAScript (JavaScript) that is executed when the form is submitted.
+  example:
+  - "<xref:System.Web.UI.ScriptManager.RegisterOnSubmitStatement%2A>  \n  \n <xref:System.Web.UI.ClientScriptManager.RegisterOnSubmitStatement%2A>"
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredScript> GetRegisteredOnSubmitStatements ();
     parameters: []
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Web.UI.RegisteredScript}
-      description: To be added.
+      description: A generic collection that contains  statements.
   overload: System.Web.UI.ScriptManager.GetRegisteredOnSubmitStatements*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -984,15 +1029,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a read-only collection of startup scripts that were previously registered with the  object.
+  remarks: A startup script is client script that is associated with a control that executes when the control is started.
+  example:
+  - "<xref:System.Web.UI.ScriptManager.RegisterStartupScript%2A>  \n  \n <xref:System.Web.UI.ClientScriptManager.RegisterStartupScript%2A>  \n  \n GetRegisteredStartupScripts"
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredScript> GetRegisteredStartupScripts ();
     parameters: []
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Web.UI.RegisteredScript}
-      description: To be added.
+      description: A generic collection that contains startup scripts.
   overload: System.Web.UI.ScriptManager.GetRegisteredStartupScripts*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1009,15 +1057,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a string that contains key/value pairs that represent the state of the Web page.
   syntax:
     content: public string GetStateString ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: A string containing the key/value pairs that represent the state of the Web page.
   overload: System.Web.UI.ScriptManager.GetStateString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1034,14 +1082,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the debug versions of client script libraries will be rendered.
+  remarks: "The IsDebuggingEnabled property returns `false` when any one of the following conditions is true:  \n  \n-   In the  element of the configuration file, the `retail` attribute is set to `true`. This overrides all other settings.  \n  \n-   The <xref:System.Web.UI.ScriptManager.ScriptMode%2A> property is set to `Auto` or to `Inherit`, and debugging is not enabled in the `compilation` section of the application-root Web.config file.  \n  \n-   The <xref:System.Web.UI.ScriptManager.ScriptMode%2A> property is set to `Release`.  \n  \n    > [!NOTE]\n    >  The `debug` attribute of the  directive does not affect Ajax-enabled ASP.NET applications. The <xref:System.Web.UI.ScriptManager> control uses only the settings in the Web.config file and in its IsDebuggingEnabled and <xref:System.Web.UI.ScriptManager.ScriptMode%2A> properties to determine whether to render debug scripts.  \n  \n For more information, see [Debugging and Tracing Ajax Applications Overview](../Topic/Debugging%20and%20Tracing%20Ajax%20Applications%20Overview.md)."
   syntax:
     content: public bool IsDebuggingEnabled { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the current request is executing in debug mode; otherwise, .
   overload: System.Web.UI.ScriptManager.IsDebuggingEnabled*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1058,14 +1107,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the current postback is being executed in partial-rendering mode.
+  remarks: Use the IsInAsyncPostBack property in combination with the <xref:System.Web.UI.Page.IsPostBack%2A> property to distinguish between the initial page load, a partial-page update, and a full-page update in <xref:System.Web.UI.Control.Load>, <xref:System.Web.UI.Page.InitComplete>, or <xref:System.Web.UI.Control.PreRender> events.
   syntax:
     content: public bool IsInAsyncPostBack { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the current postback is executing in partial-rendering mode; otherwise, .
   overload: System.Web.UI.ScriptManager.IsInAsyncPostBack*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1082,14 +1132,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether a  event is currently being handled.
+  remarks: Use the IsNavigating property to determine whether the <xref:System.Web.UI.ScriptManager.Navigate> event has been raised.
   syntax:
     content: public bool IsNavigating { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  is being handled; otherwise, .
   overload: System.Web.UI.ScriptManager.IsNavigating*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1106,21 +1157,22 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Reads form data that is posted from the browser to the server, and determines the source of the asynchronous postback.
+  remarks: The LoadPostData method is primarily used by control developers to extend the functionality of the <xref:System.Web.UI.ScriptManager> control.
   syntax:
     content: protected virtual bool LoadPostData (string postDataKey, System.Collections.Specialized.NameValueCollection postCollection);
     parameters:
     - id: postDataKey
       type: System.String
-      description: To be added.
+      description: The key identifier for the control.
     - id: postCollection
       type: System.Collections.Specialized.NameValueCollection
-      description: To be added.
+      description: The collection of all the incoming post data.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  control's state has changed as a result of a postback; otherwise, .
   overload: System.Web.UI.ScriptManager.LoadPostData*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1137,14 +1189,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether scripts are loaded before or after markup for the page UI is loaded.
+  remarks: "The LoadScriptsBeforeUI property determines how scripts in the <xref:System.Web.UI.ScriptManager.Scripts%2A> collection are loaded relative to the markup for the page UI.  \n  \n When the LoadScriptsBeforeUI property is `true`, a `script` element is rendered before the page's UI markup is loaded. In this scenario, if UI elements are defined in scripts, the UI will be fully functional when it loads. However, if the script accesses UI elements in the markup for which instances have not yet been created, an error might occur. To make sure that UI elements are loaded before you access them, handle the  event of the  class.  \n  \n When the LoadScriptsBeforeUI property is `false`, a `script` element is rendered after the page's UI markup is rendered. In this scenario, the UI loads more quickly, but it might not be fully functional if scripts that define additional UI elements have not finished loading.  \n  \n Do not set this property to `true` if you set <xref:System.Web.UI.ScriptManager.EnableCdn%2A> to `true` already."
   syntax:
     content: public bool LoadScriptsBeforeUI { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if scripts are loaded before markup for the UI is loaded;  if scripts are loaded after markup for the UI is loaded. The default is .
   overload: System.Web.UI.ScriptManager.LoadScriptsBeforeUI*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1161,13 +1214,14 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the user clicks the browser's **Back** or **Forward** button.
+  remarks: When a user clicks the browser's **Back** button, the browser navigates through previously-viewed URLs, which can include URLs that contain history-point state data. If client code in the Web page detects that the URL contains history state data, it makes a request to the server page. This acts as a postback event, and the <xref:System.Web.UI.ScriptManagerProxy> server control raises the `Navigate` event. You can handle this event and re-create the page as required in the Web application by using the state data that is passed with the event.
   syntax:
     content: public event EventHandler<System.Web.UI.HistoryEventArgs> Navigate;
     return:
       type: System.EventHandler{System.Web.UI.HistoryEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1184,15 +1238,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
+  remarks: The <xref:System.Web.UI.ScriptManager.AsyncPostBackError> event is raised when there is a page error during asynchronous postbacks. How errors on the server are sent to the client depends on the <xref:System.Web.UI.ScriptManager.AllowCustomErrorsRedirect%2A> property, the <xref:System.Web.UI.ScriptManager.AsyncPostBackErrorMessage%2A> property, and the custom errors section of the Web.config file.
+  example:
+  - "The following example shows how to handle the <xref:System.Web.UI.ScriptManager.AsyncPostBackError> event to set the <xref:System.Web.UI.ScriptManager.AsyncPostBackErrorMessage%2A> property (which is sent to the client) to the server exception error message.  \n  \n [!code-vb[System.Web.UI.ScriptManager.AsyncPostBackErrorMessage#1](../../add/codesnippet/VisualBasic/b3084245-e566-4363-b817-_1.aspx)]\n [!code-cs[System.Web.UI.ScriptManager.AsyncPostBackErrorMessage#1](../../add/codesnippet/CSharp/b3084245-e566-4363-b817-_1.aspx)]"
   syntax:
     content: protected virtual void OnAsyncPostBackError (System.Web.UI.AsyncPostBackErrorEventArgs e);
     parameters:
     - id: e
       type: System.Web.UI.AsyncPostBackErrorEventArgs
-      description: To be added.
+      description: The error event data.
   overload: System.Web.UI.ScriptManager.OnAsyncPostBackError*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1209,15 +1266,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event and makes sure that only one  control exists on the page.
   syntax:
     content: protected override void OnInit (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: The event data.
   overload: System.Web.UI.ScriptManager.OnInit*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: More than one instance of  exists on the page.
   platform:
   - net-11
   - net-20
@@ -1234,15 +1294,19 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event, and registers script files and services for partial-page updates.
+  remarks: For information about the DOM, see the [Document Object Model (DOM) Level 1 Specification](http://go.microsoft.com/fwlink/?LinkId=73305) on the World Wide Web Consortium (W3C) Web site.
   syntax:
     content: protected override void OnPreRender (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: The event data.
   overload: System.Web.UI.ScriptManager.OnPreRender*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The browser that made the partial-page request does not support at least DOM Level 1.0.
   platform:
   - net-11
   - net-20
@@ -1259,15 +1323,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnResolveCompositeScriptReference (System.Web.UI.CompositeScriptReferenceEventArgs e);
     parameters:
     - id: e
       type: System.Web.UI.CompositeScriptReferenceEventArgs
-      description: To be added.
+      description: An object that represents the composite script reference.
   overload: System.Web.UI.ScriptManager.OnResolveCompositeScriptReference*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1284,15 +1348,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event for each script reference that is managed by the  control.
+  remarks: "This method is called by the <xref:System.Web.UI.ScriptManager.OnPreRender%2A> event handler, one time for each <xref:System.Web.UI.ScriptReference> in the <xref:System.Web.UI.ScriptManager.Scripts%2A> collection.  \n  \n The <xref:System.Web.UI.ScriptManager.ResolveScriptReference> event is raised after duplicate script entries have been resolved.  \n  \n Override this method to affect the behaviors of individual script blocks on postback or during partial-page updates."
   syntax:
     content: protected virtual void OnResolveScriptReference (System.Web.UI.ScriptReferenceEventArgs e);
     parameters:
     - id: e
       type: System.Web.UI.ScriptReferenceEventArgs
-      description: To be added.
+      description: An object that represents the current script.
   overload: System.Web.UI.ScriptManager.OnResolveScriptReference*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1309,14 +1374,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object that is associated with the current  instance.
+  remarks: "The <xref:System.Web.UI.ProfileServiceManager> object that is returned by this property represents the profile service that is registered with the page. The profile service can be defined in the <xref:System.Web.UI.ScriptManager> control or in an associated <xref:System.Web.UI.ScriptManagerProxy> control.  \n  \n You can use the ASP.NET profile service or use a custom profile service. You can add the custom service in markup by including a `ProfileService` element inside the `asp:ScriptManager` element on the page, as shown in the following example.  \n  \n```  \n<asp:ScriptManager ID=\"SM1\" runat=\"server\">  \n  <ProfileService LoadProperties=\"propertyA,propertyB\"  \n    Path=\"MyProfileService.asmx\" />  \n</asp:ScriptManager>  \n```  \n  \n You can also programmatically configure the <xref:System.Web.UI.ProfileServiceManager> object. Services are registered with the <xref:System.Web.UI.ScriptManager> control during the page's <xref:System.Web.UI.Control.PreRender> life-cycle stage."
   syntax:
     content: public System.Web.UI.ProfileServiceManager ProfileService { get; }
     return:
       type: System.Web.UI.ProfileServiceManager
-      description: To be added.
+      description: The  object for the current  instance.
   overload: System.Web.UI.ScriptManager.ProfileService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1333,15 +1399,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a postback event raised by the  control and loads the history state of the Web page.
   syntax:
     content: protected virtual void RaisePostBackEvent (string eventArgument);
     parameters:
     - id: eventArgument
       type: System.String
-      description: To be added.
+      description: A string of key/value pairs that represent the history state of the Web page.
   overload: System.Web.UI.ScriptManager.RaisePostBackEvent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1358,12 +1424,13 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises events for the  control when it posts back to the server.
+  remarks: The RaisePostDataChangedEvent method is primarily used by control developers to extend the functionality of the <xref:System.Web.UI.ScriptManager> control. For the default implementation of the <xref:System.Web.UI.ScriptManager> control, no events are raised.
   syntax:
     content: protected virtual void RaisePostDataChangedEvent ();
     parameters: []
   overload: System.Web.UI.ScriptManager.RaisePostDataChangedEvent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1380,21 +1447,25 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers an ECMAScript (JavaScript) array declaration with the  control for use with a control that is inside an  control, and adds the array to the page.
+  remarks: "You use the RegisterArrayDeclaration method to register a client script array that is compatible with partial-page rendering and that has no [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] dependencies. This method registers the array when `control` represents a control that is inside an <xref:System.Web.UI.UpdatePanel> control that is being updated. To register an array every time that an asynchronous postback occurs, use the <xref:System.Web.UI.ScriptManager.RegisterArrayDeclaration%28System.Web.UI.Page%2CSystem.String%2CSystem.String%29> overload of this method.  \n  \n If you want to register an array that does not pertain to partial-page updates, and if you want to register the array only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterArrayDeclaration%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page.  \n  \n The RegisterArrayDeclaration method determines whether an array with the name that is specified in the `arrayName` parameter is already registered. If so, the method adds the values specified in `arrayValue`. Because the array to be registered is based on the <xref:System.Collections.ArrayList> class, duplicates are allowed. If a registered array with the name in `arrayName` does not exist, the array is created and the values in `arrayValue` are added to it.  \n  \n To include string literals in the array, use single quotation marks (') or escaped double quotation marks (\\\\\") in `arrayValue`.  \n  \n Note that JavaScript treats a comma (,) as a delimiter in an array. You can specify multiple array values by passing a comma-delimited string in `arrayValue`. Separating two items with a comma in `arrayValue` is equivalent to calling the RegisterArrayDeclaration method two times, one time for each item."
   syntax:
     content: public static void RegisterArrayDeclaration (System.Web.UI.Control control, string arrayName, string arrayValue);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that is registering the array.
     - id: arrayName
       type: System.String
-      description: To be added.
+      description: The name of the array to register.
     - id: arrayValue
       type: System.String
-      description: To be added.
+      description: The array value or values to register.
   overload: System.Web.UI.ScriptManager.RegisterArrayDeclaration*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    arrayName is ."
   platform:
   - net-11
   - net-20
@@ -1411,21 +1482,25 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers an ECMAScript (JavaScript) array declaration with the  control for use with a control that is inside an  control, and adds the array to the page.
+  remarks: "You use the RegisterArrayDeclaration method to register a client script array that is compatible with partial-page rendering and that has no [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] dependencies. This method registers the array every time that an asynchronous postback occurs. To register an array for a control that is inside an <xref:System.Web.UI.UpdatePanel> control so that the array is registered only when the panel is updated, use the <xref:System.Web.UI.ScriptManager.RegisterArrayDeclaration%28System.Web.UI.Control%2CSystem.String%2CSystem.String%29> overload of this method.  \n  \n If you want to register an array that does not pertain to partial-page updates, and if you want to register the array only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterArrayDeclaration%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page."
   syntax:
     content: public static void RegisterArrayDeclaration (System.Web.UI.Page page, string arrayName, string arrayValue);
     parameters:
     - id: page
       type: System.Web.UI.Page
-      description: To be added.
+      description: The page object that is registering the array.
     - id: arrayName
       type: System.String
-      description: To be added.
+      description: The name of the array to register.
     - id: arrayValue
       type: System.String
-      description: To be added.
+      description: The array value or values to register.
   overload: System.Web.UI.ScriptManager.RegisterArrayDeclaration*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    arrayName is ."
   platform:
   - net-11
   - net-20
@@ -1442,15 +1517,24 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a control as a trigger for asynchronous postbacks.
+  remarks: "The RegisterAsyncPostBackControl method enables you to register Web server controls as triggers so that they perform an asynchronous postback instead of a synchronous postback. When the <xref:System.Web.UI.UpdatePanel.ChildrenAsTriggers%2A> property of an <xref:System.Web.UI.UpdatePanel> control is set to `true` (which is the default), postback controls inside the <xref:System.Web.UI.UpdatePanel> control are automatically registered as asynchronous postback controls.  \n  \n Use the RegisterAsyncPostBackControl method to register controls outside an <xref:System.Web.UI.UpdatePanel> control as triggers for asynchronous postbacks, and to potentially update the content of an update panel. To update an <xref:System.Web.UI.UpdatePanel> control programmatically, call the <xref:System.Web.UI.UpdatePanel.Update%2A> method.  \n  \n You can add the trigger declaratively by using the `Triggers` element of the <xref:System.Web.UI.UpdatePanel> control. In [!INCLUDE[vsprvs](../../add/includes/vsprvs-md.md)], use the designer's **UpdatePanelTrigger Collection Editor** dialog box."
+  example:
+  - "The following example shows how to call the RegisterAsyncPostBackControl method to register a <xref:System.Web.UI.WebControls.Button> control so that it causes an update of an <xref:System.Web.UI.UpdatePanel> control's content. The <xref:System.Web.UI.WebControls.Button> control is not inside the <xref:System.Web.UI.UpdatePanel> control. Two buttons are shown: `Button1` and `Button2`. `Button1` refreshes the content of the panel, and `Button2` refreshes the whole page.  \n  \n [!code-cs[System.Web.UI.ScriptManager.RegisterAsyncPostBackControl#1](../../add/codesnippet/CSharp/52cf52da-aed7-4683-b734-_1.aspx)]\n [!code-vb[System.Web.UI.ScriptManager.RegisterAsyncPostBackControl#1](../../add/codesnippet/VisualBasic/52cf52da-aed7-4683-b734-_1.aspx)]  \n  \n The following example shows how to call the RegisterAsyncPostBackControl method to register a user control so that it causes an update of an <xref:System.Web.UI.UpdatePanel> control's content. The first example shows a page using the user control. The second example shows the user control.  \n  \n [!code-vb[System.Web.UI.ScriptManager.RegisterAsyncPostBackControl#2](../../add/codesnippet/VisualBasic/52cf52da-aed7-4683-b734-_2.aspx)]\n [!code-cs[System.Web.UI.ScriptManager.RegisterAsyncPostBackControl#2](../../add/codesnippet/CSharp/52cf52da-aed7-4683-b734-_2.aspx)]  \n  \n [!CODE [System.Web.UI.ScriptManager.RegisterAsyncPostBackControl#3](../CodeSnippet/VS_Snippets_Atlas/System.Web.UI.ScriptManager.RegisterAsyncPostBackControl#3)]"
   syntax:
     content: public void RegisterAsyncPostBackControl (System.Web.UI.Control control);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control to register for asynchronous postbacks.
   overload: System.Web.UI.ScriptManager.RegisterAsyncPostBackControl*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    control is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The registered control does not implement the , , or  interfaces.
   platform:
   - net-11
   - net-20
@@ -1467,27 +1551,36 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a client script block with the  control for use with a control that is inside an  control, and then adds the script block to the page.
+  remarks: "You use the RegisterClientScriptBlock method to register a client script block that is compatible with partial-page rendering and that has no [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] dependencies. Client script blocks that are registered by using this method are sent to the page only when `control` represents a control that is inside an <xref:System.Web.UI.UpdatePanel> control that is being updated. To register a script block every time that an asynchronous postback occurs, use the <xref:System.Web.UI.ScriptManager.RegisterClientScriptBlock%28System.Web.UI.Page%2CSystem.Type%2CSystem.String%2CSystem.String%2CSystem.Boolean%29> overload of this method.  \n  \n If you want to register a script block that does not pertain to partial-page updates, and if you want to register the script block only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterClientScriptBlock%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page.  \n  \n If `addScriptTags` is `true`, the RegisterClientScriptBlock method adds `<script>` tags around the script block. Pass `false` if you want to create `<script>` tags yourself, such as when you want to set the attributes of specific `<script>` tags. If `addScriptTags` is `false` and the `script` parameter contains multiple script blocks, an exception is thrown.  \n  \n The RegisterClientScriptBlock method adds a script block to the page after the opening `<form>` tag. The script blocks are not guaranteed to be output in the same order in which they are registered. If the order of the script blocks is important, concatenate your script blocks into a single string (for example, by using the <xref:System.Text.StringBuilder> object), and then register them as a single client script block."
+  example:
+  - "[!code-cs[System.Web.UI.ScriptManager.RegisterClientScriptBlock#1](../../add/codesnippet/CSharp/e9c100e2-0b39-467f-a078-_1.aspx)]\n [!code-vb[System.Web.UI.ScriptManager.RegisterClientScriptBlock#1](../../add/codesnippet/VisualBasic/e9c100e2-0b39-467f-a078-_1.aspx)]  \n  \n [!code-xml[System.Web.UI.ScriptManager.RegisterClientScriptBlock#2](../../add/codesnippet/XML/e9c100e2-0b39-467f-a078-_2.xml)]"
   syntax:
     content: public static void RegisterClientScriptBlock (System.Web.UI.Control control, Type type, string key, string script, bool addScriptTags);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that is registering the client script block.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of the client script block. This parameter is usually specified by using the  operator (C#) or the  operator (Visual Basic) to retrieve the type of the control that is registering the script.
     - id: key
       type: System.String
-      description: To be added.
+      description: A unique identifier for the script block.
     - id: script
       type: System.String
-      description: To be added.
+      description: The script.
     - id: addScriptTags
       type: System.Boolean
-      description: To be added.
+      description: "\n     to enclose the script block in  and  tags; otherwise, ."
   overload: System.Web.UI.ScriptManager.RegisterClientScriptBlock*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The client script block type is .  \n  \n \\- or -  \n  \n The control that is registering the script block is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The control that is registering the script block is not in the page's control tree.
   platform:
   - net-11
   - net-20
@@ -1504,27 +1597,31 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a client script block with the  control for use with a control that is inside an  control, and then adds the script block to the page.
+  remarks: "When you register a script block by using this method, the script is rendered every time that an asynchronous postback occurs. To register a script block for a control that is inside an <xref:System.Web.UI.UpdatePanel> control so that script is registered only when the <xref:System.Web.UI.UpdatePanel> control is updated, use the <xref:System.Web.UI.ScriptManager.RegisterClientScriptBlock%28System.Web.UI.Control%2CSystem.Type%2CSystem.String%2CSystem.String%2CSystem.Boolean%29> overload of this method.  \n  \n If you want to register a script block that does not pertain to partial-page updates, and if you want to register the script block only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterClientScriptBlock%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page."
   syntax:
     content: public static void RegisterClientScriptBlock (System.Web.UI.Page page, Type type, string key, string script, bool addScriptTags);
     parameters:
     - id: page
       type: System.Web.UI.Page
-      description: To be added.
+      description: The page object that is registering the client script block.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of the client script block. This parameter is usually specified by using the  operator (C#) or the  operator (Visual Basic) to retrieve the type of the control that is registering the script.
     - id: key
       type: System.String
-      description: To be added.
+      description: A unique identifier for the script block.
     - id: script
       type: System.String
-      description: To be added.
+      description: The script to register.
     - id: addScriptTags
       type: System.Boolean
-      description: To be added.
+      description: "\n     to enclose the script block in  and  tags; otherwise, ."
   overload: System.Web.UI.ScriptManager.RegisterClientScriptBlock*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The script block type is .  \n  \n \\- or -  \n  \n The page that is registering the script block is ."
   platform:
   - net-11
   - net-20
@@ -1541,24 +1638,33 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a client script file with the  control for use with a control that is inside an  control, and then adds a script file reference to the page.
+  remarks: "You use the RegisterClientScriptInclude method to register a client script file for a page or part of a page that is participating in partial-page updates. Client script files that are registered by using this method are sent to the page only when the `control` represents a control that is inside an <xref:System.Web.UI.UpdatePanel> control that is being updated. To register a script file every time that an asynchronous postback occurs, use the <xref:System.Web.UI.ScriptManager.RegisterClientScriptInclude%28System.Web.UI.Page%2CSystem.Type%2CSystem.String%2CSystem.String%29> overload of this method.  \n  \n If you want to register a script block that does not pertain to partial-page updates, and if you want to register the script block only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterClientScriptBlock%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page.  \n  \n The RegisterClientScriptInclude method registers a client script file on the page by rendering a `script` element whose opening tag contains a `src` attribute. The `url` parameter is used to set the `src` attribute. To resolve URLs, use the <xref:System.Web.UI.Control.ResolveClientUrl%2A> method. This method uses the context of the URL it is called for to resolve the path.  \n  \n Both the RegisterClientScriptInclude and <xref:System.Web.UI.ScriptManager.RegisterClientScriptResource%2A> methods render script files to the browser. If a script with the same type and key (for a script file) or the same type and resource name (for an embedded resource) is already rendered, the script is not rendered again."
+  example:
+  - "[!code-cs[System.Web.UI.ScriptManager.RegisterClientScriptInclude#1](../../add/codesnippet/CSharp/515cb652-1f4e-4c80-af8e-_1.aspx)]  \n  \n [!code-javascript[System.Web.UI.ScriptManager.RegisterClientScriptInclude#2](../../add/codesnippet/JavaScript/515cb652-1f4e-4c80-af8e-_2.js)]"
   syntax:
     content: public static void RegisterClientScriptInclude (System.Web.UI.Control control, Type type, string key, string url);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that is registering the client script file.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of the client script file. This parameter is usually specified by using the typeof operator (C#) or the GetType operator (Visual Basic) to retrieve the type of the control that is registering the script.
     - id: key
       type: System.String
-      description: To be added.
+      description: A unique identifier for the script file.
     - id: url
       type: System.String
-      description: To be added.
+      description: The URL of the script file.
   overload: System.Web.UI.ScriptManager.RegisterClientScriptInclude*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The client script file type is .  \n  \n \\- or -  \n  \n The control that is registering the script file is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The control that is registering the script file is not in the page's control tree.  \n  \n \\- or -  \n  \n url is .  \n  \n \\- or -  \n  \n url is empty."
   platform:
   - net-11
   - net-20
@@ -1575,24 +1681,31 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers client script with the  control every time that an asynchronous postback occurs, and then adds a script file reference to the page.
+  remarks: "When you register a script file with this method, the script is rendered every time that an asynchronous postback occurs. To register a script file for a control that is inside an <xref:System.Web.UI.UpdatePanel> control so that script is registered only when the <xref:System.Web.UI.UpdatePanel> control is updated, use the <xref:System.Web.UI.ScriptManager.RegisterClientScriptInclude%28System.Web.UI.Control%2CSystem.Type%2CSystem.String%2CSystem.String%29> overload of this method.  \n  \n If you want to register a script block that does not pertain to partial-page updates, and if you want to register the script block only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterClientScriptBlock%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page."
   syntax:
     content: public static void RegisterClientScriptInclude (System.Web.UI.Page page, Type type, string key, string url);
     parameters:
     - id: page
       type: System.Web.UI.Page
-      description: To be added.
+      description: The page object that is registering the client script file.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of the client script file. This parameter is usually specified by using the typeof operator (C#) or the GetType operator (Visual Basic) to retrieve the type of the control that is registering the script.
     - id: key
       type: System.String
-      description: To be added.
+      description: A unique identifier for the script file.
     - id: url
       type: System.String
-      description: To be added.
+      description: The URL of the script file.
   overload: System.Web.UI.ScriptManager.RegisterClientScriptInclude*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The client script file type is .  \n  \n \\- or -  \n  \n The page that is registering the script file is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    url is .  \n  \n \\- or -  \n  \n url is empty."
   platform:
   - net-11
   - net-20
@@ -1609,21 +1722,28 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers the client script that is embedded in an assembly with the  control for use with a control that is participating in partial-page rendering.
+  remarks: "You use the RegisterClientScriptResource method to register a script that is compatible with partial-page rendering and that has no [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] dependencies. Script resources that are registered by using this method are registered only when `control` represents a control that is inside an <xref:System.Web.UI.UpdatePanel> control that is updated. To register a script every time that an asynchronous postback occurs, use the <xref:System.Web.UI.ScriptManager.RegisterStartupScript%28System.Web.UI.Page%2CSystem.Type%2CSystem.String%2CSystem.String%2CSystem.Boolean%29> overload of this method.  \n  \n If you want to register a script block that does not pertain to partial-page updates, and if you want to register the script block only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterClientScriptBlock%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page.  \n  \n The RegisterClientScriptResource method is used when resources from assemblies are accessed through an HTTP handler. This method includes the content of the resource URL in a `script` element.  \n  \n Both the <xref:System.Web.UI.ScriptManager.RegisterClientScriptInclude%2A> and the RegisterClientScriptResource method load script files into the browser. If a script with the same type and key (for a script file) or the same type and resource name (for an embedded resource) is already loaded, the script is not reloaded."
   syntax:
     content: public static void RegisterClientScriptResource (System.Web.UI.Control control, Type type, string resourceName);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that is registering the script.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of the client script. This parameter is usually specified by using the typeof operator (C#) or the GetType operator (Visual Basic) to retrieve the type of the control that is registering the script.
     - id: resourceName
       type: System.String
-      description: To be added.
+      description: An identifier for the resource.
   overload: System.Web.UI.ScriptManager.RegisterClientScriptResource*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The client resource type is .  \n  \n \\- or -  \n  \n The control that is registering the script is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The control that is registering the script is not in the page's control tree.
   platform:
   - net-11
   - net-20
@@ -1640,21 +1760,25 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a client script file that is embedded in an assembly with the  control every time that a postback occurs.
+  remarks: "When you register a script file with this method, the script is rendered every time that an asynchronous postback occurs. To register a script for a control that is inside an <xref:System.Web.UI.UpdatePanel> control so that the script is registered only when the <xref:System.Web.UI.UpdatePanel> control is updated, use the <xref:System.Web.UI.ScriptManager.RegisterClientScriptResource%28System.Web.UI.Control%2CSystem.Type%2CSystem.String%29> overload of this method.  \n  \n If you want to register a script block that does not pertain to partial-page updates, and if you want to register the script block only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterClientScriptBlock%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page."
   syntax:
     content: public static void RegisterClientScriptResource (System.Web.UI.Page page, Type type, string resourceName);
     parameters:
     - id: page
       type: System.Web.UI.Page
-      description: To be added.
+      description: The page object that is registering the script.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of the client script. This parameter is usually specified by using the typeof operator (C#) or the GetType operator (Visual Basic) to retrieve the type of the control that is registering the script.
     - id: resourceName
       type: System.String
-      description: To be added.
+      description: An identifier for the resource.
   overload: System.Web.UI.ScriptManager.RegisterClientScriptResource*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "The client resource type is .  \n  \n \\- or -  \n  \n The page that is registering the script is ."
   platform:
   - net-11
   - net-20
@@ -1671,18 +1795,30 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Sends custom data to a control during partial-page rendering.
+  remarks: "Use the RegisterDataItem method to send data from the server to the client during asynchronous postbacks, regardless of whether the control receiving the data is inside an <xref:System.Web.UI.UpdatePanel> control.  \n  \n The RegisterDataItem method can be called only during an asynchronous postback. To determine whether a postback is asynchronous, use the <xref:System.Web.UI.ScriptManager.IsInAsyncPostBack%2A> property. This method invokes the overload that takes a parameter named `isJsonSerialized` that is set to `false`. When the `isJsonSerialized` parameter is set to `false`, the string is not serialized as JavaScript Object Notation (JSON). For more information about the JSON format, see the [Introducing JSON](http://go.microsoft.com/fwlink/?LinkId=77297) Web site.  \n  \n The data items that are registered with the RegisterDataItem method can be accessed in client script during the , , and  events of the  object. When you handle these events, the custom data is passed in an event argument object. For example, if you provide a handler for the  event, the custom data is passed in the  class, which exposes a  property."
+  example:
+  - "The following example shows how to send data to two <xref:System.Web.UI.WebControls.Label> controls on a page during an asynchronous postback. The <xref:System.Web.UI.WebControls.Label> controls are not inside an <xref:System.Web.UI.UpdatePanel> control.  \n  \n> [!NOTE]\n>  The data that is sent in this example is for illustration only. In a real-world application, you would use the RegisterDataItem method to send custom data from the server.  \n  \n [!code-vb[System.Web.UI.ScriptManager.RegisterDataItem#1](../../add/codesnippet/VisualBasic/f9a1f6cf-1974-484c-9f62-_1.aspx)]\n [!code-cs[System.Web.UI.ScriptManager.RegisterDataItem#1](../../add/codesnippet/CSharp/f9a1f6cf-1974-484c-9f62-_1.aspx)]"
   syntax:
     content: public void RegisterDataItem (System.Web.UI.Control control, string dataItem);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that is receiving the data.
     - id: dataItem
       type: System.String
-      description: To be added.
+      description: The data that is sent to the control.
   overload: System.Web.UI.ScriptManager.RegisterDataItem*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    control is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The <xref:System.Web.UI.ScriptManager.RegisterDataItem%2A> method is called during a postback.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    dataItem is already registered for control."
   platform:
   - net-11
   - net-20
@@ -1699,21 +1835,33 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Sends custom data to a control during partial-page rendering, and indicates whether the data is in JavaScript Object Notation (JSON) format.
+  remarks: "You use the <xref:System.Web.UI.ScriptManager.RegisterDataItem%2A> method to send data from the server to the client during asynchronous postbacks, regardless of whether the control receiving the data is inside an <xref:System.Web.UI.UpdatePanel> control.  \n  \n If the `dataItem` parameter that you register for `control` is not serialized as JSON, set the `isJsonSerialized` parameter to `false`. This avoids the need to use the  function for each string that is sent to the client. For more information about the JSON format, see the [Introducing JSON](http://go.microsoft.com/fwlink/?LinkId=77297) Web site.  \n  \n The RegisterDataItem method can be called only during an asynchronous postback. To determine whether a postback is asynchronous, use the <xref:System.Web.UI.ScriptManager.IsInAsyncPostBack%2A> property.  \n  \n The data items that are registered by using the <xref:System.Web.UI.ScriptManager.RegisterDataItem%2A> method can be accessed in client script during the , , and  events of the  object. When you handle these events, the custom data is passed in an event argument object. For example, if you provide a handler for the  event, the custom data is passed in the  class, which exposes a  property."
+  example:
+  - "The following example shows how to send data to two <xref:System.Web.UI.WebControls.Label> controls on a page during an asynchronous postback. The <xref:System.Web.UI.WebControls.Label> controls are not inside an <xref:System.Web.UI.UpdatePanel> control. This example shows the overload that does not take the `isJsonSerialized` parameter. Otherwise, the procedure for retrieving the  property of the  object is the same as if you did not use that overload.  \n  \n> [!NOTE]\n>  The data that is sent in this example is for illustration only. In a real-world application, you would use the RegisterDataItem method to send custom data from the server. For example, you could use the data item to send information about whether to hide or show client elements that are not inside an <xref:System.Web.UI.UpdatePanel> control.  \n  \n [!code-vb[System.Web.UI.ScriptManager.RegisterDataItem#1](../../add/codesnippet/VisualBasic/f58deeed-5242-449c-b3ca-_1.aspx)]\n [!code-cs[System.Web.UI.ScriptManager.RegisterDataItem#1](../../add/codesnippet/CSharp/f58deeed-5242-449c-b3ca-_1.aspx)]"
   syntax:
     content: public void RegisterDataItem (System.Web.UI.Control control, string dataItem, bool isJsonSerialized);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The page control that is receiving the data.
     - id: dataItem
       type: System.String
-      description: To be added.
+      description: The data that is sent to the control.
     - id: isJsonSerialized
       type: System.Boolean
-      description: To be added.
+      description: "\n     to indicate that `dataItem` is serialized as JSON; otherwise, ."
   overload: System.Web.UI.ScriptManager.RegisterDataItem*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    control is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The RegisterDataItem method is called during a postback.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    dataItem is already registered for control."
   platform:
   - net-11
   - net-20
@@ -1730,18 +1878,25 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a  script for a control that is inside an  control. The script is executed when the  control is updated or deleted.
+  remarks: "Use the RegisterDispose method to register `dispose` scripts for controls that are inside an <xref:System.Web.UI.UpdatePanel> control. During asynchronous postbacks, <xref:System.Web.UI.UpdatePanel> controls can be updated, deleted, or created. When a panel is updated or deleted, any `dispose` scripts that are registered for controls that are inside the <xref:System.Web.UI.UpdatePanel> are called. In typical page development scenarios, you do not have to call the RegisterDispose method.  \n  \n The RegisterDispose method is intended for use by control developers to register script or create controls that inherit from the <xref:System.Web.UI.IScriptControl> interface. For example, you might use a `dispose` script if you develop a client control by using composition. In your control, you implement <xref:System.Web.UI.IScriptControl> and render individual controls. You register the `dispose` method of any item that does not correspond to a defined client component such as `Sys.TextBox`. If your custom control composes elements that correspond to client components in the [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)], you do not have to register a `dispose` script, because `dispose` is called automatically. Therefore, use the RegisterDispose method for client components that are part of the [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] and that have to free resources when a component is no longer used.  \n  \n The RegisterDispose method can be called multiple times for a control. Multiple scripts are aggregated. The order of disposing scripts matches the order in which the scripts were registered.  \n  \n If you register a `dispose` script for a control that is not in an <xref:System.Web.UI.UpdatePanel> control, an exception is thrown. The `dispose` script is called between the  and  events of the  class."
   syntax:
     content: public void RegisterDispose (System.Web.UI.Control control, string disposeScript);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that the  script is for.
     - id: disposeScript
       type: System.String
-      description: To be added.
+      description: The  script.
   overload: System.Web.UI.ScriptManager.RegisterDispose*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    control is .  \n  \n \\- or -  \n  \n disposeScript is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    control is not found on the page.  \n  \n \\- or -  \n  \n control is not inside an  control."
   platform:
   - net-11
   - net-20
@@ -1758,27 +1913,34 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a name/value pair with the  control as a custom (expando) attribute of a specified control.
+  remarks: "You use the RegisterExpandoAttribute method to register a custom (expando) property for a control that is compatible with partial-page rendering and that has no [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] dependencies.  \n  \n The RegisterExpandoAttribute method registers a name/value pair as a custom attribute for the specified control. The property is set dynamically from ECMAScript (JavaScript) to preserve XHTML compatibility for the rendered control's markup. Set `encode` to `true` if you have to escape any characters in the dynamic property's value.  \n  \n If the control to which the dynamic property will be added is not found, a script error occurs."
   syntax:
     content: public static void RegisterExpandoAttribute (System.Web.UI.Control control, string controlId, string attributeName, string attributeValue, bool encode);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that is registering the expando attribute.
     - id: controlId
       type: System.String
-      description: To be added.
+      description: The control that contains the custom attribute on the page.
     - id: attributeName
       type: System.String
-      description: To be added.
+      description: The name of the custom attribute to register.
     - id: attributeValue
       type: System.String
-      description: To be added.
+      description: The value of the custom attribute.
     - id: encode
       type: System.Boolean
-      description: To be added.
+      description: "\n     to encode the custom attribute that is being registered; otherwise, ."
   overload: System.Web.UI.ScriptManager.RegisterExpandoAttribute*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    control is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    control is not in the page's control tree.  \n  \n \\- or -  \n  \n controlId is .  \n  \n \\- or -  \n  \n controlId is empty.  \n  \n \\- or -  \n  \n attributeName is .  \n  \n \\- or -  \n  \n attributeName is empty.  \n  \n \\- or -  \n  \n attributeName is already registered."
   platform:
   - net-11
   - net-20
@@ -1795,8 +1957,6 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: 'public void RegisterExtenderControl<TExtenderControl> (TExtenderControl extenderControl, System.Web.UI.Control targetControl) where TExtenderControl : System.Web.UI.Control, System.Web.UI.IExtenderControl;'
     parameters:
@@ -1807,6 +1967,7 @@ items:
       type: System.Web.UI.Control
       description: To be added.
   overload: System.Web.UI.ScriptManager.RegisterExtenderControl<TExtenderControl>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1823,21 +1984,28 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a hidden field with the  control for a control that is inside an  control.
+  remarks: "You use the RegisterHiddenField method to register a hidden field that is compatible with partial-page rendering and that has no [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] dependencies. This method registers the hidden field when the control that is registering the field is inside an <xref:System.Web.UI.UpdatePanel> control that is being updated. To register a hidden field every time that an asynchronous postback occurs, use the <xref:System.Web.UI.ScriptManager.RegisterHiddenField%28System.Web.UI.Page%2CSystem.String%2CSystem.String%29> overload of this method.  \n  \n If you want to register a hidden field that does not pertain to partial-page updates, and if you want to register the hidden field only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterHiddenField%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page.  \n  \n The RegisterHiddenField method creates a hidden `input` element on the rendered HTML page."
   syntax:
     content: public static void RegisterHiddenField (System.Web.UI.Control control, string hiddenFieldName, string hiddenFieldInitialValue);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that is registering the hidden field.
     - id: hiddenFieldName
       type: System.String
-      description: To be added.
+      description: The name of the hidden field to register.
     - id: hiddenFieldInitialValue
       type: System.String
-      description: To be added.
+      description: The initial value of the hidden field.
   overload: System.Web.UI.ScriptManager.RegisterHiddenField*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    control is .  \n  \n \\- or -  \n  \n hiddenFieldName is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    control is not in the page's control tree."
   platform:
   - net-11
   - net-20
@@ -1854,21 +2022,25 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a hidden field with the  control during every asynchronous postback.
+  remarks: "You use the RegisterHiddenField method to register a hidden field that is compatible with partial-page rendering and that has no [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] dependencies. This method registers the hidden field every time that an asynchronous postback occurs. To register a hidden field for a control that is inside an <xref:System.Web.UI.UpdatePanel> control so that the field is registered only when the panel is updated, use the <xref:System.Web.UI.ScriptManager.RegisterHiddenField%28System.Web.UI.Control%2CSystem.String%2CSystem.String%29> overload of this method.  \n  \n If you want to register a hidden field that does not pertain to partial-page updates, and if you want to register the hidden field only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterHiddenField%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page."
   syntax:
     content: public static void RegisterHiddenField (System.Web.UI.Page page, string hiddenFieldName, string hiddenFieldInitialValue);
     parameters:
     - id: page
       type: System.Web.UI.Page
-      description: To be added.
+      description: The page object that is registering the hidden field.
     - id: hiddenFieldName
       type: System.String
-      description: To be added.
+      description: The name of the hidden field to register.
     - id: hiddenFieldInitialValue
       type: System.String
-      description: To be added.
+      description: The initial value of the hidden field.
   overload: System.Web.UI.ScriptManager.RegisterHiddenField*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    page is .  \n  \n \\- or -  \n  \n hiddenFieldName is ."
   platform:
   - net-11
   - net-20
@@ -1885,18 +2057,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers client script by resource name that is embedded in an assembly with the  control for use with a control that is participating in partial-page rendering.
   syntax:
     content: public static void RegisterNamedClientScriptResource (System.Web.UI.Control control, string resourceName);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that is registering the script.
     - id: resourceName
       type: System.String
-      description: To be added.
+      description: An identifier for the resource.
   overload: System.Web.UI.ScriptManager.RegisterNamedClientScriptResource*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1913,18 +2085,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers client script by resource name that is embedded in an assembly with the  control for use with a control that is participating in partial-page rendering.
   syntax:
     content: public static void RegisterNamedClientScriptResource (System.Web.UI.Page page, string resourceName);
     parameters:
     - id: page
       type: System.Web.UI.Page
-      description: To be added.
+      description: The page object that is registering the script.
     - id: resourceName
       type: System.String
-      description: To be added.
+      description: An identifier for the resource.
   overload: System.Web.UI.ScriptManager.RegisterNamedClientScriptResource*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1941,24 +2113,31 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers ECMAScript (JavaScript) code with the  control for a control that is used with an  control that is executed when the form is submitted.
+  remarks: "The RegisterOnSubmitStatement adds script that is executed before the form is submitted, which lets you modify the submission or cancel it.  \n  \n You use the RegisterOnSubmitStatement method to render an `onsubmit` statement that is compatible with partial-page rendering and that has no [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] dependencies. JavaScript code that is registered by using this method is sent to the page only when the control that is registering the statement is inside an <xref:System.Web.UI.UpdatePanel> control that is being updated. To register code with every asynchronous postback, use the <xref:System.Web.UI.ScriptManager.RegisterOnSubmitStatement%28System.Web.UI.Page%2CSystem.Type%2CSystem.String%2CSystem.String%29> overload of this method.  \n  \n If you want to register JavaScript code that does not pertain to partial-page updates, and if you want to register the code only one time during initial page rendering, use the <xref:System.Web.UI.Page.RegisterOnSubmitStatement%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page.  \n  \n The *script* parameter of the RegisterOnSubmitStatement method can contain multiple script commands that are delimited by using semicolons (;).  \n  \n For more information about HTML forms and the `onsubmit` event, see the [World Wide Web Consortium (W3C) Web site](http://go.microsoft.com/fwlink/?linkid=37125)."
   syntax:
     content: public static void RegisterOnSubmitStatement (System.Web.UI.Control control, Type type, string key, string script);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that is registering the  statement.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of the client script statement. This parameter is usually specified by using the typeof operator (C#) or the GetType operator (Visual Basic) to retrieve the type of the control that is registering the script.
     - id: key
       type: System.String
-      description: To be added.
+      description: A unique identifier for the script statement.
     - id: script
       type: System.String
-      description: To be added.
+      description: The script to register.
   overload: System.Web.UI.ScriptManager.RegisterOnSubmitStatement*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    control is .  \n  \n \\- or -  \n  \n type is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    control is not in the page's control tree."
   platform:
   - net-11
   - net-20
@@ -1975,24 +2154,28 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers ECMAScript (JavaScript) code with the  control for a control that is used with an  control that is executed when the form is submitted.
+  remarks: "Registering JavaScript code with this method causes the script to be included every time that an asynchronous postback occurs.  \n  \n> [!NOTE]\n>  Code from any earlier asynchronous postbacks is not removed. New asynchronous postbacks append code to any existing code for the `onsubmit` statement.  \n  \n To register code for a control that is inside an <xref:System.Web.UI.UpdatePanel> control so that the code is registered only when the <xref:System.Web.UI.UpdatePanel> control is updated, use the <xref:System.Web.UI.ScriptManager.RegisterOnSubmitStatement%28System.Web.UI.Control%2CSystem.Type%2CSystem.String%2CSystem.String%29> overload of this method.  \n  \n If you want to register JavaScript code that does not pertain to partial-page updates, and if you want to register the code only one time during initial page rendering, use the <xref:System.Web.UI.Page.RegisterOnSubmitStatement%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page."
   syntax:
     content: public static void RegisterOnSubmitStatement (System.Web.UI.Page page, Type type, string key, string script);
     parameters:
     - id: page
       type: System.Web.UI.Page
-      description: To be added.
+      description: The page object that is registering the  statement.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of the client script statement. This parameter is usually specified by using the typeof operator (C#) or the GetType operator (Visual Basic) to retrieve the type of the control that is registering the script.
     - id: key
       type: System.String
-      description: To be added.
+      description: A unique identifier for the script statement.
     - id: script
       type: System.String
-      description: To be added.
+      description: The script to register.
   overload: System.Web.UI.ScriptManager.RegisterOnSubmitStatement*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    page is .  \n  \n \\- or -  \n  \n type is ."
   platform:
   - net-11
   - net-20
@@ -2009,15 +2192,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a control as a trigger for a postback. This method is used to configure postback controls inside an  control that would otherwise perform asynchronous postbacks.
+  remarks: "Use the RegisterPostBackControl method to register postback controls inside an <xref:System.Web.UI.UpdatePanel> control as triggers. Controls that are registered by using this method update a whole page instead of updating only the <xref:System.Web.UI.UpdatePanel> control's content. Registering a postback control with this method outside an <xref:System.Web.UI.UpdatePanel> control has no affect because by default these controls do not perform asynchronous postbacks.  \n  \n You can add the trigger declaratively by using the `Triggers` element of the <xref:System.Web.UI.UpdatePanel> control. In [!INCLUDE[vsprvs](../../add/includes/vsprvs-md.md)], use the designer's **UpdatePanelTrigger Collection Editor** dialog box."
   syntax:
     content: public void RegisterPostBackControl (System.Web.UI.Control control);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control to register for postback.
   overload: System.Web.UI.ScriptManager.RegisterPostBackControl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2034,8 +2218,6 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: 'public void RegisterScriptControl<TScriptControl> (TScriptControl scriptControl) where TScriptControl : System.Web.UI.Control, System.Web.UI.IScriptControl;'
     parameters:
@@ -2043,6 +2225,7 @@ items:
       type: TScriptControl
       description: To be added.
   overload: System.Web.UI.ScriptManager.RegisterScriptControl<TScriptControl>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2059,15 +2242,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Calls back to an  class to return instance scripts that must be rendered to support the client object that represents a client control, component, or behavior.
+  remarks: The <xref:System.Web.UI.ExtenderControl> class calls the RegisterScriptDescriptors method in its <xref:System.Web.UI.Control.Render%2A> method.
   syntax:
     content: public void RegisterScriptDescriptors (System.Web.UI.IExtenderControl extenderControl);
     parameters:
     - id: extenderControl
       type: System.Web.UI.IExtenderControl
-      description: To be added.
+      description: The extender control for which script descriptors will be registered.
   overload: System.Web.UI.ScriptManager.RegisterScriptDescriptors*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2084,15 +2268,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Calls a  class to return instance scripts that must be rendered to support the client object that represents a client control, component, or behavior.
+  remarks: The <xref:System.Web.UI.ScriptControl> class calls the RegisterScriptDescriptors method during its <xref:System.Web.UI.Control.Render%2A> event.
   syntax:
     content: public void RegisterScriptDescriptors (System.Web.UI.IScriptControl scriptControl);
     parameters:
     - id: scriptControl
       type: System.Web.UI.IScriptControl
-      description: To be added.
+      description: The script control for which script descriptors will be registered.
   overload: System.Web.UI.ScriptManager.RegisterScriptDescriptors*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2109,27 +2294,34 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a startup script block for a control that is inside an  by using the  control, and adds the script block to the page.
+  remarks: "You use the RegisterStartupScript method to register a startup script block for a page that is compatible with partial-page rendering and that has no [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] dependencies. Startup script blocks that are registered by using this method are sent to the page only when the control that is registering the block is inside an <xref:System.Web.UI.UpdatePanel> control that is being updated. To register a startup script block every time that an asynchronous postback occurs, use the <xref:System.Web.UI.ScriptManager.RegisterStartupScript%28System.Web.UI.Page%2CSystem.Type%2CSystem.String%2CSystem.String%2CSystem.Boolean%29> overload of this method.  \n  \n If you want to register a startup script that does not pertain to partial-page updates, and if you want to register the script only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterStartupScript%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page.  \n  \n The script block that is rendered by the RegisterStartupScript method executes when the page finishes loading but before the page's client `onload` event is raised. Startup script blocks are located at the bottom of the rendered ASP.NET page just before the `</form>` tag.  \n  \n Startup script blocks that are registered by using RegisterStartupScript are not guaranteed to be output in the same order in which they are registered. If the order of the startup script blocks is important, use a <xref:System.Text.StringBuilder> object to gather the script blocks in a single string, and then register them all as a single startup script."
   syntax:
     content: public static void RegisterStartupScript (System.Web.UI.Control control, Type type, string key, string script, bool addScriptTags);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control that is registering the client script block.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of the client script block. This parameter is usually specified by using the typeof operator (C#) or the GetType operator (Visual Basic) to retrieve the type of the control that is registering the script.
     - id: key
       type: System.String
-      description: To be added.
+      description: A unique identifier for the script block.
     - id: script
       type: System.String
-      description: To be added.
+      description: The script to register.
     - id: addScriptTags
       type: System.Boolean
-      description: To be added.
+      description: "\n     to enclose the script block with  and  tags; otherwise, ."
   overload: System.Web.UI.ScriptManager.RegisterStartupScript*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    control is .  \n  \n \\- or -  \n  \n type is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    control is not in the page's control tree."
   platform:
   - net-11
   - net-20
@@ -2146,27 +2338,28 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a startup script block for every asynchronous postback with the  control and adds the script block to the page.
+  remarks: "You use this method to register a startup script block that is included every time that an asynchronous postback occurs. To register a script block for a control that is inside an <xref:System.Web.UI.UpdatePanel> control so that the script block is registered only when the <xref:System.Web.UI.UpdatePanel> control is updated, use the <xref:System.Web.UI.ScriptManager.RegisterStartupScript%28System.Web.UI.Control%2CSystem.Type%2CSystem.String%2CSystem.String%2CSystem.Boolean%29> overload of this method.  \n  \n If you want to register a startup script that does not pertain to partial-page updates, and if you want to register the script only one time during initial page rendering, use the <xref:System.Web.UI.ClientScriptManager.RegisterStartupScript%2A> method of the <xref:System.Web.UI.ClientScriptManager> class. You can get a reference to the <xref:System.Web.UI.ClientScriptManager> object from the <xref:System.Web.UI.Page.ClientScript%2A> property of the page."
   syntax:
     content: public static void RegisterStartupScript (System.Web.UI.Page page, Type type, string key, string script, bool addScriptTags);
     parameters:
     - id: page
       type: System.Web.UI.Page
-      description: To be added.
+      description: The page object that is registering the client script block.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of the client script block. This parameter is usually specified by using the typeof operator (C#) or the GetType operator (Visual Basic) to retrieve the type of the control that is registering the script.
     - id: key
       type: System.String
-      description: To be added.
+      description: A unique identifier for the script block.
     - id: script
       type: System.String
-      description: To be added.
+      description: The script to register.
     - id: addScriptTags
       type: System.Boolean
-      description: To be added.
+      description: "\n     to enclose the script block with  and  tags; otherwise, ."
   overload: System.Web.UI.ScriptManager.RegisterStartupScript*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2183,15 +2376,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Renders the  control's content to the browser by using the specified  object.
+  remarks: This method is used by control developers to extend the <xref:System.Web.UI.ScriptManager> control.
   syntax:
     content: protected override void Render (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: To be added.
+      description: An object that receives the content of the control to write to the page.
   overload: System.Web.UI.ScriptManager.Render*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2208,13 +2402,13 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a composite script is registered with the  control.
   syntax:
     content: public event EventHandler<System.Web.UI.CompositeScriptReferenceEventArgs> ResolveCompositeScriptReference;
     return:
       type: System.EventHandler{System.Web.UI.CompositeScriptReferenceEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2231,13 +2425,14 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a member of the <xref:System.Web.UI.ScriptManager.Scripts%2A> collection is registered with the  control.
+  remarks: This event is raised one time for each member of the <xref:System.Web.UI.ScriptManager.Scripts%2A> collection during the page's <xref:System.Web.UI.Control.PreRender> event. Use this event to perform any updates before the script is rendered to the page.
   syntax:
     content: public event EventHandler<System.Web.UI.ScriptReferenceEventArgs> ResolveScriptReference;
     return:
       type: System.EventHandler{System.Web.UI.ScriptReferenceEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2254,14 +2449,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object that is associated with the current  instance.
+  remarks: "The <xref:System.Web.UI.RoleServiceManager> object that is returned by this property represents the role service that is registered with the page. The role service can be defined in the <xref:System.Web.UI.ScriptManager> control or in an associated <xref:System.Web.UI.ScriptManagerProxy> control. You can use the ASP.NET role service or use a custom role service. You can add the custom service in markup by including a `RoleService` element inside the `asp:ScriptManager` element on the page, as shown in the following example:  \n  \n```  \n<asp:ScriptManager ID=\"SM1\" runat=\"server\">  \n  <RoleService Path=\"MyRoleService.asmx\" LoadRoles=\"True\" />  \n</asp:ScriptManager>  \n```  \n  \n You can also programmatically configure the <xref:System.Web.UI.RoleServiceManager> object. Services are registered with the <xref:System.Web.UI.ScriptManager> control during the page's <xref:System.Web.UI.Control.PreRender> life-cycle stage."
   syntax:
     content: public System.Web.UI.RoleServiceManager RoleService { get; }
     return:
       type: System.Web.UI.RoleServiceManager
-      description: To be added.
+      description: The  object for the current  instance.
   overload: System.Web.UI.ScriptManager.RoleService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2278,14 +2474,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that specifies whether debug or release versions of client script libraries are rendered.
+  remarks: "The ScriptMode property specifies whether the <xref:System.Web.UI.ScriptManager> control should render debug or release versions of client script libraries. This value can be superseded by values that are set in the configuration file and in the page directive.  \n  \n The following table lists the valid values for this property.  \n  \n|Value|Definition|  \n|-----------|----------------|  \n|<xref:System.Web.UI.ScriptMode>|Debug versions of client script libraries are used in the Web page when the `retail` attribute of the  configuration element is set to `false`. Otherwise, the release versions of client script libraries are used.|  \n|<xref:System.Web.UI.ScriptMode>|When applied to the ScriptMode property of the <xref:System.Web.UI.ScriptManager> object, this value is the same as <xref:System.Web.UI.ScriptMode>.|  \n|<xref:System.Web.UI.ScriptMode>|Debug versions of client script libraries are used in the Web page unless the `retail` attribute of the  configuration element is set to `true`.|  \n|<xref:System.Web.UI.ScriptMode>|Release versions of client script libraries are used in the Web page unless the `retail` attribute of the  configuration element is set to `false`.|  \n  \n> [!NOTE]\n>  The `debug` attribute of the  directive does not affect Ajax-enabled ASP.NET applications. The <xref:System.Web.UI.ScriptManager> control uses only the settings in the Web.config file and in its <xref:System.Web.UI.ScriptManager.IsDebuggingEnabled%2A> and ScriptMode properties to determine whether to render debug scripts.  \n  \n For more information, see [Debugging and Tracing Ajax Applications Overview](../Topic/Debugging%20and%20Tracing%20Ajax%20Applications%20Overview.md)."
   syntax:
     content: public System.Web.UI.ScriptMode ScriptMode { get; set; }
     return:
       type: System.Web.UI.ScriptMode
-      description: To be added.
+      description: The enumeration value that indicates the current mode. The default is .
   overload: System.Web.UI.ScriptManager.ScriptMode*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The ScriptMode property is not one of the  values.
   platform:
   - net-11
   - net-20
@@ -2302,14 +2502,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the root path of the location that is used to build the paths to ASP.NET Ajax and custom script files.
+  remarks: "The ScriptPath property enables you to specify an absolute, relative, or application-relative URL for all script blocks on the page. This includes custom and third-party script blocks that are registered with the current <xref:System.Web.UI.ScriptManager> instance. The ScriptPath property is typically set declaratively as an attribute of a `ScriptManager` element on the page, but it can be set in code also.  \n  \n If the `path` attribute or the <xref:System.Web.UI.ScriptReferenceBase.Path%2A> property is set for a <xref:System.Web.UI.ScriptReference> object in the <xref:System.Web.UI.ScriptManager.Scripts%2A> collection, the path value overrides the ScriptPath value for that <xref:System.Web.UI.ScriptReference> instance.  \n  \n If no <xref:System.Web.UI.ScriptReferenceBase.Path%2A> value is specified, the <xref:System.Web.UI.ScriptManager> control searches the directory that is defined by the ScriptPath property and resolves script references by their <xref:System.Web.UI.ScriptReference.Name%2A> or <xref:System.Web.UI.ScriptReference.Assembly%2A> properties."
   syntax:
     content: public string ScriptPath { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The location where script files are stored. The default value is an empty string (""), which is interpreted as a relative path.
   overload: System.Web.UI.ScriptManager.ScriptPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2326,14 +2527,17 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  object.
+  remarks: The static ScriptResourceMapping property returns a <xref:System.Web.UI.ScriptResourceMapping> object that can contain a collection of mappings that represent the location of the script resource (script redirection). This collection of mappings can be mapped based on names or name/assembly pairs, and it can point to a <xref:System.Web.UI.ScriptResourceDefinition> object.
+  example:
+  - "The following examples shows how to add a <xref:System.Web.UI.ScriptResourceDefinition> object that can be referenced by a <xref:System.Web.UI.ScriptManager> object. Add the following code to the Global.asax file in the `Application_Start` event.  \n  \n```c#  \nScriptResourceDefinition myScriptResDef = new ScriptResourceDefinition();  \nmyScriptResDef.Path = \"~/Scripts/jquery-1.4.2.min.js\";  \nmyScriptResDef.DebugPath = \"~/Scripts/jquery-1.4.2.js\";  \nmyScriptResDef.CdnPath = \"http://ajax.microsoft.com/ajax/jQuery/jquery-1.4.2.min.js\";  \nmyScriptResDef.CdnDebugPath = \"http://ajax.microsoft.com/ajax/jQuery/jquery-1.4.2.js\";  \nScriptManager.ScriptResourceMapping.AddDefinition(\"jquery\", null, myScriptResDef);  \n```  \n  \n```vb#  \nDim myScriptResDef As New ScriptResourceDefinition()  \nmyScriptResDef.Path = \"~/Scripts/jquery-1.4.2.min.js\"  \nmyScriptResDef.DebugPath = \"~/Scripts/jquery-1.4.2.js\"  \nmyScriptResDef.CdnPath = \"http://ajax.microsoft.com/ajax/jQuery/jquery-1.4.2.min.js\"  \nmyScriptResDef.CdnDebugPath = \"http://ajax.microsoft.com/ajax/jQuery/jquery-1.4.2.js\"  \nScriptManager.ScriptResourceMapping.AddDefinition(\"jquery\", Nothing, myScriptResDef)  \n```  \n  \n In the markup for an ASP.NET Web Forms page (.aspx file), add the following markup inside the `form` element and before any elements or code that uses jQuery script.  \n  \n```  \n<asp:ScriptManager ID=\"sm1\" runat=\"server\">  \n  <Scripts>  \n    <asp:ScriptReference Name=\"jquery\"/>  \n  </Scripts>  \n</asp:ScriptManager>  \n```"
   syntax:
     content: public static System.Web.UI.ScriptResourceMapping ScriptResourceMapping { get; }
     return:
       type: System.Web.UI.ScriptResourceMapping
-      description: To be added.
+      description: A  object.
   overload: System.Web.UI.ScriptManager.ScriptResourceMapping*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2350,14 +2554,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  object that contains the  objects, each of which represents a script file rendered to the client.
+  remarks: "The <xref:System.Web.UI.ScriptReferenceCollection> object that is returned by this property is a collection of <xref:System.Web.UI.ScriptReference> objects, each of which represents a script file. The collection includes references to all the script files that ASP.NET needs for Ajax functionality, and to custom script files. Custom script files to render can be defined in the <xref:System.Web.UI.ScriptManager> control or in an associated <xref:System.Web.UI.ScriptManagerProxy> control.  \n  \n You can add script files to the collection in markup by adding `asp:ScriptReference` elements to a `Scripts` node inside the `asp:ScriptManager` element on the page, as shown in the following example.  \n  \n```  \n<asp:ScriptManager ID=\"SM1\" runat=\"server\">  \n  <Scripts>  \n    <asp:ScriptReference Name=\"Script.js\" />  \n  </Scripts>  \n</asp:ScriptManager>  \n```  \n  \n You can also add a <xref:System.Web.UI.ScriptReference> object to the Scripts collection programmatically by using the <xref:System.Collections.ObjectModel.Collection%601.Add%2A> method of the <xref:System.Web.UI.ScriptReferenceCollection> class.  \n  \n The <xref:System.Web.UI.ScriptManager> control registers script files during the control's <xref:System.Web.UI.Control.PreRender> event.  \n  \n The Scripts collection does not contain the core [!INCLUDE[atlaslib_current_ext](../../add/includes/atlaslib-current-ext-md.md)] scripts. The scripts in the core library are rendered automatically; they do not have to be registered with the <xref:System.Web.UI.ScriptManager> control. However, if you want to override a core script or any control script and substitute a different version of the script, you can add your version to the Scripts collection."
   syntax:
     content: public System.Web.UI.ScriptReferenceCollection Scripts { get; }
     return:
       type: System.Web.UI.ScriptReferenceCollection
-      description: To be added.
+      description: The  object of the  instance.
   overload: System.Web.UI.ScriptManager.Scripts*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2374,14 +2579,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  object that contains a  object for each Web service that ASP.NET exposes on the client for Ajax functionality.
+  remarks: "The <xref:System.Web.UI.ServiceReferenceCollection> object that is returned by this property is a collection of <xref:System.Web.UI.ServiceReference> objects, each of which represents a Web service that is registered with the <xref:System.Web.UI.ScriptManager> control . You can define services in the <xref:System.Web.UI.ScriptManager> control or in an associated <xref:System.Web.UI.ScriptManagerProxy> control.  \n  \n You can add services to the collection in markup by adding an `asp:ServiceReference` element to a `Services` element inside the `asp:ScriptManager` instance on the page, as shown in the following example.  \n  \n```  \n<asp:ScriptManager ID=\"SM1\" runat=\"server\">  \n  <Services>  \n    <asp:ServiceReference Path=\"Service.asmx\" />  \n  </Services>  \n</asp:ScriptManager>  \n```  \n  \n You can also programmatically add a <xref:System.Web.UI.ServiceReference> object to the Services collection by using the <xref:System.Collections.ObjectModel.Collection%601.Add%2A> method of the <xref:System.Web.UI.ServiceReferenceCollection> class.  \n  \n Services are registered with the <xref:System.Web.UI.ScriptManager> during the page's <xref:System.Web.UI.Control.PreRender> life-cycle stage."
   syntax:
     content: public System.Web.UI.ServiceReferenceCollection Services { get; }
     return:
       type: System.Web.UI.ServiceReferenceCollection
-      description: To be added.
+      description: The  object for the current  instance.
   overload: System.Web.UI.ScriptManager.Services*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2398,15 +2604,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the browser focus to the control specified by ID.
+  remarks: "The SetFocus method works like the <xref:System.Web.UI.Page.SetFocus%2A> method for the <xref:System.Web.UI.Page> class. Both methods make the control with the specified ID the active control on the Web page. The SetFocus method of the <xref:System.Web.UI.ScriptManager> class is used to set focus during an asynchronous postback. During postbacks and when the page is first rendered, the SetFocus method calls the <xref:System.Web.UI.Page.SetFocus%2A> method of the <xref:System.Web.UI.Page> class.  \n  \n If there are multiple calls to the SetFocus method, the control in the last call receives focus."
   syntax:
     content: public void SetFocus (string clientID);
     parameters:
     - id: clientID
       type: System.String
-      description: To be added.
+      description: The ID of the control to receive focus.
   overload: System.Web.UI.ScriptManager.SetFocus*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2423,15 +2630,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the browser focus to the specified control.
+  remarks: "The SetFocus method works like the <xref:System.Web.UI.Page.SetFocus%2A> method for the <xref:System.Web.UI.Page> class. Both methods make the specified control the active control on the Web page. The SetFocus method of the <xref:System.Web.UI.ScriptManager> class is used to set focus during an asynchronous postback. During postbacks and when the page is first rendered, the SetFocus method calls the <xref:System.Web.UI.Page.SetFocus%2A> method of the <xref:System.Web.UI.Page> class.  \n  \n If there are multiple calls to the SetFocus method, the control specified in the last call receives focus."
   syntax:
     content: public void SetFocus (System.Web.UI.Control control);
     parameters:
     - id: control
       type: System.Web.UI.Control
-      description: To be added.
+      description: The control to receive focus.
   overload: System.Web.UI.ScriptManager.SetFocus*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2448,14 +2656,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the client supports partial-page rendering.
+  remarks: "If the <xref:System.Web.UI.ScriptManager.EnablePartialRendering%2A> property is set to `false`, the SupportsPartialRendering property returns `false`.  \n  \n The default check to determine whether partial-page rendering is supported returns `true` when the following conditions are true:  \n  \n-   The <xref:System.Web.Configuration.HttpCapabilitiesBase.W3CDomVersion%2A> property value must be greater than or equal to 1.0.  \n  \n-   The <xref:System.Web.Configuration.HttpCapabilitiesBase.EcmaScriptVersion%2A> property value must be greater than or equal to 1.0.  \n  \n-   The <xref:System.Web.Configuration.HttpCapabilitiesBase.SupportsCallback%2A> property value must be set to `true`.  \n  \n When the SupportsPartialRendering property is explicitly set, these checks are not used.  \n  \n Control developers should use the SupportsPartialRendering property to determine whether they should support partial-page rendering."
   syntax:
     content: public bool SupportsPartialRendering { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the client supports partial-page rendering; otherwise, . The default value is .
   overload: System.Web.UI.ScriptManager.SupportsPartialRendering*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The <xref:System.Web.UI.ScriptManager.EnablePartialRendering%2A> property is  and the SupportsPartialRendering property was set to .  \n  \n \\- or -  \n  \n The SupportsPartialRendering property was set after the  event."
   platform:
   - net-11
   - net-20
@@ -2473,21 +2685,22 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Web.UI.IPostBackDataHandler.LoadPostData%2A?displayProperty=fullName>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.ScriptManager> instance is cast to an <xref:System.Web.UI.IPostBackDataHandler> interface.
   syntax:
     content: bool IPostBackDataHandler.LoadPostData (string postDataKey, System.Collections.Specialized.NameValueCollection postCollection);
     parameters:
     - id: postDataKey
       type: System.String
-      description: To be added.
+      description: The key-identifier for the control.
     - id: postCollection
       type: System.Collections.Specialized.NameValueCollection
-      description: To be added.
+      description: A collection of all incoming post data.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  control's state has changed as a result of a postback; otherwise, .
   overload: System.Web.UI.ScriptManager.System#Web#UI#IPostBackDataHandler#LoadPostData*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2505,12 +2718,13 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Web.UI.IPostBackDataHandler.RaisePostDataChangedEvent%2A?displayProperty=fullName>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.ScriptManager> instance is cast to an <xref:System.Web.UI.IPostBackDataHandler> interface.
   syntax:
     content: void IPostBackDataHandler.RaisePostDataChangedEvent ();
     parameters: []
   overload: System.Web.UI.ScriptManager.System#Web#UI#IPostBackDataHandler#RaisePostDataChangedEvent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2528,15 +2742,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Enables the  control to process a postback event and load the history state of the Web page.
   syntax:
     content: void IPostBackEventHandler.RaisePostBackEvent (string eventArgument);
     parameters:
     - id: eventArgument
       type: System.String
-      description: To be added.
+      description: A string of key/value pairs that represent the history state of the Web page.
   overload: System.Web.UI.ScriptManager.System#Web#UI#IPostBackEventHandler#RaisePostBackEvent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2553,14 +2767,18 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Overrides the <xref:System.Web.UI.Control.Visible%2A> property that is inherited from the base  class to prevent setting this value.
+  remarks: The <xref:System.Web.UI.Control.Visible%2A> property is overridden in the <xref:System.Web.UI.ScriptManager> class to prevent setting this value. A <xref:System.NotImplementedException> error occurs if a value is assigned to this property.
   syntax:
     content: public override bool Visible { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: in all cases.
   overload: System.Web.UI.ScriptManager.Visible*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: A value is assigned to the Visible property.
   platform:
   - net-11
   - net-20
@@ -2599,42 +2817,12 @@ references:
   name: AddHistoryPoint(String,String)
   nameWithType: ScriptManager.AddHistoryPoint(String,String)
   fullName: System.Web.UI.ScriptManager.AddHistoryPoint(String,String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.AddHistoryPoint(System.String,System.String,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: AddHistoryPoint(String,String,String)
   nameWithType: ScriptManager.AddHistoryPoint(String,String,String)
   fullName: System.Web.UI.ScriptManager.AddHistoryPoint(String,String,String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.AjaxFrameworkAssembly
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -2683,30 +2871,33 @@ references:
   name: EventHandler<AsyncPostBackErrorEventArgs>
   nameWithType: EventHandler<AsyncPostBackErrorEventArgs>
   fullName: System.EventHandler<System.Web.UI.AsyncPostBackErrorEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Web.UI.AsyncPostBackErrorEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.AsyncPostBackErrorEventArgs
+    name: AsyncPostBackErrorEventArgs
+    nameWithType: AsyncPostBackErrorEventArgs
+    fullName: AsyncPostBackErrorEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.UI.ScriptManager.AsyncPostBackErrorMessage
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: AsyncPostBackErrorMessage
   nameWithType: ScriptManager.AsyncPostBackErrorMessage
   fullName: System.Web.UI.ScriptManager.AsyncPostBackErrorMessage
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.AsyncPostBackSourceElementID
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: AsyncPostBackSourceElementID
   nameWithType: ScriptManager.AsyncPostBackSourceElementID
   fullName: System.Web.UI.ScriptManager.AsyncPostBackSourceElementID
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.AsyncPostBackTimeout
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -2737,12 +2928,6 @@ references:
   name: ClientNavigateHandler
   nameWithType: ScriptManager.ClientNavigateHandler
   fullName: System.Web.UI.ScriptManager.ClientNavigateHandler
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.CompositeScript
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -2761,108 +2946,54 @@ references:
   name: EmptyPageUrl
   nameWithType: ScriptManager.EmptyPageUrl
   fullName: System.Web.UI.ScriptManager.EmptyPageUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.EnableCdn
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: EnableCdn
   nameWithType: ScriptManager.EnableCdn
   fullName: System.Web.UI.ScriptManager.EnableCdn
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.EnableCdnFallback
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: EnableCdnFallback
   nameWithType: ScriptManager.EnableCdnFallback
   fullName: System.Web.UI.ScriptManager.EnableCdnFallback
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.EnableHistory
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: EnableHistory
   nameWithType: ScriptManager.EnableHistory
   fullName: System.Web.UI.ScriptManager.EnableHistory
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.EnablePageMethods
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: EnablePageMethods
   nameWithType: ScriptManager.EnablePageMethods
   fullName: System.Web.UI.ScriptManager.EnablePageMethods
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.EnablePartialRendering
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: EnablePartialRendering
   nameWithType: ScriptManager.EnablePartialRendering
   fullName: System.Web.UI.ScriptManager.EnablePartialRendering
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.EnableScriptGlobalization
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: EnableScriptGlobalization
   nameWithType: ScriptManager.EnableScriptGlobalization
   fullName: System.Web.UI.ScriptManager.EnableScriptGlobalization
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.EnableScriptLocalization
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: EnableScriptLocalization
   nameWithType: ScriptManager.EnableScriptLocalization
   fullName: System.Web.UI.ScriptManager.EnableScriptLocalization
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.EnableSecureHistoryState
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: EnableSecureHistoryState
   nameWithType: ScriptManager.EnableSecureHistoryState
   fullName: System.Web.UI.ScriptManager.EnableSecureHistoryState
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.GetCurrent(System.Web.UI.Page)
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -2893,6 +3024,21 @@ references:
   name: ReadOnlyCollection<RegisteredArrayDeclaration>
   nameWithType: ReadOnlyCollection<RegisteredArrayDeclaration>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredArrayDeclaration>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.Web.UI.RegisteredArrayDeclaration>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.RegisteredArrayDeclaration
+    name: RegisteredArrayDeclaration
+    nameWithType: RegisteredArrayDeclaration
+    fullName: RegisteredArrayDeclaration
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.UI.ScriptManager.GetRegisteredClientScriptBlocks
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -2905,6 +3051,21 @@ references:
   name: ReadOnlyCollection<RegisteredScript>
   nameWithType: ReadOnlyCollection<RegisteredScript>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredScript>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.Web.UI.RegisteredScript>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.RegisteredScript
+    name: RegisteredScript
+    nameWithType: RegisteredScript
+    fullName: RegisteredScript
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.UI.ScriptManager.GetRegisteredDisposeScripts
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -2917,6 +3078,21 @@ references:
   name: ReadOnlyCollection<RegisteredDisposeScript>
   nameWithType: ReadOnlyCollection<RegisteredDisposeScript>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredDisposeScript>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.Web.UI.RegisteredDisposeScript>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.RegisteredDisposeScript
+    name: RegisteredDisposeScript
+    nameWithType: RegisteredDisposeScript
+    fullName: RegisteredDisposeScript
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.UI.ScriptManager.GetRegisteredExpandoAttributes
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -2929,6 +3105,21 @@ references:
   name: ReadOnlyCollection<RegisteredExpandoAttribute>
   nameWithType: ReadOnlyCollection<RegisteredExpandoAttribute>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredExpandoAttribute>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.Web.UI.RegisteredExpandoAttribute>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.RegisteredExpandoAttribute
+    name: RegisteredExpandoAttribute
+    nameWithType: RegisteredExpandoAttribute
+    fullName: RegisteredExpandoAttribute
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.UI.ScriptManager.GetRegisteredHiddenFields
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -2941,114 +3132,69 @@ references:
   name: ReadOnlyCollection<RegisteredHiddenField>
   nameWithType: ReadOnlyCollection<RegisteredHiddenField>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredHiddenField>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.Web.UI.RegisteredHiddenField>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.RegisteredHiddenField
+    name: RegisteredHiddenField
+    nameWithType: RegisteredHiddenField
+    fullName: RegisteredHiddenField
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.UI.ScriptManager.GetRegisteredOnSubmitStatements
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: GetRegisteredOnSubmitStatements()
   nameWithType: ScriptManager.GetRegisteredOnSubmitStatements()
   fullName: System.Web.UI.ScriptManager.GetRegisteredOnSubmitStatements()
-- uid: System.Collections.ObjectModel.ReadOnlyCollection{System.Web.UI.RegisteredScript}
-  parent: System.Collections.ObjectModel
-  isExternal: true
-  name: ReadOnlyCollection<RegisteredScript>
-  nameWithType: ReadOnlyCollection<RegisteredScript>
-  fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredScript>
 - uid: System.Web.UI.ScriptManager.GetRegisteredStartupScripts
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: GetRegisteredStartupScripts()
   nameWithType: ScriptManager.GetRegisteredStartupScripts()
   fullName: System.Web.UI.ScriptManager.GetRegisteredStartupScripts()
-- uid: System.Collections.ObjectModel.ReadOnlyCollection{System.Web.UI.RegisteredScript}
-  parent: System.Collections.ObjectModel
-  isExternal: true
-  name: ReadOnlyCollection<RegisteredScript>
-  nameWithType: ReadOnlyCollection<RegisteredScript>
-  fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Web.UI.RegisteredScript>
 - uid: System.Web.UI.ScriptManager.GetStateString
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: GetStateString()
   nameWithType: ScriptManager.GetStateString()
   fullName: System.Web.UI.ScriptManager.GetStateString()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.IsDebuggingEnabled
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: IsDebuggingEnabled
   nameWithType: ScriptManager.IsDebuggingEnabled
   fullName: System.Web.UI.ScriptManager.IsDebuggingEnabled
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.IsInAsyncPostBack
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: IsInAsyncPostBack
   nameWithType: ScriptManager.IsInAsyncPostBack
   fullName: System.Web.UI.ScriptManager.IsInAsyncPostBack
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.IsNavigating
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: IsNavigating
   nameWithType: ScriptManager.IsNavigating
   fullName: System.Web.UI.ScriptManager.IsNavigating
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.LoadPostData(System.String,System.Collections.Specialized.NameValueCollection)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: LoadPostData(String,NameValueCollection)
   nameWithType: ScriptManager.LoadPostData(String,NameValueCollection)
   fullName: System.Web.UI.ScriptManager.LoadPostData(String,NameValueCollection)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Collections.Specialized.NameValueCollection
-  parent: System.Collections.Specialized
-  isExternal: false
-  name: NameValueCollection
-  nameWithType: NameValueCollection
-  fullName: System.Collections.Specialized.NameValueCollection
 - uid: System.Web.UI.ScriptManager.LoadScriptsBeforeUI
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: LoadScriptsBeforeUI
   nameWithType: ScriptManager.LoadScriptsBeforeUI
   fullName: System.Web.UI.ScriptManager.LoadScriptsBeforeUI
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.Navigate
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3061,6 +3207,21 @@ references:
   name: EventHandler<HistoryEventArgs>
   nameWithType: EventHandler<HistoryEventArgs>
   fullName: System.EventHandler<System.Web.UI.HistoryEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Web.UI.HistoryEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.HistoryEventArgs
+    name: HistoryEventArgs
+    nameWithType: HistoryEventArgs
+    fullName: HistoryEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.UI.ScriptManager.OnAsyncPostBackError(System.Web.UI.AsyncPostBackErrorEventArgs)
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3091,12 +3252,6 @@ references:
   name: OnPreRender(EventArgs)
   nameWithType: ScriptManager.OnPreRender(EventArgs)
   fullName: System.Web.UI.ScriptManager.OnPreRender(EventArgs)
-- uid: System.EventArgs
-  parent: System
-  isExternal: true
-  name: EventArgs
-  nameWithType: EventArgs
-  fullName: System.EventArgs
 - uid: System.Web.UI.ScriptManager.OnResolveCompositeScriptReference(System.Web.UI.CompositeScriptReferenceEventArgs)
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3139,12 +3294,6 @@ references:
   name: RaisePostBackEvent(String)
   nameWithType: ScriptManager.RaisePostBackEvent(String)
   fullName: System.Web.UI.ScriptManager.RaisePostBackEvent(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RaisePostDataChangedEvent
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3157,336 +3306,84 @@ references:
   name: RegisterArrayDeclaration(Control,String,String)
   nameWithType: ScriptManager.RegisterArrayDeclaration(Control,String,String)
   fullName: System.Web.UI.ScriptManager.RegisterArrayDeclaration(Control,String,String)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterArrayDeclaration(System.Web.UI.Page,System.String,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterArrayDeclaration(Page,String,String)
   nameWithType: ScriptManager.RegisterArrayDeclaration(Page,String,String)
   fullName: System.Web.UI.ScriptManager.RegisterArrayDeclaration(Page,String,String)
-- uid: System.Web.UI.Page
-  parent: System.Web.UI
-  isExternal: false
-  name: Page
-  nameWithType: Page
-  fullName: System.Web.UI.Page
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterAsyncPostBackControl(System.Web.UI.Control)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterAsyncPostBackControl(Control)
   nameWithType: ScriptManager.RegisterAsyncPostBackControl(Control)
   fullName: System.Web.UI.ScriptManager.RegisterAsyncPostBackControl(Control)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
 - uid: System.Web.UI.ScriptManager.RegisterClientScriptBlock(System.Web.UI.Control,System.Type,System.String,System.String,System.Boolean)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterClientScriptBlock(Control,Type,String,String,Boolean)
   nameWithType: ScriptManager.RegisterClientScriptBlock(Control,Type,String,String,Boolean)
   fullName: System.Web.UI.ScriptManager.RegisterClientScriptBlock(Control,Type,String,String,Boolean)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
 - uid: System.Type
   parent: System
   isExternal: true
   name: Type
   nameWithType: Type
   fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.RegisterClientScriptBlock(System.Web.UI.Page,System.Type,System.String,System.String,System.Boolean)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterClientScriptBlock(Page,Type,String,String,Boolean)
   nameWithType: ScriptManager.RegisterClientScriptBlock(Page,Type,String,String,Boolean)
   fullName: System.Web.UI.ScriptManager.RegisterClientScriptBlock(Page,Type,String,String,Boolean)
-- uid: System.Web.UI.Page
-  parent: System.Web.UI
-  isExternal: false
-  name: Page
-  nameWithType: Page
-  fullName: System.Web.UI.Page
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.RegisterClientScriptInclude(System.Web.UI.Control,System.Type,System.String,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterClientScriptInclude(Control,Type,String,String)
   nameWithType: ScriptManager.RegisterClientScriptInclude(Control,Type,String,String)
   fullName: System.Web.UI.ScriptManager.RegisterClientScriptInclude(Control,Type,String,String)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterClientScriptInclude(System.Web.UI.Page,System.Type,System.String,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterClientScriptInclude(Page,Type,String,String)
   nameWithType: ScriptManager.RegisterClientScriptInclude(Page,Type,String,String)
   fullName: System.Web.UI.ScriptManager.RegisterClientScriptInclude(Page,Type,String,String)
-- uid: System.Web.UI.Page
-  parent: System.Web.UI
-  isExternal: false
-  name: Page
-  nameWithType: Page
-  fullName: System.Web.UI.Page
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterClientScriptResource(System.Web.UI.Control,System.Type,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterClientScriptResource(Control,Type,String)
   nameWithType: ScriptManager.RegisterClientScriptResource(Control,Type,String)
   fullName: System.Web.UI.ScriptManager.RegisterClientScriptResource(Control,Type,String)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterClientScriptResource(System.Web.UI.Page,System.Type,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterClientScriptResource(Page,Type,String)
   nameWithType: ScriptManager.RegisterClientScriptResource(Page,Type,String)
   fullName: System.Web.UI.ScriptManager.RegisterClientScriptResource(Page,Type,String)
-- uid: System.Web.UI.Page
-  parent: System.Web.UI
-  isExternal: false
-  name: Page
-  nameWithType: Page
-  fullName: System.Web.UI.Page
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterDataItem(System.Web.UI.Control,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterDataItem(Control,String)
   nameWithType: ScriptManager.RegisterDataItem(Control,String)
   fullName: System.Web.UI.ScriptManager.RegisterDataItem(Control,String)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterDataItem(System.Web.UI.Control,System.String,System.Boolean)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterDataItem(Control,String,Boolean)
   nameWithType: ScriptManager.RegisterDataItem(Control,String,Boolean)
   fullName: System.Web.UI.ScriptManager.RegisterDataItem(Control,String,Boolean)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.RegisterDispose(System.Web.UI.Control,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterDispose(Control,String)
   nameWithType: ScriptManager.RegisterDispose(Control,String)
   fullName: System.Web.UI.ScriptManager.RegisterDispose(Control,String)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterExpandoAttribute(System.Web.UI.Control,System.String,System.String,System.String,System.Boolean)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterExpandoAttribute(Control,String,String,String,Boolean)
   nameWithType: ScriptManager.RegisterExpandoAttribute(Control,String,String,String,Boolean)
   fullName: System.Web.UI.ScriptManager.RegisterExpandoAttribute(Control,String,String,String,Boolean)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.RegisterExtenderControl``1(``0,System.Web.UI.Control)
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3494,173 +3391,52 @@ references:
   nameWithType: ScriptManager.RegisterExtenderControl(TExtenderControl,Control)
   fullName: System.Web.UI.ScriptManager.RegisterExtenderControl(TExtenderControl,Control)
 - uid: TExtenderControl
-  parent: ''
   isExternal: true
   name: TExtenderControl
   nameWithType: TExtenderControl
   fullName: TExtenderControl
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
 - uid: System.Web.UI.ScriptManager.RegisterHiddenField(System.Web.UI.Control,System.String,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterHiddenField(Control,String,String)
   nameWithType: ScriptManager.RegisterHiddenField(Control,String,String)
   fullName: System.Web.UI.ScriptManager.RegisterHiddenField(Control,String,String)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterHiddenField(System.Web.UI.Page,System.String,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterHiddenField(Page,String,String)
   nameWithType: ScriptManager.RegisterHiddenField(Page,String,String)
   fullName: System.Web.UI.ScriptManager.RegisterHiddenField(Page,String,String)
-- uid: System.Web.UI.Page
-  parent: System.Web.UI
-  isExternal: false
-  name: Page
-  nameWithType: Page
-  fullName: System.Web.UI.Page
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterNamedClientScriptResource(System.Web.UI.Control,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterNamedClientScriptResource(Control,String)
   nameWithType: ScriptManager.RegisterNamedClientScriptResource(Control,String)
   fullName: System.Web.UI.ScriptManager.RegisterNamedClientScriptResource(Control,String)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterNamedClientScriptResource(System.Web.UI.Page,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterNamedClientScriptResource(Page,String)
   nameWithType: ScriptManager.RegisterNamedClientScriptResource(Page,String)
   fullName: System.Web.UI.ScriptManager.RegisterNamedClientScriptResource(Page,String)
-- uid: System.Web.UI.Page
-  parent: System.Web.UI
-  isExternal: false
-  name: Page
-  nameWithType: Page
-  fullName: System.Web.UI.Page
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterOnSubmitStatement(System.Web.UI.Control,System.Type,System.String,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterOnSubmitStatement(Control,Type,String,String)
   nameWithType: ScriptManager.RegisterOnSubmitStatement(Control,Type,String,String)
   fullName: System.Web.UI.ScriptManager.RegisterOnSubmitStatement(Control,Type,String,String)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterOnSubmitStatement(System.Web.UI.Page,System.Type,System.String,System.String)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterOnSubmitStatement(Page,Type,String,String)
   nameWithType: ScriptManager.RegisterOnSubmitStatement(Page,Type,String,String)
   fullName: System.Web.UI.ScriptManager.RegisterOnSubmitStatement(Page,Type,String,String)
-- uid: System.Web.UI.Page
-  parent: System.Web.UI
-  isExternal: false
-  name: Page
-  nameWithType: Page
-  fullName: System.Web.UI.Page
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.RegisterPostBackControl(System.Web.UI.Control)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterPostBackControl(Control)
   nameWithType: ScriptManager.RegisterPostBackControl(Control)
   fullName: System.Web.UI.ScriptManager.RegisterPostBackControl(Control)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
 - uid: System.Web.UI.ScriptManager.RegisterScriptControl``1(``0)
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3668,7 +3444,6 @@ references:
   nameWithType: ScriptManager.RegisterScriptControl(TScriptControl)
   fullName: System.Web.UI.ScriptManager.RegisterScriptControl(TScriptControl)
 - uid: TScriptControl
-  parent: ''
   isExternal: true
   name: TScriptControl
   nameWithType: TScriptControl
@@ -3703,72 +3478,12 @@ references:
   name: RegisterStartupScript(Control,Type,String,String,Boolean)
   nameWithType: ScriptManager.RegisterStartupScript(Control,Type,String,String,Boolean)
   fullName: System.Web.UI.ScriptManager.RegisterStartupScript(Control,Type,String,String,Boolean)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.RegisterStartupScript(System.Web.UI.Page,System.Type,System.String,System.String,System.Boolean)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: RegisterStartupScript(Page,Type,String,String,Boolean)
   nameWithType: ScriptManager.RegisterStartupScript(Page,Type,String,String,Boolean)
   fullName: System.Web.UI.ScriptManager.RegisterStartupScript(Page,Type,String,String,Boolean)
-- uid: System.Web.UI.Page
-  parent: System.Web.UI
-  isExternal: false
-  name: Page
-  nameWithType: Page
-  fullName: System.Web.UI.Page
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.Render(System.Web.UI.HtmlTextWriter)
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3793,6 +3508,21 @@ references:
   name: EventHandler<CompositeScriptReferenceEventArgs>
   nameWithType: EventHandler<CompositeScriptReferenceEventArgs>
   fullName: System.EventHandler<System.Web.UI.CompositeScriptReferenceEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Web.UI.CompositeScriptReferenceEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.CompositeScriptReferenceEventArgs
+    name: CompositeScriptReferenceEventArgs
+    nameWithType: CompositeScriptReferenceEventArgs
+    fullName: CompositeScriptReferenceEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.UI.ScriptManager.ResolveScriptReference
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3805,6 +3535,21 @@ references:
   name: EventHandler<ScriptReferenceEventArgs>
   nameWithType: EventHandler<ScriptReferenceEventArgs>
   fullName: System.EventHandler<System.Web.UI.ScriptReferenceEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Web.UI.ScriptReferenceEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.UI.ScriptReferenceEventArgs
+    name: ScriptReferenceEventArgs
+    nameWithType: ScriptReferenceEventArgs
+    fullName: ScriptReferenceEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.UI.ScriptManager.RoleService
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3835,12 +3580,6 @@ references:
   name: ScriptPath
   nameWithType: ScriptManager.ScriptPath
   fullName: System.Web.UI.ScriptManager.ScriptPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.ScriptResourceMapping
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3883,60 +3622,24 @@ references:
   name: SetFocus(String)
   nameWithType: ScriptManager.SetFocus(String)
   fullName: System.Web.UI.ScriptManager.SetFocus(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.SetFocus(System.Web.UI.Control)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: SetFocus(Control)
   nameWithType: ScriptManager.SetFocus(Control)
   fullName: System.Web.UI.ScriptManager.SetFocus(Control)
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
 - uid: System.Web.UI.ScriptManager.SupportsPartialRendering
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: SupportsPartialRendering
   nameWithType: ScriptManager.SupportsPartialRendering
   fullName: System.Web.UI.ScriptManager.SupportsPartialRendering
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.System#Web#UI#IPostBackDataHandler#LoadPostData(System.String,System.Collections.Specialized.NameValueCollection)
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: System.Web.UI.IPostBackDataHandler.LoadPostData(String,NameValueCollection)
   nameWithType: ScriptManager.System.Web.UI.IPostBackDataHandler.LoadPostData(String,NameValueCollection)
   fullName: System.Web.UI.ScriptManager.System.Web.UI.IPostBackDataHandler.LoadPostData(String,NameValueCollection)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Collections.Specialized.NameValueCollection
-  parent: System.Collections.Specialized
-  isExternal: false
-  name: NameValueCollection
-  nameWithType: NameValueCollection
-  fullName: System.Collections.Specialized.NameValueCollection
 - uid: System.Web.UI.ScriptManager.System#Web#UI#IPostBackDataHandler#RaisePostDataChangedEvent
   parent: System.Web.UI.ScriptManager
   isExternal: false
@@ -3949,24 +3652,12 @@ references:
   name: System.Web.UI.IPostBackEventHandler.RaisePostBackEvent(String)
   nameWithType: ScriptManager.System.Web.UI.IPostBackEventHandler.RaisePostBackEvent(String)
   fullName: System.Web.UI.ScriptManager.System.Web.UI.IPostBackEventHandler.RaisePostBackEvent(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager.Visible
   parent: System.Web.UI.ScriptManager
   isExternal: false
   name: Visible
   nameWithType: ScriptManager.Visible
   fullName: System.Web.UI.ScriptManager.Visible
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ScriptManager.#ctor*
   parent: System.Web.UI.ScriptManager
   isExternal: false

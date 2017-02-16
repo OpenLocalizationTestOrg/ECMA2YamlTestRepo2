@@ -13,8 +13,10 @@ items:
   nameWithType: InstalledVoice
   fullName: System.Speech.Synthesis.InstalledVoice
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Contains information about a speech synthesis voice installed in Windows.
+  remarks: "Use this class to get information about an installed voice, including its culture, name, gender, age, and whether it is enabled.  \n  \n To perform text-to-speech using the language specified in the <xref:System.Speech.Synthesis.PromptBuilder.Culture%2A> property, a speech synthesis engine that supports that language-country code must be installed. The speech synthesis engines that shipped with Microsoft Windows 7 work with the following language-country codes:  \n  \n-   en-US. English (United States)  \n  \n-   zh-CN. Chinese (China)  \n  \n-   zh-TW. Chinese (Taiwan)  \n  \n Two-letter language codes such as \"en\" are also permitted."
+  example:
+  - "The following example is part of a console application that initializes a <xref:System.Speech.Synthesis.SpeechSynthesizer> object and outputs to the console a list of the installed voices (engines for speech synthesis) and demonstrates the information that is available for each voice.  \n  \n```c#  \nusing System;  \nusing System.Speech.Synthesis;  \nusing System.Speech.AudioFormat;  \n  \nnamespace SampleSynthesis  \n{  \n  class Program  \n  {  \n    static void Main(string[] args)  \n    {  \n  \n      // Initialize a new instance of the SpeechSynthesizer.  \n      using (SpeechSynthesizer synth = new SpeechSynthesizer())  \n      {  \n  \n        // Output information about all of the installed voices.   \n        Console.WriteLine(\"Installed voices -\");  \n        foreach (InstalledVoice voice in synth.GetInstalledVoices())  \n        {  \n          VoiceInfo info = voice.VoiceInfo;  \n          string AudioFormats = \"\";  \n          foreach (SpeechAudioFormatInfo fmt in info.SupportedAudioFormats)  \n          {  \n            AudioFormats += String.Format(\"{0}\\n\",  \n            fmt.EncodingFormat.ToString());  \n          }  \n  \n          Console.WriteLine(\" Name:          \" + info.Name);  \n          Console.WriteLine(\" Culture:       \" + info.Culture);  \n          Console.WriteLine(\" Age:           \" + info.Age);  \n          Console.WriteLine(\" Gender:        \" + info.Gender);  \n          Console.WriteLine(\" Description:   \" + info.Description);  \n          Console.WriteLine(\" ID:            \" + info.Id);  \n          Console.WriteLine(\" Enabled:       \" + voice.Enabled);  \n          if (info.SupportedAudioFormats.Count != 0)  \n          {  \n            Console.WriteLine( \" Audio formats: \" + AudioFormats);  \n          }  \n          else  \n          {  \n            Console.WriteLine(\" No supported audio formats found\");  \n          }  \n  \n          string AdditionalInfo = \"\";  \n          foreach (string key in info.AdditionalInfo.Keys)  \n          {  \n            AdditionalInfo += String.Format(\"  {0}: {1}\\n\", key, info.AdditionalInfo[key]);  \n          }  \n  \n          Console.WriteLine(\" Additional Info - \" + AdditionalInfo);  \n          Console.WriteLine();  \n        }  \n      }  \n      Console.WriteLine(\"Press any key to exit...\");  \n      Console.ReadKey();  \n    }  \n  }  \n}  \n  \n```"
   syntax:
     content: >-
       [System.Diagnostics.DebuggerDisplay("{VoiceInfo.Name} [{Enabled ? "Enabled" : "Disabled"}]")]
@@ -40,14 +42,15 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets whether a voice can be used to generate speech.
+  remarks: The value of the Enabled property is `true` by default. When an application calls <xref:System.Speech.Synthesis.SpeechSynthesizer.GetInstalledVoices%2A>, the method verifies that each of the voices it finds in the registry meets certain minimum criteria. For any voice that fails verification, <xref:System.Speech.Synthesis.SpeechSynthesizer.GetInstalledVoices%2A> sets its Enabled property to `false`. An application cannot select a voice whose Enabled property is `false`. Typically, applications will not set a voice’s Enabled property.
   syntax:
     content: public bool Enabled { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: Returns a  that represents the enabled state of the voice.
   overload: System.Speech.Synthesis.InstalledVoice.Enabled*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -64,18 +67,19 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines if a given object is an instance of  and equal to the current instance of .
+  remarks: The method returns false if the <xref:System.Object> provided by the `obj` argument cannot be cast to <xref:System.Speech.Synthesis.InstalledVoice>.
   syntax:
     content: public override bool Equals (object obj);
     parameters:
     - id: obj
       type: System.Object
-      description: To be added.
+      description: An object that can be cast to an instance of .
     return:
       type: System.Boolean
-      description: To be added.
+      description: Returns  if the current instance of  and that obtained from the obj argument are equal, otherwise returns .
   overload: System.Speech.Synthesis.InstalledVoice.Equals*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -92,15 +96,15 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a hash code for an `InstalledVoice` object.
   syntax:
     content: public override int GetHashCode ();
     parameters: []
     return:
       type: System.Int32
-      description: To be added.
+      description: A hash code for the current  object.
   overload: System.Speech.Synthesis.InstalledVoice.GetHashCode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -117,14 +121,14 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets information about a voice, such as culture, name, gender, and age.
   syntax:
     content: public System.Speech.Synthesis.VoiceInfo VoiceInfo { get; }
     return:
       type: System.Speech.Synthesis.VoiceInfo
-      description: To be added.
+      description: The information about an installed voice.
   overload: System.Speech.Synthesis.InstalledVoice.VoiceInfo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -151,18 +155,6 @@ references:
   name: Equals(Object)
   nameWithType: InstalledVoice.Equals(Object)
   fullName: System.Speech.Synthesis.InstalledVoice.Equals(Object)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Speech.Synthesis.InstalledVoice.GetHashCode
   parent: System.Speech.Synthesis.InstalledVoice
   isExternal: false

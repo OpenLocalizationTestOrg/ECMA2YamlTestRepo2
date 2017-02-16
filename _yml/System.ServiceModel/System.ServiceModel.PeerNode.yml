@@ -16,8 +16,8 @@ items:
   nameWithType: PeerNode
   fullName: System.ServiceModel.PeerNode
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Defines the instance of of a peer node used by an application participating in a specific peer mesh.
+  remarks: "A peer node can host multiple peer channels within the mesh as long as they share a common URI and host name in the <xref:System.ServiceModel.EndpointAddress> supplied to the binding for each channel.  \n  \n If two or more peer channels defined for a peer node are created with separate bindings, then the <xref:System.ServiceModel.NetPeerTcpBinding.Port%2A>, <xref:System.ServiceModel.NetPeerTcpBinding.ListenIPAddress%2A>, and <xref:System.ServiceModel.NetPeerTcpBinding.Resolver%2A> properties must be identical on all bindings.  \n  \n If a subsequent channel binding is created after the first one for the same peer node instance, then the <xref:System.ServiceModel.NetPeerTcpBinding.MaxReceivedMessageSize%2A> property on this and subsequent bindings must be less than or equal to the value of <xref:System.ServiceModel.NetPeerTcpBinding.MaxReceivedMessageSize%2A> property as set on the first channel binding."
   syntax:
     content: 'public sealed class PeerNode : System.ServiceModel.IOnlineStatus'
   inheritance:
@@ -41,14 +41,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the peer node is online and able to send messages to neighboring nodes in the peer mesh.
+  remarks: "\"Online\" indicates that a peer node has available neighbor nodes. \"Offline\" indicates that a peer node has no available neighbors."
   syntax:
     content: public bool IsOnline { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the peer node is online; otherwise, .
   overload: System.ServiceModel.PeerNode.IsOnline*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -65,14 +66,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets and sets a custom filter for messages received over the peer channel.
+  remarks: The message filter must be a derived type and should be recast to that type to use any custom features defined on it.
   syntax:
     content: public System.ServiceModel.PeerMessagePropagationFilter MessagePropagationFilter { get; set; }
     return:
       type: System.ServiceModel.PeerMessagePropagationFilter
-      description: To be added.
+      description: that contains a custom message filter.
   overload: System.ServiceModel.PeerNode.MessagePropagationFilter*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: No channel is open for listening.
   platform:
   - net-11
   - net-20
@@ -89,13 +94,14 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Signals when the peer node goes offline from the peer mesh.
+  remarks: An offline peer node has no neighbor nodes within the peer mesh to which it can connect.
   syntax:
     content: public event EventHandler Offline;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -112,13 +118,14 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Signals when a peer node comes online within the peer mesh.
+  remarks: An online peer node has at least one neighbor node within the peer mesh to which it is connected.
   syntax:
     content: public event EventHandler Online;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -135,14 +142,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the network port on which the peer node is listening.
   syntax:
     content: public int Port { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: <xref:System.Int32> that specifies the network port on which the peer node is listening.
   overload: System.ServiceModel.PeerNode.Port*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: No channel is open for listening.
   platform:
   - net-11
   - net-20
@@ -159,12 +169,27 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Refreshes the connection with the peer mesh.
   syntax:
     content: public void RefreshConnection ();
     parameters: []
   overload: System.ServiceModel.PeerNode.RefreshConnection*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: No channel is open for listening.
+  - type: System.TimeoutException
+    commentId: T:System.TimeoutException
+    description: The refresh operation timed out.
+  - type: System.ServiceModel.CommunicationException
+    commentId: T:System.ServiceModel.CommunicationException
+    description: A network error occurred during the refresh attempt.
+  - type: System.ServiceModel.CommunicationObjectAbortedException
+    commentId: T:System.ServiceModel.CommunicationObjectAbortedException
+    description: The connection aborted during the refresh attempt.
+  - type: System.ServiceModel.CommunicationObjectFaultedException
+    commentId: T:System.ServiceModel.CommunicationObjectFaultedException
+    description: The connection faulted during the refresh attempt.
   platform:
   - net-11
   - net-20
@@ -181,15 +206,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a string representation of a peer node.
   syntax:
     content: public override string ToString ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: <xref:System.String> value that contains the mesh ID of the peer node if the mesh ID is set; otherwise, it returns the type.
   overload: System.ServiceModel.PeerNode.ToString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -240,12 +265,6 @@ references:
   name: Online
   nameWithType: PeerNode.Online
   fullName: System.ServiceModel.PeerNode.Online
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.ServiceModel.PeerNode.Port
   parent: System.ServiceModel.PeerNode
   isExternal: false

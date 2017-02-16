@@ -17,8 +17,8 @@ items:
   nameWithType: TransactionInterop
   fullName: System.Transactions.TransactionInterop
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Facilitates interaction between  and components that were previously written to interact with MSDTC, COM+, or . This class cannot be inherited.
+  remarks: "This class provides methods for transaction propagation. For more information on how this process works, see [Transaction Propagation](http://msdn.microsoft.com/library/default.asp?url=/library/cossdk/html/b09541e6-4baf-4e37-b879-62884fbb0969.asp).  \n  \n Using the methods provided by this class, you can engage in two types of transaction propagations, Export/Import (push model) and Transmitter/Receiver (pull model).  \n  \n The Export/Import (push model) propagation involves these steps,  \n  \n1.  On the remote machine, obtain the \"whereabouts\" of the transaction manager of that machine by calling the <xref:System.Transactions.TransactionInterop.GetWhereabouts%2A> method. You can then cache this piece of information on the client machine for future usage.  \n  \n2.  Send the data containing the whereabouts to the client machine using any preferred method  \n  \n3.  On the client machine, use the whereabouts to \"export\" the transaction to the remote machine and generate a transaction \"cookie\".  This is done by calling <xref:System.Transactions.TransactionInterop.GetExportCookie%2A> and passing in the remote machine's whereabouts.  \n  \n4.  Send the data containing the transaction \"cookie\" to the remote machine using any preferred method  \n  \n5.  On the remote machine, use the transaction \"cookie\" to obtain a clone of the client transaction by calling the <xref:System.Transactions.TransactionInterop.GetTransactionFromExportCookie%2A> method.  \n  \n6.  On the remote machine, use the clone transaction to enlist the resource manager using the <xref:System.Transactions.Transaction.EnlistVolatile%2A> or <xref:System.Transactions.Transaction.EnlistDurable%2A> methods of the <xref:System.Transactions.Transaction> class.  \n  \n The Transmitter/Receiver (pull model) propagation involves these steps,  \n  \n-   On the client machine, using the transaction generates a corresponding \"propagation token\" by calling <xref:System.Transactions.TransactionInterop.GetTransmitterPropagationToken%2A>  \n  \n-   Send the data containing the \"propagation token\" of the transaction to the remote machine using any preferred method  \n  \n-   On the remote machine, use the \"propagation token\" to obtain a clone of the client transaction by calling <xref:System.Transactions.TransactionInterop.GetTransactionFromTransmitterPropagationToken%2A>  \n  \n The Transmitter/Receiver model provides better performance in scenarios where the transaction token is sent to a remote machine, but the remote machine may not use it to obtain the transaction.  This is because the transaction is not propagated until <xref:System.Transactions.TransactionInterop.GetTransactionFromTransmitterPropagationToken%2A> is called. Another advantage is that the propagation token can be sent to any remote machine, while the export cookie can be used only on the machine that provided the whereabouts.  \n  \n However, you should also note that the whereabouts of remote transaction managers are encapsulated in all the propagation tokens, making them bigger than the corresponding transaction cookies from the Export/Import model.  \n  \n **Note** This type uses <xref:System.Security.Permissions.SecurityAction> to prevent it from being called from untrusted code; however, only the immediate caller is required to possess the `FullTrust` permission set."
   syntax:
     content: public static class TransactionInterop
   inheritance:
@@ -41,18 +41,18 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets an  instance that represents a .
   syntax:
     content: public static System.Transactions.IDtcTransaction GetDtcTransaction (System.Transactions.Transaction transaction);
     parameters:
     - id: transaction
       type: System.Transactions.Transaction
-      description: To be added.
+      description: A  instance to be marshaled.
     return:
       type: System.Transactions.IDtcTransaction
-      description: To be added.
+      description: An  instance that represents a .  The  instance is compatible with the unmanaged form of [ITransaction](http://msdn.microsoft.com/library/default.asp?url=/library/cossdk/html/d40264be-f9b2-4044-aac6-84b43e5be666.asp) used by MSDTC and with the Managed form of  used by .
   overload: System.Transactions.TransactionInterop.GetDtcTransaction*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -69,21 +69,22 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Transforms a transaction object into an export transaction cookie.
+  remarks: "Call this method if you want to export a transaction. The `transaction` that is passed along is marshaled into a transaction cookie. You can then send the transaction cookie to the destination process. This is referred to as propagating the transaction between processes or systems. The propagation is considered to be a push model where the local transaction is pushed to the destination.  Therefore, information contained in `whereabouts` must describe the destination transaction manager.  \n  \n For more information on different propagation models, see the Remarks section of the <xref:System.Transactions.TransactionInterop> class."
   syntax:
     content: public static byte[] GetExportCookie (System.Transactions.Transaction transaction, byte[] whereabouts);
     parameters:
     - id: transaction
       type: System.Transactions.Transaction
-      description: To be added.
+      description: The  object to be marshaled.
     - id: whereabouts
       type: System.Byte[]
-      description: To be added.
+      description: An address that describes the location of the destination transaction manager. This permits two transaction managers to communicate with one another and thereby propagate a transaction from one system to the other.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: An export transaction cookie representing the specified  object.
   overload: System.Transactions.TransactionInterop.GetExportCookie*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -100,18 +101,19 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates a  from a specified .
+  remarks: The `transactionNative` is compatible with the unmanaged form of [ITransaction](http://msdn.microsoft.com/library/default.asp?url=/library/cossdk/html/d40264be-f9b2-4044-aac6-84b43e5be666.asp) used by MSDTC and with the Managed form of <xref:System.EnterpriseServices.ITransaction> used by <xref:System.EnterpriseServices>.
   syntax:
     content: public static System.Transactions.Transaction GetTransactionFromDtcTransaction (System.Transactions.IDtcTransaction transactionNative);
     parameters:
     - id: transactionNative
       type: System.Transactions.IDtcTransaction
-      description: To be added.
+      description: The  object to be marshaled.
     return:
       type: System.Transactions.Transaction
-      description: To be added.
+      description: A  instance that represents the given .
   overload: System.Transactions.TransactionInterop.GetTransactionFromDtcTransaction*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -128,18 +130,19 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates a  from the specified an export cookie.
+  remarks: For more information on different propagation models, see the Remarks section of the <xref:System.Transactions.TransactionInterop> class.
   syntax:
     content: public static System.Transactions.Transaction GetTransactionFromExportCookie (byte[] cookie);
     parameters:
     - id: cookie
       type: System.Byte[]
-      description: To be added.
+      description: A marshaled form of the transaction object.
     return:
       type: System.Transactions.Transaction
-      description: To be added.
+      description: A  from the specified export cookie.
   overload: System.Transactions.TransactionInterop.GetTransactionFromExportCookie*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -156,18 +159,22 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates a  instance from the specified transmitter propagation token.
+  remarks: "This method, together with the <xref:System.Transactions.TransactionInterop.GetTransmitterPropagationToken%2A> method, provide functionality for \"pull\" propagation, in which the transaction is \"pulled\" from the remote machine when this method is called to unmarshal the transaction.  \n  \n For more information on different propagation models, see the Remarks section of the <xref:System.Transactions.TransactionInterop> class."
   syntax:
     content: public static System.Transactions.Transaction GetTransactionFromTransmitterPropagationToken (byte[] propagationToken);
     parameters:
     - id: propagationToken
       type: System.Byte[]
-      description: To be added.
+      description: A propagation token representing a transaction.
     return:
       type: System.Transactions.Transaction
-      description: To be added.
+      description: A  from the specified transmitter propagation token.
   overload: System.Transactions.TransactionInterop.GetTransactionFromTransmitterPropagationToken*
+  exceptions:
+  - type: System.Transactions.TransactionManagerCommunicationException
+    commentId: T:System.Transactions.TransactionManagerCommunicationException
+    description: The deserialization of a transaction fails because the transaction manager cannot be contacted. This may be caused by network firewall or security settings.
   platform:
   - net-11
   - net-20
@@ -184,18 +191,18 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates a propagation token for the specified .
   syntax:
     content: public static byte[] GetTransmitterPropagationToken (System.Transactions.Transaction transaction);
     parameters:
     - id: transaction
       type: System.Transactions.Transaction
-      description: To be added.
+      description: A transaction to be marshaled into a propagation token.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: "This method, together with the <xref:System.Transactions.TransactionInterop.GetTransactionFromTransmitterPropagationToken%2A> method, provide functionality for Transmitter/Receiver propagation, in which the transaction is \"pulled\" from the remote machine when the latter is called to unmarshal the transaction.  \n  \n For more information on different propagation models, see the Remarks section of the  class."
   overload: System.Transactions.TransactionInterop.GetTransmitterPropagationToken*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -212,15 +219,16 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the Whereabouts of the distributed transaction manager that  uses.
+  remarks: "The Whereabouts contains an address that describes the location of a transaction manager. This permits two transaction managers to communicate with one another and thereby propagate a transaction from one system to the other. The information returned by this method can be used to provide location information for push model transaction propagation with the <xref:System.Transactions.TransactionInterop.GetExportCookie%2A> method.  \n  \n For more information on different propagation models, see the Remarks section of the <xref:System.Transactions.TransactionInterop> class."
   syntax:
     content: public static byte[] GetWhereabouts ();
     parameters: []
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The Whereabouts of the distributed transaction manager that  uses.
   overload: System.Transactions.TransactionInterop.GetWhereabouts*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -237,13 +245,14 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: The type of the distributed transaction processor.
+  remarks: This value is used for the `Transaction.PromoterType` property if the transaction is or will be promoted to MSDTC and the `Transaction.GetPromotedToken` method will return an MSDTC transaction propagation token for the `byte[]` result.
   syntax:
     content: public static readonly Guid PromoterTypeDtc;
     return:
       type: System.Guid
-      description: To be added.
+      description: The type of the distributed transaction processor.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -276,108 +285,50 @@ references:
   name: GetExportCookie(Transaction,Byte[])
   nameWithType: TransactionInterop.GetExportCookie(Transaction,Byte[])
   fullName: System.Transactions.TransactionInterop.GetExportCookie(Transaction,Byte[])
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
-- uid: System.Transactions.Transaction
-  parent: System.Transactions
-  isExternal: false
-  name: Transaction
-  nameWithType: Transaction
-  fullName: System.Transactions.Transaction
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Transactions.TransactionInterop.GetTransactionFromDtcTransaction(System.Transactions.IDtcTransaction)
   parent: System.Transactions.TransactionInterop
   isExternal: false
   name: GetTransactionFromDtcTransaction(IDtcTransaction)
   nameWithType: TransactionInterop.GetTransactionFromDtcTransaction(IDtcTransaction)
   fullName: System.Transactions.TransactionInterop.GetTransactionFromDtcTransaction(IDtcTransaction)
-- uid: System.Transactions.Transaction
-  parent: System.Transactions
-  isExternal: false
-  name: Transaction
-  nameWithType: Transaction
-  fullName: System.Transactions.Transaction
-- uid: System.Transactions.IDtcTransaction
-  parent: System.Transactions
-  isExternal: false
-  name: IDtcTransaction
-  nameWithType: IDtcTransaction
-  fullName: System.Transactions.IDtcTransaction
 - uid: System.Transactions.TransactionInterop.GetTransactionFromExportCookie(System.Byte[])
   parent: System.Transactions.TransactionInterop
   isExternal: false
   name: GetTransactionFromExportCookie(Byte[])
   nameWithType: TransactionInterop.GetTransactionFromExportCookie(Byte[])
   fullName: System.Transactions.TransactionInterop.GetTransactionFromExportCookie(Byte[])
-- uid: System.Transactions.Transaction
-  parent: System.Transactions
-  isExternal: false
-  name: Transaction
-  nameWithType: Transaction
-  fullName: System.Transactions.Transaction
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Transactions.TransactionInterop.GetTransactionFromTransmitterPropagationToken(System.Byte[])
   parent: System.Transactions.TransactionInterop
   isExternal: false
   name: GetTransactionFromTransmitterPropagationToken(Byte[])
   nameWithType: TransactionInterop.GetTransactionFromTransmitterPropagationToken(Byte[])
   fullName: System.Transactions.TransactionInterop.GetTransactionFromTransmitterPropagationToken(Byte[])
-- uid: System.Transactions.Transaction
-  parent: System.Transactions
-  isExternal: false
-  name: Transaction
-  nameWithType: Transaction
-  fullName: System.Transactions.Transaction
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Transactions.TransactionInterop.GetTransmitterPropagationToken(System.Transactions.Transaction)
   parent: System.Transactions.TransactionInterop
   isExternal: false
   name: GetTransmitterPropagationToken(Transaction)
   nameWithType: TransactionInterop.GetTransmitterPropagationToken(Transaction)
   fullName: System.Transactions.TransactionInterop.GetTransmitterPropagationToken(Transaction)
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Transactions.Transaction
-  parent: System.Transactions
-  isExternal: false
-  name: Transaction
-  nameWithType: Transaction
-  fullName: System.Transactions.Transaction
 - uid: System.Transactions.TransactionInterop.GetWhereabouts
   parent: System.Transactions.TransactionInterop
   isExternal: false
   name: GetWhereabouts()
   nameWithType: TransactionInterop.GetWhereabouts()
   fullName: System.Transactions.TransactionInterop.GetWhereabouts()
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Transactions.TransactionInterop.PromoterTypeDtc
   parent: System.Transactions.TransactionInterop
   isExternal: false

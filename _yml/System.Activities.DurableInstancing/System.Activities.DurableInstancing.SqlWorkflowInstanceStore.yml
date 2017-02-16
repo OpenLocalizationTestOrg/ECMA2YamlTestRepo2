@@ -24,8 +24,10 @@ items:
   nameWithType: SqlWorkflowInstanceStore
   fullName: System.Activities.DurableInstancing.SqlWorkflowInstanceStore
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Derives from the abstract  class of the persistence functionality and provides implementation to allow saving instance state information to and loading instance state information from an SQL Server 2005 or SQL Server 2008 database.
+  remarks: SqlWorkflowInstanceStore uses the <xref:System.Runtime.Serialization.NetDataContractSerializer> to serialize complex types; all types used in workflows to be persisted with this instance store must be serializable using <xref:System.Runtime.Serialization.NetDataContractSerializer>.
+  example:
+  - "The following code sample demonstrates creating a SqlWorkflowInstanceStore. This example is from the [Persistence Participants](../Topic/Persistence%20Participants.md) sample.  \n  \n [!CODE [wfs_PersistenceParticipant#2](wfs_PersistenceParticipant#2)]"
   syntax:
     content: 'public sealed class SqlWorkflowInstanceStore : System.Runtime.DurableInstancing.InstanceStore'
   inheritance:
@@ -65,12 +67,12 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public SqlWorkflowInstanceStore ();
     parameters: []
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -87,15 +89,15 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class by using the connectionString parameter.
   syntax:
     content: public SqlWorkflowInstanceStore (string connectionString);
     parameters:
     - id: connectionString
       type: System.String
-      description: To be added.
+      description: The connection string to a persistence database.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -112,8 +114,6 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override IAsyncResult BeginTryCommand (System.Runtime.DurableInstancing.InstancePersistenceContext context, System.Runtime.DurableInstancing.InstancePersistenceCommand command, TimeSpan timeout, AsyncCallback callback, object state);
     parameters:
@@ -136,6 +136,7 @@ items:
       type: System.IAsyncResult
       description: To be added.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.BeginTryCommand*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -152,14 +153,14 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a connection string with parameters that are used to connect to an underlying persistence database.
   syntax:
     content: public string ConnectionString { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The connection string.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.ConnectionString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -176,8 +177,6 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override bool EndTryCommand (IAsyncResult result);
     parameters:
@@ -188,6 +187,7 @@ items:
       type: System.Boolean
       description: To be added.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.EndTryCommand*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -204,14 +204,14 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or set a value that indicates whether Run commands are enqueued. This property is used internally by the SQL Workflow Instance Store and it should not be used in your applications.
   syntax:
     content: public bool EnqueueRunCommands { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the Run commands are enqueued; otherwise .
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.EnqueueRunCommands*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -228,14 +228,17 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies the time period within which the host renews its lock on a workflow service instance.
+  remarks: If the host does not renew the lock (in other words, extend the lease) with this in this time period, the persistence provider unlocks the instance and another host may lock the instance. The value is a <xref:System.TimeSpan> of the form “hh:mm:ss”. The minimum permitted value is “00:00:01” (1 sec). The default value of this property is “00:00:30” (30 seconds).
+  example:
+  - "The following code sample demonstrates using HostLockRenewalPeriod in a <xref:System.Activities.DurableInstancing.SqlWorkflowInstanceStore>. This example is from the [Built-in Configuration](../Topic/Built-in%20Configuration.md) sample.  \n  \n [!code-cs[wfs_BuiltInConfiguration#1](../../add/codesnippet/CSharp/535773bf-1ad7-4437-bc1d-_1.cs)]"
   syntax:
     content: public TimeSpan HostLockRenewalPeriod { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The time period.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.HostLockRenewalPeriod*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -252,14 +255,17 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies the action to be taken after a workflow instance completes. Possible values are “DeleteNothing” and “DeleteAll”. The default value is “DeleteAll”. If the property is set to “DeleteNothing”, the persistence provider keeps all the instance data and metadata in the persistence database after the workflow instance completes. If the property is set to “DeleteAll”, the persistence provider deletes all the instance data and metadata after the workflow instance completes.
+  remarks: Possible values are “DeleteNothing” and “DeleteAll”. The default value is “DeleteAll”. If the property is set to “DeleteNothing”, the persistence provider keeps all the instance data and metadata in the persistence database after the workflow instance completes. If the property is set to “DeleteAll”, the persistence provider deletes all the instance data and metadata after the workflow instance completes.
+  example:
+  - "The following code sample demonstrates using InstanceCompletionAction in a <xref:System.Activities.DurableInstancing.SqlWorkflowInstanceStore>. This example is from the [Built-in Configuration](../Topic/Built-in%20Configuration.md) sample.  \n  \n [!code-cs[wfs_BuiltInConfiguration#1](../../add/codesnippet/CSharp/10161e56-a942-4bb2-99c1-_1.cs)]"
   syntax:
     content: public System.Activities.DurableInstancing.InstanceCompletionAction InstanceCompletionAction { get; set; }
     return:
       type: System.Activities.DurableInstancing.InstanceCompletionAction
-      description: To be added.
+      description: The action to be taken after a workflow completes.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.InstanceCompletionAction*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -276,14 +282,17 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies a value that indicates whether the instance data must be compressed.
+  remarks: If the value is set to “GZip”, the instance data is compressed using the GZip algorithm.
+  example:
+  - "The following code sample demonstrates using InstanceEncodingOption in a <xref:System.Activities.DurableInstancing.SqlWorkflowInstanceStore>. This example is from the [Built-in Configuration](../Topic/Built-in%20Configuration.md) sample.  \n  \n [!code-cs[wfs_BuiltInConfiguration#1](../../add/codesnippet/CSharp/07e6e29d-eb1b-4eec-948c-_1.cs)]"
   syntax:
     content: public System.Activities.DurableInstancing.InstanceEncodingOption InstanceEncodingOption { get; set; }
     return:
       type: System.Activities.DurableInstancing.InstanceEncodingOption
-      description: To be added.
+      description: The possible values are “None” and “GZip”. The default is “None”.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.InstanceEncodingOption*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -300,14 +309,17 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies the action to be taken when the persistence provider catches an .
+  remarks: "Specify what action a service host should take when a workflow service instance experiences an <xref:System.Runtime.DurableInstancing.InstanceLockedException>. The service host receives an <xref:System.Runtime.DurableInstancing.InstanceLockedException> when it tries to lock an instance that is already locked by another owner. The possible values are in the following list:  \n  \n-   **None**. The service host does not attempt to lock the instance and passes the <xref:System.Runtime.DurableInstancing.InstanceLockedException> to the caller.  \n  \n-   **BasicRetry**. The service host reattempts to lock the instance with a linear retry interval and passes the exception to the caller at the end of the sequence.  \n  \n-   **AggressiveRetry**. The service host reattempts to lock the instance with an exponentially increasing delay and passes the <xref:System.Runtime.DurableInstancing.InstanceLockedException> to the caller at the end of the sequence. The intervals are short in the beginning in an attempt to acquire the lock as quickly as possible and the intervals gets bigger with every unsuccessful attempt."
+  example:
+  - "The following code sample demonstrates using InstanceLockedExceptionAction in a <xref:System.Activities.DurableInstancing.SqlWorkflowInstanceStore>. This example is from the [Built-in Configuration](../Topic/Built-in%20Configuration.md) sample.  \n  \n [!code-cs[wfs_BuiltInConfiguration#1](../../add/codesnippet/CSharp/ee37a22d-0628-499b-95c7-_1.cs)]"
   syntax:
     content: public System.Activities.DurableInstancing.InstanceLockedExceptionAction InstanceLockedExceptionAction { get; set; }
     return:
       type: System.Activities.DurableInstancing.InstanceLockedExceptionAction
-      description: To be added.
+      description: The action to be taken when the persistence provider catches an
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.InstanceLockedExceptionAction*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -324,14 +336,14 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the maximum number of SQL connection retries.  The default value is 4.
   syntax:
     content: public int MaxConnectionRetries { get; set; }
     return:
       type: System.Int32
-      description: To be added.
+      description: An integer representing the maximum number of SQL connection retries.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.MaxConnectionRetries*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -348,8 +360,6 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override void OnFreeInstanceHandle (System.Runtime.DurableInstancing.InstanceHandle instanceHandle, object userContext);
     parameters:
@@ -360,6 +370,7 @@ items:
       type: System.Object
       description: To be added.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.OnFreeInstanceHandle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -376,8 +387,6 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override object OnNewInstanceHandle (System.Runtime.DurableInstancing.InstanceHandle instanceHandle);
     parameters:
@@ -388,6 +397,7 @@ items:
       type: System.Object
       description: To be added.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.OnNewInstanceHandle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -404,21 +414,24 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: 'Associates the specified properties with a workflow instance so that you can query for instances based on specific values for these properties. These properties that can be used in external queries can be of simple types (for example: Int64, String, and so on) or of a serialized binary type (byte[]). Binary properties are typically used to store tracking data.'
+  remarks: ''
+  example:
+  - "The following code sample demonstrates using Promote in a <xref:System.Activities.DurableInstancing.SqlWorkflowInstanceStore>. This example is from the [SQLStoreExtensibility](../Topic/SQLStoreExtensibility.md) sample.  \n  \n [!code-cs[wfs_SQLStoreExtensibility#1](../../add/codesnippet/CSharp/sqlstoreextensibility/program.cs#1)]"
   syntax:
     content: public void Promote (string name, System.Collections.Generic.IEnumerable<System.Xml.Linq.XName> promoteAsVariant, System.Collections.Generic.IEnumerable<System.Xml.Linq.XName> promoteAsBinary);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the promotion itself.
     - id: promoteAsVariant
       type: System.Collections.Generic.IEnumerable{System.Xml.Linq.XName}
-      description: To be added.
+      description: The properties that must be promoted as variants.
     - id: promoteAsBinary
       type: System.Collections.Generic.IEnumerable{System.Xml.Linq.XName}
-      description: To be added.
+      description: The properties that must be promoted as a binary stream.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.Promote*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -435,14 +448,17 @@ items:
   assemblies:
   - System.Activities.DurableInstancing
   namespace: System.Activities.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies the time period after which the SQL Workflow Instance Store runs a detection task to detect any runnable or activatable workflow instances in the persistence database after the previous detection cycle.
+  remarks: "The <xref:System.Activities.DurableInstancing.SqlWorkflowInstanceStore> runs an internal task that periodically wakes up and checks if any runnable instances exist in the persistence database. An instance is *runnable*, if it is not in the suspended state or the completed state and satisfies the following conditions:  \n  \n-   The instance is unlocked and has a pending timer that has expired.  \n  \n-   The instance is unlocked and its status is **Executing**.  \n  \n-   The instance has an expired lock on it.  \n  \n The SQL Workflow Instance Store raises the <xref:System.Activities.DurableInstancing.HasRunnableWorkflowEvent> when it finds a runnable instance in the database and also finds a workflow host capable of loading the instance running on the computer.  \n  \n When a workflow host receives this event, it executes the <xref:System.Activities.DurableInstancing.TryLoadRunnableWorkflowCommand> against the instance store to load the instance into the memory.  \n  \n The type of the property is TimeSpan and the value is of the form “hh:mm:ss”. The minimum value is “00:00:01” (1 sec). If omitted, defaults to “00:00:05” (5 secs). This parameter is an optional parameter."
+  example:
+  - "The following code sample demonstrates using RunnableInstancesDetectionPeriod in a <xref:System.Activities.DurableInstancing.SqlWorkflowInstanceStore>. This example is from the [Built-in Configuration](../Topic/Built-in%20Configuration.md) sample.  \n  \n [!code-cs[wfs_BuiltInConfiguration#1](../../add/codesnippet/CSharp/fbed6199-3a8d-437a-a553-_1.cs)]"
   syntax:
     content: public TimeSpan RunnableInstancesDetectionPeriod { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: Returns <xref:System.TimeSpan>.
   overload: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.RunnableInstancesDetectionPeriod*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -517,12 +533,6 @@ references:
   name: ConnectionString
   nameWithType: SqlWorkflowInstanceStore.ConnectionString
   fullName: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.ConnectionString
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.EndTryCommand(System.IAsyncResult)
   parent: System.Activities.DurableInstancing.SqlWorkflowInstanceStore
   isExternal: false
@@ -535,36 +545,18 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.EnqueueRunCommands
   parent: System.Activities.DurableInstancing.SqlWorkflowInstanceStore
   isExternal: false
   name: EnqueueRunCommands
   nameWithType: SqlWorkflowInstanceStore.EnqueueRunCommands
   fullName: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.EnqueueRunCommands
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.HostLockRenewalPeriod
   parent: System.Activities.DurableInstancing.SqlWorkflowInstanceStore
   isExternal: false
   name: HostLockRenewalPeriod
   nameWithType: SqlWorkflowInstanceStore.HostLockRenewalPeriod
   fullName: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.HostLockRenewalPeriod
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.InstanceCompletionAction
   parent: System.Activities.DurableInstancing.SqlWorkflowInstanceStore
   isExternal: false
@@ -625,66 +617,45 @@ references:
   name: InstanceHandle
   nameWithType: InstanceHandle
   fullName: System.Runtime.DurableInstancing.InstanceHandle
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.OnNewInstanceHandle(System.Runtime.DurableInstancing.InstanceHandle)
   parent: System.Activities.DurableInstancing.SqlWorkflowInstanceStore
   isExternal: false
   name: OnNewInstanceHandle(InstanceHandle)
   nameWithType: SqlWorkflowInstanceStore.OnNewInstanceHandle(InstanceHandle)
   fullName: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.OnNewInstanceHandle(InstanceHandle)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Runtime.DurableInstancing.InstanceHandle
-  parent: System.Runtime.DurableInstancing
-  isExternal: false
-  name: InstanceHandle
-  nameWithType: InstanceHandle
-  fullName: System.Runtime.DurableInstancing.InstanceHandle
 - uid: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.Promote(System.String,System.Collections.Generic.IEnumerable{System.Xml.Linq.XName},System.Collections.Generic.IEnumerable{System.Xml.Linq.XName})
   parent: System.Activities.DurableInstancing.SqlWorkflowInstanceStore
   isExternal: false
   name: Promote(String,IEnumerable<XName>,IEnumerable<XName>)
   nameWithType: SqlWorkflowInstanceStore.Promote(String,IEnumerable<XName>,IEnumerable<XName>)
   fullName: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.Promote(String,IEnumerable<XName>,IEnumerable<XName>)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Collections.Generic.IEnumerable{System.Xml.Linq.XName}
   parent: System.Collections.Generic
   isExternal: true
   name: IEnumerable<XName>
   nameWithType: IEnumerable<XName>
   fullName: System.Collections.Generic.IEnumerable<System.Xml.Linq.XName>
-- uid: System.Collections.Generic.IEnumerable{System.Xml.Linq.XName}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IEnumerable<XName>
-  nameWithType: IEnumerable<XName>
-  fullName: System.Collections.Generic.IEnumerable<System.Xml.Linq.XName>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Xml.Linq.XName>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Xml.Linq.XName
+    name: XName
+    nameWithType: XName
+    fullName: XName
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.RunnableInstancesDetectionPeriod
   parent: System.Activities.DurableInstancing.SqlWorkflowInstanceStore
   isExternal: false
   name: RunnableInstancesDetectionPeriod
   nameWithType: SqlWorkflowInstanceStore.RunnableInstancesDetectionPeriod
   fullName: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.RunnableInstancesDetectionPeriod
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Activities.DurableInstancing.SqlWorkflowInstanceStore.#ctor*
   parent: System.Activities.DurableInstancing.SqlWorkflowInstanceStore
   isExternal: false

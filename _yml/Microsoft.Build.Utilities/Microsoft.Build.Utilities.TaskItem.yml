@@ -28,8 +28,8 @@ items:
   nameWithType: TaskItem
   fullName: Microsoft.Build.Utilities.TaskItem
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Defines a single item of the project as it is passed into a task.
+  remarks: "TaskItem objects do not exactly correspond to item elements in project files. If they did, then tasks would have access to data that was not explicitly passed into the task through the project file. This is not a security issue, but rather an issue with project file clarity and transparency.  \n  \n This class has to be sealed since the build engine instantiates its own copy of this type. If a third party were to extend this class, then the build engine will yield an undesired behavior."
   syntax:
     content: 'public sealed class TaskItem : MarshalByRefObject, Microsoft.Build.Framework.ITaskItem2'
   inheritance:
@@ -57,12 +57,13 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: This constructor enables this type to be COM-creatable.
   syntax:
     content: public TaskItem ();
     parameters: []
   overload: Microsoft.Build.Utilities.TaskItem.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -79,15 +80,15 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified source .
   syntax:
     content: public TaskItem (Microsoft.Build.Framework.ITaskItem sourceItem);
     parameters:
     - id: sourceItem
       type: Microsoft.Build.Framework.ITaskItem
-      description: To be added.
+      description: The item to copy.
   overload: Microsoft.Build.Utilities.TaskItem.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -104,15 +105,15 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified item-specification string.
   syntax:
     content: public TaskItem (string itemSpec);
     parameters:
     - id: itemSpec
       type: System.String
-      description: To be added.
+      description: The item specification.
   overload: Microsoft.Build.Utilities.TaskItem.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -129,18 +130,18 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified item-specification string and its metadata.
   syntax:
     content: public TaskItem (string itemSpec, System.Collections.IDictionary itemMetadata);
     parameters:
     - id: itemSpec
       type: System.String
-      description: To be added.
+      description: The item specification.
     - id: itemMetadata
       type: System.Collections.IDictionary
-      description: To be added.
+      description: The custom metadata for the item specification.
   overload: Microsoft.Build.Utilities.TaskItem.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -157,15 +158,16 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Clones the collection of custom metadata for the item specification.
+  remarks: This method does not include built-in metadata.
   syntax:
     content: public System.Collections.IDictionary CloneCustomMetadata ();
     parameters: []
     return:
       type: System.Collections.IDictionary
-      description: To be added.
+      description: An <xref:System.Collections.IDictionary> that represents a clone of the custom metadata.
   overload: Microsoft.Build.Utilities.TaskItem.CloneCustomMetadata*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -182,15 +184,16 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Copies the item-specification metadata to the specified destination task item.
+  remarks: "If the metadata already exists on the destination item, then it is not overwritten. The original metadata value supersedes the copied metadata value.  \n  \n This method does not copy the item specification to the destination task item."
   syntax:
     content: public void CopyMetadataTo (Microsoft.Build.Framework.ITaskItem destinationItem);
     parameters:
     - id: destinationItem
       type: Microsoft.Build.Framework.ITaskItem
-      description: To be added.
+      description: The item that this method will copy metadata to.
   overload: Microsoft.Build.Utilities.TaskItem.CopyMetadataTo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -207,18 +210,18 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the specified metadata on the item.
   syntax:
     content: public string GetMetadata (string metadataName);
     parameters:
     - id: metadataName
       type: System.String
-      description: To be added.
+      description: The name of the metadata to retrieve.
     return:
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> that represents the metadata value.
   overload: Microsoft.Build.Utilities.TaskItem.GetMetadata*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -235,15 +238,16 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, gives task items infinite lease time.
+  remarks: Otherwise, a limited lease of 5 minutes will result; and task instances can expire if they take a long time to process.
   syntax:
     content: public override object InitializeLifetimeService ();
     parameters: []
     return:
       type: System.Object
-      description: To be added.
+      description: to specify an infinite lifetime.
   overload: Microsoft.Build.Utilities.TaskItem.InitializeLifetimeService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -260,14 +264,15 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the item specification.
+  remarks: "The <xref:Microsoft.Build.Framework.ITaskItem.ItemSpec%2A> for the following item declaration in a project file is `File.cs`.  \n  \n```  \n<ItemGroup>  \n    <Compile Include=\"File.cs\"/>  \n</ItemGroup>  \n```"
   syntax:
     content: public string ItemSpec { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> that represents the item specification.
   overload: Microsoft.Build.Utilities.TaskItem.ItemSpec*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -284,14 +289,14 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of metadata set on the item.
   syntax:
     content: public int MetadataCount { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: An <xref:System.Int32> that represents the count of metadata set on the item.
   overload: Microsoft.Build.Utilities.TaskItem.MetadataCount*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -308,14 +313,14 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the names of all the metadata on the item.
   syntax:
     content: public System.Collections.ICollection MetadataNames { get; }
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> of metadata names.
   overload: Microsoft.Build.Utilities.TaskItem.MetadataNames*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -333,15 +338,15 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: implementation which returns a clone of the metadata on this object. Values returned are in their original escaped form.
   syntax:
     content: System.Collections.IDictionary ITaskItem2.CloneCustomMetadataEscaped ();
     parameters: []
     return:
       type: System.Collections.IDictionary
-      description: To be added.
+      description: Returns the cloned metadata, with values' escaping preserved.
   overload: Microsoft.Build.Utilities.TaskItem.Microsoft#Build#Framework#ITaskItem2#CloneCustomMetadataEscaped*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -359,14 +364,14 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: implementation which gets or sets the item include value.  For disk-based items this would be the file path.
   syntax:
     content: string Microsoft.Build.Framework.ITaskItem2.EvaluatedIncludeEscaped { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: Returns the item include value.
   overload: Microsoft.Build.Utilities.TaskItem.Microsoft#Build#Framework#ITaskItem2#EvaluatedIncludeEscaped*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -384,18 +389,18 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: implementation which allows the values of metadata on the item to be queried.
   syntax:
     content: string ITaskItem2.GetMetadataValueEscaped (string metadataName);
     parameters:
     - id: metadataName
       type: System.String
-      description: To be added.
+      description: The metadata to be queried
     return:
       type: System.String
-      description: To be added.
+      description: Returns the escaped metadata value.
   overload: Microsoft.Build.Utilities.TaskItem.Microsoft#Build#Framework#ITaskItem2#GetMetadataValueEscaped*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -413,18 +418,18 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: implementation which allows a piece of custom metadata to be set on the item. Assumes that the value passed in is unescaped, and escapes the value as necessary in order to maintain its value.
   syntax:
     content: void ITaskItem2.SetMetadataValueLiteral (string metadataName, string metadataValue);
     parameters:
     - id: metadataName
       type: System.String
-      description: To be added.
+      description: The metadata name.
     - id: metadataValue
       type: System.String
-      description: To be added.
+      description: The metadata value.
   overload: Microsoft.Build.Utilities.TaskItem.Microsoft#Build#Framework#ITaskItem2#SetMetadataValueLiteral*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -441,8 +446,6 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static string op_Explicit (Microsoft.Build.Utilities.TaskItem taskItemToCast);
     parameters:
@@ -453,6 +456,7 @@ items:
       type: System.String
       description: To be added.
   overload: Microsoft.Build.Utilities.TaskItem.op_Explicit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -469,15 +473,15 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the specified metadata on the item.
   syntax:
     content: public void RemoveMetadata (string metadataName);
     parameters:
     - id: metadataName
       type: System.String
-      description: To be added.
+      description: The name of metadata to remove.
   overload: Microsoft.Build.Utilities.TaskItem.RemoveMetadata*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -494,18 +498,18 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets or modifies the value of the specified metadata on the item.
   syntax:
     content: public void SetMetadata (string metadataName, string metadataValue);
     parameters:
     - id: metadataName
       type: System.String
-      description: To be added.
+      description: The name of metadata to set or modify.
     - id: metadataValue
       type: System.String
-      description: To be added.
+      description: The new value of metadata.
   overload: Microsoft.Build.Utilities.TaskItem.SetMetadata*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -522,15 +526,15 @@ items:
   assemblies:
   - Microsoft.Build.Utilities.v4.0
   namespace: Microsoft.Build.Utilities
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the item specification.
   syntax:
     content: public override string ToString ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> that represents the item specification.
   overload: Microsoft.Build.Utilities.TaskItem.ToString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -575,12 +579,6 @@ references:
   name: TaskItem(String,IDictionary)
   nameWithType: TaskItem.TaskItem(String,IDictionary)
   fullName: Microsoft.Build.Utilities.TaskItem.TaskItem(String,IDictionary)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Collections.IDictionary
   parent: System.Collections
   isExternal: true
@@ -593,42 +591,18 @@ references:
   name: CloneCustomMetadata()
   nameWithType: TaskItem.CloneCustomMetadata()
   fullName: Microsoft.Build.Utilities.TaskItem.CloneCustomMetadata()
-- uid: System.Collections.IDictionary
-  parent: System.Collections
-  isExternal: true
-  name: IDictionary
-  nameWithType: IDictionary
-  fullName: System.Collections.IDictionary
 - uid: Microsoft.Build.Utilities.TaskItem.CopyMetadataTo(Microsoft.Build.Framework.ITaskItem)
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false
   name: CopyMetadataTo(ITaskItem)
   nameWithType: TaskItem.CopyMetadataTo(ITaskItem)
   fullName: Microsoft.Build.Utilities.TaskItem.CopyMetadataTo(ITaskItem)
-- uid: Microsoft.Build.Framework.ITaskItem
-  parent: Microsoft.Build.Framework
-  isExternal: false
-  name: ITaskItem
-  nameWithType: ITaskItem
-  fullName: Microsoft.Build.Framework.ITaskItem
 - uid: Microsoft.Build.Utilities.TaskItem.GetMetadata(System.String)
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false
   name: GetMetadata(String)
   nameWithType: TaskItem.GetMetadata(String)
   fullName: Microsoft.Build.Utilities.TaskItem.GetMetadata(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Utilities.TaskItem.InitializeLifetimeService
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false
@@ -647,12 +621,6 @@ references:
   name: ItemSpec
   nameWithType: TaskItem.ItemSpec
   fullName: Microsoft.Build.Utilities.TaskItem.ItemSpec
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Utilities.TaskItem.MetadataCount
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false
@@ -683,72 +651,30 @@ references:
   name: Microsoft.Build.Framework.ITaskItem2.CloneCustomMetadataEscaped()
   nameWithType: TaskItem.Microsoft.Build.Framework.ITaskItem2.CloneCustomMetadataEscaped()
   fullName: Microsoft.Build.Utilities.TaskItem.Microsoft.Build.Framework.ITaskItem2.CloneCustomMetadataEscaped()
-- uid: System.Collections.IDictionary
-  parent: System.Collections
-  isExternal: true
-  name: IDictionary
-  nameWithType: IDictionary
-  fullName: System.Collections.IDictionary
 - uid: Microsoft.Build.Utilities.TaskItem.Microsoft#Build#Framework#ITaskItem2#EvaluatedIncludeEscaped
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false
   name: Microsoft.Build.Framework.ITaskItem2.EvaluatedIncludeEscaped
   nameWithType: TaskItem.Microsoft.Build.Framework.ITaskItem2.EvaluatedIncludeEscaped
   fullName: Microsoft.Build.Utilities.TaskItem.Microsoft.Build.Framework.ITaskItem2.EvaluatedIncludeEscaped
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Utilities.TaskItem.Microsoft#Build#Framework#ITaskItem2#GetMetadataValueEscaped(System.String)
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false
   name: Microsoft.Build.Framework.ITaskItem2.GetMetadataValueEscaped(String)
   nameWithType: TaskItem.Microsoft.Build.Framework.ITaskItem2.GetMetadataValueEscaped(String)
   fullName: Microsoft.Build.Utilities.TaskItem.Microsoft.Build.Framework.ITaskItem2.GetMetadataValueEscaped(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Utilities.TaskItem.Microsoft#Build#Framework#ITaskItem2#SetMetadataValueLiteral(System.String,System.String)
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false
   name: Microsoft.Build.Framework.ITaskItem2.SetMetadataValueLiteral(String,String)
   nameWithType: TaskItem.Microsoft.Build.Framework.ITaskItem2.SetMetadataValueLiteral(String,String)
   fullName: Microsoft.Build.Utilities.TaskItem.Microsoft.Build.Framework.ITaskItem2.SetMetadataValueLiteral(String,String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Utilities.TaskItem.op_Explicit(Microsoft.Build.Utilities.TaskItem to System.String)
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false
   name: op_Explicit(TaskItem)
   nameWithType: TaskItem.op_Explicit(TaskItem)
   fullName: Microsoft.Build.Utilities.TaskItem.op_Explicit(TaskItem)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Utilities.TaskItem
   parent: Microsoft.Build.Utilities
   isExternal: false
@@ -761,42 +687,18 @@ references:
   name: RemoveMetadata(String)
   nameWithType: TaskItem.RemoveMetadata(String)
   fullName: Microsoft.Build.Utilities.TaskItem.RemoveMetadata(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Utilities.TaskItem.SetMetadata(System.String,System.String)
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false
   name: SetMetadata(String,String)
   nameWithType: TaskItem.SetMetadata(String,String)
   fullName: Microsoft.Build.Utilities.TaskItem.SetMetadata(String,String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Utilities.TaskItem.ToString
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false
   name: ToString()
   nameWithType: TaskItem.ToString()
   fullName: Microsoft.Build.Utilities.TaskItem.ToString()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Utilities.TaskItem.#ctor*
   parent: Microsoft.Build.Utilities.TaskItem
   isExternal: false

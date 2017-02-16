@@ -16,8 +16,10 @@ items:
   nameWithType: CounterSet
   fullName: System.Diagnostics.PerformanceData.CounterSet
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Defines a set of logical counters.
+  remarks: Call the <xref:System.Diagnostics.PerformanceData.CounterSet.Dispose%2A> method when you are finished to remove your provider's registration and to release all managed and unmanaged resources.
+  example:
+  - For an example, see <xref:System.Diagnostics.PerformanceData>.
   syntax:
     content: 'public class CounterSet : IDisposable'
   inheritance:
@@ -41,21 +43,36 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.PerformanceData
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: Registers your provider. Calling the <xref:System.Diagnostics.PerformanceData.CounterSet.Dispose%2A> method removes the registration.
+  example:
+  - For an example, see <xref:System.Diagnostics.PerformanceData>.
   syntax:
     content: public CounterSet (Guid providerGuid, Guid counterSetGuid, System.Diagnostics.PerformanceData.CounterSetInstanceType instanceType);
     parameters:
     - id: providerGuid
       type: System.Guid
-      description: To be added.
+      description: Guid that uniquely identifies the provider of the counter data. Use the Guid specified in the manifest.
     - id: counterSetGuid
       type: System.Guid
-      description: To be added.
+      description: Guid that uniquely identifies the counter set for a provider. Use the Guid specified in the manifest.
     - id: instanceType
       type: System.Diagnostics.PerformanceData.CounterSetInstanceType
-      description: To be added.
+      description: Identifies the type of the counter set, for example, whether the counter set is a single or multiple instance counter set.
   overload: System.Diagnostics.PerformanceData.CounterSet.#ctor*
+  exceptions:
+  - type: System.InsufficientMemoryException
+    commentId: T:System.InsufficientMemoryException
+    description: Not enough memory is available to complete the operation.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: Not supported prior to Windows Vista.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: One of the parameters is NULL or not valid.
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An underlying Win32 function call failed.
   platform:
   - net-11
   - net-20
@@ -72,18 +89,25 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.PerformanceData
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a counter to the counter set by using the specified counter identifier and type.
+  remarks: You must add counters to the counter set before creating an instance of the counter set.
   syntax:
     content: public void AddCounter (int counterId, System.Diagnostics.PerformanceData.CounterType counterType);
     parameters:
     - id: counterId
       type: System.Int32
-      description: To be added.
+      description: Identifies the counter. Use the same value that you used in the manifest to define the counter.
     - id: counterType
       type: System.Diagnostics.PerformanceData.CounterType
-      description: To be added.
+      description: Identifies the counter type. The counter type determines how the counter data is calculated, averaged, and displayed.
   overload: System.Diagnostics.PerformanceData.CounterSet.AddCounter*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The counter identifier already exists in the set or is negative, or the counter type is NULL or not valid.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: You cannot add counters to the counter set after creating an instance of the counter set.
   platform:
   - net-11
   - net-20
@@ -100,21 +124,30 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.PerformanceData
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a counter to the counter set by using the specified counter identifier and type and a display name for the counter.
+  remarks: You must add counters to the counter set before creating an instance of the counter set.
+  example:
+  - For an example, see <xref:System.Diagnostics.PerformanceData>.
   syntax:
     content: public void AddCounter (int counterId, System.Diagnostics.PerformanceData.CounterType counterType, string counterName);
     parameters:
     - id: counterId
       type: System.Int32
-      description: To be added.
+      description: Identifies the counter. Use the same value that you used in the manifest to define the counter.
     - id: counterType
       type: System.Diagnostics.PerformanceData.CounterType
-      description: To be added.
+      description: Identifies the counter type. The counter type determines how the counter data is calculated, averaged, and displayed.
     - id: counterName
       type: System.String
-      description: To be added.
+      description: Name of the counter. You can use this name to index the counter in the counter set instance. (See <xref:System.Diagnostics.PerformanceData.CounterSetInstanceCounterDataSet.Item%2A?displayProperty=fullName>.)
   overload: System.Diagnostics.PerformanceData.CounterSet.AddCounter*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The counter identifier already exists in the set or is negative, or the counter type is NULL or not valid.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: You cannot add counters to the counter set after creating an instance of the counter set.
   platform:
   - net-11
   - net-20
@@ -131,18 +164,27 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.PerformanceData
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of the counter set.
+  remarks: "Call this method one time for single-instance counter sets and one or more times for multiple-instance counter sets.  \n  \n The provider determines when it creates an instance. If the counter data is more static, the provider can create an instance at initialization time. For example, the number of processors on a computer would be considered static, so a provider that provides counter data for processors could create an instance for each processor on the computer at initialization time. For counters that are more dynamic, such as disk or process counters, the providers would create the new instances in response to a new USB device being added or a new process being created.  \n  \n The provider should keep the counter data up-to-date at all times."
+  example:
+  - For an example, see <xref:System.Diagnostics.PerformanceData>.
   syntax:
     content: public System.Diagnostics.PerformanceData.CounterSetInstance CreateCounterSetInstance (string instanceName);
     parameters:
     - id: instanceName
       type: System.String
-      description: To be added.
+      description: Name of the instance. The name must be unique.
     return:
       type: System.Diagnostics.PerformanceData.CounterSetInstance
-      description: To be added.
+      description: An instance of the counter set which will contain the counter data.
   overload: System.Diagnostics.PerformanceData.CounterSet.CreateCounterSetInstance*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The instance name is NULL.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: You must add counters to the counter set before creating an instance of the counter set.
   platform:
   - net-11
   - net-20
@@ -159,12 +201,12 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.PerformanceData
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases all unmanaged resources used by this object.
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.Diagnostics.PerformanceData.CounterSet.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -181,15 +223,15 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.PerformanceData
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases all unmanaged resources used by this object and optionally release the managed resources.
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     if this was called from the Dispose method,  if called from the finalizer."
   overload: System.Diagnostics.PerformanceData.CounterSet.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -206,12 +248,13 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.PerformanceData
-  summary: To be added.
-  remarks: To be added.
+  summary: Frees resources before the object is reclaimed by garbage collection.
+  remarks: This method is called automatically by the runtime.
   syntax:
     content: ~CounterSet ();
     parameters: []
   overload: System.Diagnostics.PerformanceData.CounterSet.Finalize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -226,12 +269,6 @@ references:
   name: CounterSet(Guid,Guid,CounterSetInstanceType)
   nameWithType: CounterSet.CounterSet(Guid,Guid,CounterSetInstanceType)
   fullName: System.Diagnostics.PerformanceData.CounterSet.CounterSet(Guid,Guid,CounterSetInstanceType)
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Guid
   parent: System
   isExternal: true
@@ -268,18 +305,6 @@ references:
   name: AddCounter(Int32,CounterType,String)
   nameWithType: CounterSet.AddCounter(Int32,CounterType,String)
   fullName: System.Diagnostics.PerformanceData.CounterSet.AddCounter(Int32,CounterType,String)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Diagnostics.PerformanceData.CounterType
-  parent: System.Diagnostics.PerformanceData
-  isExternal: false
-  name: CounterType
-  nameWithType: CounterType
-  fullName: System.Diagnostics.PerformanceData.CounterType
 - uid: System.String
   parent: System
   isExternal: true
@@ -298,12 +323,6 @@ references:
   name: CounterSetInstance
   nameWithType: CounterSetInstance
   fullName: System.Diagnostics.PerformanceData.CounterSetInstance
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Diagnostics.PerformanceData.CounterSet.Dispose
   parent: System.Diagnostics.PerformanceData.CounterSet
   isExternal: false

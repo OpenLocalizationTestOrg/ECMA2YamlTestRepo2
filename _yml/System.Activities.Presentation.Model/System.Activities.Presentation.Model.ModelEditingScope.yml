@@ -19,8 +19,8 @@ items:
   nameWithType: ModelEditingScope
   fullName: System.Activities.Presentation.Model.ModelEditingScope
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a group of changes to the editing store. Change groups are transactional. The changes made under an editing scope can be committed or aborted as a unit.
+  remarks: When an editing scope is committed, the editing store takes all changes that occurred within it and applies them to the model. If the editing scope’s <xref:System.Activities.Presentation.Model.ModelEditingScope.Revert%2A> method is called, or the editing scope is disposed of before <xref:System.Activities.Presentation.Model.ModelEditingScope.Complete%2A> is called, the editing scope will instead reverse the changes made to the underlying objects, reapplying state from the editing store. This provides a solid basis for an undo mechanism.
   syntax:
     content: 'public abstract class ModelEditingScope : IDisposable'
   inheritance:
@@ -44,12 +44,12 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation.Model
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new .
   syntax:
     content: protected ModelEditingScope ();
     parameters: []
   overload: System.Activities.Presentation.Model.ModelEditingScope.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -66,15 +66,15 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation.Model
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether <xref:System.Activities.Presentation.Model.ModelEditingScope.OnComplete%2A> should be called, or whether the change should instead be reverted. Reasons for reverting might include a file cannot be checked out of a source control system for modification.
   syntax:
     content: protected abstract bool CanComplete ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if completion can occur;  if the change should instead revert.
   overload: System.Activities.Presentation.Model.ModelEditingScope.CanComplete*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -91,12 +91,15 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation.Model
-  summary: To be added.
-  remarks: To be added.
+  summary: Completes the editing scope by calling the <xref:System.Activities.Presentation.Model.ModelEditingScope.OnComplete%2A> method.
   syntax:
     content: public void Complete ();
     parameters: []
   overload: System.Activities.Presentation.Model.ModelEditingScope.Complete*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The editing scope has already been reverted or completed.
   platform:
   - net-11
   - net-20
@@ -113,14 +116,14 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation.Model
-  summary: To be added.
-  remarks: To be added.
+  summary: Describes the group of changes. It can be changed anytime before the changes are committed.
   syntax:
     content: public string Description { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: Returnsa <xref:System.String> that describes the changes.
   overload: System.Activities.Presentation.Model.ModelEditingScope.Description*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -137,12 +140,13 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation.Model
-  summary: To be added.
-  remarks: To be added.
+  summary: Disposes of this object by aborting changes unless the editing scope has already been completed or reverted.
+  remarks: If either the editing scope has completed or it has been reverted previously, then calling this method does nothing. This method calls <xref:System.Activities.Presentation.Model.ModelEditingScope.Dispose%2A> with the input parameter set to `true`.
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.Activities.Presentation.Model.ModelEditingScope.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -159,15 +163,16 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation.Model
-  summary: To be added.
-  remarks: To be added.
+  summary: Disposes of this object by aborting changes.
+  remarks: Calls <xref:System.Activities.Presentation.Model.ModelEditingScope.Revert%2A> if `disposing` is set to `true`.
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: Determines whether the changes should be reverted as part of an undo operation or because the object is being finalized.
   overload: System.Activities.Presentation.Model.ModelEditingScope.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -184,12 +189,12 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation.Model
-  summary: To be added.
-  remarks: To be added.
+  summary: Performs the actual complete of the editing scope.
   syntax:
     content: protected abstract void OnComplete ();
     parameters: []
   overload: System.Activities.Presentation.Model.ModelEditingScope.OnComplete*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -206,18 +211,19 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation.Model
-  summary: To be added.
-  remarks: To be added.
+  summary: Handles an exception.
+  remarks: The <xref:System.Activities.Presentation.Model.ModelEditingScope.Complete%2A> and <xref:System.Activities.Presentation.Model.ModelEditingScope.Revert%2A> methods call this method to handle exceptions.
   syntax:
     content: protected abstract bool OnException (Exception exception);
     parameters:
     - id: exception
       type: System.Exception
-      description: To be added.
+      description: The exception to handle.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the exception is handled; otherwise, .
   overload: System.Activities.Presentation.Model.ModelEditingScope.OnException*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -234,15 +240,15 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation.Model
-  summary: To be added.
-  remarks: To be added.
+  summary: Performs the actual revert of the editing scope.
   syntax:
     content: protected abstract void OnRevert (bool finalizing);
     parameters:
     - id: finalizing
       type: System.Boolean
-      description: To be added.
+      description: Determines whether the abort is occurring because the object is being finalized. Some undo systems might attempt to abort in this case, while others might abandon the change and record it as a reactive undo operation.
   overload: System.Activities.Presentation.Model.ModelEditingScope.OnRevert*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -259,12 +265,16 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation.Model
-  summary: To be added.
-  remarks: To be added.
+  summary: Abandons the changes made during the editing scope.
+  remarks: This method calls <xref:System.Activities.Presentation.Model.ModelEditingScope.OnRevert%2A> with the input parameter set to `false`.
   syntax:
     content: public void Revert ();
     parameters: []
   overload: System.Activities.Presentation.Model.ModelEditingScope.Revert*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The group of changes has already been committed.
   platform:
   - net-11
   - net-20
@@ -321,12 +331,6 @@ references:
   name: Dispose(Boolean)
   nameWithType: ModelEditingScope.Dispose(Boolean)
   fullName: System.Activities.Presentation.Model.ModelEditingScope.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Activities.Presentation.Model.ModelEditingScope.OnComplete
   parent: System.Activities.Presentation.Model.ModelEditingScope
   isExternal: false
@@ -339,12 +343,6 @@ references:
   name: OnException(Exception)
   nameWithType: ModelEditingScope.OnException(Exception)
   fullName: System.Activities.Presentation.Model.ModelEditingScope.OnException(Exception)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Exception
   parent: System
   isExternal: true
@@ -357,12 +355,6 @@ references:
   name: OnRevert(Boolean)
   nameWithType: ModelEditingScope.OnRevert(Boolean)
   fullName: System.Activities.Presentation.Model.ModelEditingScope.OnRevert(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Activities.Presentation.Model.ModelEditingScope.Revert
   parent: System.Activities.Presentation.Model.ModelEditingScope
   isExternal: false

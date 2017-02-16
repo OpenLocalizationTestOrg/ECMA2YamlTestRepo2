@@ -19,8 +19,10 @@ items:
   nameWithType: IDbConnection
   fullName: System.Data.IDbConnection
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents an open connection to a data source, and is implemented by .NET Framework data providers that access relational databases.
+  remarks: "The IDbConnection interface enables an inheriting class to implement a Connection class, which represents a unique session with a data source (for example, a network connection to a server). For more information about Connection classes, see [Connecting to a Data Source](../Topic/Connecting%20to%20a%20Data%20Source%20in%20ADO.NET.md).  \n  \n An application does not create an instance of the IDbConnection interface directly, but creates an instance of a class that inherits IDbConnection.  \n  \n Classes that inherit IDbConnection must implement all inherited members, and typically define additional members to add provider-specific functionality. For example, the IDbConnection interface defines the <xref:System.Data.IDbConnection.ConnectionTimeout%2A> property. In turn, the <xref:System.Data.SqlClient.SqlConnection> class inherits this property, and also defines the <xref:System.Data.SqlClient.SqlConnection.PacketSize%2A> property."
+  example:
+  - "The following example creates instances of the derived classes, <xref:System.Data.SqlClient.SqlCommand> and <xref:System.Data.SqlClient.SqlConnection>. The <xref:System.Data.SqlClient.SqlConnection> is opened and set as the <xref:System.Data.SqlClient.SqlCommand.Connection%2A> for the <xref:System.Data.SqlClient.SqlCommand>. The example then calls <xref:System.Data.SqlClient.SqlCommand.ExecuteNonQuery%2A>, and closes the connection. To accomplish this, the <xref:System.Data.SqlClient.SqlCommand.ExecuteNonQuery%2A> is passed a connection string and a query string that is a Transact-SQL INSERT statement.  \n  \n [!code-cs[Classic WebData SqlConnection Example#1](../../add/codesnippet/CSharp/t-system.data.idbconnect_1.cs)]\n [!code-vb[Classic WebData SqlConnection Example#1](../../add/codesnippet/VisualBasic/t-system.data.idbconnect_1.vb)]"
   syntax:
     content: 'public interface IDbConnection : IDisposable'
   implements:
@@ -41,15 +43,16 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins a database transaction.
+  remarks: Once the transaction has completed, you must explicitly commit or roll back the transaction by using the <xref:System.Data.IDbTransaction.Commit%2A> or <xref:System.Data.IDbTransaction.Rollback%2A> methods.
   syntax:
     content: public System.Data.IDbTransaction BeginTransaction ();
     parameters: []
     return:
       type: System.Data.IDbTransaction
-      description: To be added.
+      description: An object representing the new transaction.
   overload: System.Data.IDbConnection.BeginTransaction*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -66,18 +69,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins a database transaction with the specified  value.
+  remarks: Once the transaction has completed, you must explicitly commit or roll back the transaction using the <xref:System.Data.IDbTransaction.Commit%2A> or <xref:System.Data.IDbTransaction.Rollback%2A> methods.
   syntax:
     content: public System.Data.IDbTransaction BeginTransaction (System.Data.IsolationLevel il);
     parameters:
     - id: il
       type: System.Data.IsolationLevel
-      description: To be added.
+      description: One of the  values.
     return:
       type: System.Data.IDbTransaction
-      description: To be added.
+      description: An object representing the new transaction.
   overload: System.Data.IDbConnection.BeginTransaction*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -94,15 +98,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data
-  summary: To be added.
-  remarks: To be added.
+  summary: Changes the current database for an open  object.
   syntax:
     content: public void ChangeDatabase (string databaseName);
     parameters:
     - id: databaseName
       type: System.String
-      description: To be added.
+      description: The name of the database to use in place of the current database.
   overload: System.Data.IDbConnection.ChangeDatabase*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -119,12 +123,13 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data
-  summary: To be added.
-  remarks: To be added.
+  summary: Closes the connection to the database.
+  remarks: "The Close method rolls back any pending transactions. It then releases the connection to the connection pool, or closes the connection if connection pooling is disabled.  \n  \n An application can call `Close` more than one time without generating an exception."
   syntax:
     content: public void Close ();
     parameters: []
   overload: System.Data.IDbConnection.Close*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -141,14 +146,17 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the string used to open a database.
+  remarks: The `ConnectionString` property can be set only while the connection is closed.
+  example:
+  - "The following example creates an instance of a derived class, <xref:System.Data.OleDb.OleDbConnection>, sets its <xref:System.Data.OleDb.OleDbConnection.ConnectionString%2A>, and displays its <xref:System.Data.OleDb.OleDbConnection.State%2A>.  \n  \n [!code-cs[Classic WebData IDbConnection.ConnectionString Example#1](../../add/codesnippet/CSharp/p-system.data.idbconnect_0_1.cs)]\n [!code-vb[Classic WebData IDbConnection.ConnectionString Example#1](../../add/codesnippet/VisualBasic/p-system.data.idbconnect_0_1.vb)]"
   syntax:
     content: public string ConnectionString { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: A string containing connection settings.
   overload: System.Data.IDbConnection.ConnectionString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -165,14 +173,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the time to wait while trying to establish a connection before terminating the attempt and generating an error.
+  remarks: A value of 0 indicates no limit to the wait time, rather than no wait time, and should be avoided in a <xref:System.Data.IDbConnection.ConnectionString%2A> because it would cause the connection attempt to wait indefinitely.
   syntax:
     content: public int ConnectionTimeout { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The time (in seconds) to wait for a connection to open. The default value is 15 seconds.
   overload: System.Data.IDbConnection.ConnectionTimeout*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -189,15 +198,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates and returns a Command object associated with the connection.
   syntax:
     content: public System.Data.IDbCommand CreateCommand ();
     parameters: []
     return:
       type: System.Data.IDbCommand
-      description: To be added.
+      description: A Command object associated with the connection.
   overload: System.Data.IDbConnection.CreateCommand*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -214,14 +223,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the name of the current database or the database to be used after a connection is opened.
+  remarks: The `Database` property can be dynamically updated by using the <xref:System.Data.IDbConnection.ChangeDatabase%2A> method or by passing an SQL statement using one of the Execute methods. (Initially the database is set by means of the connection string.) If you change the current database using an SQL statement or the `ChangeDatabase` method, an informational message is sent and then the property is updated.
   syntax:
     content: public string Database { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The name of the current database or the name of the database to be used once a connection is open. The default value is an empty string.
   overload: System.Data.IDbConnection.Database*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -238,12 +248,12 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a database connection with the settings specified by the  property of the provider-specific Connection object.
   syntax:
     content: public void Open ();
     parameters: []
   overload: System.Data.IDbConnection.Open*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -260,14 +270,17 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the current state of the connection.
+  remarks: "The allowed state changes are:  \n  \n-   From `Closed` to `Open`, using the `Open` method of the Connection object.  \n  \n-   From `Open` to `Closed`, using either the `Close` method or the `Dispose` method of the Connection object."
+  example:
+  - "The following example creates an instance of a derived class, <xref:System.Data.OleDb.OleDbConnection>, sets its <xref:System.Data.IDbConnection.ConnectionString%2A>, and displays its State.  \n  \n [!code-cs[Classic WebData IDbConnection.ConnectionString Example#1](../../add/codesnippet/CSharp/p-system.data.idbconnect_1_1.cs)]\n [!code-vb[Classic WebData IDbConnection.ConnectionString Example#1](../../add/codesnippet/VisualBasic/p-system.data.idbconnect_1_1.vb)]"
   syntax:
     content: public System.Data.ConnectionState State { get; }
     return:
       type: System.Data.ConnectionState
-      description: To be added.
+      description: One of the  values.
   overload: System.Data.IDbConnection.State*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -291,12 +304,6 @@ references:
   name: BeginTransaction(IsolationLevel)
   nameWithType: IDbConnection.BeginTransaction(IsolationLevel)
   fullName: System.Data.IDbConnection.BeginTransaction(IsolationLevel)
-- uid: System.Data.IDbTransaction
-  parent: System.Data
-  isExternal: false
-  name: IDbTransaction
-  nameWithType: IDbTransaction
-  fullName: System.Data.IDbTransaction
 - uid: System.Data.IsolationLevel
   parent: System.Data
   isExternal: false
@@ -327,12 +334,6 @@ references:
   name: ConnectionString
   nameWithType: IDbConnection.ConnectionString
   fullName: System.Data.IDbConnection.ConnectionString
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Data.IDbConnection.ConnectionTimeout
   parent: System.Data.IDbConnection
   isExternal: false
@@ -363,12 +364,6 @@ references:
   name: Database
   nameWithType: IDbConnection.Database
   fullName: System.Data.IDbConnection.Database
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Data.IDbConnection.Open
   parent: System.Data.IDbConnection
   isExternal: false

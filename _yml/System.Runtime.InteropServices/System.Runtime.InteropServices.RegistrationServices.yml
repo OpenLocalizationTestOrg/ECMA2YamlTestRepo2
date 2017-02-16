@@ -20,8 +20,8 @@ items:
   nameWithType: RegistrationServices
   fullName: System.Runtime.InteropServices.RegistrationServices
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a set of services for registering and unregistering managed assemblies for use from COM.
+  remarks: "Registration is needed when the objects within an assembly are being used by COM clients. The [Regasm.exe (Assembly Registration Tool)](../Topic/Regasm.exe%20\\(Assembly%20Registration%20Tool\\).md) and [!INCLUDE[vsprvsext](../../add/includes/vsprvsext-md.md)] use methods exposed by the RegistrationServices class to add or remove COM-enabling registry entries for managed assemblies.  \n  \n You can use the following methods to assist you in preparing a registration file:  \n  \n-   <xref:System.Runtime.InteropServices.RegistrationServices.GetManagedCategoryGuid%2A>  \n  \n-   <xref:System.Runtime.InteropServices.RegistrationServices.GetProgIdForType%2A>  \n  \n-   <xref:System.Runtime.InteropServices.RegistrationServices.GetRegistrableTypesInAssembly%2A>  \n  \n-   <xref:System.Runtime.InteropServices.RegistrationServices.TypeRepresentsComType%2A>  \n  \n Although these methods help in gathering information to be used in a registration file, they do not actually produce a registration file. Instead, you can use the [Regasm.exe (Assembly Registration Tool)](../Topic/Regasm.exe%20\\(Assembly%20Registration%20Tool\\).md) tool with the `/regfile` option to perform this task. RegistrationServices methods cannot export and register a type library. To export and register a type library, you can use the [Regasm.exe (Assembly Registration Tool)](../Topic/Regasm.exe%20\\(Assembly%20Registration%20Tool\\).md) tool and the [Tlbexp.exe (Type Library Exporter)](../Topic/Tlbexp.exe%20\\(Type%20Library%20Exporter\\).md) tool."
   syntax:
     content: >-
       [System.Runtime.InteropServices.ClassInterface(System.Runtime.InteropServices.ClassInterfaceType.None)]
@@ -52,12 +52,12 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public RegistrationServices ();
     parameters: []
   overload: System.Runtime.InteropServices.RegistrationServices.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -74,15 +74,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the GUID of the COM category that contains the managed classes.
   syntax:
     content: public virtual Guid GetManagedCategoryGuid ();
     parameters: []
     return:
       type: System.Guid
-      description: To be added.
+      description: The GUID of the COM category that contains the managed classes.
   overload: System.Runtime.InteropServices.RegistrationServices.GetManagedCategoryGuid*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -99,18 +99,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the COM ProgID for the specified type.
   syntax:
     content: public virtual string GetProgIdForType (Type type);
     parameters:
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type corresponding to the ProgID that is being requested.
     return:
       type: System.String
-      description: To be added.
+      description: The ProgID for the specified type.
   overload: System.Runtime.InteropServices.RegistrationServices.GetProgIdForType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -127,18 +127,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a list of classes in an assembly that would be registered by a call to <xref:System.Runtime.InteropServices.RegistrationServices.RegisterAssembly%2A>.
   syntax:
     content: public virtual Type[] GetRegistrableTypesInAssembly (System.Reflection.Assembly assembly);
     parameters:
     - id: assembly
       type: System.Reflection.Assembly
-      description: To be added.
+      description: The assembly to search for classes.
     return:
       type: System.Type[]
-      description: To be added.
+      description: A <xref:System.Type> array containing a list of classes in assembly.
   overload: System.Runtime.InteropServices.RegistrationServices.GetRegistrableTypesInAssembly*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The assembly parameter is .
   platform:
   - net-11
   - net-20
@@ -155,21 +158,31 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers the classes in a managed assembly to enable creation from COM.
+  remarks: "`RegisterAssembly` adds the appropriate registry entries for the types in the specified assembly. This method also calls any registration functions found in the assembly.  \n  \n Use <xref:System.Reflection.Assembly.Load%2A?displayProperty=fullName> to get an assembly."
   syntax:
     content: public virtual bool RegisterAssembly (System.Reflection.Assembly assembly, System.Runtime.InteropServices.AssemblyRegistrationFlags flags);
     parameters:
     - id: assembly
       type: System.Reflection.Assembly
-      description: To be added.
+      description: The assembly to be registered.
     - id: flags
       type: System.Runtime.InteropServices.AssemblyRegistrationFlags
-      description: To be added.
+      description: An  value indicating any special settings used when registering `assembly`.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if assembly contains types that were successfully registered; otherwise  if the assembly contains no eligible types.
   overload: System.Runtime.InteropServices.RegistrationServices.RegisterAssembly*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    assembly is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The full name of assembly is .  \n  \n -or-  \n  \n A method marked with  is not .  \n  \n -or-  \n  \n There is more than one method marked with  at a given level of the hierarchy.  \n  \n -or-  \n  \n The signature of the method marked with  is not valid."
+  - type: System.Reflection.TargetInvocationException
+    commentId: T:System.Reflection.TargetInvocationException
+    description: A user-defined custom registration function (marked with the  attribute) throws an exception.
   platform:
   - net-11
   - net-20
@@ -186,18 +199,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers the specified type with COM using the specified GUID.
+  remarks: "This method is equivalent to calling `CoRegisterClassObject` in COM. The RegisterTypeForComClients method is not atomic and can cause unpredictable results when used in a multithreaded context.  \n  \n In version 2.0 and later, use the <xref:System.Runtime.InteropServices.RegistrationServices.UnregisterTypeForComClients%2A> method to unregister a type in COM.  \n  \n Note that using platform invoke to call the unmanaged `CoRegisterClassObject` and  `CoDisconnectObject` methods for registration and unregistration of COM objects is not supported."
   syntax:
     content: public virtual void RegisterTypeForComClients (Type type, ref Guid g);
     parameters:
     - id: type
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> to be registered for use from COM.
     - id: g
       type: System.Guid
-      description: To be added.
+      description: The <xref:System.Guid> used to register the specified type.
   overload: System.Runtime.InteropServices.RegistrationServices.RegisterTypeForComClients*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The type parameter is .
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The type parameter cannot be created.
   platform:
   - net-11
   - net-20
@@ -214,24 +234,31 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers the specified type with COM using the specified execution context and connection type.
+  remarks: "This method is equivalent to calling `CoRegisterClassObject` in COM. The RegisterTypeForComClients method is not atomic and can cause unpredictable results when used in a multithreaded context.  \n  \n In the .NET Framework version 2.0 and later, use the <xref:System.Runtime.InteropServices.RegistrationServices.UnregisterTypeForComClients%2A> method to unregister a type in COM.  \n  \n Note that using platform invoke to call the unmanaged `CoRegisterClassObject` and  `CoDisconnectObject` methods for registration and unregistration of COM objects is not supported."
   syntax:
     content: public virtual int RegisterTypeForComClients (Type type, System.Runtime.InteropServices.RegistrationClassContext classContext, System.Runtime.InteropServices.RegistrationConnectionType flags);
     parameters:
     - id: type
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> object to register for use from COM.
     - id: classContext
       type: System.Runtime.InteropServices.RegistrationClassContext
-      description: To be added.
+      description: One of the  values that indicates the context in which the executable code will be run.
     - id: flags
       type: System.Runtime.InteropServices.RegistrationConnectionType
-      description: To be added.
+      description: One of the  values that specifies how connections are made to the class object.
     return:
       type: System.Int32
-      description: To be added.
+      description: An integer that represents a cookie value.
   overload: System.Runtime.InteropServices.RegistrationServices.RegisterTypeForComClients*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The type parameter is .
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The type parameter cannot be created.
   platform:
   - net-11
   - net-20
@@ -248,18 +275,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether a type is marked with the <xref:System.Runtime.InteropServices.ComImportAttribute>, or derives from a type marked with the <xref:System.Runtime.InteropServices.ComImportAttribute> and shares the same GUID as the parent.
   syntax:
     content: public virtual bool TypeRepresentsComType (Type type);
     parameters:
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type to check for being a COM type.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a type is marked with the <xref:System.Runtime.InteropServices.ComImportAttribute>, or derives from a type marked with the <xref:System.Runtime.InteropServices.ComImportAttribute> and shares the same GUID as the parent; otherwise .
   overload: System.Runtime.InteropServices.RegistrationServices.TypeRepresentsComType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -276,18 +303,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the specified type requires registration.
   syntax:
     content: public virtual bool TypeRequiresRegistration (Type type);
     parameters:
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type to check for COM registration requirements.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the type must be registered for use from COM; otherwise .
   overload: System.Runtime.InteropServices.RegistrationServices.TypeRequiresRegistration*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -304,18 +331,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Unregisters the classes in a managed assembly.
+  remarks: '`UnregisterAssembly` removes the registry entries for the types in the specified assembly previously added by <xref:System.Runtime.InteropServices.RegistrationServices.RegisterAssembly%2A>. This method also calls any unregistration functions found in the assembly.'
   syntax:
     content: public virtual bool UnregisterAssembly (System.Reflection.Assembly assembly);
     parameters:
     - id: assembly
       type: System.Reflection.Assembly
-      description: To be added.
+      description: The assembly to be unregistered.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if assembly contains types that were successfully unregistered; otherwise  if the assembly contains no eligible types.
   overload: System.Runtime.InteropServices.RegistrationServices.UnregisterAssembly*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    assembly is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The full name of assembly is .  \n  \n -or-  \n  \n A method marked with  is not .  \n  \n -or-  \n  \n There is more than one method marked with  at a given level of the hierarchy.  \n  \n -or-  \n  \n The signature of the method marked with  is not valid."
+  - type: System.Reflection.TargetInvocationException
+    commentId: T:System.Reflection.TargetInvocationException
+    description: A user-defined custom unregistration function (marked with the  attribute) throws an exception.
   platform:
   - net-11
   - net-20
@@ -332,15 +369,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.InteropServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes references to a type registered with the <xref:System.Runtime.InteropServices.RegistrationServices.RegisterTypeForComClients%2A> method.
+  remarks: Note that using platform invoke to call the unmanaged `CoRegisterClassObject` and  `CoDisconnectObject` methods to register and unregister COM objects is not supported.
   syntax:
     content: public virtual void UnregisterTypeForComClients (int cookie);
     parameters:
     - id: cookie
       type: System.Int32
-      description: To be added.
+      description: The cookie value returned by a previous call to the <xref:System.Runtime.InteropServices.RegistrationServices.RegisterTypeForComClients%2A> method overload.
   overload: System.Runtime.InteropServices.RegistrationServices.UnregisterTypeForComClients*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -391,12 +429,20 @@ references:
   name: GetRegistrableTypesInAssembly(Assembly)
   nameWithType: RegistrationServices.GetRegistrableTypesInAssembly(Assembly)
   fullName: System.Runtime.InteropServices.RegistrationServices.GetRegistrableTypesInAssembly(Assembly)
-- uid: System.Type
+- uid: System.Type[]
   parent: System
   isExternal: true
   name: Type
   nameWithType: Type
   fullName: System.Type[]
+  spec.csharp:
+  - uid: System.Type
+    name: Type
+    nameWithType: Type
+    fullName: Type[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.Assembly
   parent: System.Reflection
   isExternal: true
@@ -415,12 +461,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Reflection.Assembly
-  parent: System.Reflection
-  isExternal: true
-  name: Assembly
-  nameWithType: Assembly
-  fullName: System.Reflection.Assembly
 - uid: System.Runtime.InteropServices.AssemblyRegistrationFlags
   parent: System.Runtime.InteropServices
   isExternal: false
@@ -433,18 +473,6 @@ references:
   name: RegisterTypeForComClients(Type,Guid)
   nameWithType: RegistrationServices.RegisterTypeForComClients(Type,Guid)
   fullName: System.Runtime.InteropServices.RegistrationServices.RegisterTypeForComClients(Type,Guid)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Runtime.InteropServices.RegistrationServices.RegisterTypeForComClients(System.Type,System.Runtime.InteropServices.RegistrationClassContext,System.Runtime.InteropServices.RegistrationConnectionType)
   parent: System.Runtime.InteropServices.RegistrationServices
   isExternal: false
@@ -457,12 +485,6 @@ references:
   name: Int32
   nameWithType: Int32
   fullName: System.Int32
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Runtime.InteropServices.RegistrationClassContext
   parent: System.Runtime.InteropServices
   isExternal: false
@@ -481,66 +503,24 @@ references:
   name: TypeRepresentsComType(Type)
   nameWithType: RegistrationServices.TypeRepresentsComType(Type)
   fullName: System.Runtime.InteropServices.RegistrationServices.TypeRepresentsComType(Type)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Runtime.InteropServices.RegistrationServices.TypeRequiresRegistration(System.Type)
   parent: System.Runtime.InteropServices.RegistrationServices
   isExternal: false
   name: TypeRequiresRegistration(Type)
   nameWithType: RegistrationServices.TypeRequiresRegistration(Type)
   fullName: System.Runtime.InteropServices.RegistrationServices.TypeRequiresRegistration(Type)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Runtime.InteropServices.RegistrationServices.UnregisterAssembly(System.Reflection.Assembly)
   parent: System.Runtime.InteropServices.RegistrationServices
   isExternal: false
   name: UnregisterAssembly(Assembly)
   nameWithType: RegistrationServices.UnregisterAssembly(Assembly)
   fullName: System.Runtime.InteropServices.RegistrationServices.UnregisterAssembly(Assembly)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Reflection.Assembly
-  parent: System.Reflection
-  isExternal: true
-  name: Assembly
-  nameWithType: Assembly
-  fullName: System.Reflection.Assembly
 - uid: System.Runtime.InteropServices.RegistrationServices.UnregisterTypeForComClients(System.Int32)
   parent: System.Runtime.InteropServices.RegistrationServices
   isExternal: false
   name: UnregisterTypeForComClients(Int32)
   nameWithType: RegistrationServices.UnregisterTypeForComClients(Int32)
   fullName: System.Runtime.InteropServices.RegistrationServices.UnregisterTypeForComClients(Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Runtime.InteropServices.RegistrationServices.#ctor*
   parent: System.Runtime.InteropServices.RegistrationServices
   isExternal: false

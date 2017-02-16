@@ -15,8 +15,10 @@ items:
   nameWithType: OdbcTransaction
   fullName: System.Data.Odbc.OdbcTransaction
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents an SQL transaction to be made at a data source. This class cannot be inherited.
+  remarks: The application creates an OdbcTransaction object by calling <xref:System.Data.Odbc.OdbcConnection.BeginTransaction%2A> on the <xref:System.Data.Odbc.OdbcConnection> object. All subsequent operations associated with the transaction (for example, committing or aborting the transaction) are performed on the OdbcTransaction object.
+  example:
+  - "The following example creates an <xref:System.Data.Odbc.OdbcConnection> and an OdbcTransaction. It also demonstrates how to use the <xref:System.Data.Odbc.OdbcConnection.BeginTransaction%2A>, <xref:System.Data.Odbc.OdbcTransaction.Commit%2A>, and <xref:System.Data.Odbc.OdbcTransaction.Rollback%2A> methods.  \n  \n [!code-cs[Classic WebData OdbcConnection.BeginTransaction#1](../../add/codesnippet/CSharp/t-system.data.odbc.odbct_1.cs)]\n [!code-vb[Classic WebData OdbcConnection.BeginTransaction#1](../../add/codesnippet/VisualBasic/t-system.data.odbc.odbct_1.vb)]"
   syntax:
     content: 'public sealed class OdbcTransaction : System.Data.Common.DbTransaction'
   inheritance:
@@ -47,12 +49,21 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Commits the database transaction.
+  remarks: ''
+  example:
+  - "The following example creates an <xref:System.Data.Odbc.OdbcConnection> and an <xref:System.Data.Odbc.OdbcTransaction>. It also demonstrates how to use the <xref:System.Data.Odbc.OdbcConnection.BeginTransaction%2A>, Commit, and <xref:System.Data.Odbc.OdbcTransaction.Rollback%2A> methods.  \n  \n [!code-cs[Classic WebData OdbcConnection.BeginTransaction1#1](../../add/codesnippet/CSharp/m-system.data.odbc.odbct_1_1.cs)]\n [!code-vb[Classic WebData OdbcConnection.BeginTransaction1#1](../../add/codesnippet/VisualBasic/m-system.data.odbc.odbct_1_1.vb)]"
   syntax:
     content: public override void Commit ();
     parameters: []
   overload: System.Data.Odbc.OdbcTransaction.Commit*
+  exceptions:
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: An error occurred while trying to commit the transaction.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The transaction has already been committed or rolled back.  \n  \n -or-  \n  \n The connection is broken."
   platform:
   - net-11
   - net-20
@@ -69,14 +80,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object associated with the transaction, or  if the transaction is no longer valid.
+  remarks: A single application may have multiple database connections, each with zero or more transactions. This property lets you determine the connection object associated with a particular transaction created by <xref:System.Data.Odbc.OdbcConnection.BeginTransaction%2A>.
   syntax:
     content: public System.Data.Odbc.OdbcConnection Connection { get; }
     return:
       type: System.Data.Odbc.OdbcConnection
-      description: To be added.
+      description: The  object associated with the transaction.
   overload: System.Data.Odbc.OdbcTransaction.Connection*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -93,14 +105,13 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override System.Data.Common.DbConnection DbConnection { get; }
     return:
       type: System.Data.Common.DbConnection
       description: To be added.
   overload: System.Data.Odbc.OdbcTransaction.DbConnection*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -117,8 +128,6 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
@@ -126,6 +135,7 @@ items:
       type: System.Boolean
       description: To be added.
   overload: System.Data.Odbc.OdbcTransaction.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -142,14 +152,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies the  for this transaction.
+  remarks: Parallel transactions are not supported. Therefore, the <xref:System.Data.IsolationLevel> applies to the whole transaction.
   syntax:
     content: public override System.Data.IsolationLevel IsolationLevel { get; }
     return:
       type: System.Data.IsolationLevel
-      description: To be added.
+      description: The  for this transaction. The default depends on the underlying ODBC driver.
   overload: System.Data.Odbc.OdbcTransaction.IsolationLevel*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -166,12 +177,21 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Odbc
-  summary: To be added.
-  remarks: To be added.
+  summary: Rolls back a transaction from a pending state.
+  remarks: The transaction can be rolled back only from a pending state (after <xref:System.Data.Odbc.OdbcConnection.BeginTransaction%2A> has been called, but before <xref:System.Data.Odbc.OdbcTransaction.Commit%2A> is called). The transaction will be rolled back in the event it is disposed before `Commit` or `Rollback` is called.
+  example:
+  - "The following example creates an <xref:System.Data.Odbc.OdbcConnection> and an <xref:System.Data.Odbc.OdbcTransaction>. It also demonstrates how to use the <xref:System.Data.Odbc.OdbcConnection.BeginTransaction%2A>, <xref:System.Data.Odbc.OdbcTransaction.Commit%2A>, and Rollback methods.  \n  \n [!code-cs[Classic WebData OdbcConnection.BeginTransaction1#1](../../add/codesnippet/CSharp/m-system.data.odbc.odbct_0_1.cs)]\n [!code-vb[Classic WebData OdbcConnection.BeginTransaction1#1](../../add/codesnippet/VisualBasic/m-system.data.odbc.odbct_0_1.vb)]"
   syntax:
     content: public override void Rollback ();
     parameters: []
   overload: System.Data.Odbc.OdbcTransaction.Rollback*
+  exceptions:
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: An error occurred while trying to commit the transaction.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The transaction has already been committed or rolled back.  \n  \n -or-  \n  \n The connection is broken."
   platform:
   - net-11
   - net-20

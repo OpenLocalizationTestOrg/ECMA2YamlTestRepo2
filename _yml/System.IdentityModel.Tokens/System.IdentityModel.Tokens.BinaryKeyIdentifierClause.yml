@@ -16,8 +16,8 @@ items:
   nameWithType: BinaryKeyIdentifierClause
   fullName: System.IdentityModel.Tokens.BinaryKeyIdentifierClause
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a base class for key identifier clauses that are based upon binary data.
+  remarks: Typically, the BinaryKeyIdentifierClause does not need to be used, other than when a custom security token service is created. When a security token service returns a security token, the issued security token contains references to attached and unattached security tokens. Attached references refer to security tokens that are contained within the security header of a SOAP message and unattached references are security tokens that are not included within the security header of the SOAP message. These references typically affirm the authenticity of the issued security token.
   syntax:
     content: 'public abstract class BinaryKeyIdentifierClause : System.IdentityModel.Tokens.SecurityKeyIdentifierClause'
   inheritance:
@@ -47,21 +47,27 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified key identifier clause type, binary data and a value that indicates whether the binary data must be cloned.
   syntax:
     content: protected BinaryKeyIdentifierClause (string clauseType, byte[] identificationData, bool cloneBuffer);
     parameters:
     - id: clauseType
       type: System.String
-      description: To be added.
+      description: The key identifier clause type. Sets the value of the <xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause.ClauseType%2A> property.
     - id: identificationData
       type: System.Byte[]
-      description: To be added.
+      description: An array of <xref:System.Byte> that contains the binary data that represents the key identifier.
     - id: cloneBuffer
       type: System.Boolean
-      description: To be added.
+      description: "\n     to clone the array passed into the `identificationData` parameter; otherwise, ."
   overload: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    identificationData is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    identificationData is zero length."
   platform:
   - net-11
   - net-20
@@ -78,27 +84,34 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified key identifier clause type, binary data, a value that indicates whether the binary data must be cloned, a nonce and the key length.
+  remarks: "When the `derivationNonce` and `derivationLength` parameters are specified, the implied derived key is used instead of the direct security key of the token.  \n  \n Regardless of the value passed into the `cloneBuffer` parameter, the <xref:System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetBuffer%2A> method always returns a clone of the array passed into the `identificationData` parameter."
   syntax:
     content: protected BinaryKeyIdentifierClause (string clauseType, byte[] identificationData, bool cloneBuffer, byte[] derivationNonce, int derivationLength);
     parameters:
     - id: clauseType
       type: System.String
-      description: To be added.
+      description: The key identifier clause type. Sets the value of the <xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause.ClauseType%2A> property.
     - id: identificationData
       type: System.Byte[]
-      description: To be added.
+      description: An array of <xref:System.Byte> that contains the binary data that represents the key identifier. Sets the binary data that is returned by the <xref:System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetBuffer%2A> method.
     - id: cloneBuffer
       type: System.Boolean
-      description: To be added.
+      description: "\n     to clone the array passed into the `identificationData` parameter; otherwise, ."
     - id: derivationNonce
       type: System.Byte[]
-      description: To be added.
+      description: An array of <xref:System.Byte> that contains the nonce that was used to create a derived key. Sets the value that is returned by the <xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause.GetDerivationNonce%2A> method.
     - id: derivationLength
       type: System.Int32
-      description: To be added.
+      description: The size of the derived key. Sets the value of the <xref:System.IdentityModel.Tokens.SecurityKeyIdentifierClause.DerivationLength%2A> property.
   overload: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    identificationData is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    identificationData is zero length."
   platform:
   - net-11
   - net-20
@@ -115,15 +128,16 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the binary data that represents the key identifier.
+  remarks: Regardless of the value passed into the constructor's `cloneBuffer` parameter, the GetBuffer method always returns a clone of the array passed into the constructor's `identificationData` parameter.
   syntax:
     content: public byte[] GetBuffer ();
     parameters: []
     return:
       type: System.Byte[]
-      description: To be added.
+      description: An array of <xref:System.Byte> that contains the binary data that represents the key identifier.
   overload: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetBuffer*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -140,15 +154,16 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the binary data that represents the key identifier.
+  remarks: "The array returned by the GetRawBuffer method is a clone of the constructor's `identificationData` parameter when the value passed into the `cloneBuffer` is `true`; otherwise it is same array.  \n  \n The <xref:System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetBuffer%2A> method always returns a clone of the array passed into the constructor's `identificationData` parameter."
   syntax:
     content: protected byte[] GetRawBuffer ();
     parameters: []
     return:
       type: System.Byte[]
-      description: To be added.
+      description: An array of <xref:System.Byte> that contains the binary data that represents the key identifier.
   overload: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetRawBuffer*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -165,18 +180,18 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the binary data for the current instance matches the specified binary data.
   syntax:
     content: public bool Matches (byte[] data);
     parameters:
     - id: data
       type: System.Byte[]
-      description: To be added.
+      description: An array of <xref:System.Byte> to compare to.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if data is equivalent to the binary data returned by the <xref:System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetBuffer%2A> method; otherwise, .
   overload: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.Matches*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -193,18 +208,18 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the key identifier for this instance is equivalent to the specified key identifier clause.
   syntax:
     content: public override bool Matches (System.IdentityModel.Tokens.SecurityKeyIdentifierClause keyIdentifierClause);
     parameters:
     - id: keyIdentifierClause
       type: System.IdentityModel.Tokens.SecurityKeyIdentifierClause
-      description: To be added.
+      description: A  to compare to.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if keyIdentifierClause is of type  and the binary data returned by the <xref:System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetBuffer%2A> method is identical for the keyIdentifierClause parameter and the current instance; otherwise, .
   overload: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.Matches*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -221,21 +236,21 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the binary data for the current instance is equivalent to the specified binary data at the specified offset.
   syntax:
     content: public bool Matches (byte[] data, int offset);
     parameters:
     - id: data
       type: System.Byte[]
-      description: To be added.
+      description: An array of <xref:System.Byte> to compare to.
     - id: offset
       type: System.Int32
-      description: To be added.
+      description: The index in the array at which the comparison starts.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the binary data in the data parameter starting at the index specified in the offset parameter is equivalent to the binary data returned by the <xref:System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetBuffer%2A> method (starting at index zero); otherwise, .
   overload: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.Matches*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -256,12 +271,20 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -274,30 +297,6 @@ references:
   name: BinaryKeyIdentifierClause(String,Byte[],Boolean,Byte[],Int32)
   nameWithType: BinaryKeyIdentifierClause.BinaryKeyIdentifierClause(String,Byte[],Boolean,Byte[],Int32)
   fullName: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.BinaryKeyIdentifierClause(String,Byte[],Boolean,Byte[],Int32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Int32
   parent: System
   isExternal: true
@@ -310,84 +309,30 @@ references:
   name: GetBuffer()
   nameWithType: BinaryKeyIdentifierClause.GetBuffer()
   fullName: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetBuffer()
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetRawBuffer
   parent: System.IdentityModel.Tokens.BinaryKeyIdentifierClause
   isExternal: false
   name: GetRawBuffer()
   nameWithType: BinaryKeyIdentifierClause.GetRawBuffer()
   fullName: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.GetRawBuffer()
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.Matches(System.Byte[])
   parent: System.IdentityModel.Tokens.BinaryKeyIdentifierClause
   isExternal: false
   name: Matches(Byte[])
   nameWithType: BinaryKeyIdentifierClause.Matches(Byte[])
   fullName: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.Matches(Byte[])
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.Matches(System.IdentityModel.Tokens.SecurityKeyIdentifierClause)
   parent: System.IdentityModel.Tokens.BinaryKeyIdentifierClause
   isExternal: false
   name: Matches(SecurityKeyIdentifierClause)
   nameWithType: BinaryKeyIdentifierClause.Matches(SecurityKeyIdentifierClause)
   fullName: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.Matches(SecurityKeyIdentifierClause)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.IdentityModel.Tokens.SecurityKeyIdentifierClause
-  parent: System.IdentityModel.Tokens
-  isExternal: false
-  name: SecurityKeyIdentifierClause
-  nameWithType: SecurityKeyIdentifierClause
-  fullName: System.IdentityModel.Tokens.SecurityKeyIdentifierClause
 - uid: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.Matches(System.Byte[],System.Int32)
   parent: System.IdentityModel.Tokens.BinaryKeyIdentifierClause
   isExternal: false
   name: Matches(Byte[],Int32)
   nameWithType: BinaryKeyIdentifierClause.Matches(Byte[],Int32)
   fullName: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.Matches(Byte[],Int32)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.IdentityModel.Tokens.BinaryKeyIdentifierClause.#ctor*
   parent: System.IdentityModel.Tokens.BinaryKeyIdentifierClause
   isExternal: false

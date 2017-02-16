@@ -16,8 +16,10 @@ items:
   nameWithType: WsdlExporter
   fullName: System.ServiceModel.Description.WsdlExporter
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Converts service, contract, and endpoint information into metadata documents.
+  remarks: "Use the WsdlExporter class to transform <xref:System.ServiceModel.Description.ContractDescription> or <xref:System.ServiceModel.Description.ServiceEndpoint> objects into metadata represented by <xref:System.ServiceModel.Description.MetadataSection> objects.  \n  \n The WsdlExporter is used in a three-step process.  \n  \n1.  Call the <xref:System.ServiceModel.Description.WsdlExporter.ExportContract%2A>, <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoint%2A>, or <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoints%2A> method, passing the appropriate parameters.  \n  \n2.  Determine whether there are any export errors by checking the base <xref:System.ServiceModel.Description.MetadataExporter.Errors%2A> property.  \n  \n3.  If there are no errors, use the <xref:System.ServiceModel.Description.WsdlExporter.GetGeneratedMetadata%2A> to get a collection of <xref:System.ServiceModel.Description.MetadataSection> objects or get more specific versions of the metadata using the <xref:System.ServiceModel.Description.WsdlExporter.GeneratedWsdlDocuments%2A> or <xref:System.ServiceModel.Description.WsdlExporter.GeneratedXmlSchemas%2A> properties.  \n  \n You can support exporting custom WSDL extensions by implementing the <xref:System.ServiceModel.Description.IWsdlExportExtension> interface and custom policy assertions by implementing the <xref:System.ServiceModel.Description.IPolicyExportExtension> interface. For details, see the documentation for those interfaces.  \n  \n> [!NOTE]\n>  The `WsdlExporter` can only be used to export metadata from `ContractDescription` instances that contain Common Language Runtime (CLR) type information, such as a `ContractDescription` instance created using the `ContractDescription.GetContract` method or created as part of the `ServiceDescription` for a `ServiceHost` instance. You cannot use the `WsdlExporter` to export metadata from `ContractDescription` instances imported from service metadata or constructed without type information."
+  example:
+  - "The following code example shows how to use the <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoint%2A> method to generate a set of <xref:System.ServiceModel.Description.MetadataSection> objects from the endpoints in a collection of <xref:System.ServiceModel.Description.ServiceEndpoint> objects called `myServiceEndpoints`.  \n  \n [!code-vb[S_UEWsdlExporter#0](../../add/codesnippet/VisualBasic/t-system.servicemodel.de_15_1.vb)]\n [!code-cs[S_UEWsdlExporter#0](../../add/codesnippet/CSharp/t-system.servicemodel.de_15_1.cs)]"
   syntax:
     content: 'public class WsdlExporter : System.ServiceModel.Description.MetadataExporter'
   inheritance:
@@ -45,12 +47,13 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: Use to create a <xref:System.ServiceModel.Description.WsdlExporter> object.
   syntax:
     content: public WsdlExporter ();
     parameters: []
   overload: System.ServiceModel.Description.WsdlExporter.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -67,15 +70,24 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Exports metadata that describes only the contract information from the specified contract description.
+  remarks: Use the ExportContract method to export metadata from only one contract.
+  example:
+  - "The following code example demonstrates how to call ExportContract to export only contract information.  \n  \n [!code-vb[S_UEWsdlExporter#1](../../add/codesnippet/VisualBasic/e2a93a75-ffe7-4415-a8f7-_1.vb)]\n [!code-cs[S_UEWsdlExporter#1](../../add/codesnippet/CSharp/e2a93a75-ffe7-4415-a8f7-_1.cs)]"
   syntax:
     content: public override void ExportContract (System.ServiceModel.Description.ContractDescription contract);
     parameters:
     - id: contract
       type: System.ServiceModel.Description.ContractDescription
-      description: To be added.
+      description: The <xref:System.ServiceModel.Description.ContractDescription> to generate metadata from.
   overload: System.ServiceModel.Description.WsdlExporter.ExportContract*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The exporter encountered an error.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The contract is .
   platform:
   - net-11
   - net-20
@@ -92,15 +104,27 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates metadata about the specified endpoint.
+  remarks: Use the ExportEndpoint method to create metadata about a single endpoint.
+  example:
+  - "The following code example shows how to export a single endpoint.  \n  \n [!code-vb[S_UEWsdlExporter#2](../../add/codesnippet/VisualBasic/780db36e-0e2c-4a54-801d-_1.vb)]\n [!code-cs[S_UEWsdlExporter#2](../../add/codesnippet/CSharp/780db36e-0e2c-4a54-801d-_1.cs)]"
   syntax:
     content: public override void ExportEndpoint (System.ServiceModel.Description.ServiceEndpoint endpoint);
     parameters:
     - id: endpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The <xref:System.ServiceModel.Description.ServiceEndpoint> about which to return metadata.
   overload: System.ServiceModel.Description.WsdlExporter.ExportEndpoint*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The exporter encountered an error.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    endpoint is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The binding is .
   platform:
   - net-11
   - net-20
@@ -117,18 +141,28 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates metadata about a group of endpoints from a specified service.
+  remarks: Use the ExportEndpoints method to create metadata about a set of endpoints from a specified service.
   syntax:
     content: public void ExportEndpoints (System.Collections.Generic.IEnumerable<System.ServiceModel.Description.ServiceEndpoint> endpoints, System.Xml.XmlQualifiedName wsdlServiceQName);
     parameters:
     - id: endpoints
       type: System.Collections.Generic.IEnumerable{System.ServiceModel.Description.ServiceEndpoint}
-      description: To be added.
+      description: The <xref:System.ServiceModel.Description.ServiceEndpoint> objects about which to generate metadata.
     - id: wsdlServiceQName
       type: System.Xml.XmlQualifiedName
-      description: To be added.
+      description: The name of the service.
   overload: System.ServiceModel.Description.WsdlExporter.ExportEndpoints*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The exporter encountered an error.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    wsdlServiceQName is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: A binding is .
   platform:
   - net-11
   - net-20
@@ -145,14 +179,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of  objects after calling one of the export methods.
+  remarks: The GeneratedWsdlDocuments property returns documents only as a result of calls to either <xref:System.ServiceModel.Description.WsdlExporter.ExportContract%2A>, <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoint%2A>, or <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoints%2A>.
   syntax:
     content: public System.Web.Services.Description.ServiceDescriptionCollection GeneratedWsdlDocuments { get; }
     return:
       type: System.Web.Services.Description.ServiceDescriptionCollection
-      description: To be added.
+      description: A collection of  objects.
   overload: System.ServiceModel.Description.WsdlExporter.GeneratedWsdlDocuments*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -169,14 +204,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a set of <xref:System.Xml.Schema.XmlSchema> objects after calling one of the export methods.
+  remarks: The GeneratedXmlSchemas property returns documents only as a result of calls to either <xref:System.ServiceModel.Description.WsdlExporter.ExportContract%2A>, <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoint%2A>, or <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoints%2A>.
   syntax:
     content: public System.Xml.Schema.XmlSchemaSet GeneratedXmlSchemas { get; }
     return:
       type: System.Xml.Schema.XmlSchemaSet
-      description: To be added.
+      description: A set of <xref:System.Xml.Schema.XmlSchema> objects.
   overload: System.ServiceModel.Description.WsdlExporter.GeneratedXmlSchemas*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -193,15 +229,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an enumerable collection of generated  objects.
+  remarks: "Use the GetGeneratedMetadata property to get a collection of all the metadata generated as a result of any number of calls to <xref:System.ServiceModel.Description.WsdlExporter.ExportContract%2A>, <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoint%2A>, or <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoints%2A>.  \n  \n It is recommended that you check the base <xref:System.ServiceModel.Description.MetadataExporter.Errors%2A> property to determine whether any errors occurred before you retrieve the metadata."
+  example:
+  - "The following code example shows how to use the <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoint%2A> method to generate a set of <xref:System.ServiceModel.Description.MetadataSection> objects from the endpoints in a collection of <xref:System.ServiceModel.Description.ServiceEndpoint> objects called `myServiceEndpoints`.  \n  \n [!code-vb[S_UEWsdlExporter#0](../../add/codesnippet/VisualBasic/m-system.servicemodel.de_7_1.vb)]\n [!code-cs[S_UEWsdlExporter#0](../../add/codesnippet/CSharp/m-system.servicemodel.de_7_1.cs)]"
   syntax:
     content: public override System.ServiceModel.Description.MetadataSet GetGeneratedMetadata ();
     parameters: []
     return:
       type: System.ServiceModel.Description.MetadataSet
-      description: To be added.
+      description: An enumerable collection of generated  objects that represents the metadata generated as a result of calls to <xref:System.ServiceModel.Description.WsdlExporter.ExportContract%2A>, <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoint%2A>, or <xref:System.ServiceModel.Description.WsdlExporter.ExportEndpoints%2A>.
   overload: System.ServiceModel.Description.WsdlExporter.GetGeneratedMetadata*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -252,6 +291,21 @@ references:
   name: IEnumerable<ServiceEndpoint>
   nameWithType: IEnumerable<ServiceEndpoint>
   fullName: System.Collections.Generic.IEnumerable<System.ServiceModel.Description.ServiceEndpoint>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.ServiceModel.Description.ServiceEndpoint>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ServiceModel.Description.ServiceEndpoint
+    name: ServiceEndpoint
+    nameWithType: ServiceEndpoint
+    fullName: ServiceEndpoint
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Xml.XmlQualifiedName
   parent: System.Xml
   isExternal: true

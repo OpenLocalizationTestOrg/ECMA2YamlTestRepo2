@@ -20,8 +20,7 @@ items:
   nameWithType: WSFederationSerializer
   fullName: System.IdentityModel.Services.WSFederationSerializer
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides methods to convert a WS-Federation message to  and  objects, which are WS-Trust protocol specific.
   syntax:
     content: public class WSFederationSerializer
   inheritance:
@@ -44,12 +43,13 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: The new instance serializes WS-Federation messages into WS-Trust Feb 2005 protocol messages; an instance of the <xref:System.IdentityModel.Protocols.WSTrust.WSTrustFeb2005RequestSerializer> class is used to serialize requests and an instance of the <xref:System.IdentityModel.Protocols.WSTrust.WSTrustFeb2005ResponseSerializer> class is used to serialize responses.
   syntax:
     content: public WSFederationSerializer ();
     parameters: []
   overload: System.IdentityModel.Services.WSFederationSerializer.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -66,15 +66,19 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class based on the namespace of the response XML.
+  remarks: The request and response messages are serialized based on the namespace of the response XML (the appropriate WS-Trust serializers are used based on the namespace).
   syntax:
     content: public WSFederationSerializer (System.Xml.XmlDictionaryReader reader);
     parameters:
     - id: reader
       type: System.Xml.XmlDictionaryReader
-      description: To be added.
+      description: An <xref:System.Xml.XmlDictionaryReader> opened on the response XML.
   overload: System.IdentityModel.Services.WSFederationSerializer.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    reader is ."
   platform:
   - net-11
   - net-20
@@ -91,18 +95,21 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified request and response serializers.
   syntax:
     content: public WSFederationSerializer (System.IdentityModel.Protocols.WSTrust.WSTrustRequestSerializer requestSerializer, System.IdentityModel.Protocols.WSTrust.WSTrustResponseSerializer responseSerializer);
     parameters:
     - id: requestSerializer
       type: System.IdentityModel.Protocols.WSTrust.WSTrustRequestSerializer
-      description: To be added.
+      description: The WS-Trust Serializer to use to read the request (RST).
     - id: responseSerializer
       type: System.IdentityModel.Protocols.WSTrust.WSTrustResponseSerializer
-      description: To be added.
+      description: The WS-Trust Serializer to use to write the response (RSTR).
   overload: System.IdentityModel.Services.WSFederationSerializer.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    requestSerializer is .  \n  \n -or-  \n  \n responseSerializer is ."
   platform:
   - net-11
   - net-20
@@ -119,18 +126,18 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Checks whether the specified string is a wst:RequestSecurityToken message with a namespace that is recognized by the wrapped .
   syntax:
     content: public virtual bool CanReadRequest (string trustMessage);
     parameters:
     - id: trustMessage
       type: System.String
-      description: To be added.
+      description: The WS-Trust message to check.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the message is a valid wst:RequestSecurityToken message with a namespace that matches the WS-Trust protocol that this  supports; otherwise, .
   overload: System.IdentityModel.Services.WSFederationSerializer.CanReadRequest*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -147,18 +154,18 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Checks whether the specified string is a wst:RequestSecurityTokenResponse message with a namespace that is recognized by the wrapped .
   syntax:
     content: public virtual bool CanReadResponse (string trustMessage);
     parameters:
     - id: trustMessage
       type: System.String
-      description: To be added.
+      description: The WS-Trust message to check.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the message is a valid wst:RequestSecurityTokenResponse message with a namespace that matches the WS-Trust protocol that this  supports; otherwise .
   overload: System.IdentityModel.Services.WSFederationSerializer.CanReadResponse*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -175,21 +182,27 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Converts a WS-Federation Sign-In Request message to a  object that the security token service (the  class) can consume.
   syntax:
     content: public virtual System.IdentityModel.Protocols.WSTrust.RequestSecurityToken CreateRequest (System.IdentityModel.Services.FederationMessage message, System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext context);
     parameters:
     - id: message
       type: System.IdentityModel.Services.FederationMessage
-      description: To be added.
+      description: The message to convert. This should be an instance of .
     - id: context
       type: System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext
-      description: To be added.
+      description: The current serialization context.
     return:
       type: System.IdentityModel.Protocols.WSTrust.RequestSecurityToken
-      description: To be added.
+      description: A  object that represents the converted Sign-In Request message.
   overload: System.IdentityModel.Services.WSFederationSerializer.CreateRequest*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    message is null.  \n  \n -or-  \n  \n context is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The message is not of type .  \n  \n -or-  \n  \n The  object is missing required information to construct a valid  object."
   platform:
   - net-11
   - net-20
@@ -206,21 +219,27 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Converts a WS-Federation Sign-In Response message object to a  object.
   syntax:
     content: public virtual System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse CreateResponse (System.IdentityModel.Services.FederationMessage message, System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext context);
     parameters:
     - id: message
       type: System.IdentityModel.Services.FederationMessage
-      description: To be added.
+      description: The message to convert. This should be an instance of .
     - id: context
       type: System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext
-      description: To be added.
+      description: The current serialization context.
     return:
       type: System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse
-      description: To be added.
+      description: A  object that represents the converted Sign-In Response message.
   overload: System.IdentityModel.Services.WSFederationSerializer.CreateResponse*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    message is .  \n  \n -or-  \n  \n context is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The message is not of type .  \n  \n -or-  \n  \n The  object is missing required information to construct a valid  object."
   platform:
   - net-11
   - net-20
@@ -237,18 +256,22 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the wreq string from a referenced URL.
+  remarks: Override this method to get the wreq string from a reference URL. The default implementation throws a <xref:System.NotSupportedException>.
   syntax:
     content: public virtual string GetReferencedRequest (string wreqptr);
     parameters:
     - id: wreqptr
       type: System.String
-      description: To be added.
+      description: The URL of the request data.
     return:
       type: System.String
-      description: To be added.
+      description: The request data from the URL.
   overload: System.IdentityModel.Services.WSFederationSerializer.GetReferencedRequest*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: Thrown by the default implementation.
   platform:
   - net-11
   - net-20
@@ -265,18 +288,22 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the wresult string from a referenced URL.
+  remarks: Override this method to get the wresult string from a reference URL. The default implementation throws a <xref:System.NotSupportedException>.
   syntax:
     content: public virtual string GetReferencedResult (string wresultptr);
     parameters:
     - id: wresultptr
       type: System.String
-      description: To be added.
+      description: The URL of the result data.
     return:
       type: System.String
-      description: To be added.
+      description: The request data from the URL.
   overload: System.IdentityModel.Services.WSFederationSerializer.GetReferencedResult*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: Thrown by the default implementation.
   platform:
   - net-11
   - net-20
@@ -293,21 +320,24 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes the specified  object into a string.
   syntax:
     content: public virtual string GetRequestAsString (System.IdentityModel.Protocols.WSTrust.RequestSecurityToken request, System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext context);
     parameters:
     - id: request
       type: System.IdentityModel.Protocols.WSTrust.RequestSecurityToken
-      description: To be added.
+      description: The  object to serialize.
     - id: context
       type: System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext
-      description: To be added.
+      description: The current serialization context.
     return:
       type: System.String
-      description: To be added.
+      description: A serialized string representation of the  object.
   overload: System.IdentityModel.Services.WSFederationSerializer.GetRequestAsString*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    request is .  \n  \n -or-  \n  \n context is ."
   platform:
   - net-11
   - net-20
@@ -324,21 +354,24 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes the specified  object into a string.
   syntax:
     content: public virtual string GetResponseAsString (System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse response, System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext context);
     parameters:
     - id: response
       type: System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse
-      description: To be added.
+      description: The  object to serialize.
     - id: context
       type: System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext
-      description: To be added.
+      description: The current serialization context.
     return:
       type: System.String
-      description: To be added.
+      description: A serialized string representation of the  object.
   overload: System.IdentityModel.Services.WSFederationSerializer.GetResponseAsString*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    response is .  \n  \n -or-  \n  \n context is ."
   platform:
   - net-11
   - net-20
@@ -407,18 +440,6 @@ references:
   name: CanReadResponse(String)
   nameWithType: WSFederationSerializer.CanReadResponse(String)
   fullName: System.IdentityModel.Services.WSFederationSerializer.CanReadResponse(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.WSFederationSerializer.CreateRequest(System.IdentityModel.Services.FederationMessage,System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext)
   parent: System.IdentityModel.Services.WSFederationSerializer
   isExternal: false
@@ -455,102 +476,30 @@ references:
   name: RequestSecurityTokenResponse
   nameWithType: RequestSecurityTokenResponse
   fullName: System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse
-- uid: System.IdentityModel.Services.FederationMessage
-  parent: System.IdentityModel.Services
-  isExternal: false
-  name: FederationMessage
-  nameWithType: FederationMessage
-  fullName: System.IdentityModel.Services.FederationMessage
-- uid: System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext
-  parent: System.IdentityModel.Protocols.WSTrust
-  isExternal: false
-  name: WSTrustSerializationContext
-  nameWithType: WSTrustSerializationContext
-  fullName: System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext
 - uid: System.IdentityModel.Services.WSFederationSerializer.GetReferencedRequest(System.String)
   parent: System.IdentityModel.Services.WSFederationSerializer
   isExternal: false
   name: GetReferencedRequest(String)
   nameWithType: WSFederationSerializer.GetReferencedRequest(String)
   fullName: System.IdentityModel.Services.WSFederationSerializer.GetReferencedRequest(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.WSFederationSerializer.GetReferencedResult(System.String)
   parent: System.IdentityModel.Services.WSFederationSerializer
   isExternal: false
   name: GetReferencedResult(String)
   nameWithType: WSFederationSerializer.GetReferencedResult(String)
   fullName: System.IdentityModel.Services.WSFederationSerializer.GetReferencedResult(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.WSFederationSerializer.GetRequestAsString(System.IdentityModel.Protocols.WSTrust.RequestSecurityToken,System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext)
   parent: System.IdentityModel.Services.WSFederationSerializer
   isExternal: false
   name: GetRequestAsString(RequestSecurityToken,WSTrustSerializationContext)
   nameWithType: WSFederationSerializer.GetRequestAsString(RequestSecurityToken,WSTrustSerializationContext)
   fullName: System.IdentityModel.Services.WSFederationSerializer.GetRequestAsString(RequestSecurityToken,WSTrustSerializationContext)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IdentityModel.Protocols.WSTrust.RequestSecurityToken
-  parent: System.IdentityModel.Protocols.WSTrust
-  isExternal: false
-  name: RequestSecurityToken
-  nameWithType: RequestSecurityToken
-  fullName: System.IdentityModel.Protocols.WSTrust.RequestSecurityToken
-- uid: System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext
-  parent: System.IdentityModel.Protocols.WSTrust
-  isExternal: false
-  name: WSTrustSerializationContext
-  nameWithType: WSTrustSerializationContext
-  fullName: System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext
 - uid: System.IdentityModel.Services.WSFederationSerializer.GetResponseAsString(System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse,System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext)
   parent: System.IdentityModel.Services.WSFederationSerializer
   isExternal: false
   name: GetResponseAsString(RequestSecurityTokenResponse,WSTrustSerializationContext)
   nameWithType: WSFederationSerializer.GetResponseAsString(RequestSecurityTokenResponse,WSTrustSerializationContext)
   fullName: System.IdentityModel.Services.WSFederationSerializer.GetResponseAsString(RequestSecurityTokenResponse,WSTrustSerializationContext)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse
-  parent: System.IdentityModel.Protocols.WSTrust
-  isExternal: false
-  name: RequestSecurityTokenResponse
-  nameWithType: RequestSecurityTokenResponse
-  fullName: System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse
-- uid: System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext
-  parent: System.IdentityModel.Protocols.WSTrust
-  isExternal: false
-  name: WSTrustSerializationContext
-  nameWithType: WSTrustSerializationContext
-  fullName: System.IdentityModel.Protocols.WSTrust.WSTrustSerializationContext
 - uid: System.IdentityModel.Services.WSFederationSerializer.#ctor*
   parent: System.IdentityModel.Services.WSFederationSerializer
   isExternal: false

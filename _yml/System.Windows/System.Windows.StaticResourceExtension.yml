@@ -13,8 +13,8 @@ items:
   nameWithType: StaticResourceExtension
   fullName: System.Windows.StaticResourceExtension
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Implements a markup extension that supports static (XAML load time) resource references made from XAML.
+  remarks: "This class is a markup extension implementation. Markup extension classes in WPF exist mainly to provide infrastructure support for some aspect of the [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] XAML  processor implementation, and the members exposed by a markup extension are not typically called from user code. This extension supports the [StaticResource Markup Extension](../Topic/StaticResource%20Markup%20Extension.md) usage from XAML. For more information on the mechanics of static resource lookup in WPF XAML, see [StaticResource Markup Extension](../Topic/StaticResource%20Markup%20Extension.md) or [XAML Resources](../Topic/XAML%20Resources.md).  \n  \n `{StaticResource}` is a markup extension that is specific to the WPF implementation of XAML. You can use `{StaticResource}` when referencing the default XAML namespace for WPF, without using a prefix. In contrast, markup extensions that are defined for XAML language support (such as `{x:Type}`) require the prefix for the XAML language XAML namespace in the usage. For more information, see [Markup Extensions and WPF XAML](../Topic/Markup%20Extensions%20and%20WPF%20XAML.md).  \n  \n Static resource references are generally used in XAML whenever a [DynamicResource Markup Extension](../Topic/DynamicResource%20Markup%20Extension.md) is not explicitly necessary.  \n  \n<a name=\"xamlTextUsage_StaticResourceExtension\"></a>   \n## XAML Text Usage  \n See Remarks"
   syntax:
     content: >-
       [System.Windows.Localizability(System.Windows.LocalizationCategory.NeverLocalize)]
@@ -42,12 +42,12 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public StaticResourceExtension ();
     parameters: []
   overload: System.Windows.StaticResourceExtension.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -64,15 +64,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class, with the provided initial key.
   syntax:
     content: public StaticResourceExtension (object resourceKey);
     parameters:
     - id: resourceKey
       type: System.Object
-      description: To be added.
+      description: The key of the resource that this markup extension references.
   overload: System.Windows.StaticResourceExtension.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    resourceKey parameter is , either through markup extension usage or explicit construction."
   platform:
   - net-11
   - net-20
@@ -89,18 +92,22 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an object that should be set on the property where this extension is applied. For , this is the object found in a resource dictionary, where the object to find is identified by the <xref:System.Windows.StaticResourceExtension.ResourceKey%2A>.
+  remarks: "This method supports [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] XAML processor implementation, and is not intended to be called directly. The XAML processor implementation uses this method for proper handling of `StaticResource` extension values during object creation.  \n  \n The property to be set can be identified by a <xref:System.Reflection.PropertyInfo> (standard property) or <xref:System.Windows.DependencyProperty> (dependency property).  \n  \n This implementation relies on XAML-related services based on the passed `serviceProvider`. It must not be `null`. In the [!INCLUDE[net_v40_short](../../add/includes/net-v40-short-md.md)] implementation, the following are required services from service context:  \n  \n-   <xref:System.Xaml.IXamlSchemaContextProvider>  \n  \n-   <xref:System.Xaml.IAmbientProvider>  \n  \n-   <xref:System.Xaml.IRootObjectProvider>  \n  \n If any of these services are missing, usage of the markup extension throws an exception."
   syntax:
     content: public override object ProvideValue (IServiceProvider serviceProvider);
     parameters:
     - id: serviceProvider
       type: System.IServiceProvider
-      description: To be added.
+      description: Object that can provide services for the markup extension.
     return:
       type: System.Object
-      description: To be added.
+      description: The object value to set on the property where the markup extension provided value is evaluated.
   overload: System.Windows.StaticResourceExtension.ProvideValue*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    serviceProvider was , or failed to implement a required service."
   platform:
   - net-11
   - net-20
@@ -117,14 +124,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the key value passed by this static resource reference. They key is used  to return the object matching that key in resource dictionaries.
+  remarks: "For [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)] usage information, see [StaticResource Markup Extension](../Topic/StaticResource%20Markup%20Extension.md).  \n  \n<a name=\"xamlTextUsage_ResourceKey\"></a>   \n## XAML Text Usage"
   syntax:
     content: public object ResourceKey { get; set; }
     return:
       type: System.Object
-      description: To be added.
+      description: The resource key for a resource.
   overload: System.Windows.StaticResourceExtension.ResourceKey*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: Specified value as , either through markup extension usage or explicit construction.
   platform:
   - net-11
   - net-20
@@ -157,12 +168,6 @@ references:
   name: ProvideValue(IServiceProvider)
   nameWithType: StaticResourceExtension.ProvideValue(IServiceProvider)
   fullName: System.Windows.StaticResourceExtension.ProvideValue(IServiceProvider)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.IServiceProvider
   parent: System
   isExternal: true
@@ -175,12 +180,6 @@ references:
   name: ResourceKey
   nameWithType: StaticResourceExtension.ResourceKey
   fullName: System.Windows.StaticResourceExtension.ResourceKey
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.StaticResourceExtension.#ctor*
   parent: System.Windows.StaticResourceExtension
   isExternal: false

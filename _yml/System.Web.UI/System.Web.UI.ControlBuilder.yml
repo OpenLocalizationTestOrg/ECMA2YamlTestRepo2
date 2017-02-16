@@ -51,8 +51,10 @@ items:
   nameWithType: ControlBuilder
   fullName: System.Web.UI.ControlBuilder
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Supports the page parser in building a control and the child controls it contains.
+  remarks: "By default, every control on a page is associated with a default ControlBuilder class. During parsing, the ASP.NET page framework builds a tree of ControlBuilder objects corresponding to the tree of controls for the page. The ControlBuilder tree is then used to generate page code to create the control tree. In addition to child controls, the ControlBuilder defines the behavior of how the content within control tags is parsed. You can override this default behavior by defining your own custom control builder class. This is done by applying a <xref:System.Web.UI.ControlBuilderAttribute> attribute to your control builder class as follows:  \n  \n `[ControlBuilderAttribute(typeof(ControlBuilderType))]`"
+  example:
+  - "The following code example creates a <xref:System.Web.UI.WebControls.Table> control whose attributes and content are defined at the time the table is built. The following is the command line to use to build the executable.  \n  \n [Visual Basic]  \n  \n```  \nvbc /r:System.dll /r:System.Web.dll /r:System.Drawing.dll /t:library /out:myWebAppPath/Bin/vb_mycontrolbuilder.dll myControlBuilder.vb  \n```  \n  \n [C#]  \n  \n```  \ncsc /t:library /out:myWebAppPath/Bin/cs_mycontrolbuilder.dll myControlBuilder.cs  \n```  \n  \n [!code-cs[SystemWebUI_ControlBuilder_2#1](../../add/codesnippet/CSharp/t-system.web.ui.controlb_1_1.cs)]\n [!code-vb[SystemWebUI_ControlBuilder_2#1](../../add/codesnippet/VisualBasic/t-system.web.ui.controlb_1_1.vb)]  \n  \n The following code example uses the previous custom control. In particular, it builds a table whose attributes and content are defined at run time. Notice that the values shown in the  directive reflect the previous command line.  \n  \n [!code-cs[SystemWebUI_ControlBuilder_2#2](../../add/codesnippet/CSharp/t-system.web.ui.controlb_1_2.aspx)]\n [!code-vb[SystemWebUI_ControlBuilder_2#2](../../add/codesnippet/VisualBasic/t-system.web.ui.controlb_1_2.aspx)]"
   syntax:
     content: public class ControlBuilder
   inheritance:
@@ -75,12 +77,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: "Use this constructor to create a new instance the <xref:System.Web.UI.ControlBuilder> class.  \n  \n> [!NOTE]\n>  This constructor is generally used by ASP.NET when parsing the page and creating the control hierarchy. It is not intended for use in your code."
   syntax:
     content: public ControlBuilder ();
     parameters: []
   overload: System.Web.UI.ControlBuilder.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -97,15 +100,20 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether white space literals are permitted in the content between a control's opening and closing tags. This method is called by the ASP.NET page framework.
+  remarks: "The AllowWhitespaceLiterals method is used to determine whether white space literals are permitted in the content between the opening and closing tags of a control. When this method returns `false`, the white space literals are trimmed from the content before the content is processed by the page parser. When this method returns `true`, the white space literals not removed.  \n  \n This method is called by the ASP.NET page framework during parsing and is not intended to be called directly in you code."
+  example:
+  - >-
+    [!code-cs[ControlBuilderSamples_1#4](../../add/codesnippet/CSharp/m-system.web.ui.controlb_4_1.cs)]
+     [!code-vb[ControlBuilderSamples_1#4](../../add/codesnippet/VisualBasic/m-system.web.ui.controlb_4_1.vb)]
   syntax:
     content: public virtual bool AllowWhitespaceLiterals ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: Always returns .
   overload: System.Web.UI.ControlBuilder.AllowWhitespaceLiterals*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -122,15 +130,23 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the specified literal content to a control. This method is called by the ASP.NET page framework.
+  remarks: Override the AppendLiteralString method to control how literal content between the control's opening and closing tags is processed. Literal content can be any text that is passed by the browser to the server control. For example, any HTML elements and text, between their opening and closing tags, are literal content.
+  example:
+  - >-
+    [!code-cs[ControlBuilderSamples_1#3](../../add/codesnippet/CSharp/m-system.web.ui.controlb_3_1.cs)]
+     [!code-vb[ControlBuilderSamples_1#3](../../add/codesnippet/VisualBasic/m-system.web.ui.controlb_3_1.vb)]
   syntax:
     content: public virtual void AppendLiteralString (string s);
     parameters:
     - id: s
       type: System.String
-      description: To be added.
+      description: The content to add to the control.
   overload: System.Web.UI.ControlBuilder.AppendLiteralString*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: The string literal is not well formed.
   platform:
   - net-11
   - net-20
@@ -147,15 +163,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds builders to the  object for any child controls that belong to the container control.
+  remarks: ''
+  example:
+  - "The following example overrides the AppendSubBuilder method to throw an <xref:System.Exception> if the control this control builder is applied to tries to include controls in its instance of <xref:System.Web.UI.ControlCollection> class.  \n  \n [!code-vb[ControlBuilderSamples_2#1](../../add/codesnippet/VisualBasic/m-system.web.ui.controlb_5_1.vb)]\n [!code-cs[ControlBuilderSamples_2#1](../../add/codesnippet/CSharp/m-system.web.ui.controlb_5_1.cs)]"
   syntax:
     content: public virtual void AppendSubBuilder (System.Web.UI.ControlBuilder subBuilder);
     parameters:
     - id: subBuilder
       type: System.Web.UI.ControlBuilder
-      description: To be added.
+      description: The  object assigned to the child control.
   overload: System.Web.UI.ControlBuilder.AppendSubBuilder*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -172,14 +191,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the control builder that corresponds to the binding container for the control that this builder creates.
   syntax:
     content: public virtual System.Web.UI.ControlBuilder BindingContainerBuilder { get; }
     return:
       type: System.Web.UI.ControlBuilder
-      description: To be added.
+      description: The control builder that corresponds to the binding container for the control.
   overload: System.Web.UI.ControlBuilder.BindingContainerBuilder*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -196,14 +215,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type of the binding container for the control that this builder creates.
   syntax:
     content: public virtual Type BindingContainerType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: A <xref:System.Type> that represent the type of the binding container for the control that this builder creates.
   overload: System.Web.UI.ControlBuilder.BindingContainerType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -220,15 +239,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Builds a design-time instance of the control that is referred to by this  object.
   syntax:
     content: public virtual object BuildObject ();
     parameters: []
     return:
       type: System.Object
-      description: To be added.
+      description: The resulting built control.
   overload: System.Web.UI.ControlBuilder.BuildObject*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -245,12 +264,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Called by the parser to inform the builder that the parsing of the control's opening and closing tags is complete.
+  remarks: The CloseControl method is used by the parser to indicate to the builder that it has finished parsing the control.
   syntax:
     content: public virtual void CloseControl ();
     parameters: []
   overload: System.Web.UI.ControlBuilder.CloseControl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -267,14 +287,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of complex property entries.
+  remarks: If there are no entries, a static empty collection is returned.
   syntax:
     content: public System.Collections.ICollection ComplexPropertyEntries { get; }
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: A collection of complex property entries.
   overload: System.Web.UI.ControlBuilder.ComplexPropertyEntries*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -291,14 +312,17 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the <xref:System.Type> for the control to be created.
+  remarks: ''
+  example:
+  - "This example overrides the <xref:System.Web.UI.ControlBuilder.OnAppendToParentBuilder%2A> method to check the ControlType property to determine what type of control this builder is applied to. If it is a `CustomTextBox`, the builder checks whether the value of the <xref:System.Web.UI.ControlBuilder.HasAspCode%2A> property is included in the control. If so, an exception is thrown, if not the <xref:System.Web.UI.ControlBuilder.HasBody%2A> method is called.  \n  \n [!code-vb[ControlBuilderSamples_4#1](../../add/codesnippet/VisualBasic/p-system.web.ui.controlb_1_1.vb)]\n [!code-cs[ControlBuilderSamples_4#1](../../add/codesnippet/CSharp/p-system.web.ui.controlb_1_1.cs)]"
   syntax:
     content: public Type ControlType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> for the control to be created.
   overload: System.Web.UI.ControlBuilder.ControlType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -315,39 +339,39 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a  object from the specified tag name and object type, as well as other parameters defining the builder.
   syntax:
     content: public static System.Web.UI.ControlBuilder CreateBuilderFromType (System.Web.UI.TemplateParser parser, System.Web.UI.ControlBuilder parentBuilder, Type type, string tagName, string id, System.Collections.IDictionary attribs, int line, string sourceFileName);
     parameters:
     - id: parser
       type: System.Web.UI.TemplateParser
-      description: To be added.
+      description: The  object responsible for parsing the control.
     - id: parentBuilder
       type: System.Web.UI.ControlBuilder
-      description: To be added.
+      description: The  object responsible for building the parent control.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the object that the builder will create.
     - id: tagName
       type: System.String
-      description: To be added.
+      description: The name of the tag to be built. This allows the builder to support multiple tag types.
     - id: id
       type: System.String
-      description: To be added.
+      description: The <xref:System.Web.UI.ControlBuilder.ID%2A> attribute assigned to the control.
     - id: attribs
       type: System.Collections.IDictionary
-      description: To be added.
+      description: The <xref:System.Collections.IDictionary> object that holds all the specified tag attributes.
     - id: line
       type: System.Int32
-      description: To be added.
+      description: The source file line number for the specified control.
     - id: sourceFileName
       type: System.String
-      description: To be added.
+      description: The name of the source file from which the control is to be created.
     return:
       type: System.Web.UI.ControlBuilder
-      description: To be added.
+      description: The builder that is responsible for creating the control.
   overload: System.Web.UI.ControlBuilder.CreateBuilderFromType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -364,14 +388,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets an  object that is used to manage device-filter related services when parsing and persisting controls in the designer.
+  remarks: The <xref:System.Web.UI.IFilterResolutionService> interface is an interface that is specific to how a control uses device filters in a designer. When controls are parsed or persisted in the designer outside the context of a browser request, the <xref:System.Web.UI.IFilterResolutionService> provides a way to determine whether the current control is affected by a named filter and whether a named filter is part of a specific device-filter hierarchy.
   syntax:
     content: public System.Web.UI.IFilterResolutionService CurrentFilterResolutionService { get; }
     return:
       type: System.Web.UI.IFilterResolutionService
-      description: To be added.
+      description: An  object that is used to manage device filter related services when parsing and persisting controls in the designer.
   overload: System.Web.UI.ControlBuilder.CurrentFilterResolutionService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -388,14 +413,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type that will be used by code generation to declare the control.
   syntax:
     content: public virtual Type DeclareType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the control used by code generation to declare the control.
   overload: System.Web.UI.ControlBuilder.DeclareType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -412,13 +437,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the `"__designer"` literal string.
   syntax:
     content: public static readonly string DesignerFilter;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -435,14 +460,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that determines whether the control has a  with <xref:System.Web.UI.ParseChildrenAttribute.ChildrenAsProperties%2A> set to .
   syntax:
     content: protected bool FChildrenAsProperties { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the control has a  with <xref:System.Web.UI.ParseChildrenAttribute.ChildrenAsProperties%2A> set to , otherwise .
   overload: System.Web.UI.ControlBuilder.FChildrenAsProperties*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -459,14 +484,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that determines whether the control implements the  interface.
   syntax:
     content: protected bool FIsNonParserAccessor { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the control implements the  interface, otherwise .
   overload: System.Web.UI.ControlBuilder.FIsNonParserAccessor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -483,21 +508,26 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains the <xref:System.Type> of the control type corresponding to a child tag. This method is called by the ASP.NET page framework.
+  remarks: This method is called by the ASP.NET page framework during parsing and is not intended to be called directly in you code.
+  example:
+  - >-
+    [!code-cs[ControlBuilderSamples_1#2](../../add/codesnippet/CSharp/1e17c7c0-caef-4f64-90f8-_1.cs)]
+     [!code-vb[ControlBuilderSamples_1#2](../../add/codesnippet/VisualBasic/1e17c7c0-caef-4f64-90f8-_1.vb)]
   syntax:
     content: public virtual Type GetChildControlType (string tagName, System.Collections.IDictionary attribs);
     parameters:
     - id: tagName
       type: System.String
-      description: To be added.
+      description: The tag name of the child.
     - id: attribs
       type: System.Collections.IDictionary
-      description: To be added.
+      description: An array of attributes contained in the child control.
     return:
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the specified control's child.
   overload: System.Web.UI.ControlBuilder.GetChildControlType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -514,15 +544,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates the  object for this  object.
   syntax:
     content: public System.Web.UI.ObjectPersistData GetObjectPersistData ();
     parameters: []
     return:
       type: System.Web.UI.ObjectPersistData
-      description: To be added.
+      description: The  for this .
   overload: System.Web.UI.ControlBuilder.GetObjectPersistData*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -539,15 +569,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the resource key for this  object.
   syntax:
     content: public string GetResourceKey ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: The resource key for this .
   overload: System.Web.UI.ControlBuilder.GetResourceKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -564,14 +594,17 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the control contains any code blocks.
+  remarks: ''
+  example:
+  - "This example overrides the <xref:System.Web.UI.ControlBuilder.OnAppendToParentBuilder%2A> method to check the <xref:System.Web.UI.ControlBuilder.ControlType%2A> property to determine what type of control this builder is applied to. If it is a `CustomTextBox`, the builder checks whether the value of the HasAspCode property is included in the control. If so, an exception is thrown, if not the <xref:System.Web.UI.ControlBuilder.HasBody%2A> method is called.  \n  \n [!code-vb[ControlBuilderSamples_4#1](../../add/codesnippet/VisualBasic/p-system.web.ui.controlb_3_1.vb)]\n [!code-cs[ControlBuilderSamples_4#1](../../add/codesnippet/CSharp/p-system.web.ui.controlb_3_1.cs)]"
   syntax:
     content: public virtual bool HasAspCode { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the control contains at least one code block; otherwise, .
   overload: System.Web.UI.ControlBuilder.HasAspCode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -588,15 +621,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines if a control has both an opening and closing tag. This method is called by the ASP.NET page framework.
+  remarks: This method is called by the ASP.NET page framework during parsing and is not intended to be called directly in you code.
+  example:
+  - "This example overrides the <xref:System.Web.UI.ControlBuilder.OnAppendToParentBuilder%2A> method to check the <xref:System.Web.UI.ControlBuilder.ControlType%2A> property to determine what type of control this builder is applied to. If it is a `CustomTextBox`, the builder checks whether the value of the <xref:System.Web.UI.ControlBuilder.HasAspCode%2A> property is included in the control. If so, an exception is thrown, if not the HasBody method is called.  \n  \n [!code-vb[ControlBuilderSamples_4#1](../../add/codesnippet/VisualBasic/m-system.web.ui.controlb_1_1.vb)]\n [!code-cs[ControlBuilderSamples_4#1](../../add/codesnippet/CSharp/m-system.web.ui.controlb_1_1.cs)]"
   syntax:
     content: public virtual bool HasBody ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the control has an opening and closing tag; otherwise, .
   overload: System.Web.UI.ControlBuilder.HasBody*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -613,15 +649,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the literal string of an HTML control must be HTML decoded. This method is called by the ASP.NET page framework.
+  remarks: "A literal string refers to the text between the opening and closing tag of an HTML control. HTML encoding is when text is converted into a string representation that the browser will display rather than interpret as HTML. Characters such as the question mark (?), ampersand (&), slash mark (/), and spaces might be truncated or corrupted by some browsers, so those characters must be encoded when they appear in `a` tags or in query strings.  \n  \n The HtmlDecodeLiterals method is called by the ASP.NET page framework during parsing and is not intended to be called directly in you code."
+  example:
+  - "The following example overrides the HtmlDecodeLiterals method to allow HTML decoding of literal strings in any control this builder is applied to.  \n  \n [!code-vb[ControlBuilderSamples_2#2](../../add/codesnippet/VisualBasic/m-system.web.ui.controlb_6_1.vb)]\n [!code-cs[ControlBuilderSamples_2#2](../../add/codesnippet/CSharp/m-system.web.ui.controlb_6_1.cs)]"
   syntax:
     content: public virtual bool HtmlDecodeLiterals ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the HTML control literal string is to be decoded; otherwise, .
   overload: System.Web.UI.ControlBuilder.HtmlDecodeLiterals*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -638,14 +677,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the identifier property for the control to be built.
   syntax:
     content: public string ID { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The identifier property for the control.
   overload: System.Web.UI.ControlBuilder.ID*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -662,14 +701,17 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns whether the  is running in the designer.
+  remarks: ''
+  example:
+  - "The following example uses the InDesigner property when the <xref:System.Web.UI.ControlBuilder.NeedsTagInnerText%2A> method is called. When a control has this builder attached to it, the <xref:System.Web.UI.ControlBuilder.NeedsTagInnerText%2A> method determines whether the control is being accessed at design-time through a designer. The <xref:System.Web.UI.ControlBuilder.NeedsTagInnerText%2A> returns the value of the InDesigner property, and then the <xref:System.Web.UI.ControlBuilder.SetTagInnerText%2A> method is called. If the InDesigner property is set to `false`, an <xref:System.Exception> is thrown. Otherwise, the inner text of the control is returned on the <xref:System.Web.UI.ControlBuilder.SetTagInnerText%2A> call.  \n  \n [!code-vb[ControlBuilderSamples_3#1](../../add/codesnippet/VisualBasic/p-system.web.ui.controlb_0_1.vb)]\n [!code-cs[ControlBuilderSamples_3#1](../../add/codesnippet/CSharp/p-system.web.ui.controlb_0_1.cs)]"
   syntax:
     content: protected bool InDesigner { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  is running in the designer; otherwise, .
   overload: System.Web.UI.ControlBuilder.InDesigner*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -686,30 +728,31 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes the  for use after it is instantiated. This method is called by the ASP.NET page framework.
+  remarks: This method is called by the ASP.NET page framework during parsing and is not intended to be called directly in you code.
   syntax:
     content: public virtual void Init (System.Web.UI.TemplateParser parser, System.Web.UI.ControlBuilder parentBuilder, Type type, string tagName, string id, System.Collections.IDictionary attribs);
     parameters:
     - id: parser
       type: System.Web.UI.TemplateParser
-      description: To be added.
+      description: The  object responsible for parsing the control.
     - id: parentBuilder
       type: System.Web.UI.ControlBuilder
-      description: To be added.
+      description: The  object responsible for building the parent control.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> assigned to the control that the builder will create.
     - id: tagName
       type: System.String
-      description: To be added.
+      description: The name of the tag to be built. This allows the builder to support multiple tag types.
     - id: id
       type: System.String
-      description: To be added.
+      description: The <xref:System.Web.UI.ControlBuilder.ID%2A> attribute assigned to the control.
     - id: attribs
       type: System.Collections.IDictionary
-      description: To be added.
+      description: The <xref:System.Collections.IDictionary> object that holds all the specified tag attributes.
   overload: System.Web.UI.ControlBuilder.Init*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -726,14 +769,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a Boolean value indicating whether this  object is used to generate page themes.
   syntax:
     content: protected bool InPageTheme { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: to use this  to generate page themes; otherwise, .
   overload: System.Web.UI.ControlBuilder.InPageTheme*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -750,14 +793,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type set on the binding container.
   syntax:
     content: public virtual string ItemType { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The type set on the binding container.
   overload: System.Web.UI.ControlBuilder.ItemType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -774,14 +817,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a Boolean value indicating whether the control that is created by this  object is localized.
   syntax:
     content: public bool Localize { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: to indicate that the control created by this  object is localized; otherwise, .
   overload: System.Web.UI.ControlBuilder.Localize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -798,14 +841,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type of the naming container for the control that this builder creates.
   syntax:
     content: public Type NamingContainerType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: A <xref:System.Type> that represent the type of the naming container for the control that this builder creates.
   overload: System.Web.UI.ControlBuilder.NamingContainerType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -822,15 +865,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines if the control builder needs to get its inner text. If so, the <xref:System.Web.UI.ControlBuilder.SetTagInnerText%2A> method must be called. This method is called by the ASP.NET page framework.
+  remarks: "The inner text is the text between the opening and closing tags of the control.  \n  \n This method is called by the ASP.NET page framework during parsing and is not intended to be called directly in you code."
+  example:
+  - "The following example uses the <xref:System.Web.UI.ControlBuilder.InDesigner%2A> property when the NeedsTagInnerText method is called. When a control has this builder attached to it, the NeedsTagInnerText determines whether the control is being accessed at design-time through a designer. The NeedsTagInnerText returns the value of the <xref:System.Web.UI.ControlBuilder.InDesigner%2A> property, and then the <xref:System.Web.UI.ControlBuilder.SetTagInnerText%2A> method is called. If the <xref:System.Web.UI.ControlBuilder.InDesigner%2A> property is set to `false`, an <xref:System.Exception> is thrown. Otherwise, the inner text of the control is returned on the <xref:System.Web.UI.ControlBuilder.SetTagInnerText%2A> call.  \n  \n [!code-vb[ControlBuilderSamples_3#1](../../add/codesnippet/VisualBasic/m-system.web.ui.controlb_0_1.vb)]\n [!code-cs[ControlBuilderSamples_3#1](../../add/codesnippet/CSharp/m-system.web.ui.controlb_0_1.cs)]"
   syntax:
     content: public virtual bool NeedsTagInnerText ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the control builder needs to get its inner text. The default is .
   overload: System.Web.UI.ControlBuilder.NeedsTagInnerText*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -847,15 +893,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Notifies the  that it is being added to a parent control builder.
+  remarks: ''
+  example:
+  - "This example overrides the OnAppendToParentBuilder method to check the <xref:System.Web.UI.ControlBuilder.ControlType%2A> property to determine what type of control this builder is applied to. If it is a `CustomTextBox`, the builder checks whether the value of the <xref:System.Web.UI.ControlBuilder.HasAspCode%2A> property is included in the control. If so, an exception is thrown, if not the <xref:System.Web.UI.ControlBuilder.HasBody%2A> method is called.  \n  \n [!code-vb[ControlBuilderSamples_4#1](../../add/codesnippet/VisualBasic/6102f4e2-d19f-4c63-97f4-_1.vb)]\n [!code-cs[ControlBuilderSamples_4#1](../../add/codesnippet/CSharp/6102f4e2-d19f-4c63-97f4-_1.cs)]"
   syntax:
     content: public virtual void OnAppendToParentBuilder (System.Web.UI.ControlBuilder parentBuilder);
     parameters:
     - id: parentBuilder
       type: System.Web.UI.ControlBuilder
-      description: To be added.
+      description: The  object to which the current builder is added.
   overload: System.Web.UI.ControlBuilder.OnAppendToParentBuilder*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -872,14 +921,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the virtual path of a page to be built by this  instance.
   syntax:
     content: public string PageVirtualPath { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The virtual path of the page to be built.
   overload: System.Web.UI.ControlBuilder.PageVirtualPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -896,14 +945,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  responsible for parsing the control.
+  remarks: This property retrieves the <xref:System.Web.UI.TemplateParser> responsible for parsing the control.
   syntax:
     content: protected System.Web.UI.TemplateParser Parser { get; }
     return:
       type: System.Web.UI.TemplateParser
-      description: To be added.
+      description: The  used to parse the control.
   overload: System.Web.UI.ControlBuilder.Parser*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -920,27 +970,28 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Enables custom control builders to access the generated Code Document Object Model (CodeDom) and insert and modify code during the process of parsing and building controls.
+  remarks: "In the single-file page model, the `baseType` and `derivedType` parameters are the same <xref:System.CodeDom.CodeTypeDeclaration> type, which typically derives from the <xref:System.Web.UI.Page> class.  \n  \n In the code-behind page model, `baseType` is the <xref:System.CodeDom.CodeTypeDeclaration> type that represents the partial code-behind class, which is typically derived from the <xref:System.Web.UI.Page> class. The `derivedType` parameter is the class that derives from the partial class that contains the markup.  \n  \n For more information about ASP.NET Web page models, see [ASP.NET Web Forms Page Syntax Overview](../Topic/ASP.NET%20Web%20Forms%20Page%20Syntax%20Overview.md).  \n  \n For more information about how to use the CodeDOM to represent and generate source code, see [Dynamic Source Code Generation and Compilation](../Topic/Dynamic%20Source%20Code%20Generation%20and%20Compilation.md)."
   syntax:
     content: public virtual void ProcessGeneratedCode (System.CodeDom.CodeCompileUnit codeCompileUnit, System.CodeDom.CodeTypeDeclaration baseType, System.CodeDom.CodeTypeDeclaration derivedType, System.CodeDom.CodeMemberMethod buildMethod, System.CodeDom.CodeMemberMethod dataBindingMethod);
     parameters:
     - id: codeCompileUnit
       type: System.CodeDom.CodeCompileUnit
-      description: To be added.
+      description: The root container of a CodeDOM graph of the control that is being built.
     - id: baseType
       type: System.CodeDom.CodeTypeDeclaration
-      description: To be added.
+      description: The base type of the page or user control that contains the control that is being built.
     - id: derivedType
       type: System.CodeDom.CodeTypeDeclaration
-      description: To be added.
+      description: The derived type of the page or user control that contains the control that is being built.
     - id: buildMethod
       type: System.CodeDom.CodeMemberMethod
-      description: To be added.
+      description: The code that is used to build the control.
     - id: dataBindingMethod
       type: System.CodeDom.CodeMemberMethod
-      description: To be added.
+      description: The code that is used to build the data-binding method of the control.
   overload: System.Web.UI.ControlBuilder.ProcessGeneratedCode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -957,14 +1008,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the service object for this  object.
   syntax:
     content: public IServiceProvider ServiceProvider { get; }
     return:
       type: System.IServiceProvider
-      description: To be added.
+      description: An <xref:System.IServiceProvider> that represents the service object for this .
   overload: System.Web.UI.ControlBuilder.ServiceProvider*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -981,15 +1032,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the resource key for this  object.
   syntax:
     content: public void SetResourceKey (string resourceKey);
     parameters:
     - id: resourceKey
       type: System.String
-      description: To be added.
+      description: The resource key for this .
   overload: System.Web.UI.ControlBuilder.SetResourceKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1006,15 +1057,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the service object for this  object.
   syntax:
     content: public void SetServiceProvider (IServiceProvider serviceProvider);
     parameters:
     - id: serviceProvider
       type: System.IServiceProvider
-      description: To be added.
+      description: An <xref:System.IServiceProvider> that represents the service object for the .
   overload: System.Web.UI.ControlBuilder.SetServiceProvider*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1031,15 +1082,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides the  with the inner text of the control tag.
+  remarks: This method is called only if <xref:System.Web.UI.ControlBuilder.NeedsTagInnerText%2A> previously returned `true`.
+  example:
+  - "The following example uses the <xref:System.Web.UI.ControlBuilder.InDesigner%2A> property when the <xref:System.Web.UI.ControlBuilder.NeedsTagInnerText%2A> method is called. When a control has this builder attached to it, the <xref:System.Web.UI.ControlBuilder.NeedsTagInnerText%2A> determines whether the control is being accessed at design-time through a designer. The <xref:System.Web.UI.ControlBuilder.NeedsTagInnerText%2A> returns the value of the <xref:System.Web.UI.ControlBuilder.InDesigner%2A> property, and then the SetTagInnerText method is called. If the <xref:System.Web.UI.ControlBuilder.InDesigner%2A> property is set to `false`, an <xref:System.Exception> is thrown. Otherwise, the inner text of the control is returned on the SetTagInnerText call.  \n  \n [!code-vb[ControlBuilderSamples_3#1](../../add/codesnippet/VisualBasic/m-system.web.ui.controlb_2_1.vb)]\n [!code-cs[ControlBuilderSamples_3#1](../../add/codesnippet/CSharp/m-system.web.ui.controlb_2_1.cs)]"
   syntax:
     content: public virtual void SetTagInnerText (string text);
     parameters:
     - id: text
       type: System.String
-      description: To be added.
+      description: The text to be provided.
   overload: System.Web.UI.ControlBuilder.SetTagInnerText*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1056,14 +1110,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a list of child  objects for this  object.
   syntax:
     content: public System.Collections.ArrayList SubBuilders { get; }
     return:
       type: System.Collections.ArrayList
-      description: To be added.
+      description: A list of child  objects.
   overload: System.Web.UI.ControlBuilder.SubBuilders*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1080,14 +1134,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the tag name for the control to be built.
   syntax:
     content: public string TagName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The tag name for the control.
   overload: System.Web.UI.ControlBuilder.TagName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1104,14 +1158,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of template property entries.
+  remarks: If there are no entries, a static empty collection is returned.
   syntax:
     content: public System.Collections.ICollection TemplatePropertyEntries { get; }
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: A collection of template property entries.
   overload: System.Web.UI.ControlBuilder.TemplatePropertyEntries*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1128,14 +1183,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets an  object that is used in design time to manage control themes and skins.
+  remarks: The <xref:System.Web.UI.IThemeResolutionService> interface is a container for one or more <xref:System.Web.UI.ThemeProvider> objects, which in turn supply the <xref:System.Web.UI.SkinBuilder> objects that apply themes and control skins to controls when they are created in a designer.
   syntax:
     content: public System.Web.UI.IThemeResolutionService ThemeResolutionService { get; }
     return:
       type: System.Web.UI.IThemeResolutionService
-      description: To be added.
+      description: An  object that is used in design time to manage control themes and skins.
   overload: System.Web.UI.ControlBuilder.ThemeResolutionService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1192,12 +1248,6 @@ references:
   name: BindingContainerBuilder
   nameWithType: ControlBuilder.BindingContainerBuilder
   fullName: System.Web.UI.ControlBuilder.BindingContainerBuilder
-- uid: System.Web.UI.ControlBuilder
-  parent: System.Web.UI
-  isExternal: false
-  name: ControlBuilder
-  nameWithType: ControlBuilder
-  fullName: System.Web.UI.ControlBuilder
 - uid: System.Web.UI.ControlBuilder.BindingContainerType
   parent: System.Web.UI.ControlBuilder
   isExternal: false
@@ -1216,12 +1266,6 @@ references:
   name: BuildObject()
   nameWithType: ControlBuilder.BuildObject()
   fullName: System.Web.UI.ControlBuilder.BuildObject()
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.ControlBuilder.CloseControl
   parent: System.Web.UI.ControlBuilder
   isExternal: false
@@ -1246,54 +1290,18 @@ references:
   name: ControlType
   nameWithType: ControlBuilder.ControlType
   fullName: System.Web.UI.ControlBuilder.ControlType
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Web.UI.ControlBuilder.CreateBuilderFromType(System.Web.UI.TemplateParser,System.Web.UI.ControlBuilder,System.Type,System.String,System.String,System.Collections.IDictionary,System.Int32,System.String)
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: CreateBuilderFromType(TemplateParser,ControlBuilder,Type,String,String,IDictionary,Int32,String)
   nameWithType: ControlBuilder.CreateBuilderFromType(TemplateParser,ControlBuilder,Type,String,String,IDictionary,Int32,String)
   fullName: System.Web.UI.ControlBuilder.CreateBuilderFromType(TemplateParser,ControlBuilder,Type,String,String,IDictionary,Int32,String)
-- uid: System.Web.UI.ControlBuilder
-  parent: System.Web.UI
-  isExternal: false
-  name: ControlBuilder
-  nameWithType: ControlBuilder
-  fullName: System.Web.UI.ControlBuilder
 - uid: System.Web.UI.TemplateParser
   parent: System.Web.UI
   isExternal: false
   name: TemplateParser
   nameWithType: TemplateParser
   fullName: System.Web.UI.TemplateParser
-- uid: System.Web.UI.ControlBuilder
-  parent: System.Web.UI
-  isExternal: false
-  name: ControlBuilder
-  nameWithType: ControlBuilder
-  fullName: System.Web.UI.ControlBuilder
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Collections.IDictionary
   parent: System.Collections
   isExternal: true
@@ -1306,12 +1314,6 @@ references:
   name: Int32
   nameWithType: Int32
   fullName: System.Int32
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ControlBuilder.CurrentFilterResolutionService
   parent: System.Web.UI.ControlBuilder
   isExternal: false
@@ -1330,72 +1332,30 @@ references:
   name: DeclareType
   nameWithType: ControlBuilder.DeclareType
   fullName: System.Web.UI.ControlBuilder.DeclareType
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Web.UI.ControlBuilder.DesignerFilter
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: DesignerFilter
   nameWithType: ControlBuilder.DesignerFilter
   fullName: System.Web.UI.ControlBuilder.DesignerFilter
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ControlBuilder.FChildrenAsProperties
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: FChildrenAsProperties
   nameWithType: ControlBuilder.FChildrenAsProperties
   fullName: System.Web.UI.ControlBuilder.FChildrenAsProperties
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ControlBuilder.FIsNonParserAccessor
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: FIsNonParserAccessor
   nameWithType: ControlBuilder.FIsNonParserAccessor
   fullName: System.Web.UI.ControlBuilder.FIsNonParserAccessor
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ControlBuilder.GetChildControlType(System.String,System.Collections.IDictionary)
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: GetChildControlType(String,IDictionary)
   nameWithType: ControlBuilder.GetChildControlType(String,IDictionary)
   fullName: System.Web.UI.ControlBuilder.GetChildControlType(String,IDictionary)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Collections.IDictionary
-  parent: System.Collections
-  isExternal: true
-  name: IDictionary
-  nameWithType: IDictionary
-  fullName: System.Collections.IDictionary
 - uid: System.Web.UI.ControlBuilder.GetObjectPersistData
   parent: System.Web.UI.ControlBuilder
   isExternal: false
@@ -1414,210 +1374,90 @@ references:
   name: GetResourceKey()
   nameWithType: ControlBuilder.GetResourceKey()
   fullName: System.Web.UI.ControlBuilder.GetResourceKey()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ControlBuilder.HasAspCode
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: HasAspCode
   nameWithType: ControlBuilder.HasAspCode
   fullName: System.Web.UI.ControlBuilder.HasAspCode
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ControlBuilder.HasBody
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: HasBody()
   nameWithType: ControlBuilder.HasBody()
   fullName: System.Web.UI.ControlBuilder.HasBody()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ControlBuilder.HtmlDecodeLiterals
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: HtmlDecodeLiterals()
   nameWithType: ControlBuilder.HtmlDecodeLiterals()
   fullName: System.Web.UI.ControlBuilder.HtmlDecodeLiterals()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ControlBuilder.ID
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: ID
   nameWithType: ControlBuilder.ID
   fullName: System.Web.UI.ControlBuilder.ID
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ControlBuilder.InDesigner
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: InDesigner
   nameWithType: ControlBuilder.InDesigner
   fullName: System.Web.UI.ControlBuilder.InDesigner
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ControlBuilder.Init(System.Web.UI.TemplateParser,System.Web.UI.ControlBuilder,System.Type,System.String,System.String,System.Collections.IDictionary)
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: Init(TemplateParser,ControlBuilder,Type,String,String,IDictionary)
   nameWithType: ControlBuilder.Init(TemplateParser,ControlBuilder,Type,String,String,IDictionary)
   fullName: System.Web.UI.ControlBuilder.Init(TemplateParser,ControlBuilder,Type,String,String,IDictionary)
-- uid: System.Web.UI.TemplateParser
-  parent: System.Web.UI
-  isExternal: false
-  name: TemplateParser
-  nameWithType: TemplateParser
-  fullName: System.Web.UI.TemplateParser
-- uid: System.Web.UI.ControlBuilder
-  parent: System.Web.UI
-  isExternal: false
-  name: ControlBuilder
-  nameWithType: ControlBuilder
-  fullName: System.Web.UI.ControlBuilder
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Collections.IDictionary
-  parent: System.Collections
-  isExternal: true
-  name: IDictionary
-  nameWithType: IDictionary
-  fullName: System.Collections.IDictionary
 - uid: System.Web.UI.ControlBuilder.InPageTheme
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: InPageTheme
   nameWithType: ControlBuilder.InPageTheme
   fullName: System.Web.UI.ControlBuilder.InPageTheme
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ControlBuilder.ItemType
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: ItemType
   nameWithType: ControlBuilder.ItemType
   fullName: System.Web.UI.ControlBuilder.ItemType
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ControlBuilder.Localize
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: Localize
   nameWithType: ControlBuilder.Localize
   fullName: System.Web.UI.ControlBuilder.Localize
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ControlBuilder.NamingContainerType
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: NamingContainerType
   nameWithType: ControlBuilder.NamingContainerType
   fullName: System.Web.UI.ControlBuilder.NamingContainerType
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Web.UI.ControlBuilder.NeedsTagInnerText
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: NeedsTagInnerText()
   nameWithType: ControlBuilder.NeedsTagInnerText()
   fullName: System.Web.UI.ControlBuilder.NeedsTagInnerText()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.ControlBuilder.OnAppendToParentBuilder(System.Web.UI.ControlBuilder)
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: OnAppendToParentBuilder(ControlBuilder)
   nameWithType: ControlBuilder.OnAppendToParentBuilder(ControlBuilder)
   fullName: System.Web.UI.ControlBuilder.OnAppendToParentBuilder(ControlBuilder)
-- uid: System.Web.UI.ControlBuilder
-  parent: System.Web.UI
-  isExternal: false
-  name: ControlBuilder
-  nameWithType: ControlBuilder
-  fullName: System.Web.UI.ControlBuilder
 - uid: System.Web.UI.ControlBuilder.PageVirtualPath
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: PageVirtualPath
   nameWithType: ControlBuilder.PageVirtualPath
   fullName: System.Web.UI.ControlBuilder.PageVirtualPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ControlBuilder.Parser
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: Parser
   nameWithType: ControlBuilder.Parser
   fullName: System.Web.UI.ControlBuilder.Parser
-- uid: System.Web.UI.TemplateParser
-  parent: System.Web.UI
-  isExternal: false
-  name: TemplateParser
-  nameWithType: TemplateParser
-  fullName: System.Web.UI.TemplateParser
 - uid: System.Web.UI.ControlBuilder.ProcessGeneratedCode(System.CodeDom.CodeCompileUnit,System.CodeDom.CodeTypeDeclaration,System.CodeDom.CodeTypeDeclaration,System.CodeDom.CodeMemberMethod,System.CodeDom.CodeMemberMethod)
   parent: System.Web.UI.ControlBuilder
   isExternal: false
@@ -1636,18 +1476,6 @@ references:
   name: CodeTypeDeclaration
   nameWithType: CodeTypeDeclaration
   fullName: System.CodeDom.CodeTypeDeclaration
-- uid: System.CodeDom.CodeTypeDeclaration
-  parent: System.CodeDom
-  isExternal: false
-  name: CodeTypeDeclaration
-  nameWithType: CodeTypeDeclaration
-  fullName: System.CodeDom.CodeTypeDeclaration
-- uid: System.CodeDom.CodeMemberMethod
-  parent: System.CodeDom
-  isExternal: false
-  name: CodeMemberMethod
-  nameWithType: CodeMemberMethod
-  fullName: System.CodeDom.CodeMemberMethod
 - uid: System.CodeDom.CodeMemberMethod
   parent: System.CodeDom
   isExternal: false
@@ -1672,36 +1500,18 @@ references:
   name: SetResourceKey(String)
   nameWithType: ControlBuilder.SetResourceKey(String)
   fullName: System.Web.UI.ControlBuilder.SetResourceKey(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ControlBuilder.SetServiceProvider(System.IServiceProvider)
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: SetServiceProvider(IServiceProvider)
   nameWithType: ControlBuilder.SetServiceProvider(IServiceProvider)
   fullName: System.Web.UI.ControlBuilder.SetServiceProvider(IServiceProvider)
-- uid: System.IServiceProvider
-  parent: System
-  isExternal: true
-  name: IServiceProvider
-  nameWithType: IServiceProvider
-  fullName: System.IServiceProvider
 - uid: System.Web.UI.ControlBuilder.SetTagInnerText(System.String)
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: SetTagInnerText(String)
   nameWithType: ControlBuilder.SetTagInnerText(String)
   fullName: System.Web.UI.ControlBuilder.SetTagInnerText(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ControlBuilder.SubBuilders
   parent: System.Web.UI.ControlBuilder
   isExternal: false
@@ -1720,24 +1530,12 @@ references:
   name: TagName
   nameWithType: ControlBuilder.TagName
   fullName: System.Web.UI.ControlBuilder.TagName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ControlBuilder.TemplatePropertyEntries
   parent: System.Web.UI.ControlBuilder
   isExternal: false
   name: TemplatePropertyEntries
   nameWithType: ControlBuilder.TemplatePropertyEntries
   fullName: System.Web.UI.ControlBuilder.TemplatePropertyEntries
-- uid: System.Collections.ICollection
-  parent: System.Collections
-  isExternal: true
-  name: ICollection
-  nameWithType: ICollection
-  fullName: System.Collections.ICollection
 - uid: System.Web.UI.ControlBuilder.ThemeResolutionService
   parent: System.Web.UI.ControlBuilder
   isExternal: false

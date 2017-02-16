@@ -41,8 +41,10 @@ items:
   nameWithType: FieldTemplateUserControl
   fullName: System.Web.DynamicData.FieldTemplateUserControl
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the base class for all field template controls.
+  remarks: "ASP.NET Dynamic Data field templates are ASP.NET user controls that map data controls to data types in a data model. Field templates derive from FieldTemplateUserControl, the class that enables access to data fields, data columns, and metadata in data models. Dynamic Data projects provide field templates by default. You can modify the field templates provided by default or create custom field templates.  \n  \n This class inherits from the <xref:System.Web.UI.UserControl> Class."
+  example:
+  - "The following code example creates a field template that displays data fields that have a many-to-one relationship and renders a <xref:System.Web.UI.WebControls.HyperLink> control that redirects the user to the relationship page.  \n  \n The following example shows the code file for the ForeignKey.ascx user control.  \n  \n```vb#  \nPublic Partial Class ForeignKeyField   \n    Inherits System.Web.DynamicData.FieldTemplateUserControl   \n  \n    Protected Function GetDisplayString() As String   \n        Return FormatFieldValue( _  \n            ForeignKeyColumn.ParentTable.GetDisplayString(FieldValue))   \n    End Function   \n  \n    Public Overloads Overrides ReadOnly Property DataControl() As Control   \n        Get   \n            Return HyperLink1   \n        End Get   \n    End Property   \nEnd Class   \n```  \n  \n```c#  \npublic partial class ForeignKeyField :   \n                        System.Web.DynamicData.FieldTemplateUserControl   \n{  \n    protected string GetDisplayString()   \n    {  \n       Return         FormatFieldValue(ForeignKeyColumn.ParentTable.GetDisplayString(FieldValue));  \n  \n    public override Control DataControl   \n    {  \n        get   \n        {  \n          return HyperLink1;  \n    }  \n}  \n```  \n  \n The following example shows the ForeignKey.aspx file.  \n  \n```vb#  \n<%@ Control Language=\"VB\" CodeFile=\"ForeignKey.ascx.vb\" Inherits=\"ForeignKeyField\" %>  \n  \n<asp:HyperLink ID=\"HyperLink1\" runat=\"server\"  \n    Text=\"<%# GetDisplayString() %>\" />  \n```  \n  \n```c#  \n<%@ Control Language=\"C#\" CodeFile=\"ForeignKey.ascx.cs\" Inherits=\"ForeignKeyField\" %>  \n  \n<asp:HyperLink ID=\"HyperLink1\" runat=\"server\"  \n    Text=\"<%# GetDisplayString() %>\" />  \n```  \n  \n To compile the example code, you need the following:  \n  \n-   [!INCLUDE[vs_dev10_long](../../add/includes/vs-dev10-long-md.md)] or [!INCLUDE[vwd_exp_dev10_long](../../add/includes/vwd-exp-dev10-long-md.md)].  \n  \n-   A Dynamic Data Web site. For more information, see [Walkthrough: Creating a New Dynamic Data Web Site Using Scaffolding](../Topic/Walkthrough:%20Creating%20a%20New%20Dynamic%20Data%20Web%20Site%20Using%20Scaffolding.md)."
   syntax:
     content: 'public class FieldTemplateUserControl : System.Web.UI.UserControl, System.Web.DynamicData.IFieldTemplate, System.Web.UI.IBindableControl'
   inheritance:
@@ -236,12 +238,12 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public FieldTemplateUserControl ();
     parameters: []
   overload: System.Web.DynamicData.FieldTemplateUserControl.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -258,18 +260,19 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the URL that links to the page that displays the list of children entities and allows the path to be overridden.
+  remarks: This method is similar to <xref:System.Web.DynamicData.FieldTemplateUserControl.ChildrenPath%2A>, except that it allows the path part of the URL to be overridden. This method is used if the pages are not located in the DynamicData\CustomPages folder of the Dynamic Data project. This method applies to Children columns only.
   syntax:
     content: protected string BuildChildrenPath (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path to override.
     return:
       type: System.String
-      description: To be added.
+      description: The URL that links the displayed page to the children page.
   overload: System.Web.DynamicData.FieldTemplateUserControl.BuildChildrenPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -286,18 +289,19 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Get the URL that links the current page to the page that displays the details of the foreign key entity and allows the path to be overridden.
+  remarks: This method is similar to <xref:System.Web.DynamicData.FieldTemplateUserControl.ForeignKeyPath%2A> except that it allows the path of the URL to be overridden. This property is used if the page is not located in the DynamicData\CustomPages folder your the Dynamic Data project.
   syntax:
     content: protected string BuildForeignKeyPath (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path to override.
     return:
       type: System.String
-      description: To be added.
+      description: The URL that links to the page that displays the details of the foreign key page.
   overload: System.Web.DynamicData.FieldTemplateUserControl.BuildForeignKeyPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -314,14 +318,18 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object associated with a field template.
+  remarks: This property casts a <xref:System.Web.DynamicData.MetaColumn> to a <xref:System.Web.DynamicData.MetaChildrenColumn>. If the <xref:System.Web.DynamicData.MetaColumn> class is not a children column, this property throws an exception.
   syntax:
     content: public System.Web.DynamicData.MetaChildrenColumn ChildrenColumn { get; }
     return:
       type: System.Web.DynamicData.MetaChildrenColumn
-      description: To be added.
+      description: A column that represents a one-to-many relationship.
   overload: System.Web.DynamicData.FieldTemplateUserControl.ChildrenColumn*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: ChildrenColumn is .
   platform:
   - net-11
   - net-20
@@ -338,14 +346,15 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the URL that links to a page that displays a list of children entities.
+  remarks: This method returns a URL that links to a page that displays a list of children entities. For example, the products column in the ProductCategories table in the AdventureWorksLT sample database has URLs that link to the list of product that are in the selected category. This property only applies to children columns.
   syntax:
     content: protected string ChildrenPath { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The URL that links the displayed page to the children entities.
   overload: System.Web.DynamicData.FieldTemplateUserControl.ChildrenPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -362,14 +371,14 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  associated with a field template.
   syntax:
     content: public System.Web.DynamicData.MetaColumn Column { get; }
     return:
       type: System.Web.DynamicData.MetaColumn
-      description: To be added.
+      description: An object that represents a database column.
   overload: System.Web.DynamicData.FieldTemplateUserControl.Column*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -386,14 +395,14 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type of the data-bound control that contains the  class.
   syntax:
     content: public virtual System.Web.DynamicData.ContainerType ContainerType { get; }
     return:
       type: System.Web.DynamicData.ContainerType
-      description: To be added.
+      description: The container control type.
   overload: System.Web.DynamicData.FieldTemplateUserControl.ContainerType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -410,18 +419,19 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets either an input value or  based on <xref:System.Web.DynamicData.MetaColumn.ConvertEmptyStringToNull%2A> and <xref:System.Web.DynamicData.DynamicField.NullDisplayText%2A>.
+  remarks: This method returns <xref:System.Web.DynamicData.DynamicControl.ConvertEmptyStringToNull%2A> property and <xref:System.Web.DynamicData.DynamicField.NullDisplayText%2A> property which can be set via metadata or the <xref:System.Web.DynamicData.DynamicField> class or <xref:System.Web.DynamicData.DynamicControl>.
   syntax:
     content: protected virtual object ConvertEditedValue (string value);
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The input value.
     return:
       type: System.Object
-      description: To be added.
+      description: The converted value.
   overload: System.Web.DynamicData.FieldTemplateUserControl.ConvertEditedValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -438,14 +448,14 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the data control that handles the data field in a field template.
   syntax:
     content: public virtual System.Web.UI.Control DataControl { get; }
     return:
       type: System.Web.UI.Control
-      description: To be added.
+      description: A data control that handles the data field in a field template.
   overload: System.Web.DynamicData.FieldTemplateUserControl.DataControl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -462,18 +472,19 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Saves the value of foreign keys.
+  remarks: This method is used when saving foreign key columns. The value of the foreign key is selected from the <xref:System.Web.UI.WebControls.ListControl.SelectedValue%2A> property of a drop down list.
   syntax:
     content: protected virtual void ExtractForeignKey (System.Collections.IDictionary dictionary, string selectedValue);
     parameters:
     - id: dictionary
       type: System.Collections.IDictionary
-      description: To be added.
+      description: The dictionary that contains all the new values.
     - id: selectedValue
       type: System.String
-      description: To be added.
+      description: The value to save.
   overload: System.Web.DynamicData.FieldTemplateUserControl.ExtractForeignKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -490,15 +501,16 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides dictionary access to all data in the current row.
+  remarks: This method implements the <xref:System.Web.UI.IBindableControl.ExtractValues%2A> method.
   syntax:
     content: protected virtual void ExtractValues (System.Collections.Specialized.IOrderedDictionary dictionary);
     parameters:
     - id: dictionary
       type: System.Collections.Specialized.IOrderedDictionary
-      description: To be added.
+      description: The dictionary that contains all the new values.
   overload: System.Web.DynamicData.FieldTemplateUserControl.ExtractValues*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -515,14 +527,14 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the value of a column in a current row.
   syntax:
     content: public virtual object FieldValue { get; set; }
     return:
       type: System.Object
-      description: To be added.
+      description: An object that represents the value of the column in the current row.
   overload: System.Web.DynamicData.FieldTemplateUserControl.FieldValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -539,14 +551,15 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the string representation of the value of a column in the current row when the row is in edit mode.
+  remarks: If formatting is enabled the string is formatted after editing.
   syntax:
     content: public virtual string FieldValueEditString { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the column in the row that is edited.
   overload: System.Web.DynamicData.FieldTemplateUserControl.FieldValueEditString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -563,14 +576,14 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the formatted string representation of the value of a column in the current row.
   syntax:
     content: public virtual string FieldValueString { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The formatted value of the column in the current row.
   overload: System.Web.DynamicData.FieldTemplateUserControl.FieldValueString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -587,18 +600,18 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines the field template that is used to render a specified data column.
   syntax:
     content: protected System.Web.DynamicData.FieldTemplateUserControl FindOtherFieldTemplate (string columnName);
     parameters:
     - id: columnName
       type: System.String
-      description: To be added.
+      description: The data column the field template renders.
     return:
       type: System.Web.DynamicData.FieldTemplateUserControl
-      description: To be added.
+      description: The field template that is used to render a specified data column.
   overload: System.Web.DynamicData.FieldTemplateUserControl.FindOtherFieldTemplate*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -615,14 +628,18 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  that is associated with a foreign key column.
+  remarks: This class converts the <xref:System.Web.DynamicData.MetaColumn> to a <xref:System.Web.DynamicData.MetaForeignKeyColumn>. The class throws an exception if <xref:System.Web.DynamicData.MetaColumn> is not a foreign key column.
   syntax:
     content: public System.Web.DynamicData.MetaForeignKeyColumn ForeignKeyColumn { get; }
     return:
       type: System.Web.DynamicData.MetaForeignKeyColumn
-      description: To be added.
+      description: A column that represents a many-to-one relationship.
   overload: System.Web.DynamicData.FieldTemplateUserControl.ForeignKeyColumn*
+  exceptions:
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: If the  is not a foreign key column.
   platform:
   - net-11
   - net-20
@@ -639,14 +656,15 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Get the URL that links the current page to the page that displays the details of the foreign key entity.
+  remarks: If the data column has a many-to-one relationship, this property returns a URL that links to the page that displays the details of the foreign key entity. For example, in the Category column of the Product table in the Northwind Database, this method can return a link that goes to the details of the category that the product belongs to. This property applies to foreign key columns only.
   syntax:
     content: protected string ForeignKeyPath { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The URL that links to the details of the foreign key data.
   overload: System.Web.DynamicData.FieldTemplateUserControl.ForeignKeyPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -663,18 +681,18 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies HTML encoding and formatting to a string that will be displayed.
   syntax:
     content: public virtual string FormatFieldValue (object fieldValue);
     parameters:
     - id: fieldValue
       type: System.Object
-      description: To be added.
+      description: The value from the data field to format.
     return:
       type: System.String
-      description: To be added.
+      description: The formatted value.
   overload: System.Web.DynamicData.FieldTemplateUserControl.FormatFieldValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -691,14 +709,14 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the HTML encoding and formatting options to apply to a field template.
   syntax:
     content: public System.Web.DynamicData.IFieldFormattingOptions FormattingOptions { get; }
     return:
       type: System.Web.DynamicData.IFieldFormattingOptions
-      description: To be added.
+      description: The interface that exposes the HTML encoding and formatting options to apply to a field template.
   overload: System.Web.DynamicData.FieldTemplateUserControl.FormattingOptions*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -715,18 +733,18 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of a specified column in the current row.
   syntax:
     content: protected virtual object GetColumnValue (System.Web.DynamicData.MetaColumn column);
     parameters:
     - id: column
       type: System.Web.DynamicData.MetaColumn
-      description: To be added.
+      description: The column to get the value from.
     return:
       type: System.Object
-      description: To be added.
+      description: An object that represents the value of a specified column in the current row.
   overload: System.Web.DynamicData.FieldTemplateUserControl.GetColumnValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -743,15 +761,16 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the string representation of the column's value.
+  remarks: The GetSelectedValueString method is used to return a string representation of foreign-key or enumeration column types.
   syntax:
     content: protected string GetSelectedValueString ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: If the column's current value is a foreign-key column or an enumeration column, a string representation of the selected value; otherwise, .
   overload: System.Web.DynamicData.FieldTemplateUserControl.GetSelectedValueString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -768,14 +787,14 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the host that provides context to this  class.
   syntax:
     content: public System.Web.DynamicData.IFieldTemplateHost Host { get; }
     return:
       type: System.Web.DynamicData.IFieldTemplateHost
-      description: To be added.
+      description: The object that provides context to this field template class.
   overload: System.Web.DynamicData.FieldTemplateUserControl.Host*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -792,15 +811,16 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Allows a  to ignore a specific type of model validation attribute.
+  remarks: This method allows a <xref:System.Web.DynamicData.DynamicValidator> to ignore a specific type of model Validation attributes. This method is called when the attribute type is already handled by an ASP.NET validation controls. Without this call, the validation can occur two times, resulting in a duplicate error message.
   syntax:
     content: protected void IgnoreModelValidationAttribute (Type attributeType);
     parameters:
     - id: attributeType
       type: System.Type
-      description: To be added.
+      description: The attribute to ignore.
   overload: System.Web.DynamicData.FieldTemplateUserControl.IgnoreModelValidationAttribute*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -817,14 +837,14 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the collection of metadata attributes that apply to the current column.
   syntax:
     content: public System.ComponentModel.AttributeCollection MetadataAttributes { get; }
     return:
       type: System.ComponentModel.AttributeCollection
-      description: To be added.
+      description: The collection of metadata attributes that apply to the column.
   overload: System.Web.DynamicData.FieldTemplateUserControl.MetadataAttributes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -841,14 +861,15 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the mode a field template uses.
+  remarks: The <xref:System.Web.UI.WebControls.DataBoundControlMode> that field templates uses include `Insert`, `Edit`, and `ReadOnly`.
   syntax:
     content: public System.Web.UI.WebControls.DataBoundControlMode Mode { get; }
     return:
       type: System.Web.UI.WebControls.DataBoundControlMode
-      description: To be added.
+      description: The current mode of the field template.
   overload: System.Web.DynamicData.FieldTemplateUserControl.Mode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -865,15 +886,16 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Populates a list control with all the values from a parent table.
+  remarks: This method works with only foreign key columns.
   syntax:
     content: protected void PopulateListControl (System.Web.UI.WebControls.ListControl listControl);
     parameters:
     - id: listControl
       type: System.Web.UI.WebControls.ListControl
-      description: To be added.
+      description: The list control to populate.
   overload: System.Web.DynamicData.FieldTemplateUserControl.PopulateListControl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -890,14 +912,15 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the current data row object.
+  remarks: The object returned by this the property and the <xref:System.Web.UI.Page.GetDataItem%2A> method are equivalent. This property uses the `Page.GetDataItem` method to return the data row object.
   syntax:
     content: public virtual object Row { get; }
     return:
       type: System.Object
-      description: To be added.
+      description: The current data row object.
   overload: System.Web.DynamicData.FieldTemplateUserControl.Row*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -914,15 +937,16 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets up a <xref:System.Web.DynamicData.IFieldTemplateHost.ValidationGroup%2A> on all validation controls.
+  remarks: This method performs additional logic for specific validation control such as the <xref:System.Web.UI.WebControls.RangeValidator> and sets up a <xref:System.Web.DynamicData.DynamicControl.ValidationGroup%2A> on all validation controls.
   syntax:
     content: protected virtual void SetUpValidator (System.Web.UI.WebControls.BaseValidator validator);
     parameters:
     - id: validator
       type: System.Web.UI.WebControls.BaseValidator
-      description: To be added.
+      description: The validation control to set up.
   overload: System.Web.DynamicData.FieldTemplateUserControl.SetUpValidator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -939,18 +963,19 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets up a  using the type of validator and the column to validate.
+  remarks: "This method used to set up <xref:System.Web.DynamicData.DynamicControl.ValidationGroup%2A> on all validators.  \n  \n It performs additional logic for specific validator types in this method. For example, if range values exit in the data model this method sets up <xref:System.Web.UI.WebControls.RangeValidator>."
   syntax:
     content: protected virtual void SetUpValidator (System.Web.UI.WebControls.BaseValidator validator, System.Web.DynamicData.MetaColumn column);
     parameters:
     - id: validator
       type: System.Web.UI.WebControls.BaseValidator
-      description: To be added.
+      description: The type of validator to set up.
     - id: column
       type: System.Web.DynamicData.MetaColumn
-      description: To be added.
+      description: The column for which to validator is set.
   overload: System.Web.DynamicData.FieldTemplateUserControl.SetUpValidator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -968,15 +993,16 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Associates a field template with the object that controls how the field template is used.
+  remarks: This method implements the <xref:System.Web.DynamicData.IFieldTemplate.SetHost%2A> interface.
   syntax:
     content: void IFieldTemplate.SetHost (System.Web.DynamicData.IFieldTemplateHost host);
     parameters:
     - id: host
       type: System.Web.DynamicData.IFieldTemplateHost
-      description: To be added.
+      description: The object that hosts the field template class. Controls the use of the field template.
   overload: System.Web.DynamicData.FieldTemplateUserControl.System#Web#DynamicData#IFieldTemplate#SetHost*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -994,15 +1020,15 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a set of name/value pairs to implement two-way data-binding in field template controls.
   syntax:
     content: void IBindableControl.ExtractValues (System.Collections.Specialized.IOrderedDictionary dictionary);
     parameters:
     - id: dictionary
       type: System.Collections.Specialized.IOrderedDictionary
-      description: To be added.
+      description: The dictionary that contains name/values pairs.
   overload: System.Web.DynamicData.FieldTemplateUserControl.System#Web#UI#IBindableControl#ExtractValues*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1019,14 +1045,14 @@ items:
   assemblies:
   - System.Web.DynamicData
   namespace: System.Web.DynamicData
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  that a column of a field template belongs to.
   syntax:
     content: public System.Web.DynamicData.MetaTable Table { get; }
     return:
       type: System.Web.DynamicData.MetaTable
-      description: To be added.
+      description: The table that the column that is associated with the field template belongs to.
   overload: System.Web.DynamicData.FieldTemplateUserControl.Table*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1053,30 +1079,12 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.DynamicData.FieldTemplateUserControl.BuildForeignKeyPath(System.String)
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
   name: BuildForeignKeyPath(String)
   nameWithType: FieldTemplateUserControl.BuildForeignKeyPath(String)
   fullName: System.Web.DynamicData.FieldTemplateUserControl.BuildForeignKeyPath(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.DynamicData.FieldTemplateUserControl.ChildrenColumn
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
@@ -1095,12 +1103,6 @@ references:
   name: ChildrenPath
   nameWithType: FieldTemplateUserControl.ChildrenPath
   fullName: System.Web.DynamicData.FieldTemplateUserControl.ChildrenPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.DynamicData.FieldTemplateUserControl.Column
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
@@ -1137,12 +1139,6 @@ references:
   name: Object
   nameWithType: Object
   fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.DynamicData.FieldTemplateUserControl.DataControl
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
@@ -1167,12 +1163,6 @@ references:
   name: IDictionary
   nameWithType: IDictionary
   fullName: System.Collections.IDictionary
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.DynamicData.FieldTemplateUserControl.ExtractValues(System.Collections.Specialized.IOrderedDictionary)
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
@@ -1191,36 +1181,18 @@ references:
   name: FieldValue
   nameWithType: FieldTemplateUserControl.FieldValue
   fullName: System.Web.DynamicData.FieldTemplateUserControl.FieldValue
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.DynamicData.FieldTemplateUserControl.FieldValueEditString
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
   name: FieldValueEditString
   nameWithType: FieldTemplateUserControl.FieldValueEditString
   fullName: System.Web.DynamicData.FieldTemplateUserControl.FieldValueEditString
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.DynamicData.FieldTemplateUserControl.FieldValueString
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
   name: FieldValueString
   nameWithType: FieldTemplateUserControl.FieldValueString
   fullName: System.Web.DynamicData.FieldTemplateUserControl.FieldValueString
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.DynamicData.FieldTemplateUserControl.FindOtherFieldTemplate(System.String)
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
@@ -1233,12 +1205,6 @@ references:
   name: FieldTemplateUserControl
   nameWithType: FieldTemplateUserControl
   fullName: System.Web.DynamicData.FieldTemplateUserControl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.DynamicData.FieldTemplateUserControl.ForeignKeyColumn
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
@@ -1257,30 +1223,12 @@ references:
   name: ForeignKeyPath
   nameWithType: FieldTemplateUserControl.ForeignKeyPath
   fullName: System.Web.DynamicData.FieldTemplateUserControl.ForeignKeyPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.DynamicData.FieldTemplateUserControl.FormatFieldValue(System.Object)
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
   name: FormatFieldValue(Object)
   nameWithType: FieldTemplateUserControl.FormatFieldValue(Object)
   fullName: System.Web.DynamicData.FieldTemplateUserControl.FormatFieldValue(Object)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.DynamicData.FieldTemplateUserControl.FormattingOptions
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
@@ -1299,30 +1247,12 @@ references:
   name: GetColumnValue(MetaColumn)
   nameWithType: FieldTemplateUserControl.GetColumnValue(MetaColumn)
   fullName: System.Web.DynamicData.FieldTemplateUserControl.GetColumnValue(MetaColumn)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Web.DynamicData.MetaColumn
-  parent: System.Web.DynamicData
-  isExternal: false
-  name: MetaColumn
-  nameWithType: MetaColumn
-  fullName: System.Web.DynamicData.MetaColumn
 - uid: System.Web.DynamicData.FieldTemplateUserControl.GetSelectedValueString
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
   name: GetSelectedValueString()
   nameWithType: FieldTemplateUserControl.GetSelectedValueString()
   fullName: System.Web.DynamicData.FieldTemplateUserControl.GetSelectedValueString()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.DynamicData.FieldTemplateUserControl.Host
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
@@ -1389,12 +1319,6 @@ references:
   name: Row
   nameWithType: FieldTemplateUserControl.Row
   fullName: System.Web.DynamicData.FieldTemplateUserControl.Row
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.DynamicData.FieldTemplateUserControl.SetUpValidator(System.Web.UI.WebControls.BaseValidator)
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
@@ -1413,42 +1337,18 @@ references:
   name: SetUpValidator(BaseValidator,MetaColumn)
   nameWithType: FieldTemplateUserControl.SetUpValidator(BaseValidator,MetaColumn)
   fullName: System.Web.DynamicData.FieldTemplateUserControl.SetUpValidator(BaseValidator,MetaColumn)
-- uid: System.Web.UI.WebControls.BaseValidator
-  parent: System.Web.UI.WebControls
-  isExternal: false
-  name: BaseValidator
-  nameWithType: BaseValidator
-  fullName: System.Web.UI.WebControls.BaseValidator
-- uid: System.Web.DynamicData.MetaColumn
-  parent: System.Web.DynamicData
-  isExternal: false
-  name: MetaColumn
-  nameWithType: MetaColumn
-  fullName: System.Web.DynamicData.MetaColumn
 - uid: System.Web.DynamicData.FieldTemplateUserControl.System#Web#DynamicData#IFieldTemplate#SetHost(System.Web.DynamicData.IFieldTemplateHost)
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
   name: System.Web.DynamicData.IFieldTemplate.SetHost(IFieldTemplateHost)
   nameWithType: FieldTemplateUserControl.System.Web.DynamicData.IFieldTemplate.SetHost(IFieldTemplateHost)
   fullName: System.Web.DynamicData.FieldTemplateUserControl.System.Web.DynamicData.IFieldTemplate.SetHost(IFieldTemplateHost)
-- uid: System.Web.DynamicData.IFieldTemplateHost
-  parent: System.Web.DynamicData
-  isExternal: false
-  name: IFieldTemplateHost
-  nameWithType: IFieldTemplateHost
-  fullName: System.Web.DynamicData.IFieldTemplateHost
 - uid: System.Web.DynamicData.FieldTemplateUserControl.System#Web#UI#IBindableControl#ExtractValues(System.Collections.Specialized.IOrderedDictionary)
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false
   name: System.Web.UI.IBindableControl.ExtractValues(IOrderedDictionary)
   nameWithType: FieldTemplateUserControl.System.Web.UI.IBindableControl.ExtractValues(IOrderedDictionary)
   fullName: System.Web.DynamicData.FieldTemplateUserControl.System.Web.UI.IBindableControl.ExtractValues(IOrderedDictionary)
-- uid: System.Collections.Specialized.IOrderedDictionary
-  parent: System.Collections.Specialized
-  isExternal: false
-  name: IOrderedDictionary
-  nameWithType: IOrderedDictionary
-  fullName: System.Collections.Specialized.IOrderedDictionary
 - uid: System.Web.DynamicData.FieldTemplateUserControl.Table
   parent: System.Web.DynamicData.FieldTemplateUserControl
   isExternal: false

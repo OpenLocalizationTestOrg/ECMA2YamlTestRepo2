@@ -17,8 +17,10 @@ items:
   nameWithType: IMenuCommandService
   fullName: System.ComponentModel.Design.IMenuCommandService
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides methods to manage the global designer verbs and menu commands available in design mode, and to show some types of shortcut menus.
+  remarks: "This interface provides methods to:  \n  \n-   Find, invoke, add and remove global designer verb commands.  \n  \n-   Find, invoke, add and remove standard menu commands.  \n  \n-   Alter the event handlers associated with standard menu commands.  \n  \n-   Display a shortcut menu of standard commands that is associated with a menu <xref:System.ComponentModel.Design.CommandID>.  \n  \n Designer verbs represent custom-defined commands that are listed on the shortcut menu in design mode. A designer verb can provide a specified text label. Each designer verb is automatically assigned a unique <xref:System.ComponentModel.Design.CommandID>. A designer can provide designer verbs through its <xref:System.ComponentModel.Design.IDesigner.Verbs%2A> property, but these are only available when the designer's component is currently selected. Global designer verbs are designer verb commands that can be accessed from a design-mode shortcut menu regardless of the selected component. This interface allows you to manage the set of global designer verbs that are available in design mode.  \n  \n You can add a global designer verb using the <xref:System.ComponentModel.Design.IMenuCommandService.AddVerb%2A> method, and you can remove a global designer verb using the <xref:System.ComponentModel.Design.IMenuCommandService.RemoveVerb%2A> method. You can invoke a designer verb using the <xref:System.ComponentModel.Design.IMenuCommandService.GlobalInvoke%2A> method if you know the <xref:System.ComponentModel.Design.CommandID> of the verb. The <xref:System.ComponentModel.Design.IMenuCommandService.Verbs%2A> property of this interface contains the current set of designer verb commands to display in a shortcut menu. This set of designer verb commands consists of all global designer verbs and any designer verbs offered by the designer of any currently selected component. This set of verbs is updated each time a component with a designer offering designer verb commands is selected or deselected.  \n  \n Menu commands are limited to the set of predefined standard commands. Most of the predefined standard commands are defined in the <xref:System.ComponentModel.Design.StandardCommands> and <xref:System.Windows.Forms.Design.MenuCommands> enumerations. You can add, remove, and invoke menu commands, and search for menu commands that have been added to a menu using methods of this interface.  \n  \n You can add a standard menu command using the <xref:System.ComponentModel.Design.IMenuCommandService.AddCommand%2A> method, and remove a standard menu command using the <xref:System.ComponentModel.Design.IMenuCommandService.RemoveCommand%2A> method. You can attach an event handler to a predefined standard menu command by following the procedure detailed in the documentation for the <xref:System.ComponentModel.Design.IMenuCommandService.AddCommand%2A> method. You can retrieve a menu command by <xref:System.ComponentModel.Design.CommandID> if it has been added to a menu using the <xref:System.ComponentModel.Design.IMenuCommandService.FindCommand%2A> method. You can invoke a menu command or designer verb command by <xref:System.ComponentModel.Design.CommandID> using the <xref:System.ComponentModel.Design.IMenuCommandService.GlobalInvoke%2A> method.  \n  \n> [!NOTE]\n>  An attempt to add a menu command with an already existing <xref:System.ComponentModel.Design.CommandID> will throw an <xref:System.InvalidOperationException>. When adding a menu command, be sure to check that it is not already on a menu using the <xref:System.ComponentModel.Design.IMenuCommandService.FindCommand%2A> method, or use exception handling wisely.  \n  \n> [!NOTE]\n>  A menu command can be added to a menu, and have its <xref:System.ComponentModel.Design.MenuCommand.Visible%2A> or <xref:System.ComponentModel.Design.MenuCommand.Enabled%2A> properties set to `false`. If you cannot visually locate a menu command that has been added on a menu, one of these properties may have been set to `false`.  \n  \n You can show certain standard shortcut menus containing menu commands at a specified location using the <xref:System.ComponentModel.Design.IMenuCommandService.ShowContextMenu%2A> method. The documentation for this method contains a table listing the command IDs that specify the valid menus to show."
+  example:
+  - "This example demonstrates using the IMenuCommandService to add a <xref:System.ComponentModel.Design.MenuCommand>.  \n  \n [!code-cpp[MenuCommand Example#1](../../add/codesnippet/CPP/t-system.componentmodel._76_1.cpp)]\n [!code-cs[MenuCommand Example#1](../../add/codesnippet/CSharp/t-system.componentmodel._76_1.cs)]\n [!code-vb[MenuCommand Example#1](../../add/codesnippet/VisualBasic/t-system.componentmodel._76_1.vb)]"
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -41,15 +43,19 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the specified standard menu command to the menu.
+  remarks: "The <xref:System.Windows.Forms.Design.MenuCommands> and <xref:System.ComponentModel.Design.StandardCommands> enumerations contain <xref:System.ComponentModel.Design.CommandID> identifiers for predefined standard commands and menu commands that are already associated with a location on a particular menu.  \n  \n> [!NOTE]\n>  An attempt to add a menu command with an already existing <xref:System.ComponentModel.Design.CommandID> will throw an <xref:System.InvalidOperationException>. When adding a menu command, be sure to check that it is not already on a menu using the <xref:System.ComponentModel.Design.IMenuCommandService.FindCommand%2A> method, or use exception handling wisely.  \n  \n You can attach an event handler to a predefined menu command with the following procedure:  \n  \n1.  If the menu command to link with an event handler has been added to a menu, or is located with the <xref:System.ComponentModel.Design.IMenuCommandService.FindCommand%2A> method, consider whether you wish to restore this menu command later, and whether you want to invoke the current event handler from your new event handler. If your code might restore the menu command or chain the invocation of event handlers, be sure to store a reference to the menu command somewhere.  \n  \n2.  Ensure that any previously existing menu command with the same <xref:System.ComponentModel.Design.CommandID> has been removed from the menu using the <xref:System.ComponentModel.Design.IMenuCommandService.RemoveCommand%2A> method.  \n  \n3.  Create a new <xref:System.ComponentModel.Design.MenuCommand> and specify your event handler in the constructor, along with a <xref:System.ComponentModel.Design.CommandID> representing the command to add. Each standard menu command is associated with a predefined menu location where it is added to. The supported command IDs are defined in the <xref:System.ComponentModel.Design.StandardCommands> and <xref:System.Windows.Forms.Design.MenuCommands> enumerations.  \n  \n4.  If you want to invoke any preexisting event handler for the menu command, call the <xref:System.ComponentModel.Design.MenuCommand.Invoke%2A> method of the menu command you have replaced on the menu from the event handler that handles the invoke event of your menu command.  \n  \n5.  If you are interested in restoring the event handler of a preexisting menu command that you have replaced, add the stored, preexisting menu command after you remove the replacement menu command you created. You may want to add this behavior to the `Dispose` method for your type."
   syntax:
     content: public void AddCommand (System.ComponentModel.Design.MenuCommand command);
     parameters:
     - id: command
       type: System.ComponentModel.Design.MenuCommand
-      description: To be added.
+      description: The  to add.
   overload: System.ComponentModel.Design.IMenuCommandService.AddCommand*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  of the specified  is already present on a menu.
   platform:
   - net-11
   - net-20
@@ -66,15 +72,16 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the specified designer verb to the set of global designer verbs.
+  remarks: Designers of components that provide designer verbs should use the <xref:System.ComponentModel.Design.IDesigner.Verbs%2A> property of their designer rather than calling this method. This method adds a global designer verb that can be accessed from the right-click shortcut menu in design mode regardless of the currently selected component.
   syntax:
     content: public void AddVerb (System.ComponentModel.Design.DesignerVerb verb);
     parameters:
     - id: verb
       type: System.ComponentModel.Design.DesignerVerb
-      description: To be added.
+      description: The  to add.
   overload: System.ComponentModel.Design.IMenuCommandService.AddVerb*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -91,18 +98,18 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Searches for the specified command ID and returns the menu command associated with it.
   syntax:
     content: public System.ComponentModel.Design.MenuCommand FindCommand (System.ComponentModel.Design.CommandID commandID);
     parameters:
     - id: commandID
       type: System.ComponentModel.Design.CommandID
-      description: To be added.
+      description: The  to search for.
     return:
       type: System.ComponentModel.Design.MenuCommand
-      description: To be added.
+      description: The  associated with the command ID, or  if no command is found.
   overload: System.ComponentModel.Design.IMenuCommandService.FindCommand*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -119,18 +126,19 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Invokes a menu or designer verb command matching the specified command ID.
+  remarks: This method searches for a menu command or designer verb with a <xref:System.ComponentModel.Design.CommandID> matching the specified <xref:System.ComponentModel.Design.CommandID>. This method first searches within the designer verbs collection consisting of global and active designer-provided verbs before continuing the search, if necessary, through the global environment command service. If a matching menu command or designer verb is located, the command is invoked.
   syntax:
     content: public bool GlobalInvoke (System.ComponentModel.Design.CommandID commandID);
     parameters:
     - id: commandID
       type: System.ComponentModel.Design.CommandID
-      description: To be added.
+      description: The  of the command to search for and execute.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the command was found and invoked successfully; otherwise, .
   overload: System.ComponentModel.Design.IMenuCommandService.GlobalInvoke*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -147,15 +155,16 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the specified standard menu command from the menu.
+  remarks: This method removes the specified <xref:System.ComponentModel.Design.MenuCommand> if it is found. This method does not raise an exception or return a value if the specified <xref:System.ComponentModel.Design.MenuCommand> is not found. Use the <xref:System.ComponentModel.Design.IMenuCommandService.FindCommand%2A> method to determine whether a <xref:System.ComponentModel.Design.MenuCommand> matching a specified <xref:System.ComponentModel.Design.CommandID> is located on a menu.
   syntax:
     content: public void RemoveCommand (System.ComponentModel.Design.MenuCommand command);
     parameters:
     - id: command
       type: System.ComponentModel.Design.MenuCommand
-      description: To be added.
+      description: The  to remove.
   overload: System.ComponentModel.Design.IMenuCommandService.RemoveCommand*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -172,15 +181,16 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the specified designer verb from the collection of global designer verbs.
+  remarks: This method removes the specified global designer verb if it is within the global designer verbs collection. You can add a designer verb to the global designer verbs collection using the <xref:System.ComponentModel.Design.IMenuCommandService.AddVerb%2A> method.
   syntax:
     content: public void RemoveVerb (System.ComponentModel.Design.DesignerVerb verb);
     parameters:
     - id: verb
       type: System.ComponentModel.Design.DesignerVerb
-      description: To be added.
+      description: The  to remove.
   overload: System.ComponentModel.Design.IMenuCommandService.RemoveVerb*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -197,21 +207,22 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Shows the specified shortcut menu at the specified location.
+  remarks: "The ShowContextMenu method can display any of the following Visual Studio shortcut menus containing menu commands at a specified point:  \n  \n|Menu|CommandID|  \n|----------|---------------|  \n|The shortcut menu displayed for a container|<xref:System.Windows.Forms.Design.MenuCommands.ContainerMenu>|  \n|The shortcut menu displayed for the component tray|<xref:System.Windows.Forms.Design.MenuCommands.ComponentTrayMenu>|  \n|The shortcut menu displayed for a selection|<xref:System.Windows.Forms.Design.MenuCommands.SelectionMenu>|  \n|The shortcut menu displayed for a tray selection|<xref:System.Windows.Forms.Design.MenuCommands.TraySelectionMenu>|  \n  \n This method can also display other registered shortcut menus."
   syntax:
     content: public void ShowContextMenu (System.ComponentModel.Design.CommandID menuID, int x, int y);
     parameters:
     - id: menuID
       type: System.ComponentModel.Design.CommandID
-      description: To be added.
+      description: The  for the shortcut menu to show.
     - id: x
       type: System.Int32
-      description: To be added.
+      description: The x-coordinate at which to display the menu, in screen coordinates.
     - id: y
       type: System.Int32
-      description: To be added.
+      description: The y-coordinate at which to display the menu, in screen coordinates.
   overload: System.ComponentModel.Design.IMenuCommandService.ShowContextMenu*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -228,14 +239,15 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of the designer verbs that are currently available.
+  remarks: The set of currently available designer verbs consists of all global designer verbs, which are added by the <xref:System.ComponentModel.Design.IMenuCommandService.AddVerb%2A> method on this interface, and individual designer verbs, which are offered by the <xref:System.ComponentModel.Design.IDesigner.Verbs%2A> property of individual designers. If the name of a global verb conflicts with the name of a designer verb, the designer-provided designer verb takes precedence.
   syntax:
     content: public System.ComponentModel.Design.DesignerVerbCollection Verbs { get; }
     return:
       type: System.ComponentModel.Design.DesignerVerbCollection
-      description: To be added.
+      description: A  that contains the designer verbs that are currently available.
   overload: System.ComponentModel.Design.IMenuCommandService.Verbs*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -271,12 +283,6 @@ references:
   name: FindCommand(CommandID)
   nameWithType: IMenuCommandService.FindCommand(CommandID)
   fullName: System.ComponentModel.Design.IMenuCommandService.FindCommand(CommandID)
-- uid: System.ComponentModel.Design.MenuCommand
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: MenuCommand
-  nameWithType: MenuCommand
-  fullName: System.ComponentModel.Design.MenuCommand
 - uid: System.ComponentModel.Design.CommandID
   parent: System.ComponentModel.Design
   isExternal: false
@@ -295,54 +301,24 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.ComponentModel.Design.CommandID
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: CommandID
-  nameWithType: CommandID
-  fullName: System.ComponentModel.Design.CommandID
 - uid: System.ComponentModel.Design.IMenuCommandService.RemoveCommand(System.ComponentModel.Design.MenuCommand)
   parent: System.ComponentModel.Design.IMenuCommandService
   isExternal: false
   name: RemoveCommand(MenuCommand)
   nameWithType: IMenuCommandService.RemoveCommand(MenuCommand)
   fullName: System.ComponentModel.Design.IMenuCommandService.RemoveCommand(MenuCommand)
-- uid: System.ComponentModel.Design.MenuCommand
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: MenuCommand
-  nameWithType: MenuCommand
-  fullName: System.ComponentModel.Design.MenuCommand
 - uid: System.ComponentModel.Design.IMenuCommandService.RemoveVerb(System.ComponentModel.Design.DesignerVerb)
   parent: System.ComponentModel.Design.IMenuCommandService
   isExternal: false
   name: RemoveVerb(DesignerVerb)
   nameWithType: IMenuCommandService.RemoveVerb(DesignerVerb)
   fullName: System.ComponentModel.Design.IMenuCommandService.RemoveVerb(DesignerVerb)
-- uid: System.ComponentModel.Design.DesignerVerb
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: DesignerVerb
-  nameWithType: DesignerVerb
-  fullName: System.ComponentModel.Design.DesignerVerb
 - uid: System.ComponentModel.Design.IMenuCommandService.ShowContextMenu(System.ComponentModel.Design.CommandID,System.Int32,System.Int32)
   parent: System.ComponentModel.Design.IMenuCommandService
   isExternal: false
   name: ShowContextMenu(CommandID,Int32,Int32)
   nameWithType: IMenuCommandService.ShowContextMenu(CommandID,Int32,Int32)
   fullName: System.ComponentModel.Design.IMenuCommandService.ShowContextMenu(CommandID,Int32,Int32)
-- uid: System.ComponentModel.Design.CommandID
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: CommandID
-  nameWithType: CommandID
-  fullName: System.ComponentModel.Design.CommandID
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Int32
   parent: System
   isExternal: true

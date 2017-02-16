@@ -19,8 +19,7 @@ items:
   nameWithType: ProjectElement
   fullName: Microsoft.Build.Construction.ProjectElement
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Abstract base class for MSBuild construction object model elements.
   syntax:
     content: public abstract class ProjectElement
   inheritance:
@@ -43,14 +42,14 @@ items:
   assemblies:
   - Microsoft.Build
   namespace: Microsoft.Build.Construction
-  summary: To be added.
-  remarks: To be added.
+  summary: "All parent elements of this element, going up to the ProjectRootElement.  \n  \n None if this is a ProjectRootElement.  \n  \n None if this has not been attached to a parent yet."
   syntax:
     content: public System.Collections.Generic.IEnumerable<Microsoft.Build.Construction.ProjectElementContainer> AllParents { get; }
     return:
       type: System.Collections.Generic.IEnumerable{Microsoft.Build.Construction.ProjectElementContainer}
-      description: To be added.
+      description: Returns an enumerator over all parent elements. There are no parents elements if the project element is a ProjectRootElement or if this is not yet attached to a parent element.
   overload: Microsoft.Build.Construction.ProjectElement.AllParents*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -67,14 +66,15 @@ items:
   assemblies:
   - Microsoft.Build
   namespace: Microsoft.Build.Construction
-  summary: To be added.
-  remarks: To be added.
+  summary: "Gets or sets the Condition value.  \n  \n It will return empty string IFF a condition attribute is legal but it’s not present or has no value.  \n  \n It will return null IFF a Condition attribute is illegal on that element.  \n  \n Removes the attribute if the value to set is empty.  \n  \n It is possible for derived classes to throw an <xref:System.InvalidOperationException> if setting the condition is not applicable for those elements."
+  remarks: "Removes the Condition attribute if the value to set is set to null or an empty string. If the Condition attribute is not present, returns an empty string instead of throwing an exception because a nonexistent condition is implicitly true  \n  \n For the \"ProjectExtensions\" element, the getter returns null and the setter throws an exception for any value."
   syntax:
     content: public virtual string Condition { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: Returns the Condition attribute value. Returns an empty string if the attribute is not present.
   overload: Microsoft.Build.Construction.ProjectElement.Condition*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -91,14 +91,14 @@ items:
   assemblies:
   - Microsoft.Build
   namespace: Microsoft.Build.Construction
-  summary: To be added.
-  remarks: To be added.
+  summary: "Location of the \"Condition\" attribute on this element, if any.  \n  \n If there is no such attribute, returns null."
   syntax:
     content: public virtual Microsoft.Build.Construction.ElementLocation ConditionLocation { get; }
     return:
       type: Microsoft.Build.Construction.ElementLocation
-      description: To be added.
+      description: Returns .
   overload: Microsoft.Build.Construction.ProjectElement.ConditionLocation*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -115,14 +115,14 @@ items:
   assemblies:
   - Microsoft.Build
   namespace: Microsoft.Build.Construction
-  summary: To be added.
-  remarks: To be added.
+  summary: "ProjectRootElement (possibly imported) that contains this Xml.  \n  \n Cannot be null."
   syntax:
     content: public Microsoft.Build.Construction.ProjectRootElement ContainingProject { get; }
     return:
       type: Microsoft.Build.Construction.ProjectRootElement
-      description: To be added.
+      description: Returns the project root container that contains this project.
   overload: Microsoft.Build.Construction.ProjectElement.ContainingProject*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -139,14 +139,15 @@ items:
   assemblies:
   - Microsoft.Build
   namespace: Microsoft.Build.Construction
-  summary: To be added.
-  remarks: To be added.
+  summary: "Gets or sets the Label value.  \n  \n Returns empty string if it is not present.  \n  \n Removes the attribute if the value to set is empty."
+  remarks: Removes the attribute if the value to set is empty.
   syntax:
     content: public string Label { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: Returns the label. Returns an empty string if no label is present.
   overload: Microsoft.Build.Construction.ProjectElement.Label*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -163,14 +164,14 @@ items:
   assemblies:
   - Microsoft.Build
   namespace: Microsoft.Build.Construction
-  summary: To be added.
-  remarks: To be added.
+  summary: "Location of the \"Label\" attribute on this element, if any.  \n  \n If there is no such attribute, returns null;"
   syntax:
     content: public Microsoft.Build.Construction.ElementLocation LabelLocation { get; }
     return:
       type: Microsoft.Build.Construction.ElementLocation
-      description: To be added.
+      description: Returns .
   overload: Microsoft.Build.Construction.ProjectElement.LabelLocation*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -187,14 +188,14 @@ items:
   assemblies:
   - Microsoft.Build
   namespace: Microsoft.Build.Construction
-  summary: To be added.
-  remarks: To be added.
+  summary: "Location of the corresponding Xml element.  \n  \n May not be correct if file is not saved, or file has been edited since it was last saved.  \n  \n In the case of an unsaved edit, the location only contains the path to the file that the element originates from."
   syntax:
     content: public Microsoft.Build.Construction.ElementLocation Location { get; }
     return:
       type: Microsoft.Build.Construction.ElementLocation
-      description: To be added.
+      description: Returns .
   overload: Microsoft.Build.Construction.ProjectElement.Location*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -211,14 +212,14 @@ items:
   assemblies:
   - Microsoft.Build
   namespace: Microsoft.Build.Construction
-  summary: To be added.
-  remarks: To be added.
+  summary: "Next sibling element.  \n  \n May be null."
   syntax:
     content: public Microsoft.Build.Construction.ProjectElement NextSibling { get; }
     return:
       type: Microsoft.Build.Construction.ProjectElement
-      description: To be added.
+      description: Returns the next sibling of this project element. Returns null if no next sibling exists.
   overload: Microsoft.Build.Construction.ProjectElement.NextSibling*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -235,14 +236,15 @@ items:
   assemblies:
   - Microsoft.Build
   namespace: Microsoft.Build.Construction
-  summary: To be added.
-  remarks: To be added.
+  summary: "Null if this is a ProjectRootElement.  \n  \n Null if this has not been attached to a parent yet."
+  remarks: Parent should only be set by ProjectElementContainer.
   syntax:
     content: public Microsoft.Build.Construction.ProjectElementContainer Parent { get; }
     return:
       type: Microsoft.Build.Construction.ProjectElementContainer
-      description: To be added.
+      description: Returns the project element container that contains this project.
   overload: Microsoft.Build.Construction.ProjectElement.Parent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -259,14 +261,14 @@ items:
   assemblies:
   - Microsoft.Build
   namespace: Microsoft.Build.Construction
-  summary: To be added.
-  remarks: To be added.
+  summary: "Previous sibling element.  \n  \n May be null."
   syntax:
     content: public Microsoft.Build.Construction.ProjectElement PreviousSibling { get; }
     return:
       type: Microsoft.Build.Construction.ProjectElement
-      description: To be added.
+      description: Returns the previous sibling of this project element. Returns null if no previous sibling exists.
   overload: Microsoft.Build.Construction.ProjectElement.PreviousSibling*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -287,6 +289,21 @@ references:
   name: IEnumerable<ProjectElementContainer>
   nameWithType: IEnumerable<ProjectElementContainer>
   fullName: System.Collections.Generic.IEnumerable<Microsoft.Build.Construction.ProjectElementContainer>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<Microsoft.Build.Construction.ProjectElementContainer>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: Microsoft.Build.Construction.ProjectElementContainer
+    name: ProjectElementContainer
+    nameWithType: ProjectElementContainer
+    fullName: ProjectElementContainer
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: Microsoft.Build.Construction.ProjectElement.Condition
   parent: Microsoft.Build.Construction.ProjectElement
   isExternal: false
@@ -329,36 +346,18 @@ references:
   name: Label
   nameWithType: ProjectElement.Label
   fullName: Microsoft.Build.Construction.ProjectElement.Label
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Construction.ProjectElement.LabelLocation
   parent: Microsoft.Build.Construction.ProjectElement
   isExternal: false
   name: LabelLocation
   nameWithType: ProjectElement.LabelLocation
   fullName: Microsoft.Build.Construction.ProjectElement.LabelLocation
-- uid: Microsoft.Build.Construction.ElementLocation
-  parent: Microsoft.Build.Construction
-  isExternal: false
-  name: ElementLocation
-  nameWithType: ElementLocation
-  fullName: Microsoft.Build.Construction.ElementLocation
 - uid: Microsoft.Build.Construction.ProjectElement.Location
   parent: Microsoft.Build.Construction.ProjectElement
   isExternal: false
   name: Location
   nameWithType: ProjectElement.Location
   fullName: Microsoft.Build.Construction.ProjectElement.Location
-- uid: Microsoft.Build.Construction.ElementLocation
-  parent: Microsoft.Build.Construction
-  isExternal: false
-  name: ElementLocation
-  nameWithType: ElementLocation
-  fullName: Microsoft.Build.Construction.ElementLocation
 - uid: Microsoft.Build.Construction.ProjectElement.NextSibling
   parent: Microsoft.Build.Construction.ProjectElement
   isExternal: false
@@ -389,12 +388,6 @@ references:
   name: PreviousSibling
   nameWithType: ProjectElement.PreviousSibling
   fullName: Microsoft.Build.Construction.ProjectElement.PreviousSibling
-- uid: Microsoft.Build.Construction.ProjectElement
-  parent: Microsoft.Build.Construction
-  isExternal: false
-  name: ProjectElement
-  nameWithType: ProjectElement
-  fullName: Microsoft.Build.Construction.ProjectElement
 - uid: Microsoft.Build.Construction.ProjectElement.AllParents*
   parent: Microsoft.Build.Construction.ProjectElement
   isExternal: false

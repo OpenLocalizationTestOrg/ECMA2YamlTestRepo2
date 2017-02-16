@@ -21,8 +21,10 @@ items:
   nameWithType: DataProtector
   fullName: System.Security.Cryptography.DataProtector
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides the base class for data protectors.
+  remarks: "This class protects stored data from viewing and tampering. The access to the protected data is obtained by creating an instance of this class and using the exact purpose strings that were used to protect the data.  The caller does not need a key to either protect or unprotect the data. The key is provided by the encryption algorithm.  \n  \n Derived classes must override the [ProviderProtect(Byte\\[\\])](assetId:///M:System.Security.Cryptography.DataProtector.ProviderProtect(System.Byte[])?qualifyHint=False&autoUpgrade=True) and <xref:System.Security.Cryptography.DataProtector.Unprotect%2A> methods, which the DataProtector base class calls back into. They must also override the <xref:System.Security.Cryptography.DataProtector.IsReprotectRequired%2A> method, which can always return `true` with a  potential small loss of efficiency when applications refresh their database of stored cipher text. Derived classes should provide a constructor that calls the base class constructor, which sets the <xref:System.Security.Cryptography.DataProtector.ApplicationName%2A>, <xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A>, and <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A> properties."
+  example:
+  - "The following example demonstrates how to create a data protector that uses a protection class with an option for extra entropy. By default, the DataProtector class prepends the hash of the purpose properties to the data to be encrypted. You can turn that functionality off and use the hashed purpose as extra entropy when calling a data protector with an extra entropy option.  \n  \n [!code-cs[Cryptography.DataProtector#1](../../add/codesnippet/CSharp/t-system.security.crypto_7_1.cs)]\n [!code-vb[Cryptography.DataProtector#1](../../add/codesnippet/VisualBasic/t-system.security.crypto_7_1.vb)]  \n  \n The following example demonstrates a simple data protector that uses the <xref:System.Security.Cryptography.DataProtector.PrependHashedPurposeToPlaintext%2A> functionality of the DataProtector class.  \n  \n [!code-vb[Cryptography.MemoryProtector#1](../../add/codesnippet/VisualBasic/t-system.security.crypto_7_2.vb)]\n [!code-cs[Cryptography.MemoryProtector#1](../../add/codesnippet/CSharp/t-system.security.crypto_7_2.cs)]"
   syntax:
     content: public abstract class DataProtector
   inheritance:
@@ -45,21 +47,25 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new instance of the  class by using the provided application name, primary purpose, and specific purposes.
+  remarks: This constructor sets the <xref:System.Security.Cryptography.DataProtector.ApplicationName%2A>, <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A>, and <xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A> properties. The combination of these three properties must uniquely identify the data you are protecting. If the data is not uniquely identified, you might inadvertently read the wrong data, or other data might be substituted for yours. Examples of primary and specific purpose pairs are “invoice” and invoice number, “gift card” and gift card number, “password” and URL string.
   syntax:
     content: protected DataProtector (string applicationName, string primaryPurpose, string[] specificPurposes);
     parameters:
     - id: applicationName
       type: System.String
-      description: To be added.
+      description: The name of the application.
     - id: primaryPurpose
       type: System.String
-      description: To be added.
+      description: The primary purpose for the protected data. See Remarks for additional important information.
     - id: specificPurposes
       type: System.String[]
-      description: To be added.
+      description: The specific purposes for the protected data. See Remarks for additional important information.
   overload: System.Security.Cryptography.DataProtector.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    applicationName is an empty string or .  \n  \n -or-  \n  \n primaryPurpose is an empty string or .  \n  \n -or-  \n  \n specificPurposes contains an empty string or ."
   platform:
   - net-11
   - net-20
@@ -76,14 +82,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the name of the application.
   syntax:
     content: protected string ApplicationName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The name of the application.
   overload: System.Security.Cryptography.DataProtector.ApplicationName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -100,27 +106,30 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of a data protector implementation by using the specified class name of the data protector, the application name, the primary purpose, and the specific purposes.
   syntax:
     content: public static System.Security.Cryptography.DataProtector Create (string providerClass, string applicationName, string primaryPurpose, string[] specificPurposes);
     parameters:
     - id: providerClass
       type: System.String
-      description: To be added.
+      description: The class name for the data protector.
     - id: applicationName
       type: System.String
-      description: To be added.
+      description: The name of the application.
     - id: primaryPurpose
       type: System.String
-      description: To be added.
+      description: The primary purpose for the protected data.
     - id: specificPurposes
       type: System.String[]
-      description: To be added.
+      description: The specific purposes for the protected data.
     return:
       type: System.Security.Cryptography.DataProtector
-      description: To be added.
+      description: A data protector implementation object.
   overload: System.Security.Cryptography.DataProtector.Create*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    providerClass is ."
   platform:
   - net-11
   - net-20
@@ -137,15 +146,18 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a hash of the property values specified by the constructor.
+  remarks: GetHashedPurpose computes the hash of the application name and the full purpose.  The full purpose is a concatenation of all the <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A> and <xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A> properties.  Each of the three parts is prefaced with its length so the hash can be reversed.
+  example:
+  - "The following example shows how to use the GetHashedPurpose method to hash the purpose properties for use as extra entropy.  It is part of a larger code example for the <xref:System.Security.Cryptography.DataProtector> class.  \n  \n [!code-cs[Cryptography.DataProtector#3](../../add/codesnippet/CSharp/m-system.security.crypto_107_1.cs)]\n [!code-vb[Cryptography.DataProtector#3](../../add/codesnippet/VisualBasic/m-system.security.crypto_107_1.vb)]"
   syntax:
     content: protected virtual byte[] GetHashedPurpose ();
     parameters: []
     return:
       type: System.Byte[]
-      description: To be added.
+      description: An array of bytes that contain the hash of the <xref:System.Security.Cryptography.DataProtector.ApplicationName%2A>, <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A>, and <xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A> properties.
   overload: System.Security.Cryptography.DataProtector.GetHashedPurpose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -162,18 +174,18 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines if re-encryption is required for the specified encrypted data.
   syntax:
     content: public abstract bool IsReprotectRequired (byte[] encryptedData);
     parameters:
     - id: encryptedData
       type: System.Byte[]
-      description: To be added.
+      description: The encrypted data to be evaluated.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the data must be re-encrypted; otherwise, .
   overload: System.Security.Cryptography.DataProtector.IsReprotectRequired*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -190,14 +202,15 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies whether the hash is prepended to the text array before encryption.
+  remarks: By default, it is assumed that derived classes will prepend the hash of the <xref:System.Security.Cryptography.DataProtector.ApplicationName%2A>, <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A>, and <xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A> properties to the plain text before encryption, and will check and verify  the hash during decryption.  If a derived class wants to specify the prepended data on its own (for example as an optional entropy value), this property can be overridden and set to return `false`.  If PrependHashedPurposeToPlaintext is `false`, <xref:System.Security.Cryptography.DataProtector.Protect%2A> and <xref:System.Security.Cryptography.DataProtector.Unprotect%2A> passes directly through to the <xref:System.Security.Cryptography.DataProtector.ProviderProtect%2A> and <xref:System.Security.Cryptography.DataProtector.ProviderUnprotect%2A> overrides without altering the byte array.
   syntax:
     content: protected virtual bool PrependHashedPurposeToPlaintext { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: Always .
   overload: System.Security.Cryptography.DataProtector.PrependHashedPurposeToPlaintext*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -214,14 +227,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the primary purpose for the protected data.
   syntax:
     content: protected string PrimaryPurpose { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The primary purpose for the protected data.
   overload: System.Security.Cryptography.DataProtector.PrimaryPurpose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -238,18 +251,21 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Protects the specified user data.
   syntax:
     content: public byte[] Protect (byte[] userData);
     parameters:
     - id: userData
       type: System.Byte[]
-      description: To be added.
+      description: The data to be protected.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: A byte array that contains the encrypted data.
   overload: System.Security.Cryptography.DataProtector.Protect*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    userData is ."
   platform:
   - net-11
   - net-20
@@ -266,18 +282,21 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies the delegate method in the derived class that the <xref:System.Security.Cryptography.DataProtector.Protect%2A> method in the base class calls back into.
+  remarks: ''
+  example:
+  - "The following example shows an implementation of the ProviderProtect method.  It is part of a larger code example for the <xref:System.Security.Cryptography.DataProtector> class.  \n  \n [!code-vb[Cryptography.MemoryProtector#3](../../add/codesnippet/VisualBasic/m-system.security.crypto_130_1.vb)]\n [!code-cs[Cryptography.MemoryProtector#3](../../add/codesnippet/CSharp/m-system.security.crypto_130_1.cs)]"
   syntax:
     content: protected abstract byte[] ProviderProtect (byte[] userData);
     parameters:
     - id: userData
       type: System.Byte[]
-      description: To be added.
+      description: The data to be encrypted.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: A byte array that contains the encrypted data.
   overload: System.Security.Cryptography.DataProtector.ProviderProtect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -294,18 +313,21 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies the delegate method in the derived class that the <xref:System.Security.Cryptography.DataProtector.Unprotect%2A> method in the base class calls back into.
+  remarks: ''
+  example:
+  - "The following example shows an implementation of the ProviderUnprotect method.  It is part of a larger code example for the <xref:System.Security.Cryptography.DataProtector> class.  \n  \n [!code-vb[Cryptography.MemoryProtector#4](../../add/codesnippet/VisualBasic/m-system.security.crypto_20_1.vb)]\n [!code-cs[Cryptography.MemoryProtector#4](../../add/codesnippet/CSharp/m-system.security.crypto_20_1.cs)]"
   syntax:
     content: protected abstract byte[] ProviderUnprotect (byte[] encryptedData);
     parameters:
     - id: encryptedData
       type: System.Byte[]
-      description: To be added.
+      description: The data to be unencrypted.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The unencrypted data..
   overload: System.Security.Cryptography.DataProtector.ProviderUnprotect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -322,14 +344,14 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the specific purposes for the protected data.
   syntax:
     content: protected System.Collections.Generic.IEnumerable<string> SpecificPurposes { get; }
     return:
       type: System.Collections.Generic.IEnumerable{System.String}
-      description: To be added.
+      description: A collection of the specific purposes for the protected data.
   overload: System.Security.Cryptography.DataProtector.SpecificPurposes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -346,18 +368,24 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Unprotects the specified protected data.
   syntax:
     content: public byte[] Unprotect (byte[] encryptedData);
     parameters:
     - id: encryptedData
       type: System.Byte[]
-      description: To be added.
+      description: The encrypted data to be unprotected.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: A byte array that contains the plain-text data.
   overload: System.Security.Cryptography.DataProtector.Unprotect*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    encryptedData is ."
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: "\n    encryptedData contained an invalid purpose."
   platform:
   - net-11
   - net-20
@@ -378,30 +406,26 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
+- uid: System.String[]
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Security.Cryptography.DataProtector.ApplicationName
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
   name: ApplicationName
   nameWithType: DataProtector.ApplicationName
   fullName: System.Security.Cryptography.DataProtector.ApplicationName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.DataProtector.Create(System.String,System.String,System.String,System.String[])
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
@@ -414,42 +438,26 @@ references:
   name: DataProtector
   nameWithType: DataProtector
   fullName: System.Security.Cryptography.DataProtector
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
 - uid: System.Security.Cryptography.DataProtector.GetHashedPurpose
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
   name: GetHashedPurpose()
   nameWithType: DataProtector.GetHashedPurpose()
   fullName: System.Security.Cryptography.DataProtector.GetHashedPurpose()
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Security.Cryptography.DataProtector.IsReprotectRequired(System.Byte[])
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
@@ -462,90 +470,36 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.DataProtector.PrependHashedPurposeToPlaintext
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
   name: PrependHashedPurposeToPlaintext
   nameWithType: DataProtector.PrependHashedPurposeToPlaintext
   fullName: System.Security.Cryptography.DataProtector.PrependHashedPurposeToPlaintext
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.Cryptography.DataProtector.PrimaryPurpose
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
   name: PrimaryPurpose
   nameWithType: DataProtector.PrimaryPurpose
   fullName: System.Security.Cryptography.DataProtector.PrimaryPurpose
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.DataProtector.Protect(System.Byte[])
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
   name: Protect(Byte[])
   nameWithType: DataProtector.Protect(Byte[])
   fullName: System.Security.Cryptography.DataProtector.Protect(Byte[])
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.DataProtector.ProviderProtect(System.Byte[])
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
   name: ProviderProtect(Byte[])
   nameWithType: DataProtector.ProviderProtect(Byte[])
   fullName: System.Security.Cryptography.DataProtector.ProviderProtect(Byte[])
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.DataProtector.ProviderUnprotect(System.Byte[])
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
   name: ProviderUnprotect(Byte[])
   nameWithType: DataProtector.ProviderUnprotect(Byte[])
   fullName: System.Security.Cryptography.DataProtector.ProviderUnprotect(Byte[])
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.DataProtector.SpecificPurposes
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
@@ -558,24 +512,27 @@ references:
   name: IEnumerable<String>
   nameWithType: IEnumerable<String>
   fullName: System.Collections.Generic.IEnumerable<System.String>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.String>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Security.Cryptography.DataProtector.Unprotect(System.Byte[])
   parent: System.Security.Cryptography.DataProtector
   isExternal: false
   name: Unprotect(Byte[])
   nameWithType: DataProtector.Unprotect(Byte[])
   fullName: System.Security.Cryptography.DataProtector.Unprotect(Byte[])
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.DataProtector.#ctor*
   parent: System.Security.Cryptography.DataProtector
   isExternal: false

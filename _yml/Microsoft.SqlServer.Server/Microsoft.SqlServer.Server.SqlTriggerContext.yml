@@ -13,8 +13,10 @@ items:
   nameWithType: SqlTriggerContext
   fullName: Microsoft.SqlServer.Server.SqlTriggerContext
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides contextual information about the trigger that was fired.
+  remarks: "The contextual information provided includes the type of action that caused the trigger to fire, which columns were modified in an UPDATE operation, and, in the case of a data definition language (DDL) trigger, an XML EventData structure (see \"Transact-SQL Reference\" in SQL Server Books Online) that describes the triggering operation.  \n  \n An instance of SqlTriggerContext is available from the <xref:Microsoft.SqlServer.Server.SqlContext> class, when the code is running inside a trigger through the <xref:Microsoft.SqlServer.Server.SqlContext.TriggerContext%2A> property."
+  example:
+  - "The following example shows a SqlTriggerContext object being used to determine if an <xref:Microsoft.SqlServer.Server.TriggerAction> action occurred. If a row was inserted into the `user`'s table, the user name and real name are retrieved from the inserted row and then added to the **UserNameAudit** table.  \n  \n [!code-cs[DataWorks SqlTriggerContext Sample#1](../../add/codesnippet/CSharp/t-microsoft.sqlserver.se_7_1.cs)]\n [!code-vb[DataWorks SqlTriggerContext Sample#1](../../add/codesnippet/VisualBasic/t-microsoft.sqlserver.se_7_1.vb)]"
   syntax:
     content: public sealed class SqlTriggerContext
   inheritance:
@@ -37,14 +39,15 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of columns contained by the data table bound to the trigger. This property is read-only.
+  remarks: ColumnCount property is useful to determine the maximum ordinal that <xref:Microsoft.SqlServer.Server.SqlTriggerContext.IsUpdatedColumn%2A> allows for a given trigger invocation.
   syntax:
     content: public int ColumnCount { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of columns contained by the data table bound to the trigger, as an integer.
   overload: Microsoft.SqlServer.Server.SqlTriggerContext.ColumnCount*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -61,14 +64,15 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the event data specific to the action that fired the trigger.
+  remarks: This information is available for data definition language (DDL) triggers. No information is available through this property for data manipulation language (DML) triggers.
   syntax:
     content: public System.Data.SqlTypes.SqlXml EventData { get; }
     return:
       type: System.Data.SqlTypes.SqlXml
-      description: To be added.
+      description: The event data specific to the action that fired the trigger as a  if more information is available;  otherwise.
   overload: Microsoft.SqlServer.Server.SqlTriggerContext.EventData*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -85,18 +89,21 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns  if a column was affected by an INSERT or UPDATE statement.
   syntax:
     content: public bool IsUpdatedColumn (int columnOrdinal);
     parameters:
     - id: columnOrdinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based ordinal of the column.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the column was affected by an INSERT or UPDATE operation.
   overload: Microsoft.SqlServer.Server.SqlTriggerContext.IsUpdatedColumn*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: Called in the context of a trigger where the value of the <xref:Microsoft.SqlServer.Server.SqlTriggerContext.TriggerAction%2A> property is not  or .
   platform:
   - net-11
   - net-20
@@ -113,14 +120,17 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates what action fired the trigger.
+  remarks: ''
+  example:
+  - "The following example shows an auditing trigger. If an <xref:Microsoft.SqlServer.Server.TriggerAction> or <xref:Microsoft.SqlServer.Server.TriggerAction> action occurred, the affected rows are retrieved from the INSERTED and DELETED tables.  \n  \n [!code-cs[DataWorks SqlTriggerContext Sample#2](../../add/codesnippet/CSharp/p-microsoft.sqlserver.se_1_1.cs)]\n [!code-vb[DataWorks SqlTriggerContext Sample#2](../../add/codesnippet/VisualBasic/p-microsoft.sqlserver.se_1_1.vb)]"
   syntax:
     content: public Microsoft.SqlServer.Server.TriggerAction TriggerAction { get; }
     return:
       type: Microsoft.SqlServer.Server.TriggerAction
-      description: To be added.
+      description: The action that fired the trigger as a .
   overload: Microsoft.SqlServer.Server.SqlTriggerContext.TriggerAction*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -165,12 +175,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: Microsoft.SqlServer.Server.SqlTriggerContext.TriggerAction
   parent: Microsoft.SqlServer.Server.SqlTriggerContext
   isExternal: false

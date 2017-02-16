@@ -9,8 +9,26 @@
     <BaseTypeName>System.Enum</BaseTypeName>
   </Base>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Used by <see cref="T:Microsoft.SqlServer.Server.SqlUserDefinedTypeAttribute" /> and <see cref="T:Microsoft.SqlServer.Server.SqlUserDefinedAggregateAttribute" /> to indicate the serialization format of a user-defined type (UDT) or aggregate.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Used by <xref:Microsoft.SqlServer.Server.SqlUserDefinedTypeAttribute> and <xref:Microsoft.SqlServer.Server.SqlUserDefinedAggregateAttribute> to indicate the serialization format of a user-defined type (UDT) or aggregate.  
+  
+   
+  
+## Examples  
+ The following example shows the `UserDefinedType` attribute of the Point UDT.  The UDT is byte-ordered, is named "Point", has a validation method named "ValidatePoint", and uses the native serialization format.  
+  
+ [!code-cs[DataWorks SqlUserDefinedTypeAttribute Example#1](../../add/codesnippet/CSharp/t-microsoft.sqlserver.se_6_1.cs)]
+ [!code-vb[DataWorks SqlUserDefinedTypeAttribute Example#1](../../add/codesnippet/VisualBasic/t-microsoft.sqlserver.se_6_1.vb)]  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName="Native">
@@ -24,7 +42,32 @@
         <ReturnType>Microsoft.SqlServer.Server.Format</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>The <see langword="Native" /> serialization format uses a very simple algorithm that enables SQL Server to store an efficient representation of the UDT on disk. Types marked for <see langword="Native" /> serialization can only have value types (structs in Microsoft Visual C# and structures in Microsoft Visual Basic .NET) as members. Members of reference types (such as classes in Visual C# and Visual Basic), either user-defined or those existing in the framework (such as T:System.String?qualifyHint=False</summary>
+        <threadsafe />
+        <returns />
+        <value />
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The requirements for this format are:  
+  
+-   The `StructLayout.LayoutKindSequential` attribute must be applied to the aggregate or UDT if it is defined in a class and not a structure. This controls the physical layout of the data fields, and is used to force the members to be laid out sequentially in the order they appear. SQL Server uses this attribute to determine the field order for UDTs with multiple fields.  
+  
+-   The type must contain at least one member (serialized values cannot be zero bytes in size).  
+  
+-   All the fields of the aggregate must be *blittable*, that is, they must have a common representation in both managed and unmanaged memory and not require special handling by the interop marshaler.  
+  
+-   All the fields of the UDT should be of one of the following types that can be serialized: `bool`, `byte`,`sbyte`,`short`,`ushort`, `int`, `uint`, `long`, `ulong`, `float`, `double`, T:System.Data.SqlTypes.SqlByte?qualifyHint=False&autoUpgrade=True, T:System.Data.SqlTypes.SqlInt16?qualifyHint=False&autoUpgrade=True, T:System.Data.SqlTypes.SqlInt32?qualifyHint=False&autoUpgrade=True, T:System.Data.SqlTypes.SqlInt64?qualifyHint=False&autoUpgrade=True, T:System.Data.SqlTypes.SqlDateTime?qualifyHint=False&autoUpgrade=True, T:System.Data.SqlTypes.SqlSingle?qualifyHint=False&autoUpgrade=True, T:System.Data.SqlTypes.SqlDouble?qualifyHint=False&autoUpgrade=True, T:System.Data.SqlTypes.SqlMoney?qualifyHint=False&autoUpgrade=True, or other value types defined by the user that contain fields of one of these types.  
+  
+-   The aggregate must not specify a value for `MaxByteSize`.  
+  
+-   The aggregate must not have any [NonSerialized] fields.  
+  
+-   Fields must not be marked as an explicit layout (T:System.Runtime.InteropServices.StructLayoutAttribute?qualifyHint=False&autoUpgrade=True).  
+  
+ ]]></format>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Unknown">
@@ -38,7 +81,10 @@
         <ReturnType>Microsoft.SqlServer.Server.Format</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>The serialization format is unknown.</summary>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="UserDefined">
@@ -52,7 +98,22 @@
         <ReturnType>Microsoft.SqlServer.Server.Format</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>The <see langword="UserDefined" /> serialization format gives the developer full control over the binary format through the T:Microsoft.SqlServer.Server.IBinarySerialize?qualifyHint=False</summary>
+        <threadsafe />
+        <returns />
+        <value />
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The aggregate must specify a value for `MaxByteSize`.  
+  
+ Specify the P:Microsoft.SqlServer.Server.SqlUserDefinedTypeAttribute.IsByteOrdered?qualifyHint=False&autoUpgrade=True attribute property. The default value is false.  
+  
+ If you omit any field in the M:Microsoft.SqlServer.Server.IBinarySerialize.Read(System.IO.BinaryReader)?qualifyHint=False&autoUpgrade=True or M:Microsoft.SqlServer.Server.IBinarySerialize.Write(System.IO.BinaryWriter)?qualifyHint=False&autoUpgrade=True methods, the state of that field is not serialized.  
+  
+ ]]></format>
+        </remarks>
       </Docs>
     </Member>
   </Members>

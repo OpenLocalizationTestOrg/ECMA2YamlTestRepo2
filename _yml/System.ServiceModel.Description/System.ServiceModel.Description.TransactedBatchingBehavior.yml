@@ -15,8 +15,10 @@ items:
   nameWithType: TransactedBatchingBehavior
   fullName: System.ServiceModel.Description.TransactedBatchingBehavior
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a behavior that optimizes the receive operations for transports that support transactional receives.
+  remarks: A transport that is configured with this behavior attempts to batch several receive operations into one transaction. By doing so, the relatively high cost of creating a transaction and committing it in every receive operation is avoided.
+  example:
+  - "The following example shows how to add the transacted batching behavior to a service in a configuration file.  \n  \n [!CODE [UETransactedBatchingConfig#0](../CodeSnippet/VS_Snippets_CFX/uetransactedbatchingconfig#0)]  \n  \n The following example shows how to add the transacted batching behavior to a service in code.  \n  \n [!code-cs[UETransactedBatchingCode#0](../../add/codesnippet/CSharp/t-system.servicemodel.de_10_2.cs)]\n [!code-cs[UETransactedBatchingCode#0](../../add/codesnippet/CSharp/t-system.servicemodel.de_10_2.cs)]"
   syntax:
     content: 'public class TransactedBatchingBehavior : System.ServiceModel.Description.IEndpointBehavior'
   inheritance:
@@ -40,15 +42,21 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified batch size.
+  remarks: The `maxBatchSize` value passed into the constructor is only a hint. It is possible that all messages are received before reaching the `maxBatchSize`. When that occurs, it is unnecessary to wait indefinitely for another message to be received. To prevent this from happening, [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] commits the batch early and open a new batch to receive additional messages. The batch is committed if there are no messages to be received and 20 percent of the transaction time-out value has elapsed.
+  example:
+  - "The following code shows how to create a new instance of <xref:System.ServiceModel.Description.TransactedBatchingBehavior> specifying the maximum number of messages to be processed in a batch.  \n  \n [!code-cs[UETransactedBatchingCode#1](../../add/codesnippet/CSharp/39fc090e-5527-4a2d-a64d-_1.cs)]"
   syntax:
     content: public TransactedBatchingBehavior (int maxBatchSize);
     parameters:
     - id: maxBatchSize
       type: System.Int32
-      description: To be added.
+      description: The maximum number of receive operations that can be batched together.
   overload: System.ServiceModel.Description.TransactedBatchingBehavior.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    MaxBatchSize is less than 0."
   platform:
   - net-11
   - net-20
@@ -65,14 +73,20 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the maximum number of receive operations that can be batched together in one transaction.
+  remarks: The `maxBatchSize` value is only a hint. It is possible that all messages are received before reaching the `maxBatchSize`. When that occurs, it is unnecessary to wait indefinitely for another message to be received. To prevent this from happening, [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] commits the batch early and open a new batch to receive additional messages. The batch is committed if there are no messages to be received and 20 percent of the transaction time-out value has elapsed.
+  example:
+  - "The following code shows how to set the MaxBatchSize property.  \n  \n [!code-cs[UETransactedBatchingCode#2](../../add/codesnippet/CSharp/p-system.servicemodel.de_7_1.cs)]"
   syntax:
     content: public int MaxBatchSize { get; set; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The maximum number of receive operations that can be batched together in one transaction.
   overload: System.ServiceModel.Description.TransactedBatchingBehavior.MaxBatchSize*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    MaxBatchSize is less than 0."
   platform:
   - net-11
   - net-20
@@ -90,18 +104,19 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies binding settings to the specified service endpoint. This method cannot be inherited.
+  remarks: Enables you to add additional binding parameters to the specified service endpoint. This is normally used when working with a custom binding.
   syntax:
     content: void IEndpointBehavior.AddBindingParameters (System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Channels.BindingParameterCollection bindingParameters);
     parameters:
     - id: serviceEndpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: A service endpoint where behavior settings are applied.
     - id: bindingParameters
       type: System.ServiceModel.Channels.BindingParameterCollection
-      description: To be added.
+      description: A collection of binding parameters that store information used by binding elements to build factories.
   overload: System.ServiceModel.Description.TransactedBatchingBehavior.System#ServiceModel#Description#IEndpointBehavior#AddBindingParameters*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -119,18 +134,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies transaction batching behavior settings to the specified service endpoint. This method cannot be inherited.
   syntax:
     content: void IEndpointBehavior.ApplyClientBehavior (System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Dispatcher.ClientRuntime behavior);
     parameters:
     - id: serviceEndpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: A service endpoint where behavior settings are applied.
     - id: behavior
       type: System.ServiceModel.Dispatcher.ClientRuntime
-      description: To be added.
+      description: Contains the transaction batching behavior.
   overload: System.ServiceModel.Description.TransactedBatchingBehavior.System#ServiceModel#Description#IEndpointBehavior#ApplyClientBehavior*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -148,18 +163,19 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Associates an endpoint dispatcher with the specified service endpoint. This method cannot be inherited.
+  remarks: This method is called by [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] to associate a service endpoint with an endpoint dispatcher.
   syntax:
     content: void IEndpointBehavior.ApplyDispatchBehavior (System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Dispatcher.EndpointDispatcher endpointDispatcher);
     parameters:
     - id: serviceEndpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: A service endpoint where behavior settings are applied.
     - id: endpointDispatcher
       type: System.ServiceModel.Dispatcher.EndpointDispatcher
-      description: To be added.
+      description: An endpoint dispatching for dispatching messages
   overload: System.ServiceModel.Description.TransactedBatchingBehavior.System#ServiceModel#Description#IEndpointBehavior#ApplyDispatchBehavior*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -177,15 +193,16 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Ensures that transacted batching is applicable only for the bindings that support transacted receive operation. This method cannot be inherited.
+  remarks: This method is called by [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] to ensure that batching is available only for bindings that support transacted receive operations.
   syntax:
     content: void IEndpointBehavior.Validate (System.ServiceModel.Description.ServiceEndpoint serviceEndpoint);
     parameters:
     - id: serviceEndpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: A service endpoint for which batching behavior is validated.
   overload: System.ServiceModel.Description.TransactedBatchingBehavior.System#ServiceModel#Description#IEndpointBehavior#Validate*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -212,12 +229,6 @@ references:
   name: MaxBatchSize
   nameWithType: TransactedBatchingBehavior.MaxBatchSize
   fullName: System.ServiceModel.Description.TransactedBatchingBehavior.MaxBatchSize
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.ServiceModel.Description.TransactedBatchingBehavior.System#ServiceModel#Description#IEndpointBehavior#AddBindingParameters(System.ServiceModel.Description.ServiceEndpoint,System.ServiceModel.Channels.BindingParameterCollection)
   parent: System.ServiceModel.Description.TransactedBatchingBehavior
   isExternal: false
@@ -242,12 +253,6 @@ references:
   name: System.ServiceModel.Description.IEndpointBehavior.ApplyClientBehavior(ServiceEndpoint,ClientRuntime)
   nameWithType: TransactedBatchingBehavior.System.ServiceModel.Description.IEndpointBehavior.ApplyClientBehavior(ServiceEndpoint,ClientRuntime)
   fullName: System.ServiceModel.Description.TransactedBatchingBehavior.System.ServiceModel.Description.IEndpointBehavior.ApplyClientBehavior(ServiceEndpoint,ClientRuntime)
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
 - uid: System.ServiceModel.Dispatcher.ClientRuntime
   parent: System.ServiceModel.Dispatcher
   isExternal: true
@@ -260,12 +265,6 @@ references:
   name: System.ServiceModel.Description.IEndpointBehavior.ApplyDispatchBehavior(ServiceEndpoint,EndpointDispatcher)
   nameWithType: TransactedBatchingBehavior.System.ServiceModel.Description.IEndpointBehavior.ApplyDispatchBehavior(ServiceEndpoint,EndpointDispatcher)
   fullName: System.ServiceModel.Description.TransactedBatchingBehavior.System.ServiceModel.Description.IEndpointBehavior.ApplyDispatchBehavior(ServiceEndpoint,EndpointDispatcher)
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
 - uid: System.ServiceModel.Dispatcher.EndpointDispatcher
   parent: System.ServiceModel.Dispatcher
   isExternal: true
@@ -278,12 +277,6 @@ references:
   name: System.ServiceModel.Description.IEndpointBehavior.Validate(ServiceEndpoint)
   nameWithType: TransactedBatchingBehavior.System.ServiceModel.Description.IEndpointBehavior.Validate(ServiceEndpoint)
   fullName: System.ServiceModel.Description.TransactedBatchingBehavior.System.ServiceModel.Description.IEndpointBehavior.Validate(ServiceEndpoint)
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
 - uid: System.ServiceModel.Description.TransactedBatchingBehavior.#ctor*
   parent: System.ServiceModel.Description.TransactedBatchingBehavior
   isExternal: false

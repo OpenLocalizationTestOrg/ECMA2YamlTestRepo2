@@ -10,8 +10,36 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Provides information about the characteristics for a component, such as its attributes, properties, and events. This class cannot be inherited.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The .NET Framework provides two ways to access metadata on a type: the reflection API provided in the <xref:System.Reflection?displayProperty=fullName> namespace, and the TypeDescriptor class. Reflection is a general mechanism available to all types because its foundation is established in the <xref:System.Object.GetType%2A> method of the root <xref:System.Object> class. The information it returns for a type is not extensible, in that it cannot be modified after compilation of the target type. For more information, see the topics in [Reflection](../Topic/Reflection%20in%20the%20.NET%20Framework.md).  
+  
+ In contrast, TypeDescriptor is an extensible inspection mechanism for components: those classes that implement the <xref:System.ComponentModel.IComponent> interface. Unlike reflection, it does not inspect for methods. TypeDescriptor can be dynamically extended by several services available through the target component's <xref:System.ComponentModel.Component.Site%2A>. The following table shows these services.  
+  
+|Service name|Description|  
+|------------------|-----------------|  
+|<xref:System.ComponentModel.IExtenderProvider>|Enables another class, such as <xref:System.Windows.Forms.ToolTip>, to provide extra properties to a component.|  
+|<xref:System.ComponentModel.Design.ITypeDescriptorFilterService>|Enables another object to modify the standard metadata that is exposed by a component.|  
+|<xref:System.ComponentModel.ICustomTypeDescriptor>|Enables a class to completely and dynamically specify its own metadata, replacing the standard inspection mechanism of TypeDescriptor.|  
+  
+ The extensibility provided by TypeDescriptor allows the design-time representation of a component to differ from its actual run-time representation, which makes TypeDescriptor useful for building design-time infrastructure.  
+  
+ All the methods in TypeDescriptor are `static`. You cannot create an instance of this class, and this class cannot be inherited.  
+  
+ You can set property and event values two different ways: specify them in the component class or change them at design time. Because you can set these values two ways, the overloaded methods of TypeDescriptor take two different types of parameters: a class type or an object instance.  
+  
+ When you want to access TypeDescriptor information and you have an instance of the object, use the method that calls for a component. Use the method that calls for the class type only when you do not have an instance of the object.  
+  
+ Properties and events are cached by TypeDescriptor for speed. Typically, they are constant for the lifetime of an object. However, extender providers and designers can change the set of properties on an object. If this is the case, then the <xref:System.ComponentModel.TypeDescriptor.Refresh%2A> method must be called to update the cache.  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName="AddAttributes">
@@ -40,11 +68,22 @@
         </Parameter>
       </Parameters>
       <Docs>
-        <param name="instance">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="instance">An instance of the target component.</param>
+        <param name="attributes">An array of &lt;xref:System.Attribute&gt; objects to add to the component's class.</param>
+        <summary>Adds class-level attributes to the target component instance.</summary>
+        <returns>The newly created <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> that was used to add the specified attributes.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The AddAttributes method adds class-level attributes to the specified instance of a component. Because this is a common requirement of applications using the [!INCLUDE[vsprvs](../../add/includes/vsprvs-md.md)] Windows Forms Designer and Properties window, this method provides a shortcut by creating a type description provider that merges the provided attributes with the attributes that already exist on the class. The return value is the type description provider that was used to add the attributes. This provider can later be passed to the <xref:System.ComponentModel.TypeDescriptor.RemoveProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Object%29> method when the added attributes are no longer needed.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters is <see langword="null" />.</exception>
+        <permission cref="T:System.Security.NamedPermissionSet">for full access to system resources. Demand value: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated state:</permission>
+        <threadsafe />
+        <value>The newly created <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> that was used to add the specified attributes.</value>
       </Docs>
     </Member>
     <Member MemberName="AddAttributes">
@@ -73,11 +112,22 @@
         </Parameter>
       </Parameters>
       <Docs>
-        <param name="type">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <param name="attributes">An array of &lt;xref:System.Attribute&gt; objects to add to the component's class.</param>
+        <summary>Adds class-level attributes to the target component type.</summary>
+        <returns>The newly created <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> that was used to add the specified attributes.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The AddAttributes method adds class-level attributes to the specified type of a component. Because this is a common requirement of applications using the [!INCLUDE[vsprvs](../../add/includes/vsprvs-md.md)] Windows Forms Designer and Properties window, this method provides a shortcut by creating a type description provider that merges the provided attributes with the attributes that already exist on the class. The return value is the type description provider that was used to add the attributes. This provider can later be passed to the <xref:System.ComponentModel.TypeDescriptor.RemoveProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Type%29> method when the added attributes are no longer needed.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters is <see langword="null" />.</exception>
+        <permission cref="T:System.Security.NamedPermissionSet">for full access to system resources. Demand value: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated state:</permission>
+        <threadsafe />
+        <value>The newly created <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> that was used to add the specified attributes.</value>
       </Docs>
     </Member>
     <Member MemberName="AddEditorTable">
@@ -100,10 +150,22 @@
         <Parameter Name="table" Type="System.Collections.Hashtable" />
       </Parameters>
       <Docs>
-        <param name="editorBaseType">To be added.</param>
-        <param name="table">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="editorBaseType">The editor base type to add the editor table for. If a table already exists for this type, this method will do nothing.</param>
+        <param name="table">The <see cref="T:System.Collections.Hashtable" /> to add.</param>
+        <summary>Adds an editor table for the given editor base type.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The AddEditorTable method adds an editor table for the given editor base type. Typically, editors are specified as metadata on a component. However, if no metadata for a requested editor base type can be found on the component, the associated <xref:System.ComponentModel.TypeDescriptor> will search an editor table for the editor type, if one can be found. Once an editor table has been added to a type descriptor, it cannot be removed and is owned by the type descriptor. The type descriptor may freely make modifications to this table.  
+  
+ The format for an editor table uses data types as keys and editors as values. The value portion of an entry in the table represents an editor instance. It can have one of three values. If it contains a string, the type descriptor will assume this is a fully qualified name of a type, and then load the type for the object. If it contains a type, an instance of this type will be created to obtain an editor. Finally, the value portion may contain an actual editor instance. If the type descriptor resolves an editor to an instance, it will store the instance back into the table for future use.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="AddProvider">
@@ -126,10 +188,33 @@
         <Parameter Name="instance" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="provider">To be added.</param>
-        <param name="instance">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="provider">The <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> to add.</param>
+        <param name="instance">An instance of the target component.</param>
+        <summary>Adds a type description provider for a single instance of a component.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The AddProvider method adds a type description provider that supplies type information for a single instance of a component. If a provider is added by this method, the provider's <xref:System.ComponentModel.TypeDescriptor.CreateInstance%2A> method will not be called because the instance already exists.  
+  
+ This method does not maintain a hard reference to the component, so it does not prevent the component from finalizing.  
+  
+ It is possible to add multiple type description providers for the same type or object. If this occurs, the first type description provider encountered that provides type information will be used exclusively. Since type information providers are stored in a stack, the last provider added will be the first one queried. This behavior enables the AddProvider and <xref:System.ComponentModel.TypeDescriptor.RemoveProvider%2A> methods to be used to push and pop type description providers as required for particular scenarios.  
+  
+ If successful, this method calls the <xref:System.ComponentModel.TypeDescriptor.Refresh%28System.Object%29> method on the `instance` parameter.  
+  
+> [!NOTE]
+>  The two versions of this method produce results with different scopes. The <xref:System.ComponentModel.TypeDescriptor.AddProvider%2A> method that takes an <xref:System.Object> parameter affects only that single instance of the component specified. In contrast, the other overload, which takes a <xref:System.Type> parameter, affects all instances of the component described by that type.  
+  
+ Use the <xref:System.ComponentModel.TypeDescriptor.AddProviderTransparent%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Object%29> method if you need to call from partially trusted code.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <permission cref="T:System.Security.NamedPermissionSet">for full access to system resources. Demand value: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated state:</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="AddProvider">
@@ -152,10 +237,36 @@
         <Parameter Name="type" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="provider">To be added.</param>
-        <param name="type">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="provider">The <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> to add.</param>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Adds a type description provider for a component class.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The AddProvider method adds a type description provider that supplies type information for the specified class, derived classes, and all instances of these types.  
+  
+> [!NOTE]
+>  The `type` parameter can be any type, including an interface. For example, to provide custom type and instance information for all components, you would specify `typeof(IComponent)`. Passing `typeof(object)` will call the provider to supply type information for all types.  
+  
+ This method does not maintain a hard reference to any object, so it does not prevent objects from finalizing.  
+  
+ It is possible to add multiple type description providers for the same type or object. If this occurs, the first type description provider encountered that provides type information will be used exclusively. Because type information providers are stored in a stack, the last provider added will be the first one queried. This behavior enables the AddProvider and <xref:System.ComponentModel.TypeDescriptor.RemoveProvider%2A> methods to be used to push and pop type description providers as required for particular scenarios.  
+  
+ If successful, this method calls the <xref:System.ComponentModel.TypeDescriptor.Refresh%28System.Type%29> method on the `type` parameter.  
+  
+> [!NOTE]
+>  The two versions of this method produce results with different scopes. The <xref:System.ComponentModel.TypeDescriptor.AddProvider%2A> method that takes an <xref:System.Object> parameter affects only that single instance of the component specified. In contrast, the other overload, which takes a <xref:System.Type> parameter, affects all instances of the component described by that type.  
+  
+ Use the <xref:System.ComponentModel.TypeDescriptor.AddProviderTransparent%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Type%29> method if you need to call from partially trusted code.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <permission cref="T:System.Security.NamedPermissionSet">for full access to system resources. Demand value: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated state:</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="AddProviderTransparent">
@@ -178,10 +289,25 @@
         <Parameter Name="instance" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="provider">To be added.</param>
-        <param name="instance">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="provider">The <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> to add.</param>
+        <param name="instance">An instance of the target component.</param>
+        <summary>Adds a type description provider for a single instance of a component.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method can be called from partially trusted code. If <xref:System.Security.Permissions.TypeDescriptorPermissionFlags> is defined, the caller can register a provider for the specified instance if its type is also partially trusted.  
+  
+ Use the <xref:System.ComponentModel.TypeDescriptor.AddProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Object%29> method if you do not need to call from partially trusted code.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <permission cref="T:System.Security.Permissions.TypeDescriptorPermission">For registry access. Security action: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated enumeration: <see cref="T:System.Security.Permissions.TypeDescriptorPermissionFlags" /></permission>
+        <permission cref="P:System.Reflection.Assembly.PermissionSet">Security action: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated type: The <see cref="T:System.Security.PermissionSet" /> that is required by the assembly that defines the <paramref name="instance" /> parameter's type.</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="AddProviderTransparent">
@@ -204,10 +330,25 @@
         <Parameter Name="type" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="provider">To be added.</param>
-        <param name="type">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="provider">The <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> to add.</param>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Adds a type description provider for a component class.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method can be called from partially trusted code. If <xref:System.Security.Permissions.TypeDescriptorPermissionFlags> is defined, the caller can register a provider for the specified type if it is also partially trusted.  
+  
+ Use the <xref:System.ComponentModel.TypeDescriptor.AddProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Type%29> method if you do not need to call from partially trusted code.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <permission cref="T:System.Security.Permissions.TypeDescriptorPermission">For registry access. Security action: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated enumeration: <see cref="T:System.Security.Permissions.TypeDescriptorPermissionFlags" /></permission>
+        <permission cref="P:System.Reflection.Assembly.PermissionSet">Security action: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated type: The <see cref="T:System.Security.PermissionSet" /> that is required by the assembly that defines <paramref name="type" />.</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="ComNativeDescriptorHandler">
@@ -226,9 +367,19 @@
         <ReturnType>System.ComponentModel.IComNativeDescriptorHandler</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the provider for the Component Object Model (COM) type information for the target component.</summary>
+        <value>An <see cref="T:System.ComponentModel.IComNativeDescriptorHandler" /> instance representing the COM type information provider.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The ComNativeDescriptorHandler property and the <xref:System.ComponentModel.IComNativeDescriptorHandler> interface are obsolete. For more information, see the <xref:System.ComponentModel.TypeDescriptor.ComObjectType%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <permission cref="T:System.Security.NamedPermissionSet">for full access to system resources. Demand value: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated state:</permission>
+        <threadsafe />
+        <returns>An <see cref="T:System.ComponentModel.IComNativeDescriptorHandler" /> instance representing the COM type information provider.</returns>
       </Docs>
     </Member>
     <Member MemberName="ComObjectType">
@@ -247,9 +398,20 @@
         <ReturnType>System.Type</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets the type of the Component Object Model (COM) object represented by the target component.</summary>
+        <value>The &lt;xref:System.Type&gt; of the COM object represented by this component, or <see langword="null" /> for non-COM objects.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The ComObjectType property returns a type that can be passed to the <xref:System.ComponentModel.TypeDescriptor.AddProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Type%29> method to define a type description provider for COM types.  
+  
+ The ComObjectType property and other members in this class replace the functionality in the obsolete <xref:System.ComponentModel.IComNativeDescriptorHandler> interface. To implement a mapping layer between a COM object and <xref:System.ComponentModel.TypeDescriptor>, add a <xref:System.ComponentModel.TypeDescriptionProvider> to handle type ComObjectType.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>The &lt;xref:System.Type&gt; of the COM object represented by this component, or <see langword="null" /> for non-COM objects.</returns>
       </Docs>
     </Member>
     <Member MemberName="CreateAssociation">
@@ -272,10 +434,26 @@
         <Parameter Name="secondary" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="primary">To be added.</param>
-        <param name="secondary">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="primary">The primary &lt;xref:System.Object&gt;.</param>
+        <param name="secondary">The secondary &lt;xref:System.Object&gt;.</param>
+        <summary>Creates a primary-secondary association between two objects.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The CreateAssociation method creates an association between a primary and a secondary object. Once an association is created, a designer or other filtering mechanism can add properties that route to either object into the primary object's property set. When a property invocation is made against the primary object, the <xref:System.ComponentModel.TypeDescriptor.GetAssociation%2A> method will be called to resolve the actual object instance that is related to its type parameter.  
+  
+ A <xref:System.WeakReference> is used to maintain the association between the primary and secondary object; therefore, this method does not prevent either object from being finalized and reclaimed by garbage collection.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException">
+          <paramref name="primary" /> is equal to <paramref name="secondary" />.</exception>
+        <permission cref="T:System.Security.NamedPermissionSet">for full access to system resources. Demand value: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated state:</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="CreateDesigner">
@@ -293,11 +471,20 @@
         <Parameter Name="designerBaseType" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="designerBaseType">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">An <see cref="T:System.ComponentModel.IComponent" /> that specifies the component to associate with the designer.</param>
+        <param name="designerBaseType">A &lt;xref:System.Type&gt; that represents the type of designer to create.</param>
+        <summary>Creates an instance of the designer associated with the specified component and of the specified type of designer.</summary>
+        <returns>An <see cref="T:System.ComponentModel.Design.IDesigner" /> that is an instance of the designer for the component, or <see langword="null" /> if no designer can be found.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ If this method cannot find a valid <xref:System.ComponentModel.DesignerAttribute>, it searches up the class hierarchy for a designer. If it cannot find a designer in the class hierarchy, it returns `null`.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.Design.IDesigner" /> that is an instance of the designer for the component, or <see langword="null" /> if no designer can be found.</value>
       </Docs>
     </Member>
     <Member MemberName="CreateEvent">
@@ -322,12 +509,15 @@
         </Parameter>
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <param name="oldEventDescriptor">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="componentType">The type of the component for which to create the new event.</param>
+        <param name="oldEventDescriptor">The existing event information.</param>
+        <param name="attributes">The new attributes.</param>
+        <summary>Creates a new event descriptor that is identical to an existing event descriptor, when passed the existing <see cref="T:System.ComponentModel.EventDescriptor" />.</summary>
+        <returns>A new <see cref="T:System.ComponentModel.EventDescriptor" /> that has merged the specified metadata attributes with the existing metadata attributes.</returns>
         <remarks>To be added.</remarks>
+        <permission cref="T:System.Security.Permissions.ReflectionPermission">Required to inspect non-public members of the component. Link demand access required for <see cref="T:System.Security.Permissions.ReflectionPermissionFlag" /> type <see cref="T:System.Security.Permissions.ReflectionPermissionFlag" />.</permission>
+        <threadsafe />
+        <value>A new <see cref="T:System.ComponentModel.EventDescriptor" /> that has merged the specified metadata attributes with the existing metadata attributes.</value>
       </Docs>
     </Member>
     <Member MemberName="CreateEvent">
@@ -353,13 +543,16 @@
         </Parameter>
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <param name="name">To be added.</param>
-        <param name="type">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="componentType">The type of the component the event lives on.</param>
+        <param name="name">The name of the event.</param>
+        <param name="type">The type of the delegate that handles the event.</param>
+        <param name="attributes">The attributes for this event.</param>
+        <summary>Creates a new event descriptor that is identical to an existing event descriptor by dynamically generating descriptor information from a specified event on a type.</summary>
+        <returns>An <see cref="T:System.ComponentModel.EventDescriptor" /> that is bound to a type.</returns>
         <remarks>To be added.</remarks>
+        <permission cref="T:System.Security.Permissions.ReflectionPermission">Required to inspect non-public members of the component. Link demand access required for <see cref="T:System.Security.Permissions.ReflectionPermissionFlag" /> type <see cref="T:System.Security.Permissions.ReflectionPermissionFlag" />.</permission>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.EventDescriptor" /> that is bound to a type.</value>
       </Docs>
     </Member>
     <Member MemberName="CreateInstance">
@@ -379,13 +572,26 @@
         <Parameter Name="args" Type="System.Object[]" />
       </Parameters>
       <Docs>
-        <param name="provider">To be added.</param>
-        <param name="objectType">To be added.</param>
-        <param name="argTypes">To be added.</param>
-        <param name="args">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="provider">The service provider that provides a <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> service. This parameter can be <see langword="null" />.</param>
+        <param name="objectType">The &lt;xref:System.Type&gt; of object to create.</param>
+        <param name="argTypes">An optional array of parameter types to be passed to the object's constructor. This parameter can be <see langword="null" /> or an array of zero length.</param>
+        <param name="args">An optional array of parameter values to pass to the object's constructor. If not <see langword="null" />, the number of elements must be the same as `argTypes`.</param>
+        <summary>Creates an object that can substitute for another data type.</summary>
+        <returns>An instance of the substitute data type if an associated <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> is found; otherwise, <see langword="null" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The CreateInstance method will search for a <xref:System.ComponentModel.TypeDescriptionProvider> that is associated with the specified `objectType` data type. This method first tries to obtain a type description provider from the `provider` parameter. If this fails, it searches its own internal tables for a provider (these entries were created through previous calls to <xref:System.ComponentModel.TypeDescriptor.AddProvider%2A>). If it finds a provider, this method will delegate the creation call to that object.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="objectType" /> is <see langword="null" />, or <paramref name="args" /> is <see langword="null" /> when <paramref name="argTypes" /> is not <see langword="null" />.</exception>
+        <exception cref="T:System.ArgumentException">
+          <paramref name="argTypes" /> and <paramref name="args" /> have different number of elements.</exception>
+        <threadsafe />
+        <value>An instance of the substitute data type if an associated <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> is found; otherwise, <see langword="null" />.</value>
       </Docs>
     </Member>
     <Member MemberName="CreateProperty">
@@ -410,12 +616,15 @@
         </Parameter>
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <param name="oldPropertyDescriptor">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="componentType">The &lt;xref:System.Type&gt; of the component that the property is a member of.</param>
+        <param name="oldPropertyDescriptor">The existing property descriptor.</param>
+        <param name="attributes">The new attributes for this property.</param>
+        <summary>Creates a new property descriptor from an existing property descriptor, using the specified existing <see cref="T:System.ComponentModel.PropertyDescriptor" /> and attribute array.</summary>
+        <returns>A new <see cref="T:System.ComponentModel.PropertyDescriptor" /> that has the specified metadata attributes merged with the existing metadata attributes.</returns>
         <remarks>To be added.</remarks>
+        <permission cref="T:System.Security.Permissions.ReflectionPermission">Required to inspect non-public members of the component. Link demand access required for <see cref="T:System.Security.Permissions.ReflectionPermissionFlag" /> type <see cref="T:System.Security.Permissions.ReflectionPermissionFlag" />.</permission>
+        <threadsafe />
+        <value>A new <see cref="T:System.ComponentModel.PropertyDescriptor" /> that has the specified metadata attributes merged with the existing metadata attributes.</value>
       </Docs>
     </Member>
     <Member MemberName="CreateProperty">
@@ -441,13 +650,16 @@
         </Parameter>
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <param name="name">To be added.</param>
-        <param name="type">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="componentType">The &lt;xref:System.Type&gt; of the component that the property is a member of.</param>
+        <param name="name">The name of the property.</param>
+        <param name="type">The &lt;xref:System.Type&gt; of the property.</param>
+        <param name="attributes">The new attributes for this property.</param>
+        <summary>Creates and dynamically binds a property descriptor to a type, using the specified property name, type, and attribute array.</summary>
+        <returns>A <see cref="T:System.ComponentModel.PropertyDescriptor" /> that is bound to the specified type and that has the specified metadata attributes merged with the existing metadata attributes.</returns>
         <remarks>To be added.</remarks>
+        <permission cref="T:System.Security.Permissions.ReflectionPermission">Required to inspect non-public members of the component. Link demand access required for <see cref="T:System.Security.Permissions.ReflectionPermissionFlag" /> type <see cref="T:System.Security.Permissions.ReflectionPermissionFlag" />.</permission>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.PropertyDescriptor" /> that is bound to the specified type and that has the specified metadata attributes merged with the existing metadata attributes.</value>
       </Docs>
     </Member>
     <Member MemberName="GetAssociation">
@@ -470,11 +682,23 @@
         <Parameter Name="primary" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="type">To be added.</param>
-        <param name="primary">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <param name="primary">The primary object of the association.</param>
+        <summary>Returns an instance of the type associated with the specified primary object.</summary>
+        <returns>An instance of the secondary type that has been associated with the primary object if an association exists; otherwise, <paramref name="primary" /> if no specified association exists.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ If a previous association has been made for the `type` parameter using the <xref:System.ComponentModel.TypeDescriptor.CreateAssociation%2A> method, then the GetAssociation method returns the correct secondary object to invoke for the requested type. Otherwise, GetAssociation searches for a compatible designer for `type` and returns the designer if one is found. This method never returns `null`.  
+  
+ A <xref:System.WeakReference> is used to maintain the association between the primary and secondary object; therefore, this method does not prevent either the primary or secondary object from being finalized and reclaimed by garbage collection.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <threadsafe />
+        <value>An instance of the secondary type that has been associated with the primary object if an association exists; otherwise, <paramref name="primary" /> if no specified association exists.</value>
       </Docs>
     </Member>
     <Member MemberName="GetAttributes">
@@ -491,10 +715,29 @@
         <Parameter Name="component" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The component for which you want to get attributes.</param>
+        <summary>Returns the collection of attributes for the specified component.</summary>
+        <returns>An <see cref="T:System.ComponentModel.AttributeCollection" /> containing the attributes for the component. If <paramref name="component" /> is <see langword="null" />, this method returns an empty collection.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The attributes returned by the <xref:System.ComponentModel.TypeDescriptor.GetAttributes%2A> method may be dynamically modified from the original component's source listing by extender providers (<xref:System.ComponentModel.IExtenderProvider>), filter services (<xref:System.ComponentModel.Design.ITypeDescriptorFilterService>), and attribute filters.  
+  
+ When you define a custom attribute with <xref:System.AttributeUsageAttribute.AllowMultiple%2A?displayProperty=fullName> set to `true`, you must override the <xref:System.Attribute.TypeId%2A?displayProperty=fullName> property to make it unique. If all instances of your attribute are unique, override <xref:System.Attribute.TypeId%2A?displayProperty=fullName> to return the object identity of your attribute. If only some instances of your attribute are unique, return a value from <xref:System.Attribute.TypeId%2A?displayProperty=fullName> that would return equality in those cases. For example, some attributes have a constructor parameter that acts as a unique key. For these attributes, return the value of the constructor parameter from the <xref:System.Attribute.TypeId%2A?displayProperty=fullName> property.  
+  
+> [!NOTE]
+>  The default implementation of <xref:System.Attribute.TypeId%2A?displayProperty=fullName> returns the type identity regardless of the value of the <xref:System.AttributeUsageAttribute.AllowMultiple%2A?displayProperty=fullName> property. In order to return multiple instances of an <xref:System.AttributeUsageAttribute.AllowMultiple%2A?displayProperty=fullName> attribute from the <xref:System.ComponentModel.AttributeCollection>, your attribute must override the <xref:System.Attribute.TypeId%2A?displayProperty=fullName> property.  
+  
+   
+  
+## Examples  
+ For an example of this method, see the <xref:System.ComponentModel.AttributeCollection.Matches%2A> method.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.AttributeCollection" /> containing the attributes for the component. If <paramref name="component" /> is <see langword="null" />, this method returns an empty collection.</value>
       </Docs>
     </Member>
     <Member MemberName="GetAttributes">
@@ -511,10 +754,26 @@
         <Parameter Name="componentType" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="componentType">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Returns a collection of attributes for the specified type of component.</summary>
+        <returns>An <see cref="T:System.ComponentModel.AttributeCollection" /> with the attributes for the type of the component. If the component is <see langword="null" />, this method returns an empty collection.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call this version of this method only when you do not have an instance of the object.  
+  
+ For attributes with <xref:System.AttributeUsageAttribute.AllowMultiple%2A?displayProperty=fullName> set to `true`, the attribute collection removes duplicate instances. These are instances in which the <xref:System.Attribute.TypeId%2A?displayProperty=fullName> property returns equal values.  
+  
+ When you define a custom attribute with <xref:System.AttributeUsageAttribute.AllowMultiple%2A?displayProperty=fullName> set to `true`, you must override the <xref:System.Attribute.TypeId%2A?displayProperty=fullName> property to make it unique. If all instances of your attribute are unique, override <xref:System.Attribute.TypeId%2A?displayProperty=fullName> to return the object identity of your attribute. If only some instances of your attribute are unique, return a value from <xref:System.Attribute.TypeId%2A?displayProperty=fullName> that would return equality in those cases. For example, some attributes have a constructor parameter that acts as a unique key. For these attributes, return the value of the constructor parameter from the <xref:System.Attribute.TypeId%2A?displayProperty=fullName> property.  
+  
+> [!NOTE]
+>  The default implementation of <xref:System.Attribute.TypeId%2A?displayProperty=fullName> returns the type identity regardless of the value of the <xref:System.AttributeUsageAttribute.AllowMultiple%2A?displayProperty=fullName> property. In order to return multiple instances of an <xref:System.AttributeUsageAttribute.AllowMultiple%2A?displayProperty=fullName> attribute from the <xref:System.ComponentModel.AttributeCollection>, your attribute must override the <xref:System.Attribute.TypeId%2A?displayProperty=fullName> property.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.AttributeCollection" /> with the attributes for the type of the component. If the component is <see langword="null" />, this method returns an empty collection.</value>
       </Docs>
     </Member>
     <Member MemberName="GetAttributes">
@@ -537,11 +796,26 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The component for which you want to get attributes.</param>
+        <param name="noCustomTypeDesc">
+          <see langword="true" /> to use a baseline set of attributes from the custom type descriptor if `component` is of type <see cref="T:System.ComponentModel.ICustomTypeDescriptor" />; otherwise, <see langword="false" />.</param>
+        <summary>Returns a collection of attributes for the specified component and a Boolean indicating that a custom type descriptor has been created.</summary>
+        <returns>An <see cref="T:System.ComponentModel.AttributeCollection" /> with the attributes for the component. If the component is <see langword="null" />, this method returns an empty collection.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The attributes returned by the <xref:System.ComponentModel.TypeDescriptor.GetAttributes%2A> method may be dynamically modified from the original components source listing by extender providers (<xref:System.ComponentModel.IExtenderProvider>), filter services (<xref:System.ComponentModel.Design.ITypeDescriptorFilterService>), and attribute filters.  
+  
+ When you define a custom attribute with <xref:System.AttributeUsageAttribute.AllowMultiple%2A?displayProperty=fullName> set to `true`, you must override the <xref:System.Attribute.TypeId%2A?displayProperty=fullName> property to make it unique. If all instances of your attribute are unique, override <xref:System.Attribute.TypeId%2A?displayProperty=fullName> to return the object identity of your attribute. If only some instances of your attribute are unique, return a value from <xref:System.Attribute.TypeId%2A?displayProperty=fullName> that would return equality in those cases. For example, some attributes have a constructor parameter that acts as a unique key. For these attributes, return the value of the constructor parameter from the <xref:System.Attribute.TypeId%2A?displayProperty=fullName> property.  
+  
+> [!NOTE]
+>  The default implementation of <xref:System.Attribute.TypeId%2A?displayProperty=fullName> returns the type identity regardless of the value of the <xref:System.AttributeUsageAttribute.AllowMultiple%2A?displayProperty=fullName> property. In order to return multiple instances of an <xref:System.AttributeUsageAttribute.AllowMultiple%2A?displayProperty=fullName> attribute from the <xref:System.ComponentModel.AttributeCollection>, your attribute must override the <xref:System.Attribute.TypeId%2A?displayProperty=fullName> property.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.AttributeCollection" /> with the attributes for the component. If the component is <see langword="null" />, this method returns an empty collection.</value>
       </Docs>
     </Member>
     <Member MemberName="GetClassName">
@@ -558,10 +832,23 @@
         <Parameter Name="component" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The &lt;xref:System.Object&gt; for which you want the class name.</param>
+        <summary>Returns the name of the class for the specified component using the default type descriptor.</summary>
+        <returns>A &lt;xref:System.String&gt; containing the name of the class for the specified component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Typically, this method returns the full <xref:System.Type> name for the `component` parameter type. For example, the class name for a button is "System.Windows.Forms.Button". If `component` implements <xref:System.ComponentModel.ICustomTypeDescriptor>, it can return an alternate name.  
+  
+ This method is equivalent to the overloaded <xref:System.ComponentModel.TypeDescriptor.GetClassName%28System.Object%2CSystem.Boolean%29> method with a second parameter of `false`.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <value>A &lt;xref:System.String&gt; containing the name of the class for the specified component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetClassName">
@@ -578,10 +865,21 @@
         <Parameter Name="componentType" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="componentType">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Returns the name of the class for the specified type.</summary>
+        <returns>A &lt;xref:System.String&gt; containing the name of the class for the specified component type.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method uses the cached custom type descriptor for the specified type to discover the associated class name.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="componentType" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <value>A &lt;xref:System.String&gt; containing the name of the class for the specified component type.</value>
       </Docs>
     </Member>
     <Member MemberName="GetClassName">
@@ -604,11 +902,25 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The &lt;xref:System.Object&gt; for which you want the class name.</param>
+        <param name="noCustomTypeDesc">
+          <see langword="true" /> to consider custom type description information; otherwise, <see langword="false" />.</param>
+        <summary>Returns the name of the class for the specified component using a custom type descriptor.</summary>
+        <returns>A &lt;xref:System.String&gt; containing the name of the class for the specified component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Typically, this method returns the full <xref:System.Type> name for the `component` parameter type. For example, the class name for a button is "System.Windows.Forms.Button". If the `component` parameter implements <xref:System.ComponentModel.ICustomTypeDescriptor>, it can return an alternate name.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>A &lt;xref:System.String&gt; containing the name of the class for the specified component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetComponentName">
@@ -625,10 +937,27 @@
         <Parameter Name="component" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The &lt;xref:System.Object&gt; for which you want the class name.</param>
+        <summary>Returns the name of the specified component using the default type descriptor.</summary>
+        <returns>A &lt;xref:System.String&gt; containing the name of the specified component, or <see langword="null" /> if there is no component name.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Typically, this method returns the name for the site of the component, if one exists. For example, the class name for a button is "System.Windows.Forms.Button".  
+  
+ This method is equivalent to the overloaded <xref:System.ComponentModel.TypeDescriptor.GetComponentName%28System.Object%2CSystem.Boolean%29> method with a second parameter of `false`.  
+  
+ This method is used at design time to retrieve the name of an instance of a component.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>A &lt;xref:System.String&gt; containing the name of the specified component, or <see langword="null" /> if there is no component name.</value>
       </Docs>
     </Member>
     <Member MemberName="GetComponentName">
@@ -651,11 +980,25 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The &lt;xref:System.Object&gt; for which you want the class name.</param>
+        <param name="noCustomTypeDesc">
+          <see langword="true" /> to consider custom type description information; otherwise, <see langword="false" />.</param>
+        <summary>Returns the name of the specified component using a custom type descriptor.</summary>
+        <returns>The name of the class for the specified component, or <see langword="null" /> if there is no component name.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method is used at design time to retrieve the name of an instance of a component. Typically, this method returns the name for the site of the component, if one exists. For example, the class name for a button is "System.Windows.Forms.Button". If the component implements the <xref:System.ComponentModel.ICustomTypeDescriptor> interface, it can return an alternate name.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>The name of the class for the specified component, or <see langword="null" /> if there is no component name.</value>
       </Docs>
     </Member>
     <Member MemberName="GetConverter">
@@ -672,10 +1015,30 @@
         <Parameter Name="component" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">A component to get the converter for.</param>
+        <summary>Returns a type converter for the type of the specified component.</summary>
+        <returns>A <see cref="T:System.ComponentModel.TypeConverter" /> for the specified component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method locates an appropriate type converter by looking for a <xref:System.ComponentModel.TypeConverterAttribute>. If it cannot find a <xref:System.ComponentModel.TypeConverterAttribute>, it traverses the base class hierarchy of the class until it finds a primitive type.  
+  
+ This method is equivalent to the overloaded <xref:System.ComponentModel.TypeDescriptor.GetConverter%2A> method with a second parameter of `false`.  
+  
+   
+  
+## Examples  
+ For an example of using this method, see the <xref:System.ComponentModel.TypeConverter> class.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.TypeConverter" /> for the specified component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetConverter">
@@ -692,10 +1055,23 @@
         <Parameter Name="type" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="type">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Returns a type converter for the specified type.</summary>
+        <returns>A <see cref="T:System.ComponentModel.TypeConverter" /> for the specified type.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call this version of this method only when you do not have an instance of the object.  
+  
+ This method looks for the appropriate type converter by looking for a <xref:System.ComponentModel.TypeConverterAttribute>. If it cannot find a <xref:System.ComponentModel.TypeConverterAttribute>, it traverses the base class hierarchy of the class until it finds a primitive type.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.TypeConverter" /> for the specified type.</value>
       </Docs>
     </Member>
     <Member MemberName="GetConverter">
@@ -718,11 +1094,25 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">A component to get the converter for.</param>
+        <param name="noCustomTypeDesc">
+          <see langword="true" /> to consider custom type description information; otherwise, <see langword="false" />.</param>
+        <summary>Returns a type converter for the type of the specified component with a custom type descriptor.</summary>
+        <returns>A <see cref="T:System.ComponentModel.TypeConverter" /> for the specified component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method looks for the appropriate type converter by trying to find a <xref:System.ComponentModel.TypeConverterAttribute>. If it cannot find a <xref:System.ComponentModel.TypeConverterAttribute>, it traverses the base class hierarchy of the class until it finds a primitive type.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.TypeConverter" /> for the specified component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetDefaultEvent">
@@ -739,10 +1129,23 @@
         <Parameter Name="component" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The component to get the event for.</param>
+        <summary>Returns the default event for the specified component.</summary>
+        <returns>An <see cref="T:System.ComponentModel.EventDescriptor" /> with the default event, or <see langword="null" /> if there are no events.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method is equivalent to the overloaded <xref:System.ComponentModel.TypeDescriptor.GetDefaultEvent%28System.Object%2CSystem.Boolean%29> method with a second parameter of `false`.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.EventDescriptor" /> with the default event, or <see langword="null" /> if there are no events.</value>
       </Docs>
     </Member>
     <Member MemberName="GetDefaultEvent">
@@ -759,10 +1162,21 @@
         <Parameter Name="componentType" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="componentType">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Returns the default event for the specified type of component.</summary>
+        <returns>An <see cref="T:System.ComponentModel.EventDescriptor" /> with the default event, or <see langword="null" /> if there are no events.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call this version of this method only when you do not have an instance of the object.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.EventDescriptor" /> with the default event, or <see langword="null" /> if there are no events.</value>
       </Docs>
     </Member>
     <Member MemberName="GetDefaultEvent">
@@ -785,11 +1199,18 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="component">The component to get the event for.</param>
+        <param name="noCustomTypeDesc">
+          <see langword="true" /> to consider custom type description information; otherwise, <see langword="false" />.</param>
+        <summary>Returns the default event for a component with a custom type descriptor.</summary>
+        <returns>An <see cref="T:System.ComponentModel.EventDescriptor" /> with the default event, or <see langword="null" /> if there are no events.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.EventDescriptor" /> with the default event, or <see langword="null" /> if there are no events.</value>
       </Docs>
     </Member>
     <Member MemberName="GetDefaultProperty">
@@ -806,10 +1227,21 @@
         <Parameter Name="component" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The component to get the default property for.</param>
+        <summary>Returns the default property for the specified component.</summary>
+        <returns>A <see cref="T:System.ComponentModel.PropertyDescriptor" /> with the default property, or <see langword="null" /> if there are no properties.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ If the `component` parameter is `null`, this method returns `null`.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.PropertyDescriptor" /> with the default property, or <see langword="null" /> if there are no properties.</value>
       </Docs>
     </Member>
     <Member MemberName="GetDefaultProperty">
@@ -826,10 +1258,21 @@
         <Parameter Name="componentType" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="componentType">A &lt;xref:System.Type&gt; that represents the class to get the property for.</param>
+        <summary>Returns the default property for the specified type of component.</summary>
+        <returns>A <see cref="T:System.ComponentModel.PropertyDescriptor" /> with the default property, or <see langword="null" /> if there are no properties.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call this version of this method only when you do not have an instance of the object.  
+  
+ If the `componentType` parameter is `null`, this method returns `null`.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.PropertyDescriptor" /> with the default property, or <see langword="null" /> if there are no properties.</value>
       </Docs>
     </Member>
     <Member MemberName="GetDefaultProperty">
@@ -852,11 +1295,23 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The component to get the default property for.</param>
+        <param name="noCustomTypeDesc">
+          <see langword="true" /> to consider custom type description information; otherwise, <see langword="false" />.</param>
+        <summary>Returns the default property for the specified component with a custom type descriptor.</summary>
+        <returns>A <see cref="T:System.ComponentModel.PropertyDescriptor" /> with the default property, or <see langword="null" /> if there are no properties.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ If the `component` parameter is `null`, this method returns `null`.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.PropertyDescriptor" /> with the default property, or <see langword="null" /> if there are no properties.</value>
       </Docs>
     </Member>
     <Member MemberName="GetEditor">
@@ -874,11 +1329,26 @@
         <Parameter Name="editorBaseType" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="editorBaseType">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The component to get the editor for.</param>
+        <param name="editorBaseType">A &lt;xref:System.Type&gt; that represents the base type of the editor you want to find.</param>
+        <summary>Gets an editor with the specified base type for the specified component.</summary>
+        <returns>An instance of the editor that can be cast to the specified editor type, or <see langword="null" /> if no editor of the requested type can be found.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The type of `editorBaseType` is usually <xref:System.Drawing.Design.UITypeEditor>, but you can also use other types (for example, <xref:System.ComponentModel.ComponentEditor> and <xref:System.ComponentModel.InstanceCreationEditor>).  
+  
+ You can define multiple editors for a property. You use this method to select the editor you want to use.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> or <paramref name="editorBaseType" /> is <see langword="null" />.</exception>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>An instance of the editor that can be cast to the specified editor type, or <see langword="null" /> if no editor of the requested type can be found.</value>
       </Docs>
     </Member>
     <Member MemberName="GetEditor">
@@ -896,11 +1366,26 @@
         <Parameter Name="editorBaseType" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="type">To be added.</param>
-        <param name="editorBaseType">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <param name="editorBaseType">A &lt;xref:System.Type&gt; that represents the base type of the editor you are trying to find.</param>
+        <summary>Returns an editor with the specified base type for the specified type.</summary>
+        <returns>An instance of the editor object that can be cast to the given base type, or <see langword="null" /> if no editor of the requested type can be found.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The type of `editorBaseType` is usually <xref:System.Drawing.Design.UITypeEditor>, but you can also use other types (for example <xref:System.ComponentModel.ComponentEditor> and <xref:System.ComponentModel.InstanceCreationEditor>).  
+  
+ You can define multiple editors for a type. You use this method to select the one you want to use.  
+  
+ Call this version of this method only when you do not have an instance of the object.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="type" /> or <paramref name="editorBaseType" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <value>An instance of the editor object that can be cast to the given base type, or <see langword="null" /> if no editor of the requested type can be found.</value>
       </Docs>
     </Member>
     <Member MemberName="GetEditor">
@@ -924,12 +1409,27 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="editorBaseType">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The component to get the editor for.</param>
+        <param name="editorBaseType">A &lt;xref:System.Type&gt; that represents the base type of the editor you want to find.</param>
+        <param name="noCustomTypeDesc">A flag indicating whether custom type description information should be considered.</param>
+        <summary>Returns an editor with the specified base type and with a custom type descriptor for the specified component.</summary>
+        <returns>An instance of the editor that can be cast to the specified editor type, or <see langword="null" /> if no editor of the requested type can be found.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The type of `editorBaseType` is usually <xref:System.Drawing.Design.UITypeEditor>, but you can also use other types (for example <xref:System.ComponentModel.ComponentEditor> and <xref:System.ComponentModel.InstanceCreationEditor>).  
+  
+ You can define multiple editors for a property. You use this method to select the editor you want to use.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> or <paramref name="editorBaseType" /> is <see langword="null" />.</exception>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>An instance of the editor that can be cast to the specified editor type, or <see langword="null" /> if no editor of the requested type can be found.</value>
       </Docs>
     </Member>
     <Member MemberName="GetEvents">
@@ -946,10 +1446,30 @@
         <Parameter Name="component" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">A component to get the events for.</param>
+        <summary>Returns the collection of events for the specified component.</summary>
+        <returns>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events for this component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Retrieves a collection of events that the given `component` parameter instance provides. This collection can differ from the set of events the class provides. If the `component` parameter is sited, the site can add or remove additional events.  
+  
+ If `component` is `null`, then an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+   
+  
+## Examples  
+ For an example of this method, see the <xref:System.ComponentModel.EventDescriptorCollection.Count%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events for this component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetEvents">
@@ -966,10 +1486,23 @@
         <Parameter Name="componentType" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="componentType">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Returns the collection of events for a specified type of component.</summary>
+        <returns>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events for this component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call this version of this method only when you do not have an instance of the object.  
+  
+ If the `componentType` parameter is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events for this component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetEvents">
@@ -987,11 +1520,36 @@
         <Parameter Name="attributes" Type="System.Attribute[]" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">A component to get the events for.</param>
+        <param name="attributes">An array of type &lt;xref:System.Attribute&gt; that you can use as a filter.</param>
+        <summary>Returns the collection of events for a specified component using a specified array of attributes as a filter.</summary>
+        <returns>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events that match the specified attributes for this component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The events for the `component` parameter can differ from the events of a class, because the site can add or remove events if the `component` parameter is sited.  
+  
+ The `attributes` array can have a mix of <xref:System.Type> and <xref:System.Attribute> objects. Filtering is defined by the following rules:  
+  
+-   A <xref:System.Type> is treated as a wildcard; it matches any event that has the <xref:System.Type> in its set of attributes.  
+  
+-   If an event does not have an <xref:System.Attribute> of the same class, the event is not included in the returned array.  
+  
+-   If the attribute is an instance of the <xref:System.Attribute> class, the event must be an exact match or it is not included in the returned array.  
+  
+-   If an <xref:System.Attribute> instance is specified and it is the default event, it is included in the returned array even if there is no instance of the <xref:System.Attribute> in the event.  
+  
+ If `component` is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events that match the specified attributes for this component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetEvents">
@@ -1014,11 +1572,27 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">A component to get the events for.</param>
+        <param name="noCustomTypeDesc">
+          <see langword="true" /> to consider custom type description information; otherwise, <see langword="false" />.</param>
+        <summary>Returns the collection of events for a specified component with a custom type descriptor.</summary>
+        <returns>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events for this component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method retrieves a collection of events that the given `component` parameter instance provides. This can differ from the set of events the class provides. If the `component` parameter is sited, the site can add or remove additional events.  
+  
+ If `component` is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events for this component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetEvents">
@@ -1036,11 +1610,34 @@
         <Parameter Name="attributes" Type="System.Attribute[]" />
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="componentType">The &lt;xref:System.Type&gt; of the target component.</param>
+        <param name="attributes">An array of type &lt;xref:System.Attribute&gt; that you can use as a filter.</param>
+        <summary>Returns the collection of events for a specified type of component using a specified array of attributes as a filter.</summary>
+        <returns>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events that match the specified attributes for this component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call this version of this method only when you do not have an instance of the object.  
+  
+ The `attributes` parameter array can have a mix of <xref:System.Type> and <xref:System.Attribute> objects. Filtering is defined by the following rules:  
+  
+-   A <xref:System.Type> is treated as a wildcard; it matches any event that has the <xref:System.Type> in its set of attributes.  
+  
+-   If an event does not have an <xref:System.Attribute> of the same class, the event is not included in the returned array.  
+  
+-   If the attribute is an instance of the <xref:System.Attribute> class, the event must be an exact match or it is not included in the returned array.  
+  
+-   If an <xref:System.Attribute> instance is specified and it is the default event, it is included in the returned array even if there is no instance of the <xref:System.Attribute> in the event.  
+  
+ If the `componentType` parameter is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events that match the specified attributes for this component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetEvents">
@@ -1064,12 +1661,38 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">A component to get the events for.</param>
+        <param name="attributes">An array of type &lt;xref:System.Attribute&gt; to use as a filter.</param>
+        <param name="noCustomTypeDesc">
+          <see langword="true" /> to consider custom type description information; otherwise, <see langword="false" />.</param>
+        <summary>Returns the collection of events for a specified component using a specified array of attributes as a filter and using a custom type descriptor.</summary>
+        <returns>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events that match the specified attributes for this component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The events for the `component` parameter can differ from the events of a class, because the site can add or remove events if the `component` parameter is sited.  
+  
+ The `attributes` parameter array can have a mix of <xref:System.Type> and <xref:System.Attribute> objects. Filtering is defined by the following rules:  
+  
+-   A <xref:System.Type> is treated as a wildcard; it matches any event that has the <xref:System.Type> in its set of attributes.  
+  
+-   If an event does not have an <xref:System.Attribute> of the same class, the event is not included in the returned array.  
+  
+-   If the attribute is an instance of the <xref:System.Attribute> class, the event must be an exact match or it is not included in the returned array.  
+  
+-   If an <xref:System.Attribute> instance is specified and it is the default event, it is included in the returned array even if there is no instance of the <xref:System.Attribute> in the event.  
+  
+ If `component` is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>An <see cref="T:System.ComponentModel.EventDescriptorCollection" /> with the events that match the specified attributes for this component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetFullComponentName">
@@ -1086,10 +1709,21 @@
         <Parameter Name="component" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">The <see cref="T:System.ComponentModel.Component" /> to find the name for.</param>
+        <summary>Returns the fully qualified name of the component.</summary>
+        <returns>The fully qualified name of the specified component, or <see langword="null" /> if the component has no name.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ In many cases, the GetFullComponentName method will return the same value as the <xref:System.ComponentModel.TypeDescriptor.GetComponentName%2A> method. However, if the component resides in a nested container or has other nested semantics, it may return a different fully qualified name.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="component" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <value>The fully qualified name of the specified component, or <see langword="null" /> if the component has no name.</value>
       </Docs>
     </Member>
     <Member MemberName="GetProperties">
@@ -1106,10 +1740,33 @@
         <Parameter Name="component" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">A component to get the properties for.</param>
+        <summary>Returns the collection of properties for a specified component.</summary>
+        <returns>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the properties for the specified component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The properties for a component can differ from the properties of a class, because the site can add or remove properties if the component is sited.  
+  
+ If the `component` parameter is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+   
+  
+## Examples  
+ The following code example demonstrates the use of the GetProperties method to access the properties of a control. This code example is part of a larger example provided for the <xref:System.ComponentModel.Design.ComponentDesigner> class.  
+  
+ [!code-vb[System.ComponentModel.Design.DesignerServices#8](../../add/codesnippet/VisualBasic/m-system.componentmodel._38_1.vb)]
+ [!code-cs[System.ComponentModel.Design.DesignerServices#8](../../add/codesnippet/CSharp/m-system.componentmodel._38_1.cs)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the properties for the specified component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetProperties">
@@ -1126,10 +1783,23 @@
         <Parameter Name="componentType" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="componentType">A &lt;xref:System.Type&gt; that represents the component to get properties for.</param>
+        <summary>Returns the collection of properties for a specified type of component.</summary>
+        <returns>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the properties for a specified type of component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call this version of this method only when you do not have an instance of the object.  
+  
+ If the `componentType` parameter is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the properties for a specified type of component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetProperties">
@@ -1147,11 +1817,45 @@
         <Parameter Name="attributes" Type="System.Attribute[]" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">A component to get the properties for.</param>
+        <param name="attributes">An array of type &lt;xref:System.Attribute&gt; to use as a filter.</param>
+        <summary>Returns the collection of properties for a specified component using a specified array of attributes as a filter.</summary>
+        <returns>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the properties that match the specified attributes for the specified component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The properties for the `component` parameter can differ from the properties of a class, because the site can add or remove properties if the `component` parameter is sited.  
+  
+ The `attributes` parameter array is used to filter the array. Filtering is defined by the following rules:  
+  
+-   If a property does not have an <xref:System.Attribute> of the same class, the property is not included in the returned array.  
+  
+-   If the attribute is an instance of the <xref:System.Attribute> class, the property must be an exact match or it is not included in the returned array.  
+  
+-   If an <xref:System.Attribute> instance is specified and it is the default property, it is included in the returned array even if there is no instance of the <xref:System.Attribute> in the property.  
+  
+-   If `attributes` has a default attribute, the GetProperties method matches the case when the property does not have the attribute applied.  
+  
+ If `component` is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+   
+  
+## Examples  
+ The following code example demonstrates how to implement the <xref:System.Windows.Forms.Design.PropertyTab.GetProperties%2A> method. This code example is part of a larger example provided for the <xref:System.Windows.Forms.Design.PropertyTab> class.  
+  
+ [!code-cs[PropertyTabExample#2](../../add/codesnippet/CSharp/0d160e65-8e23-4623-ad72-_1.cs)]
+ [!code-cpp[PropertyTabExample#2](../../add/codesnippet/CPP/0d160e65-8e23-4623-ad72-_1.cpp)]
+ [!code-vb[PropertyTabExample#2](../../add/codesnippet/VisualBasic/0d160e65-8e23-4623-ad72-_1.vb)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the properties that match the specified attributes for the specified component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetProperties">
@@ -1174,11 +1878,27 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">A component to get the properties for.</param>
+        <param name="noCustomTypeDesc">
+          <see langword="true" /> to not consider custom type description information; otherwise, <see langword="false" />.</param>
+        <summary>Returns the collection of properties for a specified component using the default type descriptor.</summary>
+        <returns>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the properties for a specified component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The properties for the `component` parameter can differ from the properties of a class, because the site can add or remove properties if the `component` parameter is sited.  
+  
+ If `component` is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the properties for a specified component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetProperties">
@@ -1196,11 +1916,43 @@
         <Parameter Name="attributes" Type="System.Attribute[]" />
       </Parameters>
       <Docs>
-        <param name="componentType">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="componentType">The &lt;xref:System.Type&gt; of the target component.</param>
+        <param name="attributes">An array of type &lt;xref:System.Attribute&gt; to use as a filter.</param>
+        <summary>Returns the collection of properties for a specified type of component using a specified array of attributes as a filter.</summary>
+        <returns>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the properties that match the specified attributes for this type of component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call this version of this method only when you do not have an instance of the object.  
+  
+ The `attributes` parameter array is used to filter the array. Filtering is defined by the following rules:  
+  
+-   If a property does not have an <xref:System.Attribute> of the same class, the property is not included in the returned array.  
+  
+-   If the attribute is an instance of the <xref:System.Attribute> class, the property must be an exact match or it is not included in the returned array.  
+  
+-   If an <xref:System.Attribute> instance is specified and it is the default property, it is included in the returned array even if there is no instance of the <xref:System.Attribute> in the property.  
+  
+-   If `attributes` has a default attribute, the GetProperties method matches the case when the property does not have the attribute applied.  
+  
+ If the `componentType` parameter is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+   
+  
+## Examples  
+ The following code example demonstrates how to implement the <xref:System.Windows.Forms.Design.PropertyTab.GetProperties%2A> method. This code example is part of a larger example provided for the <xref:System.Windows.Forms.Design.PropertyTab> class.  
+  
+ [!code-cs[PropertyTabExample#2](../../add/codesnippet/CSharp/af245915-0d17-4307-99bf-_1.cs)]
+ [!code-cpp[PropertyTabExample#2](../../add/codesnippet/CPP/af245915-0d17-4307-99bf-_1.cpp)]
+ [!code-vb[PropertyTabExample#2](../../add/codesnippet/VisualBasic/af245915-0d17-4307-99bf-_1.vb)]  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the properties that match the specified attributes for this type of component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetProperties">
@@ -1219,12 +1971,38 @@
         <Parameter Name="noCustomTypeDesc" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <param name="attributes">To be added.</param>
-        <param name="noCustomTypeDesc">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="component">A component to get the properties for.</param>
+        <param name="attributes">An array of type &lt;xref:System.Attribute&gt; to use as a filter.</param>
+        <param name="noCustomTypeDesc">
+          <see langword="true" /> to consider custom type description information; otherwise, <see langword="false" />.</param>
+        <summary>Returns the collection of properties for a specified component using a specified array of attributes as a filter and using a custom type descriptor.</summary>
+        <returns>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the events that match the specified attributes for the specified component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The properties for a `component` can differ from the properties of a class, because the site can add or remove properties if the `component` is sited.  
+  
+ The `attributes` parameter array is used to filter the array. Filtering is defined by the following rules:  
+  
+-   If a property does not have an <xref:System.Attribute> of the same class, the property is not included in the returned array.  
+  
+-   If the attribute is an instance of the <xref:System.Attribute> class, the property must be an exact match or it is not included in the returned array.  
+  
+-   If an <xref:System.Attribute> instance is specified and it is the default property, it is included in the returned array even if there is no instance of the <xref:System.Attribute> in the property.  
+  
+-   If `attributes` has a default attribute, the GetProperties method matches the case when the property does not have the attribute applied.  
+  
+ If the `component` parameter is `null`, an empty collection is returned.  
+  
+ The order of the returned collection is not guaranteed to be identical between calls, so always order it before use.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">
+          <paramref name="component" /> is a cross-process remoted object.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> with the events that match the specified attributes for the specified component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetProvider">
@@ -1246,10 +2024,21 @@
         <Parameter Name="instance" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="instance">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="instance">An instance of the target component.</param>
+        <summary>Returns the type description provider for the specified component.</summary>
+        <returns>A <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> associated with the specified component.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The <xref:System.ComponentModel.TypeDescriptor.GetProvider%2A> method will always return a type description provider. Even the default <xref:System.ComponentModel.TypeDescriptor> implementation is built on a <xref:System.ComponentModel.TypeDescriptionProvider>.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="instance" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> associated with the specified component.</value>
       </Docs>
     </Member>
     <Member MemberName="GetProvider">
@@ -1271,10 +2060,21 @@
         <Parameter Name="type" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="type">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Returns the type description provider for the specified type.</summary>
+        <returns>A <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> associated with the specified type.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The <xref:System.ComponentModel.TypeDescriptor.GetProvider%2A> method will always return a type description provider. Even the default <xref:System.ComponentModel.TypeDescriptor> implementation is built on a <xref:System.ComponentModel.TypeDescriptionProvider>.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="type" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <value>A <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> associated with the specified type.</value>
       </Docs>
     </Member>
     <Member MemberName="GetReflectionType">
@@ -1296,10 +2096,21 @@
         <Parameter Name="instance" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="instance">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="instance">An instance of the target component.</param>
+        <summary>Returns a &lt;xref:System.Type&gt; that can be used to perform reflection, given an object.</summary>
+        <returns>A &lt;xref:System.Type&gt; for the specified object.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The <xref:System.ComponentModel.TypeDescriptor.GetReflectionType%2A> method is a low-level version of the <xref:System.ComponentModel.TypeDescriptionProvider.GetTypeDescriptor%2A> method. <xref:System.ComponentModel.TypeDescriptor.GetReflectionType%2A> is typically used to perform standard reflection against an object when no custom type descriptor can be located for it.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="instance" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <value>A &lt;xref:System.Type&gt; for the specified object.</value>
       </Docs>
     </Member>
     <Member MemberName="GetReflectionType">
@@ -1321,10 +2132,21 @@
         <Parameter Name="type" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="type">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Returns a &lt;xref:System.Type&gt; that can be used to perform reflection, given a class type.</summary>
+        <returns>A &lt;xref:System.Type&gt; of the specified class.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The <xref:System.ComponentModel.TypeDescriptor.GetReflectionType%2A> method is a low-level version of the <xref:System.ComponentModel.TypeDescriptionProvider.GetTypeDescriptor%2A> method. <xref:System.ComponentModel.TypeDescriptor.GetReflectionType%2A> is typically used to perform standard reflection against a class when no custom type descriptor can be located for it.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="type" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <value>A &lt;xref:System.Type&gt; of the specified class.</value>
       </Docs>
     </Member>
     <Member MemberName="InterfaceType">
@@ -1343,9 +2165,18 @@
         <ReturnType>System.Type</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets a type that represents a type description provider for all interface types.</summary>
+        <value>A &lt;xref:System.Type&gt; that represents a custom type description provider for all interface types.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The InterfaceType property gets a <xref:System.Type> object that you can pass to the <xref:System.ComponentModel.TypeDescriptor.AddProvider%2A> methods to define a type description provider for interface types.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>A &lt;xref:System.Type&gt; that represents a custom type description provider for all interface types.</returns>
       </Docs>
     </Member>
     <Member MemberName="Refresh">
@@ -1362,9 +2193,26 @@
         <Parameter Name="component" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="component">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="component">A component for which the properties or events have changed.</param>
+        <summary>Clears the properties and events for the specified component from the cache.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Properties and events are cached by <xref:System.ComponentModel.TypeDescriptor> for speed. Typically, they are constant for the lifetime of an object. However, extender providers and designers can change the set of properties on an object. If they do, they should call this method to clear the property and event descriptors of the object. This method is used only at design time. It is not used during run time.  
+  
+ This method also raises a <xref:System.ComponentModel.TypeDescriptor.Refreshed> event when the properties or events of a component change. This event is only raised if there was a prior call to the <xref:System.ComponentModel.TypeDescriptor.GetProperties%2A> or <xref:System.ComponentModel.TypeDescriptor.GetEvents%2A> method that cached the information.  
+  
+   
+  
+## Examples  
+ For an example of using this method, see the <xref:System.ComponentModel.RefreshEventHandler> class.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Refresh">
@@ -1381,9 +2229,23 @@
         <Parameter Name="assembly" Type="System.Reflection.Assembly" />
       </Parameters>
       <Docs>
-        <param name="assembly">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="assembly">The &lt;xref:System.Reflection.Assembly&gt; that represents the assembly to refresh. Each &lt;xref:System.Type&gt; in this assembly will be refreshed.</param>
+        <summary>Clears the properties and events for the specified assembly from the cache.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Properties and events are cached by <xref:System.ComponentModel.TypeDescriptor> for speed. Typically, they are constant for the lifetime of an object. However, extender providers and designers can change the set of properties on an object. If they do, they can call this method to clear the property and event descriptors of the object. This method is used only at design time. It is not used during run time.  
+  
+ Before you make a call to the <xref:System.ComponentModel.TypeDescriptor.Refresh%2A> method to clear the cache, you need to call the <xref:System.ComponentModel.TypeDescriptor.GetProperties%2A> method for the specific assembly to cache the information first.  
+  
+ This method also raises a <xref:System.ComponentModel.TypeDescriptor.Refreshed> event to notify all classes that want to be notified when the property set of a component changes.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Refresh">
@@ -1400,9 +2262,23 @@
         <Parameter Name="module" Type="System.Reflection.Module" />
       </Parameters>
       <Docs>
-        <param name="module">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="module">The &lt;xref:System.Reflection.Module&gt; that represents the module to refresh. Each &lt;xref:System.Type&gt; in this module will be refreshed.</param>
+        <summary>Clears the properties and events for the specified module from the cache.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Properties and events are cached by <xref:System.ComponentModel.TypeDescriptor> for speed. Typically, they are constant for the lifetime of an object. However, extender providers and designers can change the set of properties on an object. If they do, they can call this method to clear the property and event descriptors of the object. This method is used only at design time. It is not used during run time.  
+  
+ Before you make a call to the <xref:System.ComponentModel.TypeDescriptor.Refresh%2A> method to clear the cache, you need to call the <xref:System.ComponentModel.TypeDescriptor.GetProperties%2A> method for the specific module to cache the information first.  
+  
+ This method also raises a <xref:System.ComponentModel.TypeDescriptor.Refreshed> event to notify all classes that want to be notified when the property set of a component changes.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Refresh">
@@ -1419,9 +2295,23 @@
         <Parameter Name="type" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="type">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Clears the properties and events for the specified type of component from the cache.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call this version of this method only when you do not have an instance of the object.  
+  
+ Properties and events are cached by <xref:System.ComponentModel.TypeDescriptor> for speed. Typically, they are constant for the lifetime of an object. However, extender providers and designers can change the set of properties on an object. If they do, they can call this method to clear the property and event descriptors of the object. This method is used only at design time. It is not used during run time.  
+  
+ This method also raises a <xref:System.ComponentModel.TypeDescriptor.Refreshed> event when the properties or events of a component change. This event is only raised if there was a prior call to the <xref:System.ComponentModel.TypeDescriptor.GetProperties%2A> or <xref:System.ComponentModel.TypeDescriptor.GetEvents%2A> method that cached the information.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Refreshed">
@@ -1435,8 +2325,23 @@
         <ReturnType>System.ComponentModel.RefreshEventHandler</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Occurs when the cache for a component is cleared.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ For more information about handling events, see [NIB: Consuming Events](http://msdn.microsoft.com/en-us/01e4f1bc-e55e-413f-98c7-6588493e5f67).  
+  
+   
+  
+## Examples  
+ For an example of using this event, see the <xref:System.ComponentModel.RefreshEventHandler> class.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="RemoveAssociation">
@@ -1459,10 +2364,24 @@
         <Parameter Name="secondary" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="primary">To be added.</param>
-        <param name="secondary">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="primary">The primary &lt;xref:System.Object&gt;.</param>
+        <param name="secondary">The secondary &lt;xref:System.Object&gt;.</param>
+        <summary>Removes an association between two objects.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The RemoveAssociation method removes an association between two objects formed by the <xref:System.ComponentModel.TypeDescriptor.CreateAssociation%2A> method.  
+  
+ A <xref:System.WeakReference> is used to maintain the association between the primary and secondary object; therefore, this method does not influence when either object is finalized or reclaimed by garbage collection.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <permission cref="T:System.Security.NamedPermissionSet">for full access to system resources. Demand value: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated state:</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="RemoveAssociations">
@@ -1484,9 +2403,24 @@
         <Parameter Name="primary" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="primary">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="primary">The primary &lt;xref:System.Object&gt; in an association.</param>
+        <summary>Removes all associations for a primary object.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The RemoveAssociations method removes all associations between a primary object and all of its secondary objects, created by calls to the <xref:System.ComponentModel.TypeDescriptor.CreateAssociation%2A> method.  
+  
+ A <xref:System.WeakReference> is used to maintain the association between the primary and secondary object; therefore, this method does not influence when either the primary of secondary objects are finalized or reclaimed by garbage collection.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="primary" /> is <see langword="null" />.</exception>
+        <permission cref="T:System.Security.NamedPermissionSet">for full access to system resources. Demand value: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated state:</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="RemoveProvider">
@@ -1509,10 +2443,24 @@
         <Parameter Name="instance" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="provider">To be added.</param>
-        <param name="instance">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="provider">The <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> to remove.</param>
+        <param name="instance">An instance of the target component.</param>
+        <summary>Removes a previously added type description provider that is associated with the specified object.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method removes a type description provider previously added with the <xref:System.ComponentModel.TypeDescriptor.AddProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Object%29> method. Removing a provider causes a <xref:System.ComponentModel.TypeDescriptor.Refreshed> event to be raised for the associated object.  
+  
+ Use the <xref:System.ComponentModel.TypeDescriptor.RemoveProviderTransparent%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Object%29> method if you need to call from partially trusted code.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <permission cref="T:System.Security.NamedPermissionSet">for full access to system resources. Demand value: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated state:</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="RemoveProvider">
@@ -1535,10 +2483,24 @@
         <Parameter Name="type" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="provider">To be added.</param>
-        <param name="type">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="provider">The <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> to remove.</param>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Removes a previously added type description provider that is associated with the specified type.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method removes a type description provider previously added with the <xref:System.ComponentModel.TypeDescriptor.AddProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Type%29> method. Removing a provider causes a <xref:System.ComponentModel.TypeDescriptor.Refreshed> event to be raised for the associated type.  
+  
+ Use the <xref:System.ComponentModel.TypeDescriptor.RemoveProviderTransparent%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Type%29> method if you need to call from partially trusted code.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <permission cref="T:System.Security.NamedPermissionSet">for full access to system resources. Demand value: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated state:</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="RemoveProviderTransparent">
@@ -1561,10 +2523,27 @@
         <Parameter Name="instance" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="provider">To be added.</param>
-        <param name="instance">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="provider">The <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> to remove.</param>
+        <param name="instance">An instance of the target component.</param>
+        <summary>Removes a previously added type description provider that is associated with the specified object.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method removes a type description provider previously added with the <xref:System.ComponentModel.TypeDescriptor.AddProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Object%29> method. Removing a provider causes a <xref:System.ComponentModel.TypeDescriptor.Refreshed> event to be raised for the associated object.  
+  
+ This method can be called from partially trusted code. If <xref:System.Security.Permissions.TypeDescriptorPermissionFlags> is defined, the caller can register a provider for the specified instance if its type is also partially trusted.  
+  
+ Use the <xref:System.ComponentModel.TypeDescriptor.RemoveProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Object%29> method if you do not need to call from partially trusted code.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <permission cref="T:System.Security.Permissions.TypeDescriptorPermission">For registry access. Security action: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated enumeration: <see cref="T:System.Security.Permissions.TypeDescriptorPermissionFlags" /></permission>
+        <permission cref="P:System.Reflection.Assembly.PermissionSet">Security action: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated type: The <see cref="T:System.Security.PermissionSet" /> that is required by the assembly that defines the <paramref name="instance" /> parameter's type.</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="RemoveProviderTransparent">
@@ -1587,10 +2566,27 @@
         <Parameter Name="type" Type="System.Type" />
       </Parameters>
       <Docs>
-        <param name="provider">To be added.</param>
-        <param name="type">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="provider">The <see cref="T:System.ComponentModel.TypeDescriptionProvider" /> to remove.</param>
+        <param name="type">The &lt;xref:System.Type&gt; of the target component.</param>
+        <summary>Removes a previously added type description provider that is associated with the specified type.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method removes a type description provider previously added with the <xref:System.ComponentModel.TypeDescriptor.AddProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Type%29> method. Removing a provider causes a <xref:System.ComponentModel.TypeDescriptor.Refreshed> event to be raised for the associated type.  
+  
+ This method can be called from partially trusted code. If <xref:System.Security.Permissions.TypeDescriptorPermissionFlags> is defined, the caller can unregister a provider for the specified type if it is also partially trusted.  
+  
+ Use the <xref:System.ComponentModel.TypeDescriptor.RemoveProvider%28System.ComponentModel.TypeDescriptionProvider%2CSystem.Type%29> method if you do not need to call from partially trusted code.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">One or both of the parameters are <see langword="null" />.</exception>
+        <permission cref="T:System.Security.Permissions.TypeDescriptorPermission">For registry access. Security action: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated enumeration: <see cref="T:System.Security.Permissions.TypeDescriptorPermissionFlags" /></permission>
+        <permission cref="P:System.Reflection.Assembly.PermissionSet">Security action: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated type: The <see cref="T:System.Security.PermissionSet" /> that is required by the assembly that defines <paramref name="type" />.</permission>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="SortDescriptorArray">
@@ -1607,9 +2603,14 @@
         <Parameter Name="infos" Type="System.Collections.IList" />
       </Parameters>
       <Docs>
-        <param name="infos">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="infos">An &lt;xref:System.Collections.IList&gt; that contains the descriptors to sort.</param>
+        <summary>Sorts descriptors using the name of the descriptor.</summary>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="infos" /> is <see langword="null" />.</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
   </Members>

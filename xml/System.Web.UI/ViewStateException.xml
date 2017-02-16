@@ -10,8 +10,32 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Represents the exception that is thrown when the view state cannot be loaded or validated. This class cannot be inherited.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ If an exception occurs when the page loads the view-state information, the page creates a ViewStateException object and passes it as an inner exception within an <xref:System.Web.HttpException> exception. The <xref:System.Web.HttpException> exception is re-thrown to be handled by the application.  
+  
+ The ViewStateException class stores information about the exception in the <xref:System.Web.UI.ViewStateException.Message%2A> property. If the request has permission to access the <xref:System.Web.HttpRequest.ServerVariables%2A> property, then the <xref:System.Web.UI.ViewStateException.Message%2A> property contains the values returned from the <xref:System.Web.UI.ViewStateException.RemoteAddress%2A>, <xref:System.Web.UI.ViewStateException.RemotePort%2A>, <xref:System.Web.UI.ViewStateException.UserAgent%2A>, <xref:System.Web.UI.ViewStateException.PersistedState%2A>, <xref:System.Web.UI.ViewStateException.Referer%2A>, and <xref:System.Web.UI.ViewStateException.Path%2A> properties; otherwise, the <xref:System.Web.UI.ViewStateException.Message%2A> property contains a generic view-state error message.  
+  
+ A view-state exception can be the result of a Message Authentication Codes (MAC) validation error. If the page attribute `enableViewStateMac` is set to `true`, view-state information is encoded with a MAC identifier. When the view-state information is posted back to the server, the page verifies the encoding to ensure that it has not been altered by the user. If the page cannot validate the MAC encoding on the view-state information, it will throw an <xref:System.Web.HttpException> exception with the ViewStateException object as an inner exception.  
+  
+ For MAC validation to succeed, the view-state information must be hashed by the same key when it is sent and received. Within a Web farm, the machine key on each server should be set to a common key.  
+  
+   
+  
+## Examples  
+ The following code example demonstrates how to implement a method that deserializes a base64-encoded string and returns an <xref:System.Collections.ICollection> collection of property settings. The <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A> method can throw an <xref:System.Web.HttpException> exception that contains a ViewStateException object as an inner exception. The example shows how you can catch an <xref:System.Web.HttpException> exception and retrieve the properties from the ViewStateException object.  
+  
+ [!code-cs[System.Web.UI.ViewStateException#2](../../add/codesnippet/CSharp/t-system.web.ui.viewstat_0_1.cs)]
+ [!code-vb[System.Web.UI.ViewStateException#2](../../add/codesnippet/VisualBasic/t-system.web.ui.viewstat_0_1.vb)]  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -23,8 +47,11 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Initializes a new instance of the <see cref="T:System.Web.UI.ViewStateException" /> class.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="GetObjectData">
@@ -42,10 +69,13 @@
         <Parameter Name="context" Type="System.Runtime.Serialization.StreamingContext" />
       </Parameters>
       <Docs>
-        <param name="info">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="info">The object that holds the serialized object data.</param>
+        <param name="context">The contextual information about the source or destination.</param>
+        <summary>Initializes a new instance of the <see cref="T:System.Web.UI.ViewStateException" /> class with serialized data.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="IsConnected">
@@ -59,9 +89,28 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets a value indicating whether the client is currently connected to the server.</summary>
+        <value>
+          <see langword="true" /> if the client is still connected to the server; otherwise, <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This property returns the same value as calling the <xref:System.Web.HttpResponse.IsClientConnected%2A> property.  
+  
+   
+  
+## Examples  
+ The following code example demonstrates how to implement a method that deserializes a base64-encoded string and returns an <xref:System.Collections.ICollection> collection of property settings. The <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A> method can throw an <xref:System.Web.HttpException> exception that contains a <xref:System.Web.UI.ViewStateException> object as an inner exception. The example shows how you can catch an <xref:System.Web.HttpException> exception and retrieve the properties from the <xref:System.Web.UI.ViewStateException> object.  
+  
+ [!code-cs[System.Web.UI.ViewStateException#2](../../add/codesnippet/CSharp/p-system.web.ui.viewstat_0_1.cs)]
+ [!code-vb[System.Web.UI.ViewStateException#2](../../add/codesnippet/VisualBasic/p-system.web.ui.viewstat_0_1.vb)]  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>
+          <see langword="true" /> if the client is still connected to the server; otherwise, <see langword="false" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="Message">
@@ -75,9 +124,18 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets debugging information about the HTTP request that resulted in a view-state exception.</summary>
+        <value>A &lt;xref:System.String&gt; containing the formatted message with information about the exception.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ If the request does not have permission to access the server variables, then this property returns a generic view-state error message. If the request does have permission to access server variables, the Message property contains the values returned from the <xref:System.Web.UI.ViewStateException.RemoteAddress%2A>, <xref:System.Web.UI.ViewStateException.RemotePort%2A>, <xref:System.Web.UI.ViewStateException.UserAgent%2A>, <xref:System.Web.UI.ViewStateException.PersistedState%2A>, <xref:System.Web.UI.ViewStateException.Referer%2A>, and <xref:System.Web.UI.ViewStateException.Path%2A> properties.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>A &lt;xref:System.String&gt; containing the formatted message with information about the exception.</returns>
       </Docs>
     </Member>
     <Member MemberName="Path">
@@ -91,9 +149,26 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets the path of the HTTP request that resulted in a view-state exception.</summary>
+        <value>A &lt;xref:System.String&gt; containing the path from the request.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This property returns the same value as the `PATH_INFO` variable in the <xref:System.Web.HttpRequest.ServerVariables%2A> property. It returns the portion of the path after the host name. For example, in the URL http://www.contoso.com/virdir/page.html, Path would return /virdir/page.html.  
+  
+   
+  
+## Examples  
+ The following code example demonstrates how to implement a method that deserializes a base64-encoded string and returns an <xref:System.Collections.ICollection> collection of property settings. The <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A> method can throw an <xref:System.Web.HttpException> exception that contains a <xref:System.Web.UI.ViewStateException> object as an inner exception. The example shows how you can catch an <xref:System.Web.HttpException> exception and retrieve the properties from the <xref:System.Web.UI.ViewStateException> object.  
+  
+ [!code-cs[System.Web.UI.ViewStateException#2](../../add/codesnippet/CSharp/p-system.web.ui.viewstat_2_1.cs)]
+ [!code-vb[System.Web.UI.ViewStateException#2](../../add/codesnippet/VisualBasic/p-system.web.ui.viewstat_2_1.vb)]  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>A &lt;xref:System.String&gt; containing the path from the request.</returns>
       </Docs>
     </Member>
     <Member MemberName="PersistedState">
@@ -107,9 +182,11 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Gets the contents of the view-state string that, when read, caused the view-state exception.</summary>
+        <value>A &lt;xref:System.String&gt; containing the view-state values that caused the view-state exception.</value>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>A &lt;xref:System.String&gt; containing the view-state values that caused the view-state exception.</returns>
       </Docs>
     </Member>
     <Member MemberName="Referer">
@@ -123,9 +200,26 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets the URL of the page that linked to the page where the view-state exception occurred.</summary>
+        <value>A &lt;xref:System.String&gt; containing the HTTP referrer.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This property returns the same value as the `HTTP_REFERER` variable in the <xref:System.Web.HttpRequest.ServerVariables%2A> property. The value is an empty string ("") if no previous request linked to the page.  
+  
+   
+  
+## Examples  
+ The following code example demonstrates how to implement a method that deserializes a base64-encoded string and returns an <xref:System.Collections.ICollection> collection of property settings. The <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A> method can throw an <xref:System.Web.HttpException> exception that contains a <xref:System.Web.UI.ViewStateException> object as an inner exception. The example shows how you can catch an <xref:System.Web.HttpException> exception and retrieve the properties from the <xref:System.Web.UI.ViewStateException> object.  
+  
+ [!code-cs[System.Web.UI.ViewStateException#2](../../add/codesnippet/CSharp/p-system.web.ui.viewstat_3_1.cs)]
+ [!code-vb[System.Web.UI.ViewStateException#2](../../add/codesnippet/VisualBasic/p-system.web.ui.viewstat_3_1.vb)]  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>A &lt;xref:System.String&gt; containing the HTTP referrer.</returns>
       </Docs>
     </Member>
     <Member MemberName="RemoteAddress">
@@ -139,9 +233,18 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets the IP address of the HTTP request that resulted in a view-state exception.</summary>
+        <value>A &lt;xref:System.String&gt; containing the remote IP address of the client.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This property returns the same value as the `REMOTE_ADDR` variable in the <xref:System.Web.HttpRequest.ServerVariables%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>A &lt;xref:System.String&gt; containing the remote IP address of the client.</returns>
       </Docs>
     </Member>
     <Member MemberName="RemotePort">
@@ -155,9 +258,18 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets the port number of the HTTP request that resulted in a view-state exception.</summary>
+        <value>A &lt;xref:System.String&gt; containing the remote port number.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This property returns the same value as the `REMOTE_PORT` variable in the <xref:System.Web.HttpRequest.ServerVariables%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>A &lt;xref:System.String&gt; containing the remote port number.</returns>
       </Docs>
     </Member>
     <Member MemberName="UserAgent">
@@ -171,9 +283,26 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets the browser type of the HTTP request that resulted in a view-state exception.</summary>
+        <value>A &lt;xref:System.String&gt; containing the user agent, which is typically the browser type.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This property returns the same value as the `HTTP_USER_AGENT` variable in the <xref:System.Web.HttpRequest.ServerVariables%2A> property.  
+  
+   
+  
+## Examples  
+ The following code example demonstrates how to implement a method that deserializes a base64-encoded string and returns an <xref:System.Collections.ICollection> collection of property settings. The <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A> method can throw an <xref:System.Web.HttpException> exception that contains a <xref:System.Web.UI.ViewStateException> object as an inner exception. The example shows how you can catch an <xref:System.Web.HttpException> exception and retrieve the properties from the <xref:System.Web.UI.ViewStateException> object.  
+  
+ [!code-cs[System.Web.UI.ViewStateException#2](../../add/codesnippet/CSharp/p-system.web.ui.viewstat_1_1.cs)]
+ [!code-vb[System.Web.UI.ViewStateException#2](../../add/codesnippet/VisualBasic/p-system.web.ui.viewstat_1_1.vb)]  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>A &lt;xref:System.String&gt; containing the user agent, which is typically the browser type.</returns>
       </Docs>
     </Member>
   </Members>

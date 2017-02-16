@@ -16,8 +16,8 @@ items:
   nameWithType: SessionStateModule
   fullName: System.Web.SessionState.SessionStateModule
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides session-state services for an application. This class cannot be inherited.
+  remarks: "SessionStateModule is ASP.NET's default session-state handler. It writes session data to and retrieves it from the session-state store and raises the **Session_OnStart** and **Session_OnEnd** events. For details about how to use ASP.NET session state to store and retrieve values for a user session, see [ASP.NET Session State Overview](../Topic/ASP.NET%20Session%20State%20Overview.md).  \n  \n You can replace the SessionStateModule with a custom implementation of the <xref:System.Web.IHttpModule> interface that manages session state. For an example of a custom session-state module, see the <xref:System.Web.SessionState.SessionStateUtility> class overview."
   syntax:
     content: 'public sealed class SessionStateModule : System.Web.SessionState.ISessionStateModule'
   inheritance:
@@ -41,12 +41,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.SessionState
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: "This constructor is not intended to be called from application code.  \n  \n An <xref:System.Web.HttpApplication> object is created when an ASP.NET application is started. The <xref:System.Web.HttpApplication> object calls the <xref:System.Web.SessionState.SessionStateModule> constructor to create the <xref:System.Web.SessionState.SessionStateModule> object for the application. The <xref:System.Web.SessionState.SessionStateModule> is specified in the configuration for an application."
   syntax:
     content: public SessionStateModule ();
     parameters: []
   overload: System.Web.SessionState.SessionStateModule.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -63,12 +64,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.SessionState
-  summary: To be added.
-  remarks: To be added.
+  summary: Executes final cleanup code before the  object is released from memory.
+  remarks: "This method is not intended to be called from application code.  \n  \n An <xref:System.Web.HttpApplication> object is created when an ASP.NET application is started. The <xref:System.Web.HttpApplication> object creates and initializes the <xref:System.Web.SessionState.SessionStateModule> object for the application and calls the Dispose method when the object is released. The <xref:System.Web.SessionState.SessionStateModule> is specified in the configuration for an application."
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.Web.SessionState.SessionStateModule.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -85,13 +87,16 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.SessionState
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a session ends.
+  remarks: "The End event is raised at the end of a request when the <xref:System.Web.SessionState.HttpSessionState.Abandon%2A> method has been called or when the session has expired. A session expires when the number of minutes specified by the <xref:System.Web.SessionState.HttpSessionState.Timeout%2A> property passes without a request being made for the session.  \n  \n The **Session_OnEnd** event is used to perform any cleanup work for a session such as disposing of resources used by the session.  \n  \n You can specify a handler for the End event by adding a public subroutine named **Session_OnEnd** to the Global.asax file.  \n  \n> [!NOTE]\n>  The **Session_OnEnd** event is only supported when the session-state <xref:System.Web.SessionState.HttpSessionState.Mode%2A?displayProperty=fullName> property value is <xref:System.Web.SessionState.SessionStateMode>, which is the default. If the session-state <xref:System.Web.SessionState.HttpSessionState.Mode%2A> is set to <xref:System.Web.SessionState.SessionStateMode> or <xref:System.Web.SessionState.SessionStateMode>, then the **Session_OnEnd** event in the Global.asax file is ignored. If the session state <xref:System.Web.SessionState.HttpSessionState.Mode%2A> property value is <xref:System.Web.SessionState.SessionStateMode>, then support for the **Session_OnEnd** event is determined by the custom session-state store provider.  \n  \n Though the End event is public, you can only handle it by adding an event handler in the Global.asax file. This restriction is implemented because <xref:System.Web.HttpApplication> instances are reused for performance. When a session expires, only the **Session_OnEnd** event specified in the Global.asax file is executed, to prevent code from calling  an End event handler associated with an <xref:System.Web.HttpApplication> instance that is currently in use.  \n  \n For more information about the Global.asax file, see [Global.asax Syntax](http://msdn.microsoft.com/en-us/9ade9d4d-4d52-4e88-af52-53a9ffa26582)."
+  example:
+  - "The following code example shows the contents of a Global.asax file with the **Session_OnStart** and **Session_OnEnd** events defined.  \n  \n```vb#  \n<script language=\"VB\" runat=\"server\">  \nPublic Sub Session_OnStart()  \n  \nEnd Sub  \n  \nPublic Sub Session_OnEnd()  \n  \nEnd Sub  \n</script>  \n```  \n  \n```c#  \n<script language=\"C#\" runat=\"server\">  \npublic void Session_OnStart()  \n{  \n  \n}  \n  \npublic void Session_OnEnd()  \n{  \n  \n}  \n</script>  \n```"
   syntax:
     content: public event EventHandler End;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -108,15 +113,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.SessionState
-  summary: To be added.
-  remarks: To be added.
+  summary: Calls initialization code when a  object is created.
+  remarks: "This method is not intended to be called from application code.  \n  \n An <xref:System.Web.HttpApplication> is created when an ASP.NET application is started. The <xref:System.Web.HttpApplication> object calls the Init method when it creates the <xref:System.Web.SessionState.SessionStateModule> object for the application. The <xref:System.Web.SessionState.SessionStateModule> class is specified in the configuration for an application."
   syntax:
     content: public void Init (System.Web.HttpApplication app);
     parameters:
     - id: app
       type: System.Web.HttpApplication
-      description: To be added.
+      description: The current application.
   overload: System.Web.SessionState.SessionStateModule.Init*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: The  attribute in the [sessionState Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/bda6fb8c-0076-43e3-9ce2-8cf1f8bdaa7d) configuration element is set to  or , and the ASP.NET application has less than  trust.
+  - type: System.Configuration.ConfigurationErrorsException
+    commentId: T:System.Configuration.ConfigurationErrorsException
+    description: "The  attribute in the [sessionState Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/bda6fb8c-0076-43e3-9ce2-8cf1f8bdaa7d) configuration element is set to  and the  attribute is empty or does not exist.  \n  \n -or-  \n  \n The  attribute in the [sessionState Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/bda6fb8c-0076-43e3-9ce2-8cf1f8bdaa7d) configuration element is set to  and the provider identified by name in the  attribute has not been added to the [providers Element for sessionState (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/219d6778-9fb8-48ac-810d-bec68cf7d6aa) sub-element."
   platform:
   - net-11
   - net-20
@@ -133,15 +145,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.SessionState
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the session state for the specified .
   syntax:
     content: public void ReleaseSessionState (System.Web.HttpContext context);
     parameters:
     - id: context
       type: System.Web.HttpContext
-      description: To be added.
+      description: The   for which to to release the session state.
   overload: System.Web.SessionState.SessionStateModule.ReleaseSessionState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -158,18 +170,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.SessionState
-  summary: To be added.
-  remarks: To be added.
+  summary: Asynchronously releases the session state for the specified .
   syntax:
     content: public System.Threading.Tasks.Task ReleaseSessionStateAsync (System.Web.HttpContext context);
     parameters:
     - id: context
       type: System.Web.HttpContext
-      description: To be added.
+      description: The   for which to to release the session state.
     return:
       type: System.Threading.Tasks.Task
-      description: To be added.
+      description: A <xref:System.Threading.Tasks.Task> for the asynchronous operation.
   overload: System.Web.SessionState.SessionStateModule.ReleaseSessionStateAsync*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -186,13 +198,16 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.SessionState
-  summary: To be added.
-  remarks: To be added.
+  summary: The event that occurs when a session is created.
+  remarks: "The Start event is raised at the beginning of a request when a new session is started. A new session is started if a request is made that does not contain a session identifier, the session identifier is invalid, or the session associated with a session identifier has expired.  \n  \n The **Session_OnStart** event is used to perform any initialization work for a session such as setting up default values for session variables.  \n  \n You can specify a handler for the Start event by adding a public subroutine named **Session_OnStart** to the Global.asax file.  \n  \n For more information about the Global.asax file, see [Global.asax Syntax](http://msdn.microsoft.com/en-us/9ade9d4d-4d52-4e88-af52-53a9ffa26582)."
+  example:
+  - "The following code example shows the contents of a Global.asax file with the **Session_OnStart** and **Session_OnEnd** events defined.  \n  \n```vb#  \n<script language=\"VB\" runat=\"server\">  \nPublic Sub Session_OnStart()  \n  \nEnd Sub  \n  \nPublic Sub Session_OnEnd()  \n  \nEnd Sub  \n</script>  \n```  \n  \n```c#  \n<script language=\"C#\" runat=\"server\">  \npublic void Session_OnStart()  \n{  \n  \n}  \n  \npublic void Session_OnEnd()  \n{  \n  \n}  \n</script>  \n```"
   syntax:
     content: public event EventHandler Start;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -261,24 +276,12 @@ references:
   name: Task
   nameWithType: Task
   fullName: System.Threading.Tasks.Task
-- uid: System.Web.HttpContext
-  parent: System.Web
-  isExternal: false
-  name: HttpContext
-  nameWithType: HttpContext
-  fullName: System.Web.HttpContext
 - uid: System.Web.SessionState.SessionStateModule.Start
   parent: System.Web.SessionState.SessionStateModule
   isExternal: false
   name: Start
   nameWithType: SessionStateModule.Start
   fullName: System.Web.SessionState.SessionStateModule.Start
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.Web.SessionState.SessionStateModule.#ctor*
   parent: System.Web.SessionState.SessionStateModule
   isExternal: false

@@ -30,8 +30,8 @@ items:
   nameWithType: BuildManager
   fullName: System.Web.Compilation.BuildManager
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a set of methods to help manage the compilation of an ASP.NET application.
+  remarks: "The BuildManager class manages the process of compiling assemblies and pages for an application. It is a sealed class and cannot be inherited.  \n  \n BuildManager contains static members that provide information about the compiled assemblies."
   syntax:
     content: public sealed class BuildManager
   inheritance:
@@ -54,15 +54,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies a string that represents a dependency that the build manager uses to help determine if a clean build is required.
+  remarks: The method must be called during the `Application_PreStartInit` stage of the application.
   syntax:
     content: public static void AddCompilationDependency (string dependency);
     parameters:
     - id: dependency
       type: System.String
-      description: To be added.
+      description: A string that represents a dependency.
   overload: System.Web.Compilation.BuildManager.AddCompilationDependency*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The dependency parameter is  or an empty string.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The method was called after the  stage of the application.
   platform:
   - net-11
   - net-20
@@ -79,15 +86,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds an assembly to the application's set of referenced assemblies.
+  remarks: "Calling this method is equivalent to adding the assembly to the application-level Web.config file. The method must be called during the `Application_PreStartInit` stage of the application.  \n  \n The <xref:System.Web.Compilation.BuildManager.GetReferencedAssemblies%2A> method will return the set of assemblies that are determined from configuration files and any assemblies that were added by using this method.  \n  \n If an attempt is made to add an assembly that has already been added, the duplicate entry is ignored.  \n  \n This method must be called before the `Application_Start` event in the Global.asax file occurs."
   syntax:
     content: public static void AddReferencedAssembly (System.Reflection.Assembly assembly);
     parameters:
     - id: assembly
       type: System.Reflection.Assembly
-      description: To be added.
+      description: The assembly to add.
   overload: System.Web.Compilation.BuildManager.AddReferencedAssembly*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The assembly parameter is  or empty.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The method was not called before the  event in the Global.asax file occurred.
   platform:
   - net-11
   - net-20
@@ -104,14 +118,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether batch compilation is enabled.
+  remarks: "This property enables you to turn batch compilation on or off programmatically. It corresponds to the `batch` attribute of the `compilation` element in the Web.config file. For more information, see [compilation Element (ASP.NET Settings Schema)](http://msdn.microsoft.com/en-us/7c319582-074a-4d2a-a787-03b9d4541c12).  \n  \n The property can be set only in the `PreApplicationStart` method. For more information about the `PreApplicationStart` method, see <xref:System.Web.PreApplicationStartMethodAttribute>."
   syntax:
     content: public static Nullable<bool> BatchCompilationEnabled { get; set; }
     return:
       type: System.Nullable{System.Boolean}
-      description: To be added.
+      description: if batch compilation is always enabled,  if batch compilation is never enabled, or  if the compilation setting is determined from the configuration file. The default value is .
   overload: System.Web.Compilation.BuildManager.BatchCompilationEnabled*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The property was not set in the  method.
   platform:
   - net-11
   - net-20
@@ -128,14 +146,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a list of assemblies built from the App_Code directory.
   syntax:
     content: public static System.Collections.IList CodeAssemblies { get; }
     return:
       type: System.Collections.IList
-      description: To be added.
+      description: An <xref:System.Collections.IList> collection that contains the assemblies built from the App_Code directory.
   overload: System.Web.Compilation.BuildManager.CodeAssemblies*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -152,18 +170,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a cached file.
+  remarks: "This method and the <xref:System.Web.Compilation.BuildManager.ReadCachedFile%2A> method enable you to perform caching that persists across application domain restarts in partial-trust environments. It is used by the MVC framework to cache results of the controller lookup.  \n  \n To cache data, you write to the <xref:System.IO.Stream> object that is returned by this method."
   syntax:
     content: public static System.IO.Stream CreateCachedFile (string fileName);
     parameters:
     - id: fileName
       type: System.String
-      description: To be added.
+      description: The name of the file to create.
     return:
       type: System.IO.Stream
-      description: To be added.
+      description: The <xref:System.IO.Stream> object for the new file.
   overload: System.Web.Compilation.BuildManager.CreateCachedFile*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -180,21 +199,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a file, given its virtual path, and creates an instance of the result.
+  remarks: The CreateInstanceFromVirtualPath method works for compiled and non-compile pages.
   syntax:
     content: public static object CreateInstanceFromVirtualPath (string virtualPath, Type requiredBaseType);
     parameters:
     - id: virtualPath
       type: System.String
-      description: To be added.
+      description: The virtual path of the file to create an instance of.
     - id: requiredBaseType
       type: System.Type
-      description: To be added.
+      description: The base type that defines the object to be created.
     return:
       type: System.Object
-      description: To be added.
+      description: The <xref:System.Object> that represents the instance of the processed file.
   overload: System.Web.Compilation.BuildManager.CreateInstanceFromVirtualPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -211,21 +231,21 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a build dependency set for a virtual path if the path is located in the ASP.NET cache.
   syntax:
     content: public static System.Web.Compilation.BuildDependencySet GetCachedBuildDependencySet (System.Web.HttpContext context, string virtualPath);
     parameters:
     - id: context
       type: System.Web.HttpContext
-      description: To be added.
+      description: The context of the request.
     - id: virtualPath
       type: System.String
-      description: To be added.
+      description: The virtual path from which to determine the build dependency set.
     return:
       type: System.Web.Compilation.BuildDependencySet
-      description: To be added.
+      description: A  object that is stored in the cache, or  if the  object cannot be retrieved from the cache.
   overload: System.Web.Compilation.BuildManager.GetCachedBuildDependencySet*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -242,24 +262,25 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a build dependency set for a virtual path if the path is located in the ASP.NET cache, even if the content is not current.
+  remarks: "If the `ensureIsUpToDate` parameter value is set to `true`, the GetCachedBuildDependencySet method overload behaves like the <xref:System.Web.Compilation.BuildManager.GetCachedBuildDependencySet%2A?displayProperty=fullName> method overload. Both overloads return a current build dependency set if one exists, otherwise they return `null`.  \n  \n However, the GetCachedBuildDependencySet method overload includes the option to return any build dependency set that is available, even an outdated one. If the `ensureIsUpToDate` parameter value is set to `false`, the method will return any available build dependency set."
   syntax:
     content: public static System.Web.Compilation.BuildDependencySet GetCachedBuildDependencySet (System.Web.HttpContext context, string virtualPath, bool ensureIsUpToDate);
     parameters:
     - id: context
       type: System.Web.HttpContext
-      description: To be added.
+      description: The context of the request.
     - id: virtualPath
       type: System.String
-      description: To be added.
+      description: The virtual path from which to determine the build dependency set.
     - id: ensureIsUpToDate
       type: System.Boolean
-      description: To be added.
+      description: "\n     to specify that only a current build dependency set should be returned, or  to indicate that any available build dependency set should be returned, even if it is not current. The default is ."
     return:
       type: System.Web.Compilation.BuildDependencySet
-      description: To be added.
+      description: A  object that is stored in the cache, or  if the  object cannot be retrieved from the cache.
   overload: System.Web.Compilation.BuildManager.GetCachedBuildDependencySet*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -276,18 +297,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Compiles a file into an assembly using the specified virtual path.
   syntax:
     content: public static System.Reflection.Assembly GetCompiledAssembly (string virtualPath);
     parameters:
     - id: virtualPath
       type: System.String
-      description: To be added.
+      description: The virtual path to build into an assembly.
     return:
       type: System.Reflection.Assembly
-      description: To be added.
+      description: An <xref:System.Reflection.Assembly> object that is compiled from the specified virtual path, which is cached to either memory or to disk.
   overload: System.Web.Compilation.BuildManager.GetCompiledAssembly*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -304,18 +325,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Compiles a file, given its virtual path, and returns a custom string that the build provider persists in cache.
   syntax:
     content: public static string GetCompiledCustomString (string virtualPath);
     parameters:
     - id: virtualPath
       type: System.String
-      description: To be added.
+      description: The virtual path of the file to build.
     return:
       type: System.String
-      description: To be added.
+      description: A string, as returned by the <xref:System.Web.Compilation.BuildProvider.GetCustomString%2A> method, that is cached to disk or memory.
   overload: System.Web.Compilation.BuildManager.GetCompiledCustomString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -332,18 +353,24 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Compiles a file, given its virtual path, and returns the compiled type.
   syntax:
     content: public static Type GetCompiledType (string virtualPath);
     parameters:
     - id: virtualPath
       type: System.String
-      description: To be added.
+      description: The virtual path to build into a type.
     return:
       type: System.Type
-      description: To be added.
+      description: A <xref:System.Type> object that represents the type generated from compiling the virtual path.
   overload: System.Web.Compilation.BuildManager.GetCompiledType*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: An error occurred when compiling the virtual path.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    virtualPath is ."
   platform:
   - net-11
   - net-20
@@ -360,15 +387,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets an object that represents the compiled type for the Global.asax file.
+  remarks: An exception is thrown if this method is called before the Global.asax file has been compiled.
   syntax:
     content: public static Type GetGlobalAsaxType ();
     parameters: []
     return:
       type: System.Type
-      description: To be added.
+      description: An object that represents the compiled type for the Global.asax file.
   overload: System.Web.Compilation.BuildManager.GetGlobalAsaxType*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An attempt was made to call this method before the Global.asax page was compiled.
   platform:
   - net-11
   - net-20
@@ -385,21 +416,25 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets an object factory for the specified virtual path.
+  remarks: This method returns an object that enables you to generate a type by compiling the virtual path. It returns an object regardless of whether the Web site is precompiled.
   syntax:
     content: public static System.Web.Util.IWebObjectFactory GetObjectFactory (string virtualPath, bool throwIfNotFound);
     parameters:
     - id: virtualPath
       type: System.String
-      description: To be added.
+      description: The virtual path.
     - id: throwIfNotFound
       type: System.Boolean
-      description: To be added.
+      description: "\n     to throw an error if the virtual path does not exist; otherwise, . If the virtual path does not exist and `throwIfNotFound` is , this method returns ."
     return:
       type: System.Web.Util.IWebObjectFactory
-      description: To be added.
+      description: The object factory.
   overload: System.Web.Compilation.BuildManager.GetObjectFactory*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "The virtual path does not exist.  \n  \n -or-  \n  \n A higher-level exception already existed when this method was called.  \n  \n -or-  \n  \n This method was called while the compilation process was building top-level files.  \n  \n -or-  \n  \n This is a precompiled application and the virtual path was not found in the cache.  \n  \n -or-  \n  \n A circular reference was detected."
   platform:
   - net-11
   - net-20
@@ -416,15 +451,16 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a list of assembly references that all page compilations must reference.
+  remarks: "The collection of assemblies that is returned from the GetReferencedAssemblies method includes assemblies specified in the  element of the Web.config file, assemblies built from custom code in the App_Code directory, and assemblies in other top-level folders.  \n  \n GetReferencedAssemblies is introduced in the .NET Framework version 3.5.  For more information, see [.NET Framework Versions and Dependencies](../Topic/.NET%20Framework%20Versions%20and%20Dependencies.md)."
   syntax:
     content: public static System.Collections.ICollection GetReferencedAssemblies ();
     parameters: []
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> collection of assembly references.
   overload: System.Web.Compilation.BuildManager.GetReferencedAssemblies*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -441,21 +477,25 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Finds a type in the top-level assemblies or in assemblies that are defined in configuration, and optionally throws an exception on failure.
+  remarks: A top-level assembly refers to the Global.asax file, or to a file that is in the App_GlobalResources, App_WebReferences, App_Code, or App_Browsers directory.
   syntax:
     content: public static Type GetType (string typeName, bool throwOnError);
     parameters:
     - id: typeName
       type: System.String
-      description: To be added.
+      description: The name of the type.
     - id: throwOnError
       type: System.Boolean
-      description: To be added.
+      description: "\n     to throw an exception if a <xref:System.Type> object cannot be generated for the type name; otherwise, ."
     return:
       type: System.Type
-      description: To be added.
+      description: A <xref:System.Type> object that represents the requested typeName parameter.
   overload: System.Web.Compilation.BuildManager.GetType*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "\n    typeName is invalid.  \n  \n \\- or -  \n  \n typeName is ambiguous.  \n  \n \\- or -  \n  \n typeName could not be found, and throwOnError is ."
   platform:
   - net-11
   - net-20
@@ -472,24 +512,28 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Finds a type in the top-level assemblies, or in assemblies that are defined in configuration, by using a case-insensitive search and optionally throwing an exception on failure.
+  remarks: A top-level assembly refers to the Global.asax file, or to a file that is in the App_GlobalResources, App_WebReferences, App_Code, or App_Browsers directory.
   syntax:
     content: public static Type GetType (string typeName, bool throwOnError, bool ignoreCase);
     parameters:
     - id: typeName
       type: System.String
-      description: To be added.
+      description: The name of the type.
     - id: throwOnError
       type: System.Boolean
-      description: To be added.
+      description: "\n     to throw an exception if a <xref:System.Type> cannot be generated for the type name; otherwise, ."
     - id: ignoreCase
       type: System.Boolean
-      description: To be added.
+      description: "\n     if `typeName` is case-sensitive; otherwise, ."
     return:
       type: System.Type
-      description: To be added.
+      description: A <xref:System.Type> object that represents the requested typeName parameter.
   overload: System.Web.Compilation.BuildManager.GetType*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: "\n    typeName is invalid.  \n  \n \\- or -  \n  \n typeName is ambiguous.  \n  \n \\- or -  \n  \n typeName could not be found, and throwOnError is ."
   platform:
   - net-11
   - net-20
@@ -506,18 +550,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a collection of virtual-path dependencies for a specified virtual path.
   syntax:
     content: public static System.Collections.ICollection GetVirtualPathDependencies (string virtualPath);
     parameters:
     - id: virtualPath
       type: System.String
-      description: To be added.
+      description: The virtual path used to determine the dependencies.
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> collection of files represented by virtual paths that are caching dependencies for the virtual path.
   overload: System.Web.Compilation.BuildManager.GetVirtualPathDependencies*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -534,14 +578,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that specifies whether the application is precompiled.
   syntax:
     content: public static bool IsPrecompiledApp { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the application is precompiled; otherwise, .
   overload: System.Web.Compilation.BuildManager.IsPrecompiledApp*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -558,14 +602,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that specifies whether the application is precompiled as updatable.
   syntax:
     content: public static bool IsUpdatablePrecompiledApp { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the application is precompiled as updatable; otherwise, .
   overload: System.Web.Compilation.BuildManager.IsUpdatablePrecompiledApp*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -582,18 +626,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Reads a cached file.
+  remarks: "This method and the <xref:System.Web.Compilation.BuildManager.CreateCachedFile%2A> method enable you to perform caching that persists across application domain restarts in partial-trust environments. It is used by the MVC framework to cache results of the controller lookup.  \n  \n To retrieve cached data, you read from the <xref:System.IO.Stream> object that is returned by this method."
   syntax:
     content: public static System.IO.Stream ReadCachedFile (string fileName);
     parameters:
     - id: fileName
       type: System.String
-      description: To be added.
+      description: The name of the file to read.
     return:
       type: System.IO.Stream
-      description: To be added.
+      description: The <xref:System.IO.Stream> object for the file, or  if the file does not exist.
   overload: System.Web.Compilation.BuildManager.ReadCachedFile*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -610,14 +655,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Compilation
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the target version of the .NET Framework for the current Web site.
+  remarks: "This property supports the ASP.NET multi-targeting feature, which enables you to use the latest version of [!INCLUDE[vsprvs](../../add/includes/vsprvs-md.md)] to develop applications that will run with earlier versions of the .NET Framework. A build provider can use this property to make sure that the provider generates code that is appropriate for the targeted version of the .NET Framework. For example, you might want to generate different code depending on whether a Web site targets the [!INCLUDE[net_v35_short](../../add/includes/net-v35-short-md.md)] or the [!INCLUDE[net_v40_short](../../add/includes/net-v40-short-md.md)]. For more information about multi-targeting, see [.NET Framework Multi-Targeting for ASP.NET Web Projects](../Topic/.NET%20Framework%20Multi-Targeting%20for%20ASP.NET%20Web%20Projects.md).  \n  \n If the Web site does not have a Web.config file, ASP.NET assumes that the target framework version is the version that is associated with the IIS application pool that the site is running under. For a file-system Web site that is running in Visual Studio, the default framework version is the current version of the [!INCLUDE[dnprdnshort](../../add/includes/dnprdnshort-md.md)].  \n  \n If the Web site does have a Web.config file, ASP.NET determines the target framework by examining the Web.config file.  \n  \n## Web Sites that Target the .NET Framework 2.0  \n Web applications that target the [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)] are compiled as if the target were the [!INCLUDE[net_v30_short](../../add/includes/net-v30-short-md.md)]. The build process does not differentiate between the [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)] and the [!INCLUDE[net_v30_short](../../add/includes/net-v30-short-md.md)] because the Web.config file does not indicate compiler version or target framework when one of those versions is targeted. (For the [!INCLUDE[net_v35_short](../../add/includes/net-v35-short-md.md)], the Web.config file specifies the compiler version, and for the [!INCLUDE[net_v40_short](../../add/includes/net-v40-short-md.md)], the Web.config file specifies the target framework.) Therefore, for Web applications that target the [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)], this property returns a target framework moniker that indicates the [!INCLUDE[net_v30_short](../../add/includes/net-v30-short-md.md)].  \n  \n This normally will not cause any problems. [!INCLUDE[vsprvs](../../add/includes/vsprvs-md.md)] prevents you from creating references to [!INCLUDE[net_v30_short](../../add/includes/net-v30-short-md.md)] features in a project that is targeted for the [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)]. For example, [!INCLUDE[vsprvs](../../add/includes/vsprvs-md.md)] does not provide item templates for WCF services in a project that is targeted for [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)], because WCF was introduced with the [!INCLUDE[net_v30_short](../../add/includes/net-v30-short-md.md)] and is not compatible with the [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)].  \n  \n If you plan to deploy a Web site in a [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)] run-time environment and you use a tool other than [!INCLUDE[vsprvs](../../add/includes/vsprvs-md.md)] to reference features that are compatible only with [!INCLUDE[net_v30_short](../../add/includes/net-v30-short-md.md)], the project might build without generating errors or warnings. However, the application might generate errors when the Web site runs on the [!INCLUDE[dnprdnlong](../../add/includes/dnprdnlong-md.md)]."
   syntax:
     content: public static System.Runtime.Versioning.FrameworkName TargetFramework { get; }
     return:
       type: System.Runtime.Versioning.FrameworkName
-      description: To be added.
+      description: The target version of the .NET Framework for the current Web site.
   overload: System.Web.Compilation.BuildManager.TargetFramework*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -662,6 +708,21 @@ references:
   name: Nullable<Boolean>
   nameWithType: Nullable<Boolean>
   fullName: System.Nullable<System.Boolean>
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    nameWithType: Nullable
+    fullName: Nullable<System.Boolean>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Boolean
+    name: Boolean
+    nameWithType: Boolean
+    fullName: Boolean
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.Compilation.BuildManager.CodeAssemblies
   parent: System.Web.Compilation.BuildManager
   isExternal: false
@@ -686,30 +747,12 @@ references:
   name: Stream
   nameWithType: Stream
   fullName: System.IO.Stream
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Compilation.BuildManager.CreateInstanceFromVirtualPath(System.String,System.Type)
   parent: System.Web.Compilation.BuildManager
   isExternal: false
   name: CreateInstanceFromVirtualPath(String,Type)
   nameWithType: BuildManager.CreateInstanceFromVirtualPath(String,Type)
   fullName: System.Web.Compilation.BuildManager.CreateInstanceFromVirtualPath(String,Type)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Type
   parent: System
   isExternal: true
@@ -734,36 +777,12 @@ references:
   name: HttpContext
   nameWithType: HttpContext
   fullName: System.Web.HttpContext
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Compilation.BuildManager.GetCachedBuildDependencySet(System.Web.HttpContext,System.String,System.Boolean)
   parent: System.Web.Compilation.BuildManager
   isExternal: false
   name: GetCachedBuildDependencySet(HttpContext,String,Boolean)
   nameWithType: BuildManager.GetCachedBuildDependencySet(HttpContext,String,Boolean)
   fullName: System.Web.Compilation.BuildManager.GetCachedBuildDependencySet(HttpContext,String,Boolean)
-- uid: System.Web.Compilation.BuildDependencySet
-  parent: System.Web.Compilation
-  isExternal: false
-  name: BuildDependencySet
-  nameWithType: BuildDependencySet
-  fullName: System.Web.Compilation.BuildDependencySet
-- uid: System.Web.HttpContext
-  parent: System.Web
-  isExternal: false
-  name: HttpContext
-  nameWithType: HttpContext
-  fullName: System.Web.HttpContext
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -776,66 +795,24 @@ references:
   name: GetCompiledAssembly(String)
   nameWithType: BuildManager.GetCompiledAssembly(String)
   fullName: System.Web.Compilation.BuildManager.GetCompiledAssembly(String)
-- uid: System.Reflection.Assembly
-  parent: System.Reflection
-  isExternal: true
-  name: Assembly
-  nameWithType: Assembly
-  fullName: System.Reflection.Assembly
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Compilation.BuildManager.GetCompiledCustomString(System.String)
   parent: System.Web.Compilation.BuildManager
   isExternal: false
   name: GetCompiledCustomString(String)
   nameWithType: BuildManager.GetCompiledCustomString(String)
   fullName: System.Web.Compilation.BuildManager.GetCompiledCustomString(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Compilation.BuildManager.GetCompiledType(System.String)
   parent: System.Web.Compilation.BuildManager
   isExternal: false
   name: GetCompiledType(String)
   nameWithType: BuildManager.GetCompiledType(String)
   fullName: System.Web.Compilation.BuildManager.GetCompiledType(String)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Compilation.BuildManager.GetGlobalAsaxType
   parent: System.Web.Compilation.BuildManager
   isExternal: false
   name: GetGlobalAsaxType()
   nameWithType: BuildManager.GetGlobalAsaxType()
   fullName: System.Web.Compilation.BuildManager.GetGlobalAsaxType()
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Web.Compilation.BuildManager.GetObjectFactory(System.String,System.Boolean)
   parent: System.Web.Compilation.BuildManager
   isExternal: false
@@ -848,18 +825,6 @@ references:
   name: IWebObjectFactory
   nameWithType: IWebObjectFactory
   fullName: System.Web.Util.IWebObjectFactory
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.Compilation.BuildManager.GetReferencedAssemblies
   parent: System.Web.Compilation.BuildManager
   isExternal: false
@@ -878,114 +843,36 @@ references:
   name: GetType(String,Boolean)
   nameWithType: BuildManager.GetType(String,Boolean)
   fullName: System.Web.Compilation.BuildManager.GetType(String,Boolean)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.Compilation.BuildManager.GetType(System.String,System.Boolean,System.Boolean)
   parent: System.Web.Compilation.BuildManager
   isExternal: false
   name: GetType(String,Boolean,Boolean)
   nameWithType: BuildManager.GetType(String,Boolean,Boolean)
   fullName: System.Web.Compilation.BuildManager.GetType(String,Boolean,Boolean)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.Compilation.BuildManager.GetVirtualPathDependencies(System.String)
   parent: System.Web.Compilation.BuildManager
   isExternal: false
   name: GetVirtualPathDependencies(String)
   nameWithType: BuildManager.GetVirtualPathDependencies(String)
   fullName: System.Web.Compilation.BuildManager.GetVirtualPathDependencies(String)
-- uid: System.Collections.ICollection
-  parent: System.Collections
-  isExternal: true
-  name: ICollection
-  nameWithType: ICollection
-  fullName: System.Collections.ICollection
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Compilation.BuildManager.IsPrecompiledApp
   parent: System.Web.Compilation.BuildManager
   isExternal: false
   name: IsPrecompiledApp
   nameWithType: BuildManager.IsPrecompiledApp
   fullName: System.Web.Compilation.BuildManager.IsPrecompiledApp
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.Compilation.BuildManager.IsUpdatablePrecompiledApp
   parent: System.Web.Compilation.BuildManager
   isExternal: false
   name: IsUpdatablePrecompiledApp
   nameWithType: BuildManager.IsUpdatablePrecompiledApp
   fullName: System.Web.Compilation.BuildManager.IsUpdatablePrecompiledApp
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.Compilation.BuildManager.ReadCachedFile(System.String)
   parent: System.Web.Compilation.BuildManager
   isExternal: false
   name: ReadCachedFile(String)
   nameWithType: BuildManager.ReadCachedFile(String)
   fullName: System.Web.Compilation.BuildManager.ReadCachedFile(String)
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Compilation.BuildManager.TargetFramework
   parent: System.Web.Compilation.BuildManager
   isExternal: false

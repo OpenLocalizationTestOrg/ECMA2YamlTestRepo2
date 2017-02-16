@@ -26,8 +26,10 @@ items:
   nameWithType: ReliableSessionBindingElement
   fullName: System.ServiceModel.Channels.ReliableSessionBindingElement
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the binding element that can produce the sending and receiving channels required for a reliable session between endpoints.
+  remarks: "Provides sessions and optionally provides ordered message delivery. This implemented session can cross SOAP and transport intermediaries.  \n  \n Each binding element represents a processing step when sending or receiving messages. At runtime, binding elements create the channel factories and listeners that are necessary to build outgoing and incoming channel stacks required to send and receive messages. The ReliableSessionBindingElement provides an optional layer in the stack that can establish a reliable session between endpoints and configure the behavior of this session.  \n  \n The ReliableSessionBindingElement is provided on the standard bindings in the following table.  \n  \n|Binding|Default|  \n|-------------|-------------|  \n|<xref:System.ServiceModel.NetTcpBinding>|Off|  \n|<xref:System.ServiceModel.WSHttpBinding>|Off|  \n|<xref:System.ServiceModel.WSDualHttpBinding>|On (required)|"
+  example:
+  - "The ReliableSessionBindingElement can be added to any custom binding. This is done using the following configuration elements.  \n  \n```  \n<bindings>  \n    <customBinding>  \n        <binding configurationName=”ReliabilityHTTP”>  \n            <reliableSession/>  \n        </binding>  \n    </customBinding>  \n</bindings>  \n```  \n  \n The following sample code demonstrates how to use ReliableSessionBindingElement in code.  \n  \n [!code-vb[S_Imperative#1](../../add/codesnippet/VisualBasic/t-system.servicemodel.ch_0_1.vb)]\n [!code-cs[S_Imperative#1](../../add/codesnippet/CSharp/t-system.servicemodel.ch_0_1.cs)]"
   syntax:
     content: 'public sealed class ReliableSessionBindingElement : System.ServiceModel.Channels.BindingElement, System.ServiceModel.Description.IPolicyExportExtension'
   inheritance:
@@ -51,12 +53,12 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public ReliableSessionBindingElement ();
     parameters: []
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -73,15 +75,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class that specifies whether message delivery must preserve the order in which messages are sent.
   syntax:
     content: public ReliableSessionBindingElement (bool ordered);
     parameters:
     - id: ordered
       type: System.Boolean
-      description: To be added.
+      description: "\n     if messages must be delivered in the order in which they are sent; otherwise, . The default value is ."
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -98,14 +100,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the interval of time that a destination waits before sending an acknowledgment to the message source on reliable channels that are created by the factory.
+  remarks: "The destination that receives messages on a reliable channel groups the acknowledgments for these messages together into a single message to reduce network traffic and to increase information density on messages. Grouping scales better as traffic increases. It does not attempt to send an acknowledgment for every message it receives as soon as possible, but rather waits for an interval of time, groups together the acknowledgments that have arrived during that interval, and then sends them all together. The first message that is received is the exception; it is acknowledged as soon as it is delivered. Also, if reliable sessions are used with single HTTP connections, as is the case for example with the <xref:System.ServiceModel.WSHttpBinding> but not <xref:System.ServiceModel.WSDualHttpBinding>, then this setting is not used.  \n  \n The value that is set with the AcknowledgementInterval property is a recommendation to the infrastructure and not a hard limit."
   syntax:
     content: public TimeSpan AcknowledgementInterval { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The <xref:System.TimeSpan> that specifies the interval of time that a service waits until sending an acknowledgment to the message source. The default value is 2 seconds.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.AcknowledgementInterval*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value set is less than or equal to zero.
   platform:
   - net-11
   - net-20
@@ -122,8 +128,6 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public override System.ServiceModel.Channels.IChannelFactory<TChannel> BuildChannelFactory<TChannel> (System.ServiceModel.Channels.BindingContext context);
     parameters:
@@ -134,6 +138,7 @@ items:
       type: System.ServiceModel.Channels.IChannelFactory{TChannel}
       description: To be added.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.BuildChannelFactory<TChannel>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -150,8 +155,6 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: 'public override System.ServiceModel.Channels.IChannelListener<TChannel> BuildChannelListener<TChannel> (System.ServiceModel.Channels.BindingContext context) where TChannel : class, System.ServiceModel.Channels.IChannel;'
     parameters:
@@ -162,6 +165,7 @@ items:
       type: System.ServiceModel.Channels.IChannelListener`1
       description: To be added.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.BuildChannelListener<TChannel>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -178,8 +182,6 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public override bool CanBuildChannelFactory<TChannel> (System.ServiceModel.Channels.BindingContext context);
     parameters:
@@ -190,6 +192,7 @@ items:
       type: System.Boolean
       description: To be added.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.CanBuildChannelFactory<TChannel>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -206,8 +209,6 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: 'public override bool CanBuildChannelListener<TChannel> (System.ServiceModel.Channels.BindingContext context) where TChannel : class, System.ServiceModel.Channels.IChannel;'
     parameters:
@@ -218,6 +219,7 @@ items:
       type: System.Boolean
       description: To be added.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.CanBuildChannelListener<TChannel>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -234,15 +236,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a copy of the current reliable session binding element.
   syntax:
     content: public override System.ServiceModel.Channels.BindingElement Clone ();
     parameters: []
     return:
       type: System.ServiceModel.Channels.BindingElement
-      description: To be added.
+      description: A <xref:System.ServiceModel.Channels.BindingElement> that is a clone of the current binding element.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.Clone*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -259,14 +261,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether the reliable session has flow control enabled.
+  remarks: Flow control is a mechanism that reliable sessions implement to ensure that senders do not send more messages than a receiver can handle. Receivers have a buffer of messages that is used to accommodate message bursts and out-of-order messages. Receivers advertise to senders the amount of space that remains in this buffer in each of their acknowledgements. Senders can use this information to stop sending new messages whenever the receiver has no buffer space left.
   syntax:
     content: public bool FlowControlEnabled { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the reliable session has flow control enabled; otherwise, . The default is .
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.FlowControlEnabled*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -283,8 +286,6 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: 'public override T GetProperty<T> (System.ServiceModel.Channels.BindingContext context) where T : class;'
     parameters:
@@ -295,6 +296,7 @@ items:
       type: T
       description: To be added.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.GetProperty<T>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -311,14 +313,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets an interval of time that a service remains inactive before closing.
+  remarks: "Activity on a channel is defined as receiving an application or infrastructure message. The inactivity timeout parameter controls the maximum amount of time to keep an inactive session alive. If more than InactivityTimeout time interval passes with no activity, the session is aborted by the infrastructure and the channel faults. The reliable session is torn down unilaterally.  \n  \n If the sending application has no messages to send then the reliable session is normally not faulted because of inactivity; instead a keep-alive mechanism keeps the session active indefinitely. Note that the dispatcher can independently abort the reliable session if no application messages are sent or received. Thus, the inactivity timeout typically expires if network conditions are such that no messages are received or if there is a failure on the sender."
   syntax:
     content: public TimeSpan InactivityTimeout { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The <xref:System.TimeSpan> that specifies the interval of time that a service remains inactive before closing. The default value is 10 minutes.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.InactivityTimeout*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value set is less than or equal to zero or greater than either <xref:System.Int32.MaxValue> or <xref:System.TimeSpan.MaxValue>.
   platform:
   - net-11
   - net-20
@@ -335,14 +341,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the largest number of channels that can be pending during the reliable session.
+  remarks: "Channels are pending when they are waiting to be accepted. Once that limit is reached, no channels are created and put in pending mode until this number goes down (by accepting pending channels). This is a limit for each listener.  \n  \n When the threshold is reached and a remote application tries to establish a new reliable session, the request is denied and the open operation that prompted this faults."
   syntax:
     content: public int MaxPendingChannels { get; set; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The largest number of channels that can be pending. The default value is 4.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.MaxPendingChannels*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value set is less than or equal to zero or greater than 16384.
   platform:
   - net-11
   - net-20
@@ -359,14 +369,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the maximum number of times that a message attempts to be transferred during the reliable session.
+  remarks: "A message is considered to be transferred if its delivery at the recipient has been acknowledged by the recipient.  \n  \n If an acknowledgment has not been received within a certain amount of time for a message that has been transmitted, the infrastructure automatically retransmits the message. The infrastructure tries to send the message for, at most, a MaxRetryCount number of times. Not receiving an acknowledgment before this limit is reached is considered a fatal communication failure and causes the channel faulted event to be raised.  \n  \n The infrastructure uses an exponential back-off algorithm to determine when to retransmit, based on a computed average round-trip time. The initial retry time is computed based on the measured roundtrip time of establishing the session. The retransmission algorithm doubles the delay with every attempt, which results in approximately 8.5 minutes passing between the first transmission attempt and the last retransmission attempt. The time for the first retransmission attempt is adjusted according to the calculated round-trip time and the resulting stretch of time that those attempts take varies accordingly. This allows the retransmission time to dynamically adapt to varying network conditions."
   syntax:
     content: public int MaxRetryCount { get; set; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The maximum number of times that a message attempts to be re-sent. The minimum value is 1; the maximum is <xref:System.Int32>; and the default value is 8.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.MaxRetryCount*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value set is less than or equal to zero.
   platform:
   - net-11
   - net-20
@@ -383,14 +397,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the largest number of messages that can exist in either the send buffer or the receive buffer.
+  remarks: "The value of the MaxTransferWindowSize property can be set on both the sender and the receiver. This value is included in the binding policy of the WSDL, so if you use the [ServiceModel Metadata Utility Tool (Svcutil.exe)](../Topic/ServiceModel%20Metadata%20Utility%20Tool%20\\(Svcutil.exe\\).md) to construct your client, it has the same value. Otherwise this value is whatever you set it to be on the client.  \n  \n When this limit is reached on the sender, additional calls to send are blocked. When this limit is reached on the receiver, new messages that arrive on the underlying channel are not accepted.  \n  \n A reliable session uses a windowing protocol to help improve network utilization. The amount of buffering required is directly derived from the size of the transmission window. When tuning this value, note that the optimal transmission window is related to the bandwidth and the latency in a straight-forward way. The ideal maximum window size is the bandwidth times the latency. Anything smaller yields less than 100% network utilization; anything larger is just wasted space."
   syntax:
     content: public int MaxTransferWindowSize { get; set; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The largest number of messages that can be buffered. The minimum value is 1; the maximum value is 4096; and the default value is 32.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.MaxTransferWindowSize*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value set is less than or equal to one or greater than 4096.
   platform:
   - net-11
   - net-20
@@ -407,14 +425,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether message delivery must preserve the order in which messages are sent.
+  remarks: To get messages dispatched in order, you also must set the <xref:System.ServiceModel.ConcurrencyMode> to <xref:System.ServiceModel.ConcurrencyMode>.
   syntax:
     content: public bool Ordered { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if messages must be delivered in the order in which they are sent; otherwise, . The default is .
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.Ordered*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -431,14 +450,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the version of WS-ReliableMessaging specified by the binding element.
+  remarks: 'There are currently two versions of the WS-ReliableMessaging protocol supported by [!INCLUDE[indigo1](../../add/includes/indigo1-md.md)]: WS-ReliableMessaging1.1 and WS-ReliableMessagingFebruary2005. The default version is WS-ReliableMessagingFebruary2005.'
   syntax:
     content: public System.ServiceModel.ReliableMessagingVersion ReliableMessagingVersion { get; set; }
     return:
       type: System.ServiceModel.ReliableMessagingVersion
-      description: To be added.
+      description: An instance derived from  that represents the version of the WS-ReliableMessaging protocol used by the configuration element.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.ReliableMessagingVersion*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -456,18 +476,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Maps the information contained in the reliable session binding element into the WSDL elements that enable a remote endpoint to access the service with a reliable session.
   syntax:
     content: void IPolicyExportExtension.ExportPolicy (System.ServiceModel.Description.MetadataExporter exporter, System.ServiceModel.Description.PolicyConversionContext context);
     parameters:
     - id: exporter
       type: System.ServiceModel.Description.MetadataExporter
-      description: To be added.
+      description: The  that exports the binding information in the reliable session binding element to the WSDL elements.
     - id: context
       type: System.ServiceModel.Description.PolicyConversionContext
-      description: To be added.
+      description: The  that provides the mapping from exported WSDL elements to the endpoint description.
   overload: System.ServiceModel.Channels.ReliableSessionBindingElement.System#ServiceModel#Description#IPolicyExportExtension#ExportPolicy*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -518,6 +538,21 @@ references:
   name: IChannelFactory<TChannel>
   nameWithType: IChannelFactory<TChannel>
   fullName: System.ServiceModel.Channels.IChannelFactory<TChannel>
+  spec.csharp:
+  - uid: System.ServiceModel.Channels.IChannelFactory`1
+    name: IChannelFactory
+    nameWithType: IChannelFactory
+    fullName: IChannelFactory<TChannel>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: TChannel
+    name: TChannel
+    nameWithType: TChannel
+    fullName: TChannel
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ServiceModel.Channels.BindingContext
   parent: System.ServiceModel.Channels
   isExternal: true
@@ -536,72 +571,30 @@ references:
   name: IChannelListener<TChannel>
   nameWithType: IChannelListener<TChannel>
   fullName: System.ServiceModel.Channels.IChannelListener<TChannel>
-- uid: System.ServiceModel.Channels.BindingContext
-  parent: System.ServiceModel.Channels
-  isExternal: true
-  name: BindingContext
-  nameWithType: BindingContext
-  fullName: System.ServiceModel.Channels.BindingContext
 - uid: System.ServiceModel.Channels.ReliableSessionBindingElement.CanBuildChannelFactory``1(System.ServiceModel.Channels.BindingContext)
   parent: System.ServiceModel.Channels.ReliableSessionBindingElement
   isExternal: false
   name: CanBuildChannelFactory(BindingContext)
   nameWithType: ReliableSessionBindingElement.CanBuildChannelFactory(BindingContext)
   fullName: System.ServiceModel.Channels.ReliableSessionBindingElement.CanBuildChannelFactory(BindingContext)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.ServiceModel.Channels.BindingContext
-  parent: System.ServiceModel.Channels
-  isExternal: true
-  name: BindingContext
-  nameWithType: BindingContext
-  fullName: System.ServiceModel.Channels.BindingContext
 - uid: System.ServiceModel.Channels.ReliableSessionBindingElement.CanBuildChannelListener``1(System.ServiceModel.Channels.BindingContext)
   parent: System.ServiceModel.Channels.ReliableSessionBindingElement
   isExternal: false
   name: CanBuildChannelListener(BindingContext)
   nameWithType: ReliableSessionBindingElement.CanBuildChannelListener(BindingContext)
   fullName: System.ServiceModel.Channels.ReliableSessionBindingElement.CanBuildChannelListener(BindingContext)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.ServiceModel.Channels.BindingContext
-  parent: System.ServiceModel.Channels
-  isExternal: true
-  name: BindingContext
-  nameWithType: BindingContext
-  fullName: System.ServiceModel.Channels.BindingContext
 - uid: System.ServiceModel.Channels.ReliableSessionBindingElement.Clone
   parent: System.ServiceModel.Channels.ReliableSessionBindingElement
   isExternal: false
   name: Clone()
   nameWithType: ReliableSessionBindingElement.Clone()
   fullName: System.ServiceModel.Channels.ReliableSessionBindingElement.Clone()
-- uid: System.ServiceModel.Channels.BindingElement
-  parent: System.ServiceModel.Channels
-  isExternal: true
-  name: BindingElement
-  nameWithType: BindingElement
-  fullName: System.ServiceModel.Channels.BindingElement
 - uid: System.ServiceModel.Channels.ReliableSessionBindingElement.FlowControlEnabled
   parent: System.ServiceModel.Channels.ReliableSessionBindingElement
   isExternal: false
   name: FlowControlEnabled
   nameWithType: ReliableSessionBindingElement.FlowControlEnabled
   fullName: System.ServiceModel.Channels.ReliableSessionBindingElement.FlowControlEnabled
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ServiceModel.Channels.ReliableSessionBindingElement.GetProperty``1(System.ServiceModel.Channels.BindingContext)
   parent: System.ServiceModel.Channels.ReliableSessionBindingElement
   isExternal: false
@@ -609,29 +602,16 @@ references:
   nameWithType: ReliableSessionBindingElement.GetProperty(BindingContext)
   fullName: System.ServiceModel.Channels.ReliableSessionBindingElement.GetProperty(BindingContext)
 - uid: T
-  parent: ''
   isExternal: true
   name: T
   nameWithType: T
   fullName: T
-- uid: System.ServiceModel.Channels.BindingContext
-  parent: System.ServiceModel.Channels
-  isExternal: true
-  name: BindingContext
-  nameWithType: BindingContext
-  fullName: System.ServiceModel.Channels.BindingContext
 - uid: System.ServiceModel.Channels.ReliableSessionBindingElement.InactivityTimeout
   parent: System.ServiceModel.Channels.ReliableSessionBindingElement
   isExternal: false
   name: InactivityTimeout
   nameWithType: ReliableSessionBindingElement.InactivityTimeout
   fullName: System.ServiceModel.Channels.ReliableSessionBindingElement.InactivityTimeout
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.ServiceModel.Channels.ReliableSessionBindingElement.MaxPendingChannels
   parent: System.ServiceModel.Channels.ReliableSessionBindingElement
   isExternal: false
@@ -650,36 +630,18 @@ references:
   name: MaxRetryCount
   nameWithType: ReliableSessionBindingElement.MaxRetryCount
   fullName: System.ServiceModel.Channels.ReliableSessionBindingElement.MaxRetryCount
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.ServiceModel.Channels.ReliableSessionBindingElement.MaxTransferWindowSize
   parent: System.ServiceModel.Channels.ReliableSessionBindingElement
   isExternal: false
   name: MaxTransferWindowSize
   nameWithType: ReliableSessionBindingElement.MaxTransferWindowSize
   fullName: System.ServiceModel.Channels.ReliableSessionBindingElement.MaxTransferWindowSize
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.ServiceModel.Channels.ReliableSessionBindingElement.Ordered
   parent: System.ServiceModel.Channels.ReliableSessionBindingElement
   isExternal: false
   name: Ordered
   nameWithType: ReliableSessionBindingElement.Ordered
   fullName: System.ServiceModel.Channels.ReliableSessionBindingElement.Ordered
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ServiceModel.Channels.ReliableSessionBindingElement.ReliableMessagingVersion
   parent: System.ServiceModel.Channels.ReliableSessionBindingElement
   isExternal: false

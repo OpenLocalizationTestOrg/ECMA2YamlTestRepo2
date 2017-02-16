@@ -18,8 +18,8 @@ items:
   nameWithType: XsltArgumentList
   fullName: System.Xml.Xsl.XsltArgumentList
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Contains a variable number of arguments which are either XSLT parameters or extension objects.
+  remarks: "This class is used by the <xref:System.Xml.Xsl.XslCompiledTransform.Transform%2A> method. It allows parameters and extension objects to be invoked from within the style sheet.  \n  \n When the parameters and objects are added to the XsltArgumentList, they are associated with a namespace qualified name and a namespace URI, respectively.  \n  \n The following are advantages to passing an object rather than using an embedded script such as `<msxsl:script>`:  \n  \n-   Provides better encapsulation and reuse of classes.  \n  \n-   Allows style sheets to be smaller and more easily maintained.  \n  \n-   Supports passing node fragments (through the <xref:System.Xml.XPath.XPathNavigator>) to the style sheet.  \n  \n For more information about using the XsltArgumentList, see [XSLT Extension Objects](../Topic/XSLT%20Extension%20Objects.md) and [XSLT Parameters](../Topic/XSLT%20Parameters.md)."
   syntax:
     content: public class XsltArgumentList
   inheritance:
@@ -42,12 +42,12 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Xsl
-  summary: To be added.
-  remarks: To be added.
+  summary: Implements a new instance of the .
   syntax:
     content: public XsltArgumentList ();
     parameters: []
   overload: System.Xml.Xsl.XsltArgumentList.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -64,18 +64,27 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Xsl
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a new object to the  and associates it with the namespace URI.
+  remarks: The `params` keyword, which allows an unspecified number of parameters to be passed, is currently not supported. XSLT style sheets that utilize methods defined with the `params` keyword does not work correctly. For more information, see [params](../Topic/params%20\(C%23%20Reference\).md).
+  example:
+  - "In the following example, the style sheet uses an XSLT extension object to convert the book price.  \n  \n [!code-vb[XsltArgumentList.AddExtensionObject#1](../../add/codesnippet/VisualBasic/207575d1-290f-43a6-bf00-_1.vb)]\n [!code-cs[XsltArgumentList.AddExtensionObject#1](../../add/codesnippet/CSharp/207575d1-290f-43a6-bf00-_1.cs)]  \n  \n The example uses the following data files as input.  \n  \n `books.xml`  \n  \n [!code-xml[XsltArgumentList.AddExtensionObject#2](../../add/codesnippet/XML/207575d1-290f-43a6-bf00-_2.xml)]  \n  \n `prices.xsl`  \n  \n [!code-xml[XsltArgumentList.AddExtensionObject#3](../../add/codesnippet/XML/207575d1-290f-43a6-bf00-_3.xsl)]"
   syntax:
     content: public void AddExtensionObject (string namespaceUri, object extension);
     parameters:
     - id: namespaceUri
       type: System.String
-      description: To be added.
+      description: The namespace URI to associate with the object. To use the default namespace, specify an empty string.
     - id: extension
       type: System.Object
-      description: To be added.
+      description: The object to add to the list.
   overload: System.Xml.Xsl.XsltArgumentList.AddExtensionObject*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The namespaceUri is either  or http://www.w3.org/1999/XSL/Transform  \n  \n The namespaceUri already has an extension object associated with it."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have sufficient permissions to call this method.
   platform:
   - net-11
   - net-20
@@ -92,21 +101,27 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Xsl
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a parameter to the  and associates it with the namespace qualified name.
+  remarks: "The `parameter` should correspond to a W3C type. The following table shows the W3C types, either XPath or XSLT, and the corresponding.NET class.  \n  \n|W3C Type|Equivalent.NET Class (Type)|  \n|--------------|-----------------------------------|  \n|`String` (XPath)|<xref:System.String>|  \n|`Boolean` (XPath)|<xref:System.Boolean>|  \n|`Number` (XPath)|<xref:System.Double>|  \n|`Result Tree Fragment` (XSLT)|<xref:System.Xml.XPath.XPathNavigator>|  \n|`Node Set` (XPath)|<xref:System.Xml.XPath.XPathNodeIterator><br /><br /> `XPathNavigator[]`|  \n|`Node`* (XPath)|<xref:System.Xml.XPath.XPathNavigator>|  \n  \n *This is equivalent to a node set that contains a single node.  \n  \n If the parameter object being invoked from within the style sheet  is not one of the above, it is converted according to the following rules:  \n  \n-   CLR numeric types are converted to <xref:System.Double>.  \n  \n-   The <xref:System.DateTime> type is converted to <xref:System.String>.  \n  \n-   <xref:System.Xml.XPath.IXPathNavigable> types are converted to <xref:System.Xml.XPath.XPathNavigator>. `XPathNavigator[]` is converted to <xref:System.Xml.XPath.XPathNodeIterator>.  \n  \n All other types throw an error."
+  example:
+  - "The following example uses the AddParam method to create a parameter representing the current date and time.  \n  \n [!code-vb[XsltArgumentList.AddParam#1](../../add/codesnippet/VisualBasic/8ec8daf9-d9bd-4ab5-82ff-_1.vb)]\n [!code-cs[XsltArgumentList.AddParam#1](../../add/codesnippet/CSharp/8ec8daf9-d9bd-4ab5-82ff-_1.cs)]  \n  \n The example uses the following two data files as input.  \n  \n `order.xml`  \n  \n [!code-xml[XsltArgumentList.AddParam#2](../../add/codesnippet/XML/8ec8daf9-d9bd-4ab5-82ff-_2.xml)]  \n  \n `order.xsl`  \n  \n [!code-xml[XsltArgumentList.AddParam#3](../../add/codesnippet/XML/8ec8daf9-d9bd-4ab5-82ff-_3.xsl)]"
   syntax:
     content: public void AddParam (string name, string namespaceUri, object parameter);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the parameter.
     - id: namespaceUri
       type: System.String
-      description: To be added.
+      description: The namespace URI to associate with the parameter. To use the default namespace, specify an empty string.
     - id: parameter
       type: System.Object
-      description: To be added.
+      description: The parameter value or object to add to the list.
   overload: System.Xml.Xsl.XsltArgumentList.AddParam*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The namespaceUri is either  or http://www.w3.org/1999/XSL/Transform.  \n  \n The name is not a valid name according to the W3C XML specification.  \n  \n The namespaceUri already has a parameter associated with it."
   platform:
   - net-11
   - net-20
@@ -123,12 +138,12 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Xsl
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes all parameters and extension objects from the .
   syntax:
     content: public void Clear ();
     parameters: []
   overload: System.Xml.Xsl.XsltArgumentList.Clear*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -145,18 +160,18 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Xsl
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the object associated with the given namespace.
   syntax:
     content: public object GetExtensionObject (string namespaceUri);
     parameters:
     - id: namespaceUri
       type: System.String
-      description: To be added.
+      description: The namespace URI of the object.
     return:
       type: System.Object
-      description: To be added.
+      description: The namespace URI object or  if one was not found.
   overload: System.Xml.Xsl.XsltArgumentList.GetExtensionObject*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -173,21 +188,21 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Xsl
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the parameter associated with the namespace qualified name.
   syntax:
     content: public object GetParam (string name, string namespaceUri);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the parameter.  does not check to ensure the name passed is a valid local name; however, the name cannot be .
     - id: namespaceUri
       type: System.String
-      description: To be added.
+      description: The namespace URI associated with the parameter.
     return:
       type: System.Object
-      description: To be added.
+      description: The parameter object or  if one was not found.
   overload: System.Xml.Xsl.XsltArgumentList.GetParam*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -204,18 +219,18 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Xsl
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the object with the namespace URI from the .
   syntax:
     content: public object RemoveExtensionObject (string namespaceUri);
     parameters:
     - id: namespaceUri
       type: System.String
-      description: To be added.
+      description: The namespace URI associated with the object to remove.
     return:
       type: System.Object
-      description: To be added.
+      description: The object with the namespace URI or  if one was not found.
   overload: System.Xml.Xsl.XsltArgumentList.RemoveExtensionObject*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -232,21 +247,21 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Xsl
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the parameter from the .
   syntax:
     content: public object RemoveParam (string name, string namespaceUri);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the parameter to remove.  does not check to ensure the name passed is a valid local name; however, the name cannot be .
     - id: namespaceUri
       type: System.String
-      description: To be added.
+      description: The namespace URI of the parameter to remove.
     return:
       type: System.Object
-      description: To be added.
+      description: The parameter object or  if one was not found.
   overload: System.Xml.Xsl.XsltArgumentList.RemoveParam*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -263,13 +278,14 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Xsl
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a message is specified in the style sheet by the `xsl:message` element.
+  remarks: If the event is not registered, all messages are piped to standard out.
   syntax:
     content: public event System.Xml.Xsl.XsltMessageEncounteredEventHandler XsltMessageEncountered;
     return:
       type: System.Xml.Xsl.XsltMessageEncounteredEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -296,36 +312,12 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xml.Xsl.XsltArgumentList.AddParam(System.String,System.String,System.Object)
   parent: System.Xml.Xsl.XsltArgumentList
   isExternal: false
   name: AddParam(String,String,Object)
   nameWithType: XsltArgumentList.AddParam(String,String,Object)
   fullName: System.Xml.Xsl.XsltArgumentList.AddParam(String,String,Object)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xml.Xsl.XsltArgumentList.Clear
   parent: System.Xml.Xsl.XsltArgumentList
   isExternal: false
@@ -338,84 +330,24 @@ references:
   name: GetExtensionObject(String)
   nameWithType: XsltArgumentList.GetExtensionObject(String)
   fullName: System.Xml.Xsl.XsltArgumentList.GetExtensionObject(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Xml.Xsl.XsltArgumentList.GetParam(System.String,System.String)
   parent: System.Xml.Xsl.XsltArgumentList
   isExternal: false
   name: GetParam(String,String)
   nameWithType: XsltArgumentList.GetParam(String,String)
   fullName: System.Xml.Xsl.XsltArgumentList.GetParam(String,String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Xml.Xsl.XsltArgumentList.RemoveExtensionObject(System.String)
   parent: System.Xml.Xsl.XsltArgumentList
   isExternal: false
   name: RemoveExtensionObject(String)
   nameWithType: XsltArgumentList.RemoveExtensionObject(String)
   fullName: System.Xml.Xsl.XsltArgumentList.RemoveExtensionObject(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Xml.Xsl.XsltArgumentList.RemoveParam(System.String,System.String)
   parent: System.Xml.Xsl.XsltArgumentList
   isExternal: false
   name: RemoveParam(String,String)
   nameWithType: XsltArgumentList.RemoveParam(String,String)
   fullName: System.Xml.Xsl.XsltArgumentList.RemoveParam(String,String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Xml.Xsl.XsltArgumentList.XsltMessageEncountered
   parent: System.Xml.Xsl.XsltArgumentList
   isExternal: false

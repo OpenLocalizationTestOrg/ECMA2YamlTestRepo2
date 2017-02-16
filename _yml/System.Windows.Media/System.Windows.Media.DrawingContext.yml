@@ -37,8 +37,10 @@ items:
   nameWithType: DrawingContext
   fullName: System.Windows.Media.DrawingContext
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Describes visual content using draw, push, and pop commands.
+  remarks: "Use a DrawingContext to populate a <xref:System.Windows.Media.Visual> or a <xref:System.Windows.Media.Drawing> with visual content.  \n  \n Although the DrawingContext draw methods appear similar to the draw methods of the <xref:System.Drawing.Graphics?displayProperty=fullName> type, they function very differently: DrawingContext is used with a retained mode graphics system, while the <xref:System.Drawing.Graphics?displayProperty=fullName> type is used with an immediate mode graphics system. When you use a DrawingContext object's draw commands, you are actually storing a set of rendering instructions (although the exact storage mechanism depends on the type of object that supplies the DrawingContext) that will later be used by the graphics system; you are not drawing to the screen in real-time. For more information about how the [!INCLUDE[TLA#tla_wpf](../../add/includes/tlasharptla-wpf-md.md)] graphics system works, see [WPF Graphics Rendering Overview](../Topic/WPF%20Graphics%20Rendering%20Overview.md).  \n  \n You never directly instantiate a DrawingContext; you can, however, acquire a drawing context from certain methods, such as <xref:System.Windows.Media.DrawingGroup.Open%2A?displayProperty=fullName> and <xref:System.Windows.Media.DrawingVisual.RenderOpen%2A?displayProperty=fullName>."
+  example:
+  - "The following example retrieves a DrawingContext from a <xref:System.Windows.Media.DrawingVisual> and uses it to draw a rectangle.  \n  \n [!code-cs[drawingvisualsample#101](../../add/codesnippet/CSharp/DrawingVisual/Window1.xaml.cs#101)]\n [!code-vb[drawingvisualsample#101](../../add/codesnippet/VisualBasic/drawingvisual/window1.xaml.vb#101)]  \n  \n The next example demonstrates the <xref:System.Windows.Media.DrawingContext.PushOpacity%2A>, <xref:System.Windows.Media.DrawingContext.PushEffect%2A>, and <xref:System.Windows.Media.DrawingContext.Pop%2A> commands. The DrawingContext is obtained from a <xref:System.Windows.Media.DrawingGroup> and displayed using an <xref:System.Windows.Controls.Image> control.  \n  \n [!code-cs[DrawingContext_procedural_snip#PushEffectExampleWholePage](../../add/codesnippet/CSharp/DrawingContextExample/PushEffectExample.cs#pusheffectexamplewholepage)]\n [!code-vb[DrawingContext_procedural_snip#PushEffectExampleWholePage](../../add/codesnippet/VisualBasic/drawingcontextexample/pusheffectexample.vb#pusheffectexamplewholepage)]"
   syntax:
     content: 'public abstract class DrawingContext : System.Windows.Threading.DispatcherObject, IDisposable'
   inheritance:
@@ -66,12 +68,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Closes the  and flushes the content. Afterward, the  cannot be modified.
+  remarks: A <xref:System.Windows.Media.DrawingContext> must be closed before its content can be rendered, but after it has been closed, it cannot be modified. This call does not require all Push calls to have been Popped.
   syntax:
     content: public abstract void Close ();
     parameters: []
   overload: System.Windows.Media.DrawingContext.Close*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: This object has already been closed or disposed.
   platform:
   - net-11
   - net-20
@@ -88,12 +94,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases all resources used by the .
+  remarks: Do not call this method directly from your code; use the <xref:System.Windows.Media.DrawingContext.System%23IDisposable%23Dispose%2A> method instead.
   syntax:
     content: protected abstract void DisposeCore ();
     parameters: []
   overload: System.Windows.Media.DrawingContext.DisposeCore*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The object has already been closed or disposed.
   platform:
   - net-11
   - net-20
@@ -110,15 +120,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws the specified  object.
   syntax:
     content: public abstract void DrawDrawing (System.Windows.Media.Drawing drawing);
     parameters:
     - id: drawing
       type: System.Windows.Media.Drawing
-      description: To be added.
+      description: The drawing to append.
   overload: System.Windows.Media.DrawingContext.DrawDrawing*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -135,27 +145,28 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws an ellipse with the specified  and .
+  remarks: The brush and the pen can both be `null`.  If the brush is `null`, then no fill is performed.  If the pen is `null`, then no stoke is performed.  If both the pen and the brush are `null`, then the drawing is not visible.
   syntax:
     content: public abstract void DrawEllipse (System.Windows.Media.Brush brush, System.Windows.Media.Pen pen, System.Windows.Point center, double radiusX, double radiusY);
     parameters:
     - id: brush
       type: System.Windows.Media.Brush
-      description: To be added.
+      description: The brush with which to fill the ellipse.  This is optional, and can be . If the brush is , no fill is drawn.
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: The pen with which to stroke the ellipse.  This is optional, and can be . If the pen is , no stroke is drawn.
     - id: center
       type: System.Windows.Point
-      description: To be added.
+      description: The location of the center of the ellipse.
     - id: radiusX
       type: System.Double
-      description: To be added.
+      description: The horizontal radius of the ellipse.
     - id: radiusY
       type: System.Double
-      description: To be added.
+      description: The vertical radius of the ellipse.
   overload: System.Windows.Media.DrawingContext.DrawEllipse*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -172,36 +183,37 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws an ellipse with the specified  and  and applies the specified animation clocks.
+  remarks: The brush and the pen can both be `null`.  If the brush is `null`, then no fill is performed.  If the pen is `null`, then no stoke is performed.  If both the pen and the brush are `null`, then the drawing is not visible.
   syntax:
     content: public abstract void DrawEllipse (System.Windows.Media.Brush brush, System.Windows.Media.Pen pen, System.Windows.Point center, System.Windows.Media.Animation.AnimationClock centerAnimations, double radiusX, System.Windows.Media.Animation.AnimationClock radiusXAnimations, double radiusY, System.Windows.Media.Animation.AnimationClock radiusYAnimations);
     parameters:
     - id: brush
       type: System.Windows.Media.Brush
-      description: To be added.
+      description: The brush with which to fill the ellipse.  This is optional, and can be . If the brush is , no fill is drawn.
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: The pen with which to stroke the ellipse.  This is optional, and can be . If the pen is , no stroke is drawn.
     - id: center
       type: System.Windows.Point
-      description: To be added.
+      description: The location of the center of the ellipse.
     - id: centerAnimations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the ellipse's center position, or  for no animation. This clock must be created from an  that can animate  objects.
     - id: radiusX
       type: System.Double
-      description: To be added.
+      description: The horizontal radius of the ellipse.
     - id: radiusXAnimations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the ellipse's x-radius, or  for no animation. This clock must be created from an  that can animate <xref:System.Double> objects.
     - id: radiusY
       type: System.Double
-      description: To be added.
+      description: The vertical radius of the ellipse.
     - id: radiusYAnimations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the ellipse's y-radius, or  for no animation. This clock must be created from an  that can animate <xref:System.Double> objects.
   overload: System.Windows.Media.DrawingContext.DrawEllipse*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -218,21 +230,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws the specified  using the specified  and .
   syntax:
     content: public abstract void DrawGeometry (System.Windows.Media.Brush brush, System.Windows.Media.Pen pen, System.Windows.Media.Geometry geometry);
     parameters:
     - id: brush
       type: System.Windows.Media.Brush
-      description: To be added.
+      description: The  with which to fill the . This is optional, and can be . If the brush is , no fill is drawn.
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: The  with which to stroke the . This is optional, and can be . If the pen is , no stroke is drawn.
     - id: geometry
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The  to draw.
   overload: System.Windows.Media.DrawingContext.DrawGeometry*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -249,18 +261,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws the specified text.
   syntax:
     content: public abstract void DrawGlyphRun (System.Windows.Media.Brush foregroundBrush, System.Windows.Media.GlyphRun glyphRun);
     parameters:
     - id: foregroundBrush
       type: System.Windows.Media.Brush
-      description: To be added.
+      description: The brush used to paint the text.
     - id: glyphRun
       type: System.Windows.Media.GlyphRun
-      description: To be added.
+      description: The text to draw.
   overload: System.Windows.Media.DrawingContext.DrawGlyphRun*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -277,18 +289,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws an image into the region defined by the specified .
   syntax:
     content: public abstract void DrawImage (System.Windows.Media.ImageSource imageSource, System.Windows.Rect rectangle);
     parameters:
     - id: imageSource
       type: System.Windows.Media.ImageSource
-      description: To be added.
+      description: The image to draw.
     - id: rectangle
       type: System.Windows.Rect
-      description: To be added.
+      description: The region in which to draw `bitmapSource`.
   overload: System.Windows.Media.DrawingContext.DrawImage*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -305,21 +317,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws an image into the region defined by the specified  and applies the specified animation clock.
   syntax:
     content: public abstract void DrawImage (System.Windows.Media.ImageSource imageSource, System.Windows.Rect rectangle, System.Windows.Media.Animation.AnimationClock rectangleAnimations);
     parameters:
     - id: imageSource
       type: System.Windows.Media.ImageSource
-      description: To be added.
+      description: The image to draw.
     - id: rectangle
       type: System.Windows.Rect
-      description: To be added.
+      description: The region in which to draw `bitmapSource`.
     - id: rectangleAnimations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the rectangle's size and dimensions, or  for no animation. This clock must be created from an  that can animate  objects.
   overload: System.Windows.Media.DrawingContext.DrawImage*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -336,21 +348,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws a line between the specified points using the specified .
   syntax:
     content: public abstract void DrawLine (System.Windows.Media.Pen pen, System.Windows.Point point0, System.Windows.Point point1);
     parameters:
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: The pen with which to stroke the line.
     - id: point0
       type: System.Windows.Point
-      description: To be added.
+      description: The start point of the line.
     - id: point1
       type: System.Windows.Point
-      description: To be added.
+      description: The end point of the line.
   overload: System.Windows.Media.DrawingContext.DrawLine*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -367,27 +379,27 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws a line between the specified points using the specified  and applies the specified animation clocks.
   syntax:
     content: public abstract void DrawLine (System.Windows.Media.Pen pen, System.Windows.Point point0, System.Windows.Media.Animation.AnimationClock point0Animations, System.Windows.Point point1, System.Windows.Media.Animation.AnimationClock point1Animations);
     parameters:
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: The pen to stroke the line.
     - id: point0
       type: System.Windows.Point
-      description: To be added.
+      description: The start point of the line.
     - id: point0Animations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the start point of the line, or  for no animation. This clock must be created from an  that can animate  objects.
     - id: point1
       type: System.Windows.Point
-      description: To be added.
+      description: The end point of the line.
     - id: point1Animations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the end point of the line, or  for no animation. This clock must be created from an  that can animate  objects.
   overload: System.Windows.Media.DrawingContext.DrawLine*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -404,21 +416,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws a rectangle with the specified  and . The pen and the brush can be .
+  remarks: The brush and the pen can both be `null`.  If the brush is `null`, then no fill is performed.  If the pen is `null`, then no stoke is performed.  If both the pen and the brush are `null`, then the drawing is not visible.
   syntax:
     content: public abstract void DrawRectangle (System.Windows.Media.Brush brush, System.Windows.Media.Pen pen, System.Windows.Rect rectangle);
     parameters:
     - id: brush
       type: System.Windows.Media.Brush
-      description: To be added.
+      description: The brush with which to fill the rectangle.  This is optional, and can be . If the brush is , no fill is drawn.
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: The pen with which to stroke the rectangle.  This is optional, and can be . If the pen is , no stroke is drawn.
     - id: rectangle
       type: System.Windows.Rect
-      description: To be added.
+      description: The rectangle to draw.
   overload: System.Windows.Media.DrawingContext.DrawRectangle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -435,24 +448,25 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws a rectangle with the specified  and  and applies the specified animation clocks.
+  remarks: The brush and the pen can both be `null`.  If the brush is `null`, then no fill is performed.  If the pen is `null`, then no stoke is performed.  If both the pen and the brush are `null`, then the drawing is not visible.
   syntax:
     content: public abstract void DrawRectangle (System.Windows.Media.Brush brush, System.Windows.Media.Pen pen, System.Windows.Rect rectangle, System.Windows.Media.Animation.AnimationClock rectangleAnimations);
     parameters:
     - id: brush
       type: System.Windows.Media.Brush
-      description: To be added.
+      description: The brush with which to fill the rectangle.  This is optional, and can be . If the brush is , no fill is drawn.
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: The pen with which to stroke the rectangle.  This is optional, and can be . If the pen is , no stroke is drawn.
     - id: rectangle
       type: System.Windows.Rect
-      description: To be added.
+      description: The rectangle to draw.
     - id: rectangleAnimations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the rectangle's size and dimensions, or  for no animation. This clock must be created from an  that can animate  objects.
   overload: System.Windows.Media.DrawingContext.DrawRectangle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -469,27 +483,28 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws a rounded rectangle with the specified  and .
+  remarks: The brush and the pen can both be `null`.  If the brush is `null`, then no fill is performed.  If the pen is `null`, then no stoke is performed.  If both the pen and the brush are `null`, then the drawing is not visible.
   syntax:
     content: public abstract void DrawRoundedRectangle (System.Windows.Media.Brush brush, System.Windows.Media.Pen pen, System.Windows.Rect rectangle, double radiusX, double radiusY);
     parameters:
     - id: brush
       type: System.Windows.Media.Brush
-      description: To be added.
+      description: The brush used to fill the rectangle.
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: The pen used to stroke the rectangle.
     - id: rectangle
       type: System.Windows.Rect
-      description: To be added.
+      description: The rectangle to draw.
     - id: radiusX
       type: System.Double
-      description: To be added.
+      description: The radius in the X dimension of the rounded corners.  This value will be clamped to the range of 0 to <xref:System.Windows.Rect.Width%2A>/2.
     - id: radiusY
       type: System.Double
-      description: To be added.
+      description: The radius in the Y dimension of the rounded corners.  This value will be clamped to a value between 0 to <xref:System.Windows.Rect.Height%2A>/2.
   overload: System.Windows.Media.DrawingContext.DrawRoundedRectangle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -506,36 +521,37 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws a rounded rectangle with the specified  and  and applies the specified animation clocks.
+  remarks: The brush and the pen can both be `null`.  If the brush is `null`, then no fill is performed.  If the pen is `null`, then no stoke is performed.  If both the pen and the brush are `null`, then the drawing is not visible.
   syntax:
     content: public abstract void DrawRoundedRectangle (System.Windows.Media.Brush brush, System.Windows.Media.Pen pen, System.Windows.Rect rectangle, System.Windows.Media.Animation.AnimationClock rectangleAnimations, double radiusX, System.Windows.Media.Animation.AnimationClock radiusXAnimations, double radiusY, System.Windows.Media.Animation.AnimationClock radiusYAnimations);
     parameters:
     - id: brush
       type: System.Windows.Media.Brush
-      description: To be added.
+      description: The brush used to fill the rectangle, or  for no fill.
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: The pen used to stroke the rectangle, or for no stroke.
     - id: rectangle
       type: System.Windows.Rect
-      description: To be added.
+      description: The rectangle to draw.
     - id: rectangleAnimations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the rectangle's size and dimensions, or  for no animation. This clock must be created from an  that can animate  objects.
     - id: radiusX
       type: System.Double
-      description: To be added.
+      description: The radius in the X dimension of the rounded corners.  This value will be clamped to the range of 0 to <xref:System.Windows.Rect.Width%2A>/2
     - id: radiusXAnimations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the rectangle's `radiusX` value, or  for no animation. This clock must be created from an  that can animate <xref:System.Double> values.
     - id: radiusY
       type: System.Double
-      description: To be added.
+      description: The radius in the Y dimension of the rounded corners.  This value will be clamped to a value between 0 to <xref:System.Windows.Rect.Height%2A>/2.
     - id: radiusYAnimations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the rectangle's `radiusY` value, or  for no animation. This clock must be created from an  that can animate <xref:System.Double> values.
   overload: System.Windows.Media.DrawingContext.DrawRoundedRectangle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -552,18 +568,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws formatted text at the specified location.
   syntax:
     content: public void DrawText (System.Windows.Media.FormattedText formattedText, System.Windows.Point origin);
     parameters:
     - id: formattedText
       type: System.Windows.Media.FormattedText
-      description: To be added.
+      description: The formatted text to be drawn.
     - id: origin
       type: System.Windows.Point
-      description: To be added.
+      description: The location where the text is to be drawn.
   overload: System.Windows.Media.DrawingContext.DrawText*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The object has already been closed or disposed.
   platform:
   - net-11
   - net-20
@@ -580,18 +599,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws a video into the specified region.
+  remarks: Note that the media will be stretched to fit inside the area defined by the rectangle parameter. If rectangle and media have different aspect ratios, distortion will occur. For more control over how media is used to fill an area, use the <xref:System.Windows.Media.DrawingContext.DrawRectangle%2A> command to draw a rectangle and fill it with a <xref:System.Windows.Media.VisualBrush> that contains media.
   syntax:
     content: public abstract void DrawVideo (System.Windows.Media.MediaPlayer player, System.Windows.Rect rectangle);
     parameters:
     - id: player
       type: System.Windows.Media.MediaPlayer
-      description: To be added.
+      description: The media to draw.
     - id: rectangle
       type: System.Windows.Rect
-      description: To be added.
+      description: The region in which to draw `player`.
   overload: System.Windows.Media.DrawingContext.DrawVideo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -608,21 +628,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Draws a video into the specified region and applies the specified animation clock.
+  remarks: Note that the media will be stretched to fit inside the area defined by the rectangle parameter. If rectangle and media have different aspect ratios, distortion will occur. For more control over how media is used to fill an area, use the <xref:System.Windows.Media.DrawingContext.DrawRectangle%2A> command to draw a rectangle and fill it with a <xref:System.Windows.Media.VisualBrush> that contains media.
   syntax:
     content: public abstract void DrawVideo (System.Windows.Media.MediaPlayer player, System.Windows.Rect rectangle, System.Windows.Media.Animation.AnimationClock rectangleAnimations);
     parameters:
     - id: player
       type: System.Windows.Media.MediaPlayer
-      description: To be added.
+      description: The media to draw.
     - id: rectangle
       type: System.Windows.Rect
-      description: To be added.
+      description: The area in which to draw the media.
     - id: rectangleAnimations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the rectangle's size and dimensions, or  for no animation. This clock must be created from an  that can animate  objects.
   overload: System.Windows.Media.DrawingContext.DrawVideo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -639,12 +660,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Pops the last opacity mask, opacity, clip, effect, or transform operation that was pushed onto the drawing context.
+  remarks: Once an operation is popped, it is no longer applied to subsequent drawing commands.
+  example:
+  - "The following example shows the effect of the Pop command.  \n  \n [!code-cs[DrawingContext_procedural_snip#PopExampleWholePage](../../add/codesnippet/CSharp/DrawingContextExample/PopExample.cs#popexamplewholepage)]\n [!code-vb[DrawingContext_procedural_snip#PopExampleWholePage](../../add/codesnippet/VisualBasic/drawingcontextexample/popexample.vb#popexamplewholepage)]  \n  \n The following illustration shows this example's output:  \n  \n ![Rectangles drawn with different opacity values](../../add/media/graphicsmm-drawingcontextpopexample.gif \"Rectangles drawn with different opacity values\")"
   syntax:
     content: public abstract void Pop ();
     parameters: []
   overload: System.Windows.Media.DrawingContext.Pop*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -661,15 +685,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Pushes the specified clip region onto the drawing context.
+  remarks: The clip region applies to all subsequent drawing commands until it is removed by the <xref:System.Windows.Media.DrawingContext.Pop%2A> command.
   syntax:
     content: public abstract void PushClip (System.Windows.Media.Geometry clipGeometry);
     parameters:
     - id: clipGeometry
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The clip region to apply to subsequent drawing commands.
   overload: System.Windows.Media.DrawingContext.PushClip*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -686,18 +711,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Pushes the specified  onto the drawing context.
+  remarks: The effect is applied to all subsequent drawing operations until it is removed by the <xref:System.Windows.Media.DrawingContext.Pop%2A> command.
+  example:
+  - "The following example demonstrates the <xref:System.Windows.Media.DrawingContext.PushOpacity%2A>, PushEffect, and <xref:System.Windows.Media.DrawingContext.Pop%2A> commands.  \n  \n [!code-cs[DrawingContext_procedural_snip#PushEffectExampleWholePage](../../add/codesnippet/CSharp/DrawingContextExample/PushEffectExample.cs#pusheffectexamplewholepage)]\n [!code-vb[DrawingContext_procedural_snip#PushEffectExampleWholePage](../../add/codesnippet/VisualBasic/drawingcontextexample/pusheffectexample.vb#pusheffectexamplewholepage)]"
   syntax:
     content: public abstract void PushEffect (System.Windows.Media.Effects.BitmapEffect effect, System.Windows.Media.Effects.BitmapEffectInput effectInput);
     parameters:
     - id: effect
       type: System.Windows.Media.Effects.BitmapEffect
-      description: To be added.
+      description: The effect to apply to subsequent drawings.
     - id: effectInput
       type: System.Windows.Media.Effects.BitmapEffectInput
-      description: To be added.
+      description: The area to which the effect is applied, or  if the effect is to be applied to the entire area of subsequent drawings.
   overload: System.Windows.Media.DrawingContext.PushEffect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -714,15 +742,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Pushes the specified  onto the drawing context.
+  remarks: The guideline set applies to all subsequent drawing commands until it is removed by the <xref:System.Windows.Media.DrawingContext.Pop%2A> operation.
   syntax:
     content: public abstract void PushGuidelineSet (System.Windows.Media.GuidelineSet guidelines);
     parameters:
     - id: guidelines
       type: System.Windows.Media.GuidelineSet
-      description: To be added.
+      description: The guideline set to apply to subsequent drawing commands.
   overload: System.Windows.Media.DrawingContext.PushGuidelineSet*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -739,15 +768,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Pushes the specified opacity setting onto the drawing context.
+  remarks: The opacity is blended into all subsequent drawing commands until it is removed by the <xref:System.Windows.Media.DrawingContext.Pop%2A> command.
+  example:
+  - "The following example demonstrates the PushOpacity, <xref:System.Windows.Media.DrawingContext.PushEffect%2A>, and <xref:System.Windows.Media.DrawingContext.Pop%2A> commands.  \n  \n [!code-cs[DrawingContext_procedural_snip#PushEffectExampleWholePage](../../add/codesnippet/CSharp/DrawingContextExample/PushEffectExample.cs#pusheffectexamplewholepage)]\n [!code-vb[DrawingContext_procedural_snip#PushEffectExampleWholePage](../../add/codesnippet/VisualBasic/drawingcontextexample/pusheffectexample.vb#pusheffectexamplewholepage)]"
   syntax:
     content: public abstract void PushOpacity (double opacity);
     parameters:
     - id: opacity
       type: System.Double
-      description: To be added.
+      description: The opacity factor to apply to subsequent drawing commands. This factor is cumulative with previous PushOpacity operations.
   overload: System.Windows.Media.DrawingContext.PushOpacity*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -764,18 +796,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Pushes the specified opacity setting onto the drawing context and applies the specified animation clock.
+  remarks: The opacity is blended into all subsequent drawing commands until it is removed by the <xref:System.Windows.Media.DrawingContext.Pop%2A> command.
   syntax:
     content: public abstract void PushOpacity (double opacity, System.Windows.Media.Animation.AnimationClock opacityAnimations);
     parameters:
     - id: opacity
       type: System.Double
-      description: To be added.
+      description: The opacity factor to apply to subsequent drawing commands. This factor is cumulative with previous <xref:System.Windows.Media.DrawingContext.PushOpacity%2A> operations.
     - id: opacityAnimations
       type: System.Windows.Media.Animation.AnimationClock
-      description: To be added.
+      description: The clock with which to animate the opacity value, or  for no animation. This clock must be created from an  that can animate <xref:System.Double> values.
   overload: System.Windows.Media.DrawingContext.PushOpacity*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -792,15 +825,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Pushes the specified opacity mask onto the drawing context.
+  remarks: "The mask is applied to all subsequent drawing commands until it is removed by the <xref:System.Windows.Media.DrawingContext.Pop%2A> operation.  \n  \n For more information about creating opacity masks, see [Opacity Masks Overview](../Topic/Opacity%20Masks%20Overview.md)."
   syntax:
     content: public abstract void PushOpacityMask (System.Windows.Media.Brush opacityMask);
     parameters:
     - id: opacityMask
       type: System.Windows.Media.Brush
-      description: To be added.
+      description: The opacity mask to apply to subsequent drawings. The alpha values of this brush determine the opacity of the drawing to which it is applied.
   overload: System.Windows.Media.DrawingContext.PushOpacityMask*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -817,15 +851,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Pushes the specified  onto the drawing context.
+  remarks: The transform applies to all subsequent drawing commands until it is removed by the <xref:System.Windows.Media.DrawingContext.Pop%2A> command.
   syntax:
     content: public abstract void PushTransform (System.Windows.Media.Transform transform);
     parameters:
     - id: transform
       type: System.Windows.Media.Transform
-      description: To be added.
+      description: The transform to apply to subsequent drawing commands.
   overload: System.Windows.Media.DrawingContext.PushTransform*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -843,12 +878,12 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: This member supports the [!INCLUDE[TLA#tla_winclient](../../add/includes/tlasharptla-winclient-md.md)] infrastructure and is not intended to be used directly from your code.
   syntax:
     content: void IDisposable.Dispose ();
     parameters: []
   overload: System.Windows.Media.DrawingContext.System#IDisposable#Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -865,12 +900,12 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: This member supports the [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] infrastructure and is not intended to be used directly from your code.
   syntax:
     content: protected virtual void VerifyApiNonstructuralChange ();
     parameters: []
   overload: System.Windows.Media.DrawingContext.VerifyApiNonstructuralChange*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -933,60 +968,12 @@ references:
   name: Double
   nameWithType: Double
   fullName: System.Double
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: System.Windows.Media.DrawingContext.DrawEllipse(System.Windows.Media.Brush,System.Windows.Media.Pen,System.Windows.Point,System.Windows.Media.Animation.AnimationClock,System.Double,System.Windows.Media.Animation.AnimationClock,System.Double,System.Windows.Media.Animation.AnimationClock)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
   name: DrawEllipse(Brush,Pen,Point,AnimationClock,Double,AnimationClock,Double,AnimationClock)
   nameWithType: DrawingContext.DrawEllipse(Brush,Pen,Point,AnimationClock,Double,AnimationClock,Double,AnimationClock)
   fullName: System.Windows.Media.DrawingContext.DrawEllipse(Brush,Pen,Point,AnimationClock,Double,AnimationClock,Double,AnimationClock)
-- uid: System.Windows.Media.Brush
-  parent: System.Windows.Media
-  isExternal: false
-  name: Brush
-  nameWithType: Brush
-  fullName: System.Windows.Media.Brush
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Point
-  parent: System.Windows
-  isExternal: false
-  name: Point
-  nameWithType: Point
-  fullName: System.Windows.Point
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: System.Windows.Media.Animation.AnimationClock
   parent: System.Windows.Media.Animation
   isExternal: false
@@ -999,18 +986,6 @@ references:
   name: DrawGeometry(Brush,Pen,Geometry)
   nameWithType: DrawingContext.DrawGeometry(Brush,Pen,Geometry)
   fullName: System.Windows.Media.DrawingContext.DrawGeometry(Brush,Pen,Geometry)
-- uid: System.Windows.Media.Brush
-  parent: System.Windows.Media
-  isExternal: false
-  name: Brush
-  nameWithType: Brush
-  fullName: System.Windows.Media.Brush
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
 - uid: System.Windows.Media.Geometry
   parent: System.Windows.Media
   isExternal: false
@@ -1023,12 +998,6 @@ references:
   name: DrawGlyphRun(Brush,GlyphRun)
   nameWithType: DrawingContext.DrawGlyphRun(Brush,GlyphRun)
   fullName: System.Windows.Media.DrawingContext.DrawGlyphRun(Brush,GlyphRun)
-- uid: System.Windows.Media.Brush
-  parent: System.Windows.Media
-  isExternal: false
-  name: Brush
-  nameWithType: Brush
-  fullName: System.Windows.Media.Brush
 - uid: System.Windows.Media.GlyphRun
   parent: System.Windows.Media
   isExternal: false
@@ -1059,228 +1028,42 @@ references:
   name: DrawImage(ImageSource,Rect,AnimationClock)
   nameWithType: DrawingContext.DrawImage(ImageSource,Rect,AnimationClock)
   fullName: System.Windows.Media.DrawingContext.DrawImage(ImageSource,Rect,AnimationClock)
-- uid: System.Windows.Media.ImageSource
-  parent: System.Windows.Media
-  isExternal: false
-  name: ImageSource
-  nameWithType: ImageSource
-  fullName: System.Windows.Media.ImageSource
-- uid: System.Windows.Rect
-  parent: System.Windows
-  isExternal: false
-  name: Rect
-  nameWithType: Rect
-  fullName: System.Windows.Rect
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
 - uid: System.Windows.Media.DrawingContext.DrawLine(System.Windows.Media.Pen,System.Windows.Point,System.Windows.Point)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
   name: DrawLine(Pen,Point,Point)
   nameWithType: DrawingContext.DrawLine(Pen,Point,Point)
   fullName: System.Windows.Media.DrawingContext.DrawLine(Pen,Point,Point)
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Point
-  parent: System.Windows
-  isExternal: false
-  name: Point
-  nameWithType: Point
-  fullName: System.Windows.Point
-- uid: System.Windows.Point
-  parent: System.Windows
-  isExternal: false
-  name: Point
-  nameWithType: Point
-  fullName: System.Windows.Point
 - uid: System.Windows.Media.DrawingContext.DrawLine(System.Windows.Media.Pen,System.Windows.Point,System.Windows.Media.Animation.AnimationClock,System.Windows.Point,System.Windows.Media.Animation.AnimationClock)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
   name: DrawLine(Pen,Point,AnimationClock,Point,AnimationClock)
   nameWithType: DrawingContext.DrawLine(Pen,Point,AnimationClock,Point,AnimationClock)
   fullName: System.Windows.Media.DrawingContext.DrawLine(Pen,Point,AnimationClock,Point,AnimationClock)
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Point
-  parent: System.Windows
-  isExternal: false
-  name: Point
-  nameWithType: Point
-  fullName: System.Windows.Point
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
-- uid: System.Windows.Point
-  parent: System.Windows
-  isExternal: false
-  name: Point
-  nameWithType: Point
-  fullName: System.Windows.Point
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
 - uid: System.Windows.Media.DrawingContext.DrawRectangle(System.Windows.Media.Brush,System.Windows.Media.Pen,System.Windows.Rect)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
   name: DrawRectangle(Brush,Pen,Rect)
   nameWithType: DrawingContext.DrawRectangle(Brush,Pen,Rect)
   fullName: System.Windows.Media.DrawingContext.DrawRectangle(Brush,Pen,Rect)
-- uid: System.Windows.Media.Brush
-  parent: System.Windows.Media
-  isExternal: false
-  name: Brush
-  nameWithType: Brush
-  fullName: System.Windows.Media.Brush
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Rect
-  parent: System.Windows
-  isExternal: false
-  name: Rect
-  nameWithType: Rect
-  fullName: System.Windows.Rect
 - uid: System.Windows.Media.DrawingContext.DrawRectangle(System.Windows.Media.Brush,System.Windows.Media.Pen,System.Windows.Rect,System.Windows.Media.Animation.AnimationClock)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
   name: DrawRectangle(Brush,Pen,Rect,AnimationClock)
   nameWithType: DrawingContext.DrawRectangle(Brush,Pen,Rect,AnimationClock)
   fullName: System.Windows.Media.DrawingContext.DrawRectangle(Brush,Pen,Rect,AnimationClock)
-- uid: System.Windows.Media.Brush
-  parent: System.Windows.Media
-  isExternal: false
-  name: Brush
-  nameWithType: Brush
-  fullName: System.Windows.Media.Brush
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Rect
-  parent: System.Windows
-  isExternal: false
-  name: Rect
-  nameWithType: Rect
-  fullName: System.Windows.Rect
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
 - uid: System.Windows.Media.DrawingContext.DrawRoundedRectangle(System.Windows.Media.Brush,System.Windows.Media.Pen,System.Windows.Rect,System.Double,System.Double)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
   name: DrawRoundedRectangle(Brush,Pen,Rect,Double,Double)
   nameWithType: DrawingContext.DrawRoundedRectangle(Brush,Pen,Rect,Double,Double)
   fullName: System.Windows.Media.DrawingContext.DrawRoundedRectangle(Brush,Pen,Rect,Double,Double)
-- uid: System.Windows.Media.Brush
-  parent: System.Windows.Media
-  isExternal: false
-  name: Brush
-  nameWithType: Brush
-  fullName: System.Windows.Media.Brush
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Rect
-  parent: System.Windows
-  isExternal: false
-  name: Rect
-  nameWithType: Rect
-  fullName: System.Windows.Rect
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: System.Windows.Media.DrawingContext.DrawRoundedRectangle(System.Windows.Media.Brush,System.Windows.Media.Pen,System.Windows.Rect,System.Windows.Media.Animation.AnimationClock,System.Double,System.Windows.Media.Animation.AnimationClock,System.Double,System.Windows.Media.Animation.AnimationClock)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
   name: DrawRoundedRectangle(Brush,Pen,Rect,AnimationClock,Double,AnimationClock,Double,AnimationClock)
   nameWithType: DrawingContext.DrawRoundedRectangle(Brush,Pen,Rect,AnimationClock,Double,AnimationClock,Double,AnimationClock)
   fullName: System.Windows.Media.DrawingContext.DrawRoundedRectangle(Brush,Pen,Rect,AnimationClock,Double,AnimationClock,Double,AnimationClock)
-- uid: System.Windows.Media.Brush
-  parent: System.Windows.Media
-  isExternal: false
-  name: Brush
-  nameWithType: Brush
-  fullName: System.Windows.Media.Brush
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Rect
-  parent: System.Windows
-  isExternal: false
-  name: Rect
-  nameWithType: Rect
-  fullName: System.Windows.Rect
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
 - uid: System.Windows.Media.DrawingContext.DrawText(System.Windows.Media.FormattedText,System.Windows.Point)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
@@ -1293,12 +1076,6 @@ references:
   name: FormattedText
   nameWithType: FormattedText
   fullName: System.Windows.Media.FormattedText
-- uid: System.Windows.Point
-  parent: System.Windows
-  isExternal: false
-  name: Point
-  nameWithType: Point
-  fullName: System.Windows.Point
 - uid: System.Windows.Media.DrawingContext.DrawVideo(System.Windows.Media.MediaPlayer,System.Windows.Rect)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
@@ -1311,36 +1088,12 @@ references:
   name: MediaPlayer
   nameWithType: MediaPlayer
   fullName: System.Windows.Media.MediaPlayer
-- uid: System.Windows.Rect
-  parent: System.Windows
-  isExternal: false
-  name: Rect
-  nameWithType: Rect
-  fullName: System.Windows.Rect
 - uid: System.Windows.Media.DrawingContext.DrawVideo(System.Windows.Media.MediaPlayer,System.Windows.Rect,System.Windows.Media.Animation.AnimationClock)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
   name: DrawVideo(MediaPlayer,Rect,AnimationClock)
   nameWithType: DrawingContext.DrawVideo(MediaPlayer,Rect,AnimationClock)
   fullName: System.Windows.Media.DrawingContext.DrawVideo(MediaPlayer,Rect,AnimationClock)
-- uid: System.Windows.Media.MediaPlayer
-  parent: System.Windows.Media
-  isExternal: false
-  name: MediaPlayer
-  nameWithType: MediaPlayer
-  fullName: System.Windows.Media.MediaPlayer
-- uid: System.Windows.Rect
-  parent: System.Windows
-  isExternal: false
-  name: Rect
-  nameWithType: Rect
-  fullName: System.Windows.Rect
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
 - uid: System.Windows.Media.DrawingContext.Pop
   parent: System.Windows.Media.DrawingContext
   isExternal: false
@@ -1353,12 +1106,6 @@ references:
   name: PushClip(Geometry)
   nameWithType: DrawingContext.PushClip(Geometry)
   fullName: System.Windows.Media.DrawingContext.PushClip(Geometry)
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
 - uid: System.Windows.Media.DrawingContext.PushEffect(System.Windows.Media.Effects.BitmapEffect,System.Windows.Media.Effects.BitmapEffectInput)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
@@ -1395,42 +1142,18 @@ references:
   name: PushOpacity(Double)
   nameWithType: DrawingContext.PushOpacity(Double)
   fullName: System.Windows.Media.DrawingContext.PushOpacity(Double)
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: System.Windows.Media.DrawingContext.PushOpacity(System.Double,System.Windows.Media.Animation.AnimationClock)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
   name: PushOpacity(Double,AnimationClock)
   nameWithType: DrawingContext.PushOpacity(Double,AnimationClock)
   fullName: System.Windows.Media.DrawingContext.PushOpacity(Double,AnimationClock)
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.Animation.AnimationClock
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: AnimationClock
-  nameWithType: AnimationClock
-  fullName: System.Windows.Media.Animation.AnimationClock
 - uid: System.Windows.Media.DrawingContext.PushOpacityMask(System.Windows.Media.Brush)
   parent: System.Windows.Media.DrawingContext
   isExternal: false
   name: PushOpacityMask(Brush)
   nameWithType: DrawingContext.PushOpacityMask(Brush)
   fullName: System.Windows.Media.DrawingContext.PushOpacityMask(Brush)
-- uid: System.Windows.Media.Brush
-  parent: System.Windows.Media
-  isExternal: false
-  name: Brush
-  nameWithType: Brush
-  fullName: System.Windows.Media.Brush
 - uid: System.Windows.Media.DrawingContext.PushTransform(System.Windows.Media.Transform)
   parent: System.Windows.Media.DrawingContext
   isExternal: false

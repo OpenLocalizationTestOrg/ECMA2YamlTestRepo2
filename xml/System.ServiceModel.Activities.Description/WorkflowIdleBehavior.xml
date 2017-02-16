@@ -14,8 +14,22 @@
     </Interface>
   </Interfaces>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>A service behavior that controls when idle workflow instances are unloaded and persisted.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!IMPORTANT]
+>  When <xref:System.ServiceModel.Activities.Description.WorkflowIdleBehavior.TimeToUnload%2A> is set to a value greater than the value of <xref:System.ServiceModel.Activities.Description.WorkflowIdleBehavior.TimeToPersist%2A> and the workflow then goes idle (because of a Delay activity) if the workflow instance has not changed it will be removed from memory by calling Abort, rather than going through the normal unloading process.. This is a runtime optimization and no data is lost, but a developer looking at trace log may see an Abort trace when expecting an Unload trace.  
+  
+ For an example of how to use this behavior see [Workflow Service Host Extensibility](../Topic/Workflow%20Service%20Host%20Extensibility.md)  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -27,8 +41,11 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Initializes a new instance of the <see cref="T:System.ServiceModel.Activities.Description.WorkflowIdleBehavior" />.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="AddBindingParameters">
@@ -48,12 +65,15 @@
         <Parameter Name="bindingParameters" Type="System.ServiceModel.Channels.BindingParameterCollection" />
       </Parameters>
       <Docs>
-        <param name="serviceDescription">To be added.</param>
-        <param name="serviceHostBase">To be added.</param>
-        <param name="endpoints">To be added.</param>
-        <param name="bindingParameters">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="serviceDescription">The service description.</param>
+        <param name="serviceHostBase">The service host.</param>
+        <param name="endpoints">The endpoints exposed by the service.</param>
+        <param name="bindingParameters">The binding parameters required to implement the behavior.</param>
+        <summary>Implements the &lt;xref:System.ServiceModel.Description.IServiceBehavior.AddBindingParameters%2A?displayProperty=fullName&gt; method.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="ApplyDispatchBehavior">
@@ -71,10 +91,13 @@
         <Parameter Name="serviceHostBase" Type="System.ServiceModel.ServiceHostBase" />
       </Parameters>
       <Docs>
-        <param name="serviceDescription">To be added.</param>
-        <param name="serviceHostBase">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="serviceDescription">The service description.</param>
+        <param name="serviceHostBase">The service host.</param>
+        <summary>Implements the &lt;xref:System.ServiceModel.Description.IServiceBehavior.ApplyDispatchBehavior%2A?displayProperty=fullName&gt; method.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="TimeToPersist">
@@ -88,9 +111,18 @@
         <ReturnType>System.TimeSpan</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets a value that specifies the &lt;xref:System.TimeSpan&gt; that occurs between the time the workflow becomes idle and is persisted.</summary>
+        <value>The time span used to determine when a workflow is persisted.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The <xref:System.TimeSpan> begins to elapse when the workflow instance becomes idle. This property is useful if you want to persist a workflow instance more aggressively while still keeping the instance in memory for as long as possible. The default value for this property is <xref:System.TimeSpan>. The TimeToPersist property is only valid if its value is less than <xref:System.ServiceModel.Activities.Description.WorkflowIdleBehavior.TimeToUnload%2A>. If it is greater, it is ignored. If the <xref:System.TimeSpan> specified by TimeToPersist elapses before the <xref:System.TimeSpan> specified by <xref:System.ServiceModel.Activities.Description.WorkflowIdleBehavior.TimeToUnload%2A>, persistence must complete before the workflow is unloaded. This implies that the unload operation may be delayed until the workflow is persisted. The persistence layer is responsible for handling any retries for transient errors and only throws exceptions on non-recoverable errors. Therefore, any exceptions thrown during persistence are treated as fatal and the workflow instance is aborted.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>The time span used to determine when a workflow is persisted.</returns>
       </Docs>
     </Member>
     <Member MemberName="TimeToUnload">
@@ -104,9 +136,18 @@
         <ReturnType>System.TimeSpan</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets a value that specifies the &lt;xref:System.TimeSpan&gt; that occurs between the time workflow becomes idle and is unloaded.</summary>
+        <value>The time span used to determine when a workflow is unloaded.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The default value is 1 minute. Unloading a workflow implies that it is also persisted. If TimeToUnload is set to zero the workflow instance is persisted and unloaded immediately after the workflow becomes idle. Setting TimeToUnload to <xref:System.TimeSpan> effectively disables the unload operation. Idle workflow instances are never unloaded.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>The time span used to determine when a workflow is unloaded.</returns>
       </Docs>
     </Member>
     <Member MemberName="Validate">
@@ -124,10 +165,13 @@
         <Parameter Name="serviceHostBase" Type="System.ServiceModel.ServiceHostBase" />
       </Parameters>
       <Docs>
-        <param name="serviceDescription">To be added.</param>
-        <param name="serviceHostBase">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="serviceDescription">The service description.</param>
+        <param name="serviceHostBase">The service host.</param>
+        <summary>Implements the &lt;xref:System.ServiceModel.Description.IServiceBehavior.Validate%2A?displayProperty=fullName&gt; method.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
   </Members>

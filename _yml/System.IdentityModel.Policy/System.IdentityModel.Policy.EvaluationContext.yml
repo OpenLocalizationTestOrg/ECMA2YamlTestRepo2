@@ -15,8 +15,8 @@ items:
   nameWithType: EvaluationContext
   fullName: System.IdentityModel.Policy.EvaluationContext
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, represents the results of the authorization policies that have been evaluated.
+  remarks: "Claims are added to an EvaluationContext by authorization policies. An authorization policy takes a set of claims, such as those found in a security token, and adds additional claims based on the current set. For instance, an authorization policy might evaluate a claim that contains the date of birth and add a claim that states the user is over 21 years old and add an Over21 claim to the EvaluationContext.  \n  \n Classes that implement the <xref:System.IdentityModel.Policy.IAuthorizationPolicy> interface do not authorize users, but they enable the <xref:System.ServiceModel.ServiceAuthorizationManager> class to do so. The <xref:System.ServiceModel.ServiceAuthorizationManager> calls the <xref:System.IdentityModel.Policy.IAuthorizationPolicy.Evaluate%2A> method for each authorization policy in effect. The <xref:System.IdentityModel.Policy.IAuthorizationPolicy.Evaluate%2A> method determines whether additional claims should be added for the user based on the current claims. An authorization policy's <xref:System.IdentityModel.Policy.IAuthorizationPolicy.Evaluate%2A> method may be called multiple times, as claims are added to the EvaluationContext by other authorization policies. When all authorization policies in effect are done, the <xref:System.ServiceModel.ServiceAuthorizationManager> class makes authorization decisions based upon the final set of claims. The <xref:System.ServiceModel.ServiceAuthorizationManager> class then creates an <xref:System.IdentityModel.Policy.AuthorizationContext> that contains an immutable set of claims that reflects these authorization decisions.  \n  \n An evaluation context contains a set of <xref:System.IdentityModel.Claims.ClaimSet> objects: an expiration time, which specifies the span of time during which the evaluation context is valid, and a unique identifier."
   syntax:
     content: public abstract class EvaluationContext
   inheritance:
@@ -39,12 +39,12 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: protected EvaluationContext ();
     parameters: []
   overload: System.IdentityModel.Policy.EvaluationContext.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -61,18 +61,19 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a set of claims to the evaluation context.
+  remarks: "The claims are added to the set of claims contained within the <xref:System.IdentityModel.Policy.EvaluationContext.ClaimSets%2A> property.  \n  \n Each time the AddClaimSet method is called to add claims to the evaluation context, the <xref:System.IdentityModel.Policy.EvaluationContext.Generation%2A> property should be incremented."
   syntax:
     content: public abstract void AddClaimSet (System.IdentityModel.Policy.IAuthorizationPolicy policy, System.IdentityModel.Claims.ClaimSet claimSet);
     parameters:
     - id: policy
       type: System.IdentityModel.Policy.IAuthorizationPolicy
-      description: To be added.
+      description: An  that represents the authorization policy that is adding claims to the evaluation context.
     - id: claimSet
       type: System.IdentityModel.Claims.ClaimSet
-      description: To be added.
+      description: A  that contains a set of claims.
   overload: System.IdentityModel.Policy.EvaluationContext.AddClaimSet*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -89,14 +90,15 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a read-only collection of  objects that contains the claims added by authorization policies that have been evaluated.
+  remarks: To add claims to this collection, for example from an authorization policy, use the <xref:System.IdentityModel.Policy.EvaluationContext.AddClaimSet%2A> method.
   syntax:
     content: public abstract System.Collections.ObjectModel.ReadOnlyCollection<System.IdentityModel.Claims.ClaimSet> ClaimSets { get; }
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.IdentityModel.Claims.ClaimSet}
-      description: To be added.
+      description: A <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> objects that contains the claims added by authorization policies that have been evaluated.
   overload: System.IdentityModel.Policy.EvaluationContext.ClaimSets*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -113,14 +115,15 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of times that claims have been added to the evaluation context.
+  remarks: "The <xref:System.ServiceModel.ServiceAuthorizationManager> class uses the Generation property to determine if another evaluation round is required. Each time an authorization policy calls the `AddToTarget` method to add claims to the evaluation context, the Generation property is incremented.  \n  \n The <xref:System.ServiceModel.ServiceAuthorizationManager> class examines the Generation property after calling the <xref:System.IdentityModel.Policy.IAuthorizationPolicy.Evaluate%2A> method on all authorization policies again. If the Generation property has been incremented during evaluation, the <xref:System.ServiceModel.ServiceAuthorizationManager> class calls the <xref:System.IdentityModel.Policy.IAuthorizationPolicy.Evaluate%2A> method on any authorization policies that returned `false` the last time the <xref:System.IdentityModel.Policy.IAuthorizationPolicy.Evaluate%2A> method was called on that authorization policy."
   syntax:
     content: public abstract int Generation { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of times that claims have been added to the evaluation context.
   overload: System.IdentityModel.Policy.EvaluationContext.Generation*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -137,14 +140,15 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of non-claim properties associated with this .
+  remarks: The classes in the <xref:System.IdentityModel.Selectors> namespace that implement the <xref:System.IdentityModel.Policy.IAuthorizationPolicy> interface (authorization policies) add a property named `Identities` to the.<xref:System.IdentityModel.Policy.AuthorizationContext.Properties%2A> collection. The `Identities` property contains an object of type <xref:System.Collections.Generic.IList%601> that contains one or more <xref:System.Security.Principal.IIdentity> instances that represent identity information that is provided by the authorization policies.
   syntax:
     content: public abstract System.Collections.Generic.IDictionary<string,object> Properties { get; }
     return:
       type: System.Collections.Generic.IDictionary{System.String,System.Object}
-      description: To be added.
+      description: A <xref:System.Collections.Generic.Dictionary%602> that specifies a collection of non-claim properties.
   overload: System.IdentityModel.Policy.EvaluationContext.Properties*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -161,15 +165,16 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Policy
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the date and time at which this  is no longer valid.
+  remarks: Calling the RecordExpirationTime method multiple times only has an effect if the `expirationTime` parameter has a value that is earlier than the previously specified value.
   syntax:
     content: public abstract void RecordExpirationTime (DateTime expirationTime);
     parameters:
     - id: expirationTime
       type: System.DateTime
-      description: To be added.
+      description: A <xref:System.DateTime> value that indicates the date and time when this  object is no longer valid.
   overload: System.IdentityModel.Policy.EvaluationContext.RecordExpirationTime*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -214,6 +219,21 @@ references:
   name: ReadOnlyCollection<ClaimSet>
   nameWithType: ReadOnlyCollection<ClaimSet>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.IdentityModel.Claims.ClaimSet>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.IdentityModel.Claims.ClaimSet>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.IdentityModel.Claims.ClaimSet
+    name: ClaimSet
+    nameWithType: ClaimSet
+    fullName: ClaimSet
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.IdentityModel.Policy.EvaluationContext.Generation
   parent: System.IdentityModel.Policy.EvaluationContext
   isExternal: false
@@ -238,6 +258,28 @@ references:
   name: IDictionary<String,Object>
   nameWithType: IDictionary<String,Object>
   fullName: System.Collections.Generic.IDictionary<System.String,System.Object>
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.String,System.Object>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.IdentityModel.Policy.EvaluationContext.RecordExpirationTime(System.DateTime)
   parent: System.IdentityModel.Policy.EvaluationContext
   isExternal: false

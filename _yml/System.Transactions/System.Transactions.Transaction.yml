@@ -33,8 +33,8 @@ items:
   nameWithType: Transaction
   fullName: System.Transactions.Transaction
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a transaction.
+  remarks: "The <xref:System.Transactions> namespace provides both an explicit programming model based on the Transaction class, as well as an implicit programming model using the <xref:System.Transactions.TransactionScope> class, in which transactions are automatically managed by the infrastructure. It is highly recommended that you use the easier implicit model for development. To get started, please see the [Implementing An Implicit Transaction Using Transaction Scope](http://msdn.microsoft.com/en-us/1ddba95e-7587-48b2-8838-708c275e7199) topic. For more information on writing a transactional application, see [Writing A Transactional Application](http://msdn.microsoft.com/en-us/4a7cc4d1-0891-4605-941f-a933b9ce5bc8).  \n  \n The Transaction class contains methods used by developers implementing resource managers for enlistment. It also provides functionalities for cloning a transaction and controlling the current transaction context. You can obtain the current transaction, if one is set, using the static <xref:System.Transactions.Transaction.Current%2A> property."
   syntax:
     content: 'public class Transaction : IDisposable, System.Runtime.Serialization.ISerializable'
   inheritance:
@@ -59,15 +59,16 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a clone of the transaction.
+  remarks: Clones are created to pass transactions.  For example, you might not want to pass a <xref:System.Transactions.CommittableTransaction> to other applications, because you do not want others to commit your transaction.  If you try to marshal or serialize a transaction, a clone is created for you automatically.
   syntax:
     content: public System.Transactions.Transaction Clone ();
     parameters: []
     return:
       type: System.Transactions.Transaction
-      description: To be added.
+      description: A  that is a copy of the current transaction object.
   overload: System.Transactions.Transaction.Clone*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -84,14 +85,15 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the ambient transaction.
+  remarks: "For more information on ambient transactions, please see the \"Managing transaction flow using TransactionScopeOption\" section of the [Implementing an Implicit Transaction using Transaction Scope](../Topic/Implementing%20an%20Implicit%20Transaction%20using%20Transaction%20Scope.md) topic.  \n  \n Although you can set the ambient transaction using this property, you should use the <xref:System.Transactions.TransactionScope> object to manipulate the ambient transaction whenever possible.  \n  \n This property is thread static. If you change the ambient transaction using this property inside a <xref:System.Transactions.TransactionScope> an <xref:System.InvalidOperationException> is thrown when <xref:System.Transactions.TransactionScope.Dispose%2A> is called, and the previous ambient transaction value is restored."
   syntax:
     content: public static System.Transactions.Transaction Current { get; set; }
     return:
       type: System.Transactions.Transaction
-      description: To be added.
+      description: A  that describes the current transaction.
   overload: System.Transactions.Transaction.Current*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -108,18 +110,21 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a dependent clone of the transaction.
+  remarks: "A dependent transaction is a transaction whose outcome depends on the outcome of the transaction from which it was cloned.  \n  \n The `cloneoption` parameter controls what kind of dependent transaction to create. If a dependent transaction is created with <xref:System.Transactions.DependentCloneOption>, it blocks the commit process of the transaction until the transaction times out, or <xref:System.Transactions.DependentTransaction.Complete%2A> is called on the <xref:System.Transactions.DependentTransaction>. If it is created with <xref:System.Transactions.DependentCloneOption>, it automatically aborts the transaction if <xref:System.Transactions.CommittableTransaction.Commit%2A> is called before <xref:System.Transactions.DependentTransaction.Complete%2A> is called on the <xref:System.Transactions.DependentTransaction>."
+  example:
+  - "The following example shows you how to create a dependent transaction.  \n  \n [!code-vb[Tx_DependentTx#1](../../add/codesnippet/VisualBasic/a081f0f4-5473-43fc-b7fe-_1.vb)]\n [!code-cs[Tx_DependentTx#1](../../add/codesnippet/CSharp/a081f0f4-5473-43fc-b7fe-_1.cs)]"
   syntax:
     content: public System.Transactions.DependentTransaction DependentClone (System.Transactions.DependentCloneOption cloneOption);
     parameters:
     - id: cloneOption
       type: System.Transactions.DependentCloneOption
-      description: To be added.
+      description: A  that controls what kind of dependent transaction to create.
     return:
       type: System.Transactions.DependentTransaction
-      description: To be added.
+      description: A  that represents the dependent clone.
   overload: System.Transactions.Transaction.DependentClone*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -136,12 +141,13 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the resources that are held by the object.
+  remarks: If you change the ambient transaction by setting <xref:System.Transactions.Transaction.Current%2A> inside a <xref:System.Transactions.TransactionScope> an <xref:System.InvalidOperationException> is thrown when <xref:System.Transactions.TransactionScope.Dispose%2A> is called, and the previous ambient transaction value is restored.
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.Transactions.Transaction.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -158,24 +164,25 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Enlists a durable resource manager that supports two phase commit to participate in a transaction.
+  remarks: "Resource managers with a durable enlistment must be able to perform recovery if they experience a failure. For more information on recovery, see [Performing Recovery](http://msdn.microsoft.com/en-us/d342c5c7-da64-4a4c-8e63-b52f4fbf2691). For more information on volatile and durable resources, as well as how to enlist a resource, see [Implementing A Resource Manager](http://msdn.microsoft.com/en-us/81509719-d579-4530-831e-42e1acdef63e).  For more information on how a resource manager responds to commit notification and prepare the commit in two-phase commit, see [Committing A Transaction In Single-Phase and Multi-Phase](http://msdn.microsoft.com/en-us/74b3cfe1-d33a-45b8-91f4-dfd6f6598c4d).  \n  \n Resource managers enlisted for participation in a transaction through this method receive two phase commit notifications that correspond to the methods defined on the <xref:System.Transactions.IEnlistmentNotification> interface."
   syntax:
     content: public System.Transactions.Enlistment EnlistDurable (Guid resourceManagerIdentifier, System.Transactions.IEnlistmentNotification enlistmentNotification, System.Transactions.EnlistmentOptions enlistmentOptions);
     parameters:
     - id: resourceManagerIdentifier
       type: System.Guid
-      description: To be added.
+      description: A unique identifier for a resource manager, which should persist across resource manager failure or reboot.
     - id: enlistmentNotification
       type: System.Transactions.IEnlistmentNotification
-      description: To be added.
+      description: An object that implements the  interface to receive two phase commit notifications.
     - id: enlistmentOptions
       type: System.Transactions.EnlistmentOptions
-      description: To be added.
+      description: "\n     if the resource manager wants to perform additional work during the prepare phase."
     return:
       type: System.Transactions.Enlistment
-      description: To be added.
+      description: An  object that describes the enlistment.
   overload: System.Transactions.Transaction.EnlistDurable*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -192,24 +199,25 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Enlists a durable resource manager that supports single phase commit optimization to participate in a transaction.
+  remarks: "Resource managers with a durable enlistment must be able to perform recovery if they experience a failure. For more information on recovery, see [Performing Recovery](http://msdn.microsoft.com/en-us/d342c5c7-da64-4a4c-8e63-b52f4fbf2691). For more information on volatile and durable resources, as well as how to enlist a resource, see [Implementing A Resource Manager](http://msdn.microsoft.com/en-us/81509719-d579-4530-831e-42e1acdef63e).  \n  \n You should note that even when your resource manager implementation enlists with this method, it is not guaranteed that it receives a single phase commit. The transaction manager can still send two phase commit notifications instead. For more information on the single phase commit optimization, see [Optimization Using Single Phase Commit and Promotable Single Phase Notification](http://msdn.microsoft.com/en-us/653d51d1-b4bf-4e34-9a6f-aec073f0f5bb)."
   syntax:
     content: public System.Transactions.Enlistment EnlistDurable (Guid resourceManagerIdentifier, System.Transactions.ISinglePhaseNotification singlePhaseNotification, System.Transactions.EnlistmentOptions enlistmentOptions);
     parameters:
     - id: resourceManagerIdentifier
       type: System.Guid
-      description: To be added.
+      description: A unique identifier for a resource manager, which should persist across resource manager failure or reboot.
     - id: singlePhaseNotification
       type: System.Transactions.ISinglePhaseNotification
-      description: To be added.
+      description: An object that implements the  interface that must be able to receive single phase commit and two phase commit notifications.
     - id: enlistmentOptions
       type: System.Transactions.EnlistmentOptions
-      description: To be added.
+      description: "\n     if the resource manager wants to perform additional work during the prepare phase."
     return:
       type: System.Transactions.Enlistment
-      description: To be added.
+      description: An  object that describes the enlistment.
   overload: System.Transactions.Transaction.EnlistDurable*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -226,18 +234,19 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Enlists a resource manager that has an internal transaction using a promotable single phase enlistment (PSPE).
+  remarks: "Enlistments in a transaction are volatile; that is, they do not survive the failure of the participant. In addition, this method only suggests the transaction manager to escalate control, but the escalation itself is not guaranteed. If escalation fails, the user is not notified and the transaction is rolled back.  \n  \n The parameter `promotableSinglePhaseNotification` is used to communicate to the transaction manager the outcome of attempting to commit the resource manager's internal transaction.  If inconsistent data is reported, the transaction manager throws an exception. If an <xref:System.Transactions.TransactionStatus> outcome is reported, the transaction manager looks for the outcome notification in its own internal enlistment and ignores the reported response.  \n  \n For more information on enlistments and escalation of a transaction, please see [Transaction Management Escalation](http://msdn.microsoft.com/en-us/5b87ae58-8ccf-4b9b-9715-41e4aade89b7). For more information on PSPE, see [Optimization Using Single Phase Commit and Promotable Single Phase Notification](http://msdn.microsoft.com/en-us/653d51d1-b4bf-4e34-9a6f-aec073f0f5bb).  \n  \n **Note** This method uses <xref:System.Security.Permissions.SecurityAction> to prevent it from being called from untrusted code; however, only the immediate caller is required to possess the `FullTrust` permission set."
   syntax:
     content: public bool EnlistPromotableSinglePhase (System.Transactions.IPromotableSinglePhaseNotification promotableSinglePhaseNotification);
     parameters:
     - id: promotableSinglePhaseNotification
       type: System.Transactions.IPromotableSinglePhaseNotification
-      description: To be added.
+      description: A  interface implemented by the participant.
     return:
       type: System.Boolean
-      description: To be added.
+      description: A  interface implementation that describes the enlistment.
   overload: System.Transactions.Transaction.EnlistPromotableSinglePhase*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -254,21 +263,22 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Enlists a resource manager that has an internal transaction using a promotable single phase enlistment (PSPE).
+  remarks: "If the value specified for the `promoterType` parameter is `TransactionInterop.PromoterTypeDtc`, the transaction **must** be promoted by MSDTC and the `byte[]` returned from the `IPromotableSinglePhaseNotification.Promote` method **must** be an MSDTC transaction propagation token.  \n  \n If the value specified for the `promoterType` parameter is **not**`TransactionInterop.PromoterTypeDTC`, the transaction will not be promoted by MSDTC, but rather by the caller’s implementation of `IPromotableSinglePhaseNotification`. If this call is successful, there is a set of subsequent operations on the transaction that will return a `TransactionPromotionException`. These operations are:  \n  \n-   `Transaction.EnlistDurable`  \n  \n-   `TransactionInterop.GetDtcTransaction`  \n  \n-   `TransactionInterop.GetExportCookie`  \n  \n-   `TransctionInterop.GetTransmitterPropagationToken`  \n  \n-   Serialization of a Transaction object"
   syntax:
     content: public bool EnlistPromotableSinglePhase (System.Transactions.IPromotableSinglePhaseNotification promotableSinglePhaseNotification, Guid promoterType);
     parameters:
     - id: promotableSinglePhaseNotification
       type: System.Transactions.IPromotableSinglePhaseNotification
-      description: To be added.
+      description: A  interface implemented by the participant.
     - id: promoterType
       type: System.Guid
-      description: To be added.
+      description: The type of the distributed transaction processor.
     return:
       type: System.Boolean
-      description: To be added.
+      description: A  interface implementation that describes the enlistment.
   overload: System.Transactions.Transaction.EnlistPromotableSinglePhase*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -285,21 +295,24 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Enlists a volatile resource manager that supports two phase commit to participate in a transaction.
+  remarks: "Volatile resource managers cannot recovery from failure to complete a transaction in which they were participating. To obtain a durable enlistment in a transaction, use the <xref:System.Transactions.Transaction.EnlistDurable%2A> method.  \n  \n Resource managers enlisted for participation in a transaction through this method receive two phase commit notifications that correspond to the methods defined on the <xref:System.Transactions.IEnlistmentNotification> interface."
+  example:
+  - "The following example shows an implementation of <xref:System.Transactions.IEnlistmentNotification> interface, as well as enlisting the object as a participant in a transaction using the <xref:System.Transactions.Transaction.EnlistVolatile%2A> method.  \n  \n [!code-cs[Tx_Enlist#1](../../add/codesnippet/CSharp/1d69bab4-4268-46d9-8f3f-_1.cs)]\n [!code-vb[Tx_Enlist#1](../../add/codesnippet/VisualBasic/1d69bab4-4268-46d9-8f3f-_1.vb)]"
   syntax:
     content: public System.Transactions.Enlistment EnlistVolatile (System.Transactions.IEnlistmentNotification enlistmentNotification, System.Transactions.EnlistmentOptions enlistmentOptions);
     parameters:
     - id: enlistmentNotification
       type: System.Transactions.IEnlistmentNotification
-      description: To be added.
+      description: An object that implements the  interface to receive two-phase commit notifications.
     - id: enlistmentOptions
       type: System.Transactions.EnlistmentOptions
-      description: To be added.
+      description: "\n     if the resource manager wants to perform additional work during the prepare phase."
     return:
       type: System.Transactions.Enlistment
-      description: To be added.
+      description: An  object that describes the enlistment.
   overload: System.Transactions.Transaction.EnlistVolatile*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -316,21 +329,22 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Enlists a volatile resource manager that supports single phase commit optimization to participate in a transaction.
+  remarks: "Volatile resource managers cannot recovery from failure to complete a transaction in which they were participating. To obtain a durable enlistment in a transaction, use the <xref:System.Transactions.Transaction.EnlistDurable%2A> method. For more information on volatile and durable resources, as well as how to enlist a resource, see [Implementing A Resource Manager](http://msdn.microsoft.com/en-us/81509719-d579-4530-831e-42e1acdef63e). For more information on how a resource manager responds to commit notification and prepare the commit, see [Committing A Transaction In Single-Phase and Multi-Phase](http://msdn.microsoft.com/en-us/74b3cfe1-d33a-45b8-91f4-dfd6f6598c4d).  \n  \n You should note that even when your resource manager implementation enlists with this method, it is not guaranteed that it receives a single phase commit. The transaction manager can still send two phase commit notifications instead. For more information on the single phase commit optimization, see [Optimization Using Single Phase Commit and Promotable Single Phase Notification](http://msdn.microsoft.com/en-us/653d51d1-b4bf-4e34-9a6f-aec073f0f5bb)."
   syntax:
     content: public System.Transactions.Enlistment EnlistVolatile (System.Transactions.ISinglePhaseNotification singlePhaseNotification, System.Transactions.EnlistmentOptions enlistmentOptions);
     parameters:
     - id: singlePhaseNotification
       type: System.Transactions.ISinglePhaseNotification
-      description: To be added.
+      description: An object that implements the  interface that must be able to receive single phase commit and two phase commit notifications.
     - id: enlistmentOptions
       type: System.Transactions.EnlistmentOptions
-      description: To be added.
+      description: "\n     if the resource manager wants to perform additional work during the prepare phase."
     return:
       type: System.Transactions.Enlistment
-      description: To be added.
+      description: An  object that describes the enlistment.
   overload: System.Transactions.Transaction.EnlistVolatile*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -347,18 +361,18 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether this transaction and the specified object are equal.
   syntax:
     content: public override bool Equals (object obj);
     parameters:
     - id: obj
       type: System.Object
-      description: To be added.
+      description: The object to compare with this instance.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if obj and this transaction are identical; otherwise, .
   overload: System.Transactions.Transaction.Equals*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -375,15 +389,15 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the hash code for this instance.
   syntax:
     content: public override int GetHashCode ();
     parameters: []
     return:
       type: System.Int32
-      description: To be added.
+      description: A 32-bit signed integer hash code.
   overload: System.Transactions.Transaction.GetHashCode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -400,15 +414,16 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  `byte[]` returned by the `Promote` method when the transaction is promoted.
+  remarks: "This method has the side effect of causing promotion of the transaction if it is not already promoted.  \n  \n The format of the returned `byte[]` is defined by the value of the `Transation.PromoterType` property. If the value of the `Transaction.PromoterType` property is `TransactionInterop.PromoterTypeDtc` or `Guid.Empty`, then the `byte[]` returned by this method is an MSDTC transmitter propagation token. Any other value for the `Transaction.PromoterType` property specifies a format that is defined by the caller of `Transaction.EnlistPromotableSinglePhase` that specified the property type value. In order to interpret the promoted token in this latter case, you will need to consult the documentation for the code that made the `EnlistPromotableSinglePhase` call."
   syntax:
     content: public byte[] GetPromotedToken ();
     parameters: []
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The  `byte[]` returned by the `Promote` method when the transaction is promoted.
   overload: System.Transactions.Transaction.GetPromotedToken*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -425,14 +440,15 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the isolation level of the transaction.
+  remarks: The isolation level of a transaction determines what level of access other transactions have to volatile data before a transaction completes. For more information about isolation levels, see the documentation for the <xref:System.Transactions.IsolationLevel> enumeration.
   syntax:
     content: public System.Transactions.IsolationLevel IsolationLevel { get; }
     return:
       type: System.Transactions.IsolationLevel
-      description: To be added.
+      description: One of the  values that indicates the isolation level of the transaction.
   overload: System.Transactions.Transaction.IsolationLevel*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -449,21 +465,21 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Tests whether two specified  instances are equivalent.
   syntax:
     content: public static bool op_Equality (System.Transactions.Transaction x, System.Transactions.Transaction y);
     parameters:
     - id: x
       type: System.Transactions.Transaction
-      description: To be added.
+      description: The  instance that is to the left of the equality operator.
     - id: y
       type: System.Transactions.Transaction
-      description: To be added.
+      description: The  instance that is to the right of the equality operator.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if x and y are equal; otherwise, .
   overload: System.Transactions.Transaction.op_Equality*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -480,21 +496,21 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether two  instances are not equal.
   syntax:
     content: public static bool op_Inequality (System.Transactions.Transaction x, System.Transactions.Transaction y);
     parameters:
     - id: x
       type: System.Transactions.Transaction
-      description: To be added.
+      description: The  instance that is to the left of the inequality operator.
     - id: y
       type: System.Transactions.Transaction
-      description: To be added.
+      description: The  instance that is to the right of the inequality operator.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if x and y are not equal; otherwise, .
   overload: System.Transactions.Transaction.op_Inequality*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -511,27 +527,27 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: "[Supported in the .NET Framework 4.5.2 and later versions]  \n  \n Promotes and enlists a durable resource manager that supports two phase commit to participate in a transaction."
   syntax:
     content: public System.Transactions.Enlistment PromoteAndEnlistDurable (Guid resourceManagerIdentifier, System.Transactions.IPromotableSinglePhaseNotification promotableNotification, System.Transactions.ISinglePhaseNotification enlistmentNotification, System.Transactions.EnlistmentOptions enlistmentOptions);
     parameters:
     - id: resourceManagerIdentifier
       type: System.Guid
-      description: To be added.
+      description: A unique identifier for a resource manager, which should persist across resource manager failure or reboot.
     - id: promotableNotification
       type: System.Transactions.IPromotableSinglePhaseNotification
-      description: To be added.
+      description: An object that acts as a commit delegate for a non-distributed transaction internal to a resource manager.
     - id: enlistmentNotification
       type: System.Transactions.ISinglePhaseNotification
-      description: To be added.
+      description: An object that implements the  interface to receive two phase commit notifications.
     - id: enlistmentOptions
       type: System.Transactions.EnlistmentOptions
-      description: To be added.
+      description: "\n     if the resource manager wants to perform additional work during the prepare phase."
     return:
       type: System.Transactions.Enlistment
       description: To be added.
   overload: System.Transactions.Transaction.PromoteAndEnlistDurable*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -548,14 +564,15 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Uniquely identifies the format of the `byte[]` returned by the Promote method when the transaction is promoted.
+  remarks: If the transaction has not yet been promoted and does not yet have a promotable single phase enlistment, the value of this property will be `Guid.Empty`. If the transaction has been or will be promoted to MSDTC, then the value of this property will be `TransactionInterop.PromoterTypeDtc`. If the transaction has been or will be promoted by a non-MSDTC promoter, the value of this property will be the value specified to an earlier call to `Transaction.EnlistPromotableSinglePhase`.
   syntax:
     content: public Guid PromoterType { get; }
     return:
       type: System.Guid
-      description: To be added.
+      description: A guid that uniquely identifies the format of the `byte[]` returned by the Promote method when the transaction is promoted.
   overload: System.Transactions.Transaction.PromoterType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -572,12 +589,13 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Rolls back (aborts) the transaction.
+  remarks: Any copy of a transaction object can initiate the rollback of the transaction by calling this method. Only the original transaction object, which is a <xref:System.Transactions.CommittableTransaction> object, can be used to initiate an attempt to commit the transaction. An exception is thrown when this method is called after the outcome of the transaction has already been determined.
   syntax:
     content: public void Rollback ();
     parameters: []
   overload: System.Transactions.Transaction.Rollback*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -594,15 +612,15 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Rolls back (aborts) the transaction.
   syntax:
     content: public void Rollback (Exception e);
     parameters:
     - id: e
       type: System.Exception
-      description: To be added.
+      description: An explanation of why a rollback occurred.
   overload: System.Transactions.Transaction.Rollback*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -619,18 +637,19 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the distributed transaction identifier generated by the non-MSDTC promoter.
+  remarks: "This method can only be called successfully while the `IPromotableSinglePhaseNotification.Promote` method is being processed. If this method is called at any other time, a `TransactionException` is thrown.  \n  \n The specified value of the `promotableNotification` parameter must be the same object that was originally specified to the `Transaction.EnlistPromotableSinglePhase` invocation. If this is not the case, then an `InvalidOperationException` is thrown."
   syntax:
     content: public void SetDistributedTransactionIdentifier (System.Transactions.IPromotableSinglePhaseNotification promotableNotification, Guid distributedTransactionIdentifier);
     parameters:
     - id: promotableNotification
       type: System.Transactions.IPromotableSinglePhaseNotification
-      description: To be added.
+      description: A  interface implemented by the participant.
     - id: distributedTransactionIdentifier
       type: System.Guid
-      description: To be added.
+      description: The identifier for the transaction used by the distributed transaction manager.
   overload: System.Transactions.Transaction.SetDistributedTransactionIdentifier*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -648,18 +667,18 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  with the data required to serialize this transaction.
   syntax:
     content: void ISerializable.GetObjectData (System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context);
     parameters:
     - id: serializationInfo
       type: System.Runtime.Serialization.SerializationInfo
-      description: To be added.
+      description: The  to populate with data.
     - id: context
       type: System.Runtime.Serialization.StreamingContext
-      description: To be added.
+      description: The destination (see <xref:System.Runtime.Serialization.StreamingContext> ) for this serialization.
   overload: System.Transactions.Transaction.System#Runtime#Serialization#ISerializable#GetObjectData*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -676,13 +695,19 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the transaction is completed.
+  remarks: "You can register for this event instead of using a volatile enlistment to get outcome information for transactions. The parameter passed to the <xref:System.Transactions.TransactionCompletedEventHandler> delegate is a <xref:System.Transactions.Transaction> instance. You can then query the <xref:System.Transactions.Transaction.TransactionInformation%2A> property of the specific instance to get an instance of <xref:System.Transactions.TransactionInformation>, whose <xref:System.Transactions.TransactionInformation.Status%2A> property contains the status of a transaction with either the <xref:System.Transactions.TransactionStatus> or <xref:System.Transactions.TransactionStatus> value.  \n  \n **Caution** Signing up for this event negatively affects the performance of the transaction it is attached to."
+  example:
+  - "The following sample shows how an application can obtain the outcome of a transaction by subscribing to the TransactionCompleted event.  \n  \n [!code-cs[Tx_Outcome#1](../../add/codesnippet/CSharp/e-system.transactions.tr_1.cs)]\n [!code-vb[Tx_Outcome#1](../../add/codesnippet/VisualBasic/e-system.transactions.tr_1.vb)]"
   syntax:
     content: public event System.Transactions.TransactionCompletedEventHandler TransactionCompleted;
     return:
       type: System.Transactions.TransactionCompletedEventHandler
       description: To be added.
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: An attempt to subscribe this event on a transaction that has been disposed.
   platform:
   - net-11
   - net-20
@@ -699,14 +724,14 @@ items:
   assemblies:
   - System.Transactions
   namespace: System.Transactions
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves additional information about a transaction.
   syntax:
     content: public System.Transactions.TransactionInformation TransactionInformation { get; }
     return:
       type: System.Transactions.TransactionInformation
-      description: To be added.
+      description: A  that contains additional information about the transaction.
   overload: System.Transactions.Transaction.TransactionInformation*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -733,12 +758,6 @@ references:
   name: Current
   nameWithType: Transaction.Current
   fullName: System.Transactions.Transaction.Current
-- uid: System.Transactions.Transaction
-  parent: System.Transactions
-  isExternal: false
-  name: Transaction
-  nameWithType: Transaction
-  fullName: System.Transactions.Transaction
 - uid: System.Transactions.Transaction.DependentClone(System.Transactions.DependentCloneOption)
   parent: System.Transactions.Transaction
   isExternal: false
@@ -799,30 +818,12 @@ references:
   name: EnlistDurable(Guid,ISinglePhaseNotification,EnlistmentOptions)
   nameWithType: Transaction.EnlistDurable(Guid,ISinglePhaseNotification,EnlistmentOptions)
   fullName: System.Transactions.Transaction.EnlistDurable(Guid,ISinglePhaseNotification,EnlistmentOptions)
-- uid: System.Transactions.Enlistment
-  parent: System.Transactions
-  isExternal: false
-  name: Enlistment
-  nameWithType: Enlistment
-  fullName: System.Transactions.Enlistment
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Transactions.ISinglePhaseNotification
   parent: System.Transactions
   isExternal: false
   name: ISinglePhaseNotification
   nameWithType: ISinglePhaseNotification
   fullName: System.Transactions.ISinglePhaseNotification
-- uid: System.Transactions.EnlistmentOptions
-  parent: System.Transactions
-  isExternal: false
-  name: EnlistmentOptions
-  nameWithType: EnlistmentOptions
-  fullName: System.Transactions.EnlistmentOptions
 - uid: System.Transactions.Transaction.EnlistPromotableSinglePhase(System.Transactions.IPromotableSinglePhaseNotification)
   parent: System.Transactions.Transaction
   isExternal: false
@@ -847,90 +848,24 @@ references:
   name: EnlistPromotableSinglePhase(IPromotableSinglePhaseNotification,Guid)
   nameWithType: Transaction.EnlistPromotableSinglePhase(IPromotableSinglePhaseNotification,Guid)
   fullName: System.Transactions.Transaction.EnlistPromotableSinglePhase(IPromotableSinglePhaseNotification,Guid)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Transactions.IPromotableSinglePhaseNotification
-  parent: System.Transactions
-  isExternal: false
-  name: IPromotableSinglePhaseNotification
-  nameWithType: IPromotableSinglePhaseNotification
-  fullName: System.Transactions.IPromotableSinglePhaseNotification
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Transactions.Transaction.EnlistVolatile(System.Transactions.IEnlistmentNotification,System.Transactions.EnlistmentOptions)
   parent: System.Transactions.Transaction
   isExternal: false
   name: EnlistVolatile(IEnlistmentNotification,EnlistmentOptions)
   nameWithType: Transaction.EnlistVolatile(IEnlistmentNotification,EnlistmentOptions)
   fullName: System.Transactions.Transaction.EnlistVolatile(IEnlistmentNotification,EnlistmentOptions)
-- uid: System.Transactions.Enlistment
-  parent: System.Transactions
-  isExternal: false
-  name: Enlistment
-  nameWithType: Enlistment
-  fullName: System.Transactions.Enlistment
-- uid: System.Transactions.IEnlistmentNotification
-  parent: System.Transactions
-  isExternal: false
-  name: IEnlistmentNotification
-  nameWithType: IEnlistmentNotification
-  fullName: System.Transactions.IEnlistmentNotification
-- uid: System.Transactions.EnlistmentOptions
-  parent: System.Transactions
-  isExternal: false
-  name: EnlistmentOptions
-  nameWithType: EnlistmentOptions
-  fullName: System.Transactions.EnlistmentOptions
 - uid: System.Transactions.Transaction.EnlistVolatile(System.Transactions.ISinglePhaseNotification,System.Transactions.EnlistmentOptions)
   parent: System.Transactions.Transaction
   isExternal: false
   name: EnlistVolatile(ISinglePhaseNotification,EnlistmentOptions)
   nameWithType: Transaction.EnlistVolatile(ISinglePhaseNotification,EnlistmentOptions)
   fullName: System.Transactions.Transaction.EnlistVolatile(ISinglePhaseNotification,EnlistmentOptions)
-- uid: System.Transactions.Enlistment
-  parent: System.Transactions
-  isExternal: false
-  name: Enlistment
-  nameWithType: Enlistment
-  fullName: System.Transactions.Enlistment
-- uid: System.Transactions.ISinglePhaseNotification
-  parent: System.Transactions
-  isExternal: false
-  name: ISinglePhaseNotification
-  nameWithType: ISinglePhaseNotification
-  fullName: System.Transactions.ISinglePhaseNotification
-- uid: System.Transactions.EnlistmentOptions
-  parent: System.Transactions
-  isExternal: false
-  name: EnlistmentOptions
-  nameWithType: EnlistmentOptions
-  fullName: System.Transactions.EnlistmentOptions
 - uid: System.Transactions.Transaction.Equals(System.Object)
   parent: System.Transactions.Transaction
   isExternal: false
   name: Equals(Object)
   nameWithType: Transaction.Equals(Object)
   fullName: System.Transactions.Transaction.Equals(Object)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Transactions.Transaction.GetHashCode
   parent: System.Transactions.Transaction
   isExternal: false
@@ -949,12 +884,20 @@ references:
   name: GetPromotedToken()
   nameWithType: Transaction.GetPromotedToken()
   fullName: System.Transactions.Transaction.GetPromotedToken()
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Transactions.Transaction.IsolationLevel
   parent: System.Transactions.Transaction
   isExternal: false
@@ -973,96 +916,24 @@ references:
   name: op_Equality(Transaction,Transaction)
   nameWithType: Transaction.op_Equality(Transaction,Transaction)
   fullName: System.Transactions.Transaction.op_Equality(Transaction,Transaction)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Transactions.Transaction
-  parent: System.Transactions
-  isExternal: false
-  name: Transaction
-  nameWithType: Transaction
-  fullName: System.Transactions.Transaction
-- uid: System.Transactions.Transaction
-  parent: System.Transactions
-  isExternal: false
-  name: Transaction
-  nameWithType: Transaction
-  fullName: System.Transactions.Transaction
 - uid: System.Transactions.Transaction.op_Inequality(System.Transactions.Transaction,System.Transactions.Transaction)
   parent: System.Transactions.Transaction
   isExternal: false
   name: op_Inequality(Transaction,Transaction)
   nameWithType: Transaction.op_Inequality(Transaction,Transaction)
   fullName: System.Transactions.Transaction.op_Inequality(Transaction,Transaction)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Transactions.Transaction
-  parent: System.Transactions
-  isExternal: false
-  name: Transaction
-  nameWithType: Transaction
-  fullName: System.Transactions.Transaction
-- uid: System.Transactions.Transaction
-  parent: System.Transactions
-  isExternal: false
-  name: Transaction
-  nameWithType: Transaction
-  fullName: System.Transactions.Transaction
 - uid: System.Transactions.Transaction.PromoteAndEnlistDurable(System.Guid,System.Transactions.IPromotableSinglePhaseNotification,System.Transactions.ISinglePhaseNotification,System.Transactions.EnlistmentOptions)
   parent: System.Transactions.Transaction
   isExternal: false
   name: PromoteAndEnlistDurable(Guid,IPromotableSinglePhaseNotification,ISinglePhaseNotification,EnlistmentOptions)
   nameWithType: Transaction.PromoteAndEnlistDurable(Guid,IPromotableSinglePhaseNotification,ISinglePhaseNotification,EnlistmentOptions)
   fullName: System.Transactions.Transaction.PromoteAndEnlistDurable(Guid,IPromotableSinglePhaseNotification,ISinglePhaseNotification,EnlistmentOptions)
-- uid: System.Transactions.Enlistment
-  parent: System.Transactions
-  isExternal: false
-  name: Enlistment
-  nameWithType: Enlistment
-  fullName: System.Transactions.Enlistment
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
-- uid: System.Transactions.IPromotableSinglePhaseNotification
-  parent: System.Transactions
-  isExternal: false
-  name: IPromotableSinglePhaseNotification
-  nameWithType: IPromotableSinglePhaseNotification
-  fullName: System.Transactions.IPromotableSinglePhaseNotification
-- uid: System.Transactions.ISinglePhaseNotification
-  parent: System.Transactions
-  isExternal: false
-  name: ISinglePhaseNotification
-  nameWithType: ISinglePhaseNotification
-  fullName: System.Transactions.ISinglePhaseNotification
-- uid: System.Transactions.EnlistmentOptions
-  parent: System.Transactions
-  isExternal: false
-  name: EnlistmentOptions
-  nameWithType: EnlistmentOptions
-  fullName: System.Transactions.EnlistmentOptions
 - uid: System.Transactions.Transaction.PromoterType
   parent: System.Transactions.Transaction
   isExternal: false
   name: PromoterType
   nameWithType: Transaction.PromoterType
   fullName: System.Transactions.Transaction.PromoterType
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Transactions.Transaction.Rollback
   parent: System.Transactions.Transaction
   isExternal: false
@@ -1087,18 +958,6 @@ references:
   name: SetDistributedTransactionIdentifier(IPromotableSinglePhaseNotification,Guid)
   nameWithType: Transaction.SetDistributedTransactionIdentifier(IPromotableSinglePhaseNotification,Guid)
   fullName: System.Transactions.Transaction.SetDistributedTransactionIdentifier(IPromotableSinglePhaseNotification,Guid)
-- uid: System.Transactions.IPromotableSinglePhaseNotification
-  parent: System.Transactions
-  isExternal: false
-  name: IPromotableSinglePhaseNotification
-  nameWithType: IPromotableSinglePhaseNotification
-  fullName: System.Transactions.IPromotableSinglePhaseNotification
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Transactions.Transaction.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
   parent: System.Transactions.Transaction
   isExternal: false

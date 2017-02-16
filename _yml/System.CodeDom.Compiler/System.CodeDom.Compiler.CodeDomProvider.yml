@@ -40,8 +40,10 @@ items:
   nameWithType: CodeDomProvider
   fullName: System.CodeDom.Compiler.CodeDomProvider
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a base class for CodeDomProvider implementations. This class is abstract.
+  remarks: "A CodeDomProvider can be used to create and retrieve instances of code generators and code compilers. Code generators can be used to generate code in a particular language, and code compilers can be used to compile code into assemblies.  \n  \n> [!NOTE]\n>  In the [!INCLUDE[dnprdnext](../../add/includes/dnprdnext-md.md)], the methods made available in the code generator and code compiler are available directly from the code provider. You do not need to call <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> or <xref:System.CodeDom.Compiler.CodeDomProvider.CreateCompiler%2A> to access the methods, and those methods are marked as obsolete. This applies to preexisting as well as new code provider implementations.  \n  \n A CodeDomProvider implementation typically provides code generation and/or code compilation interfaces for generating code and managing compilation for a single programming language. Several languages are supported by CodeDomProvider implementations that ship with the [!INCLUDE[winsdklong](../../add/includes/winsdklong-md.md)]. These languages include C#, Visual Basic, C++, and JScript. Developers or compiler vendors can implement the <xref:System.CodeDom.Compiler.ICodeGenerator> and <xref:System.CodeDom.Compiler.ICodeCompiler> interfaces and provide a CodeDomProvider that extends CodeDOM support to other programming languages.  \n  \n The [\\<system.codedom> Element](../Topic/%3Csystem.codedom%3E%20Element.md) in the machine configuration file (Machine.config) provides a mechanism for developers and compiler vendors to add configuration settings for additional CodeDomProvider implementations.  \n  \n The CodeDomProvider class provides static methods to discover and enumerate the CodeDomProvider implementations on a computer. The <xref:System.CodeDom.Compiler.CodeDomProvider.GetAllCompilerInfo%2A> method returns the settings for all CodeDomProvider implementations on a computer. The <xref:System.CodeDom.Compiler.CodeDomProvider.GetCompilerInfo%2A> method returns the settings for a specific CodeDomProvider implementation, based on the programming language name. The <xref:System.CodeDom.Compiler.CodeDomProvider.CreateProvider%2A> method returns an instance of a CodeDomProvider implementation for a specific language.  \n  \n For more details on language provider settings in the configuration file, see [Compiler and Language Provider Settings Schema](../Topic/Compiler%20and%20Language%20Provider%20Settings%20Schema.md).  \n  \n> [!NOTE]\n>  This class makes a link demand and an inheritance demand at the class level. A <xref:System.Security.SecurityException> is thrown if either the immediate caller or the derived class does not have full trust permission. For details about security demands, see [Link Demands](../Topic/Link%20Demands.md) and [Inheritance Demands](http://msdn.microsoft.com/en-us/28b9adbb-8f08-4f10-b856-dbf59eb932d9)."
+  example:
+  - "The following example program can generate and compile source code based on a CodeDOM model of a program that prints \"Hello World\" using the <xref:System.Console> class. A Windows Forms user interface is provided. The user can select the target programming language from several selections: C#, Visual Basic, and JScript.  \n  \n [!code-cpp[CodeDomExample#1](../../add/codesnippet/CPP/t-system.codedom.compile_7_1.cpp)]\n [!code-cs[CodeDomExample#1](../../add/codesnippet/CSharp/t-system.codedom.compile_7_1.cs)]\n [!code-vb[CodeDomExample#1](../../add/codesnippet/VisualBasic/t-system.codedom.compile_7_1.vb)]"
   syntax:
     content: >-
       [System.ComponentModel.ToolboxItem(false)]
@@ -85,12 +87,12 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: protected CodeDomProvider ();
     parameters: []
   overload: System.CodeDom.Compiler.CodeDomProvider.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -107,21 +109,28 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Compiles an assembly based on the  trees contained in the specified array of  objects, using the specified compiler settings.
+  remarks: >-
+    > [!NOTE]
+
+    >  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeCompiler> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateCompiler%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeCompiler> implementation is called by the base class.
   syntax:
     content: public virtual System.CodeDom.Compiler.CompilerResults CompileAssemblyFromDom (System.CodeDom.Compiler.CompilerParameters options, System.CodeDom.CodeCompileUnit[] compilationUnits);
     parameters:
     - id: options
       type: System.CodeDom.Compiler.CompilerParameters
-      description: To be added.
+      description: A  object that indicates the settings for the compilation.
     - id: compilationUnits
       type: System.CodeDom.CodeCompileUnit[]
-      description: To be added.
+      description: An array of type  that indicates the code to compile.
     return:
       type: System.CodeDom.Compiler.CompilerResults
-      description: To be added.
+      description: A  object that indicates the results of the compilation.
   overload: System.CodeDom.Compiler.CodeDomProvider.CompileAssemblyFromDom*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateCompiler%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -138,21 +147,28 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Compiles an assembly from the source code contained in the specified files, using the specified compiler settings.
+  remarks: >-
+    > [!NOTE]
+
+    >  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeCompiler> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateCompiler%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeCompiler> implementation is called by the base class.
   syntax:
     content: public virtual System.CodeDom.Compiler.CompilerResults CompileAssemblyFromFile (System.CodeDom.Compiler.CompilerParameters options, string[] fileNames);
     parameters:
     - id: options
       type: System.CodeDom.Compiler.CompilerParameters
-      description: To be added.
+      description: A  object that indicates the settings for the compilation.
     - id: fileNames
       type: System.String[]
-      description: To be added.
+      description: An array of the names of the files to compile.
     return:
       type: System.CodeDom.Compiler.CompilerResults
-      description: To be added.
+      description: A  object that indicates the results of compilation.
   overload: System.CodeDom.Compiler.CodeDomProvider.CompileAssemblyFromFile*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateCompiler%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -169,21 +185,28 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Compiles an assembly from the specified array of strings containing source code, using the specified compiler settings.
+  remarks: >-
+    > [!NOTE]
+
+    >  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeCompiler> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateCompiler%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeCompiler> implementation is called by the base class.
   syntax:
     content: public virtual System.CodeDom.Compiler.CompilerResults CompileAssemblyFromSource (System.CodeDom.Compiler.CompilerParameters options, string[] sources);
     parameters:
     - id: options
       type: System.CodeDom.Compiler.CompilerParameters
-      description: To be added.
+      description: A  object that indicates the compiler settings for this compilation.
     - id: sources
       type: System.String[]
-      description: To be added.
+      description: An array of source code strings to compile.
     return:
       type: System.CodeDom.Compiler.CompilerResults
-      description: To be added.
+      description: A  object that indicates the results of compilation.
   overload: System.CodeDom.Compiler.CodeDomProvider.CompileAssemblyFromSource*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateCompiler%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -200,15 +223,16 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, creates a new code compiler.
+  remarks: This method is obsolete in the [!INCLUDE[dnprdnext](../../add/includes/dnprdnext-md.md)]. The recommended alternative is to call the <xref:System.CodeDom.Compiler.ICodeCompiler> methods that are directly available in the code provider.
   syntax:
     content: public abstract System.CodeDom.Compiler.ICodeCompiler CreateCompiler ();
     parameters: []
     return:
       type: System.CodeDom.Compiler.ICodeCompiler
-      description: To be added.
+      description: An  that can be used for compilation of  based source code representations.
   overload: System.CodeDom.Compiler.CodeDomProvider.CreateCompiler*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -225,18 +249,22 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an escaped identifier for the specified value.
+  remarks: "CreateEscapedIdentifier tests whether the identifier conflicts with any reserved or language keywords, and if so, returns an equivalent name with language-specific escape code formatting. This is referred to an escaped identifier. The escaped identifier contains the same `value` but has escape-code formatting added to differentiate the identifier from the keyword. Two implementation examples are preceding the `value` with \"@\" or bracketing the `value` with \"[\" and \"]\".  \n  \n> [!NOTE]\n>  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation is called by the base class."
   syntax:
     content: public virtual string CreateEscapedIdentifier (string value);
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The string for which to create an escaped identifier.
     return:
       type: System.String
-      description: To be added.
+      description: The escaped identifier for the value.
   overload: System.CodeDom.Compiler.CodeDomProvider.CreateEscapedIdentifier*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -253,15 +281,16 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, creates a new code generator.
+  remarks: This method is obsolete in the [!INCLUDE[dnprdnext](../../add/includes/dnprdnext-md.md)]. The recommended alternative is to call the <xref:System.CodeDom.Compiler.ICodeGenerator> methods that are directly available in the <xref:System.CodeDom.Compiler.CodeDomProvider> class.
   syntax:
     content: public abstract System.CodeDom.Compiler.ICodeGenerator CreateGenerator ();
     parameters: []
     return:
       type: System.CodeDom.Compiler.ICodeGenerator
-      description: To be added.
+      description: An  that can be used to generate  based source code representations.
   overload: System.CodeDom.Compiler.CodeDomProvider.CreateGenerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -278,18 +307,19 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, creates a new code generator using the specified <xref:System.IO.TextWriter> for output.
+  remarks: "This method uses the specified <xref:System.IO.TextWriter> for output. This method supports more optimized code generation that incrementally updates the source code.  \n  \n> [!NOTE]\n>  The base class implementation calls the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method, which is obsolete in the [!INCLUDE[dnprdnext](../../add/includes/dnprdnext-md.md)] and results in a <xref:System.NotSupportedException> if an <xref:System.CodeDom.Compiler.ICodeGenerator> object is not returned."
   syntax:
     content: public virtual System.CodeDom.Compiler.ICodeGenerator CreateGenerator (System.IO.TextWriter output);
     parameters:
     - id: output
       type: System.IO.TextWriter
-      description: To be added.
+      description: A <xref:System.IO.TextWriter> to use to output.
     return:
       type: System.CodeDom.Compiler.ICodeGenerator
-      description: To be added.
+      description: An  that can be used to generate  based source code representations.
   overload: System.CodeDom.Compiler.CodeDomProvider.CreateGenerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -306,18 +336,19 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, creates a new code generator using the specified file name for output.
+  remarks: "This method uses the specified file name for output.  \n  \n> [!NOTE]\n>  The base class implementation calls the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method, which is obsolete in the [!INCLUDE[dnprdnext](../../add/includes/dnprdnext-md.md)] and results in a <xref:System.NotSupportedException> if an <xref:System.CodeDom.Compiler.ICodeGenerator> object is not returned."
   syntax:
     content: public virtual System.CodeDom.Compiler.ICodeGenerator CreateGenerator (string fileName);
     parameters:
     - id: fileName
       type: System.String
-      description: To be added.
+      description: The file name to output to.
     return:
       type: System.CodeDom.Compiler.ICodeGenerator
-      description: To be added.
+      description: An  that can be used to generate  based source code representations.
   overload: System.CodeDom.Compiler.CodeDomProvider.CreateGenerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -334,15 +365,15 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, creates a new code parser.
   syntax:
     content: public virtual System.CodeDom.Compiler.ICodeParser CreateParser ();
     parameters: []
     return:
       type: System.CodeDom.Compiler.ICodeParser
-      description: To be added.
+      description: An  that can be used to parse source code. The base implementation always returns .
   overload: System.CodeDom.Compiler.CodeDomProvider.CreateParser*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -359,18 +390,30 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  instance for the specified language.
+  remarks: "> [!NOTE]\n>  This method is most commonly used to create an instance of a code provider in an application that may optionally use one of several providers. CreateProvider allows you to specify at run time the code provider you wish to instantiate. If you know at design time which code provider is to be used, you should create an instance of that code provider rather than use the CreateProvider method.  \n  \n The CreateProvider method returns a <xref:System.CodeDom.Compiler.CodeDomProvider> instance for a specific language name; it is similar to calling the <xref:System.Activator.CreateInstance%2A?displayProperty=fullName> method with the language provider type. Use CreateProvider when you want to dynamically find a configured provider implementation for a language name.  \n  \n If more than one provider implementation is configured for the language name, CreateProvider returns a provider instance for the last matching configuration element.  \n  \n Use the [Activator.CreateInstance(Type, BindingFlags, Binder, Object\\[\\], CultureInfo)](assetId:///M:System.Activator.CreateInstance(System.Type,System.Reflection.BindingFlags,System.Reflection.Binder,System.Object[],System.Globalization.CultureInfo)?qualifyHint=True&autoUpgrade=False) method overload when you want a specific language provider implementation. For example, use the CreateProvider method to get a provider instance that supports the language name `\"CSharp\"`; use the [Activator.CreateInstance(Type, BindingFlags, Binder, Object\\[\\], CultureInfo)](assetId:///M:System.Activator.CreateInstance(System.Type,System.Reflection.BindingFlags,System.Reflection.Binder,System.Object[],System.Globalization.CultureInfo)?qualifyHint=True&autoUpgrade=False) method overload to get a provider instance specifically for the <xref:Microsoft.CSharp.CSharpCodeProvider?displayProperty=fullName> implementation. You should use the [Activator.CreateInstance(Type, BindingFlags, Binder, Object\\[\\], CultureInfo, Object\\[\\])](assetId:///M:System.Activator.CreateInstance(System.Type,System.Reflection.BindingFlags,System.Reflection.Binder,System.Object[],System.Globalization.CultureInfo,System.Object[])?qualifyHint=True&autoUpgrade=False) method if you have multiple code providers for a language and you desire to instantiate a specific code provider.  \n  \n The <xref:System.CodeDom.Compiler.CodeDomProvider.IsDefinedLanguage%2A> method checks whether at least one provider implementation supports a specific language. You can validate a language name using <xref:System.CodeDom.Compiler.CodeDomProvider.IsDefinedLanguage%2A> before passing it to CreateProvider. If you pass an unsupported language name to CreateProvider a <xref:System.Configuration.ConfigurationException?displayProperty=fullName> is thrown.  \n  \n The <xref:System.CodeDom.Compiler.CodeDomProvider.GetAllCompilerInfo%2A> method can be used to determine all <xref:System.CodeDom.Compiler.CodeDomProvider> implementations on a computer, including additional implementations provided by developers and compiler vendors that are identified in the [\\<system.codedom> Element](../Topic/%3Csystem.codedom%3E%20Element.md) in the machine configuration file (Machine.config).  \n  \n The CreateProvider method returns an instance of a <xref:System.CodeDom.Compiler.CodeDomProvider> implementation for a specific language.  \n  \n Language names are case-insensitive."
+  example:
+  - "The following code example determines the <xref:System.CodeDom.Compiler.CodeDomProvider> implementation for an input language and displays the configured settings for the language provider. This code example is part of a larger example provided for the <xref:System.CodeDom.Compiler.CompilerInfo> class.  \n  \n [!code-cpp[CodeDom_CompilerInfo#6](../../add/codesnippet/CPP/m-system.codedom.compile_8_1.cpp)]\n [!code-vb[CodeDom_CompilerInfo#6](../../add/codesnippet/VisualBasic/m-system.codedom.compile_8_1.vb)]\n [!code-cs[CodeDom_CompilerInfo#6](../../add/codesnippet/CSharp/m-system.codedom.compile_8_1.cs)]"
   syntax:
     content: public static System.CodeDom.Compiler.CodeDomProvider CreateProvider (string language);
     parameters:
     - id: language
       type: System.String
-      description: To be added.
+      description: The language name.
     return:
       type: System.CodeDom.Compiler.CodeDomProvider
-      description: To be added.
+      description: A CodeDOM provider that is implemented for the specified language name.
   overload: System.CodeDom.Compiler.CodeDomProvider.CreateProvider*
+  exceptions:
+  - type: System.Configuration.ConfigurationErrorsException
+    commentId: T:System.Configuration.ConfigurationErrorsException
+    description: The language does not have a configured provider on this computer.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The language is .
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have the required permission.
   platform:
   - net-11
   - net-20
@@ -387,21 +430,24 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  instance for the specified language and provider options.
+  remarks: "> [!NOTE]\n>  This method is most commonly used to create an instance of a code provider in an application that may optionally use one of several providers. CreateProvider enables you to specify at run time the version of the code provider you want to instantiate. If you know at design time which code provider is to be used, you should create an instance of that code provider instead of using the CreateProvider method.  \n  \n Use CreateProvider when you want to dynamically find a configured provider implementation for a specific language and options. Language names are case-insensitive. For information about supported provider options, see the specific CodeDOM provider documentation.  \n  \n For information about validating a provider and calling a provider if more than one provider implementation is configured for the language name, see the Remarks section of the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateProvider%28System.String%29> method."
+  example:
+  - "The following example shows how to create an instance of a provider by using the `providerOptions` parameter.  \n  \n [!code-vb[CodeDomProvider.ProviderOptions#1](../../add/codesnippet/VisualBasic/3796218a-f189-4563-bef3-_1.vb)]\n [!code-cs[CodeDomProvider.ProviderOptions#1](../../add/codesnippet/CSharp/3796218a-f189-4563-bef3-_1.cs)]"
   syntax:
     content: public static System.CodeDom.Compiler.CodeDomProvider CreateProvider (string language, System.Collections.Generic.IDictionary<string,string> providerOptions);
     parameters:
     - id: language
       type: System.String
-      description: To be added.
+      description: The language name.
     - id: providerOptions
       type: System.Collections.Generic.IDictionary{System.String,System.String}
-      description: To be added.
+      description: A collection of provider options from the configuration file.
     return:
       type: System.CodeDom.Compiler.CodeDomProvider
-      description: To be added.
+      description: A CodeDOM provider that is implemented for the specified language name and options.
   overload: System.CodeDom.Compiler.CodeDomProvider.CreateProvider*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -418,18 +464,22 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a valid identifier for the specified value.
+  remarks: "CreateValidIdentifier tests whether the identifier conflicts with reserved or language keywords, and if so, attempts to return a valid identifier name that does not conflict. Usually the returned identifier is only slightly modified to differentiate the identifier from the keyword; for example, the name might be preceded by the underscore (\"_\") character.  \n  \n> [!NOTE]\n>  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation is called by the base class."
   syntax:
     content: public virtual string CreateValidIdentifier (string value);
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The string for which to generate a valid identifier.
     return:
       type: System.String
-      description: To be added.
+      description: A valid identifier for the specified value.
   overload: System.CodeDom.Compiler.CodeDomProvider.CreateValidIdentifier*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -446,14 +496,17 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the default file name extension to use for source code files in the current language.
+  remarks: This property is used by code generators and code compilers to indicate what file extensions should be generated or used.
+  example:
+  - "The following code example creates an instance of <xref:Microsoft.VisualBasic.VBCodeProvider?displayProperty=fullName>. The example displays the provider name, hash code and default file name extension for the new provider instance.  \n  \n [!code-cpp[CodeDom_CompilerInfo#3](../../add/codesnippet/CPP/p-system.codedom.compile_10_1.cpp)]\n [!code-vb[CodeDom_CompilerInfo#3](../../add/codesnippet/VisualBasic/p-system.codedom.compile_10_1.vb)]\n [!code-cs[CodeDom_CompilerInfo#3](../../add/codesnippet/CSharp/p-system.codedom.compile_10_1.cs)]"
   syntax:
     content: public virtual string FileExtension { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A file name extension corresponding to the extension of the source files of the current language. The base implementation always returns <xref:System.String>.
   overload: System.CodeDom.Compiler.CodeDomProvider.FileExtension*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -470,21 +523,30 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates code for the specified Code Document Object Model (CodeDOM) compilation unit and sends it to the specified text writer, using the specified options.
+  remarks: >-
+    > [!NOTE]
+
+    >  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation is called by the base class.
+  example:
+  - "The following code example shows the use of the GenerateCodeFromCompileUnit method to generate code for a \"Hello World\" application from a <xref:System.CodeDom.CodeCompileUnit>. This example is part of a larger example provided for the <xref:System.CodeDom.Compiler.CodeDomProvider> class.  \n  \n [!code-cpp[CodeDomExample#3](../../add/codesnippet/CPP/947a7b52-7e8b-4165-86e9-_1.cpp)]\n [!code-cs[CodeDomExample#3](../../add/codesnippet/CSharp/947a7b52-7e8b-4165-86e9-_1.cs)]\n [!code-vb[CodeDomExample#3](../../add/codesnippet/VisualBasic/947a7b52-7e8b-4165-86e9-_1.vb)]"
   syntax:
     content: public virtual void GenerateCodeFromCompileUnit (System.CodeDom.CodeCompileUnit compileUnit, System.IO.TextWriter writer, System.CodeDom.Compiler.CodeGeneratorOptions options);
     parameters:
     - id: compileUnit
       type: System.CodeDom.CodeCompileUnit
-      description: To be added.
+      description: A  for which to generate code.
     - id: writer
       type: System.IO.TextWriter
-      description: To be added.
+      description: The <xref:System.IO.TextWriter> to which the output code is sent.
     - id: options
       type: System.CodeDom.Compiler.CodeGeneratorOptions
-      description: To be added.
+      description: A  that indicates the options to use for generating code.
   overload: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromCompileUnit*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -501,21 +563,28 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates code for the specified Code Document Object Model (CodeDOM) expression and sends it to the specified text writer, using the specified options.
+  remarks: >-
+    > [!NOTE]
+
+    >  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation is called by the base class.
   syntax:
     content: public virtual void GenerateCodeFromExpression (System.CodeDom.CodeExpression expression, System.IO.TextWriter writer, System.CodeDom.Compiler.CodeGeneratorOptions options);
     parameters:
     - id: expression
       type: System.CodeDom.CodeExpression
-      description: To be added.
+      description: A  object that indicates the expression for which to generate code.
     - id: writer
       type: System.IO.TextWriter
-      description: To be added.
+      description: The <xref:System.IO.TextWriter> to which output code is sent.
     - id: options
       type: System.CodeDom.Compiler.CodeGeneratorOptions
-      description: To be added.
+      description: A  that indicates the options to use for generating code.
   overload: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromExpression*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -532,21 +601,27 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates code for the specified Code Document Object Model (CodeDOM) member declaration and sends it to the specified text writer, using the specified options.
+  remarks: The base class implementation throws a <xref:System.NotImplementedException>. See <xref:Microsoft.CSharp.CSharpCodeProvider.GenerateCodeFromMember%2A?displayProperty=fullName> for documentation describing an implementation of this method.
+  example:
+  - "The following code example shows the use of the GenerateCodeFromMember method as implemented by the <xref:Microsoft.CSharp.CSharpCodeProvider> and <xref:Microsoft.VisualBasic.VBCodeProvider> classes.  \n  \n [!code-cs[CodeDom_GenerateCodeFromMember#1](../../add/codesnippet/CSharp/7dd87db0-a6d3-462b-9277-_1.cs)]\n [!code-vb[CodeDom_GenerateCodeFromMember#1](../../add/codesnippet/VisualBasic/7dd87db0-a6d3-462b-9277-_1.vb)]"
   syntax:
     content: public virtual void GenerateCodeFromMember (System.CodeDom.CodeTypeMember member, System.IO.TextWriter writer, System.CodeDom.Compiler.CodeGeneratorOptions options);
     parameters:
     - id: member
       type: System.CodeDom.CodeTypeMember
-      description: To be added.
+      description: A  object that indicates the member for which to generate code.
     - id: writer
       type: System.IO.TextWriter
-      description: To be added.
+      description: The <xref:System.IO.TextWriter> to which output code is sent.
     - id: options
       type: System.CodeDom.Compiler.CodeGeneratorOptions
-      description: To be added.
+      description: A  that indicates the options to use for generating code.
   overload: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromMember*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: This method is not overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -563,21 +638,28 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates code for the specified Code Document Object Model (CodeDOM) namespace and sends it to the specified text writer, using the specified options.
+  remarks: >-
+    > [!NOTE]
+
+    >  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation is called by the base class.
   syntax:
     content: public virtual void GenerateCodeFromNamespace (System.CodeDom.CodeNamespace codeNamespace, System.IO.TextWriter writer, System.CodeDom.Compiler.CodeGeneratorOptions options);
     parameters:
     - id: codeNamespace
       type: System.CodeDom.CodeNamespace
-      description: To be added.
+      description: A  object that indicates the namespace for which to generate code.
     - id: writer
       type: System.IO.TextWriter
-      description: To be added.
+      description: The <xref:System.IO.TextWriter> to which output code is sent.
     - id: options
       type: System.CodeDom.Compiler.CodeGeneratorOptions
-      description: To be added.
+      description: A  that indicates the options to use for generating code.
   overload: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromNamespace*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -594,21 +676,28 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates code for the specified Code Document Object Model (CodeDOM) statement and sends it to the specified text writer, using the specified options.
+  remarks: >-
+    > [!NOTE]
+
+    >  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation is called by the base class.
   syntax:
     content: public virtual void GenerateCodeFromStatement (System.CodeDom.CodeStatement statement, System.IO.TextWriter writer, System.CodeDom.Compiler.CodeGeneratorOptions options);
     parameters:
     - id: statement
       type: System.CodeDom.CodeStatement
-      description: To be added.
+      description: A  containing the CodeDOM elements for which to generate code.
     - id: writer
       type: System.IO.TextWriter
-      description: To be added.
+      description: The <xref:System.IO.TextWriter> to which output code is sent.
     - id: options
       type: System.CodeDom.Compiler.CodeGeneratorOptions
-      description: To be added.
+      description: A  that indicates the options to use for generating code.
   overload: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromStatement*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -625,21 +714,28 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Generates code for the specified Code Document Object Model (CodeDOM) type declaration and sends it to the specified text writer, using the specified options.
+  remarks: >-
+    > [!NOTE]
+
+    >  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation is called by the base class.
   syntax:
     content: public virtual void GenerateCodeFromType (System.CodeDom.CodeTypeDeclaration codeType, System.IO.TextWriter writer, System.CodeDom.Compiler.CodeGeneratorOptions options);
     parameters:
     - id: codeType
       type: System.CodeDom.CodeTypeDeclaration
-      description: To be added.
+      description: A  object that indicates the type for which to generate code.
     - id: writer
       type: System.IO.TextWriter
-      description: To be added.
+      description: The <xref:System.IO.TextWriter> to which output code is sent.
     - id: options
       type: System.CodeDom.Compiler.CodeGeneratorOptions
-      description: To be added.
+      description: A  that indicates the options to use for generating code.
   overload: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromType*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -656,15 +752,21 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the language provider and compiler configuration settings for this computer.
+  remarks: "Use the GetAllCompilerInfo method to enumerate the language provider settings on a computer.  \n  \n> [!NOTE]\n>  In the [!INCLUDE[dnprdnext](../../add/includes/dnprdnext-md.md)], the default language providers supplied by the .NET Framework are not specified in the [\\<system.codedom> Element](../Topic/%3Csystem.codedom%3E%20Element.md) compiler configuration section and cannot be removed, so this method returns information about the default providers and any specified in the configuration file."
+  example:
+  - "The following code example enumerates the language providers on the computer and displays the configuration and compiler settings for each language provider. This code example is part of a larger example provided for the <xref:System.CodeDom.Compiler.CompilerInfo> class.  \n  \n [!code-cpp[CodeDom_CompilerInfo#8](../../add/codesnippet/CPP/m-system.codedom.compile_1_1.cpp)]\n [!code-vb[CodeDom_CompilerInfo#8](../../add/codesnippet/VisualBasic/m-system.codedom.compile_1_1.vb)]\n [!code-cs[CodeDom_CompilerInfo#8](../../add/codesnippet/CSharp/m-system.codedom.compile_1_1.cs)]"
   syntax:
     content: public static System.CodeDom.Compiler.CompilerInfo[] GetAllCompilerInfo ();
     parameters: []
     return:
       type: System.CodeDom.Compiler.CompilerInfo[]
-      description: To be added.
+      description: An array of type  representing the settings of all configured  implementations.
   overload: System.CodeDom.Compiler.CodeDomProvider.GetAllCompilerInfo*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have the required permission.
   platform:
   - net-11
   - net-20
@@ -681,18 +783,30 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the language provider and compiler configuration settings for the specified language.
+  remarks: "The [\\<system.codedom> Element](../Topic/%3Csystem.codedom%3E%20Element.md) in the machine configuration file contains the language provider and compiler configuration settings for each <xref:System.CodeDom.Compiler.CodeDomProvider> implementation on the computer. For information about machine configuration files, see the Machine Configuration Files section in [Configuring Apps](../Topic/Configuring%20Apps%20by%20using%20Configuration%20Files.md). The GetCompilerInfo method searches each provider configuration element for the specified language name. The returned <xref:System.CodeDom.Compiler.CompilerInfo> instance contains the configured language provider and compiler settings.  \n  \n The <xref:System.CodeDom.Compiler.CodeDomProvider.IsDefinedLanguage%2A> method checks whether at least one provider implementation supports a specific language. You can validate a language name using <xref:System.CodeDom.Compiler.CodeDomProvider.IsDefinedLanguage%2A> before passing it to GetCompilerInfo. This prevents throwing a <xref:System.Configuration.ConfigurationException?displayProperty=fullName> when you access the <xref:System.CodeDom.Compiler.CompilerInfo> instance for an unsupported language name.  \n  \n If more than one provider implementation is configured for the input language name, GetCompilerInfo returns the settings from the last matching provider configuration element.  \n  \n Language names are case-insensitive."
+  example:
+  - "The following code example determines the <xref:System.CodeDom.Compiler.CodeDomProvider> implementation for an input language and displays the configured settings for the language provider. This code example is part of a larger example provided for the <xref:System.CodeDom.Compiler.CompilerInfo> class.  \n  \n [!code-cpp[CodeDom_CompilerInfo#6](../../add/codesnippet/CPP/m-system.codedom.compile_10_1.cpp)]\n [!code-vb[CodeDom_CompilerInfo#6](../../add/codesnippet/VisualBasic/m-system.codedom.compile_10_1.vb)]\n [!code-cs[CodeDom_CompilerInfo#6](../../add/codesnippet/CSharp/m-system.codedom.compile_10_1.cs)]"
   syntax:
     content: public static System.CodeDom.Compiler.CompilerInfo GetCompilerInfo (string language);
     parameters:
     - id: language
       type: System.String
-      description: To be added.
+      description: A language name.
     return:
       type: System.CodeDom.Compiler.CompilerInfo
-      description: To be added.
+      description: A  object populated with settings of the configured  implementation.
   overload: System.CodeDom.Compiler.CodeDomProvider.GetCompilerInfo*
+  exceptions:
+  - type: System.Configuration.ConfigurationException
+    commentId: T:System.Configuration.ConfigurationException
+    description: The language does not have a configured provider on this computer.
+  - type: System.Configuration.ConfigurationErrorsException
+    commentId: T:System.Configuration.ConfigurationErrorsException
+    description: The language is .
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have the required permission.
   platform:
   - net-11
   - net-20
@@ -709,18 +823,19 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  for the specified data type.
+  remarks: A derived class can override this method to provide specific types of type converters for specific data types.
   syntax:
     content: public virtual System.ComponentModel.TypeConverter GetConverter (Type type);
     parameters:
     - id: type
       type: System.Type
-      description: To be added.
+      description: The type of object to retrieve a type converter for.
     return:
       type: System.ComponentModel.TypeConverter
-      description: To be added.
+      description: A  for the specified type, or  if a  for the specified type cannot be found.
   overload: System.CodeDom.Compiler.CodeDomProvider.GetConverter*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -737,18 +852,30 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a language name associated with the specified file name extension, as configured in the  compiler configuration section.
+  remarks: "The [\\<system.codedom> Element](../Topic/%3Csystem.codedom%3E%20Element.md) in the machine configuration file (Machine.config) contains the language provider and compiler configuration settings for each <xref:System.CodeDom.Compiler.CodeDomProvider> implementation on the computer. The GetLanguageFromExtension method searches each provider configuration element for the specified file name extension.  \n  \n The <xref:System.CodeDom.Compiler.CodeDomProvider.IsDefinedExtension%2A> method checks whether at least one provider implementation supports a specific file name extension. You can validate a file name extension using <xref:System.CodeDom.Compiler.CodeDomProvider.IsDefinedExtension%2A> before passing it to GetLanguageFromExtension. This prevents GetLanguageFromExtension from throwing a <xref:System.Configuration.ConfigurationException?displayProperty=fullName> for an unsupported file name extension.  \n  \n If a provider implementation supports the input file name extension, and there are multiple supported languages configured for that provider, then GetLanguageFromExtension returns the first language name for that provider. If more than one provider implementation is configured for the input file name extension, GetLanguageFromExtension returns the language name from the last matching provider configuration element.  \n  \n Language names and file name extensions are case-insensitive."
+  example:
+  - "The following code example determines the <xref:System.CodeDom.Compiler.CodeDomProvider> implementation for an input file name extension and displays the configured settings for the language provider. This code example is part of a larger example provided for the <xref:System.CodeDom.Compiler.CompilerInfo> class.  \n  \n [!code-cpp[CodeDom_CompilerInfo#5](../../add/codesnippet/CPP/8fa7bea7-627d-4e5f-82ae-_1.cpp)]\n [!code-vb[CodeDom_CompilerInfo#5](../../add/codesnippet/VisualBasic/8fa7bea7-627d-4e5f-82ae-_1.vb)]\n [!code-cs[CodeDom_CompilerInfo#5](../../add/codesnippet/CSharp/8fa7bea7-627d-4e5f-82ae-_1.cs)]"
   syntax:
     content: public static string GetLanguageFromExtension (string extension);
     parameters:
     - id: extension
       type: System.String
-      description: To be added.
+      description: A file name extension.
     return:
       type: System.String
-      description: To be added.
+      description: A language name associated with the file name extension, as configured in the  compiler configuration settings.
   overload: System.CodeDom.Compiler.CodeDomProvider.GetLanguageFromExtension*
+  exceptions:
+  - type: System.Configuration.ConfigurationException
+    commentId: T:System.Configuration.ConfigurationException
+    description: The extension does not have a configured language provider on this computer.
+  - type: System.Configuration.ConfigurationErrorsException
+    commentId: T:System.Configuration.ConfigurationErrorsException
+    description: The extension is .
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have the required permission.
   platform:
   - net-11
   - net-20
@@ -765,18 +892,25 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type indicated by the specified .
+  remarks: >-
+    > [!NOTE]
+
+    >  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation is called by the base class.
   syntax:
     content: public virtual string GetTypeOutput (System.CodeDom.CodeTypeReference type);
     parameters:
     - id: type
       type: System.CodeDom.CodeTypeReference
-      description: To be added.
+      description: A  that indicates the type to return.
     return:
       type: System.String
-      description: To be added.
+      description: A text representation of the specified type, formatted for the language in which code is generated by this code generator. In Visual Basic, for example, passing in a  for the <xref:System.Int32> type will return "Integer".
   overload: System.CodeDom.Compiler.CodeDomProvider.GetTypeOutput*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -793,18 +927,27 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Tests whether a file name extension has an associated  implementation configured on the computer.
+  remarks: "The [\\<system.codedom> Element](../Topic/%3Csystem.codedom%3E%20Element.md) in the machine configuration file (Machine.config) contains the language provider and compiler configuration settings for each <xref:System.CodeDom.Compiler.CodeDomProvider> implementation on the computer. The IsDefinedExtension method searches the provider configuration elements for the specified file name extension.  \n  \n File name extensions are case-insensitive."
+  example:
+  - "The following code example determines the <xref:System.CodeDom.Compiler.CodeDomProvider> implementation for an input file name extension and displays the configured settings for the language provider. This code example is part of a larger example provided for the <xref:System.CodeDom.Compiler.CompilerInfo> class.  \n  \n [!code-cpp[CodeDom_CompilerInfo#5](../../add/codesnippet/CPP/m-system.codedom.compile_11_1.cpp)]\n [!code-vb[CodeDom_CompilerInfo#5](../../add/codesnippet/VisualBasic/m-system.codedom.compile_11_1.vb)]\n [!code-cs[CodeDom_CompilerInfo#5](../../add/codesnippet/CSharp/m-system.codedom.compile_11_1.cs)]"
   syntax:
     content: public static bool IsDefinedExtension (string extension);
     parameters:
     - id: extension
       type: System.String
-      description: To be added.
+      description: A file name extension.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a  implementation is configured for the specified file name extension; otherwise, .
   overload: System.CodeDom.Compiler.CodeDomProvider.IsDefinedExtension*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The extension is .
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have the required permission.
   platform:
   - net-11
   - net-20
@@ -821,18 +964,27 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Tests whether a language has a  implementation configured on the computer.
+  remarks: "The [\\<system.codedom> Element](../Topic/%3Csystem.codedom%3E%20Element.md) in the machine configuration file (Machine.config) contains the language provider and compiler configuration settings for each <xref:System.CodeDom.Compiler.CodeDomProvider> implementation on the computer. The IsDefinedLanguage method searches the provider configuration elements for the specified language name.  \n  \n Language names are case-insensitive."
+  example:
+  - "The following code example determines the <xref:System.CodeDom.Compiler.CodeDomProvider> implementation for an input language and displays the configured settings for the language provider. This code example is part of a larger example provided for the <xref:System.CodeDom.Compiler.CompilerInfo> class.  \n  \n [!code-cpp[CodeDom_CompilerInfo#6](../../add/codesnippet/CPP/m-system.codedom.compile_12_1.cpp)]\n [!code-vb[CodeDom_CompilerInfo#6](../../add/codesnippet/VisualBasic/m-system.codedom.compile_12_1.vb)]\n [!code-cs[CodeDom_CompilerInfo#6](../../add/codesnippet/CSharp/m-system.codedom.compile_12_1.cs)]"
   syntax:
     content: public static bool IsDefinedLanguage (string language);
     parameters:
     - id: language
       type: System.String
-      description: To be added.
+      description: The language name.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a  implementation is configured for the specified language; otherwise, .
   overload: System.CodeDom.Compiler.CodeDomProvider.IsDefinedLanguage*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The language is .
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have the required permission.
   platform:
   - net-11
   - net-20
@@ -849,18 +1001,22 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the specified value is a valid identifier for the current language.
+  remarks: "This method tests whether an identifier is valid. The IsValidIdentifier method is provider specific. Identifiers that are valid for one provider might not be valid for other providers. If `value` contains characters outside of the ASCII character range, check the identifier for all the languages that might be used to compile the code.  \n  \n> [!NOTE]\n>  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation is called by the base class."
   syntax:
     content: public virtual bool IsValidIdentifier (string value);
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The value to verify as a valid identifier.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the value parameter is a valid identifier; otherwise, .
   overload: System.CodeDom.Compiler.CodeDomProvider.IsValidIdentifier*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -877,14 +1033,14 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a language features identifier.
   syntax:
     content: public virtual System.CodeDom.Compiler.LanguageOptions LanguageOptions { get; }
     return:
       type: System.CodeDom.Compiler.LanguageOptions
-      description: To be added.
+      description: A  that indicates special features of the language.
   overload: System.CodeDom.Compiler.CodeDomProvider.LanguageOptions*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -901,18 +1057,25 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Compiles the code read from the specified text stream into a .
+  remarks: >-
+    > [!NOTE]
+
+    >  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeParser> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateParser%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeParser> implementation is called by the base class.
   syntax:
     content: public virtual System.CodeDom.CodeCompileUnit Parse (System.IO.TextReader codeStream);
     parameters:
     - id: codeStream
       type: System.IO.TextReader
-      description: To be added.
+      description: A <xref:System.IO.TextReader> object that is used to read the code to be parsed.
     return:
       type: System.CodeDom.CodeCompileUnit
-      description: To be added.
+      description: A  that contains a representation of the parsed code.
   overload: System.CodeDom.Compiler.CodeDomProvider.Parse*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -929,18 +1092,22 @@ items:
   assemblies:
   - System
   namespace: System.CodeDom.Compiler
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value indicating whether the specified code generation support is provided.
+  remarks: "This method can be called with a number of <xref:System.CodeDom.Compiler.GeneratorSupport> flags at once to test for a set of capabilities by joining a set of appropriate capability flags together with a binary `OR` operator (&#124;).  \n  \n> [!NOTE]\n>  In the .NET Framework versions 1.0 and 1.1, this method is provided by the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation that is returned by the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method of the provider. In version 2.0, this method can be called directly on the code provider even if it is not overridden by the code provider. If the code provider does not override this method, the <xref:System.CodeDom.Compiler.ICodeGenerator> implementation is called by the base class."
   syntax:
     content: public virtual bool Supports (System.CodeDom.Compiler.GeneratorSupport generatorSupport);
     parameters:
     - id: generatorSupport
       type: System.CodeDom.Compiler.GeneratorSupport
-      description: To be added.
+      description: A  object that indicates the type of code generation support to verify.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the specified code generation support is provided; otherwise, .
   overload: System.CodeDom.Compiler.CodeDomProvider.Supports*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: Neither this method nor the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateGenerator%2A> method is overridden in a derived class.
   platform:
   - net-11
   - net-20
@@ -973,60 +1140,46 @@ references:
   name: CompilerParameters
   nameWithType: CompilerParameters
   fullName: System.CodeDom.Compiler.CompilerParameters
-- uid: System.CodeDom.CodeCompileUnit
+- uid: System.CodeDom.CodeCompileUnit[]
   parent: System.CodeDom
   isExternal: false
   name: CodeCompileUnit
   nameWithType: CodeCompileUnit
   fullName: System.CodeDom.CodeCompileUnit[]
+  spec.csharp:
+  - uid: System.CodeDom.CodeCompileUnit
+    name: CodeCompileUnit
+    nameWithType: CodeCompileUnit
+    fullName: CodeCompileUnit[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.CodeDom.Compiler.CodeDomProvider.CompileAssemblyFromFile(System.CodeDom.Compiler.CompilerParameters,System.String[])
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
   name: CompileAssemblyFromFile(CompilerParameters,String[])
   nameWithType: CodeDomProvider.CompileAssemblyFromFile(CompilerParameters,String[])
   fullName: System.CodeDom.Compiler.CodeDomProvider.CompileAssemblyFromFile(CompilerParameters,String[])
-- uid: System.CodeDom.Compiler.CompilerResults
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: CompilerResults
-  nameWithType: CompilerResults
-  fullName: System.CodeDom.Compiler.CompilerResults
-- uid: System.CodeDom.Compiler.CompilerParameters
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: CompilerParameters
-  nameWithType: CompilerParameters
-  fullName: System.CodeDom.Compiler.CompilerParameters
-- uid: System.String
+- uid: System.String[]
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.CodeDom.Compiler.CodeDomProvider.CompileAssemblyFromSource(System.CodeDom.Compiler.CompilerParameters,System.String[])
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
   name: CompileAssemblyFromSource(CompilerParameters,String[])
   nameWithType: CodeDomProvider.CompileAssemblyFromSource(CompilerParameters,String[])
   fullName: System.CodeDom.Compiler.CodeDomProvider.CompileAssemblyFromSource(CompilerParameters,String[])
-- uid: System.CodeDom.Compiler.CompilerResults
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: CompilerResults
-  nameWithType: CompilerResults
-  fullName: System.CodeDom.Compiler.CompilerResults
-- uid: System.CodeDom.Compiler.CompilerParameters
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: CompilerParameters
-  nameWithType: CompilerParameters
-  fullName: System.CodeDom.Compiler.CompilerParameters
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
 - uid: System.CodeDom.Compiler.CodeDomProvider.CreateCompiler
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1051,12 +1204,6 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.Compiler.CodeDomProvider.CreateGenerator
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1075,12 +1222,6 @@ references:
   name: CreateGenerator(TextWriter)
   nameWithType: CodeDomProvider.CreateGenerator(TextWriter)
   fullName: System.CodeDom.Compiler.CodeDomProvider.CreateGenerator(TextWriter)
-- uid: System.CodeDom.Compiler.ICodeGenerator
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: ICodeGenerator
-  nameWithType: ICodeGenerator
-  fullName: System.CodeDom.Compiler.ICodeGenerator
 - uid: System.IO.TextWriter
   parent: System.IO
   isExternal: true
@@ -1093,18 +1234,6 @@ references:
   name: CreateGenerator(String)
   nameWithType: CodeDomProvider.CreateGenerator(String)
   fullName: System.CodeDom.Compiler.CodeDomProvider.CreateGenerator(String)
-- uid: System.CodeDom.Compiler.ICodeGenerator
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: ICodeGenerator
-  nameWithType: ICodeGenerator
-  fullName: System.CodeDom.Compiler.ICodeGenerator
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.Compiler.CodeDomProvider.CreateParser
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1129,66 +1258,52 @@ references:
   name: CodeDomProvider
   nameWithType: CodeDomProvider
   fullName: System.CodeDom.Compiler.CodeDomProvider
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.Compiler.CodeDomProvider.CreateProvider(System.String,System.Collections.Generic.IDictionary{System.String,System.String})
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
   name: CreateProvider(String,IDictionary<String,String>)
   nameWithType: CodeDomProvider.CreateProvider(String,IDictionary<String,String>)
   fullName: System.CodeDom.Compiler.CodeDomProvider.CreateProvider(String,IDictionary<String,String>)
-- uid: System.CodeDom.Compiler.CodeDomProvider
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: CodeDomProvider
-  nameWithType: CodeDomProvider
-  fullName: System.CodeDom.Compiler.CodeDomProvider
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Collections.Generic.IDictionary{System.String,System.String}
   parent: System.Collections.Generic
   isExternal: true
   name: IDictionary<String,String>
   nameWithType: IDictionary<String,String>
   fullName: System.Collections.Generic.IDictionary<System.String,System.String>
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.String,System.String>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.CodeDom.Compiler.CodeDomProvider.CreateValidIdentifier(System.String)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
   name: CreateValidIdentifier(String)
   nameWithType: CodeDomProvider.CreateValidIdentifier(String)
   fullName: System.CodeDom.Compiler.CodeDomProvider.CreateValidIdentifier(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.Compiler.CodeDomProvider.FileExtension
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
   name: FileExtension
   nameWithType: CodeDomProvider.FileExtension
   fullName: System.CodeDom.Compiler.CodeDomProvider.FileExtension
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromCompileUnit(System.CodeDom.CodeCompileUnit,System.IO.TextWriter,System.CodeDom.Compiler.CodeGeneratorOptions)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1201,12 +1316,6 @@ references:
   name: CodeCompileUnit
   nameWithType: CodeCompileUnit
   fullName: System.CodeDom.CodeCompileUnit
-- uid: System.IO.TextWriter
-  parent: System.IO
-  isExternal: true
-  name: TextWriter
-  nameWithType: TextWriter
-  fullName: System.IO.TextWriter
 - uid: System.CodeDom.Compiler.CodeGeneratorOptions
   parent: System.CodeDom.Compiler
   isExternal: false
@@ -1225,18 +1334,6 @@ references:
   name: CodeExpression
   nameWithType: CodeExpression
   fullName: System.CodeDom.CodeExpression
-- uid: System.IO.TextWriter
-  parent: System.IO
-  isExternal: true
-  name: TextWriter
-  nameWithType: TextWriter
-  fullName: System.IO.TextWriter
-- uid: System.CodeDom.Compiler.CodeGeneratorOptions
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: CodeGeneratorOptions
-  nameWithType: CodeGeneratorOptions
-  fullName: System.CodeDom.Compiler.CodeGeneratorOptions
 - uid: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromMember(System.CodeDom.CodeTypeMember,System.IO.TextWriter,System.CodeDom.Compiler.CodeGeneratorOptions)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1249,18 +1346,6 @@ references:
   name: CodeTypeMember
   nameWithType: CodeTypeMember
   fullName: System.CodeDom.CodeTypeMember
-- uid: System.IO.TextWriter
-  parent: System.IO
-  isExternal: true
-  name: TextWriter
-  nameWithType: TextWriter
-  fullName: System.IO.TextWriter
-- uid: System.CodeDom.Compiler.CodeGeneratorOptions
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: CodeGeneratorOptions
-  nameWithType: CodeGeneratorOptions
-  fullName: System.CodeDom.Compiler.CodeGeneratorOptions
 - uid: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromNamespace(System.CodeDom.CodeNamespace,System.IO.TextWriter,System.CodeDom.Compiler.CodeGeneratorOptions)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1273,18 +1358,6 @@ references:
   name: CodeNamespace
   nameWithType: CodeNamespace
   fullName: System.CodeDom.CodeNamespace
-- uid: System.IO.TextWriter
-  parent: System.IO
-  isExternal: true
-  name: TextWriter
-  nameWithType: TextWriter
-  fullName: System.IO.TextWriter
-- uid: System.CodeDom.Compiler.CodeGeneratorOptions
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: CodeGeneratorOptions
-  nameWithType: CodeGeneratorOptions
-  fullName: System.CodeDom.Compiler.CodeGeneratorOptions
 - uid: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromStatement(System.CodeDom.CodeStatement,System.IO.TextWriter,System.CodeDom.Compiler.CodeGeneratorOptions)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1297,18 +1370,6 @@ references:
   name: CodeStatement
   nameWithType: CodeStatement
   fullName: System.CodeDom.CodeStatement
-- uid: System.IO.TextWriter
-  parent: System.IO
-  isExternal: true
-  name: TextWriter
-  nameWithType: TextWriter
-  fullName: System.IO.TextWriter
-- uid: System.CodeDom.Compiler.CodeGeneratorOptions
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: CodeGeneratorOptions
-  nameWithType: CodeGeneratorOptions
-  fullName: System.CodeDom.Compiler.CodeGeneratorOptions
 - uid: System.CodeDom.Compiler.CodeDomProvider.GenerateCodeFromType(System.CodeDom.CodeTypeDeclaration,System.IO.TextWriter,System.CodeDom.Compiler.CodeGeneratorOptions)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1321,30 +1382,26 @@ references:
   name: CodeTypeDeclaration
   nameWithType: CodeTypeDeclaration
   fullName: System.CodeDom.CodeTypeDeclaration
-- uid: System.IO.TextWriter
-  parent: System.IO
-  isExternal: true
-  name: TextWriter
-  nameWithType: TextWriter
-  fullName: System.IO.TextWriter
-- uid: System.CodeDom.Compiler.CodeGeneratorOptions
-  parent: System.CodeDom.Compiler
-  isExternal: false
-  name: CodeGeneratorOptions
-  nameWithType: CodeGeneratorOptions
-  fullName: System.CodeDom.Compiler.CodeGeneratorOptions
 - uid: System.CodeDom.Compiler.CodeDomProvider.GetAllCompilerInfo
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
   name: GetAllCompilerInfo()
   nameWithType: CodeDomProvider.GetAllCompilerInfo()
   fullName: System.CodeDom.Compiler.CodeDomProvider.GetAllCompilerInfo()
-- uid: System.CodeDom.Compiler.CompilerInfo
+- uid: System.CodeDom.Compiler.CompilerInfo[]
   parent: System.CodeDom.Compiler
   isExternal: false
   name: CompilerInfo
   nameWithType: CompilerInfo
   fullName: System.CodeDom.Compiler.CompilerInfo[]
+  spec.csharp:
+  - uid: System.CodeDom.Compiler.CompilerInfo
+    name: CompilerInfo
+    nameWithType: CompilerInfo
+    fullName: CompilerInfo[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.CodeDom.Compiler.CodeDomProvider.GetCompilerInfo(System.String)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1357,12 +1414,6 @@ references:
   name: CompilerInfo
   nameWithType: CompilerInfo
   fullName: System.CodeDom.Compiler.CompilerInfo
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.Compiler.CodeDomProvider.GetConverter(System.Type)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1387,30 +1438,12 @@ references:
   name: GetLanguageFromExtension(String)
   nameWithType: CodeDomProvider.GetLanguageFromExtension(String)
   fullName: System.CodeDom.Compiler.CodeDomProvider.GetLanguageFromExtension(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.Compiler.CodeDomProvider.GetTypeOutput(System.CodeDom.CodeTypeReference)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
   name: GetTypeOutput(CodeTypeReference)
   nameWithType: CodeDomProvider.GetTypeOutput(CodeTypeReference)
   fullName: System.CodeDom.Compiler.CodeDomProvider.GetTypeOutput(CodeTypeReference)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.CodeTypeReference
   parent: System.CodeDom
   isExternal: false
@@ -1429,48 +1462,18 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.Compiler.CodeDomProvider.IsDefinedLanguage(System.String)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
   name: IsDefinedLanguage(String)
   nameWithType: CodeDomProvider.IsDefinedLanguage(String)
   fullName: System.CodeDom.Compiler.CodeDomProvider.IsDefinedLanguage(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.Compiler.CodeDomProvider.IsValidIdentifier(System.String)
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
   name: IsValidIdentifier(String)
   nameWithType: CodeDomProvider.IsValidIdentifier(String)
   fullName: System.CodeDom.Compiler.CodeDomProvider.IsValidIdentifier(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.CodeDom.Compiler.CodeDomProvider.LanguageOptions
   parent: System.CodeDom.Compiler.CodeDomProvider
   isExternal: false
@@ -1489,12 +1492,6 @@ references:
   name: Parse(TextReader)
   nameWithType: CodeDomProvider.Parse(TextReader)
   fullName: System.CodeDom.Compiler.CodeDomProvider.Parse(TextReader)
-- uid: System.CodeDom.CodeCompileUnit
-  parent: System.CodeDom
-  isExternal: false
-  name: CodeCompileUnit
-  nameWithType: CodeCompileUnit
-  fullName: System.CodeDom.CodeCompileUnit
 - uid: System.IO.TextReader
   parent: System.IO
   isExternal: true
@@ -1507,12 +1504,6 @@ references:
   name: Supports(GeneratorSupport)
   nameWithType: CodeDomProvider.Supports(GeneratorSupport)
   fullName: System.CodeDom.Compiler.CodeDomProvider.Supports(GeneratorSupport)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.CodeDom.Compiler.GeneratorSupport
   parent: System.CodeDom.Compiler
   isExternal: false

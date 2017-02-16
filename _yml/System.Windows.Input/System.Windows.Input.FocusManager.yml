@@ -22,8 +22,8 @@ items:
   nameWithType: FocusManager
   fullName: System.Windows.Input.FocusManager
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a set of static methods, attached properties, and events for determining and setting focus scopes and for setting the focused element within the scope.
+  remarks: "In [!INCLUDE[TLA#tla_wpf](../../add/includes/tlasharptla-wpf-md.md)] there are two concepts concerning focus: keyboard focus and logical focus.  \n  \n Keyboard focus pertains to the element which is currently receiving keyboard input.  There can be only one element with keyboard focus.  This element with keyboard focus has <xref:System.Windows.IInputElement.IsKeyboardFocused%2A> set to `true`.  <xref:System.Windows.Input.Keyboard.FocusedElement%2A?displayProperty=fullName> returns the element with keyboard focus.  \n  \n Logical focus pertains to the <xref:System.Windows.Input.FocusManager.FocusedElement%2A?displayProperty=fullName> within a specific focus scope.  \n  \n A focus scope is a container element that keeps track of the <xref:System.Windows.Input.FocusManager.FocusedElement%2A?displayProperty=fullName> within its scope.  By default, the <xref:System.Windows.Window> class is a focus scope as are the <xref:System.Windows.Controls.Menu>, <xref:System.Windows.Controls.ContextMenu>, and <xref:System.Windows.Controls.ToolBar> classes.  An element which is a focus scope has <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> set to `true`.  \n  \n There can be multiple elements with logical focus, but there can only be one element with logical focus within a single focus scope.  An element with logical focus does not necessarily have keyboard focus, but an element with keyboard focus will have logical focus.  It is possible to define a focus scope within a focus scope.  In this case, both the parent focus scope and the child focus scope can have a <xref:System.Windows.Input.FocusManager.FocusedElement%2A?displayProperty=fullName>.  \n  \n The following scenario illustrates how keyboard focus and logical focus change in a [!INCLUDE[TLA#tla_wpf](../../add/includes/tlasharptla-wpf-md.md)] application that has a <xref:System.Windows.Window> with a <xref:System.Windows.Controls.TextBox> and a <xref:System.Windows.Controls.Menu> which has a <xref:System.Windows.Controls.MenuItem>.  When keyboard focus changes from the <xref:System.Windows.Controls.TextBox> to the <xref:System.Windows.Controls.MenuItem>, the <xref:System.Windows.Controls.TextBox> losses keyboard focus but retains logical focus for the <xref:System.Windows.Window> focus scope.  The <xref:System.Windows.Controls.MenuItem> obtains keyboard focus and obtains logical focus for the <xref:System.Windows.Controls.Menu> focus scope.  When keyboard focus returns to the root <xref:System.Windows.Window>, the element in <xref:System.Windows.Window> focus scope with logical focus will obtain keyboard focus, which in this case is the <xref:System.Windows.Controls.TextBox>.  The <xref:System.Windows.Controls.TextBox> now has keyboard focus and logical focus.  The <xref:System.Windows.Controls.MenuItem> loses keyboard focus, but retains logical focus for the <xref:System.Windows.Controls.Menu> focus scope.  \n  \n The default value of <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> on a <xref:System.Windows.Window>, <xref:System.Windows.Controls.Menu>, <xref:System.Windows.Controls.ToolBar>, and <xref:System.Windows.Controls.ContextMenu> is `true`.  \n  \n For more information on focus, see the [Input Overview](../Topic/Input%20Overview.md) and the [Focus Overview](../Topic/Focus%20Overview.md)."
   syntax:
     content: public static class FocusManager
   inheritance:
@@ -46,18 +46,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a handler for the <xref:System.Windows.Input.FocusManager.GotFocus> attached event.
   syntax:
     content: public static void AddGotFocusHandler (System.Windows.DependencyObject element, System.Windows.RoutedEventHandler handler);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The  or  that listens to this event.
     - id: handler
       type: System.Windows.RoutedEventHandler
-      description: To be added.
+      description: The event handler to be added.
   overload: System.Windows.Input.FocusManager.AddGotFocusHandler*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -74,18 +74,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a handler for the <xref:System.Windows.Input.FocusManager.LostFocus> attached event.
   syntax:
     content: public static void AddLostFocusHandler (System.Windows.DependencyObject element, System.Windows.RoutedEventHandler handler);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The  or  that listens to this event.
     - id: handler
       type: System.Windows.RoutedEventHandler
-      description: To be added.
+      description: The event handler to be added.
   overload: System.Windows.Input.FocusManager.AddLostFocusHandler*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -102,13 +102,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Identifies the <xref:System.Windows.Input.FocusManager.FocusedElement%2A> attached property.
   syntax:
     content: public static readonly System.Windows.DependencyProperty FocusedElementProperty;
     return:
       type: System.Windows.DependencyProperty
-      description: To be added.
+      description: The identifier for the <xref:System.Windows.Input.FocusManager.FocusedElement%2A> attached property.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -125,18 +125,24 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the element with logical focus within the specified focus scope.
+  remarks: "The <xref:System.Windows.Input.FocusManager.FocusedElement%2A> is the element which has logical focus for a specific focus scope.  This object may or may not have keyboard focus.  Keyboard focus refers to the element that receives keyboard input.  For more information on focus, keyboard focus, and logical focus, see the [Input Overview](../Topic/Input%20Overview.md).  \n  \n If `element` is not a focus scope, this method will return `null`.  \n  \n Use <xref:System.Windows.Input.FocusManager.SetFocusedElement%2A>, to specify the element with logical focus within a specified focus scope."
+  example:
+  - "The following example sets the element with logical focus by using the <xref:System.Windows.Input.FocusManager.SetFocusedElement%2A> and it gets the element with logical focus by using the GetFocusedElement.  \n  \n [!code-cs[focussnippets#FocusGetSetFocusedElement](../../add/codesnippet/CSharp/FocusSnippets/Window1.xaml.cs#focusgetsetfocusedelement)]\n [!code-vb[focussnippets#FocusGetSetFocusedElement](../../add/codesnippet/VisualBasic/focussnippets/window1.xaml.vb#focusgetsetfocusedelement)]"
   syntax:
     content: public static System.Windows.IInputElement GetFocusedElement (System.Windows.DependencyObject element);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The element with logical focus in the specified focus scope.
     return:
       type: System.Windows.IInputElement
-      description: To be added.
+      description: The element in the specified focus scope with logical focus.
   overload: System.Windows.Input.FocusManager.GetFocusedElement*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    element is ."
   platform:
   - net-11
   - net-20
@@ -153,18 +159,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines the closest ancestor of the specified element that has <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> set to .
+  remarks: "The default value of <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> on a <xref:System.Windows.Window>, <xref:System.Windows.Controls.Menu>, <xref:System.Windows.Controls.ToolBar>, <xref:System.Windows.Controls.ContextMenu> is `true`.  \n  \n A focus scope is a container element that keeps track of the <xref:System.Windows.Input.FocusManager.FocusedElement%2A?displayProperty=fullName> within its scope.  By default, the <xref:System.Windows.Window> class is a focus scope as are the <xref:System.Windows.Controls.Menu>, <xref:System.Windows.Controls.ContextMenu>, and <xref:System.Windows.Controls.ToolBar> classes.  An element which is a focus scope has <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> set to `true`.  \n  \n For more information on focus, keyboard focus, and logical focus, see the [Input Overview](../Topic/Input%20Overview.md)."
   syntax:
     content: public static System.Windows.DependencyObject GetFocusScope (System.Windows.DependencyObject element);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The element to get the closest focus scope for.
     return:
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The focus scope for the specified element.
   overload: System.Windows.Input.FocusManager.GetFocusScope*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    element is ."
   platform:
   - net-11
   - net-20
@@ -181,18 +191,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the specified  is a focus scope.
+  remarks: "A focus scope is a container element that keeps track of the <xref:System.Windows.Input.FocusManager.FocusedElement%2A?displayProperty=fullName> within its scope.  By default, the <xref:System.Windows.Window> class is a focus scope as are the <xref:System.Windows.Controls.Menu>, <xref:System.Windows.Controls.ContextMenu>, and <xref:System.Windows.Controls.ToolBar> classes.  An element which is a focus scope has <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> set to `true`.  \n  \n For more information on focus, keyboard focus, and logical focus, see the [Input Overview](../Topic/Input%20Overview.md)."
   syntax:
     content: public static bool GetIsFocusScope (System.Windows.DependencyObject element);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The element from which to read the attached property.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> is set to  on the specified element; otherwise, .
   overload: System.Windows.Input.FocusManager.GetIsFocusScope*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -209,13 +220,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Identifies the <xref:System.Windows.Input.FocusManager.GotFocus> attached event.
   syntax:
     content: public static readonly System.Windows.RoutedEvent GotFocusEvent;
     return:
       type: System.Windows.RoutedEvent
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -232,13 +243,14 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Identifies the <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> attached property.
+  remarks: "The default value of <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> on a <xref:System.Windows.Window>, <xref:System.Windows.Controls.Menu>, <xref:System.Windows.Controls.ToolBar>, <xref:System.Windows.Controls.ContextMenu> is `true`.  \n  \n A focus scope is a container element that keeps track of the <xref:System.Windows.Input.FocusManager.FocusedElement%2A?displayProperty=fullName> within its scope.  By default, the <xref:System.Windows.Window> class is a focus scope as are the <xref:System.Windows.Controls.Menu>, <xref:System.Windows.Controls.ContextMenu>, and <xref:System.Windows.Controls.ToolBar> classes.  An element which is a focus scope has <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> set to `true`.  \n  \n For more information on focus, keyboard focus, and logical focus, see the [Input Overview](../Topic/Input%20Overview.md)."
   syntax:
     content: public static readonly System.Windows.DependencyProperty IsFocusScopeProperty;
     return:
       type: System.Windows.DependencyProperty
-      description: To be added.
+      description: The identifier for the <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> attached property.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -255,13 +267,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Identifies the <xref:System.Windows.Input.FocusManager.LostFocus> attached event.
   syntax:
     content: public static readonly System.Windows.RoutedEvent LostFocusEvent;
     return:
       type: System.Windows.RoutedEvent
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -278,18 +290,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes a handler for the <xref:System.Windows.Input.FocusManager.GotFocus> attached event.
   syntax:
     content: public static void RemoveGotFocusHandler (System.Windows.DependencyObject element, System.Windows.RoutedEventHandler handler);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The  or  that listens to this event.
     - id: handler
       type: System.Windows.RoutedEventHandler
-      description: To be added.
+      description: The event handler to be removed.
   overload: System.Windows.Input.FocusManager.RemoveGotFocusHandler*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -306,18 +318,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes a handler for the <xref:System.Windows.Input.FocusManager.LostFocus> attached event.
   syntax:
     content: public static void RemoveLostFocusHandler (System.Windows.DependencyObject element, System.Windows.RoutedEventHandler handler);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The  or  that listens to this event.
     - id: handler
       type: System.Windows.RoutedEventHandler
-      description: To be added.
+      description: The event handler to be removed.
   overload: System.Windows.Input.FocusManager.RemoveLostFocusHandler*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -334,18 +346,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets logical focus on the specified element.
+  remarks: "The <xref:System.Windows.Input.FocusManager.FocusedElement%2A> is the element which has logical focus for the specific focus scope.  This object may or may not have keyboard focus.  Keyboard focus refers to the element that receives keyboard input.  For more information on focus, keyboard focus, and logical focus, see the [Input Overview](../Topic/Input%20Overview.md).  \n  \n It is possible to specify a focus scope that is an ancestor of the focus scope the element is in.  For example, if a <xref:System.Windows.Controls.StackPanel> is a focus scope and its parent <xref:System.Windows.Window> is a focus scope, a <xref:System.Windows.Controls.TextBox> child of the <xref:System.Windows.Controls.StackPanel> could specify the <xref:System.Windows.Window> as the focus scope when calling SetFocusedElement.  The <xref:System.Windows.Controls.TextBox> is then <xref:System.Windows.Input.FocusManager.FocusedElement%2A> for both the <xref:System.Windows.Window> focus scope and the <xref:System.Windows.Controls.StackPanel> focus scope.  \n  \n SetFocusedElement will give the specified element logical focus in the specified focus scope and will attempt to give the element keyboard focus."
+  example:
+  - "The following example sets the element with logical focus by using the SetFocusedElement and it gets the element with logical focus by using the <xref:System.Windows.Input.FocusManager.GetFocusedElement%2A>.  \n  \n [!code-cs[focussnippets#FocusGetSetFocusedElement](../../add/codesnippet/CSharp/FocusSnippets/Window1.xaml.cs#focusgetsetfocusedelement)]\n [!code-vb[focussnippets#FocusGetSetFocusedElement](../../add/codesnippet/VisualBasic/focussnippets/window1.xaml.vb#focusgetsetfocusedelement)]"
   syntax:
     content: public static void SetFocusedElement (System.Windows.DependencyObject element, System.Windows.IInputElement value);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The focus scope in which to make the specified element the <xref:System.Windows.Input.FocusManager.FocusedElement%2A>.
     - id: value
       type: System.Windows.IInputElement
-      description: To be added.
+      description: The element to give logical focus to.
   overload: System.Windows.Input.FocusManager.SetFocusedElement*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -362,18 +377,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the specified  as a focus scope.
+  remarks: "A focus scope is a container element that keeps track of the <xref:System.Windows.Input.FocusManager.FocusedElement%2A?displayProperty=fullName> within its scope.  By default, the <xref:System.Windows.Window> class is a focus scope as are the <xref:System.Windows.Controls.Menu>, <xref:System.Windows.Controls.ContextMenu>, and <xref:System.Windows.Controls.ToolBar> classes.  An element which is a focus scope has <xref:System.Windows.Input.FocusManager.IsFocusScope%2A> set to `true`.  \n  \n For more information on focus, keyboard focus, and logical focus, see the [Input Overview](../Topic/Input%20Overview.md)."
+  example:
+  - "The follow example makes an element a focus scope by using SetIsFocusScope.  \n  \n [!code-cs[focussnippets#FocusSetIsFocusScope](../../add/codesnippet/CSharp/FocusSnippets/Window1.xaml.cs#focussetisfocusscope)]\n [!code-vb[focussnippets#FocusSetIsFocusScope](../../add/codesnippet/VisualBasic/focussnippets/window1.xaml.vb#focussetisfocusscope)]"
   syntax:
     content: public static void SetIsFocusScope (System.Windows.DependencyObject element, bool value);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The element to make a focus scope.
     - id: value
       type: System.Boolean
-      description: To be added.
+      description: "\n     if `element` is a focus scope; otherwise, ."
   overload: System.Windows.Input.FocusManager.SetIsFocusScope*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -406,18 +424,6 @@ references:
   name: AddLostFocusHandler(DependencyObject,RoutedEventHandler)
   nameWithType: FocusManager.AddLostFocusHandler(DependencyObject,RoutedEventHandler)
   fullName: System.Windows.Input.FocusManager.AddLostFocusHandler(DependencyObject,RoutedEventHandler)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.Windows.RoutedEventHandler
-  parent: System.Windows
-  isExternal: false
-  name: RoutedEventHandler
-  nameWithType: RoutedEventHandler
-  fullName: System.Windows.RoutedEventHandler
 - uid: System.Windows.Input.FocusManager.FocusedElementProperty
   parent: System.Windows.Input.FocusManager
   isExternal: false
@@ -442,30 +448,12 @@ references:
   name: IInputElement
   nameWithType: IInputElement
   fullName: System.Windows.IInputElement
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
 - uid: System.Windows.Input.FocusManager.GetFocusScope(System.Windows.DependencyObject)
   parent: System.Windows.Input.FocusManager
   isExternal: false
   name: GetFocusScope(DependencyObject)
   nameWithType: FocusManager.GetFocusScope(DependencyObject)
   fullName: System.Windows.Input.FocusManager.GetFocusScope(DependencyObject)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
 - uid: System.Windows.Input.FocusManager.GetIsFocusScope(System.Windows.DependencyObject)
   parent: System.Windows.Input.FocusManager
   isExternal: false
@@ -478,12 +466,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
 - uid: System.Windows.Input.FocusManager.GotFocusEvent
   parent: System.Windows.Input.FocusManager
   isExternal: false
@@ -502,96 +484,36 @@ references:
   name: IsFocusScopeProperty
   nameWithType: FocusManager.IsFocusScopeProperty
   fullName: System.Windows.Input.FocusManager.IsFocusScopeProperty
-- uid: System.Windows.DependencyProperty
-  parent: System.Windows
-  isExternal: false
-  name: DependencyProperty
-  nameWithType: DependencyProperty
-  fullName: System.Windows.DependencyProperty
 - uid: System.Windows.Input.FocusManager.LostFocusEvent
   parent: System.Windows.Input.FocusManager
   isExternal: false
   name: LostFocusEvent
   nameWithType: FocusManager.LostFocusEvent
   fullName: System.Windows.Input.FocusManager.LostFocusEvent
-- uid: System.Windows.RoutedEvent
-  parent: System.Windows
-  isExternal: false
-  name: RoutedEvent
-  nameWithType: RoutedEvent
-  fullName: System.Windows.RoutedEvent
 - uid: System.Windows.Input.FocusManager.RemoveGotFocusHandler(System.Windows.DependencyObject,System.Windows.RoutedEventHandler)
   parent: System.Windows.Input.FocusManager
   isExternal: false
   name: RemoveGotFocusHandler(DependencyObject,RoutedEventHandler)
   nameWithType: FocusManager.RemoveGotFocusHandler(DependencyObject,RoutedEventHandler)
   fullName: System.Windows.Input.FocusManager.RemoveGotFocusHandler(DependencyObject,RoutedEventHandler)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.Windows.RoutedEventHandler
-  parent: System.Windows
-  isExternal: false
-  name: RoutedEventHandler
-  nameWithType: RoutedEventHandler
-  fullName: System.Windows.RoutedEventHandler
 - uid: System.Windows.Input.FocusManager.RemoveLostFocusHandler(System.Windows.DependencyObject,System.Windows.RoutedEventHandler)
   parent: System.Windows.Input.FocusManager
   isExternal: false
   name: RemoveLostFocusHandler(DependencyObject,RoutedEventHandler)
   nameWithType: FocusManager.RemoveLostFocusHandler(DependencyObject,RoutedEventHandler)
   fullName: System.Windows.Input.FocusManager.RemoveLostFocusHandler(DependencyObject,RoutedEventHandler)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.Windows.RoutedEventHandler
-  parent: System.Windows
-  isExternal: false
-  name: RoutedEventHandler
-  nameWithType: RoutedEventHandler
-  fullName: System.Windows.RoutedEventHandler
 - uid: System.Windows.Input.FocusManager.SetFocusedElement(System.Windows.DependencyObject,System.Windows.IInputElement)
   parent: System.Windows.Input.FocusManager
   isExternal: false
   name: SetFocusedElement(DependencyObject,IInputElement)
   nameWithType: FocusManager.SetFocusedElement(DependencyObject,IInputElement)
   fullName: System.Windows.Input.FocusManager.SetFocusedElement(DependencyObject,IInputElement)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.Windows.IInputElement
-  parent: System.Windows
-  isExternal: false
-  name: IInputElement
-  nameWithType: IInputElement
-  fullName: System.Windows.IInputElement
 - uid: System.Windows.Input.FocusManager.SetIsFocusScope(System.Windows.DependencyObject,System.Boolean)
   parent: System.Windows.Input.FocusManager
   isExternal: false
   name: SetIsFocusScope(DependencyObject,Boolean)
   nameWithType: FocusManager.SetIsFocusScope(DependencyObject,Boolean)
   fullName: System.Windows.Input.FocusManager.SetIsFocusScope(DependencyObject,Boolean)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Input.FocusManager.AddGotFocusHandler*
   parent: System.Windows.Input.FocusManager
   isExternal: false

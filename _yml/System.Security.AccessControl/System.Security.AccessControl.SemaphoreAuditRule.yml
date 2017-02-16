@@ -11,8 +11,8 @@ items:
   nameWithType: SemaphoreAuditRule
   fullName: System.Security.AccessControl.SemaphoreAuditRule
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a set of access rights to be audited for a user or group. This class cannot be inherited.
+  remarks: "The SemaphoreAuditRule class is one of a set of classes that the .NET Framework provides for managing Windows access control security on named system semaphores. For an overview of these classes and their relationship to the underlying Windows access control structures, see <xref:System.Security.AccessControl.SemaphoreSecurity>.  \n  \n> [!NOTE]\n>  Windows access control security is meaningful only for named system semaphores. If a <xref:System.Threading.Semaphore> object represents a local semaphore, access control is irrelevant.  \n  \n To get a list of the audit rules currently applied to a named semaphore, use the <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=fullName> method to get a <xref:System.Security.AccessControl.SemaphoreSecurity> object, and then use its <xref:System.Security.AccessControl.CommonObjectSecurity.GetAuditRules%2A> method to obtain a collection of SemaphoreAuditRule objects.  \n  \n SemaphoreAuditRule objects do not map one-to-one with access control entries in the underlying discretionary access control list (DACL). When you get the set of all audit rules for a semaphore, the set contains the minimum number of rules currently required to express all the access control entries.  \n  \n> [!NOTE]\n>  The underlying access control entries change as you apply and remove rules. The information in rules is merged if possible, to maintain the smallest number of access control entries. Thus, when you read the current list of rules, it might not look exactly like the list of all the rules you have added.  \n  \n Use SemaphoreAuditRule objects to specify access rights to be audited for a user or group. To apply a rule to a named system semaphore, use the <xref:System.Threading.Semaphore.GetAccessControl%2A?displayProperty=fullName> method to get the <xref:System.Security.AccessControl.SemaphoreSecurity> object. Modify the <xref:System.Security.AccessControl.SemaphoreSecurity> object by using its methods to add the rule, and then use the <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=fullName> method to reattach the security object.  \n  \n> [!IMPORTANT]\n>  Changes you make to a <xref:System.Security.AccessControl.SemaphoreSecurity> object do not affect the access levels of the named semaphore until you call the <xref:System.Threading.Semaphore.SetAccessControl%2A?displayProperty=fullName> method to assign the altered security object to the named semaphore.  \n  \n SemaphoreAuditRule objects are immutable. Security for a semaphore is modified using the methods of the <xref:System.Security.AccessControl.SemaphoreSecurity> class to add or remove rules; as you do this, the underlying access control entries are modified.  \n  \n> [!NOTE]\n>  Security on synchronization objects is not supported for Windows 98 or Windows Millennium Edition."
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(false)]
@@ -46,21 +46,31 @@ items:
   assemblies:
   - System
   namespace: System.Security.AccessControl
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class, specifying the user or group to audit, the rights to audit, and whether to audit success, failure, or both.
+  remarks: To create an <xref:System.Security.Principal.NTAccount> object from a string representing a user or group name, use the <xref:System.Security.Principal.NTAccount.%23ctor%28System.String%29?displayProperty=fullName> constructor.
   syntax:
     content: public SemaphoreAuditRule (System.Security.Principal.IdentityReference identity, System.Security.AccessControl.SemaphoreRights eventRights, System.Security.AccessControl.AuditFlags flags);
     parameters:
     - id: identity
       type: System.Security.Principal.IdentityReference
-      description: To be added.
+      description: The user or group the rule applies to. Must be of type  or a type such as  that can be converted to type .
     - id: eventRights
       type: System.Security.AccessControl.SemaphoreRights
-      description: To be added.
+      description: A bitwise combination of  values specifying the kinds of access to audit.
     - id: flags
       type: System.Security.AccessControl.AuditFlags
-      description: To be added.
+      description: A bitwise combination of  values specifying whether to audit success, failure, or both.
   overload: System.Security.AccessControl.SemaphoreAuditRule.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    eventRights specifies an invalid value.  \n  \n -or-  \n  \n flags specifies an invalid value."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    identity is .  \n  \n -or-  \n  \n eventRights is zero."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    identity is neither of type  nor of a type such as  that can be converted to type ."
   platform:
   - net-11
   - net-20
@@ -77,14 +87,15 @@ items:
   assemblies:
   - System
   namespace: System.Security.AccessControl
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the access rights affected by the audit rule.
+  remarks: <xref:System.Security.AccessControl.SemaphoreAuditRule> objects are immutable. You can create a new audit rule representing a different user, different rights, or a different combination of <xref:System.Security.AccessControl.AuditFlags> values, but you cannot modify an existing audit rule.
   syntax:
     content: public System.Security.AccessControl.SemaphoreRights SemaphoreRights { get; }
     return:
       type: System.Security.AccessControl.SemaphoreRights
-      description: To be added.
+      description: A bitwise combination of  values that indicates the rights affected by the audit rule.
   overload: System.Security.AccessControl.SemaphoreAuditRule.SemaphoreRights*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -123,12 +134,6 @@ references:
   name: SemaphoreRights
   nameWithType: SemaphoreAuditRule.SemaphoreRights
   fullName: System.Security.AccessControl.SemaphoreAuditRule.SemaphoreRights
-- uid: System.Security.AccessControl.SemaphoreRights
-  parent: System.Security.AccessControl
-  isExternal: false
-  name: SemaphoreRights
-  nameWithType: SemaphoreRights
-  fullName: System.Security.AccessControl.SemaphoreRights
 - uid: System.Security.AccessControl.SemaphoreAuditRule.#ctor*
   parent: System.Security.AccessControl.SemaphoreAuditRule
   isExternal: false

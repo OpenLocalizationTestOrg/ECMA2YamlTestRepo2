@@ -21,8 +21,10 @@ items:
   nameWithType: ObjectStateFormatter
   fullName: System.Web.UI.ObjectStateFormatter
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes and deserializes object graphs that represent the state of an object. This class cannot be inherited.
+  remarks: "The ObjectStateFormatter class serializes and deserializes object state graphs in a compact format.  \n  \n ObjectStateFormatter is used by the <xref:System.Web.UI.PageStatePersister> class and classes that derive from it to serialize view state and control state. It is also used by the <xref:System.Web.UI.LosFormatter> class to provide object state graph formatting for various parts of the ASP.NET infrastructure.  \n  \n The ObjectStateFormatter class is optimized to serialize and format many common .NET Framework reference types, as well as constants. The following table lists the types that are optimized.  \n  \n|||||  \n|-|-|-|-|  \n|<xref:System.Array>|<xref:System.DateTime>|<xref:System.Int16>|<xref:System.String>|  \n|<xref:System.Collections.ArrayList>|<xref:System.Double>|<xref:System.Int32>|String []|  \n|<xref:System.Boolean>|<xref:System.Enum>|null (`Nothing`)|<xref:System.String.Empty?displayProperty=fullName>|  \n|<xref:System.Byte>|<xref:System.Collections.Hashtable>|<xref:System.Web.UI.Pair>|<xref:System.Web.UI.Triplet>|  \n|<xref:System.Char>|<xref:System.Collections.Specialized.HybridDictionary>|<xref:System.Single>|<xref:System.Type>|  \n|<xref:System.Drawing.Color>|<xref:System.Collections.IDictionary>|||  \n  \n Additionally, while conventional string types and string arrays are written to and from a serialized binary writer unaltered, some strings are optimized by creating internal string tables. Strings are optimized using these tables if the string has an associated <xref:System.ComponentModel.TypeConverter> object or if the string is actually an instance of the <xref:System.Web.UI.IndexedString> class.  \n  \n Other types not listed above are binary-serialized using a <xref:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter> object if they implement the <xref:System.Runtime.Serialization.ISerializable> interface or are decorated with the <xref:System.SerializableAttribute> attribute. The ObjectStateFormatter class is not optimized for any of these serializable types.  \n  \n If the ObjectStateFormatter class encounters a type that is not serializable, an <xref:System.ArgumentException> exception is thrown."
+  example:
+  - "The following code example demonstrates how a class that derives from the <xref:System.Web.UI.PageStatePersister> class accesses the <xref:System.Web.UI.PageStatePersister.StateFormatter%2A> property to retrieve an ObjectStateFormatter instance to serialize view state and control state to a stream. This code example is part of a larger example provided for the <xref:System.Web.UI.PageStatePersister> class.  \n  \n [!code-cs[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#3](../../add/codesnippet/CSharp/t-system.web.ui.objectst_1.cs)]\n [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#3](../../add/codesnippet/VisualBasic/t-system.web.ui.objectst_1.vb)]"
   syntax:
     content: 'public sealed class ObjectStateFormatter : System.Runtime.Serialization.IFormatter'
   inheritance:
@@ -46,12 +48,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public ObjectStateFormatter ();
     parameters: []
   overload: System.Web.UI.ObjectStateFormatter.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -68,18 +70,27 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Deserializes an object state graph from its binary-serialized form that is contained in the specified <xref:System.IO.Stream> object.
+  remarks: "Any object state graph that is serialized with the <xref:System.Web.UI.ObjectStateFormatter.Serialize%2A> method can be deserialized with the <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A> method. The Deserialize method is used to restore an object state graph stored in a <xref:System.IO.Stream>, such as a <xref:System.IO.FileStream>.  \n  \n> [!IMPORTANT]\n>  Calling this method with untrusted data is a security risk. Call this method only with trusted data. For more information, see [Untrusted Data Security Risks](http://go.microsoft.com/fwlink/?LinkId=330378)."
+  example:
+  - "The following code example demonstrates how a class that derives from the <xref:System.Web.UI.PageStatePersister> class initializes the <xref:System.Web.UI.PageStatePersister.ViewState%2A> collection. In this example, the <xref:System.Web.UI.PageStatePersister.ViewState%2A> collection has been assigned to the <xref:System.Web.UI.Pair.First> field of a <xref:System.Web.UI.Pair> object, and serialized to a file using the <xref:System.Web.UI.ObjectStateFormatter> class. When the <xref:System.Web.UI.PageStatePersister.Load%2A> method is called, the <xref:System.Web.UI.LosFormatter.Deserialize%28System.IO.Stream%29> method is used to deserialize view state from the file, and the <xref:System.Web.UI.PageStatePersister.ViewState%2A> property is initialized. This code example is part of a larger example provided for the <xref:System.Web.UI.PageStatePersister> class.  \n  \n [!code-cs[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#2](../../add/codesnippet/CSharp/m-system.web.ui.objectst_0_1.cs)]\n [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#2](../../add/codesnippet/VisualBasic/m-system.web.ui.objectst_0_1.vb)]"
   syntax:
     content: public object Deserialize (System.IO.Stream inputStream);
     parameters:
     - id: inputStream
       type: System.IO.Stream
-      description: To be added.
+      description: A <xref:System.IO.Stream> that the  deserializes into an initialized .
     return:
       type: System.Object
-      description: To be added.
+      description: An object that represents a deserialized object state graph.
   overload: System.Web.UI.ObjectStateFormatter.Deserialize*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The specified inputStream is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An exception occurs during deserialization of the <xref:System.IO.Stream>. The exception message is appended to the message of the <xref:System.ArgumentException>.
   platform:
   - net-11
   - net-20
@@ -96,18 +107,30 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Deserializes an object state graph from its serialized base64-encoded string form.
+  remarks: "Any object state graph that is serialized with the <xref:System.Web.UI.ObjectStateFormatter.Serialize%2A> method can be deserialized with the <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A> method. The Deserialize method is used to restore an object state graph stored in base64-encoded string form.  \n  \n> [!IMPORTANT]\n>  Calling this method with untrusted data is a security risk. Call this method only with trusted data. For more information, see [Untrusted Data Security Risks](http://go.microsoft.com/fwlink/?LinkId=330378)."
+  example:
+  - "The following code example demonstrates how to implement a method that deserializes a base64-encoded string and returns an <xref:System.Collections.ICollection> collection of property settings. This code example relies on the property settings having been serialized with the <xref:System.Web.UI.ObjectStateFormatter> class, as shown in the <xref:System.Web.UI.ObjectStateFormatter.Serialize%28System.Object%29> method.  \n  \n [!code-cs[System.Web.UI.ObjectStateFormatter_1#2](../../add/codesnippet/CSharp/m-system.web.ui.objectst_3_1.cs)]\n [!code-vb[System.Web.UI.ObjectStateFormatter_1#2](../../add/codesnippet/VisualBasic/m-system.web.ui.objectst_3_1.vb)]"
   syntax:
     content: public object Deserialize (string inputString);
     parameters:
     - id: inputString
       type: System.String
-      description: To be added.
+      description: A string that the  deserializes into an initialized object.
     return:
       type: System.Object
-      description: To be added.
+      description: An object that represents a deserialized object state graph.
   overload: System.Web.UI.ObjectStateFormatter.Deserialize*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The specified inputString is  or has a <xref:System.String.Length%2A> of 0.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The serialized data is invalid.
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: The machine authentication code (MAC) validation check that is performed when deserializing view state fails.
   platform:
   - net-11
   - net-20
@@ -124,18 +147,21 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes an object state graph to a base64-encoded string.
+  remarks: Any object graph that is serialized with the <xref:System.Web.UI.ObjectStateFormatter.Serialize%2A> method can be deserialized with the <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A> method. The Serialize method is used to serialize an object state graph to a base64-encoded string form.
+  example:
+  - "The following code example demonstrates how to serialize the values of a set of control properties to a base64-encoded string using the Serialize method. The string can be deserialized at a later time with the <xref:System.Web.UI.ObjectStateFormatter.Deserialize%28System.String%29> method.  \n  \n [!code-cs[System.Web.UI.ObjectStateFormatter_1#1](../../add/codesnippet/CSharp/m-system.web.ui.objectst_2_1.cs)]\n [!code-vb[System.Web.UI.ObjectStateFormatter_1#1](../../add/codesnippet/VisualBasic/m-system.web.ui.objectst_2_1.vb)]"
   syntax:
     content: public string Serialize (object stateGraph);
     parameters:
     - id: stateGraph
       type: System.Object
-      description: To be added.
+      description: The object to serialize.
     return:
       type: System.String
-      description: To be added.
+      description: A base-64 encoded string that represents the serialized object state of the stateGraph parameter.
   overload: System.Web.UI.ObjectStateFormatter.Serialize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -152,18 +178,24 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes an object state graph to the specified <xref:System.IO.Stream> object.
+  remarks: Any object state graph that is serialized with the <xref:System.Web.UI.ObjectStateFormatter.Serialize%2A> method can be deserialized with the <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A> method. The Serialize method is used to serialize an object state graph to a binary <xref:System.IO.Stream> object.
+  example:
+  - "The following code example demonstrates how a class retrieves an <xref:System.Web.UI.ObjectStateFormatter> instance to serialize view state and control state to a stream using the Serialize method. This code example is part of a larger example provided for the <xref:System.Web.UI.PageStatePersister> class.  \n  \n [!code-cs[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#3](../../add/codesnippet/CSharp/m-system.web.ui.objectst_1_1.cs)]\n [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#3](../../add/codesnippet/VisualBasic/m-system.web.ui.objectst_1_1.vb)]"
   syntax:
     content: public void Serialize (System.IO.Stream outputStream, object stateGraph);
     parameters:
     - id: outputStream
       type: System.IO.Stream
-      description: To be added.
+      description: A <xref:System.IO.Stream> to which the  serializes the state of the specified object.
     - id: stateGraph
       type: System.Object
-      description: To be added.
+      description: The object to serialize.
   overload: System.Web.UI.ObjectStateFormatter.Serialize*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The specified inputStream is .
   platform:
   - net-11
   - net-20
@@ -181,14 +213,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Runtime.Serialization.Formatter.Binder%2A?displayProperty=fullName>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.ObjectStateFormatter> instance is cast to an <xref:System.Runtime.Serialization.IFormatter> interface.
   syntax:
     content: System.Runtime.Serialization.SerializationBinder System.Runtime.Serialization.IFormatter.Binder { get; set; }
     return:
       type: System.Runtime.Serialization.SerializationBinder
-      description: To be added.
+      description: The  that performs type lookups during deserialization.
   overload: System.Web.UI.ObjectStateFormatter.System#Runtime#Serialization#IFormatter#Binder*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -206,14 +239,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Runtime.Serialization.IFormatter.Context%2A?displayProperty=fullName>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.ObjectStateFormatter> instance is cast to an <xref:System.Runtime.Serialization.IFormatter> interface.
   syntax:
     content: System.Runtime.Serialization.StreamingContext System.Runtime.Serialization.IFormatter.Context { get; set; }
     return:
       type: System.Runtime.Serialization.StreamingContext
-      description: To be added.
+      description: The <xref:System.Runtime.Serialization.StreamingContext> used for serialization and deserialization.
   overload: System.Web.UI.ObjectStateFormatter.System#Runtime#Serialization#IFormatter#Context*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -231,18 +265,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A?displayProperty=fullName>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.ObjectStateFormatter> instance is cast to an <xref:System.Runtime.Serialization.IFormatter> interface.
   syntax:
     content: object IFormatter.Deserialize (System.IO.Stream serializationStream);
     parameters:
     - id: serializationStream
       type: System.IO.Stream
-      description: To be added.
+      description: The stream that contains the data to deserialize.
     return:
       type: System.Object
-      description: To be added.
+      description: The top object of the deserialized graph.
   overload: System.Web.UI.ObjectStateFormatter.System#Runtime#Serialization#IFormatter#Deserialize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -260,18 +295,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Web.UI.ObjectStateFormatter.Serialize%2A?displayProperty=fullName>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.ObjectStateFormatter> instance is cast to an <xref:System.Runtime.Serialization.IFormatter> interface.
   syntax:
     content: void IFormatter.Serialize (System.IO.Stream serializationStream, object stateGraph);
     parameters:
     - id: serializationStream
       type: System.IO.Stream
-      description: To be added.
+      description: The stream where the formatter puts the serialized data. This stream can reference a variety of backing stores (such as files, network, memory, and so on).
     - id: stateGraph
       type: System.Object
-      description: To be added.
+      description: The object, or root of the object graph, to serialize. All child objects of this root object are automatically serialized.
   overload: System.Web.UI.ObjectStateFormatter.System#Runtime#Serialization#IFormatter#Serialize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -289,14 +325,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see .
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.ObjectStateFormatter> instance is cast to an <xref:System.Runtime.Serialization.IFormatter> interface.
   syntax:
     content: System.Runtime.Serialization.ISurrogateSelector System.Runtime.Serialization.IFormatter.SurrogateSelector { get; set; }
     return:
       type: System.Runtime.Serialization.ISurrogateSelector
-      description: To be added.
+      description: The  used by this formatter.
   overload: System.Web.UI.ObjectStateFormatter.System#Runtime#Serialization#IFormatter#SurrogateSelector*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -314,18 +351,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Web.UI.ObjectStateFormatter.Deserialize%2A?displayProperty=fullName>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.ObjectStateFormatter> instance is cast to an <xref:System.Web.UI.IStateFormatter> interface.
   syntax:
     content: object IStateFormatter.Deserialize (string serializedState);
     parameters:
     - id: serializedState
       type: System.String
-      description: To be added.
+      description: A string that the  deserializes into an initialized object.
     return:
       type: System.Object
-      description: To be added.
+      description: An object that represents the state of an ASP.NET server control.
   overload: System.Web.UI.ObjectStateFormatter.System#Web#UI#IStateFormatter#Deserialize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -343,18 +381,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Web.UI.ObjectStateFormatter.Serialize%2A?displayProperty=fullName>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Web.UI.ObjectStateFormatter> instance is cast to an <xref:System.Web.UI.IStateFormatter> interface.
   syntax:
     content: string IStateFormatter.Serialize (object state);
     parameters:
     - id: state
       type: System.Object
-      description: To be added.
+      description: The object that represents the view state of the Web server control to serialize to string form.
     return:
       type: System.String
-      description: To be added.
+      description: A string that represents a Web server control's view state.
   overload: System.Web.UI.ObjectStateFormatter.System#Web#UI#IStateFormatter#Serialize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -375,12 +414,6 @@ references:
   name: Deserialize(Stream)
   nameWithType: ObjectStateFormatter.Deserialize(Stream)
   fullName: System.Web.UI.ObjectStateFormatter.Deserialize(Stream)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.IO.Stream
   parent: System.IO
   isExternal: true
@@ -393,12 +426,6 @@ references:
   name: Deserialize(String)
   nameWithType: ObjectStateFormatter.Deserialize(String)
   fullName: System.Web.UI.ObjectStateFormatter.Deserialize(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.String
   parent: System
   isExternal: true
@@ -411,36 +438,12 @@ references:
   name: Serialize(Object)
   nameWithType: ObjectStateFormatter.Serialize(Object)
   fullName: System.Web.UI.ObjectStateFormatter.Serialize(Object)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.ObjectStateFormatter.Serialize(System.IO.Stream,System.Object)
   parent: System.Web.UI.ObjectStateFormatter
   isExternal: false
   name: Serialize(Stream,Object)
   nameWithType: ObjectStateFormatter.Serialize(Stream,Object)
   fullName: System.Web.UI.ObjectStateFormatter.Serialize(Stream,Object)
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.ObjectStateFormatter.System#Runtime#Serialization#IFormatter#Binder
   parent: System.Web.UI.ObjectStateFormatter
   isExternal: false
@@ -471,36 +474,12 @@ references:
   name: System.Runtime.Serialization.IFormatter.Deserialize(Stream)
   nameWithType: ObjectStateFormatter.System.Runtime.Serialization.IFormatter.Deserialize(Stream)
   fullName: System.Web.UI.ObjectStateFormatter.System.Runtime.Serialization.IFormatter.Deserialize(Stream)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
 - uid: System.Web.UI.ObjectStateFormatter.System#Runtime#Serialization#IFormatter#Serialize(System.IO.Stream,System.Object)
   parent: System.Web.UI.ObjectStateFormatter
   isExternal: false
   name: System.Runtime.Serialization.IFormatter.Serialize(Stream,Object)
   nameWithType: ObjectStateFormatter.System.Runtime.Serialization.IFormatter.Serialize(Stream,Object)
   fullName: System.Web.UI.ObjectStateFormatter.System.Runtime.Serialization.IFormatter.Serialize(Stream,Object)
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.ObjectStateFormatter.System#Runtime#Serialization#IFormatter#SurrogateSelector
   parent: System.Web.UI.ObjectStateFormatter
   isExternal: false
@@ -519,36 +498,12 @@ references:
   name: System.Web.UI.IStateFormatter.Deserialize(String)
   nameWithType: ObjectStateFormatter.System.Web.UI.IStateFormatter.Deserialize(String)
   fullName: System.Web.UI.ObjectStateFormatter.System.Web.UI.IStateFormatter.Deserialize(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ObjectStateFormatter.System#Web#UI#IStateFormatter#Serialize(System.Object)
   parent: System.Web.UI.ObjectStateFormatter
   isExternal: false
   name: System.Web.UI.IStateFormatter.Serialize(Object)
   nameWithType: ObjectStateFormatter.System.Web.UI.IStateFormatter.Serialize(Object)
   fullName: System.Web.UI.ObjectStateFormatter.System.Web.UI.IStateFormatter.Serialize(Object)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.ObjectStateFormatter.#ctor*
   parent: System.Web.UI.ObjectStateFormatter
   isExternal: false

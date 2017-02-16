@@ -34,8 +34,8 @@ items:
   nameWithType: SqlFileStream
   fullName: System.Data.SqlTypes.SqlFileStream
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Exposes SQL Server data that is stored with the FILESTREAM column attribute as a sequence of bytes.
+  remarks: "The SqlFileStream class is used to work with `varbinary(max)` data stored with the FILESTREAM attribute in a SQL Server 2008 database. You must install the .NET Framework 3.5 SP1 (or later) to use <xref:System.Data.SqlTypes.SqlFileStream> to work with FILESTREAM data.  \n  \n Specifying the FILESTREAM attribute on a `varbinary(max)` column causes SQL Server to store the data in the local NTFS file system instead of in the database file. Transact-SQL statements provide data manipulation capabilities within the server, and Win32 file system interfaces provide streaming access to the data.  \n  \n> [!NOTE]\n>  Individual files stored in a FILESTREAM column cannot be opened directly from the NTFS file system. Streaming FILESTREAM data works only in the context of a SQL Server transaction.  \n  \n The SqlFileStream class is derived from the <xref:System.IO.Stream> class, which represents an abstraction of a sequence of bytes from some arbitrary data source such as a file or a block of memory. You can read from a FILESTREAM by transferring data from a stream into a data structure such as an array of bytes. You can write to a FILESTREAM by transferring the data from a data structure into a stream. You can also seek within the stream, which allows you to query and modify data at the current position within the stream.  \n  \n For conceptual documentation and code examples, see [FILESTREAM Data](../Topic/FILESTREAM%20Data.md).  \n  \n For documentation about setting up and configuring FILESTREAM data on SQL Server,  see [Designing and Implementing FILESTREAM Storage](http://go.microsoft.com/fwlink/?LinkId=121499) in SQL Server 2008 Books Online."
   syntax:
     content: 'public sealed class SqlFileStream : System.IO.Stream'
   inheritance:
@@ -58,21 +58,46 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: If an exception is thrown, any open transactions should be rolled back. Otherwise, data loss can occur.
   syntax:
     content: public SqlFileStream (string path, byte[] transactionContext, System.IO.FileAccess access);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The logical path to the file. The path can be retrieved by using the Transact-SQL Pathname function on the underlying FILESTREAM column in the table.
     - id: transactionContext
       type: System.Byte[]
-      description: To be added.
+      description: The transaction context for the  object. Applications should return the byte array returned by calling the GET_FILESTREAM_TRANSACTION_CONTEXT method.
     - id: access
       type: System.IO.FileAccess
-      description: To be added.
+      description: "The access mode to use when opening the file. Supported  enumeration values are , , and .  \n  \n When using , the  object can be used to read all of the existing data.  \n  \n When using ,  points to a zero byte file. Existing data will be overwritten when the object is closed and the transaction is committed.  \n  \n When using , the  points to a file which has all the existing data in it. The handle is positioned at the beginning of the file. You can use one of the  methods to move the handle position within the file to write or append new data."
   overload: System.Data.SqlTypes.SqlFileStream.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is a null reference, or transactionContext is null."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    path is an empty string (\"\"), contains only white space, or contains one or more invalid characters.  \n  \n path begins with \"\\\\\\\\.\\\\\", for example \"\\\\\\\\.\\PHYSICALDRIVE0 \".  \n  \n The handle returned by the call to NTCreateFile is not of type FILE_TYPE_DISK.  \n  \n options contains an unsupported value."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: The file cannot be found.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: An I/O error occurred.
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have the required permission.
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The specified path is invalid, such as being on an unmapped drive.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: The access requested is not permitted by the operating system for the specified path. This occurs when Write or ReadWrite access is specified, and the file or directory is set for read-only access.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: NtCreateFile fails with error code set to ERROR_SHARING_VIOLATION.
   platform:
   - net-11
   - net-20
@@ -89,27 +114,52 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: If an exception is thrown, any open transactions should be rolled back. Otherwise, data loss can occur.
   syntax:
     content: public SqlFileStream (string path, byte[] transactionContext, System.IO.FileAccess access, System.IO.FileOptions options, long allocationSize);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The logical path to the file. The path can be retrieved by using the Transact-SQL Pathname function on the underlying FILESTREAM column in the table.
     - id: transactionContext
       type: System.Byte[]
-      description: To be added.
+      description: The transaction context for the  object. When set to null, an implicit transaction will be used for the  object. Applications should return the byte array returned by calling the GET_FILESTREAM_TRANSACTION_CONTEXT method.
     - id: access
       type: System.IO.FileAccess
-      description: To be added.
+      description: "The access mode to use when opening the file. Supported  enumeration values are , , and .  \n  \n When using , the  object can be used to read all of the existing data.  \n  \n When using ,  points to a zero byte file. Existing data will be overwritten when the object is closed and the transaction is committed.  \n  \n When using , the  points to a file which has all the existing data in it. The handle is positioned at the beginning of the file. You can use one of the  methods to move the handle position within the file to write or append new data."
     - id: options
       type: System.IO.FileOptions
-      description: To be added.
+      description: Specifies the option to use while opening the file. Supported  values are , , , and .
     - id: allocationSize
       type: System.Int64
-      description: To be added.
+      description: The allocation size to use while creating a file. If set to 0, the default value is used.
   overload: System.Data.SqlTypes.SqlFileStream.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is a null reference, or transactionContext is null."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    path is an empty string (\"\"), contains only white space, or contains one or more invalid characters.  \n  \n path begins with \"\\\\\\\\.\\\\\", for example \"\\\\\\\\.\\PHYSICALDRIVE0 \".  \n  \n The handle returned by call to NTCreateFile is not of type FILE_TYPE_DISK.  \n  \n options contains an unsupported value."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: The file cannot be found.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: An I/O error occurred.
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have the required permission.
+  - type: System.IO.DirectoryNotFoundException
+    commentId: T:System.IO.DirectoryNotFoundException
+    description: The specified path is invalid, such as being on an unmapped drive.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: The access requested is not permitted by the operating system for the specified path. This occurs when Write or ReadWrite access is specified, and the file or directory is set for read-only access.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: NtCreateFile fails with error code set to ERROR_SHARING_VIOLATION.
   platform:
   - net-11
   - net-20
@@ -126,30 +176,34 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins an asynchronous read operation.
+  remarks: Use the <xref:System.Data.SqlTypes.SqlFileStream.CanRead%2A> property to determine whether the current instance supports reading.
   syntax:
     content: public override IAsyncResult BeginRead (byte[] buffer, int offset, int count, AsyncCallback callback, object state);
     parameters:
     - id: buffer
       type: System.Byte[]
-      description: To be added.
+      description: The buffer to read the data into.
     - id: offset
       type: System.Int32
-      description: To be added.
+      description: The byte offset in `buffer` at which to begin writing data read from the stream.
     - id: count
       type: System.Int32
-      description: To be added.
+      description: The maximum number of bytes to read.
     - id: callback
       type: System.AsyncCallback
-      description: To be added.
+      description: An optional asynchronous callback, to be called when the read is complete.
     - id: state
       type: System.Object
-      description: To be added.
+      description: A user-provided object that distinguishes this particular asynchronous read request from other requests
     return:
       type: System.IAsyncResult
-      description: To be added.
+      description: An <xref:System.IAsyncResult> that represents the asynchronous read, which could still be pending.
   overload: System.Data.SqlTypes.SqlFileStream.BeginRead*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: Reading data is not supported on the stream.
   platform:
   - net-11
   - net-20
@@ -166,30 +220,34 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins an asynchronous write operation.
+  remarks: Use the <xref:System.Data.SqlTypes.SqlFileStream.CanWrite%2A> property to determine whether the current instance supports writing.
   syntax:
     content: public override IAsyncResult BeginWrite (byte[] buffer, int offset, int count, AsyncCallback callback, object state);
     parameters:
     - id: buffer
       type: System.Byte[]
-      description: To be added.
+      description: The buffer to write data from.
     - id: offset
       type: System.Int32
-      description: To be added.
+      description: The byte offset in `buffer` from which to begin writing.
     - id: count
       type: System.Int32
-      description: To be added.
+      description: The maximum number of bytes to write.
     - id: callback
       type: System.AsyncCallback
-      description: To be added.
+      description: An optional asynchronous callback, to be called when the write is complete.
     - id: state
       type: System.Object
-      description: To be added.
+      description: A user-provided object that distinguishes this particular asynchronous write request from other requests.
     return:
       type: System.IAsyncResult
-      description: To be added.
+      description: An <xref:System.IAsyncResult> that represents the asynchronous write, which could still be pending.
   overload: System.Data.SqlTypes.SqlFileStream.BeginWrite*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: Writing data is not supported on the stream.
   platform:
   - net-11
   - net-20
@@ -206,14 +264,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the current stream supports reading.
   syntax:
     content: public override bool CanRead { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the current stream supports reading; otherwise, .
   overload: System.Data.SqlTypes.SqlFileStream.CanRead*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -230,14 +288,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the current stream supports seeking.
   syntax:
     content: public override bool CanSeek { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the current stream supports seeking; otherwise, .
   overload: System.Data.SqlTypes.SqlFileStream.CanSeek*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -254,14 +312,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the current stream can time out.
   syntax:
     content: public override bool CanTimeout { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the current stream can time out; otherwise, .
   overload: System.Data.SqlTypes.SqlFileStream.CanTimeout*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -278,14 +336,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the current stream supports writing.
   syntax:
     content: public override bool CanWrite { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the current stream supports writing; otherwise, .
   overload: System.Data.SqlTypes.SqlFileStream.CanWrite*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -302,8 +360,6 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
@@ -311,6 +367,7 @@ items:
       type: System.Boolean
       description: To be added.
   overload: System.Data.SqlTypes.SqlFileStream.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -327,18 +384,21 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Waits for the pending asynchronous read to complete.
   syntax:
     content: public override int EndRead (IAsyncResult asyncResult);
     parameters:
     - id: asyncResult
       type: System.IAsyncResult
-      description: To be added.
+      description: The reference to the pending asynchronous request to finish.
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of bytes read from the stream, between zero (0) and the number of bytes you requested. Streams return zero (0) only at the end of the stream, otherwise, they should block until at least one byte is available.
   overload: System.Data.SqlTypes.SqlFileStream.EndRead*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The <xref:System.IAsyncResult> object did not come from the corresponding  method.
   platform:
   - net-11
   - net-20
@@ -355,15 +415,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Ends an asynchronous write operation.
   syntax:
     content: public override void EndWrite (IAsyncResult asyncResult);
     parameters:
     - id: asyncResult
       type: System.IAsyncResult
-      description: To be added.
+      description: A reference to the outstanding asynchronous I/O request.
   overload: System.Data.SqlTypes.SqlFileStream.EndWrite*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The <xref:System.IAsyncResult> object did not come from the corresponding  method.
   platform:
   - net-11
   - net-20
@@ -380,12 +443,12 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Ensures that resources are freed and other cleanup operations are performed when the garbage collector reclaims the .
   syntax:
     content: ~SqlFileStream ();
     parameters: []
   overload: System.Data.SqlTypes.SqlFileStream.Finalize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -402,12 +465,12 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: clears all buffers for this stream and causes any buffered data to be written to the underlying device.
   syntax:
     content: public override void Flush ();
     parameters: []
   overload: System.Data.SqlTypes.SqlFileStream.Flush*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -424,14 +487,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating the length of the current stream in bytes.
   syntax:
     content: public override long Length { get; }
     return:
       type: System.Int64
-      description: To be added.
+      description: An <xref:System.Int64> indicating the length of the current stream in bytes.
   overload: System.Data.SqlTypes.SqlFileStream.Length*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -448,14 +511,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the logical path of the  passed to the constructor.
   syntax:
     content: public string Name { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A string value indicating the name of the .
   overload: System.Data.SqlTypes.SqlFileStream.Name*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -472,14 +535,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the position within the current stream.
   syntax:
     content: public override long Position { get; set; }
     return:
       type: System.Int64
-      description: To be added.
+      description: The current position within the .
   overload: System.Data.SqlTypes.SqlFileStream.Position*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -496,24 +559,28 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
+  remarks: Use the <xref:System.Data.SqlTypes.SqlFileStream.CanRead%2A> property to determine whether the current instance supports writing.
   syntax:
     content: public override int Read (byte[] buffer, int offset, int count);
     parameters:
     - id: buffer
       type: System.Byte[]
-      description: To be added.
+      description: An array of bytes. When this method returns, the buffer contains the specified byte array with the values between offset and (offset + count - 1) replaced by the bytes read from the current source.
     - id: offset
       type: System.Int32
-      description: To be added.
+      description: The zero-based byte offset in buffer at which to begin storing the data read from the current stream.
     - id: count
       type: System.Int32
-      description: To be added.
+      description: The maximum number of bytes to be read from the current stream.
     return:
       type: System.Int32
-      description: To be added.
+      description: The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
   overload: System.Data.SqlTypes.SqlFileStream.Read*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The object does not support reading of data.
   platform:
   - net-11
   - net-20
@@ -530,15 +597,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Reads a byte from the stream and advances the position within the stream by one byte, or returns -1 if at the end of the stream.
+  remarks: Use the <xref:System.Data.SqlTypes.SqlFileStream.CanRead%2A> property to determine whether the current instance supports reading.
   syntax:
     content: public override int ReadByte ();
     parameters: []
     return:
       type: System.Int32
-      description: To be added.
+      description: The unsigned byte cast to an <xref:System.Int32>, or -1 if at the end of the stream.
   overload: System.Data.SqlTypes.SqlFileStream.ReadByte*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The object does not support reading of data.
   platform:
   - net-11
   - net-20
@@ -555,14 +626,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value, in milliseconds, that determines how long the stream will attempt to read before timing out.
   syntax:
     content: public override int ReadTimeout { get; set; }
     return:
       type: System.Int32
-      description: To be added.
+      description: A value, in milliseconds, that determines how long the stream will attempt to read before timing out.
   overload: System.Data.SqlTypes.SqlFileStream.ReadTimeout*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -579,21 +650,21 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the position within the current stream.
   syntax:
     content: public override long Seek (long offset, System.IO.SeekOrigin origin);
     parameters:
     - id: offset
       type: System.Int64
-      description: To be added.
+      description: A byte offset relative to the `origin` parameter
     - id: origin
       type: System.IO.SeekOrigin
-      description: To be added.
+      description: A value of type <xref:System.IO.SeekOrigin> indicating the reference point used to obtain the new position
     return:
       type: System.Int64
-      description: To be added.
+      description: The new position within the current stream.
   overload: System.Data.SqlTypes.SqlFileStream.Seek*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -610,15 +681,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the length of the current stream.
+  remarks: Use the <xref:System.Data.SqlTypes.SqlFileStream.CanRead%2A> property to determine whether the current instance supports reading.
   syntax:
     content: public override void SetLength (long value);
     parameters:
     - id: value
       type: System.Int64
-      description: To be added.
+      description: The desired length of the current stream in bytes.
   overload: System.Data.SqlTypes.SqlFileStream.SetLength*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The object does not support reading of data.
   platform:
   - net-11
   - net-20
@@ -635,14 +710,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the transaction context for this  object.
   syntax:
     content: public byte[] TransactionContext { get; }
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The transactionContext array that was passed to the constructor for this  object.
   overload: System.Data.SqlTypes.SqlFileStream.TransactionContext*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -659,21 +734,25 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+  remarks: Use the <xref:System.Data.SqlTypes.SqlFileStream.CanWrite%2A> property to determine whether the current instance supports writing.
   syntax:
     content: public override void Write (byte[] buffer, int offset, int count);
     parameters:
     - id: buffer
       type: System.Byte[]
-      description: To be added.
+      description: An array of bytes. This method copies `count` bytes from `buffer` to the current stream.
     - id: offset
       type: System.Int32
-      description: To be added.
+      description: The zero-based byte offset in `buffer` at which to begin copying bytes to the current stream.
     - id: count
       type: System.Int32
-      description: To be added.
+      description: The number of bytes to be written to the current stream.
   overload: System.Data.SqlTypes.SqlFileStream.Write*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The object does not support writing of data.
   platform:
   - net-11
   - net-20
@@ -690,15 +769,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Writes a byte to the current position in the stream and advances the position within the stream by one byte.
+  remarks: Use the <xref:System.Data.SqlTypes.SqlFileStream.CanWrite%2A> property to determine whether the current instance supports writing.
   syntax:
     content: public override void WriteByte (byte value);
     parameters:
     - id: value
       type: System.Byte
-      description: To be added.
+      description: The byte to write to the stream.
   overload: System.Data.SqlTypes.SqlFileStream.WriteByte*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The object does not support writing of data.
   platform:
   - net-11
   - net-20
@@ -715,14 +798,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.SqlTypes
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value, in milliseconds, that determines how long the stream will attempt to write before timing out.
   syntax:
     content: public override int WriteTimeout { get; set; }
     return:
       type: System.Int32
-      description: To be added.
+      description: A value, in milliseconds, that determines how long the stream will attempt to write before timing out.
   overload: System.Data.SqlTypes.SqlFileStream.WriteTimeout*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -743,12 +826,20 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.IO.FileAccess
   parent: System.IO
   isExternal: false
@@ -761,24 +852,6 @@ references:
   name: SqlFileStream(String,Byte[],FileAccess,FileOptions,Int64)
   nameWithType: SqlFileStream.SqlFileStream(String,Byte[],FileAccess,FileOptions,Int64)
   fullName: System.Data.SqlTypes.SqlFileStream.SqlFileStream(String,Byte[],FileAccess,FileOptions,Int64)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.IO.FileAccess
-  parent: System.IO
-  isExternal: false
-  name: FileAccess
-  nameWithType: FileAccess
-  fullName: System.IO.FileAccess
 - uid: System.IO.FileOptions
   parent: System.IO
   isExternal: false
@@ -803,18 +876,6 @@ references:
   name: IAsyncResult
   nameWithType: IAsyncResult
   fullName: System.IAsyncResult
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Int32
   parent: System
   isExternal: true
@@ -839,42 +900,6 @@ references:
   name: BeginWrite(Byte[],Int32,Int32,AsyncCallback,Object)
   nameWithType: SqlFileStream.BeginWrite(Byte[],Int32,Int32,AsyncCallback,Object)
   fullName: System.Data.SqlTypes.SqlFileStream.BeginWrite(Byte[],Int32,Int32,AsyncCallback,Object)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.AsyncCallback
-  parent: System
-  isExternal: true
-  name: AsyncCallback
-  nameWithType: AsyncCallback
-  fullName: System.AsyncCallback
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Data.SqlTypes.SqlFileStream.CanRead
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
@@ -893,78 +918,36 @@ references:
   name: CanSeek
   nameWithType: SqlFileStream.CanSeek
   fullName: System.Data.SqlTypes.SqlFileStream.CanSeek
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.SqlTypes.SqlFileStream.CanTimeout
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: CanTimeout
   nameWithType: SqlFileStream.CanTimeout
   fullName: System.Data.SqlTypes.SqlFileStream.CanTimeout
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.SqlTypes.SqlFileStream.CanWrite
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: CanWrite
   nameWithType: SqlFileStream.CanWrite
   fullName: System.Data.SqlTypes.SqlFileStream.CanWrite
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.SqlTypes.SqlFileStream.Dispose(System.Boolean)
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: Dispose(Boolean)
   nameWithType: SqlFileStream.Dispose(Boolean)
   fullName: System.Data.SqlTypes.SqlFileStream.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.SqlTypes.SqlFileStream.EndRead(System.IAsyncResult)
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: EndRead(IAsyncResult)
   nameWithType: SqlFileStream.EndRead(IAsyncResult)
   fullName: System.Data.SqlTypes.SqlFileStream.EndRead(IAsyncResult)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.Data.SqlTypes.SqlFileStream.EndWrite(System.IAsyncResult)
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: EndWrite(IAsyncResult)
   nameWithType: SqlFileStream.EndWrite(IAsyncResult)
   fullName: System.Data.SqlTypes.SqlFileStream.EndWrite(IAsyncResult)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.Data.SqlTypes.SqlFileStream.Finalize
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
@@ -983,108 +966,42 @@ references:
   name: Length
   nameWithType: SqlFileStream.Length
   fullName: System.Data.SqlTypes.SqlFileStream.Length
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.Data.SqlTypes.SqlFileStream.Name
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: Name
   nameWithType: SqlFileStream.Name
   fullName: System.Data.SqlTypes.SqlFileStream.Name
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Data.SqlTypes.SqlFileStream.Position
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: Position
   nameWithType: SqlFileStream.Position
   fullName: System.Data.SqlTypes.SqlFileStream.Position
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.Data.SqlTypes.SqlFileStream.Read(System.Byte[],System.Int32,System.Int32)
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: Read(Byte[],Int32,Int32)
   nameWithType: SqlFileStream.Read(Byte[],Int32,Int32)
   fullName: System.Data.SqlTypes.SqlFileStream.Read(Byte[],Int32,Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.SqlTypes.SqlFileStream.ReadByte
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: ReadByte()
   nameWithType: SqlFileStream.ReadByte()
   fullName: System.Data.SqlTypes.SqlFileStream.ReadByte()
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.SqlTypes.SqlFileStream.ReadTimeout
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: ReadTimeout
   nameWithType: SqlFileStream.ReadTimeout
   fullName: System.Data.SqlTypes.SqlFileStream.ReadTimeout
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.SqlTypes.SqlFileStream.Seek(System.Int64,System.IO.SeekOrigin)
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: Seek(Int64,SeekOrigin)
   nameWithType: SqlFileStream.Seek(Int64,SeekOrigin)
   fullName: System.Data.SqlTypes.SqlFileStream.Seek(Int64,SeekOrigin)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.IO.SeekOrigin
   parent: System.IO
   isExternal: true
@@ -1097,48 +1014,18 @@ references:
   name: SetLength(Int64)
   nameWithType: SqlFileStream.SetLength(Int64)
   fullName: System.Data.SqlTypes.SqlFileStream.SetLength(Int64)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.Data.SqlTypes.SqlFileStream.TransactionContext
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: TransactionContext
   nameWithType: SqlFileStream.TransactionContext
   fullName: System.Data.SqlTypes.SqlFileStream.TransactionContext
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Data.SqlTypes.SqlFileStream.Write(System.Byte[],System.Int32,System.Int32)
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
   name: Write(Byte[],Int32,Int32)
   nameWithType: SqlFileStream.Write(Byte[],Int32,Int32)
   fullName: System.Data.SqlTypes.SqlFileStream.Write(Byte[],Int32,Int32)
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.SqlTypes.SqlFileStream.WriteByte(System.Byte)
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false
@@ -1157,12 +1044,6 @@ references:
   name: WriteTimeout
   nameWithType: SqlFileStream.WriteTimeout
   fullName: System.Data.SqlTypes.SqlFileStream.WriteTimeout
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.SqlTypes.SqlFileStream.#ctor*
   parent: System.Data.SqlTypes.SqlFileStream
   isExternal: false

@@ -10,8 +10,49 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Validates expression conditions.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ The following code creates an invalid condition. It then attempts to validate the condition, and displays any errors that result.  
+  
+```c#  
+// Create an invalid condition ("abc" < true).  
+CodeBinaryOperatorExpression invalidCompare = new CodeBinaryOperatorExpression();  
+invalidCompare.Left = new CodePrimitiveExpression("abc");  
+invalidCompare.Operator = CodeBinaryOperatorType.LessThan;  
+invalidCompare.Right = new CodePrimitiveExpression(true);  
+RuleExpressionCondition condition = new RuleExpressionCondition();  
+condition.Expression = invalidCompare;  
+  
+// Create a validator for this condition.  
+// We are not using "this" in the condition, so the type is not used.  
+RuleValidation validation = new RuleValidation(this.GetType(), null);  
+  
+// See whether the condition validates.  
+if (!condition.Validate(validation))  
+{  
+    // There were errors, so display them.  
+    foreach (ValidationError error in validation.Errors)  
+    {  
+        Console.WriteLine(error.ErrorText);  
+    }  
+}  
+  
+```  
+  
+ Running this code produces the following error:  
+  
+```  
+Relational operator "LessThan" cannot be used on operands of types "string" and "bool".  
+```  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -26,10 +67,15 @@
         <Parameter Name="typeProvider" Type="System.Workflow.ComponentModel.Compiler.ITypeProvider" />
       </Parameters>
       <Docs>
-        <param name="thisType">To be added.</param>
-        <param name="typeProvider">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="thisType">The type of the object that this <see cref="T:System.Workflow.Activities.Rules.RuleCondition" /> or <see cref="T:System.Workflow.Activities.Rules.RuleSet" /> will be executed against. Normally it is the workflow, but it can be any valid type.</param>
+        <param name="typeProvider">An optional <see cref="T:System.Workflow.ComponentModel.Compiler.ITypeProvider" /> implementation that is used to determine what &lt;xref:System.Type&gt;s are available in the condition. If one is not specified, only types in the assembly specified by the activity and any assemblies it references are available.</param>
+        <summary>Initializes a new instance of the <see cref="T:System.Workflow.Activities.Rules.RuleValidation" /> class using the &lt;xref:System.Type&gt; of the <see cref="T:System.Workflow.Activities.Rules.Rule" />.</summary>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="thisType" /> is a null reference (<see langword="Nothing" /> in Visual Basic).</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -45,11 +91,23 @@
         <Parameter Name="checkStaticType" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="activity">To be added.</param>
-        <param name="typeProvider">To be added.</param>
-        <param name="checkStaticType">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="activity">The <see cref="T:System.Workflow.ComponentModel.Activity" /> in which context the <see cref="T:System.Workflow.Activities.Rules.RuleCondition" /> or <see cref="T:System.Workflow.Activities.Rules.RuleSet" /> is run. In most cases, this will be the workflow object.</param>
+        <param name="typeProvider">An optional <see cref="T:System.Workflow.ComponentModel.Compiler.ITypeProvider" /> implementation that is used to determine what &lt;xref:System.Type&gt;s are available in the condition. If one is not specified, only types in the assembly specified by the activity and any assemblies it references are available.</param>
+        <param name="checkStaticType">If <see langword="true" />, the types used by any <see cref="T:System.Workflow.Activities.Rules.RuleCondition" /> or <see cref="T:System.Workflow.Activities.Rules.RuleSet" /> that are validated with this object must be in the restricted list of types allowed.</param>
+        <summary>Initializes a new instance of the <see cref="T:System.Workflow.Activities.Rules.RuleValidation" /> class using the specified <see cref="T:System.Workflow.ComponentModel.Activity" /> and the type provider.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This constructor is used at design time.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="activity" /> is a null reference (<see langword="Nothing" /> in Visual Basic).</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Errors">
@@ -63,9 +121,11 @@
         <ReturnType>System.Workflow.ComponentModel.Compiler.ValidationErrorCollection</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Gets the errors associated with the <see cref="T:System.Workflow.Activities.Rules.RuleValidation" />.</summary>
+        <value>The <see cref="T:System.Workflow.ComponentModel.Compiler.ValidationErrorCollection" /> that contains the <see cref="T:System.Workflow.ComponentModel.Compiler.ValidationError" /> objects created during rule validation.</value>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>The <see cref="T:System.Workflow.ComponentModel.Compiler.ValidationErrorCollection" /> that contains the <see cref="T:System.Workflow.ComponentModel.Compiler.ValidationError" /> objects created during rule validation.</returns>
       </Docs>
     </Member>
     <Member MemberName="ExpressionInfo">
@@ -82,10 +142,12 @@
         <Parameter Name="expression" Type="System.CodeDom.CodeExpression" />
       </Parameters>
       <Docs>
-        <param name="expression">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="expression">The <see cref="T:System.CodeDom.CodeExpression" /> to evaluate.</param>
+        <summary>Determines the type of the code expression.</summary>
+        <returns>The <see cref="T:System.Workflow.Activities.Rules.RuleExpressionInfo" /> for the object. This identifies the type of the object.</returns>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <value>The <see cref="T:System.Workflow.Activities.Rules.RuleExpressionInfo" /> for the object. This identifies the type of the object.</value>
       </Docs>
     </Member>
     <Member MemberName="PopParentExpression">
@@ -100,8 +162,11 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Removes and returns the parent expressions at the top of the <see cref="T:System.Collections.Stack" />.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="PushParentExpression">
@@ -118,10 +183,23 @@
         <Parameter Name="newParent" Type="System.CodeDom.CodeExpression" />
       </Parameters>
       <Docs>
-        <param name="newParent">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="newParent">The <see cref="T:System.CodeDom.CodeExpression" /> to add to the <see cref="T:System.Collections.Stack" />.</param>
+        <summary>Inserts an object at the top of the <see cref="T:System.Collections.Stack" />.</summary>
+        <returns>
+          <see langword="true" /> if the <paramref name="newParent" /> was added to the stack; otherwise, <see langword="false" />.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ If the `newParent` is already part of the parent <xref:System.CodeDom.CodeExpression> objects, a new <xref:System.Workflow.ComponentModel.Compiler.ValidationError> is created.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="newParent" /> is a null reference (<see langword="Nothing" /> in Visual Basic).</exception>
+        <threadsafe />
+        <value>
+          <see langword="true" /> if the <paramref name="newParent" /> was added to the stack; otherwise, <see langword="false" />.</value>
       </Docs>
     </Member>
     <Member MemberName="ThisType">
@@ -135,9 +213,11 @@
         <ReturnType>System.Type</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Gets the type of object.</summary>
+        <value>The &lt;xref:System.Type&gt; of the object.</value>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>The &lt;xref:System.Type&gt; of the object.</returns>
       </Docs>
     </Member>
   </Members>

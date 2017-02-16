@@ -42,8 +42,10 @@ items:
   nameWithType: Package
   fullName: System.IO.Packaging.Package
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a container that can store multiple data objects.
+  remarks: "Package is an abstract class that can be used to organize objects into a single entity of a defined physical format for portability and efficient access.  \n  \n A ZIP file is the primary physical format for the Package.  Other Package implementations might use other physical formats such as an XML document, a database, or Web service.  \n  \n Like a file system, items contained in a Package are referenced in a hierarchical organization of folders and files.  \n  \n Although Package itself is an abstract class, the <xref:System.IO.Packaging.ZipPackage> derived class is used as default by the <xref:System.IO.Packaging.Package.Open%2A> method.  \n  \n A <xref:System.IO.Packaging.PackagePart> (\"part\") is the abstract class that represents an object that is stored in a Package.  \n  \n A <xref:System.IO.Packaging.PackageRelationship> (\"relationship\") defines an association between a source Package or <xref:System.IO.Packaging.PackagePart> and a target object.  A <xref:System.IO.Packaging.PackageRelationship> can be one of two types, each of which can be one of two forms:  \n  \n-   A package-level relationship (created by the <xref:System.IO.Packaging.Package.CreateRelationship%2A?displayProperty=fullName> method) relates a Package to either:  \n  \n    -   A target part in the package.  \n  \n    -   A target resource outside the package.  \n  \n-   A part-level relationship (created by the <xref:System.IO.Packaging.PackagePart.CreateRelationship%2A?displayProperty=fullName> method) relates a source <xref:System.IO.Packaging.PackagePart> to either:  \n  \n    -   Another target part in the package.  \n  \n    -   A target resource outside the package.  \n  \n The relationship's source Package or source <xref:System.IO.Packaging.PackagePart> is considered the \"owner\" of the relationship.  When the source object is deleted, all the relationships owned by the source object are also deleted.  The process of creating or deleting a relationship does not physically change either the source or target objects in any way.  \n  \n A <xref:System.IO.Packaging.PackageDigitalSignature> (\"digital signature\") is a composition of parts and relationships representing a digital signature included with a Package.  The digital signature identifies the originator and validates that the signed parts and relationships contained in the Package have not been modified.  \n  \n Packages also support Digital Rights Management (DRM) which allows content elements in a Package to be encrypted with specific access rights granted to authorized users.  \n  \n Based on the Package architecture, an <xref:System.Windows.Xps.Packaging.XpsDocument> is a package type designed for storing documents based on the open [XML Paper Specification (XPS)](http://go.microsoft.com/fwlink/?LinkID=65761).  \n  \n [!INCLUDE[TLA#tla_avalonwinfx](../../add/includes/tlasharptla-avalonwinfx-md.md)] uses packages to store content, resources, and relationships for pages and documents using a standard ZIP file by default. As with any ZIP file, your application can use the <xref:System.IO.Packaging> classes to store and optionally protect any type or number of data files in a single efficient-to-access container.  \n  \n For more information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example shows the basic steps for creating a Package.  In this example, a package is created to contain a document together with a graphic image that is displayed as part of the document.  (This is similar to the case in which an HTML file has an \\<IMG> tag that references an external image file.)  Two <xref:System.IO.Packaging.PackageRelationship> elements are also included in the package.  The first, a \"package-level\" relationship, defines the document part as the package's root element.  A second, \"part-level\" relationship defines the association between the document part (the \"source\" of the part-level relationship) and its use of the image part (the \"target\" of the part-level relationship).  For the complete sample, see [Writing a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160055).  \n  \n [!code-vb[PackageWrite#PackageWriteCreatePackage](../../add/codesnippet/VisualBasic/packagewrite/packagewrite.vb#packagewritecreatepackage)]\n [!code-cs[PackageWrite#PackageWriteCreatePackage](../../add/codesnippet/CSharp/PackageWrite/PackageWrite.cs#packagewritecreatepackage)]"
   syntax:
     content: 'public abstract class Package : IDisposable'
   inheritance:
@@ -67,15 +69,19 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class that uses a given .
+  remarks: Package is a protected constructor of the <xref:System.IO.Packaging.Package> abstract base class. When called in a derived class, the Package constructor initializes a new instance of the derived class.
   syntax:
     content: protected Package (System.IO.FileAccess openFileAccess);
     parameters:
     - id: openFileAccess
       type: System.IO.FileAccess
-      description: To be added.
+      description: The file IO permissions for the package.
   overload: System.IO.Packaging.Package.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value for openFileAccess is not valid.
   platform:
   - net-11
   - net-20
@@ -92,18 +98,22 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class that uses a given  and streaming option.
+  remarks: Package is a protected constructor of the <xref:System.IO.Packaging.Package> abstract base abstract base class. When called in a derived class, the Package constructor initializes a new instance of the derived class.
   syntax:
     content: protected Package (System.IO.FileAccess openFileAccess, bool streaming);
     parameters:
     - id: openFileAccess
       type: System.IO.FileAccess
-      description: To be added.
+      description: The file IO permissions for the package.
     - id: streaming
       type: System.Boolean
-      description: To be added.
+      description: "\n     to open the package for streaming; otherwise, ."
   overload: System.IO.Packaging.Package.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value for openFileAccess is not valid.
   platform:
   - net-11
   - net-20
@@ -120,12 +130,13 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Saves and closes the package plus all underlying part streams.
+  remarks: "For the <xref:System.IO.Packaging.Package> class Close and <xref:System.IO.Packaging.Package.Dispose%2A> perform the same operation—there is no reason to call <xref:System.IO.Packaging.Package.Dispose%2A> if you call Close, or vice-versa.  \n  \n Close and <xref:System.IO.Packaging.Package.Dispose%2A> internally call <xref:System.IO.Packaging.Package.Flush%2A>.  \n  \n> [!NOTE]\n>  The `using` statement (different from the `using` namespace directive) is the recommended way to Close and <xref:System.IO.Packaging.Package.Dispose%2A> a package.  [Writing a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160055) and [Reading a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160034) show how to close and dispose a package by using the `using` statement."
   syntax:
     content: public void Close ();
     parameters: []
   overload: System.IO.Packaging.Package.Close*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -142,21 +153,39 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new uncompressed part with a given URI and content type.
+  remarks: "CreatePart initializes an empty <xref:System.IO.Stream> for the new part.  The <xref:System.IO.Packaging.PackagePart.GetStream%2A?displayProperty=fullName> method can be used to obtain a reference to the stream instance associated with the part.  \n  \n The part <xref:System.IO.Packaging.PackagePart.CompressionOption%2A> is <xref:System.IO.Packaging.CompressionOption?displayProperty=fullName>.  \n  \n For additional information about package parts, see section 1.1 in the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example shows how to create a new <xref:System.IO.Packaging.PackagePart> and then store data into the part.  For the complete sample, see [Writing a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160055).  \n  \n [!code-vb[PackageWrite#PackageWriteCreatePart](../../add/codesnippet/VisualBasic/packagewrite/packagewrite.vb#packagewritecreatepart)]\n [!code-cs[PackageWrite#PackageWriteCreatePart](../../add/codesnippet/CSharp/PackageWrite/PackageWrite.cs#packagewritecreatepart)]"
   syntax:
     content: public System.IO.Packaging.PackagePart CreatePart (Uri partUri, string contentType);
     parameters:
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)] of the new part.
     - id: contentType
       type: System.String
-      description: To be added.
+      description: The content type of the data stream.
     return:
       type: System.IO.Packaging.PackagePart
-      description: To be added.
+      description: The new created part.
   overload: System.IO.Packaging.Package.CreatePart*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    partUri or contentType is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    partUri is not a valid  [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)]."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A part with the specified partUri is already present in the package.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is read-only (a new part cannot be added).
   platform:
   - net-11
   - net-20
@@ -173,24 +202,45 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new part with a given URI, content type, and compression option.
+  remarks: "For the default <xref:System.IO.Packaging.ZipPackage> derived class, the CreatePart method only supports two `compressionOption` values, <xref:System.IO.Packaging.CompressionOption> or <xref:System.IO.Packaging.CompressionOption> compression.  Other <xref:System.IO.Packaging.CompressionOption> values of <xref:System.IO.Packaging.CompressionOption>, <xref:System.IO.Packaging.CompressionOption>, or <xref:System.IO.Packaging.CompressionOption> use <xref:System.IO.Packaging.CompressionOption> compression.  \n  \n CreatePart creates an empty <xref:System.IO.Stream> for the new part.  The <xref:System.IO.Packaging.PackagePart.GetStream%2A?displayProperty=fullName> method can be used to obtain a reference to the stream instance associated with the part.  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example shows how to create a new <xref:System.IO.Packaging.PackagePart> and then store data into the part.  For the complete sample, see [Writing a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160055).  \n  \n [!code-vb[PackageWrite#PackageWriteCreatePart](../../add/codesnippet/VisualBasic/packagewrite/packagewrite.vb#packagewritecreatepart)]\n [!code-cs[PackageWrite#PackageWriteCreatePart](../../add/codesnippet/CSharp/PackageWrite/PackageWrite.cs#packagewritecreatepart)]"
   syntax:
     content: public System.IO.Packaging.PackagePart CreatePart (Uri partUri, string contentType, System.IO.Packaging.CompressionOption compressionOption);
     parameters:
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] of the new part.
     - id: contentType
       type: System.String
-      description: To be added.
+      description: The content type of the data stream.
     - id: compressionOption
       type: System.IO.Packaging.CompressionOption
-      description: To be added.
+      description: The compression option for the data stream,  or  compression.
     return:
       type: System.IO.Packaging.PackagePart
-      description: To be added.
+      description: The new created part.
   overload: System.IO.Packaging.Package.CreatePart*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    partUri or contentType is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    partUri is not a valid  [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)]."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A part with the specified partUri is already present in the package.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The compressionOption value is not valid.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is read-only (a new part cannot be added).
   platform:
   - net-11
   - net-20
@@ -207,24 +257,25 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, creates a new part in the package.
+  remarks: "The derived CreatePartCore method is called by the <xref:System.IO.Packaging.Package.CreatePart%2A> method to create a part based on the physical format implemented in the derived class.  \n  \n By default, a <xref:System.IO.Packaging.ZipPackage> derived class implementation of the abstract <xref:System.IO.Packaging.Package> class is provided and used.  In the default operation, <xref:System.IO.Packaging.Package.CreatePart%2A> internally calls CreatePartCore of the <xref:System.IO.Packaging.ZipPackage> class to create a new part in a ZIP file.  \n  \n For the default <xref:System.IO.Packaging.ZipPackage> derived class, the CreatePartCore method only supports two `compressionOption` values, <xref:System.IO.Packaging.CompressionOption> or <xref:System.IO.Packaging.CompressionOption> compression.  Other <xref:System.IO.Packaging.CompressionOption> values of <xref:System.IO.Packaging.CompressionOption>, <xref:System.IO.Packaging.CompressionOption>, or <xref:System.IO.Packaging.CompressionOption> use <xref:System.IO.Packaging.CompressionOption> compression.  \n  \n For more information about the package model and package parts, see Chapter 1 of the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: protected abstract System.IO.Packaging.PackagePart CreatePartCore (Uri partUri, string contentType, System.IO.Packaging.CompressionOption compressionOption);
     parameters:
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)] for the part being created.
     - id: contentType
       type: System.String
-      description: To be added.
+      description: The content type of the data stream.
     - id: compressionOption
       type: System.IO.Packaging.CompressionOption
-      description: To be added.
+      description: The compression option for the data stream.
     return:
       type: System.IO.Packaging.PackagePart
-      description: To be added.
+      description: The created part.
   overload: System.IO.Packaging.Package.CreatePartCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -241,24 +292,42 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a package-level relationship to a part with a given URI, target mode, and relationship type.
+  remarks: "A package-level relationship defines an association between the package and an associated target part or resource.  A package-level relationship can be one of two forms.  \n  \n-   Between a <xref:System.IO.Packaging.Package> to a target part in the package.  \n  \n-   Between a <xref:System.IO.Packaging.Package> to a target resource outside the package.  \n  \n In a package-relationship the package is considered the \"owner\" of the relationship.  When the package is deleted, all the relationships owned by the package are also deleted.  \n  \n CreateRelationship does not physically change the target part or resource in any way.  \n  \n The target of a relationship cannot be another relationship.  \n  \n If `targetMode` is specified as <xref:System.IO.Packaging.TargetMode>, `targetUri` must be a relative URI that is formed according to the [RFC 3986](http://tools.ietf.org/html/rfc3986) Uniform Resource Identifier (URI) Generic Syntax specification.  The internal relative URI can be either an absolute path that starts with a forward slash (\"/\") character such as \"/page1.xaml\" or \"/images/picture4.jpg\", or a relative path such as \"../imagespicture1.jpg\" that resolves against the package root (\"/\") as the base URI.  \n  \n If `targetMode` is specified as <xref:System.IO.Packaging.TargetMode>, `targetUri` can be either an absolute or relative URI formed according to the [RFC 3986](http://tools.ietf.org/html/rfc3986) Uniform Resource Identifier (URI) Generic Syntax specification.  \"http://www.microsoft.com/page2.xml\" is an example of an absolute URI that references an external target resource \"page2.xml\".  \"images/picture1.jpg\" is an example of a relative URI that also references an external target resource \"1.jpg\" but which resolves against the URI of the package itself.  \n  \n `relationshipType` must be a [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] that is formed according to the [RFC 3986](http://tools.ietf.org/html/rfc3986) Uniform Resource Identifier (URI) Generic Syntax specification.  The following table shows the package-level `relationshipType` URIs defined by the Open Packaging Conventions (OPC) specification.  \n  \n|Package-level Relationship|Relationship Type URI|  \n|---------------------------------|---------------------------|  \n|Core Properties|http://schemas.openxmlformats.org/package/2006/relationships/meta data/core-properties|  \n|Digital Signature|http://schemas.openxmlformats.org/package/2006/relationships/digit al-signature/signature|  \n|Digital Signature Certificate|http://schemas.openxmlformats.org/package/2006/relationships/digit al-signature/certificate|  \n|Digital Signature Origin|http://schemas.openxmlformats.org/package/2006/relationships/digit al-signature/origin|  \n|Thumbnail|http://schemas.openxmlformats.org/package/2006/relationships/meta data/thumbnail|  \n  \n For more information about packaging and package relationships, see section 1.3 of the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example illustrates how to use CreateRelationship to create a <xref:System.IO.Packaging.PackageRelationship> between a <xref:System.IO.Packaging.Package> and a root document part.  For the complete sample, see [Writing a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160055).  \n  \n [!code-vb[packagewrite#PackageWriteCreatePackageRelationship](../../add/codesnippet/VisualBasic/packagewrite/packagewrite.vb#packagewritecreatepackagerelationship)]\n [!code-cs[packagewrite#PackageWriteCreatePackageRelationship](../../add/codesnippet/CSharp/PackageWrite/PackageWrite.cs#packagewritecreatepackagerelationship)]"
   syntax:
     content: public System.IO.Packaging.PackageRelationship CreateRelationship (Uri targetUri, System.IO.Packaging.TargetMode targetMode, string relationshipType);
     parameters:
     - id: targetUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)] of the target part.
     - id: targetMode
       type: System.IO.Packaging.TargetMode
-      description: To be added.
+      description: Indicates if the target part is  or  to the package.
     - id: relationshipType
       type: System.String
-      description: To be added.
+      description: A URI that uniquely defines the role of the relationship.
     return:
       type: System.IO.Packaging.PackageRelationship
-      description: To be added.
+      description: The package-level relationship to the specified part.
   overload: System.IO.Packaging.Package.CreateRelationship*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    targetUri or relationshipType is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The targetUri part is a , or targetMode is  and targetUri is an absolute URI.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value for targetMode is not valid.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is read-only.
   platform:
   - net-11
   - net-20
@@ -275,27 +344,48 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a package-level relationship to a part with a given URI, target mode, relationship type, and [!INCLUDE[TLA#tla_id](../../add/includes/tlasharptla-id-md.md)].
+  remarks: "A package-level relationship defines an association between the package and an associated target part or resource.  A package-level relationship can be one of two forms.  \n  \n-   Between a <xref:System.IO.Packaging.Package> to a target part in the package.  \n  \n-   Between a <xref:System.IO.Packaging.Package> to a target resource outside the package.  \n  \n In a package-relationship the package is considered the \"owner\" of the relationship.  When the package is deleted, all the relationships owned by the package are also deleted.  \n  \n CreateRelationship does not physically change the target part or resource in any way.  \n  \n The target of a relationship cannot be another relationship.  \n  \n `id` must be a valid XML identifier.  The `id` type is xsd:ID and must follow the naming conventions prescribed in the XML Schema Part 2: Datatypes specification (see [http://www.w3.org/TR/xmlschema-2/#ID](http://www.w3.org/TR/xmlschema-2/)).  \n  \n If `id` is specified as `null` a unique ID will be automatically generated.  An `id` specified by an empty string is not valid.  \n  \n If `targetMode` is specified as <xref:System.IO.Packaging.TargetMode>, `targetUri` must be a relative URI that is formed according to the [RFC 3986](http://tools.ietf.org/html/rfc3986) Uniform Resource Identifier (URI) Generic Syntax specification.  The internal relative URI can be either an absolute path that starts with a forward slash (\"/\") character such as \"/page1.xaml\" or \"/images/picture4.jpg\", or a relative path such as \"../imagespicture1.jpg\" that resolves against the package root (\"/\") as the base URI.  \n  \n If `targetMode` is specified as <xref:System.IO.Packaging.TargetMode>, `targetUri` can be either an absolute or relative URI formed according to the [RFC 3986](http://tools.ietf.org/html/rfc3986) Uniform Resource Identifier (URI) Generic Syntax specification.  \"http://www.microsoft.com/page2.xml\" is an example of an absolute URI that references an external target resource \"page2.xml\".  \"images/picture1.jpg\" is an example of a relative URI that also references an external target resource \"1.jpg\" but which resolves against the URI of the package itself.  \n  \n `relationshipType` must be a URI that is formed according to the [RFC 3986](http://tools.ietf.org/html/rfc3986) Uniform Resource Identifier (URI) Generic Syntax specification.  The following table shows the package-level `relationshipType` URIs defined by the Open Packaging Conventions (OPC) specification.  \n  \n|Package-level Relationship|Relationship Type URI|  \n|---------------------------------|---------------------------|  \n|Core Properties|http://schemas.openxmlformats.org/package/2006/relationships/meta data/core-properties|  \n|Digital Signature|http://schemas.openxmlformats.org/package/2006/relationships/digit al-signature/signature|  \n|Digital Signature Certificate|http://schemas.openxmlformats.org/package/2006/relationships/digit al-signature/certificate|  \n|Digital Signature Origin|http://schemas.openxmlformats.org/package/2006/relationships/digit al-signature/origin|  \n|Thumbnail|http://schemas.openxmlformats.org/package/2006/relationships/meta data/thumbnail|  \n  \n For additional information about packaging and package relationships, see section 1.3 of the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example illustrates how to use <xref:System.IO.Packaging.Package.CreateRelationship%2A> to create a <xref:System.IO.Packaging.PackageRelationship> between a <xref:System.IO.Packaging.Package> and a root document part.  For the complete sample, see [Writing a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160055).  \n  \n [!code-vb[packagewrite#PackageWriteCreatePackageRelationship](../../add/codesnippet/VisualBasic/packagewrite/packagewrite.vb#packagewritecreatepackagerelationship)]\n [!code-cs[packagewrite#PackageWriteCreatePackageRelationship](../../add/codesnippet/CSharp/PackageWrite/PackageWrite.cs#packagewritecreatepackagerelationship)]"
   syntax:
     content: public System.IO.Packaging.PackageRelationship CreateRelationship (Uri targetUri, System.IO.Packaging.TargetMode targetMode, string relationshipType, string id);
     parameters:
     - id: targetUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)] of the target part.
     - id: targetMode
       type: System.IO.Packaging.TargetMode
-      description: To be added.
+      description: Indicates if the target part is  or  to the package.
     - id: relationshipType
       type: System.String
-      description: To be added.
+      description: A URI that uniquely defines the role of the relationship.
     - id: id
       type: System.String
-      description: To be added.
+      description: A unique XML identifier.
     return:
       type: System.IO.Packaging.PackageRelationship
-      description: To be added.
+      description: The package-level relationship to the specified part.
   overload: System.IO.Packaging.Package.CreateRelationship*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    targetUri or relationshipType is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The targetUri part is a , or targetMode is  and targetUri is an absolute URI.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value for targetMode is not valid.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is read-only.
+  - type: System.Xml.XmlException
+    commentId: T:System.Xml.XmlException
+    description: "\n    id is not a valid XML identifier; or a part with the specified id already occurs in the package."
   platform:
   - net-11
   - net-20
@@ -312,15 +402,28 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Deletes a part with a given URI from the package.
+  remarks: "`partUri` must be a relative URI that consists of an absolute path which starts with a forward slash (\"/\") character.  The absolute path is relative to the package root and is formed according to the [RFC 3986](http://tools.ietf.org/html/rfc3986) Uniform Resource Identifier (URI) Generic Syntax specification.  \"/page1.xaml\" and \"/images/picture4.jpg\" are examples of valid part URIs.  \n  \n No exception is raised if a part with the specified `partUri` is not in the package.  (You can use the <xref:System.IO.Packaging.Package.PartExists%2A> method to determine whether a part with a specified `partUri` is in the package.)  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: public void DeletePart (Uri partUri);
     parameters:
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] of the part to delete.
   overload: System.IO.Packaging.Package.DeletePart*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    partUri is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    partUri is not a valid  [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)]."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is read-only.
   platform:
   - net-11
   - net-20
@@ -337,15 +440,16 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, deletes a part with a given URI.
+  remarks: "By default, a <xref:System.IO.Packaging.ZipPackage> derived class implementation of the abstract <xref:System.IO.Packaging.Package> class is provided and used.  In the default operation, <xref:System.IO.Packaging.Package.DeletePart%2A> internally calls DeletePartCore of the <xref:System.IO.Packaging.ZipPackage> class to perform the actual delete operation based on the physical format implemented in the derived class.  \n  \n For more information about the package model and package parts, see Chapter 1 of the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: protected abstract void DeletePartCore (Uri partUri);
     parameters:
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The <xref:System.IO.Packaging.PackagePart.Uri%2A> of the  to delete.
   overload: System.IO.Packaging.Package.DeletePartCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -362,15 +466,28 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Deletes a package-level relationship.
+  remarks: "A package-level relationship defines an association between the package and an associated target part or resource.  A package-level relationship can be one of two forms.  \n  \n-   Between a <xref:System.IO.Packaging.Package> to a target part in the package.  \n  \n-   Between a <xref:System.IO.Packaging.Package> to a target resource outside the package.  \n  \n In a package-relationship the package is considered the \"owner\" of the relationship.  When the package is deleted, all the relationships owned by the package are also deleted.  \n  \n No exception is raised if a relationship with the specified `id` is not in the package.  \n  \n DeleteRelationship does not physically change the target part in any way.  \n  \n For more information about package relationships, see section 1.3 of the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: public void DeleteRelationship (string id);
     parameters:
     - id: id
       type: System.String
-      description: To be added.
+      description: The <xref:System.IO.Packaging.PackageRelationship.Id%2A> of the  to delete.
   overload: System.IO.Packaging.Package.DeleteRelationship*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    id is ."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is read-only.
+  - type: System.Xml.XmlException
+    commentId: T:System.Xml.XmlException
+    description: "\n    id is not a valid XML identifier."
   platform:
   - net-11
   - net-20
@@ -387,15 +504,16 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Flushes and saves the content of all parts and relationships, closes the package, and releases all resources.
+  remarks: "To make sure that all changes are correctly saved, Dispose also finalizes, flushes, and closes all parts and relationships that are contained in the package.  \n  \n For the <xref:System.IO.Packaging.Package> class, Dispose and <xref:System.IO.Packaging.Package.Close%2A> perform the same operation - there is no reason to call Dispose if you call <xref:System.IO.Packaging.Package.Close%2A>, or vice-versa.  \n  \n <xref:System.IO.Packaging.Package.Close%2A> and Dispose internally call <xref:System.IO.Packaging.Package.Flush%2A>.  \n  \n Derived classes that allocate and manage non-memory resources should override this method to release resources when Dispose is called. Derived-class overrides should also call <xref:System.IO.Packaging.Package.Flush%2A> and the base-class Dispose method to make sure that base-class cleanup is always performed.  \n  \n> [!NOTE]\n>  The `using` statement (different from the `using` namespace directive) is the recommended way to <xref:System.IO.Packaging.Package.Close%2A> and Dispose a package. [Writing a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160055) shows how to close and dispose a package by using the `using` statement."
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
   overload: System.IO.Packaging.Package.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -412,14 +530,18 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the file access setting for the package.
+  remarks: The FileOpenAccess property has no default value.  The file access setting is specified in the <xref:System.IO.Packaging.Package.%23ctor%2A> constructor call when you create a new package, or in the <xref:System.IO.Packaging.Package.Open%2A> call when you open an existing package.
   syntax:
     content: public System.IO.FileAccess FileOpenAccess { get; }
     return:
       type: System.IO.FileAccess
-      description: To be added.
+      description: 'One of the  values: , , or .'
   overload: System.IO.Packaging.Package.FileOpenAccess*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
   platform:
   - net-11
   - net-20
@@ -436,12 +558,19 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Saves the contents of all parts and relationships that are contained in the package.
+  remarks: "Flush internally calls the derived class's <xref:System.IO.Packaging.Package.FlushCore%2A> implemetation to perform the actual format-specific flush operation.  The derived class's <xref:System.IO.Packaging.Package.FlushCore%2A> method is responsible for actually saving the part and relationship content to the specific physical derived class implementation.  \n  \n By default, a <xref:System.IO.Packaging.ZipPackage> derived implementation of the abstract <xref:System.IO.Packaging.Package> base class is provided and used. In the default operation, Flush internally calls <xref:System.IO.Packaging.Package.FlushCore%2A> to save the parts and relationships in a ZIP file package.  \n  \n Flush is called automatically by the <xref:System.IO.Packaging.Package.Close%2A> and <xref:System.IO.Packaging.Package.Dispose%2A> methods.  When <xref:System.IO.Packaging.Package.Close%2A> or <xref:System.IO.Packaging.Package.Dispose%2A> is called you do not have to call Flush separately."
   syntax:
     content: public void Flush ();
     parameters: []
   overload: System.IO.Packaging.Package.Flush*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is read-only and cannot be modified.
   platform:
   - net-11
   - net-20
@@ -458,12 +587,13 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, saves the content of all parts and relationships to the derived class store.
+  remarks: FlushCore is called by the <xref:System.IO.Packaging.Package.Flush%2A> method to perform the actual flush operation based on the physical format implemented in the derived class.
   syntax:
     content: protected abstract void FlushCore ();
     parameters: []
   overload: System.IO.Packaging.Package.FlushCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -480,18 +610,36 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the part with a given URI.
+  remarks: "An <xref:System.InvalidOperationException> is thrown if a part with the specified `partUri` does not exist.  \n  \n The <xref:System.IO.Packaging.Package.PartExists%2A> method can be used to determine whether `partUri` references an existing part.  \n  \n By default, a <xref:System.IO.Packaging.ZipPackage> derived implementation of the abstract <xref:System.IO.Packaging.Package> base class is provided and used.  In the default operation, GetPart internally calls <xref:System.IO.Packaging.Package.GetPartCore%2A> of the <xref:System.IO.Packaging.ZipPackage> class to return a requested part from a ZIP file.  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example shows how to locate, retrieve, and read parts that are contained in a package.  For the complete sample, see [Reading a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160034).  \n  \n [!code-vb[PackageRead#PackageReadUsing](../../add/codesnippet/VisualBasic/packageread/packageread.vb#packagereadusing)]\n [!code-cs[PackageRead#PackageReadUsing](../../add/codesnippet/CSharp/PackageRead/PackageRead.cs#packagereadusing)]"
   syntax:
     content: public System.IO.Packaging.PackagePart GetPart (Uri partUri);
     parameters:
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)] of the part to return.
     return:
       type: System.IO.Packaging.PackagePart
-      description: To be added.
+      description: The part with the specified partUri.
   overload: System.IO.Packaging.Package.GetPart*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    partUri is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    partUri is not a valid  [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)]."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A part with the specified partUri is not in the package.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only.
   platform:
   - net-11
   - net-20
@@ -508,18 +656,19 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, returns the part addressed by a given URI.
+  remarks: "By default, a <xref:System.IO.Packaging.ZipPackage> derived implementation of the abstract <xref:System.IO.Packaging.Package> class is provided and used.  In the default operation, <xref:System.IO.Packaging.Package.GetPart%2A> internally calls GetPartCore of the <xref:System.IO.Packaging.ZipPackage> class to retrieve a part from a ZIP file.  \n  \n For more information about the package model and package parts, see Chapter 1 of the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: protected abstract System.IO.Packaging.PackagePart GetPartCore (Uri partUri);
     parameters:
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)] of the part to retrieve.
     return:
       type: System.IO.Packaging.PackagePart
-      description: To be added.
+      description: The requested part; or , if a part with the specified partUri is not in the package.
   overload: System.IO.Packaging.Package.GetPartCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -536,15 +685,24 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a collection of all the parts in the package.
+  remarks: "GetParts returns a collection of all parts that are contained in the package including <xref:System.IO.Packaging.PackageRelationship> parts.  \n  \n GetParts will never return `null`; however, the returned collection will contain zero elements if the package contains no parts.  \n  \n By default, a <xref:System.IO.Packaging.ZipPackage> derived implementation of the abstract <xref:System.IO.Packaging.Package> base class is provided and used.  In the default operation, GetParts calls the <xref:System.IO.Packaging.Package.GetPartsCore%2A> method of the <xref:System.IO.Packaging.ZipPackage> class to return the parts from a ZIP file.  \n  \n For more information about packages and package parts, see section 1.1 of the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example shows how to use the GetParts method to obtain a collection of the parts that are contained in a <xref:System.IO.Packaging.Package>.  For the complete program source code, see [Creating a Package with a Digital Signature Sample](http://go.microsoft.com/fwlink/?LinkID=159966).  \n  \n [!CODE [PackageDigitalSignature#PackageDigSigGetParts](../CodeSnippet/VS_Snippets_Wpf/PackageDigitalSignature#packagedigsiggetparts)]"
   syntax:
     content: public System.IO.Packaging.PackagePartCollection GetParts ();
     parameters: []
     return:
       type: System.IO.Packaging.PackagePartCollection
-      description: To be added.
+      description: A collection of all the  elements that are contained in the package.
   overload: System.IO.Packaging.Package.GetParts*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only.
   platform:
   - net-11
   - net-20
@@ -561,15 +719,16 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, returns an array of all the parts in the package.
+  remarks: "The derived class GetPartsCore implementation is called by the <xref:System.IO.Packaging.Package.GetParts%2A> method to access and return the array of parts based on the physical format implemented in the derived class.  \n  \n By default, a <xref:System.IO.Packaging.ZipPackage> derived implementation of the abstract <xref:System.IO.Packaging.Package> class is provided and used.  In the default operation, <xref:System.IO.Packaging.Package.GetParts%2A> internally calls <xref:System.IO.Packaging.Package.GetPartCore%2A> of the <xref:System.IO.Packaging.ZipPackage> class to retrieve the parts from a ZIP file.  \n  \n For more information about the package model and package parts, see Chapter 1 of the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: protected abstract System.IO.Packaging.PackagePart[] GetPartsCore ();
     parameters: []
     return:
       type: System.IO.Packaging.PackagePart[]
-      description: To be added.
+      description: An array of all the parts that are contained in the package.
   overload: System.IO.Packaging.Package.GetPartsCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -586,18 +745,34 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the package-level relationship with a given identifier.
+  remarks: "`id` must be a valid XML identifier.  The `id` type is xsd:ID and must follow the naming conventions prescribed in the XML Schema Part 2: Datatypes specification (see [http://www.w3.org/TR/xmlschema-2/#ID](http://www.w3.org/TR/xmlschema-2/#ID)).  \n  \n For additional information about packaging and package relationships, see section 1.3 of the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: public System.IO.Packaging.PackageRelationship GetRelationship (string id);
     parameters:
     - id: id
       type: System.String
-      description: To be added.
+      description: The <xref:System.IO.Packaging.PackageRelationship.Id%2A> of the relationship to return.
     return:
       type: System.IO.Packaging.PackageRelationship
-      description: To be added.
+      description: The package-level relationship with the specified id.
   overload: System.IO.Packaging.Package.GetRelationship*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    id is ."
+  - type: System.Xml.XmlException
+    commentId: T:System.Xml.XmlException
+    description: "\n    id is not a valid XML identifier."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A relationship with the specified id is not in the package.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only.
   platform:
   - net-11
   - net-20
@@ -614,15 +789,22 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a collection of all the package-level relationships.
+  remarks: "GetRelationships will never return `null`; however the returned collection may contain zero elements if the package contains no package-level relationships.  \n  \n A package-level relationship defines an association between the package and an associated target part or resource.  A package-level relationship can be one of two forms.  \n  \n-   Between a <xref:System.IO.Packaging.Package> to a target part in the package.  \n  \n-   Between a <xref:System.IO.Packaging.Package> to a target resource outside the package.  \n  \n In a package-relationship the package is considered the \"owner\" of the relationship.  When the package is deleted, all the relationships owned by the package are also deleted.  The process of creating or deleting the relationship does not physically alter the target part or resource in any way.  \n  \n For additional information about packaging and package relationships, see section 1.3 of the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: public System.IO.Packaging.PackageRelationshipCollection GetRelationships ();
     parameters: []
     return:
       type: System.IO.Packaging.PackageRelationshipCollection
-      description: To be added.
+      description: A collection of all the package-level relationships that are contained in the package.
   overload: System.IO.Packaging.Package.GetRelationships*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only.
   platform:
   - net-11
   - net-20
@@ -639,18 +821,33 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a collection of all the package-level relationships that match a given <xref:System.IO.Packaging.PackageRelationship.RelationshipType%2A>.
+  remarks: "<xref:System.IO.Packaging.Package.GetRelationships%2A> will never return `null`; however the returned collection may contain zero elements if there are no package-level relationships that match the specified `relationshipType`.  \n  \n The following table shows the package-level `relationshipType` URIs defined by the Open Packaging Conventions (OPC) specification.  \n  \n|Package-level Relationship|Relationship Type URI|  \n|---------------------------------|---------------------------|  \n|Core Properties|http://schemas.openxmlformats.org/package/2006/relationships/meta data/core-properties|  \n|Digital Signature|http://schemas.openxmlformats.org/package/2006/relationships/digit al-signature/signature|  \n|Digital Signature Certificate|http://schemas.openxmlformats.org/package/2006/relationships/digit al-signature/certificate|  \n|Digital Signature Origin|http://schemas.openxmlformats.org/package/2006/relationships/digit al-signature/origin|  \n|Thumbnail|http://schemas.openxmlformats.org/package/2006/relationships/meta data/thumbnail|  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example shows how to retrieve the relationships that have been defined for the package.  For the complete sample, see [Reading a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160034).  \n  \n [!code-vb[PackageRead#PackageReadUsing](../../add/codesnippet/VisualBasic/packageread/packageread.vb#packagereadusing)]\n [!code-cs[PackageRead#PackageReadUsing](../../add/codesnippet/CSharp/PackageRead/PackageRead.cs#packagereadusing)]"
   syntax:
     content: public System.IO.Packaging.PackageRelationshipCollection GetRelationshipsByType (string relationshipType);
     parameters:
     - id: relationshipType
       type: System.String
-      description: To be added.
+      description: The <xref:System.IO.Packaging.PackageRelationship.RelationshipType%2A> to match and return in the collection.
     return:
       type: System.IO.Packaging.PackageRelationshipCollection
-      description: To be added.
+      description: A collection of package-level relationships that match the specified relationshipType.
   overload: System.IO.Packaging.Package.GetRelationshipsByType*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    relationshipType is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    relationshipType is an empty string."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only.
   platform:
   - net-11
   - net-20
@@ -667,18 +864,25 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a package on a given IO stream.
+  remarks: "<xref:System.IO.Packaging.ZipPackage> is the default package type that is used by the Open method.  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: public static System.IO.Packaging.Package Open (System.IO.Stream stream);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: The IO stream on which to open the package.
     return:
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The opened package.
   overload: System.IO.Packaging.Package.Open*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    stream is ."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package to open requires read or read/write permission and the specified stream is write-only; or, the package to open requires write or read/write permission and the specified stream is read-only.
   platform:
   - net-11
   - net-20
@@ -695,18 +899,24 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a package at a given path and file name.
+  remarks: "<xref:System.IO.Packaging.ZipPackage> is the default package type that is used by the Open method.  \n  \n This <xref:System.IO.Packaging.Package.Open%2A> method opens the package with default attributes <xref:System.IO.FileMode>, <xref:System.IO.FileAccess>, and <xref:System.IO.FileShare> (to specify different attributes use one of the other Open method overloads).  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example shows how to create a new <xref:System.IO.Packaging.Package> that incorporates <xref:System.IO.Packaging.PackageRelationship> and <xref:System.IO.Packaging.PackagePart> elements together with stored data.  For the complete sample, see [Writing a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160055).  \n  \n [!code-vb[PackageWrite#PackageWriteCreatePackage](../../add/codesnippet/VisualBasic/packagewrite/packagewrite.vb#packagewritecreatepackage)]\n [!code-cs[PackageWrite#PackageWriteCreatePackage](../../add/codesnippet/CSharp/PackageWrite/PackageWrite.cs#packagewritecreatepackage)]"
   syntax:
     content: public static System.IO.Packaging.Package Open (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path and file name of the package.
     return:
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The opened package.
   overload: System.IO.Packaging.Package.Open*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
   platform:
   - net-11
   - net-20
@@ -723,21 +933,31 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a package with a given IO stream and file mode.
+  remarks: "<xref:System.IO.Packaging.ZipPackage> is the default package type that is used by the Open method.  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: public static System.IO.Packaging.Package Open (System.IO.Stream stream, System.IO.FileMode packageMode);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: The IO stream on which to open the package.
     - id: packageMode
       type: System.IO.FileMode
-      description: To be added.
+      description: The file mode in which to open the package.
     return:
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The opened package.
   overload: System.IO.Packaging.Package.Open*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    stream is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    packageMode value is not valid."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package to open requires read or read/write permission and the specified stream is write-only; or, the package to open requires write or read/write permission and the specified stream is read-only.
   platform:
   - net-11
   - net-20
@@ -754,21 +974,30 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a package at a given path using a given file mode.
+  remarks: "<xref:System.IO.Packaging.ZipPackage> is the default package type that is used by the Open method.  \n  \n This Open method opens the package with default attributes <xref:System.IO.FileAccess> and <xref:System.IO.FileShare> (to specify different attributes use one of the other Open method overloads).  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example shows how to create a new <xref:System.IO.Packaging.Package> that incorporates <xref:System.IO.Packaging.PackageRelationship> and <xref:System.IO.Packaging.PackagePart> elements together with stored data.  For the complete sample, see [Writing a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160055).  \n  \n [!code-vb[PackageWrite#PackageWriteCreatePackage](../../add/codesnippet/VisualBasic/packagewrite/packagewrite.vb#packagewritecreatepackage)]\n [!code-cs[PackageWrite#PackageWriteCreatePackage](../../add/codesnippet/CSharp/PackageWrite/PackageWrite.cs#packagewritecreatepackage)]"
   syntax:
     content: public static System.IO.Packaging.Package Open (string path, System.IO.FileMode packageMode);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path and file name of the package.
     - id: packageMode
       type: System.IO.FileMode
-      description: To be added.
+      description: The file mode in which to open the package.
     return:
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The opened package.
   overload: System.IO.Packaging.Package.Open*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: Value for packageMode is not valid.
   platform:
   - net-11
   - net-20
@@ -785,24 +1014,34 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a package with a given IO stream, file mode, and file access setting.
+  remarks: "<xref:System.IO.Packaging.ZipPackage> is the default package type that is used by the Open method.  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: public static System.IO.Packaging.Package Open (System.IO.Stream stream, System.IO.FileMode packageMode, System.IO.FileAccess packageAccess);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: The IO stream on which to open the package.
     - id: packageMode
       type: System.IO.FileMode
-      description: To be added.
+      description: The file mode in which to open the package.
     - id: packageAccess
       type: System.IO.FileAccess
-      description: To be added.
+      description: The file access in which to open the package.
     return:
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The opened package.
   overload: System.IO.Packaging.Package.Open*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    stream is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value for packageMode or packageAccess is not valid.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package to open requires read or read/write permission and the specified stream is write-only; or the package to open requires write or read/write permission and the specified stream is read-only.
   platform:
   - net-11
   - net-20
@@ -819,24 +1058,33 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a package at a given path using a given file mode and file access setting.
+  remarks: "<xref:System.IO.Packaging.ZipPackage> is the default package type that is used by the Open method.  \n  \n This Open method opens the package with a default <xref:System.IO.FileShare> attribute (to specify a different attribute use the <xref:System.IO.Packaging.Package.Open%2A> method overload).  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example shows how to open and read a <xref:System.IO.Packaging.Package> that contains <xref:System.IO.Packaging.PackageRelationship> and <xref:System.IO.Packaging.PackagePart> elements together with stored data.  For the complete sample, see [Reading a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160034).  \n  \n [!code-vb[PackageRead#PackageReadUsing](../../add/codesnippet/VisualBasic/packageread/packageread.vb#packagereadusing)]\n [!code-cs[PackageRead#PackageReadUsing](../../add/codesnippet/CSharp/PackageRead/PackageRead.cs#packagereadusing)]"
   syntax:
     content: public static System.IO.Packaging.Package Open (string path, System.IO.FileMode packageMode, System.IO.FileAccess packageAccess);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path and file name of the package.
     - id: packageMode
       type: System.IO.FileMode
-      description: To be added.
+      description: The file mode in which to open the package.
     - id: packageAccess
       type: System.IO.FileAccess
-      description: To be added.
+      description: The file access in which to open the package.
     return:
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The opened package.
   overload: System.IO.Packaging.Package.Open*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: Value for packageMode or packageAccess is not valid.
   platform:
   - net-11
   - net-20
@@ -853,27 +1101,36 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens a package at a given path using a given file mode, file access, and file share setting.
+  remarks: "<xref:System.IO.Packaging.ZipPackage> is the default package type that is used by the Open method.  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
+  example:
+  - "The following example shows how to create a new <xref:System.IO.Packaging.Package> that incorporates <xref:System.IO.Packaging.PackageRelationship> and <xref:System.IO.Packaging.PackagePart> elements together with stored data.  For the complete sample, see [Writing a Package Sample](http://go.microsoft.com/fwlink/?LinkID=160055).  \n  \n [!code-vb[PackageWrite#PackageWriteCreatePackage](../../add/codesnippet/VisualBasic/packagewrite/packagewrite.vb#packagewritecreatepackage)]\n [!code-cs[PackageWrite#PackageWriteCreatePackage](../../add/codesnippet/CSharp/PackageWrite/PackageWrite.cs#packagewritecreatepackage)]"
   syntax:
     content: public static System.IO.Packaging.Package Open (string path, System.IO.FileMode packageMode, System.IO.FileAccess packageAccess, System.IO.FileShare packageShare);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The path and file name of the package.
     - id: packageMode
       type: System.IO.FileMode
-      description: To be added.
+      description: The file mode in which to open the package.
     - id: packageAccess
       type: System.IO.FileAccess
-      description: To be added.
+      description: The file access in which to open the package.
     - id: packageShare
       type: System.IO.FileShare
-      description: To be added.
+      description: The file sharing mode in which to open the package.
     return:
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The opened package.
   overload: System.IO.Packaging.Package.Open*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    path is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value for packageMode, packageAccess, or packageShare is not valid.
   platform:
   - net-11
   - net-20
@@ -890,14 +1147,18 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the core properties of the package.
+  remarks: For additional information about core package properties, see section 3.1 in the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255).
   syntax:
     content: public System.IO.Packaging.PackageProperties PackageProperties { get; }
     return:
       type: System.IO.Packaging.PackageProperties
-      description: To be added.
+      description: The core properties of the package.
   overload: System.IO.Packaging.Package.PackageProperties*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
   platform:
   - net-11
   - net-20
@@ -914,18 +1175,31 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether a part with a given URI is in the package.
+  remarks: "The `partUri` should begin with a forward-slash character \"/\" and be absolute from the root of the package.  \n  \n For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255)."
   syntax:
     content: public virtual bool PartExists (Uri partUri);
     parameters:
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The <xref:System.Uri> of the part to check for.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a part with the specified partUri is in the package; otherwise, .
   overload: System.IO.Packaging.Package.PartExists*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    partUri is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    partUri is not a valid  [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)]."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only (information cannot be read).
   platform:
   - net-11
   - net-20
@@ -942,18 +1216,31 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether a package-level relationship with a given ID is contained in the package.
+  remarks: For additional information, see the Open Packaging Conventions (OPC) specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255).
   syntax:
     content: public bool RelationshipExists (string id);
     parameters:
     - id: id
       type: System.String
-      description: To be added.
+      description: The <xref:System.IO.Packaging.PackageRelationship.Id%2A> of the relationship to check for.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a package-level relationship with the specified id is in the package; otherwise, .
   overload: System.IO.Packaging.Package.RelationshipExists*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    id is ."
+  - type: System.Xml.XmlException
+    commentId: T:System.Xml.XmlException
+    description: "\n    id is not a valid XML identifier."
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only.
   platform:
   - net-11
   - net-20
@@ -971,12 +1258,12 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: This member supports the [!INCLUDE[TLA#tla_winclient](../../add/includes/tlasharptla-winclient-md.md)] infrastructure and is not intended for application use.  Use the type-safe <xref:System.IO.Packaging.Package.Dispose%2A> method instead.
   syntax:
     content: void IDisposable.Dispose ();
     parameters: []
   overload: System.IO.Packaging.Package.System#IDisposable#Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1003,12 +1290,6 @@ references:
   name: Package(FileAccess,Boolean)
   nameWithType: Package.Package(FileAccess,Boolean)
   fullName: System.IO.Packaging.Package.Package(FileAccess,Boolean)
-- uid: System.IO.FileAccess
-  parent: System.IO
-  isExternal: false
-  name: FileAccess
-  nameWithType: FileAccess
-  fullName: System.IO.FileAccess
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -1051,24 +1332,6 @@ references:
   name: CreatePart(Uri,String,CompressionOption)
   nameWithType: Package.CreatePart(Uri,String,CompressionOption)
   fullName: System.IO.Packaging.Package.CreatePart(Uri,String,CompressionOption)
-- uid: System.IO.Packaging.PackagePart
-  parent: System.IO.Packaging
-  isExternal: false
-  name: PackagePart
-  nameWithType: PackagePart
-  fullName: System.IO.Packaging.PackagePart
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.CompressionOption
   parent: System.IO.Packaging
   isExternal: false
@@ -1081,30 +1344,6 @@ references:
   name: CreatePartCore(Uri,String,CompressionOption)
   nameWithType: Package.CreatePartCore(Uri,String,CompressionOption)
   fullName: System.IO.Packaging.Package.CreatePartCore(Uri,String,CompressionOption)
-- uid: System.IO.Packaging.PackagePart
-  parent: System.IO.Packaging
-  isExternal: false
-  name: PackagePart
-  nameWithType: PackagePart
-  fullName: System.IO.Packaging.PackagePart
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.Packaging.CompressionOption
-  parent: System.IO.Packaging
-  isExternal: false
-  name: CompressionOption
-  nameWithType: CompressionOption
-  fullName: System.IO.Packaging.CompressionOption
 - uid: System.IO.Packaging.Package.CreateRelationship(System.Uri,System.IO.Packaging.TargetMode,System.String)
   parent: System.IO.Packaging.Package
   isExternal: false
@@ -1117,120 +1356,48 @@ references:
   name: PackageRelationship
   nameWithType: PackageRelationship
   fullName: System.IO.Packaging.PackageRelationship
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.IO.Packaging.TargetMode
   parent: System.IO.Packaging
   isExternal: false
   name: TargetMode
   nameWithType: TargetMode
   fullName: System.IO.Packaging.TargetMode
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.Package.CreateRelationship(System.Uri,System.IO.Packaging.TargetMode,System.String,System.String)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: CreateRelationship(Uri,TargetMode,String,String)
   nameWithType: Package.CreateRelationship(Uri,TargetMode,String,String)
   fullName: System.IO.Packaging.Package.CreateRelationship(Uri,TargetMode,String,String)
-- uid: System.IO.Packaging.PackageRelationship
-  parent: System.IO.Packaging
-  isExternal: false
-  name: PackageRelationship
-  nameWithType: PackageRelationship
-  fullName: System.IO.Packaging.PackageRelationship
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
-- uid: System.IO.Packaging.TargetMode
-  parent: System.IO.Packaging
-  isExternal: false
-  name: TargetMode
-  nameWithType: TargetMode
-  fullName: System.IO.Packaging.TargetMode
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.Package.DeletePart(System.Uri)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: DeletePart(Uri)
   nameWithType: Package.DeletePart(Uri)
   fullName: System.IO.Packaging.Package.DeletePart(Uri)
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.IO.Packaging.Package.DeletePartCore(System.Uri)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: DeletePartCore(Uri)
   nameWithType: Package.DeletePartCore(Uri)
   fullName: System.IO.Packaging.Package.DeletePartCore(Uri)
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.IO.Packaging.Package.DeleteRelationship(System.String)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: DeleteRelationship(String)
   nameWithType: Package.DeleteRelationship(String)
   fullName: System.IO.Packaging.Package.DeleteRelationship(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.Package.Dispose(System.Boolean)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: Dispose(Boolean)
   nameWithType: Package.Dispose(Boolean)
   fullName: System.IO.Packaging.Package.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.IO.Packaging.Package.FileOpenAccess
   parent: System.IO.Packaging.Package
   isExternal: false
   name: FileOpenAccess
   nameWithType: Package.FileOpenAccess
   fullName: System.IO.Packaging.Package.FileOpenAccess
-- uid: System.IO.FileAccess
-  parent: System.IO
-  isExternal: false
-  name: FileAccess
-  nameWithType: FileAccess
-  fullName: System.IO.FileAccess
 - uid: System.IO.Packaging.Package.Flush
   parent: System.IO.Packaging.Package
   isExternal: false
@@ -1249,36 +1416,12 @@ references:
   name: GetPart(Uri)
   nameWithType: Package.GetPart(Uri)
   fullName: System.IO.Packaging.Package.GetPart(Uri)
-- uid: System.IO.Packaging.PackagePart
-  parent: System.IO.Packaging
-  isExternal: false
-  name: PackagePart
-  nameWithType: PackagePart
-  fullName: System.IO.Packaging.PackagePart
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.IO.Packaging.Package.GetPartCore(System.Uri)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: GetPartCore(Uri)
   nameWithType: Package.GetPartCore(Uri)
   fullName: System.IO.Packaging.Package.GetPartCore(Uri)
-- uid: System.IO.Packaging.PackagePart
-  parent: System.IO.Packaging
-  isExternal: false
-  name: PackagePart
-  nameWithType: PackagePart
-  fullName: System.IO.Packaging.PackagePart
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.IO.Packaging.Package.GetParts
   parent: System.IO.Packaging.Package
   isExternal: false
@@ -1297,30 +1440,26 @@ references:
   name: GetPartsCore()
   nameWithType: Package.GetPartsCore()
   fullName: System.IO.Packaging.Package.GetPartsCore()
-- uid: System.IO.Packaging.PackagePart
+- uid: System.IO.Packaging.PackagePart[]
   parent: System.IO.Packaging
   isExternal: false
   name: PackagePart
   nameWithType: PackagePart
   fullName: System.IO.Packaging.PackagePart[]
+  spec.csharp:
+  - uid: System.IO.Packaging.PackagePart
+    name: PackagePart
+    nameWithType: PackagePart
+    fullName: PackagePart[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.IO.Packaging.Package.GetRelationship(System.String)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: GetRelationship(String)
   nameWithType: Package.GetRelationship(String)
   fullName: System.IO.Packaging.Package.GetRelationship(String)
-- uid: System.IO.Packaging.PackageRelationship
-  parent: System.IO.Packaging
-  isExternal: false
-  name: PackageRelationship
-  nameWithType: PackageRelationship
-  fullName: System.IO.Packaging.PackageRelationship
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.Package.GetRelationships
   parent: System.IO.Packaging.Package
   isExternal: false
@@ -1339,18 +1478,6 @@ references:
   name: GetRelationshipsByType(String)
   nameWithType: Package.GetRelationshipsByType(String)
   fullName: System.IO.Packaging.Package.GetRelationshipsByType(String)
-- uid: System.IO.Packaging.PackageRelationshipCollection
-  parent: System.IO.Packaging
-  isExternal: false
-  name: PackageRelationshipCollection
-  nameWithType: PackageRelationshipCollection
-  fullName: System.IO.Packaging.PackageRelationshipCollection
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.Package.Open(System.IO.Stream)
   parent: System.IO.Packaging.Package
   isExternal: false
@@ -1375,36 +1502,12 @@ references:
   name: Open(String)
   nameWithType: Package.Open(String)
   fullName: System.IO.Packaging.Package.Open(String)
-- uid: System.IO.Packaging.Package
-  parent: System.IO.Packaging
-  isExternal: false
-  name: Package
-  nameWithType: Package
-  fullName: System.IO.Packaging.Package
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.Package.Open(System.IO.Stream,System.IO.FileMode)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: Open(Stream,FileMode)
   nameWithType: Package.Open(Stream,FileMode)
   fullName: System.IO.Packaging.Package.Open(Stream,FileMode)
-- uid: System.IO.Packaging.Package
-  parent: System.IO.Packaging
-  isExternal: false
-  name: Package
-  nameWithType: Package
-  fullName: System.IO.Packaging.Package
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
 - uid: System.IO.FileMode
   parent: System.IO
   isExternal: false
@@ -1417,114 +1520,24 @@ references:
   name: Open(String,FileMode)
   nameWithType: Package.Open(String,FileMode)
   fullName: System.IO.Packaging.Package.Open(String,FileMode)
-- uid: System.IO.Packaging.Package
-  parent: System.IO.Packaging
-  isExternal: false
-  name: Package
-  nameWithType: Package
-  fullName: System.IO.Packaging.Package
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
 - uid: System.IO.Packaging.Package.Open(System.IO.Stream,System.IO.FileMode,System.IO.FileAccess)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: Open(Stream,FileMode,FileAccess)
   nameWithType: Package.Open(Stream,FileMode,FileAccess)
   fullName: System.IO.Packaging.Package.Open(Stream,FileMode,FileAccess)
-- uid: System.IO.Packaging.Package
-  parent: System.IO.Packaging
-  isExternal: false
-  name: Package
-  nameWithType: Package
-  fullName: System.IO.Packaging.Package
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
-- uid: System.IO.FileAccess
-  parent: System.IO
-  isExternal: false
-  name: FileAccess
-  nameWithType: FileAccess
-  fullName: System.IO.FileAccess
 - uid: System.IO.Packaging.Package.Open(System.String,System.IO.FileMode,System.IO.FileAccess)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: Open(String,FileMode,FileAccess)
   nameWithType: Package.Open(String,FileMode,FileAccess)
   fullName: System.IO.Packaging.Package.Open(String,FileMode,FileAccess)
-- uid: System.IO.Packaging.Package
-  parent: System.IO.Packaging
-  isExternal: false
-  name: Package
-  nameWithType: Package
-  fullName: System.IO.Packaging.Package
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
-- uid: System.IO.FileAccess
-  parent: System.IO
-  isExternal: false
-  name: FileAccess
-  nameWithType: FileAccess
-  fullName: System.IO.FileAccess
 - uid: System.IO.Packaging.Package.Open(System.String,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: Open(String,FileMode,FileAccess,FileShare)
   nameWithType: Package.Open(String,FileMode,FileAccess,FileShare)
   fullName: System.IO.Packaging.Package.Open(String,FileMode,FileAccess,FileShare)
-- uid: System.IO.Packaging.Package
-  parent: System.IO.Packaging
-  isExternal: false
-  name: Package
-  nameWithType: Package
-  fullName: System.IO.Packaging.Package
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
-- uid: System.IO.FileAccess
-  parent: System.IO
-  isExternal: false
-  name: FileAccess
-  nameWithType: FileAccess
-  fullName: System.IO.FileAccess
 - uid: System.IO.FileShare
   parent: System.IO
   isExternal: false
@@ -1549,36 +1562,12 @@ references:
   name: PartExists(Uri)
   nameWithType: Package.PartExists(Uri)
   fullName: System.IO.Packaging.Package.PartExists(Uri)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.IO.Packaging.Package.RelationshipExists(System.String)
   parent: System.IO.Packaging.Package
   isExternal: false
   name: RelationshipExists(String)
   nameWithType: Package.RelationshipExists(String)
   fullName: System.IO.Packaging.Package.RelationshipExists(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.Package.System#IDisposable#Dispose
   parent: System.IO.Packaging.Package
   isExternal: false

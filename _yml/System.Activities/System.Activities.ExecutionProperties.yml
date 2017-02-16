@@ -16,8 +16,8 @@ items:
   nameWithType: ExecutionProperties
   fullName: System.Activities.ExecutionProperties
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the collection of properties at a particular scope.
+  remarks: "Through thread local storage (TLS), the CLR maintains an execution context for each thread. This execution context governs well-known thread properties such as the thread identity, the ambient transaction, and the current permission set as well as user-defined thread properties like named slots.  \n  \n Unlike programs directly targeting the CLR, workflow programs are hierarchically-scoped trees that execute in a thread-agnostic environment. This implies that the standard TLS mechanisms cannot directly be used to determine what context is in scope for a given work item. For example, two parallel branches of execution might use different identities yet the scheduler might interleave their execution on the same CLR thread.  \n  \n Execution properties allow an activity to declare which properties are in scope for its sub-tree as well as provide hooks for setting up and tearing down TLS to properly interoperate with CLR objects."
   syntax:
     content: 'public sealed class ExecutionProperties : System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string,object>>'
   inheritance:
@@ -41,18 +41,18 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a new property using the specified name.
   syntax:
     content: public void Add (string name, object property);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the property.
     - id: property
       type: System.Object
-      description: To be added.
+      description: The object that represents the property.
   overload: System.Activities.ExecutionProperties.Add*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -69,21 +69,21 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a property using the specified name and child visibility.
   syntax:
     content: public void Add (string name, object property, bool onlyVisibleToPublicChildren);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the property.
     - id: property
       type: System.Object
-      description: To be added.
+      description: The object that represents the property.
     - id: onlyVisibleToPublicChildren
       type: System.Boolean
-      description: To be added.
+      description: A value that determines whether this property is visible to the children of the owning activity.
   overload: System.Activities.ExecutionProperties.Add*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -100,18 +100,19 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the nearest property of the given name.
+  remarks: Find finds the nearest visible property using hierarchical scoping. If two properties have the same name, the closest property at the parent scope is returned.
   syntax:
     content: public object Find (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the property.
     return:
       type: System.Object
-      description: To be added.
+      description: The nearest property of the given name.
   overload: System.Activities.ExecutionProperties.Find*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -128,15 +129,15 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an enumerator that iterates through the collection of properties.
   syntax:
     content: public System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<string,object>> GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.Generic.IEnumerator{System.Collections.Generic.KeyValuePair{System.String,System.Object}}
-      description: To be added.
+      description: An enumerator that iterates through the collection of properties.
   overload: System.Activities.ExecutionProperties.GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -153,14 +154,14 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether there are properties registered at the current scope.
   syntax:
     content: public bool IsEmpty { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if there are properties registered; otherwise, .
   overload: System.Activities.ExecutionProperties.IsEmpty*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -177,18 +178,19 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Unregisters the property with the specified name.
+  remarks: Properties are automatically unregistered when the activity completes. This method can be used to unregister a property before the activity completes.
   syntax:
     content: public bool Remove (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the property to unregister.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the property was unregistered; otherwise, .
   overload: System.Activities.ExecutionProperties.Remove*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -206,15 +208,15 @@ items:
   assemblies:
   - System.Activities
   namespace: System.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an enumerator that iterates through the collection of properties.
   syntax:
     content: System.Collections.IEnumerator IEnumerable.GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.IEnumerator
-      description: To be added.
+      description: An enumerator that iterates through the collection of properties.
   overload: System.Activities.ExecutionProperties.System#Collections#IEnumerable#GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -235,30 +237,12 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Activities.ExecutionProperties.Add(System.String,System.Object,System.Boolean)
   parent: System.Activities.ExecutionProperties
   isExternal: false
   name: Add(String,Object,Boolean)
   nameWithType: ExecutionProperties.Add(String,Object,Boolean)
   fullName: System.Activities.ExecutionProperties.Add(String,Object,Boolean)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -271,18 +255,6 @@ references:
   name: Find(String)
   nameWithType: ExecutionProperties.Find(String)
   fullName: System.Activities.ExecutionProperties.Find(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Activities.ExecutionProperties.GetEnumerator
   parent: System.Activities.ExecutionProperties
   isExternal: false
@@ -295,36 +267,50 @@ references:
   name: IEnumerator<KeyValuePair<String,Object>>
   nameWithType: IEnumerator<KeyValuePair<String,Object>>
   fullName: System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<System.String,System.Object>>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerator`1
+    name: IEnumerator
+    nameWithType: IEnumerator
+    fullName: IEnumerator<System.Collections.Generic.KeyValuePair<System.String,System.Object>>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Collections.Generic.KeyValuePair`2
+    name: KeyValuePair
+    nameWithType: KeyValuePair
+    fullName: KeyValuePair<System.String,System.Object>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Activities.ExecutionProperties.IsEmpty
   parent: System.Activities.ExecutionProperties
   isExternal: false
   name: IsEmpty
   nameWithType: ExecutionProperties.IsEmpty
   fullName: System.Activities.ExecutionProperties.IsEmpty
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Activities.ExecutionProperties.Remove(System.String)
   parent: System.Activities.ExecutionProperties
   isExternal: false
   name: Remove(String)
   nameWithType: ExecutionProperties.Remove(String)
   fullName: System.Activities.ExecutionProperties.Remove(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Activities.ExecutionProperties.System#Collections#IEnumerable#GetEnumerator
   parent: System.Activities.ExecutionProperties
   isExternal: false

@@ -45,8 +45,8 @@ items:
   nameWithType: Geometry
   fullName: System.Windows.Media.Geometry
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Classes that derive from this abstract base class define geometric shapes. Geometry objects can be used for clipping, hit-testing, and rendering 2-D graphic data.
+  remarks: "## Geometry Compared to Shape  \n The <xref:System.Windows.Shapes.Shape?displayProperty=fullName> class has a <xref:System.Windows.Shapes.Shape.Fill%2A>, <xref:System.Windows.Shapes.Shape.Stroke%2A>, and other rendering properties that Geometry and its derived classes lack. The <xref:System.Windows.Shapes.Shape> class is a <xref:System.Windows.FrameworkElement> and therefore participates in the layout system; its derived classes can be used as the content of any element that supports <xref:System.Windows.UIElement> children.  \n  \n The Geometry class, on the other hand, simply defines the geometry of a shape, and cannot render itself. Because of its simplicity, it has a wider range of uses.  \n  \n **Freezable Features:** Because it inherits from the <xref:System.Windows.Freezable> class, the Geometry class provides several special features: Geometry objects can be declared as , shared among multiple objects, made read-only to improve performance, cloned, and made thread-safe. For more information about the different features provided by <xref:System.Windows.Freezable> objects, see [Freezable Objects Overview](../Topic/Freezable%20Objects%20Overview.md)."
   syntax:
     content: >-
       [System.ComponentModel.TypeConverter(typeof(System.Windows.Media.GeometryConverter))]
@@ -127,14 +127,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  that specifies the axis-aligned bounding box of the .
+  remarks: This property does not take into account the area potentially added by a stroke.
   syntax:
     content: public virtual System.Windows.Rect Bounds { get; }
     return:
       type: System.Windows.Rect
-      description: To be added.
+      description: The axis-aligned bounding box of the .
   overload: System.Windows.Media.Geometry.Bounds*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -151,15 +152,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a modifiable clone of the , making deep copies of the object's values. When copying dependency properties, this method copies resource references and data bindings (but they might no longer resolve) but not animations or their current values.
+  remarks: "This method is used to produce modifiable copies of frozen <xref:System.Windows.Freezable> objects (or any <xref:System.Windows.Freezable> object). For convenience, this method shadows the inherited version with a strongly typed implementation.  \n  \n For more information, see <xref:System.Windows.Freezable.Clone%2A?displayProperty=fullName>."
   syntax:
     content: public System.Windows.Media.Geometry Clone ();
     parameters: []
     return:
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: A modifiable clone of the current object. The cloned object's <xref:System.Windows.Freezable.IsFrozen%2A> property will be  even if the source's <xref:System.Windows.Freezable.IsFrozen%2A> property was
   overload: System.Windows.Media.Geometry.Clone*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -176,15 +178,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a modifiable clone of the  object, making deep copies of the object's current values. Resource references, data bindings, and animations are not copied, but their current values are.
+  remarks: "This method is used to produce modifiable copies of frozen <xref:System.Windows.Freezable> objects (or any <xref:System.Windows.Freezable> object). For convenience, this method shadows the inherited version with a strongly typed implementation.  \n  \n For more information, see <xref:System.Windows.Freezable.CloneCurrentValue%2A?displayProperty=fullName>."
   syntax:
     content: public System.Windows.Media.Geometry CloneCurrentValue ();
     parameters: []
     return:
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: A modifiable clone of the current object. The cloned object's <xref:System.Windows.Freezable.IsFrozen%2A> property will be  even if the source's <xref:System.Windows.Freezable.IsFrozen%2A> property was .
   overload: System.Windows.Media.Geometry.CloneCurrentValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -201,27 +204,28 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Combines the two geometries using the specified  and applies the specified transform to the resulting geometry.
+  remarks: "This method uses the default tolerance factor (described by the <xref:System.Windows.Media.Geometry.StandardFlatteningTolerance%2A> property) when combining geometries. To specify your own tolerance factor, use the <xref:System.Windows.Media.Geometry.Combine%2A> method.  \n  \n Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.Combine%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.  \n  \n Careful thought should be involved when using Combine to perform a union as it can be very CPU-expensive. In most cases, a <xref:System.Windows.Media.GeometryGroup> or <xref:System.Windows.Media.PathGeometry.AddGeometry%2A> will work better.  \n  \n Use Combine only when any of the following apply:  \n  \n-   The geometric operation is not a union.  \n  \n-   Either of the geometries has a <xref:System.Windows.Media.FillRule> value of <xref:System.Windows.Media.FillRule> and the geometries are self-intersecting (i.e. the <xref:System.Windows.Media.FillRule> actually matters).  \n  \n-   Time is not a concern, but space is (for instance, if the geometry is created once and then cached). Typically, Combine produces smaller output than <xref:System.Windows.Media.PathGeometry.AddGeometry%2A>.  \n  \n-   The resulting geometry will be stroked or used in a path animation and <xref:System.Windows.Media.PathGeometry.AddGeometry%2A> does not provide the desired outline."
   syntax:
     content: public static System.Windows.Media.PathGeometry Combine (System.Windows.Media.Geometry geometry1, System.Windows.Media.Geometry geometry2, System.Windows.Media.GeometryCombineMode mode, System.Windows.Media.Transform transform);
     parameters:
     - id: geometry1
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The first geometry to combine.
     - id: geometry2
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The second geometry to combine.
     - id: mode
       type: System.Windows.Media.GeometryCombineMode
-      description: To be added.
+      description: One of the enumeration values that specifies how the geometries are combined.
     - id: transform
       type: System.Windows.Media.Transform
-      description: To be added.
+      description: A transformation to apply to the combined geometry, or .
     return:
       type: System.Windows.Media.PathGeometry
-      description: To be added.
+      description: The combined geometry.
   overload: System.Windows.Media.Geometry.Combine*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -238,33 +242,34 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Combines the two geometries using the specified  and tolerance factor, and applies the specified transform to the resulting geometry.
+  remarks: "Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.Combine%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.  \n  \n Careful thought should be involved when using Combine to perform a union as it can be very CPU-expensive. In most cases, a <xref:System.Windows.Media.GeometryGroup> or <xref:System.Windows.Media.PathGeometry.AddGeometry%2A> will work better.  \n  \n Use Combine only when any of the following apply:  \n  \n-   The geometric operation is not a union.  \n  \n-   Either of the geometries has a <xref:System.Windows.Media.FillRule> value of <xref:System.Windows.Media.FillRule> and the geometries are self-intersecting (i.e. the <xref:System.Windows.Media.FillRule> actually matters).  \n  \n-   Time is not a concern, but space is (for instance, if the geometry is created once and then cached). Typically, Combine produces smaller output than <xref:System.Windows.Media.PathGeometry.AddGeometry%2A>.  \n  \n-   The resulting geometry will be stroked or used in a path animation and <xref:System.Windows.Media.PathGeometry.AddGeometry%2A> does not provide the desired outline."
   syntax:
     content: public static System.Windows.Media.PathGeometry Combine (System.Windows.Media.Geometry geometry1, System.Windows.Media.Geometry geometry2, System.Windows.Media.GeometryCombineMode mode, System.Windows.Media.Transform transform, double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: geometry1
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The first geometry to combine.
     - id: geometry2
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The second geometry to combine.
     - id: mode
       type: System.Windows.Media.GeometryCombineMode
-      description: To be added.
+      description: One of the enumeration values that specifies how the geometries are combined.
     - id: transform
       type: System.Windows.Media.Transform
-      description: To be added.
+      description: A transformation to apply to the combined geometry, or .
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometries. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Windows.Media.PathGeometry
-      description: To be added.
+      description: The combined geometry.
   overload: System.Windows.Media.Geometry.Combine*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -281,14 +286,14 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets an empty object.
   syntax:
     content: public static System.Windows.Media.Geometry Empty { get; }
     return:
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The empty geometry object.
   overload: System.Windows.Media.Geometry.Empty*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -305,18 +310,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the current geometry completely contains the specified .
+  remarks: The default margin of error (described by the <xref:System.Windows.Media.Geometry.StandardFlatteningTolerance%2A> property) is used when determining whether the current geometry contains the specified geometry. To specify your own margin of error, use the <xref:System.Windows.Media.Geometry.FillContains%2A> method.
   syntax:
     content: public bool FillContains (System.Windows.Media.Geometry geometry);
     parameters:
     - id: geometry
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The geometry to test for containment.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the current geometry completely contains geometry; otherwise, .
   overload: System.Windows.Media.Geometry.FillContains*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -333,18 +339,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the geometry contains the specified .
+  remarks: The default tolerance factor (described by the <xref:System.Windows.Media.Geometry.StandardFlatteningTolerance%2A> property) is used when determining whether the geometry contains the specified point. To specify your own tolerance factor, use the <xref:System.Windows.Media.Geometry.FillContains%2A> method.
   syntax:
     content: public bool FillContains (System.Windows.Point hitPoint);
     parameters:
     - id: hitPoint
       type: System.Windows.Point
-      description: To be added.
+      description: The point to test for containment.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the geometry contains hitPoint; otherwise, .
   overload: System.Windows.Media.Geometry.FillContains*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -361,24 +368,25 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the current geometry contains the specified , given the specified margin of error.
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.FillContains%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public bool FillContains (System.Windows.Media.Geometry geometry, double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: geometry
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The geometry to test for containment.
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometries. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the current geometry contains geometry, given the specified margin of error; otherwise, .
   overload: System.Windows.Media.Geometry.FillContains*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -395,24 +403,25 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the geometry contains the specified , given the specified margin of error.
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.FillContains%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public bool FillContains (System.Windows.Point hitPoint, double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: hitPoint
       type: System.Windows.Point
-      description: To be added.
+      description: The point to test for containment.
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometry. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the geometry contains hitPoint, given the specified margin of error; otherwise, .
   overload: System.Windows.Media.Geometry.FillContains*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -429,18 +438,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that describes the intersection between the current geometry and the specified geometry.
+  remarks: "The default tolerance factor (defined by the <xref:System.Windows.Media.Geometry.StandardFlatteningTolerance%2A> property) is used when determining whether the current geometry contains the specified geometry. To specify your own tolerance factor, use the <xref:System.Windows.Media.Geometry.FillContainsWithDetail%2A> method.  \n  \n Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.FillContainsWithDetail%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor."
   syntax:
     content: public System.Windows.Media.IntersectionDetail FillContainsWithDetail (System.Windows.Media.Geometry geometry);
     parameters:
     - id: geometry
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The geometry to test for containment.
     return:
       type: System.Windows.Media.IntersectionDetail
-      description: To be added.
+      description: One of the enumeration values.
   overload: System.Windows.Media.Geometry.FillContainsWithDetail*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -457,24 +467,25 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that describes the intersection between the current geometry and the specified geometry, given the specified margin of error.
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.FillContainsWithDetail%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public virtual System.Windows.Media.IntersectionDetail FillContainsWithDetail (System.Windows.Media.Geometry geometry, double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: geometry
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The geometry to test for containment.
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometries. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Windows.Media.IntersectionDetail
-      description: To be added.
+      description: One of the enumeration values.
   overload: System.Windows.Media.Geometry.FillContainsWithDetail*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -491,15 +502,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the area of the filled region of the  object.
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.GetArea%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public double GetArea ();
     parameters: []
     return:
       type: System.Double
-      description: To be added.
+      description: The area of the filled region of the geometry.
   overload: System.Windows.Media.Geometry.GetArea*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -516,21 +528,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the area, within the specified tolerance, of the filled region of the  object.
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.GetArea%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public virtual double GetArea (double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometry. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Double
-      description: To be added.
+      description: The area of the filled region of the geometry.
   overload: System.Windows.Media.Geometry.GetArea*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -547,15 +560,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  that is a polygonal approximation of the  object.
+  remarks: "This method uses the default tolerance factor (described by the <xref:System.Windows.Media.Geometry.StandardFlatteningTolerance%2A> property) when processing the geometry. To specify your own tolerance factor, use the <xref:System.Windows.Media.Geometry.GetFlattenedPathGeometry%2A> method.  \n  \n Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.GetFlattenedPathGeometry%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor."
   syntax:
     content: public System.Windows.Media.PathGeometry GetFlattenedPathGeometry ();
     parameters: []
     return:
       type: System.Windows.Media.PathGeometry
-      description: To be added.
+      description: The polygonal approximation of the .
   overload: System.Windows.Media.Geometry.GetFlattenedPathGeometry*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -572,21 +586,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a , within the specified tolerance, that is a polygonal approximation of the  object.
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.GetFlattenedPathGeometry%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public virtual System.Windows.Media.PathGeometry GetFlattenedPathGeometry (double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometry. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Windows.Media.PathGeometry
-      description: To be added.
+      description: The polygonal approximation of the .
   overload: System.Windows.Media.Geometry.GetFlattenedPathGeometry*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -603,15 +618,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  that is a simplified outline of the filled region of the .
+  remarks: "This method uses the default tolerance factor (described by the <xref:System.Windows.Media.Geometry.StandardFlatteningTolerance%2A> property) when processing the geometry. To specify your own tolerance factor, use the <xref:System.Windows.Media.Geometry.GetOutlinedPathGeometry%2A> method.  \n  \n Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.GetOutlinedPathGeometry%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor."
   syntax:
     content: public System.Windows.Media.PathGeometry GetOutlinedPathGeometry ();
     parameters: []
     return:
       type: System.Windows.Media.PathGeometry
-      description: To be added.
+      description: A simplified outline of the filled region of the .
   overload: System.Windows.Media.Geometry.GetOutlinedPathGeometry*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -628,21 +644,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a , within the specified tolerance, that is a simplified outline of the filled region of the .
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.GetOutlinedPathGeometry%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public virtual System.Windows.Media.PathGeometry GetOutlinedPathGeometry (double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometry. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Windows.Media.PathGeometry
-      description: To be added.
+      description: A simplified outline of the filled region of the .
   overload: System.Windows.Media.Geometry.GetOutlinedPathGeometry*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -659,18 +676,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an axis-aligned rectangle that is exactly large enough to contain the geometry after it has been outlined with the specified .
+  remarks: "This method uses the default tolerance factor (described by the <xref:System.Windows.Media.Geometry.StandardFlatteningTolerance%2A> property) when processing the geometry. To specify your own tolerance factor, use the <xref:System.Windows.Media.Geometry.GetRenderBounds%2A> method.  \n  \n Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.GetRenderBounds%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor."
   syntax:
     content: public System.Windows.Rect GetRenderBounds (System.Windows.Media.Pen pen);
     parameters:
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: An object that describes the area of the geometry's stroke.
     return:
       type: System.Windows.Rect
-      description: To be added.
+      description: An axis aligned rectangle that is exactly large enough to contain the outlined geometry.
   overload: System.Windows.Media.Geometry.GetRenderBounds*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -687,24 +705,25 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an axis-aligned rectangle that is exactly large enough to contain the geometry after it has been outlined with the specified , given the specified tolerance factor.
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.GetRenderBounds%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public virtual System.Windows.Rect GetRenderBounds (System.Windows.Media.Pen pen, double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: An object that describes the area of the geometry's stroke.
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometry. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Windows.Rect
-      description: To be added.
+      description: An axis aligned rectangle that is exactly large enough to contain the outlined geometry.
   overload: System.Windows.Media.Geometry.GetRenderBounds*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -721,18 +740,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  that is the shape defined by the stroke on the  produced by the specified .
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.GetWidenedPathGeometry%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public System.Windows.Media.PathGeometry GetWidenedPathGeometry (System.Windows.Media.Pen pen);
     parameters:
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: An object that describes the area of the geometry's stroke.
     return:
       type: System.Windows.Media.PathGeometry
-      description: To be added.
+      description: The outlined geometry.
   overload: System.Windows.Media.Geometry.GetWidenedPathGeometry*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -749,24 +769,25 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a  that is the shape defined by the stroke on the  produced by the specified , given the specified tolerance factor.
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.GetWidenedPathGeometry%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public virtual System.Windows.Media.PathGeometry GetWidenedPathGeometry (System.Windows.Media.Pen pen, double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: The object used to define the area of the geometry's stroke.
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometry. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Windows.Media.PathGeometry
-      description: To be added.
+      description: The geometry, widened by pen.
   overload: System.Windows.Media.Geometry.GetWidenedPathGeometry*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -783,15 +804,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the object is empty.
   syntax:
     content: public abstract bool IsEmpty ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the geometry is empty; otherwise, .
   overload: System.Windows.Media.Geometry.IsEmpty*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -808,15 +829,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the object might have curved segments.
   syntax:
     content: public abstract bool MayHaveCurves ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the geometry object might have curved segments; otherwise, .
   overload: System.Windows.Media.Geometry.MayHaveCurves*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -833,18 +854,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new  instance from the specified string using the current culture.
+  remarks: See [Path Markup Syntax](../Topic/Path%20Markup%20Syntax.md) for information about how this string is formatted
   syntax:
     content: public static System.Windows.Media.Geometry Parse (string source);
     parameters:
     - id: source
       type: System.String
-      description: To be added.
+      description: A string that describes the geometry to be created.
     return:
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: A new  instance created from the specified string.
   overload: System.Windows.Media.Geometry.Parse*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -861,15 +883,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the value of the <xref:System.Windows.Media.Geometry.Transform%2A> property should be serialized.
   syntax:
     content: public bool ShouldSerializeTransform ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the value of the geometry's <xref:System.Windows.Media.Geometry.Transform%2A> property should be serialized; otherwise, .
   overload: System.Windows.Media.Geometry.ShouldSerializeTransform*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -886,14 +908,14 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the standard tolerance used for polygonal approximation.
   syntax:
     content: public static double StandardFlatteningTolerance { get; }
     return:
       type: System.Double
-      description: To be added.
+      description: The standard tolerance, 0.25.
   overload: System.Windows.Media.Geometry.StandardFlatteningTolerance*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -910,21 +932,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the specified  is contained in the stroke produced by applying the specified  to the geometry.
+  remarks: "The default tolerance factor (specified by the <xref:System.Windows.Media.Geometry.StandardFlatteningTolerance%2A> property) is used when determining whether the specified point is located in the geometry's stroke. To specify your own tolerance factor, use the <xref:System.Windows.Media.Geometry.StrokeContains%2A> overload.  \n  \n Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.StrokeContains%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor."
   syntax:
     content: public bool StrokeContains (System.Windows.Media.Pen pen, System.Windows.Point hitPoint);
     parameters:
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: An object that determines the area of the geometry's stroke.
     - id: hitPoint
       type: System.Windows.Point
-      description: To be added.
+      description: The point to test for containment.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if hitPoint is contained in the stroke produced by applying the specified  to the geometry; otherwise, .
   overload: System.Windows.Media.Geometry.StrokeContains*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -941,27 +964,28 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the specified  is contained in the stroke produced by applying the specified  to the geometry, given the specified margin of error.
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.StrokeContains%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public bool StrokeContains (System.Windows.Media.Pen pen, System.Windows.Point hitPoint, double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: An object that defines the stroke of a geometry.
     - id: hitPoint
       type: System.Windows.Point
-      description: To be added.
+      description: The point to test for containment.
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometry. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the stroke created by applying the specified  to the geometry contains the specified point, given the specified tolerance factor; otherwise, .
   overload: System.Windows.Media.Geometry.StrokeContains*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -978,21 +1002,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that describes the intersection between the specified  and the stroke created by applying the specified  to the current geometry.
+  remarks: "The default tolerance factor (defined by the <xref:System.Windows.Media.Geometry.StandardFlatteningTolerance%2A> property) is used when determining whether the specified geometry is located in the current geometry's stroke. To specify your own tolerance factor, use the <xref:System.Windows.Media.Geometry.StrokeContainsWithDetail%2A> method.  \n  \n Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.StrokeContainsWithDetail%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor."
   syntax:
     content: public System.Windows.Media.IntersectionDetail StrokeContainsWithDetail (System.Windows.Media.Pen pen, System.Windows.Media.Geometry geometry);
     parameters:
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: An object that determines the area of the current geometry's stroke.
     - id: geometry
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The geometry to test for containment.
     return:
       type: System.Windows.Media.IntersectionDetail
-      description: To be added.
+      description: One of the enumeration values.
   overload: System.Windows.Media.Geometry.StrokeContainsWithDetail*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1009,27 +1034,28 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that describes the intersection between the specified  and the stroke created by applying the specified  to the current geometry, given the specified margin of error.
+  remarks: Some <xref:System.Windows.Media.Geometry> methods (such as <xref:System.Windows.Media.Geometry.StrokeContainsWithDetail%2A>) produce or use a polygonal approximation of the geometry. The tolerance factor specifies the maximum distance between points in this polygonal approximation. Smaller tolerance values produce better approximations, but require more processing than an approximation with a large tolerance factor.
   syntax:
     content: public System.Windows.Media.IntersectionDetail StrokeContainsWithDetail (System.Windows.Media.Pen pen, System.Windows.Media.Geometry geometry, double tolerance, System.Windows.Media.ToleranceType type);
     parameters:
     - id: pen
       type: System.Windows.Media.Pen
-      description: To be added.
+      description: An object that determines the area of the current geometry's stroke.
     - id: geometry
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The geometry to test for containment.
     - id: tolerance
       type: System.Double
-      description: To be added.
+      description: The maximum bounds on the distance between points in the polygonal approximation of the geometries. Smaller values produce more accurate results but cause slower execution. If `tolerance` is less than .000001, .000001 is used instead.
     - id: type
       type: System.Windows.Media.ToleranceType
-      description: To be added.
+      description: One of the  values that specifies whether the tolerance factor is an absolute value or relative to the area of the geometry.
     return:
       type: System.Windows.Media.IntersectionDetail
-      description: To be added.
+      description: One of the enumeration values.
   overload: System.Windows.Media.Geometry.StrokeContainsWithDetail*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1047,21 +1073,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Formats the value of the current instance using the specified format.
   syntax:
     content: string IFormattable.ToString (string format, IFormatProvider provider);
     parameters:
     - id: format
       type: System.String
-      description: To be added.
+      description: "The format to use.  \n  \n -or-  \n  \n A null reference ( in Visual Basic) to use the default format defined for the type of the <xref:System.IFormattable> implementation."
     - id: provider
       type: System.IFormatProvider
-      description: To be added.
+      description: "The provider to use to format the value.  \n  \n -or-  \n  \n A null reference ( in Visual Basic) to obtain the numeric format information from the current locale setting of the operating system."
     return:
       type: System.String
-      description: To be added.
+      description: The value of the current instance in the specified format.
   overload: System.Windows.Media.Geometry.System#IFormattable#ToString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1078,15 +1104,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a string representation of the object based on the current culture.
   syntax:
     content: public override string ToString ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: A string representation of the object.
   overload: System.Windows.Media.Geometry.ToString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1103,18 +1129,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a string representation of the object using the specified culture-specific formatting information.
   syntax:
     content: public string ToString (IFormatProvider provider);
     parameters:
     - id: provider
       type: System.IFormatProvider
-      description: To be added.
+      description: Culture-specific formatting information, or  to use the current culture.
     return:
       type: System.String
-      description: To be added.
+      description: A string representation of the object.
   overload: System.Windows.Media.Geometry.ToString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1131,14 +1157,17 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the  object applied to a .
+  remarks: "This method returns the identity transformation if the current object has no transformation value. Otherwise, it returns the <xref:System.Windows.Media.Transform> applied to the current object.  \n  \n<a name=\"dependencyPropertyInfo_Transform\"></a>   \n## Dependency Property Information  \n  \n|||  \n|-|-|  \n|Identifier field|<xref:System.Windows.Media.Geometry.TransformProperty>|  \n|Metadata properties set to `true`|None|"
+  example:
+  - "The following example shows how to use the Transform property to apply a <xref:System.Windows.Media.RotateTransform> to a <xref:System.Windows.Media.Geometry> object.  \n  \n The example uses a <xref:System.Windows.Media.GeometryGroup> to create a composite shape from three <xref:System.Windows.Media.Geometry> objects and then rotates the geometry 45 degrees by using the Transform property.  \n  \n [!code-xml[Transforms_snip#GeometryTransformExampleWholePage](../../add/codesnippet/Xaml/Transforms/GeometryTransformExample.xaml#geometrytransformexamplewholepage)]"
   syntax:
     content: public System.Windows.Media.Transform Transform { get; set; }
     return:
       type: System.Windows.Media.Transform
-      description: To be added.
+      description: The transformation applied to the . Note that this value may be a single  or a  cast as a .
   overload: System.Windows.Media.Geometry.Transform*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1155,13 +1184,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media
-  summary: To be added.
-  remarks: To be added.
+  summary: Identifies the <xref:System.Windows.Media.Geometry.Transform%2A> dependency property.
   syntax:
     content: public static readonly System.Windows.DependencyProperty TransformProperty;
     return:
       type: System.Windows.DependencyProperty
-      description: To be added.
+      description: The identifier for the <xref:System.Windows.Media.Geometry.Transform%2A> dependency property.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1200,12 +1229,6 @@ references:
   name: CloneCurrentValue()
   nameWithType: Geometry.CloneCurrentValue()
   fullName: System.Windows.Media.Geometry.CloneCurrentValue()
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
 - uid: System.Windows.Media.Geometry.Combine(System.Windows.Media.Geometry,System.Windows.Media.Geometry,System.Windows.Media.GeometryCombineMode,System.Windows.Media.Transform)
   parent: System.Windows.Media.Geometry
   isExternal: false
@@ -1218,18 +1241,6 @@ references:
   name: PathGeometry
   nameWithType: PathGeometry
   fullName: System.Windows.Media.PathGeometry
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
 - uid: System.Windows.Media.GeometryCombineMode
   parent: System.Windows.Media
   isExternal: false
@@ -1248,36 +1259,6 @@ references:
   name: Combine(Geometry,Geometry,GeometryCombineMode,Transform,Double,ToleranceType)
   nameWithType: Geometry.Combine(Geometry,Geometry,GeometryCombineMode,Transform,Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.Combine(Geometry,Geometry,GeometryCombineMode,Transform,Double,ToleranceType)
-- uid: System.Windows.Media.PathGeometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: PathGeometry
-  nameWithType: PathGeometry
-  fullName: System.Windows.Media.PathGeometry
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
-- uid: System.Windows.Media.GeometryCombineMode
-  parent: System.Windows.Media
-  isExternal: false
-  name: GeometryCombineMode
-  nameWithType: GeometryCombineMode
-  fullName: System.Windows.Media.GeometryCombineMode
-- uid: System.Windows.Media.Transform
-  parent: System.Windows.Media
-  isExternal: false
-  name: Transform
-  nameWithType: Transform
-  fullName: System.Windows.Media.Transform
 - uid: System.Double
   parent: System
   isExternal: true
@@ -1296,12 +1277,6 @@ references:
   name: Empty
   nameWithType: Geometry.Empty
   fullName: System.Windows.Media.Geometry.Empty
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
 - uid: System.Windows.Media.Geometry.FillContains(System.Windows.Media.Geometry)
   parent: System.Windows.Media.Geometry
   isExternal: false
@@ -1314,24 +1289,12 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
 - uid: System.Windows.Media.Geometry.FillContains(System.Windows.Point)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: FillContains(Point)
   nameWithType: Geometry.FillContains(Point)
   fullName: System.Windows.Media.Geometry.FillContains(Point)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Point
   parent: System.Windows
   isExternal: false
@@ -1344,60 +1307,12 @@ references:
   name: FillContains(Geometry,Double,ToleranceType)
   nameWithType: Geometry.FillContains(Geometry,Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.FillContains(Geometry,Double,ToleranceType)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.ToleranceType
-  parent: System.Windows.Media
-  isExternal: false
-  name: ToleranceType
-  nameWithType: ToleranceType
-  fullName: System.Windows.Media.ToleranceType
 - uid: System.Windows.Media.Geometry.FillContains(System.Windows.Point,System.Double,System.Windows.Media.ToleranceType)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: FillContains(Point,Double,ToleranceType)
   nameWithType: Geometry.FillContains(Point,Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.FillContains(Point,Double,ToleranceType)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Point
-  parent: System.Windows
-  isExternal: false
-  name: Point
-  nameWithType: Point
-  fullName: System.Windows.Point
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.ToleranceType
-  parent: System.Windows.Media
-  isExternal: false
-  name: ToleranceType
-  nameWithType: ToleranceType
-  fullName: System.Windows.Media.ToleranceType
 - uid: System.Windows.Media.Geometry.FillContainsWithDetail(System.Windows.Media.Geometry)
   parent: System.Windows.Media.Geometry
   isExternal: false
@@ -1410,162 +1325,54 @@ references:
   name: IntersectionDetail
   nameWithType: IntersectionDetail
   fullName: System.Windows.Media.IntersectionDetail
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
 - uid: System.Windows.Media.Geometry.FillContainsWithDetail(System.Windows.Media.Geometry,System.Double,System.Windows.Media.ToleranceType)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: FillContainsWithDetail(Geometry,Double,ToleranceType)
   nameWithType: Geometry.FillContainsWithDetail(Geometry,Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.FillContainsWithDetail(Geometry,Double,ToleranceType)
-- uid: System.Windows.Media.IntersectionDetail
-  parent: System.Windows.Media
-  isExternal: false
-  name: IntersectionDetail
-  nameWithType: IntersectionDetail
-  fullName: System.Windows.Media.IntersectionDetail
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.ToleranceType
-  parent: System.Windows.Media
-  isExternal: false
-  name: ToleranceType
-  nameWithType: ToleranceType
-  fullName: System.Windows.Media.ToleranceType
 - uid: System.Windows.Media.Geometry.GetArea
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: GetArea()
   nameWithType: Geometry.GetArea()
   fullName: System.Windows.Media.Geometry.GetArea()
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: System.Windows.Media.Geometry.GetArea(System.Double,System.Windows.Media.ToleranceType)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: GetArea(Double,ToleranceType)
   nameWithType: Geometry.GetArea(Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.GetArea(Double,ToleranceType)
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.ToleranceType
-  parent: System.Windows.Media
-  isExternal: false
-  name: ToleranceType
-  nameWithType: ToleranceType
-  fullName: System.Windows.Media.ToleranceType
 - uid: System.Windows.Media.Geometry.GetFlattenedPathGeometry
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: GetFlattenedPathGeometry()
   nameWithType: Geometry.GetFlattenedPathGeometry()
   fullName: System.Windows.Media.Geometry.GetFlattenedPathGeometry()
-- uid: System.Windows.Media.PathGeometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: PathGeometry
-  nameWithType: PathGeometry
-  fullName: System.Windows.Media.PathGeometry
 - uid: System.Windows.Media.Geometry.GetFlattenedPathGeometry(System.Double,System.Windows.Media.ToleranceType)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: GetFlattenedPathGeometry(Double,ToleranceType)
   nameWithType: Geometry.GetFlattenedPathGeometry(Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.GetFlattenedPathGeometry(Double,ToleranceType)
-- uid: System.Windows.Media.PathGeometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: PathGeometry
-  nameWithType: PathGeometry
-  fullName: System.Windows.Media.PathGeometry
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.ToleranceType
-  parent: System.Windows.Media
-  isExternal: false
-  name: ToleranceType
-  nameWithType: ToleranceType
-  fullName: System.Windows.Media.ToleranceType
 - uid: System.Windows.Media.Geometry.GetOutlinedPathGeometry
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: GetOutlinedPathGeometry()
   nameWithType: Geometry.GetOutlinedPathGeometry()
   fullName: System.Windows.Media.Geometry.GetOutlinedPathGeometry()
-- uid: System.Windows.Media.PathGeometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: PathGeometry
-  nameWithType: PathGeometry
-  fullName: System.Windows.Media.PathGeometry
 - uid: System.Windows.Media.Geometry.GetOutlinedPathGeometry(System.Double,System.Windows.Media.ToleranceType)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: GetOutlinedPathGeometry(Double,ToleranceType)
   nameWithType: Geometry.GetOutlinedPathGeometry(Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.GetOutlinedPathGeometry(Double,ToleranceType)
-- uid: System.Windows.Media.PathGeometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: PathGeometry
-  nameWithType: PathGeometry
-  fullName: System.Windows.Media.PathGeometry
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.ToleranceType
-  parent: System.Windows.Media
-  isExternal: false
-  name: ToleranceType
-  nameWithType: ToleranceType
-  fullName: System.Windows.Media.ToleranceType
 - uid: System.Windows.Media.Geometry.GetRenderBounds(System.Windows.Media.Pen)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: GetRenderBounds(Pen)
   nameWithType: Geometry.GetRenderBounds(Pen)
   fullName: System.Windows.Media.Geometry.GetRenderBounds(Pen)
-- uid: System.Windows.Rect
-  parent: System.Windows
-  isExternal: false
-  name: Rect
-  nameWithType: Rect
-  fullName: System.Windows.Rect
 - uid: System.Windows.Media.Pen
   parent: System.Windows.Media
   isExternal: false
@@ -1578,114 +1385,36 @@ references:
   name: GetRenderBounds(Pen,Double,ToleranceType)
   nameWithType: Geometry.GetRenderBounds(Pen,Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.GetRenderBounds(Pen,Double,ToleranceType)
-- uid: System.Windows.Rect
-  parent: System.Windows
-  isExternal: false
-  name: Rect
-  nameWithType: Rect
-  fullName: System.Windows.Rect
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.ToleranceType
-  parent: System.Windows.Media
-  isExternal: false
-  name: ToleranceType
-  nameWithType: ToleranceType
-  fullName: System.Windows.Media.ToleranceType
 - uid: System.Windows.Media.Geometry.GetWidenedPathGeometry(System.Windows.Media.Pen)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: GetWidenedPathGeometry(Pen)
   nameWithType: Geometry.GetWidenedPathGeometry(Pen)
   fullName: System.Windows.Media.Geometry.GetWidenedPathGeometry(Pen)
-- uid: System.Windows.Media.PathGeometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: PathGeometry
-  nameWithType: PathGeometry
-  fullName: System.Windows.Media.PathGeometry
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
 - uid: System.Windows.Media.Geometry.GetWidenedPathGeometry(System.Windows.Media.Pen,System.Double,System.Windows.Media.ToleranceType)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: GetWidenedPathGeometry(Pen,Double,ToleranceType)
   nameWithType: Geometry.GetWidenedPathGeometry(Pen,Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.GetWidenedPathGeometry(Pen,Double,ToleranceType)
-- uid: System.Windows.Media.PathGeometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: PathGeometry
-  nameWithType: PathGeometry
-  fullName: System.Windows.Media.PathGeometry
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.ToleranceType
-  parent: System.Windows.Media
-  isExternal: false
-  name: ToleranceType
-  nameWithType: ToleranceType
-  fullName: System.Windows.Media.ToleranceType
 - uid: System.Windows.Media.Geometry.IsEmpty
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: IsEmpty()
   nameWithType: Geometry.IsEmpty()
   fullName: System.Windows.Media.Geometry.IsEmpty()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Media.Geometry.MayHaveCurves
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: MayHaveCurves()
   nameWithType: Geometry.MayHaveCurves()
   fullName: System.Windows.Media.Geometry.MayHaveCurves()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Media.Geometry.Parse(System.String)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: Parse(String)
   nameWithType: Geometry.Parse(String)
   fullName: System.Windows.Media.Geometry.Parse(String)
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
 - uid: System.String
   parent: System
   isExternal: true
@@ -1698,162 +1427,42 @@ references:
   name: ShouldSerializeTransform()
   nameWithType: Geometry.ShouldSerializeTransform()
   fullName: System.Windows.Media.Geometry.ShouldSerializeTransform()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Media.Geometry.StandardFlatteningTolerance
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: StandardFlatteningTolerance
   nameWithType: Geometry.StandardFlatteningTolerance
   fullName: System.Windows.Media.Geometry.StandardFlatteningTolerance
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: System.Windows.Media.Geometry.StrokeContains(System.Windows.Media.Pen,System.Windows.Point)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: StrokeContains(Pen,Point)
   nameWithType: Geometry.StrokeContains(Pen,Point)
   fullName: System.Windows.Media.Geometry.StrokeContains(Pen,Point)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Point
-  parent: System.Windows
-  isExternal: false
-  name: Point
-  nameWithType: Point
-  fullName: System.Windows.Point
 - uid: System.Windows.Media.Geometry.StrokeContains(System.Windows.Media.Pen,System.Windows.Point,System.Double,System.Windows.Media.ToleranceType)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: StrokeContains(Pen,Point,Double,ToleranceType)
   nameWithType: Geometry.StrokeContains(Pen,Point,Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.StrokeContains(Pen,Point,Double,ToleranceType)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Point
-  parent: System.Windows
-  isExternal: false
-  name: Point
-  nameWithType: Point
-  fullName: System.Windows.Point
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.ToleranceType
-  parent: System.Windows.Media
-  isExternal: false
-  name: ToleranceType
-  nameWithType: ToleranceType
-  fullName: System.Windows.Media.ToleranceType
 - uid: System.Windows.Media.Geometry.StrokeContainsWithDetail(System.Windows.Media.Pen,System.Windows.Media.Geometry)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: StrokeContainsWithDetail(Pen,Geometry)
   nameWithType: Geometry.StrokeContainsWithDetail(Pen,Geometry)
   fullName: System.Windows.Media.Geometry.StrokeContainsWithDetail(Pen,Geometry)
-- uid: System.Windows.Media.IntersectionDetail
-  parent: System.Windows.Media
-  isExternal: false
-  name: IntersectionDetail
-  nameWithType: IntersectionDetail
-  fullName: System.Windows.Media.IntersectionDetail
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
 - uid: System.Windows.Media.Geometry.StrokeContainsWithDetail(System.Windows.Media.Pen,System.Windows.Media.Geometry,System.Double,System.Windows.Media.ToleranceType)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: StrokeContainsWithDetail(Pen,Geometry,Double,ToleranceType)
   nameWithType: Geometry.StrokeContainsWithDetail(Pen,Geometry,Double,ToleranceType)
   fullName: System.Windows.Media.Geometry.StrokeContainsWithDetail(Pen,Geometry,Double,ToleranceType)
-- uid: System.Windows.Media.IntersectionDetail
-  parent: System.Windows.Media
-  isExternal: false
-  name: IntersectionDetail
-  nameWithType: IntersectionDetail
-  fullName: System.Windows.Media.IntersectionDetail
-- uid: System.Windows.Media.Pen
-  parent: System.Windows.Media
-  isExternal: false
-  name: Pen
-  nameWithType: Pen
-  fullName: System.Windows.Media.Pen
-- uid: System.Windows.Media.Geometry
-  parent: System.Windows.Media
-  isExternal: false
-  name: Geometry
-  nameWithType: Geometry
-  fullName: System.Windows.Media.Geometry
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.Windows.Media.ToleranceType
-  parent: System.Windows.Media
-  isExternal: false
-  name: ToleranceType
-  nameWithType: ToleranceType
-  fullName: System.Windows.Media.ToleranceType
 - uid: System.Windows.Media.Geometry.System#IFormattable#ToString(System.String,System.IFormatProvider)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: System.IFormattable.ToString(String,IFormatProvider)
   nameWithType: Geometry.System.IFormattable.ToString(String,IFormatProvider)
   fullName: System.Windows.Media.Geometry.System.IFormattable.ToString(String,IFormatProvider)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IFormatProvider
   parent: System
   isExternal: true
@@ -1866,42 +1475,18 @@ references:
   name: ToString()
   nameWithType: Geometry.ToString()
   fullName: System.Windows.Media.Geometry.ToString()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Media.Geometry.ToString(System.IFormatProvider)
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: ToString(IFormatProvider)
   nameWithType: Geometry.ToString(IFormatProvider)
   fullName: System.Windows.Media.Geometry.ToString(IFormatProvider)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IFormatProvider
-  parent: System
-  isExternal: true
-  name: IFormatProvider
-  nameWithType: IFormatProvider
-  fullName: System.IFormatProvider
 - uid: System.Windows.Media.Geometry.Transform
   parent: System.Windows.Media.Geometry
   isExternal: false
   name: Transform
   nameWithType: Geometry.Transform
   fullName: System.Windows.Media.Geometry.Transform
-- uid: System.Windows.Media.Transform
-  parent: System.Windows.Media
-  isExternal: false
-  name: Transform
-  nameWithType: Transform
-  fullName: System.Windows.Media.Transform
 - uid: System.Windows.Media.Geometry.TransformProperty
   parent: System.Windows.Media.Geometry
   isExternal: false

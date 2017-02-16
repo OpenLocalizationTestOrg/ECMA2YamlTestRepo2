@@ -16,8 +16,8 @@ items:
   nameWithType: IXamlNameResolver
   fullName: System.Xaml.IXamlNameResolver
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Describes a service that can return objects that are specified by XAML name, or alternatively, returns a token that defers name resolution. The service can also return an enumerable set of all named objects that are in the XAML namescope.
+  remarks: "This interface is not intended for external implementation of typical XAML scenarios because it is a service. This service enables markup extensions and type converters to resolve XAML names to other objects from the same XAML source while they are still in a XAML node representation. The service can be used to resolve forward references for any mechanism that relies on XAML names for nonlinear access to the surrounding XAML production. For more information, see [Type Converters and Markup Extensions for XAML](../Topic/Type%20Converters%20and%20Markup%20Extensions%20for%20XAML.md).  \n  \n Type converters and markup extensions can query for IXamlNameResolver as a service on the service context that is provided by a XAML object writer, when the XAML object writer invokes value conversion behavior. For more information, see [Type Converters and Markup Extensions for XAML](../Topic/Type%20Converters%20and%20Markup%20Extensions%20for%20XAML.md) and [Service Contexts Available to Type Converters and Markup Extensions](../Topic/Service%20Contexts%20Available%20to%20Type%20Converters%20and%20Markup%20Extensions.md).  \n  \n This service exposes an API that can defer name resolution. The metaphor implemented by the service is that names that cannot be resolved in a first pass against a partial name-object graph should be stored and used to create the fixup token. In the default behavior, all such names are submitted for another resolution attempt on a second pass. On the second pass, the overall name-object graph is complete, and all the fixup tokens are able to resolve.  \n  \n> [!NOTE]\n>  Even if they are permitted by a particular implementation, forward references in XAML inevitably have performance consequences. As a best practice for production-quality XAML, avoid forward references whenever possible."
   syntax:
     content: public interface IXamlNameResolver
   implements: []
@@ -37,15 +37,15 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an enumerable set of all named objects in the XAML namescope.
   syntax:
     content: public System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string,object>> GetAllNamesAndValuesInScope ();
     parameters: []
     return:
       type: System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}}
-      description: To be added.
+      description: An enumerable set of <xref:System.Collections.Generic.KeyValuePair%602> objects. For each <xref:System.Collections.Generic.KeyValuePair%602>, the <xref:System.Collections.Generic.KeyValuePair%602.Key%2A> component is a string, and the <xref:System.Collections.Generic.KeyValuePair%602.Value%2A> component is the object that uses the <xref:System.Collections.Generic.KeyValuePair%602.Key%2A> name in the XAML namescope.
   overload: System.Xaml.IXamlNameResolver.GetAllNamesAndValuesInScope*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -62,18 +62,19 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an object that can correct for certain markup patterns that produce forward references.
+  remarks: "Existing internal service providers that are available in schema contexts for markup extensions and type converters can implement this service; however, they return an internal type that only the existing XAML writers that work under the default XAML schema context can process.  \n  \n When all the forward referenced names are resolvable, the user code is called to reparse each name in the list."
   syntax:
     content: public object GetFixupToken (System.Collections.Generic.IEnumerable<string> names);
     parameters:
     - id: names
       type: System.Collections.Generic.IEnumerable{System.String}
-      description: To be added.
+      description: A collection of names that are possible forward references.
     return:
       type: System.Object
-      description: To be added.
+      description: An object that provides a token for lookup behavior to be evaluated later.
   overload: System.Xaml.IXamlNameResolver.GetFixupToken*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -90,21 +91,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an object that can correct for certain markup patterns that produce forward references.
+  remarks: "Existing internal service providers that are available in schema contexts for markup extensions and type converters implement this service; however, they return an internal type that can only be processed by the existing XAML writers that work under the default XAML schema context.  \n  \n If `canAssignDirectly` is `false`, when all the forward referenced names are resolvable, the user code is called to reparse each name in the list."
   syntax:
     content: public object GetFixupToken (System.Collections.Generic.IEnumerable<string> names, bool canAssignDirectly);
     parameters:
     - id: names
       type: System.Collections.Generic.IEnumerable{System.String}
-      description: To be added.
+      description: A collection of names that are possible forward references.
     - id: canAssignDirectly
       type: System.Boolean
-      description: To be added.
+      description: "\n     to immediately assign the resolved name reference to the target property.  to call the user code for a reparse. The default behavior is ."
     return:
       type: System.Object
-      description: To be added.
+      description: An object that provides a token for lookup behavior to be evaluated later.
   overload: System.Xaml.IXamlNameResolver.GetFixupToken*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -121,14 +123,15 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that determines whether calling <xref:System.Xaml.IXamlNameResolver.GetFixupToken%2A> is available in order to resolve a name into a token for forward resolution.
+  remarks: This property returns `false` when <xref:System.Xaml.IXamlNameResolver.GetFixupToken%2A> does not return a token because a <xref:System.Xaml.Schema.XamlValueConverter%601> is involved in the second pass on an existing token.
   syntax:
     content: public bool IsFixupTokenAvailable { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if <xref:System.Xaml.IXamlNameResolver.GetFixupToken%2A> is available as an implementation that returns a useful token for forward resolution; otherwise, .
   overload: System.Xaml.IXamlNameResolver.IsFixupTokenAvailable*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -145,13 +148,13 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a XAML processor has registered all the relevant names to the backing XAML namescope.
   syntax:
     content: public event EventHandler OnNameScopeInitializationComplete;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -168,18 +171,19 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Resolves an object from a name reference.
+  remarks: If a value is returned as `null`, a forward reference might exist. Implementations that want to support forward references can use the `FixupToken` pattern through the <xref:System.Xaml.IXamlNameResolver.GetFixupToken%2A> and <xref:System.Xaml.IXamlNameResolver.IsFixupTokenAvailable%2A> APIs.
   syntax:
     content: public object Resolve (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name reference to resolve.
     return:
       type: System.Object
-      description: To be added.
+      description: The resolved object; or null.
   overload: System.Xaml.IXamlNameResolver.Resolve*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -196,21 +200,21 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Resolves an object from a name reference, and provides a tracking value that reports whether the object is fully initialized for object graph purposes.
   syntax:
     content: public object Resolve (string name, out bool isFullyInitialized);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name reference to resolve.
     - id: isFullyInitialized
       type: System.Boolean
-      description: To be added.
+      description: When this method returns,  if the returned object has any dependencies on unresolved references; otherwise, .
     return:
       type: System.Object
-      description: To be added.
+      description: An object that provides a token for lookup behavior to be evaluated later.
   overload: System.Xaml.IXamlNameResolver.Resolve*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -228,6 +232,38 @@ references:
   name: IEnumerable<KeyValuePair<String,Object>>
   nameWithType: IEnumerable<KeyValuePair<String,Object>>
   fullName: System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String,System.Object>>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Collections.Generic.KeyValuePair<System.String,System.Object>>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Collections.Generic.KeyValuePair`2
+    name: KeyValuePair
+    nameWithType: KeyValuePair
+    fullName: KeyValuePair<System.String,System.Object>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Xaml.IXamlNameResolver.GetFixupToken(System.Collections.Generic.IEnumerable{System.String})
   parent: System.Xaml.IXamlNameResolver
   isExternal: false
@@ -246,24 +282,27 @@ references:
   name: IEnumerable<String>
   nameWithType: IEnumerable<String>
   fullName: System.Collections.Generic.IEnumerable<System.String>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.String>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Xaml.IXamlNameResolver.GetFixupToken(System.Collections.Generic.IEnumerable{System.String},System.Boolean)
   parent: System.Xaml.IXamlNameResolver
   isExternal: false
   name: GetFixupToken(IEnumerable<String>,Boolean)
   nameWithType: IXamlNameResolver.GetFixupToken(IEnumerable<String>,Boolean)
   fullName: System.Xaml.IXamlNameResolver.GetFixupToken(IEnumerable<String>,Boolean)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Collections.Generic.IEnumerable{System.String}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IEnumerable<String>
-  nameWithType: IEnumerable<String>
-  fullName: System.Collections.Generic.IEnumerable<System.String>
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -276,12 +315,6 @@ references:
   name: IsFixupTokenAvailable
   nameWithType: IXamlNameResolver.IsFixupTokenAvailable
   fullName: System.Xaml.IXamlNameResolver.IsFixupTokenAvailable
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Xaml.IXamlNameResolver.OnNameScopeInitializationComplete
   parent: System.Xaml.IXamlNameResolver
   isExternal: false
@@ -300,12 +333,6 @@ references:
   name: Resolve(String)
   nameWithType: IXamlNameResolver.Resolve(String)
   fullName: System.Xaml.IXamlNameResolver.Resolve(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.String
   parent: System
   isExternal: true
@@ -318,24 +345,6 @@ references:
   name: Resolve(String,Boolean)
   nameWithType: IXamlNameResolver.Resolve(String,Boolean)
   fullName: System.Xaml.IXamlNameResolver.Resolve(String,Boolean)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Xaml.IXamlNameResolver.GetAllNamesAndValuesInScope*
   parent: System.Xaml.IXamlNameResolver
   isExternal: false

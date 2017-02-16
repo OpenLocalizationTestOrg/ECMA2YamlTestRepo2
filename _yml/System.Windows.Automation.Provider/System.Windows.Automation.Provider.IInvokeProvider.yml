@@ -10,8 +10,8 @@ items:
   nameWithType: IInvokeProvider
   fullName: System.Windows.Automation.Provider.IInvokeProvider
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Exposes methods and properties to support UI Automation client access to controls that initiate or perform a single, unambiguous action and do not maintain state when activated.
+  remarks: "Implemented on a UI Automation provider that must support the <xref:System.Windows.Automation.InvokePattern> control pattern.  \n  \n Controls implement IInvokeProvider if the same behavior is not exposed through another control pattern provider. For example, if the <xref:System.Windows.Automation.InvokePattern.Invoke%2A> method on a control performs the same action as the <xref:System.Windows.Automation.ExpandCollapsePattern.Expand%2A> or <xref:System.Windows.Automation.ExpandCollapsePattern.Collapse%2A> method, the control should not implement IInvokeProvider."
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -38,12 +38,18 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Sends a request to activate a control and initiate its single, unambiguous action.
+  remarks: "Invoke is an asynchronous call and must return immediately without blocking.  \n  \n> [!NOTE]\n>  This behavior is particularly critical for controls that, directly or indirectly, launch a modal dialog when invoked. Any UI Automation client that instigated the event will remain blocked until the modal dialog is closed.  \n  \n Invoke raises the <xref:System.Windows.Automation.InvokePatternIdentifiers.InvokedEvent> event. If possible, the event should be raised after the control has completed its associated action.  \n  \n <xref:System.Windows.Automation.InvokePatternIdentifiers.InvokedEvent> should be raised before servicing the Invoke request in the following scenarios:  \n  \n-   It is not possible or practical to wait until the action is complete.  \n  \n-   The action requires user interaction.  \n  \n-   The action is time-consuming and will cause the calling client to block for a significant length of time."
+  example:
+  - "The following example implements the Invoke method on the MouseDown event handler of a control. Assume that `providerControl` is a member variable that was initialized when the class was constructed.  \n  \n [!code-cs[UIAProvider_snip#106](../../add/codesnippet/CSharp/UIAProvider/Invoker.cs#106)]"
   syntax:
     content: public void Invoke ();
     parameters: []
   overload: System.Windows.Automation.Provider.IInvokeProvider.Invoke*
+  exceptions:
+  - type: System.Windows.Automation.ElementNotEnabledException
+    commentId: T:System.Windows.Automation.ElementNotEnabledException
+    description: If the control is not enabled.
   platform:
   - net-11
   - net-20

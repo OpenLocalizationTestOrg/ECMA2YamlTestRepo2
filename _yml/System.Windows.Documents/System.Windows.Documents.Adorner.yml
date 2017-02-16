@@ -15,8 +15,8 @@ items:
   nameWithType: Adorner
   fullName: System.Windows.Documents.Adorner
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Abstract class that represents a  that decorates a .
+  remarks: "An adorner is a custom <xref:System.Windows.FrameworkElement> that is bound to a <xref:System.Windows.UIElement>. Adorners are rendered in an adorner layer, which is a rendering surface that is always on top of the adorned element or a collection of adorned elements; rendering of an adorner is independent from rendering of the <xref:System.Windows.UIElement> that the adorner is bound to. An adorner is typically positioned relative to the element to which it is bound, using the standard 2-D coordinate origin located at the upper-left of the adorned element.  \n  \n> [!NOTE]\n>  The parent of an Adorner is the <xref:System.Windows.Documents.AdornerLayer> that renders the Adorner, not the element being adorned.  \n  \n> [!NOTE]\n>  Anything placed in the adorner layer is rendered on top of the rest of any styles you have set. In other words, adorners are always visually on top and cannot be overridden using z-order."
   syntax:
     content: 'public abstract class Adorner : System.Windows.FrameworkElement'
   inheritance:
@@ -611,15 +611,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: When implementing a class that inherits from <xref:System.Windows.Documents.Adorner>, ensure that the inheriting class's constructor calls the base class constructor.
   syntax:
     content: protected Adorner (System.Windows.UIElement adornedElement);
     parameters:
     - id: adornedElement
       type: System.Windows.UIElement
-      description: To be added.
+      description: The element to bind the adorner to.
   overload: System.Windows.Documents.Adorner.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: '*adornedElement* is .'
   platform:
   - net-11
   - net-20
@@ -636,14 +640,14 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  that this adorner is bound to.
   syntax:
     content: public System.Windows.UIElement AdornedElement { get; }
     return:
       type: System.Windows.UIElement
-      description: To be added.
+      description: The element that this adorner is bound to. The default value is .
   overload: System.Windows.Documents.Adorner.AdornedElement*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -660,18 +664,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a  for the adorner, based on the transform that is currently applied to the adorned element.
+  remarks: "An adorner may need to be transformed differently than the element it decorates. For instance, adorners which act like points, such as resize handles, should be translated and rotated along with the adorned element, but not scaled. By contrast, an adorner that displays a marquee on an element might require the same transform as the adorned element.  \n  \n This method is called by the associated <xref:System.Windows.Documents.AdornerLayer> to provide an opportunity to filter unwanted or unneeded transforms. Implementations of this method should examine the incoming transform (which is the transform for the adorned element) and remove aspects that are not useful or should not be applied to the adorner itself. This method can also be used to add additional transform details at this time, for instance adding a translation that enables the adorner to control its position relative to the adorned element."
   syntax:
     content: public virtual System.Windows.Media.GeneralTransform GetDesiredTransform (System.Windows.Media.GeneralTransform transform);
     parameters:
     - id: transform
       type: System.Windows.Media.GeneralTransform
-      description: To be added.
+      description: The transform that is currently applied to the adorned element.
     return:
       type: System.Windows.Media.GeneralTransform
-      description: To be added.
+      description: A transform to apply to the adorner.
   overload: System.Windows.Documents.Adorner.GetDesiredTransform*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -688,18 +693,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Windows.UIElement.GetLayoutClip%2A>.
+  remarks: "This implementation always returns `null`.  \n  \n This method overrides <xref:System.Windows.FrameworkElement.GetLayoutClip%2A>.  \n  \n To ensure that adorners are always rendered topmost, clipping constraints are ignored unless <xref:System.Windows.Documents.Adorner.IsClipEnabled%2A> is `true`. This enables an adorner to render outside of the adorned element's bounding rectangle."
   syntax:
     content: protected override System.Windows.Media.Geometry GetLayoutClip (System.Windows.Size layoutSlotSize);
     parameters:
     - id: layoutSlotSize
       type: System.Windows.Size
-      description: To be added.
+      description: The available size provided by the element.
     return:
       type: System.Windows.Media.Geometry
-      description: To be added.
+      description: The potential clipping geometry. See Remarks.
   overload: System.Windows.Documents.Adorner.GetLayoutClip*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -716,14 +722,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether clipping of the adorner is enabled.
+  remarks: Enabling clipping an adorner incurs a substantial performance cost. In general, clipping of the adorner should be disabled.
   syntax:
     content: public bool IsClipEnabled { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: "A  value indicating whether clipping of the adorner is enabled.  \n  \n If this property is , the adorner is not clipped.  \n  \n If this property is , the adorner is clipped using the same clipping geometry as the adorned element.  \n  \n The default value is ."
   overload: System.Windows.Documents.Adorner.IsClipEnabled*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -740,18 +747,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Implements any custom measuring behavior for the adorner.
+  remarks: "By default, an adorner will size to match the adorned element.  \n  \n This method overrides <xref:System.Windows.FrameworkElement.MeasureOverride%2A>."
   syntax:
     content: protected override System.Windows.Size MeasureOverride (System.Windows.Size constraint);
     parameters:
     - id: constraint
       type: System.Windows.Size
-      description: To be added.
+      description: A size to constrain the adorner to.
     return:
       type: System.Windows.Size
-      description: To be added.
+      description: A  object representing the amount of layout space needed by the adorner.
   overload: System.Windows.Documents.Adorner.MeasureOverride*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -778,24 +786,12 @@ references:
   name: AdornedElement
   nameWithType: Adorner.AdornedElement
   fullName: System.Windows.Documents.Adorner.AdornedElement
-- uid: System.Windows.UIElement
-  parent: System.Windows
-  isExternal: false
-  name: UIElement
-  nameWithType: UIElement
-  fullName: System.Windows.UIElement
 - uid: System.Windows.Documents.Adorner.GetDesiredTransform(System.Windows.Media.GeneralTransform)
   parent: System.Windows.Documents.Adorner
   isExternal: false
   name: GetDesiredTransform(GeneralTransform)
   nameWithType: Adorner.GetDesiredTransform(GeneralTransform)
   fullName: System.Windows.Documents.Adorner.GetDesiredTransform(GeneralTransform)
-- uid: System.Windows.Media.GeneralTransform
-  parent: System.Windows.Media
-  isExternal: false
-  name: GeneralTransform
-  nameWithType: GeneralTransform
-  fullName: System.Windows.Media.GeneralTransform
 - uid: System.Windows.Media.GeneralTransform
   parent: System.Windows.Media
   isExternal: false
@@ -838,18 +834,6 @@ references:
   name: MeasureOverride(Size)
   nameWithType: Adorner.MeasureOverride(Size)
   fullName: System.Windows.Documents.Adorner.MeasureOverride(Size)
-- uid: System.Windows.Size
-  parent: System.Windows
-  isExternal: false
-  name: Size
-  nameWithType: Size
-  fullName: System.Windows.Size
-- uid: System.Windows.Size
-  parent: System.Windows
-  isExternal: false
-  name: Size
-  nameWithType: Size
-  fullName: System.Windows.Size
 - uid: System.Windows.Documents.Adorner.#ctor*
   parent: System.Windows.Documents.Adorner
   isExternal: false

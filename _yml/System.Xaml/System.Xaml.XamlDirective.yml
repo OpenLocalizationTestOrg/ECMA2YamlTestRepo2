@@ -32,8 +32,8 @@ items:
   nameWithType: XamlDirective
   fullName: System.Xaml.XamlDirective
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides the XAML type system identifier for a member if the member is also a XAML directive. XAML readers and XAML writers use the XamlDirective identifier during processing of member nodes. The identifier is used when the XAML reader is positioned on a  and <xref:System.Xaml.XamlMember.IsDirective%2A> is .
+  remarks: "XamlDirective provides expected values for the XAML type system when the member is a XAML directive. By definition, a XAML directive has characteristics that always return the same results for a subset of the <xref:System.Xaml.XamlMember> properties, and the same XAML type system information is reported for all possible XAML directives. The reporting of XAML type system characteristics that are specific to directives is accomplished by internal behavior or through overrides of <xref:System.Xaml.XamlMember> `Lookup*` virtual members in the XamlDirective class.  \n  \n The following list shows the returned results of a XAML directive for <xref:System.Xaml.XamlMember> when the member is actually a XamlDirective:  \n  \n-   <xref:System.Xaml.XamlMember.LookupCustomAttributeProvider%2A> is always `null`.  \n  \n-   <xref:System.Xaml.XamlMember.DeferringLoader%2A> is always `null`.  \n  \n-   <xref:System.Xaml.XamlMember.DependsOn%2A> is always `null`.  \n  \n-   <xref:System.Xaml.XamlMember.IsAmbient%2A> is always `false`.  \n  \n-   <xref:System.Xaml.XamlMember.IsAttachable%2A> is always `false`.  \n  \n-   <xref:System.Xaml.XamlMember.IsDirective%2A> is always `true`.  \n  \n-   <xref:System.Xaml.XamlMember.IsEvent%2A> is always `false`.  \n  \n-   <xref:System.Xaml.XamlMember.IsReadOnly%2A> is always `false`.  \n  \n-   <xref:System.Xaml.XamlMember.IsReadPublic%2A> is always `true`.  \n  \n-   <xref:System.Xaml.XamlMember.IsWritePublic%2A> is always `true`.  \n  \n Also, the internal backing for <xref:System.Xaml.XamlMember.DeclaringType%2A> remains unset and returns `null`.  \n  \n> [!IMPORTANT]\n>  XamlDirective is a <xref:System.Xaml.XamlMember> subclass. As with <xref:System.Xaml.XamlMember>, XamlDirective has security considerations regarding how the XAML type system reports access. See Remarks in <xref:System.Xaml.XamlMember>."
   syntax:
     content: 'public class XamlDirective : System.Xaml.XamlMember'
   inheritance:
@@ -84,18 +84,19 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class, specifying values for a name and a single XAML namespace. Use this signature only when you want or expect <xref:System.Xaml.XamlMember.IsUnknown%2A> to report  for the directive.
+  remarks: "> [!IMPORTANT]\n>  This signature of the constructor always generates an identifier for the directive where <xref:System.Xaml.XamlMember.IsUnknown%2A> reports `true` for the XAML type system. If the necessary information is available (the backing type and a text syntax information item for conversion) and you want an identifier that can apply the directive, use the <xref:System.Xaml.XamlDirective.%23ctor%2A?displayProperty=fullName> constructor signature instead.  \n  \n If you use this signature, the <xref:System.Xaml.XamlDirective.AllowedLocation%2A> value for the instance is <xref:System.Xaml.Schema.AllowedMemberLocations>; and the <xref:System.Xaml.XamlMember.Type%2A> value and <xref:System.Xaml.XamlMember.TypeConverter%2A> value are both `null`."
   syntax:
     content: public XamlDirective (string xamlNamespace, string name);
     parameters:
     - id: xamlNamespace
       type: System.String
-      description: To be added.
+      description: The primary XAML namespace where this  can exist.
     - id: name
       type: System.String
-      description: To be added.
+      description: The identifying name of the .
   overload: System.Xaml.XamlDirective.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -112,27 +113,31 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class, specifying values for each per-case value of a .
+  remarks: You must use this constructor to generate a <xref:System.Xaml.XamlDirective> that does not report <xref:System.Xaml.XamlMember.IsUnknown%2A> as `true`.
   syntax:
     content: public XamlDirective (System.Collections.Generic.IEnumerable<string> xamlNamespaces, string name, System.Xaml.XamlType xamlType, System.Xaml.Schema.XamlValueConverter<System.ComponentModel.TypeConverter> typeConverter, System.Xaml.Schema.AllowedMemberLocations allowedLocation);
     parameters:
     - id: xamlNamespaces
       type: System.Collections.Generic.IEnumerable{System.String}
-      description: To be added.
+      description: A set of XAML namespaces where this  can exist, passed as an enumerable set of the identifier strings.
     - id: name
       type: System.String
-      description: To be added.
+      description: The identifying name of the .
     - id: xamlType
       type: System.Xaml.XamlType
-      description: To be added.
+      description: The XAML type that backs the .
     - id: typeConverter
       type: System.Xaml.Schema.XamlValueConverter{System.ComponentModel.TypeConverter}
-      description: To be added.
+      description: The type converter that this  uses for text syntax conversion.
     - id: allowedLocation
       type: System.Xaml.Schema.AllowedMemberLocations
-      description: To be added.
+      description: A value of the  enumeration.
   overload: System.Xaml.XamlDirective.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The xamlType parameter is .
   platform:
   - net-11
   - net-20
@@ -149,14 +154,15 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that specifies the XAML node types where the directive can be specified.
+  remarks: "You can set this value in the <xref:System.Xaml.XamlDirective.%23ctor%28System.Collections.Generic.IEnumerable%7BSystem.String%7D%2CSystem.String%2CSystem.Xaml.XamlType%2CSystem.Xaml.Schema.XamlValueConverter%7BSystem.ComponentModel.TypeConverter%7D%2CSystem.Xaml.Schema.AllowedMemberLocations%29> constructor signature. If you construct by using the <xref:System.Xaml.XamlDirective.%23ctor%28System.String%2CSystem.String%29> constructor signature, the AllowedLocation value for the instance is <xref:System.Xaml.Schema.AllowedMemberLocations>. However, the instance always reports <xref:System.Xaml.XamlMember.IsUnknown%2A> as `true`. This behavior typically affects attempts to write object graphs and also affects other practical uses of a <xref:System.Xaml.XamlMember> value.  \n  \n You typically would not construct a XAML directive case where AllowedLocation is <xref:System.Xaml.Schema.AllowedMemberLocations?displayProperty=fullName>."
   syntax:
     content: public System.Xaml.Schema.AllowedMemberLocations AllowedLocation { get; }
     return:
       type: System.Xaml.Schema.AllowedMemberLocations
-      description: To be added.
+      description: A value of the enumeration. The default is the enumeration default, which is .
   overload: System.Xaml.XamlDirective.AllowedLocation*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -173,15 +179,15 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the hash code for this object.
   syntax:
     content: public override int GetHashCode ();
     parameters: []
     return:
       type: System.Int32
-      description: To be added.
+      description: An integer hash code.
   overload: System.Xaml.XamlDirective.GetHashCode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -198,15 +204,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a list of XAML namespaces where this XAML member can exist.
+  remarks: The XAML namespace identifiers are strings that typically appear in the Uniform Resource Identifier (URI) string form according to the usual conventions for XAML and XML namespaces. If the list contains more than one item, the first item in the set is usually the relevant primary XAML namespace for processing purposes, and the other items are alternates. <xref:System.Xaml.XamlMember.PreferredXamlNamespace%2A?displayProperty=fullName> relies on this ordering.
   syntax:
     content: public override System.Collections.Generic.IList<string> GetXamlNamespaces ();
     parameters: []
     return:
       type: System.Collections.Generic.IList{System.String}
-      description: To be added.
+      description: A list of XAML namespace identifiers, as strings.
   overload: System.Xaml.XamlDirective.GetXamlNamespaces*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -223,15 +230,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an  implementation. This implementation always returns .
+  remarks: Because a XAML directive cannot have custom attributes, this implementation always returns `null`. <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed System.Reflection.ICustomAttributeProvider LookupCustomAttributeProvider ();
     parameters: []
     return:
       type: System.Reflection.ICustomAttributeProvider
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupCustomAttributeProvider*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -248,15 +256,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a <xref:System.Xaml.Schema.XamlValueConverter%601> object, which is used during deferred loading of XAML-declared objects. This implementation always returns .
+  remarks: Because a directive cannot have deferred loading, this implementation always returns `null`. <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed System.Xaml.Schema.XamlValueConverter<System.Xaml.XamlDeferringLoader> LookupDeferringLoader ();
     parameters: []
     return:
       type: System.Xaml.Schema.XamlValueConverter{System.Xaml.XamlDeferringLoader}
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupDeferringLoader*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -273,15 +282,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a list of  objects. The list reports the members where dependency relationships for initialization order exist relative to this . This implementation always returns .
+  remarks: Because a XAML directive cannot have initialization order, this implementation always returns `null`. <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed System.Collections.Generic.IList<System.Xaml.XamlMember> LookupDependsOn ();
     parameters: []
     return:
       type: System.Collections.Generic.IList{System.Xaml.XamlMember}
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupDependsOn*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -298,15 +308,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the  that is associated with a .
+  remarks: "This method may be invoked by calls to <xref:System.Xaml.XamlMember.Invoker%2A>.  \n  \n This implementation returns an internal static <xref:System.Xaml.Schema.XamlMemberInvoker> value that is specific to directives in the XAML type system. <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior."
   syntax:
     content: protected override sealed System.Xaml.Schema.XamlMemberInvoker LookupInvoker ();
     parameters: []
     return:
       type: System.Xaml.Schema.XamlMemberInvoker
-      description: To be added.
+      description: The  information for this .
   overload: System.Xaml.XamlDirective.LookupInvoker*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -323,15 +334,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns whether this  is reported as an ambient property.
+  remarks: Because a XAML directive cannot be an ambient type, this implementation always returns `false`. <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed bool LookupIsAmbient ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupIsAmbient*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -348,15 +360,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns whether this  represents an event.
+  remarks: <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed bool LookupIsEvent ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupIsEvent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -373,15 +386,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns whether this  represents an intended read-only property.
+  remarks: By definition, directives are settable. <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed bool LookupIsReadOnly ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupIsReadOnly*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -398,15 +412,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns whether this  represents a property that has a public  accessor.
+  remarks: <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed bool LookupIsReadPublic ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupIsReadPublic*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -423,15 +438,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns whether this  represents a member that is not resolvable by the backing system that is used for type and member resolution.
+  remarks: 'The <xref:System.Xaml.XamlDirective> implementation only calls base and does nothing more. The base implementation returns the results in this order: the results are based on internal reflection; or the results are based on checking for a null value of the <xref:System.Xaml.XamlMember.UnderlyingMember%2A>. The <xref:System.Xaml.XamlDirective> implementation seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.'
   syntax:
     content: protected override sealed bool LookupIsUnknown ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if this  represents a non-resolvable member; otherwise, .
   overload: System.Xaml.XamlDirective.LookupIsUnknown*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -448,15 +464,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns whether this  represents an intended write-only property.
+  remarks: <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed bool LookupIsWriteOnly ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupIsWriteOnly*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -473,15 +490,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns whether this  represents a property that has a public  accessor.
+  remarks: <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed bool LookupIsWritePublic ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupIsWritePublic*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -498,15 +516,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the  of the type where the  can exist. This implementation always returns .
+  remarks: Target types are not relevant for directives; therefore, this implementation always returns `null`. <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed System.Xaml.XamlType LookupTargetType ();
     parameters: []
     return:
       type: System.Xaml.XamlType
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupTargetType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -523,15 +542,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the  of the type that is used by the member.
+  remarks: "The <xref:System.Xaml.XamlDirective> implementation only calls base and does nothing more. The base implementation returns results based either on internal reflection, or checking for a null value of <xref:System.Xaml.XamlMember.UnderlyingMember%2A>, processing in that order. <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.  \n  \n See Remarks in <xref:System.Xaml.XamlMember.LookupType%2A?displayProperty=fullName> for more information about what information <xref:System.Xaml.XamlMember.Type%2A> carries."
   syntax:
     content: protected override sealed System.Xaml.XamlType LookupType ();
     parameters: []
     return:
       type: System.Xaml.XamlType
-      description: To be added.
+      description: The  of the type that is used by the member.
   overload: System.Xaml.XamlDirective.LookupType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -548,15 +568,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a type converter implementation that is associated with this .
+  remarks: The <xref:System.Xaml.XamlDirective> implementation only calls base and does nothing more. See <xref:System.Xaml.XamlMember.LookupTypeConverter%2A?displayProperty=fullName>. <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed System.Xaml.Schema.XamlValueConverter<System.ComponentModel.TypeConverter> LookupTypeConverter ();
     parameters: []
     return:
       type: System.Xaml.Schema.XamlValueConverter{System.ComponentModel.TypeConverter}
-      description: To be added.
+      description: A <xref:System.Xaml.Schema.XamlValueConverter%601> instance that has  constraint; or .
   overload: System.Xaml.XamlDirective.LookupTypeConverter*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -573,15 +594,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a  accessor that is associated with this . This implementation always returns .
+  remarks: <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed System.Reflection.MethodInfo LookupUnderlyingGetter ();
     parameters: []
     return:
       type: System.Reflection.MethodInfo
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupUnderlyingGetter*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -598,15 +620,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a CLR reflection <xref:System.Reflection.MemberInfo> that is associated with this . This implementation always returns .
+  remarks: <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed System.Reflection.MemberInfo LookupUnderlyingMember ();
     parameters: []
     return:
       type: System.Reflection.MemberInfo
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupUnderlyingMember*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -623,15 +646,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a  accessor that is associated with this . This implementation always returns .
+  remarks: <xref:System.Xaml.XamlDirective> seals this virtual member; therefore, all <xref:System.Xaml.XamlDirective> types and all predefined XAML directives must use this behavior.
   syntax:
     content: protected override sealed System.Reflection.MethodInfo LookupUnderlyingSetter ();
     parameters: []
     return:
       type: System.Reflection.MethodInfo
-      description: To be added.
+      description: Always returns .
   overload: System.Xaml.XamlDirective.LookupUnderlyingSetter*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -648,15 +672,16 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a string representation of this .
+  remarks: If XAML namespace information is available, this implementation returns a string combination of <xref:System.Xaml.XamlMember.PreferredXamlNamespace%2A> and <xref:System.Xaml.XamlMember.Name%2A>. If XAML namespace information is unavailable, this implementation returns <xref:System.Xaml.XamlMember.Name%2A>.
   syntax:
     content: public override string ToString ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: A string representation of this .
   overload: System.Xaml.XamlDirective.ToString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -677,12 +702,6 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Xaml.XamlDirective.#ctor(System.Collections.Generic.IEnumerable{System.String},System.String,System.Xaml.XamlType,System.Xaml.Schema.XamlValueConverter{System.ComponentModel.TypeConverter},System.Xaml.Schema.AllowedMemberLocations)
   parent: System.Xaml.XamlDirective
   isExternal: false
@@ -695,12 +714,21 @@ references:
   name: IEnumerable<String>
   nameWithType: IEnumerable<String>
   fullName: System.Collections.Generic.IEnumerable<System.String>
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.String>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Xaml.XamlType
   parent: System.Xaml
   isExternal: false
@@ -713,6 +741,21 @@ references:
   name: XamlValueConverter<TypeConverter>
   nameWithType: XamlValueConverter<TypeConverter>
   fullName: System.Xaml.Schema.XamlValueConverter<System.ComponentModel.TypeConverter>
+  spec.csharp:
+  - uid: System.Xaml.Schema.XamlValueConverter`1
+    name: XamlValueConverter
+    nameWithType: XamlValueConverter
+    fullName: XamlValueConverter<System.ComponentModel.TypeConverter>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ComponentModel.TypeConverter
+    name: TypeConverter
+    nameWithType: TypeConverter
+    fullName: TypeConverter
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Xaml.Schema.AllowedMemberLocations
   parent: System.Xaml.Schema
   isExternal: false
@@ -725,12 +768,6 @@ references:
   name: AllowedLocation
   nameWithType: XamlDirective.AllowedLocation
   fullName: System.Xaml.XamlDirective.AllowedLocation
-- uid: System.Xaml.Schema.AllowedMemberLocations
-  parent: System.Xaml.Schema
-  isExternal: false
-  name: AllowedMemberLocations
-  nameWithType: AllowedMemberLocations
-  fullName: System.Xaml.Schema.AllowedMemberLocations
 - uid: System.Xaml.XamlDirective.GetHashCode
   parent: System.Xaml.XamlDirective
   isExternal: false
@@ -755,6 +792,21 @@ references:
   name: IList<String>
   nameWithType: IList<String>
   fullName: System.Collections.Generic.IList<System.String>
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: IList<System.String>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Xaml.XamlDirective.LookupCustomAttributeProvider
   parent: System.Xaml.XamlDirective
   isExternal: false
@@ -779,6 +831,21 @@ references:
   name: XamlValueConverter<XamlDeferringLoader>
   nameWithType: XamlValueConverter<XamlDeferringLoader>
   fullName: System.Xaml.Schema.XamlValueConverter<System.Xaml.XamlDeferringLoader>
+  spec.csharp:
+  - uid: System.Xaml.Schema.XamlValueConverter`1
+    name: XamlValueConverter
+    nameWithType: XamlValueConverter
+    fullName: XamlValueConverter<System.Xaml.XamlDeferringLoader>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Xaml.XamlDeferringLoader
+    name: XamlDeferringLoader
+    nameWithType: XamlDeferringLoader
+    fullName: XamlDeferringLoader
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Xaml.XamlDirective.LookupDependsOn
   parent: System.Xaml.XamlDirective
   isExternal: false
@@ -791,6 +858,21 @@ references:
   name: IList<XamlMember>
   nameWithType: IList<XamlMember>
   fullName: System.Collections.Generic.IList<System.Xaml.XamlMember>
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: IList<System.Xaml.XamlMember>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Xaml.XamlMember
+    name: XamlMember
+    nameWithType: XamlMember
+    fullName: XamlMember
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Xaml.XamlDirective.LookupInvoker
   parent: System.Xaml.XamlDirective
   isExternal: false
@@ -821,108 +903,54 @@ references:
   name: LookupIsEvent()
   nameWithType: XamlDirective.LookupIsEvent()
   fullName: System.Xaml.XamlDirective.LookupIsEvent()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Xaml.XamlDirective.LookupIsReadOnly
   parent: System.Xaml.XamlDirective
   isExternal: false
   name: LookupIsReadOnly()
   nameWithType: XamlDirective.LookupIsReadOnly()
   fullName: System.Xaml.XamlDirective.LookupIsReadOnly()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Xaml.XamlDirective.LookupIsReadPublic
   parent: System.Xaml.XamlDirective
   isExternal: false
   name: LookupIsReadPublic()
   nameWithType: XamlDirective.LookupIsReadPublic()
   fullName: System.Xaml.XamlDirective.LookupIsReadPublic()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Xaml.XamlDirective.LookupIsUnknown
   parent: System.Xaml.XamlDirective
   isExternal: false
   name: LookupIsUnknown()
   nameWithType: XamlDirective.LookupIsUnknown()
   fullName: System.Xaml.XamlDirective.LookupIsUnknown()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Xaml.XamlDirective.LookupIsWriteOnly
   parent: System.Xaml.XamlDirective
   isExternal: false
   name: LookupIsWriteOnly()
   nameWithType: XamlDirective.LookupIsWriteOnly()
   fullName: System.Xaml.XamlDirective.LookupIsWriteOnly()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Xaml.XamlDirective.LookupIsWritePublic
   parent: System.Xaml.XamlDirective
   isExternal: false
   name: LookupIsWritePublic()
   nameWithType: XamlDirective.LookupIsWritePublic()
   fullName: System.Xaml.XamlDirective.LookupIsWritePublic()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Xaml.XamlDirective.LookupTargetType
   parent: System.Xaml.XamlDirective
   isExternal: false
   name: LookupTargetType()
   nameWithType: XamlDirective.LookupTargetType()
   fullName: System.Xaml.XamlDirective.LookupTargetType()
-- uid: System.Xaml.XamlType
-  parent: System.Xaml
-  isExternal: false
-  name: XamlType
-  nameWithType: XamlType
-  fullName: System.Xaml.XamlType
 - uid: System.Xaml.XamlDirective.LookupType
   parent: System.Xaml.XamlDirective
   isExternal: false
   name: LookupType()
   nameWithType: XamlDirective.LookupType()
   fullName: System.Xaml.XamlDirective.LookupType()
-- uid: System.Xaml.XamlType
-  parent: System.Xaml
-  isExternal: false
-  name: XamlType
-  nameWithType: XamlType
-  fullName: System.Xaml.XamlType
 - uid: System.Xaml.XamlDirective.LookupTypeConverter
   parent: System.Xaml.XamlDirective
   isExternal: false
   name: LookupTypeConverter()
   nameWithType: XamlDirective.LookupTypeConverter()
   fullName: System.Xaml.XamlDirective.LookupTypeConverter()
-- uid: System.Xaml.Schema.XamlValueConverter{System.ComponentModel.TypeConverter}
-  parent: System.Xaml.Schema
-  isExternal: false
-  name: XamlValueConverter<TypeConverter>
-  nameWithType: XamlValueConverter<TypeConverter>
-  fullName: System.Xaml.Schema.XamlValueConverter<System.ComponentModel.TypeConverter>
 - uid: System.Xaml.XamlDirective.LookupUnderlyingGetter
   parent: System.Xaml.XamlDirective
   isExternal: false
@@ -953,24 +981,12 @@ references:
   name: LookupUnderlyingSetter()
   nameWithType: XamlDirective.LookupUnderlyingSetter()
   fullName: System.Xaml.XamlDirective.LookupUnderlyingSetter()
-- uid: System.Reflection.MethodInfo
-  parent: System.Reflection
-  isExternal: true
-  name: MethodInfo
-  nameWithType: MethodInfo
-  fullName: System.Reflection.MethodInfo
 - uid: System.Xaml.XamlDirective.ToString
   parent: System.Xaml.XamlDirective
   isExternal: false
   name: ToString()
   nameWithType: XamlDirective.ToString()
   fullName: System.Xaml.XamlDirective.ToString()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Xaml.XamlDirective.#ctor*
   parent: System.Xaml.XamlDirective
   isExternal: false

@@ -56,8 +56,8 @@ items:
   nameWithType: TypeDelegator
   fullName: System.Reflection.TypeDelegator
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Wraps a <xref:System.Type?displayProperty=fullName> object and delegates methods to that .
+  remarks: "Derive from this type and override only those members you have to provide customization in, plus any members that are required by your program and not already implemented by TypeDelegator.  \n  \n TypeDelegator derives from <xref:System.Type?displayProperty=fullName> and implements most of the properties and methods of <xref:System.Type>. For each member it implements, TypeDelegator automatically delegates to the corresponding member of an internal <xref:System.Type> object, which is supplied as an argument to the constructor. This internal <xref:System.Type> object is exposed to deriving classes by the `protected`<xref:System.Reflection.TypeDelegator.typeImpl> field.  \n  \n> [!NOTE]\n>  Some members of TypeDelegator have implementations even though the members themselves are simply inherited from <xref:System.Type>. In these cases, the implementation is provided by an overridden `protected` method that has a name that ends in \"Impl\". For example, the implementation for all overloads of the <xref:System.Reflection.TypeDelegator.GetMethod%2A> method is supplied by the overridden <xref:System.Reflection.TypeDelegator.GetMethodImpl%2A> method. The implementation for inherited properties such as <xref:System.Type.IsPublic%2A> and <xref:System.Type.IsNestedAssembly%2A> is provided by the overridden <xref:System.Reflection.TypeDelegator.GetAttributeFlagsImpl%2A> method.  \n  \n Deriving classes can provide a public constructor that takes a <xref:System.Type> object as its parameter and simply passes that object to the <xref:System.Reflection.TypeDelegator.%23ctor%28System.Type%29> constructor, or can set the internal <xref:System.Type> object in some other way.  \n  \n If a deriving class uses a member that is not implemented by TypeDelegator, it must override that member and provide an implementation. The simplest implementation is to call the corresponding member on the internal <xref:System.Type> object exposed by the <xref:System.Reflection.TypeDelegator.typeImpl> field, but you can provide any implementation your application requires. It is not necessary to override these members if they are not used by your application or by library functions your application calls (for example, by the <xref:System.CodeDom.CodeTypeReference.%23ctor%28System.Type%29?displayProperty=fullName> constructor).  \n  \n The following virtual methods (`Overridable` methods in Visual Basic) of <xref:System.Type> are not implemented by TypeDelegator: <xref:System.Type.MakeGenericType%2A>, <xref:System.Type.GetGenericTypeDefinition%2A>, <xref:System.Type.GetGenericArguments%2A>, <xref:System.Type.GetGenericParameterConstraints%2A>, <xref:System.Type.MakeArrayType%2A>, <xref:System.Type.MakeByRefType%2A>, <xref:System.Type.MakePointerType%2A>, <xref:System.Type.GetEnumNames%2A>, <xref:System.Type.GetEnumValues%2A>, <xref:System.Type.GetEnumUnderlyingType%2A>, <xref:System.Type.GetTypeCodeImpl%2A>, <xref:System.Type.IsEnumDefined%2A>, <xref:System.Type.IsEquivalentTo%2A>.  \n  \n The following virtual properties (`Overridable` properties in Visual Basic) of <xref:System.Type> are not implemented by TypeDelegator: <xref:System.Type.IsGenericType%2A>, <xref:System.Type.IsGenericTypeDefinition%2A>, <xref:System.Type.IsGenericParameter%2A>, <xref:System.Type.ContainsGenericParameters%2A>, <xref:System.Type.DeclaringMethod%2A>, <xref:System.Type.GenericParameterAttributes%2A>, <xref:System.Type.GenericParameterPosition%2A>, <xref:System.Type.IsSecurityCritical%2A>, <xref:System.Type.IsSecuritySafeCritical%2A>, <xref:System.Type.IsSecurityTransparent%2A>."
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -83,12 +83,12 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with default properties.
   syntax:
     content: protected TypeDelegator ();
     parameters: []
   overload: System.Reflection.TypeDelegator.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -105,15 +105,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class specifying the encapsulating instance.
+  remarks: This constructor is called from a class to generate a delegate based upon the `Type` object for the class defining the method.
   syntax:
     content: public TypeDelegator (Type delegatingType);
     parameters:
     - id: delegatingType
       type: System.Type
-      description: To be added.
+      description: The instance of the class <xref:System.Type> that encapsulates the call to the method of an object.
   overload: System.Reflection.TypeDelegator.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    delegatingType is ."
   platform:
   - net-11
   - net-20
@@ -130,14 +134,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the assembly of the implemented type.
+  remarks: Assemblies are the deployment units in the common language runtime. Assemblies establish the namespace for resolving requests and determine which resources are exposed externally and which are accessible from within the assembly. The common language runtime can determine and locate the assembly for any running object.
   syntax:
     content: public override System.Reflection.Assembly Assembly { get; }
     return:
       type: System.Reflection.Assembly
-      description: To be added.
+      description: An <xref:System.Reflection.Assembly?displayProperty=fullName> object representing the assembly of the implemented type.
   overload: System.Reflection.TypeDelegator.Assembly*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -154,14 +159,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the assembly's fully qualified name.
   syntax:
     content: public override string AssemblyQualifiedName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A  containing the assembly's fully qualified name.
   overload: System.Reflection.TypeDelegator.AssemblyQualifiedName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -178,14 +183,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the base type for the current type.
+  remarks: The base type is the type from which this type directly inherits. Since the <xref:System.Object> class type is the ultimate base class of all the other types, it is the only type that does not have a base type. In this case, `null` is returned as the base type of the `Object` type.
   syntax:
     content: public override Type BaseType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: The base type for a type.
   overload: System.Reflection.TypeDelegator.BaseType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -202,14 +208,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the fully qualified name of the implemented type.
+  remarks: A string containing the fully qualified name of the current `TypeDelegator`.
   syntax:
     content: public override string FullName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A  containing the type's fully qualified name.
   overload: System.Reflection.TypeDelegator.FullName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -226,15 +233,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the attributes assigned to the .
+  remarks: This method can be used to determine if the `TypeDelegator` is abstract, public, and so on.
   syntax:
     content: protected override System.Reflection.TypeAttributes GetAttributeFlagsImpl ();
     parameters: []
     return:
       type: System.Reflection.TypeAttributes
-      description: To be added.
+      description: A  object representing the implementation attribute flags.
   overload: System.Reflection.TypeDelegator.GetAttributeFlagsImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -251,30 +259,31 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the constructor that implemented the .
+  remarks: The `callConvention` parameter indicates the calling convention for the entry point. If no calling convention is specified, a default <xref:System.Reflection.CallingConventions> value of `Standard` is used.
   syntax:
     content: protected override System.Reflection.ConstructorInfo GetConstructorImpl (System.Reflection.BindingFlags bindingAttr, System.Reflection.Binder binder, System.Reflection.CallingConventions callConvention, Type[] types, System.Reflection.ParameterModifier[] modifiers);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     - id: binder
       type: System.Reflection.Binder
-      description: To be added.
+      description: An object that enables the binding, coercion of argument types, invocation of members, and retrieval of  objects using reflection. If `binder` is , the default binder is used.
     - id: callConvention
       type: System.Reflection.CallingConventions
-      description: To be added.
+      description: The calling conventions.
     - id: types
       type: System.Type[]
-      description: To be added.
+      description: An array of type  containing a list of the parameter number, order, and types. Types cannot be ; use an appropriate  method or an empty array to search for a method without parameters.
     - id: modifiers
       type: System.Reflection.ParameterModifier[]
-      description: To be added.
+      description: An array of type  having the same length as the `types` array, whose elements represent the attributes associated with the parameters of the method to get.
     return:
       type: System.Reflection.ConstructorInfo
-      description: To be added.
+      description: A  object for the method that matches the specified criteria, or  if a match cannot be found.
   overload: System.Reflection.TypeDelegator.GetConstructorImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -291,18 +300,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an array of <xref:System.Reflection.ConstructorInfo> objects representing constructors defined for the type wrapped by the current .
+  remarks: Class initializers are available only through `GetMember`, `GetMembers`, `FindMembers`, and `GetConstructors`.
   syntax:
     content: public override System.Reflection.ConstructorInfo[] GetConstructors (System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     return:
       type: System.Reflection.ConstructorInfo[]
-      description: To be added.
+      description: An array of type  containing the specified constructors defined for this class. If no constructors are defined, an empty array is returned. Depending on the value of a specified parameter, only public constructors or both public and non-public constructors will be returned.
   overload: System.Reflection.TypeDelegator.GetConstructors*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -319,18 +329,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns all the custom attributes defined for this type, specifying whether to search the type's inheritance chain.
   syntax:
     content: public override object[] GetCustomAttributes (bool inherit);
     parameters:
     - id: inherit
       type: System.Boolean
-      description: To be added.
+      description: Specifies whether to search this type's inheritance chain to find the attributes.
     return:
       type: System.Object[]
-      description: To be added.
+      description: An array of objects containing all the custom attributes defined for this type.
   overload: System.Reflection.TypeDelegator.GetCustomAttributes*
+  exceptions:
+  - type: System.TypeLoadException
+    commentId: T:System.TypeLoadException
+    description: A custom attribute type cannot be loaded.
   platform:
   - net-11
   - net-20
@@ -347,21 +360,27 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an array of custom attributes identified by type.
   syntax:
     content: public override object[] GetCustomAttributes (Type attributeType, bool inherit);
     parameters:
     - id: attributeType
       type: System.Type
-      description: To be added.
+      description: An array of custom attributes identified by type.
     - id: inherit
       type: System.Boolean
-      description: To be added.
+      description: Specifies whether to search this type's inheritance chain to find the attributes.
     return:
       type: System.Object[]
-      description: To be added.
+      description: An array of objects containing the custom attributes defined in this type that match the attributeType parameter, specifying whether to search the type's inheritance chain, or  if no custom attributes are defined on this type.
   overload: System.Reflection.TypeDelegator.GetCustomAttributes*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    attributeType is ."
+  - type: System.TypeLoadException
+    commentId: T:System.TypeLoadException
+    description: A custom attribute type cannot be loaded.
   platform:
   - net-11
   - net-20
@@ -378,15 +397,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the <xref:System.Type> of the object encompassed or referred to by the current array, pointer or ByRef.
   syntax:
     content: public override Type GetElementType ();
     parameters: []
     return:
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the object encompassed or referred to by the current array, pointer or , or  if the current <xref:System.Type> is not an array, a pointer or a .
   overload: System.Reflection.TypeDelegator.GetElementType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -403,21 +422,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the specified event.
+  remarks: If `bindingAttr` is <xref:System.Reflection.BindingFlags>.`IgnoreCase`, the case of the `name` parameter is ignored.
   syntax:
     content: public override System.Reflection.EventInfo GetEvent (string name, System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the event to get.
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     return:
       type: System.Reflection.EventInfo
-      description: To be added.
+      description: An <xref:System.Reflection.EventInfo> object representing the event declared or inherited by this type with the specified name. This method returns  if no such event is found.
   overload: System.Reflection.TypeDelegator.GetEvent*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
   platform:
   - net-11
   - net-20
@@ -434,15 +457,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an array of <xref:System.Reflection.EventInfo> objects representing all the public events declared or inherited by the current .
   syntax:
     content: public override System.Reflection.EventInfo[] GetEvents ();
     parameters: []
     return:
       type: System.Reflection.EventInfo[]
-      description: To be added.
+      description: Returns an array of type  containing all the events declared or inherited by the current type. If there are no events, an empty array is returned.
   overload: System.Reflection.TypeDelegator.GetEvents*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -459,18 +482,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the events specified in bindingAttr that are declared or inherited by the current .
   syntax:
     content: public override System.Reflection.EventInfo[] GetEvents (System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     return:
       type: System.Reflection.EventInfo[]
-      description: To be added.
+      description: An array of type  containing the events specified in bindingAttr. If there are no events, an empty array is returned.
   overload: System.Reflection.TypeDelegator.GetEvents*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -487,21 +510,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a <xref:System.Reflection.FieldInfo> object representing the field with the specified name.
+  remarks: Use a `bindingAttr` of <xref:System.Reflection.BindingFlags>.NonPublic to return all public and nonpublic fields. Use `BindingFlags.IgnoreCase` to ignore the case of the fields, as the search is case-sensitive by default.
   syntax:
     content: public override System.Reflection.FieldInfo GetField (string name, System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the field to find.
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     return:
       type: System.Reflection.FieldInfo
-      description: To be added.
+      description: A  object representing the field declared or inherited by this  with the specified name. Returns  if no such field is found.
   overload: System.Reflection.TypeDelegator.GetField*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
   platform:
   - net-11
   - net-20
@@ -518,18 +545,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an array of <xref:System.Reflection.FieldInfo> objects representing the data fields defined for the type wrapped by the current .
+  remarks: "The GetFields method does not return fields in a particular order, such as alphabetical or declaration order. Your code must not depend on the order in which fields are returned, because that order can vary.  \n  \n Use a `bindingAttr` of <xref:System.Reflection.BindingFlags>.NonPublic to return all public and nonpublic fields."
   syntax:
     content: public override System.Reflection.FieldInfo[] GetFields (System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     return:
       type: System.Reflection.FieldInfo[]
-      description: To be added.
+      description: An array of type  containing the fields declared or inherited by the current . An empty array is returned if there are no matched fields.
   overload: System.Reflection.TypeDelegator.GetFields*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -546,21 +574,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the specified interface implemented by the type wrapped by the current .
   syntax:
     content: public override Type GetInterface (string name, bool ignoreCase);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The fully qualified name of the interface implemented by the current class.
     - id: ignoreCase
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the case is to be ignored; otherwise, ."
     return:
       type: System.Type
-      description: To be added.
+      description: A  object representing the interface implemented (directly or indirectly) by the current class with the fully qualified name matching the specified name. If no interface that matches name is found, null is returned.
   overload: System.Reflection.TypeDelegator.GetInterface*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
   platform:
   - net-11
   - net-20
@@ -577,18 +608,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an interface mapping for the specified interface type.
+  remarks: The interface map denotes how an interface is mapped into the actual methods on a class that implements that interface.
   syntax:
     content: public override System.Reflection.InterfaceMapping GetInterfaceMap (Type interfaceType);
     parameters:
     - id: interfaceType
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the interface to retrieve a mapping of.
     return:
       type: System.Reflection.InterfaceMapping
-      description: To be added.
+      description: An <xref:System.Reflection.InterfaceMapping> object representing the interface mapping for interfaceType.
   overload: System.Reflection.TypeDelegator.GetInterfaceMap*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -605,15 +637,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns all the interfaces implemented on the current class and its base classes.
   syntax:
     content: public override Type[] GetInterfaces ();
     parameters: []
     return:
       type: System.Type[]
-      description: To be added.
+      description: An array of type  containing all the interfaces implemented on the current class and its base classes. If none are defined, an empty array is returned.
   overload: System.Reflection.TypeDelegator.GetInterfaces*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -630,24 +662,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns members (properties, methods, constructors, fields, events, and nested types) specified by the given name, type, and bindingAttr.
+  remarks: If `bindingAttr` is <xref:System.Reflection.BindingFlags>.NonPublic, all the members will be considered. If there are no matches, an empty array is returned.
   syntax:
     content: public override System.Reflection.MemberInfo[] GetMember (string name, System.Reflection.MemberTypes type, System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the member to get.
     - id: type
       type: System.Reflection.MemberTypes
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: The type of members to get.
     return:
       type: System.Reflection.MemberInfo[]
-      description: To be added.
+      description: An array of type  containing all the members of the current class and its base class meeting the specified criteria.
   overload: System.Reflection.TypeDelegator.GetMember*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
   platform:
   - net-11
   - net-20
@@ -664,18 +700,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns members specified by bindingAttr.
+  remarks: If `bindingAttr` is <xref:System.Reflection.BindingFlags>.NonPublic, all the members will be considered. If there are no matches, an empty array is returned.
   syntax:
     content: public override System.Reflection.MemberInfo[] GetMembers (System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     return:
       type: System.Reflection.MemberInfo[]
-      description: To be added.
+      description: An array of type  containing all the members of the current class and its base classes that meet the bindingAttr filter.
   overload: System.Reflection.TypeDelegator.GetMembers*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -692,33 +729,34 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Searches for the specified method whose parameters match the specified argument types and modifiers, using the specified binding constraints and the specified calling convention.
+  remarks: The `callConvention` parameter indicates the calling convention for the entry point. If no <xref:System.Reflection.CallingConventions> is specified, a default `CallingConventions` value of `Standard` is used.
   syntax:
     content: protected override System.Reflection.MethodInfo GetMethodImpl (string name, System.Reflection.BindingFlags bindingAttr, System.Reflection.Binder binder, System.Reflection.CallingConventions callConvention, Type[] types, System.Reflection.ParameterModifier[] modifiers);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The method name.
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     - id: binder
       type: System.Reflection.Binder
-      description: To be added.
+      description: An object that enables the binding, coercion of argument types, invocation of members, and retrieval of  objects using reflection. If `binder` is , the default binder is used.
     - id: callConvention
       type: System.Reflection.CallingConventions
-      description: To be added.
+      description: The calling conventions.
     - id: types
       type: System.Type[]
-      description: To be added.
+      description: An array of type  containing a list of the parameter number, order, and types. Types cannot be ; use an appropriate  method or an empty array to search for a method without parameters.
     - id: modifiers
       type: System.Reflection.ParameterModifier[]
-      description: To be added.
+      description: An array of type  having the same length as the `types` array, whose elements represent the attributes associated with the parameters of the method to get.
     return:
       type: System.Reflection.MethodInfo
-      description: To be added.
+      description: A  object for the implementation method that matches the specified criteria, or  if a match cannot be found.
   overload: System.Reflection.TypeDelegator.GetMethodImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -735,18 +773,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an array of <xref:System.Reflection.MethodInfo> objects representing specified methods of the type wrapped by the current .
   syntax:
     content: public override System.Reflection.MethodInfo[] GetMethods (System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     return:
       type: System.Reflection.MethodInfo[]
-      description: To be added.
+      description: An array of  objects representing the methods defined on this .
   overload: System.Reflection.TypeDelegator.GetMethods*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -763,21 +801,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a nested type specified by name and in bindingAttr that are declared or inherited by the type represented by the current .
   syntax:
     content: public override Type GetNestedType (string name, System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The nested type's name.
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     return:
       type: System.Type
-      description: To be added.
+      description: A  object representing the nested type.
   overload: System.Reflection.TypeDelegator.GetNestedType*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
   platform:
   - net-11
   - net-20
@@ -794,18 +835,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the nested types specified in bindingAttr that are declared or inherited by the type wrapped by the current .
   syntax:
     content: public override Type[] GetNestedTypes (System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     return:
       type: System.Type[]
-      description: To be added.
+      description: An array of type  containing the nested types.
   overload: System.Reflection.TypeDelegator.GetNestedTypes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -822,18 +863,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an array of <xref:System.Reflection.PropertyInfo> objects representing properties of the type wrapped by the current .
   syntax:
     content: public override System.Reflection.PropertyInfo[] GetProperties (System.Reflection.BindingFlags bindingAttr);
     parameters:
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     return:
       type: System.Reflection.PropertyInfo[]
-      description: To be added.
+      description: An array of  objects representing properties defined on this .
   overload: System.Reflection.TypeDelegator.GetProperties*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -850,33 +891,33 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, searches for the specified property whose parameters match the specified argument types and modifiers, using the specified binding constraints.
   syntax:
     content: protected override System.Reflection.PropertyInfo GetPropertyImpl (string name, System.Reflection.BindingFlags bindingAttr, System.Reflection.Binder binder, Type returnType, Type[] types, System.Reflection.ParameterModifier[] modifiers);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The property to get.
     - id: bindingAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: A bitmask that affects the way in which the search is conducted. The value is a combination of zero or more bit flags from .
     - id: binder
       type: System.Reflection.Binder
-      description: To be added.
+      description: An object that enables the binding, coercion of argument types, invocation of members, and retrieval of  objects via reflection. If `binder` is , the default binder is used. See .
     - id: returnType
       type: System.Type
-      description: To be added.
+      description: The return type of the property.
     - id: types
       type: System.Type[]
-      description: To be added.
+      description: A list of parameter types. The list represents the number, order, and types of the parameters. Types cannot be null; use an appropriate  method or an empty array to search for a method without parameters.
     - id: modifiers
       type: System.Reflection.ParameterModifier[]
-      description: To be added.
+      description: An array of the same length as types with elements that represent the attributes associated with the parameters of the method to get.
     return:
       type: System.Reflection.PropertyInfo
-      description: To be added.
+      description: A <xref:System.Reflection.PropertyInfo> object for the property that matches the specified criteria, or null if a match cannot be found.
   overload: System.Reflection.TypeDelegator.GetPropertyImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -893,14 +934,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the GUID (globally unique identifier) of the implemented type.
+  remarks: The GUID (globally unique identifier) is a 128-bit unique identification string used to identify a class or an interface. It is primarily useful for interoperability between the Microsoft .NET Framework and COM.
   syntax:
     content: public override Guid GUID { get; }
     return:
       type: System.Guid
-      description: To be added.
+      description: A GUID.
   overload: System.Reflection.TypeDelegator.GUID*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -917,15 +959,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the current <xref:System.Type> encompasses or refers to another type; that is, whether the current <xref:System.Type> is an array, a pointer or a ByRef.
   syntax:
     content: protected override bool HasElementTypeImpl ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Type> is an array, a pointer or a ByRef; otherwise, .
   overload: System.Reflection.TypeDelegator.HasElementTypeImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -942,39 +984,40 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Invokes the specified member. The method that is to be invoked must be accessible and provide the most specific match with the specified argument list, under the constraints of the specified binder and invocation attributes.
+  remarks: "A method will be invoked if both the following conditions are true:  \n  \n-   The number of parameters in the method declaration equals the number of arguments in the specified argument list (unless default arguments are defined on the member).  \n  \n-   The type of each arguments can be converted by the binder to the type of the parameter.  \n  \n The binder will find all the matching methods. These methods are found based upon the type of binding requested (`BindingFlags.MethodInvoke`, `BindingFlags.GetProperties`, and so on). The set of methods is filtered by the name, number of arguments, and a set of search modifiers defined in the binder.  \n  \n After the method is selected, it will be invoked. Accessibility is checked at that point. The search may control which set of methods are searched based upon the accessibility attribute associated with the method. The <xref:System.Reflection.Binder.BindToMethod%2A?displayProperty=fullName> method is responsible for selecting the method to be invoked. The default binder selects the most specific match.  \n  \n> [!NOTE]\n>  Access restrictions are ignored for fully trusted code. That is, private constructors, methods, fields, and properties can be accessed and invoked using reflection whenever the code is fully trusted.  \n  \n Currently, `InvokeMember` performs the Microsoft .NET Framework reflection semantics for every type of object.  \n  \n If the member specified by name is an array and the `BindingFlags.GetField` flag is set on `invokeAttr`, the `args` array specifies the elements whose values are to be returned. For example, the following call through `Type` object `t` returns the value of the first element of the string array MyArray, which is a member of the calling object:  \n  \n `String ret = (String) t.InvokeMember (\"MyArray\", BindingFlags.GetField, null, this, new Variant[]{0});`  \n  \n You can use `InvokeMember` to set one or more elements of a member array. All elements are set to the same value. The `args` array must be formatted as follows:  \n  \n```  \n{index1,  \n    index2,, value}  \n```  \n  \n For example, to set the first member of MyArray from the previous example, the syntax is as follows:  \n  \n```  \nt.InvokeMember (\"MyArray\", BindingFlags.SetField, null, this, new  \n    Variant[]{0,\"Updated\"});  \n```"
   syntax:
     content: public override object InvokeMember (string name, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, object target, object[] args, System.Reflection.ParameterModifier[] modifiers, System.Globalization.CultureInfo culture, string[] namedParameters);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the member to invoke. This may be a constructor, method, property, or field. If an empty string ("") is passed, the default member is invoked.
     - id: invokeAttr
       type: System.Reflection.BindingFlags
-      description: To be added.
+      description: 'The invocation attribute. This must be one of the following  : , , , , , , or . A suitable invocation attribute must be specified. If a static member is to be invoked, the  flag must be set.'
     - id: binder
       type: System.Reflection.Binder
-      description: To be added.
+      description: An object that enables the binding, coercion of argument types, invocation of members, and retrieval of  objects via reflection. If `binder` is , the default binder is used. See .
     - id: target
       type: System.Object
-      description: To be added.
+      description: The object on which to invoke the specified member.
     - id: args
       type: System.Object[]
-      description: To be added.
+      description: An array of type  that contains the number, order, and type of the parameters of the member to be invoked. If `args` contains an uninitialized , it is treated as empty, which, with the default binder, can be widened to 0, 0.0 or a string.
     - id: modifiers
       type: System.Reflection.ParameterModifier[]
-      description: To be added.
+      description: An array of type  that is the same length as `args`, with elements that represent the attributes associated with the arguments of the member to be invoked. A parameter has attributes associated with it in the member's signature. For ByRef, use , and for none, use . The default binder does exact matching on these. Attributes such as  and  are not used in binding, and can be viewed using .
     - id: culture
       type: System.Globalization.CultureInfo
-      description: To be added.
+      description: An instance of  used to govern the coercion of types. This is necessary, for example, to convert a string that represents 1000 to a  value, since 1000 is represented differently by different cultures. If `culture` is , the  for the current thread's  is used.
     - id: namedParameters
       type: System.String[]
-      description: To be added.
+      description: An array of type  containing parameter names that match up, starting at element zero, with the `args` array. There must be no holes in the array. If `args`.  is greater than `namedParameters`. , the remaining parameters are filled in order.
     return:
       type: System.Object
-      description: To be added.
+      description: An  representing the return value of the invoked member.
   overload: System.Reflection.TypeDelegator.InvokeMember*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -991,15 +1034,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the <xref:System.Type> is an array.
   syntax:
     content: protected override bool IsArrayImpl ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Type> is an array; otherwise, .
   overload: System.Reflection.TypeDelegator.IsArrayImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1016,18 +1059,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the specified type can be assigned to this type.
   syntax:
     content: public override bool IsAssignableFrom (System.Reflection.TypeInfo typeInfo);
     parameters:
     - id: typeInfo
       type: System.Reflection.TypeInfo
-      description: To be added.
+      description: The type to check.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the specified type can be assigned to this type; otherwise, .
   overload: System.Reflection.TypeDelegator.IsAssignableFrom*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1044,15 +1087,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the <xref:System.Type> is passed by reference.
   syntax:
     content: protected override bool IsByRefImpl ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Type> is passed by reference; otherwise, .
   overload: System.Reflection.TypeDelegator.IsByRefImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1069,15 +1112,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the <xref:System.Type> is a COM object.
   syntax:
     content: protected override bool IsCOMObjectImpl ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Type> is a COM object; otherwise, .
   overload: System.Reflection.TypeDelegator.IsCOMObjectImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1094,14 +1137,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether this object represents a constructed generic type.
   syntax:
     content: public override bool IsConstructedGenericType { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if this object represents a constructed generic type; otherwise, .
   overload: System.Reflection.TypeDelegator.IsConstructedGenericType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1118,21 +1161,27 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether a custom attribute identified by attributeType is defined.
   syntax:
     content: public override bool IsDefined (Type attributeType, bool inherit);
     parameters:
     - id: attributeType
       type: System.Type
-      description: To be added.
+      description: Specifies whether to search this type's inheritance chain to find the attributes.
     - id: inherit
       type: System.Boolean
-      description: To be added.
+      description: An array of custom attributes identified by type.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a custom attribute identified by attributeType is defined; otherwise, .
   overload: System.Reflection.TypeDelegator.IsDefined*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    attributeType is ."
+  - type: System.Reflection.ReflectionTypeLoadException
+    commentId: T:System.Reflection.ReflectionTypeLoadException
+    description: The custom attribute type cannot be loaded.
   platform:
   - net-11
   - net-20
@@ -1149,15 +1198,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the <xref:System.Type> is a pointer.
   syntax:
     content: protected override bool IsPointerImpl ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Type> is a pointer; otherwise, .
   overload: System.Reflection.TypeDelegator.IsPointerImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1174,15 +1223,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the <xref:System.Type> is one of the primitive types.
   syntax:
     content: protected override bool IsPrimitiveImpl ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Type> is one of the primitive types; otherwise, .
   overload: System.Reflection.TypeDelegator.IsPrimitiveImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1199,15 +1248,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the type is a value type; that is, not a class or an interface.
   syntax:
     content: protected override bool IsValueTypeImpl ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the type is a value type; otherwise, .
   overload: System.Reflection.TypeDelegator.IsValueTypeImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1224,14 +1273,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that identifies this entity in metadata.
+  remarks: The tokens obtained using this property can be passed to the unmanaged reflection API. For more information, see [Unmanaged Reflection API](http://msdn.microsoft.com/en-us/0c5bb9de-0cf6-438d-ba47-134e6c775fb8).
   syntax:
     content: public override int MetadataToken { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: A value which, in combination with the module, uniquely identifies this entity in metadata.
   overload: System.Reflection.TypeDelegator.MetadataToken*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1248,14 +1298,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the module that contains the implemented type.
+  remarks: A module is a loadable unit that can contain type declarations and implementations. Modules contain enough information to enable the common language runtime to locate all implementation bits when the module is loaded.
   syntax:
     content: public override System.Reflection.Module Module { get; }
     return:
       type: System.Reflection.Module
-      description: To be added.
+      description: A <xref:System.Reflection.Module> object representing the module of the implemented type.
   overload: System.Reflection.TypeDelegator.Module*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1272,14 +1323,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the name of the implemented type, with the path removed.
+  remarks: A string containing the name of the current `TypeDelegator`. Only the simple name, not the fully qualified name, is returned. To get the name and the path, use <xref:System.Reflection.TypeDelegator.FullName%2A>.
   syntax:
     content: public override string Name { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A  containing the type's non-qualified name.
   overload: System.Reflection.TypeDelegator.Name*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1296,14 +1348,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the namespace of the implemented type.
+  remarks: This property gets a string containing the namespace of the current `TypeDelegator`. For example, if the `TypeDelegator` is <xref:System.Reflection.TypeFilter>, the returned namespace is <xref:System.Reflection>.
   syntax:
     content: public override string Namespace { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A  containing the type's namespace.
   overload: System.Reflection.TypeDelegator.Namespace*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1320,14 +1373,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a handle to the internal metadata representation of an implemented type.
+  remarks: A type handle is a unique integer value associated with each type. The handle is unique during the runtime.
   syntax:
     content: public override RuntimeTypeHandle TypeHandle { get; }
     return:
       type: System.RuntimeTypeHandle
-      description: To be added.
+      description: A  object.
   overload: System.Reflection.TypeDelegator.TypeHandle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1344,13 +1398,13 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: A value indicating type information.
   syntax:
     content: protected Type typeImpl;
     return:
       type: System.Type
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1367,14 +1421,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Reflection
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the underlying <xref:System.Type> that represents the implemented type.
   syntax:
     content: public override Type UnderlyingSystemType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: The underlying type.
   overload: System.Reflection.TypeDelegator.UnderlyingSystemType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1431,24 +1485,12 @@ references:
   name: BaseType
   nameWithType: TypeDelegator.BaseType
   fullName: System.Reflection.TypeDelegator.BaseType
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Reflection.TypeDelegator.FullName
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: FullName
   nameWithType: TypeDelegator.FullName
   fullName: System.Reflection.TypeDelegator.FullName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Reflection.TypeDelegator.GetAttributeFlagsImpl
   parent: System.Reflection.TypeDelegator
   isExternal: false
@@ -1491,48 +1533,74 @@ references:
   name: CallingConventions
   nameWithType: CallingConventions
   fullName: System.Reflection.CallingConventions
-- uid: System.Type
+- uid: System.Type[]
   parent: System
   isExternal: true
   name: Type
   nameWithType: Type
   fullName: System.Type[]
-- uid: System.Reflection.ParameterModifier
+  spec.csharp:
+  - uid: System.Type
+    name: Type
+    nameWithType: Type
+    fullName: Type[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+- uid: System.Reflection.ParameterModifier[]
   parent: System.Reflection
   isExternal: false
   name: ParameterModifier
   nameWithType: ParameterModifier
   fullName: System.Reflection.ParameterModifier[]
+  spec.csharp:
+  - uid: System.Reflection.ParameterModifier
+    name: ParameterModifier
+    nameWithType: ParameterModifier
+    fullName: ParameterModifier[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.TypeDelegator.GetConstructors(System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetConstructors(BindingFlags)
   nameWithType: TypeDelegator.GetConstructors(BindingFlags)
   fullName: System.Reflection.TypeDelegator.GetConstructors(BindingFlags)
-- uid: System.Reflection.ConstructorInfo
+- uid: System.Reflection.ConstructorInfo[]
   parent: System.Reflection
   isExternal: true
   name: ConstructorInfo
   nameWithType: ConstructorInfo
   fullName: System.Reflection.ConstructorInfo[]
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
+  spec.csharp:
+  - uid: System.Reflection.ConstructorInfo
+    name: ConstructorInfo
+    nameWithType: ConstructorInfo
+    fullName: ConstructorInfo[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.TypeDelegator.GetCustomAttributes(System.Boolean)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetCustomAttributes(Boolean)
   nameWithType: TypeDelegator.GetCustomAttributes(Boolean)
   fullName: System.Reflection.TypeDelegator.GetCustomAttributes(Boolean)
-- uid: System.Object
+- uid: System.Object[]
   parent: System
   isExternal: true
   name: Object
   nameWithType: Object
   fullName: System.Object[]
+  spec.csharp:
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -1545,36 +1613,12 @@ references:
   name: GetCustomAttributes(Type,Boolean)
   nameWithType: TypeDelegator.GetCustomAttributes(Type,Boolean)
   fullName: System.Reflection.TypeDelegator.GetCustomAttributes(Type,Boolean)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object[]
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.GetElementType
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetElementType()
   nameWithType: TypeDelegator.GetElementType()
   fullName: System.Reflection.TypeDelegator.GetElementType()
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Reflection.TypeDelegator.GetEvent(System.String,System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
@@ -1587,48 +1631,32 @@ references:
   name: EventInfo
   nameWithType: EventInfo
   fullName: System.Reflection.EventInfo
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
 - uid: System.Reflection.TypeDelegator.GetEvents
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetEvents()
   nameWithType: TypeDelegator.GetEvents()
   fullName: System.Reflection.TypeDelegator.GetEvents()
-- uid: System.Reflection.EventInfo
+- uid: System.Reflection.EventInfo[]
   parent: System.Reflection
   isExternal: true
   name: EventInfo
   nameWithType: EventInfo
   fullName: System.Reflection.EventInfo[]
+  spec.csharp:
+  - uid: System.Reflection.EventInfo
+    name: EventInfo
+    nameWithType: EventInfo
+    fullName: EventInfo[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.TypeDelegator.GetEvents(System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetEvents(BindingFlags)
   nameWithType: TypeDelegator.GetEvents(BindingFlags)
   fullName: System.Reflection.TypeDelegator.GetEvents(BindingFlags)
-- uid: System.Reflection.EventInfo
-  parent: System.Reflection
-  isExternal: true
-  name: EventInfo
-  nameWithType: EventInfo
-  fullName: System.Reflection.EventInfo[]
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
 - uid: System.Reflection.TypeDelegator.GetField(System.String,System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
@@ -1641,60 +1669,32 @@ references:
   name: FieldInfo
   nameWithType: FieldInfo
   fullName: System.Reflection.FieldInfo
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
 - uid: System.Reflection.TypeDelegator.GetFields(System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetFields(BindingFlags)
   nameWithType: TypeDelegator.GetFields(BindingFlags)
   fullName: System.Reflection.TypeDelegator.GetFields(BindingFlags)
-- uid: System.Reflection.FieldInfo
+- uid: System.Reflection.FieldInfo[]
   parent: System.Reflection
   isExternal: true
   name: FieldInfo
   nameWithType: FieldInfo
   fullName: System.Reflection.FieldInfo[]
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
+  spec.csharp:
+  - uid: System.Reflection.FieldInfo
+    name: FieldInfo
+    nameWithType: FieldInfo
+    fullName: FieldInfo[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.TypeDelegator.GetInterface(System.String,System.Boolean)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetInterface(String,Boolean)
   nameWithType: TypeDelegator.GetInterface(String,Boolean)
   fullName: System.Reflection.TypeDelegator.GetInterface(String,Boolean)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.GetInterfaceMap(System.Type)
   parent: System.Reflection.TypeDelegator
   isExternal: false
@@ -1707,72 +1707,44 @@ references:
   name: InterfaceMapping
   nameWithType: InterfaceMapping
   fullName: System.Reflection.InterfaceMapping
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Reflection.TypeDelegator.GetInterfaces
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetInterfaces()
   nameWithType: TypeDelegator.GetInterfaces()
   fullName: System.Reflection.TypeDelegator.GetInterfaces()
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type[]
 - uid: System.Reflection.TypeDelegator.GetMember(System.String,System.Reflection.MemberTypes,System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetMember(String,MemberTypes,BindingFlags)
   nameWithType: TypeDelegator.GetMember(String,MemberTypes,BindingFlags)
   fullName: System.Reflection.TypeDelegator.GetMember(String,MemberTypes,BindingFlags)
-- uid: System.Reflection.MemberInfo
+- uid: System.Reflection.MemberInfo[]
   parent: System.Reflection
   isExternal: true
   name: MemberInfo
   nameWithType: MemberInfo
   fullName: System.Reflection.MemberInfo[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
+  spec.csharp:
+  - uid: System.Reflection.MemberInfo
+    name: MemberInfo
+    nameWithType: MemberInfo
+    fullName: MemberInfo[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.MemberTypes
   parent: System.Reflection
   isExternal: false
   name: MemberTypes
   nameWithType: MemberTypes
   fullName: System.Reflection.MemberTypes
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
 - uid: System.Reflection.TypeDelegator.GetMembers(System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetMembers(BindingFlags)
   nameWithType: TypeDelegator.GetMembers(BindingFlags)
   fullName: System.Reflection.TypeDelegator.GetMembers(BindingFlags)
-- uid: System.Reflection.MemberInfo
-  parent: System.Reflection
-  isExternal: true
-  name: MemberInfo
-  nameWithType: MemberInfo
-  fullName: System.Reflection.MemberInfo[]
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
 - uid: System.Reflection.TypeDelegator.GetMethodImpl(System.String,System.Reflection.BindingFlags,System.Reflection.Binder,System.Reflection.CallingConventions,System.Type[],System.Reflection.ParameterModifier[])
   parent: System.Reflection.TypeDelegator
   isExternal: false
@@ -1785,120 +1757,58 @@ references:
   name: MethodInfo
   nameWithType: MethodInfo
   fullName: System.Reflection.MethodInfo
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
-- uid: System.Reflection.Binder
-  parent: System.Reflection
-  isExternal: false
-  name: Binder
-  nameWithType: Binder
-  fullName: System.Reflection.Binder
-- uid: System.Reflection.CallingConventions
-  parent: System.Reflection
-  isExternal: true
-  name: CallingConventions
-  nameWithType: CallingConventions
-  fullName: System.Reflection.CallingConventions
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type[]
-- uid: System.Reflection.ParameterModifier
-  parent: System.Reflection
-  isExternal: false
-  name: ParameterModifier
-  nameWithType: ParameterModifier
-  fullName: System.Reflection.ParameterModifier[]
 - uid: System.Reflection.TypeDelegator.GetMethods(System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetMethods(BindingFlags)
   nameWithType: TypeDelegator.GetMethods(BindingFlags)
   fullName: System.Reflection.TypeDelegator.GetMethods(BindingFlags)
-- uid: System.Reflection.MethodInfo
+- uid: System.Reflection.MethodInfo[]
   parent: System.Reflection
   isExternal: true
   name: MethodInfo
   nameWithType: MethodInfo
   fullName: System.Reflection.MethodInfo[]
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
+  spec.csharp:
+  - uid: System.Reflection.MethodInfo
+    name: MethodInfo
+    nameWithType: MethodInfo
+    fullName: MethodInfo[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.TypeDelegator.GetNestedType(System.String,System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetNestedType(String,BindingFlags)
   nameWithType: TypeDelegator.GetNestedType(String,BindingFlags)
   fullName: System.Reflection.TypeDelegator.GetNestedType(String,BindingFlags)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
 - uid: System.Reflection.TypeDelegator.GetNestedTypes(System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetNestedTypes(BindingFlags)
   nameWithType: TypeDelegator.GetNestedTypes(BindingFlags)
   fullName: System.Reflection.TypeDelegator.GetNestedTypes(BindingFlags)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type[]
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
 - uid: System.Reflection.TypeDelegator.GetProperties(System.Reflection.BindingFlags)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: GetProperties(BindingFlags)
   nameWithType: TypeDelegator.GetProperties(BindingFlags)
   fullName: System.Reflection.TypeDelegator.GetProperties(BindingFlags)
-- uid: System.Reflection.PropertyInfo
+- uid: System.Reflection.PropertyInfo[]
   parent: System.Reflection
   isExternal: true
   name: PropertyInfo
   nameWithType: PropertyInfo
   fullName: System.Reflection.PropertyInfo[]
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
+  spec.csharp:
+  - uid: System.Reflection.PropertyInfo
+    name: PropertyInfo
+    nameWithType: PropertyInfo
+    fullName: PropertyInfo[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.TypeDelegator.GetPropertyImpl(System.String,System.Reflection.BindingFlags,System.Reflection.Binder,System.Type,System.Type[],System.Reflection.ParameterModifier[])
   parent: System.Reflection.TypeDelegator
   isExternal: false
@@ -1911,42 +1821,6 @@ references:
   name: PropertyInfo
   nameWithType: PropertyInfo
   fullName: System.Reflection.PropertyInfo
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
-- uid: System.Reflection.Binder
-  parent: System.Reflection
-  isExternal: false
-  name: Binder
-  nameWithType: Binder
-  fullName: System.Reflection.Binder
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type[]
-- uid: System.Reflection.ParameterModifier
-  parent: System.Reflection
-  isExternal: false
-  name: ParameterModifier
-  nameWithType: ParameterModifier
-  fullName: System.Reflection.ParameterModifier[]
 - uid: System.Reflection.TypeDelegator.GUID
   parent: System.Reflection.TypeDelegator
   isExternal: false
@@ -1965,12 +1839,6 @@ references:
   name: HasElementTypeImpl()
   nameWithType: TypeDelegator.HasElementTypeImpl()
   fullName: System.Reflection.TypeDelegator.HasElementTypeImpl()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.InvokeMember(System.String,System.Reflection.BindingFlags,System.Reflection.Binder,System.Object,System.Object[],System.Reflection.ParameterModifier[],System.Globalization.CultureInfo,System.String[])
   parent: System.Reflection.TypeDelegator
   isExternal: false
@@ -1983,180 +1851,80 @@ references:
   name: Object
   nameWithType: Object
   fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Reflection.BindingFlags
-  parent: System.Reflection
-  isExternal: false
-  name: BindingFlags
-  nameWithType: BindingFlags
-  fullName: System.Reflection.BindingFlags
-- uid: System.Reflection.Binder
-  parent: System.Reflection
-  isExternal: false
-  name: Binder
-  nameWithType: Binder
-  fullName: System.Reflection.Binder
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object[]
-- uid: System.Reflection.ParameterModifier
-  parent: System.Reflection
-  isExternal: false
-  name: ParameterModifier
-  nameWithType: ParameterModifier
-  fullName: System.Reflection.ParameterModifier[]
 - uid: System.Globalization.CultureInfo
   parent: System.Globalization
   isExternal: true
   name: CultureInfo
   nameWithType: CultureInfo
   fullName: System.Globalization.CultureInfo
-- uid: System.String
+- uid: System.String[]
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Reflection.TypeDelegator.IsArrayImpl
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: IsArrayImpl()
   nameWithType: TypeDelegator.IsArrayImpl()
   fullName: System.Reflection.TypeDelegator.IsArrayImpl()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.IsAssignableFrom(System.Reflection.TypeInfo)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: IsAssignableFrom(TypeInfo)
   nameWithType: TypeDelegator.IsAssignableFrom(TypeInfo)
   fullName: System.Reflection.TypeDelegator.IsAssignableFrom(TypeInfo)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Reflection.TypeInfo
-  parent: System.Reflection
-  isExternal: true
-  name: TypeInfo
-  nameWithType: TypeInfo
-  fullName: System.Reflection.TypeInfo
 - uid: System.Reflection.TypeDelegator.IsByRefImpl
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: IsByRefImpl()
   nameWithType: TypeDelegator.IsByRefImpl()
   fullName: System.Reflection.TypeDelegator.IsByRefImpl()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.IsCOMObjectImpl
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: IsCOMObjectImpl()
   nameWithType: TypeDelegator.IsCOMObjectImpl()
   fullName: System.Reflection.TypeDelegator.IsCOMObjectImpl()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.IsConstructedGenericType
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: IsConstructedGenericType
   nameWithType: TypeDelegator.IsConstructedGenericType
   fullName: System.Reflection.TypeDelegator.IsConstructedGenericType
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.IsDefined(System.Type,System.Boolean)
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: IsDefined(Type,Boolean)
   nameWithType: TypeDelegator.IsDefined(Type,Boolean)
   fullName: System.Reflection.TypeDelegator.IsDefined(Type,Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.IsPointerImpl
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: IsPointerImpl()
   nameWithType: TypeDelegator.IsPointerImpl()
   fullName: System.Reflection.TypeDelegator.IsPointerImpl()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.IsPrimitiveImpl
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: IsPrimitiveImpl()
   nameWithType: TypeDelegator.IsPrimitiveImpl()
   fullName: System.Reflection.TypeDelegator.IsPrimitiveImpl()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.IsValueTypeImpl
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: IsValueTypeImpl()
   nameWithType: TypeDelegator.IsValueTypeImpl()
   fullName: System.Reflection.TypeDelegator.IsValueTypeImpl()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Reflection.TypeDelegator.MetadataToken
   parent: System.Reflection.TypeDelegator
   isExternal: false
@@ -2187,24 +1955,12 @@ references:
   name: Name
   nameWithType: TypeDelegator.Name
   fullName: System.Reflection.TypeDelegator.Name
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Reflection.TypeDelegator.Namespace
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: Namespace
   nameWithType: TypeDelegator.Namespace
   fullName: System.Reflection.TypeDelegator.Namespace
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Reflection.TypeDelegator.TypeHandle
   parent: System.Reflection.TypeDelegator
   isExternal: false
@@ -2223,24 +1979,12 @@ references:
   name: typeImpl
   nameWithType: TypeDelegator.typeImpl
   fullName: System.Reflection.TypeDelegator.typeImpl
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Reflection.TypeDelegator.UnderlyingSystemType
   parent: System.Reflection.TypeDelegator
   isExternal: false
   name: UnderlyingSystemType
   nameWithType: TypeDelegator.UnderlyingSystemType
   fullName: System.Reflection.TypeDelegator.UnderlyingSystemType
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Reflection.TypeDelegator.#ctor*
   parent: System.Reflection.TypeDelegator
   isExternal: false

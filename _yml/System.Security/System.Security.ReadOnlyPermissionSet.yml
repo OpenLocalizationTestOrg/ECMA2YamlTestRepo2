@@ -19,8 +19,8 @@ items:
   nameWithType: ReadOnlyPermissionSet
   fullName: System.Security.ReadOnlyPermissionSet
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a read-only collection that can contain many different types of permissions.
+  remarks: "Read-only permission sets are created from explicit XML and cannot be modified after creation. This restriction ensures that the permission set will be restored to the same XML encoding that it was originally created from. Attempting to add or remove a permission from the ReadOnlyPermissionSet results in an <xref:System.InvalidOperationException>.  \n  \n Note that any permission you obtain from the ReadOnlyPermissionSet is only a copy of the permission. If the copy is mutable and is changed, the permission that is in the ReadOnlyPermissionSet is not changed."
   syntax:
     content: 'public sealed class ReadOnlyPermissionSet : System.Security.PermissionSet'
   inheritance:
@@ -69,15 +69,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public ReadOnlyPermissionSet (System.Security.SecurityElement permissionSetXml);
     parameters:
     - id: permissionSetXml
       type: System.Security.SecurityElement
-      description: To be added.
+      description: The XML element from which to take the value of the new .
   overload: System.Security.ReadOnlyPermissionSet.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    permissionSetXml is ."
   platform:
   - net-11
   - net-20
@@ -94,8 +97,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override System.Security.IPermission AddPermissionImpl (System.Security.IPermission perm);
     parameters:
@@ -106,6 +107,7 @@ items:
       type: System.Security.IPermission
       description: To be added.
   overload: System.Security.ReadOnlyPermissionSet.AddPermissionImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -122,15 +124,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a copy of the .
   syntax:
     content: public override System.Security.PermissionSet Copy ();
     parameters: []
     return:
       type: System.Security.PermissionSet
-      description: To be added.
+      description: A copy of the read-only permission set.
   overload: System.Security.ReadOnlyPermissionSet.Copy*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -147,15 +149,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Reconstructs a security object with a specified state from an XML encoding.
+  remarks: This override of <xref:System.Security.PermissionSet.FromXml%2A?displayProperty=fullName> is intended to be called by the base class <xref:System.Security.PermissionSet> when it is deserializing the permission set. An exception is thrown if you attempt to call FromXml directly. You cannot modify a read-only permission set with a FromXml call.
   syntax:
     content: public override void FromXml (System.Security.SecurityElement et);
     parameters:
     - id: et
       type: System.Security.SecurityElement
-      description: To be added.
+      description: The XML encoding to use to reconstruct the security object.
   overload: System.Security.ReadOnlyPermissionSet.FromXml*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The et parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The et parameter is not a valid permission element.  \n  \n -or-  \n  \n The et parameter's version number is not supported."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The object is not being deserialized; that is,  did not call back into FromXml during deserialization.
   platform:
   - net-11
   - net-20
@@ -172,8 +184,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override System.Collections.IEnumerator GetEnumeratorImpl ();
     parameters: []
@@ -181,6 +191,7 @@ items:
       type: System.Collections.IEnumerator
       description: To be added.
   overload: System.Security.ReadOnlyPermissionSet.GetEnumeratorImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -197,8 +208,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override System.Security.IPermission GetPermissionImpl (Type permClass);
     parameters:
@@ -209,6 +218,7 @@ items:
       type: System.Security.IPermission
       description: To be added.
   overload: System.Security.ReadOnlyPermissionSet.GetPermissionImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -225,14 +235,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the collection is read-only.
+  remarks: A <xref:System.Security.ReadOnlyPermissionSet> is always read-only, so this value must always be `true`.
   syntax:
     content: public override bool IsReadOnly { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: Always .
   overload: System.Security.ReadOnlyPermissionSet.IsReadOnly*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -249,8 +260,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override System.Security.IPermission RemovePermissionImpl (Type permClass);
     parameters:
@@ -261,6 +270,7 @@ items:
       type: System.Security.IPermission
       description: To be added.
   overload: System.Security.ReadOnlyPermissionSet.RemovePermissionImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -277,8 +287,6 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override System.Security.IPermission SetPermissionImpl (System.Security.IPermission perm);
     parameters:
@@ -289,6 +297,7 @@ items:
       type: System.Security.IPermission
       description: To be added.
   overload: System.Security.ReadOnlyPermissionSet.SetPermissionImpl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -305,15 +314,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an XML encoding of the security object and its current state.
   syntax:
     content: public override System.Security.SecurityElement ToXml ();
     parameters: []
     return:
       type: System.Security.SecurityElement
-      description: To be added.
+      description: An XML encoding of the security object, including any state information.
   overload: System.Security.ReadOnlyPermissionSet.ToXml*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -346,36 +355,18 @@ references:
   name: IPermission
   nameWithType: IPermission
   fullName: System.Security.IPermission
-- uid: System.Security.IPermission
-  parent: System.Security
-  isExternal: false
-  name: IPermission
-  nameWithType: IPermission
-  fullName: System.Security.IPermission
 - uid: System.Security.ReadOnlyPermissionSet.Copy
   parent: System.Security.ReadOnlyPermissionSet
   isExternal: false
   name: Copy()
   nameWithType: ReadOnlyPermissionSet.Copy()
   fullName: System.Security.ReadOnlyPermissionSet.Copy()
-- uid: System.Security.PermissionSet
-  parent: System.Security
-  isExternal: false
-  name: PermissionSet
-  nameWithType: PermissionSet
-  fullName: System.Security.PermissionSet
 - uid: System.Security.ReadOnlyPermissionSet.FromXml(System.Security.SecurityElement)
   parent: System.Security.ReadOnlyPermissionSet
   isExternal: false
   name: FromXml(SecurityElement)
   nameWithType: ReadOnlyPermissionSet.FromXml(SecurityElement)
   fullName: System.Security.ReadOnlyPermissionSet.FromXml(SecurityElement)
-- uid: System.Security.SecurityElement
-  parent: System.Security
-  isExternal: false
-  name: SecurityElement
-  nameWithType: SecurityElement
-  fullName: System.Security.SecurityElement
 - uid: System.Security.ReadOnlyPermissionSet.GetEnumeratorImpl
   parent: System.Security.ReadOnlyPermissionSet
   isExternal: false
@@ -394,12 +385,6 @@ references:
   name: GetPermissionImpl(Type)
   nameWithType: ReadOnlyPermissionSet.GetPermissionImpl(Type)
   fullName: System.Security.ReadOnlyPermissionSet.GetPermissionImpl(Type)
-- uid: System.Security.IPermission
-  parent: System.Security
-  isExternal: false
-  name: IPermission
-  nameWithType: IPermission
-  fullName: System.Security.IPermission
 - uid: System.Type
   parent: System
   isExternal: true
@@ -424,48 +409,18 @@ references:
   name: RemovePermissionImpl(Type)
   nameWithType: ReadOnlyPermissionSet.RemovePermissionImpl(Type)
   fullName: System.Security.ReadOnlyPermissionSet.RemovePermissionImpl(Type)
-- uid: System.Security.IPermission
-  parent: System.Security
-  isExternal: false
-  name: IPermission
-  nameWithType: IPermission
-  fullName: System.Security.IPermission
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Security.ReadOnlyPermissionSet.SetPermissionImpl(System.Security.IPermission)
   parent: System.Security.ReadOnlyPermissionSet
   isExternal: false
   name: SetPermissionImpl(IPermission)
   nameWithType: ReadOnlyPermissionSet.SetPermissionImpl(IPermission)
   fullName: System.Security.ReadOnlyPermissionSet.SetPermissionImpl(IPermission)
-- uid: System.Security.IPermission
-  parent: System.Security
-  isExternal: false
-  name: IPermission
-  nameWithType: IPermission
-  fullName: System.Security.IPermission
-- uid: System.Security.IPermission
-  parent: System.Security
-  isExternal: false
-  name: IPermission
-  nameWithType: IPermission
-  fullName: System.Security.IPermission
 - uid: System.Security.ReadOnlyPermissionSet.ToXml
   parent: System.Security.ReadOnlyPermissionSet
   isExternal: false
   name: ToXml()
   nameWithType: ReadOnlyPermissionSet.ToXml()
   fullName: System.Security.ReadOnlyPermissionSet.ToXml()
-- uid: System.Security.SecurityElement
-  parent: System.Security
-  isExternal: false
-  name: SecurityElement
-  nameWithType: SecurityElement
-  fullName: System.Security.SecurityElement
 - uid: System.Security.ReadOnlyPermissionSet.#ctor*
   parent: System.Security.ReadOnlyPermissionSet
   isExternal: false

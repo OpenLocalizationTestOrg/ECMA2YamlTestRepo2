@@ -10,8 +10,10 @@ items:
   nameWithType: SpeechUI
   fullName: System.Speech.Recognition.SpeechUI
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides text and status information on recognition operations to be displayed in the Speech platform user interface.
+  remarks: The members of the SpeechUI class can be used to indicate exact feedback to the end user through the speech recognition user interface. An application can return arbitrary text and success/failure information using this class.
+  example:
+  - "The following example is a handler for the <xref:System.Speech.Recognition.Grammar.SpeechRecognized> event. This event is used by a <xref:System.Speech.Recognition.Grammar> that is designed to handle password input in the form \"My password is …\".  \n  \n If a password is not present, or not valid, <xref:System.Speech.Recognition.SpeechUI.SendTextFeedback%2A> sends error information to the Speech platform user interface.  \n  \n```  \n  \ngrammar.SpeechRecognized +=   \ndelegate(object sender, SpeechRecognizedEventArgs eventArgs)   \n{  \n  SemanticValue semantics = eventArgs.Result.Semantics;  \n  RecognitionResult result=eventArgs.Result;  \n  \n  if (!semantics.ContainsKey(\"Password\"))   \n  {  \n    SpeechUI.SendTextFeedback(eventArgs.Result, \"No Password Provided\", false);  \n  }  \n  else   \n  {  \n    RecognizedAudio pwdAudio = result.GetAudioForWordRange(  \n                  result.Words[3],  \n                  result.Words[result.Words.Count - 1]);  \n    MemoryStream pwdMemoryStream = new MemoryStream();  \n    pwdAudio.WriteToAudioStream(pwdMemoryStream);  \n    if (!IsValidPwd(pwdMemoryStream))   \n    {  \n      string badPwd = System.IO.Path.GetTempPath() +   \n              \"BadPwd\" + (new Random()).Next().ToString() + \".wav\";  \n      FileStream waveStream = new FileStream(badPwd, FileMode.Create);  \n      pwdAudio.WriteToWaveStream(waveStream);  \n      waveStream.Flush();  \n      waveStream.Close();  \n      SpeechUI.SendTextFeedback(eventArgs.Result, \"Invalid Password\", false);  \n    }  \n  }  \n};  \n```"
   syntax:
     content: public class SpeechUI
   inheritance:
@@ -34,24 +36,27 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Recognition
-  summary: To be added.
-  remarks: To be added.
+  summary: Sends status and descriptive text to the Speech platform user interface about the status of a recognition operation.
+  remarks: "SendTextFeedback can be used to indicate that a recognition operation failed to meet certain criteria, even if the input was recognized.  \n  \n An example is the verification of security code information, where the input was fully recognized, but the verification information was wrong."
+  example:
+  - "The following example is a handler for a <xref:System.Speech.Recognition.Grammar.SpeechRecognized> event. This event is used by a <xref:System.Speech.Recognition.Grammar> that is designed to handle password input of the form, \"My password is …\".  \n  \n If a password is not present, or not valid, **SendTextFeedback** is used to send error information to the Speech platform user interface.  \n  \n```  \n  \ngrammar.SpeechRecognized +=  \ndelegate(object sender, SpeechRecognizedEventArgs eventArgs)   \n{  \n  SemanticValue semantics = eventArgs.Result.Semantics;  \n  RecognitionResult result=eventArgs.Result;  \n  \n  if (!semantics.ContainsKey(\"Password\"))   \n  {  \n    SpeechUI.SendTextFeedback(eventArgs.Result, \"No Password Provided\", false);  \n  }  \n  else  \n  {  \n    RecognizedAudio pwdAudio = result.GetAudioForWordRange(  \n              result.Words[3],  \n              result.Words[result.Words.Count - 1]);  \n    MemoryStream pwdMemoryStream = new MemoryStream();  \n    pwdAudio.WriteToAudioStream(pwdMemoryStream);  \n    if (!IsValidPwd(pwdMemoryStream))   \n    {  \n      string badPwd = System.IO.Path.GetTempPath() + \"BadPwd\" +   \n               (new Random()).Next().ToString() + \".wav\";  \n      FileStream waveStream = new FileStream(badPwd, FileMode.Create);  \n      pwdAudio.WriteToWaveStream(waveStream);  \n      waveStream.Flush();  \n      waveStream.Close();  \n      SpeechUI.SendTextFeedback(eventArgs.Result, \"Invalid Password\", false);  \n    }  \n  }  \n};  \n```"
   syntax:
     content: public static bool SendTextFeedback (System.Speech.Recognition.RecognitionResult result, string feedback, bool isSuccessfulAction);
     parameters:
     - id: result
       type: System.Speech.Recognition.RecognitionResult
-      description: To be added.
+      description: A valid  instance.
     - id: feedback
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> containing a comment about the recognition operation that produced the `result`.
     - id: isSuccessfulAction
       type: System.Boolean
-      description: To be added.
+      description: A  indicating whether the application deemed the recognition operation a success.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the information provided to the method (Feedback, and isSuccessfulAction) was successfully made available to the Speech platform user interface, and  if the operation failed.
   overload: System.Speech.Recognition.SpeechUI.SendTextFeedback*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -84,12 +89,6 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Speech.Recognition.SpeechUI.SendTextFeedback*
   parent: System.Speech.Recognition.SpeechUI
   isExternal: false

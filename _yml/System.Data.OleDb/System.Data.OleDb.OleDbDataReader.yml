@@ -46,8 +46,10 @@ items:
   nameWithType: OleDbDataReader
   fullName: System.Data.OleDb.OleDbDataReader
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a way of reading a forward-only stream of data rows from a data source. This class cannot be inherited.
+  remarks: "To create an OleDbDataReader, you must call the <xref:System.Data.OleDb.OleDbCommand.ExecuteReader%2A> method of the <xref:System.Data.OleDb.OleDbCommand> object, instead of directly using a constructor.  \n  \n Before you close the <xref:System.Data.OleDb.OleDbConnection>, first close the OleDbDataReader object. You must also close the OleDbDataReader object if you plan to resuse an <xref:System.Data.OleDb.OleDbCommand> object.For example, you cannot retrieve output parameters until after you call <xref:System.Data.OleDb.OleDbDataReader.Close%2A>.  \n  \n Changes made to a result set by another process or thread while data is being read may be visible to the user of the OleDbDataReader. However, the precise behavior is timing dependent.  \n  \n <xref:System.Data.OleDb.OleDbDataReader.IsClosed%2A> and <xref:System.Data.OleDb.OleDbDataReader.RecordsAffected%2A> are the only properties that you can call after the OleDbDataReader is closed. Although the <xref:System.Data.OleDb.OleDbDataReader.RecordsAffected%2A> property may be accessed while the OleDbDataReader exists, always call <xref:System.Data.OleDb.OleDbDataReader.Close%2A> before returning the value of <xref:System.Data.OleDb.OleDbDataReader.RecordsAffected%2A> to guarantee an accurate return value."
+  example:
+  - "The following example creates an <xref:System.Data.OleDb.OleDbConnection>, an <xref:System.Data.OleDb.OleDbCommand>, and an OleDbDataReader. The example reads through the data, writing it out to the console. Finally, the example closes the OleDbDataReader and then the <xref:System.Data.OleDb.OleDbConnection>.  \n  \n [!code-vb[Classic WebData OleDbDataReader Example#1](../../add/codesnippet/VisualBasic/t-system.data.oledb.oled_2_1.vb)]\n [!code-cs[Classic WebData OleDbDataReader Example#1](../../add/codesnippet/CSharp/t-system.data.oledb.oled_2_1.cs)]"
   syntax:
     content: 'public sealed class OleDbDataReader : System.Data.Common.DbDataReader'
   inheritance:
@@ -93,12 +95,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Closes the  object.
+  remarks: "You must explicitly call the Close method when you are through using the <xref:System.Data.OleDb.OleDbDataReader> to use the associated <xref:System.Data.OleDb.OleDbConnection> for any other purpose.  \n  \n> [!CAUTION]\n>  Do not call **Close** or **Dispose** on a Connection, a DataReader, or any other managed object in the **Finalize** method of your class. In a finalizer, you should only release unmanaged resources that your class owns directly. If your class does not own any unmanaged resources, do not include a **Finalize** method in your class definition. For more information, see [Garbage Collection](../Topic/Garbage%20Collection.md)."
+  example:
+  - "The following example creates an <xref:System.Data.OleDb.OleDbConnection>, an <xref:System.Data.OleDb.OleDbCommand>, and an <xref:System.Data.OleDb.OleDbDataReader>. The example reads through the data, writing it out to the console. Finally, the example closes the <xref:System.Data.OleDb.OleDbDataReader>, and then the <xref:System.Data.OleDb.OleDbConnection>.  \n  \n [!code-cs[Classic WebData IDataReader.Read Example#1](../../add/codesnippet/CSharp/m-system.data.oledb.oled_24_1.cs)]\n [!code-vb[Classic WebData IDataReader.Read Example#1](../../add/codesnippet/VisualBasic/m-system.data.oledb.oled_24_1.vb)]"
   syntax:
     content: public override void Close ();
     parameters: []
   overload: System.Data.OleDb.OleDbDataReader.Close*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -115,14 +120,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates the depth of nesting for the current row.
+  remarks: The outermost table has a depth of zero.
   syntax:
     content: public override int Depth { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The depth of nesting for the current row.
   overload: System.Data.OleDb.OleDbDataReader.Depth*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -139,14 +145,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of columns in the current row.
+  remarks: "Includes hidden fields. Use <xref:System.Data.OleDb.OleDbDataReader.VisibleFieldCount%2A> to exclude hidden fields.  \n  \n After executing a query that does not return rows, FieldCount returns 0."
   syntax:
     content: public override int FieldCount { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: When not positioned in a valid recordset, 0; otherwise the number of columns in the current record. The default is -1.
   overload: System.Data.OleDb.OleDbDataReader.FieldCount*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: There is no current connection to a data source.
   platform:
   - net-11
   - net-20
@@ -163,18 +173,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a Boolean.
+  remarks: "No conversions are performed; therefore the data retrieved must already be a Boolean, or an exception is generated.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override bool GetBoolean (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Boolean
-      description: To be added.
+      description: The value of the column.
   overload: System.Data.OleDb.OleDbDataReader.GetBoolean*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -191,18 +205,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a byte.
+  remarks: "No conversions are performed; therefore the data retrieved must already be a byte.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override byte GetByte (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Byte
-      description: To be added.
+      description: The value of the specified column as a byte.
   overload: System.Data.OleDb.OleDbDataReader.GetByte*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -219,30 +237,31 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Reads a stream of bytes from the specified column offset into the buffer as an array starting at the given buffer offset.
+  remarks: "GetBytes returns the number of available bytes in the field. Most of the time this is the exact length of the field. However, the number returned may be less than the true length of the field if `GetBytes` has already been used to obtain bytes from the field. This may be the case, for example, when the <xref:System.Data.OleDb.OleDbDataReader> is reading a large data structure into a buffer. For more information, see the `SequentialAccess` setting for <xref:System.Data.CommandBehavior>.  \n  \n If you pass a buffer that is `null`, GetBytes returns the length of the field in bytes.  \n  \n No conversions are performed; therefore, the data retrieved must already be a byte array."
   syntax:
     content: public override long GetBytes (int ordinal, long dataIndex, byte[] buffer, int bufferIndex, int length);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     - id: dataIndex
       type: System.Int64
-      description: To be added.
+      description: The index within the field from which to start the read operation.
     - id: buffer
       type: System.Byte[]
-      description: To be added.
+      description: The buffer into which to read the stream of bytes.
     - id: bufferIndex
       type: System.Int32
-      description: To be added.
+      description: The index within the `buffer` where the write operation is to start.
     - id: length
       type: System.Int32
-      description: To be added.
+      description: The maximum length to copy into the buffer.
     return:
       type: System.Int64
-      description: To be added.
+      description: The actual number of bytes read.
   overload: System.Data.OleDb.OleDbDataReader.GetBytes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -259,18 +278,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a character.
+  remarks: Not supported for <xref:System.Data.OleDb>.
   syntax:
     content: public override char GetChar (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Char
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetChar*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -287,30 +310,31 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Reads a stream of characters from the specified column offset into the buffer as an array starting at the given buffer offset.
+  remarks: "GetChars returns the number of available characters in the field. Most of the time this is the exact length of the field. However, the number returned may be less than the true length of the field if `GetChars` has already been used to obtain characters from the field. This may be the case, for example, when the <xref:System.Data.OleDb.OleDbDataReader> is reading a large data structure into a buffer. For more information, see the `SequentialAccess` setting for <xref:System.Data.CommandBehavior>.  \n  \n If you pass a buffer that is `null`, GetChars returns the length of the field in characters.  \n  \n No conversions are performed; therefore, the data retrieved must already be a character array."
   syntax:
     content: public override long GetChars (int ordinal, long dataIndex, char[] buffer, int bufferIndex, int length);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     - id: dataIndex
       type: System.Int64
-      description: To be added.
+      description: The index within the row from which to start the read operation.
     - id: buffer
       type: System.Char[]
-      description: To be added.
+      description: The buffer into which to copy data.
     - id: bufferIndex
       type: System.Int32
-      description: To be added.
+      description: The index within the `buffer` where the write operation is to start.
     - id: length
       type: System.Int32
-      description: To be added.
+      description: The number of characters to read.
     return:
       type: System.Int64
-      description: To be added.
+      description: The actual number of characters read.
   overload: System.Data.OleDb.OleDbDataReader.GetChars*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -327,18 +351,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an  object for the requested column ordinal.
+  remarks: The <xref:System.Data.OleDb.OleDbDataAdapter.Fill%2A> will call GetData if the provider returns a <xref:System.Data.IDataReader> that has a column that supports <xref:System.Data.IDataReader>.
   syntax:
     content: public System.Data.OleDb.OleDbDataReader GetData (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Data.OleDb.OleDbDataReader
-      description: To be added.
+      description: An  object.
   overload: System.Data.OleDb.OleDbDataReader.GetData*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -355,18 +380,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the name of the source data type.
   syntax:
     content: public override string GetDataTypeName (int index);
     parameters:
     - id: index
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.String
-      description: To be added.
+      description: The name of the back-end data type. For more information, see [SQL Server data types](http://go.microsoft.com/fwlink/?LinkId=198032) or [Access data types](http://go.microsoft.com/fwlink/?LinkId=198033).
   overload: System.Data.OleDb.OleDbDataReader.GetDataTypeName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -383,18 +408,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a <xref:System.DateTime> object.
+  remarks: "No conversions are performed; therefore, the data retrieved must already be a <xref:System.DateTime> object.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override DateTime GetDateTime (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.DateTime
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetDateTime*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -411,8 +440,6 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override System.Data.Common.DbDataReader GetDbDataReader (int ordinal);
     parameters:
@@ -423,6 +450,7 @@ items:
       type: System.Data.Common.DbDataReader
       description: To be added.
   overload: System.Data.OleDb.OleDbDataReader.GetDbDataReader*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -439,18 +467,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a <xref:System.Decimal> object.
+  remarks: "No conversions are performed; therefore, the data retrieved must already be a <xref:System.Decimal> object.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override decimal GetDecimal (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Decimal
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetDecimal*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -467,18 +499,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a double-precision floating-point number.
+  remarks: "No conversions are performed; therefore, the data retrieved must already be a double-precision floating-point number.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override double GetDouble (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Double
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetDouble*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -495,15 +531,16 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an <xref:System.Collections.IEnumerator> that can be used to iterate through the rows in the data reader.
+  remarks: Although you can use this method to retrieve an explicit enumerator, in languages that support a `foreach` construct, it is simpler to use the looping construct directly in order to iterate through the rows in the data reader.
   syntax:
     content: public override System.Collections.IEnumerator GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.IEnumerator
-      description: To be added.
+      description: An <xref:System.Collections.IEnumerator> that can be used to iterate through the rows in the data reader.
   overload: System.Data.OleDb.OleDbDataReader.GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -520,18 +557,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the <xref:System.Type> that is the data type of the object.
   syntax:
     content: public override Type GetFieldType (int index);
     parameters:
     - id: index
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> that is the data type of the object.
   overload: System.Data.OleDb.OleDbDataReader.GetFieldType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -548,18 +585,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a single-precision floating-point number.
+  remarks: "No conversions are performed. Therefore, the data retrieved must already be a single-precision floating-point number.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override float GetFloat (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Single
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetFloat*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -576,18 +617,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a globally unique identifier (GUID).
+  remarks: "No conversions are performed; therefore the data retrieved must already be a globally unique identifier.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override Guid GetGuid (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Guid
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetGuid*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -604,18 +649,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a 16-bit signed integer.
+  remarks: "No conversions are performed; therefore, the data retrieved must already be a 16-bit signed integer.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override short GetInt16 (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Int16
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetInt16*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -632,18 +681,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a 32-bit signed integer.
+  remarks: "No conversions are performed; therefore, the data retrieved must already be a 32-bit signed integer.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override int GetInt32 (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Int32
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetInt32*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -660,18 +713,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a 64-bit signed integer.
+  remarks: "No conversions are performed; therefore, the data retrieved must already be a 64-bit signed integer.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override long GetInt64 (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Int64
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetInt64*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -688,18 +745,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the name of the specified column.
   syntax:
     content: public override string GetName (int index);
     parameters:
     - id: index
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.String
-      description: To be added.
+      description: The name of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -716,18 +773,24 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the column ordinal, given the name of the column.
+  remarks: "GetOrdinal performs a case-sensitive lookup first. If it fails, a second case-insensitive search is made. The method throws an `IndexOutOfRange` exceptionif the zero-based column ordinal is not found.  \n  \n GetOrdinal is kana-width insensitive.  \n  \n Because ordinal-based lookups are more efficient than named lookups, it is inefficient to call GetOrdinal within a loop. Save time by calling GetOrdinal one time and assigning the results to an integer variable for use within the loop."
+  example:
+  - "The following example demonstrates how to use the GetOrdinal method.  \n  \n [!code-vb[Classic WebData OleDbDataReader.GetOrdinal#1](../../add/codesnippet/VisualBasic/m-system.data.oledb.oled_9_1.vb)]\n [!code-cs[Classic WebData OleDbDataReader.GetOrdinal#1](../../add/codesnippet/CSharp/m-system.data.oledb.oled_9_1.cs)]"
   syntax:
     content: public override int GetOrdinal (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the column.
     return:
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
   overload: System.Data.OleDb.OleDbDataReader.GetOrdinal*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The name specified is not a valid column name.
   platform:
   - net-11
   - net-20
@@ -744,15 +807,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a  that describes the column metadata of the .
+  remarks: "The GetSchemaTable method maps to the OLE DB **IColumnsRowset::GetColumnsRowset** method, and returns metadata about each column in the following order:  \n  \n|DataReader column|OLE DB column ID|Description|  \n|-----------------------|----------------------|-----------------|  \n|ColumnName|DBCOLUMN_NAME|The name of the column; this might not be unique. If this cannot be determined, a null value is returned. This name always reflects the most recent renaming of the column in the current view or command text.|  \n|ColumnOrdinal|DBCOLUMN_NUMBER|The zero-based ordinal of the column. This column cannot contain a null value.|  \n|ColumnSize|DBCOLUMN_COLUMNSIZE|The maximum possible length of a value in the column. For columns that use a fixed-length data type, this is the size of the data type.|  \n|NumericPrecision|DBCOLUMN_PRECISION|If DbType is a numeric data type, this is the maximum precision of the column. The precision of columns with a data type of DBTYPE_DECIMAL or DBTYPE_NUMERIC depends on the definition of the column. If DbType is not a numeric data type, this is a null value.|  \n|NumericScale|DBCOLUMN_SCALE|If DbType is DBTYPE_DECIMAL or DBTYPE_NUMERIC, this is the number of digits to the right of the decimal point. Otherwise, this is a null value.|  \n|DataType|None|Maps to the .NET Framework type of the column.|  \n|ProviderType|DBCOLUMN_TYPE|The indicator of the column's data type. If the data type of the column varies from row to row, this must be DBTYPE_VARIANT. This column cannot contain a null value.|  \n|IsLong|DBCOLUMNFLAGS_ISLONG|The provider sets DBCOLUMNFLAGS_ISLONG if the column contains a Binary Long Object (BLOB) that contains very long data. The definition of very long data is provider-specific. The setting of this flag corresponds to the value of the IS_LONG column in the PROVIDER_TYPES rowset for the data type.|  \n|AllowDBNull|DBCOLUMNFLAGS_ISNULLABLE|The provider sets DBCOLUMNFLAGS_ISNULLABLE if the consumer can set the column to a null value, or if the provider cannot determine whether the consumer can set the column to a null value. A column may contain null values, even if it cannot be set to a null value.|  \n|IsReadOnly|DBCOLUMNFLAGS_WRITE|`true` if the column cannot be modified; otherwise `false`. The column is assumed to be writable if the provider has set either the DBCOLUMNFLAGS_WRITE or DBCOLUMNFLAGS_WRITEUNKNOWN flag.|  \n|IsRowVersion|DBCOLUMNFLAGS_ISROWID|The provider sets DBCOLUMNFLAGS_ISROWID if the column contains a persistent row identifier that cannot be written to, and has no meaningful value except to identity the row.|  \n|IsUnique|DBCOLUMN_ISUNIQUE|VARIANT_TRUE: No two rows in the base table-the table returned in BaseTableName-can have the same value in this column. IsUnique is guaranteed to be VARIANT_TRUE if the column represents a key by itself or if there is a constraint of type UNIQUE that applies only to this column.<br /><br /> VARIANT_FALSE: The column can contain duplicate values in the base table. The default of this column is VARIANT_FALSE.|  \n|IsKey|DBCOLUMN_KEYCOLUMN|VARIANT_TRUE: The column is one of a set of columns in the rowset that, taken together, uniquely identify the row. The set of columns with IsKey set to VARIANT_TRUE must uniquely identify a row in the rowset. There is no requirement that this set of columns is a minimal set of columns. This set of columns may be generated from a base table primary key, a unique constraint or a unique index.<br /><br /> VARIANT_FALSE: The column is not required to uniquely identify the row.|  \n|IsAutoIncrement|DBCOLUMN_ISAUTOINCREMENT|VARIANT_TRUE: The column assigns values to new rows in fixed increments.<br /><br /> VARIANT_FALSE: The column does not assign values to new rows in fixed increments. The default of this column is VARIANT_FALSE.|  \n|BaseSchemaName|DBCOLUMN_BASESCHEMANAME|The name of the schema in the data store that contains the column. A null value if the base schema name cannot be determined. The default of this column is a null value.|  \n|BaseCatalogName|DBCOLUMN_BASECATALOGNAME|The name of the catalog in the data store that contains the column. A null value if the base catalog name cannot be determined. The default of this column is a null value.|  \n|BaseTableName|DBCOLUMN_BASETABLENAME|The name of the table or view in the data store that contains the column. A null value if the base table name cannot be determined. The default of this column is a null value.|  \n|BaseColumnName|DBCOLUMN_BASECOLUMNNAME|The name of the column in the data store. This might be different from the column name returned in the ColumnName column if an alias was used. A null value if the base column name cannot be determined or if the rowset column is derived, but not identical to, a column in the data store. The default of this column is a null value.|  \n  \n> [!NOTE]\n>  To make sure that metadata columns return the correct information, you must call <xref:System.Data.OleDb.OleDbCommand.ExecuteReader%2A> with the `behavior` parameter set to `KeyInfo`. Otherwise, some of the columns in the schema table may return default, null, or incorrect data."
   syntax:
     content: public override System.Data.DataTable GetSchemaTable ();
     parameters: []
     return:
       type: System.Data.DataTable
-      description: To be added.
+      description: A  that describes the column metadata.
   overload: System.Data.OleDb.OleDbDataReader.GetSchemaTable*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  is closed.
   platform:
   - net-11
   - net-20
@@ -769,18 +836,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a string.
+  remarks: "No conversions are performed; therefore the data retrieved must already be a string.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public override string GetString (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.String
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetString*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -797,18 +868,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column as a <xref:System.TimeSpan> object.
+  remarks: "No conversions are performed; therefore, the data retrieved must already be a <xref:System.TimeSpan> object.  \n  \n Call <xref:System.Data.OleDb.OleDbDataReader.IsDBNull%2A> to look for null values before calling this method."
   syntax:
     content: public TimeSpan GetTimeSpan (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The value of the specified column.
   overload: System.Data.OleDb.OleDbDataReader.GetTimeSpan*
+  exceptions:
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The specified cast is not valid.
   platform:
   - net-11
   - net-20
@@ -825,18 +900,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the column at the specified ordinal in its native format.
+  remarks: This method returns <xref:System.DBNull> for null database columns.
   syntax:
     content: public override object GetValue (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Object
-      description: To be added.
+      description: The value to return.
   overload: System.Data.OleDb.OleDbDataReader.GetValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -853,18 +929,23 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Populates an array of objects with the column values of the current row.
+  remarks: "For most applications, the GetValues method provides an efficient means for retrieving all columns, instead of retrieving each column individually.  \n  \n You can pass an <xref:System.Object> array that contains fewer than the number of columns that are contained in the resulting row. Only the amount of data the <xref:System.Object> array holds is copied to the array. You can also pass an <xref:System.Object> array whose length is more than the number of columns that are contained in the resulting row.  \n  \n This method returns <xref:System.DBNull> for null database columns."
+  example:
+  - >-
+    [!code-cs[OleDbDataReader_GetValues#1](../../add/codesnippet/CSharp/m-system.data.oledb.oled_12_1.cs)]
+     [!code-vb[OleDbDataReader_GetValues#1](../../add/codesnippet/VisualBasic/m-system.data.oledb.oled_12_1.vb)]
   syntax:
     content: public override int GetValues (object[] values);
     parameters:
     - id: values
       type: System.Object[]
-      description: To be added.
+      description: An array of <xref:System.Object> into which to copy the attribute columns.
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of instances of <xref:System.Object> in the array.
   overload: System.Data.OleDb.OleDbDataReader.GetValues*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -881,14 +962,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the  contains one or more rows.
   syntax:
     content: public override bool HasRows { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  contains one or more rows; otherwise .
   overload: System.Data.OleDb.OleDbDataReader.HasRows*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -905,14 +986,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the data reader is closed.
+  remarks: IsClosed and <xref:System.Data.OleDb.OleDbDataReader.RecordsAffected%2A> are the only properties that you can call after the <xref:System.Data.OleDb.OleDbDataReader> is closed.
   syntax:
     content: public override bool IsClosed { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  is closed; otherwise, .
   overload: System.Data.OleDb.OleDbDataReader.IsClosed*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -929,18 +1011,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the column contains nonexistent or missing values.
+  remarks: Call this method to look for null column values before calling the typed get methods (for example, <xref:System.Data.OleDb.OleDbDataReader.GetByte%2A>, <xref:System.Data.OleDb.OleDbDataReader.GetChar%2A>, and so on) to avoid raising an error.
   syntax:
     content: public override bool IsDBNull (int ordinal);
     parameters:
     - id: ordinal
       type: System.Int32
-      description: To be added.
+      description: The zero-based column ordinal.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the specified column value is equivalent to ; otherwise, .
   overload: System.Data.OleDb.OleDbDataReader.IsDBNull*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -957,18 +1040,21 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column in its native format given the column ordinal.
   syntax:
     content: public override object this[int index] { get; }
     parameters:
     - id: index
       type: System.Int32
-      description: To be added.
+      description: The column ordinal.
     return:
       type: System.Object
-      description: To be added.
+      description: The value of the specified column in its native format.
   overload: System.Data.OleDb.OleDbDataReader.Item*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: The index passed was outside the range of 0 through <xref:System.Data.IDataRecord.FieldCount%2A>.
   platform:
   - net-11
   - net-20
@@ -985,18 +1071,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the value of the specified column in its native format given the column name.
+  remarks: "A case-sensitive lookup is performed first. If it fails, a second case-insensitive search is made.  \n  \n This method is kana-width insensitive."
   syntax:
     content: public override object this[string name] { get; }
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The column name.
     return:
       type: System.Object
-      description: To be added.
+      description: The value of the specified column in its native format.
   overload: System.Data.OleDb.OleDbDataReader.Item*
+  exceptions:
+  - type: System.IndexOutOfRangeException
+    commentId: T:System.IndexOutOfRangeException
+    description: No column with the specified name was found.
   platform:
   - net-11
   - net-20
@@ -1013,15 +1103,16 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Advances the data reader to the next result, when reading the results of batch SQL statements.
+  remarks: "Used to process multiple results that can be generated by executing batch SQL statements.  \n  \n By default, the data reader is positioned on the first result."
   syntax:
     content: public override bool NextResult ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if there are more result sets; otherwise, .
   overload: System.Data.OleDb.OleDbDataReader.NextResult*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1038,15 +1129,18 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Advances the  to the next record.
+  remarks: "The default position of the <xref:System.Data.OleDb.OleDbDataReader> is before the first record. Therefore, you must call Read to start accessing any data.  \n  \n While the <xref:System.Data.OleDb.OleDbDataReader> is being used, the associated <xref:System.Data.OleDb.OleDbConnection> is busy serving it until you call <xref:System.Data.OleDb.OleDbDataReader.Close%2A>."
+  example:
+  - "The following example creates an <xref:System.Data.OleDb.OleDbConnection>, an <xref:System.Data.OleDb.OleDbCommand>, and an <xref:System.Data.OleDb.OleDbDataReader>. The example reads through the data, writing it out to the console. Finally, the example closes the <xref:System.Data.OleDb.OleDbDataReader> and then the <xref:System.Data.OleDb.OleDbConnection>.  \n  \n [!code-cs[Classic WebData IDataReader.Read Example#1](../../add/codesnippet/CSharp/m-system.data.oledb.oled_6_1.cs)]\n [!code-vb[Classic WebData IDataReader.Read Example#1](../../add/codesnippet/VisualBasic/m-system.data.oledb.oled_6_1.vb)]"
   syntax:
     content: public override bool Read ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if there are more rows; otherwise, .
   overload: System.Data.OleDb.OleDbDataReader.Read*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1063,14 +1157,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of rows changed, inserted, or deleted by execution of the SQL statement.
+  remarks: "The RecordsAffected property is not set until all rows are read and you close the <xref:System.Data.OleDb.OleDbDataReader>.  \n  \n The value of this property is cumulative. For example, if two records are inserted in batch mode, the value of RecordsAffected is two.  \n  \n <xref:System.Data.OleDb.OleDbDataReader.IsClosed%2A> and RecordsAffected are the only properties that you can call after the <xref:System.Data.OleDb.OleDbDataReader> is closed."
   syntax:
     content: public override int RecordsAffected { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of rows changed, inserted, or deleted; 0 if no rows were affected or the statement failed; and -1 for SELECT statements.
   overload: System.Data.OleDb.OleDbDataReader.RecordsAffected*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1087,14 +1182,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of fields in the  that are not hidden.
+  remarks: This value is used to determine how many fields in the <xref:System.Data.OleDb.OleDbDataReader> are visible. For example, a SELECT on a partial primary key returns the remaining parts of the key as hidden fields. The hidden fields are always appended behind the visible fields.
   syntax:
     content: public override int VisibleFieldCount { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of fields that are not hidden.
   overload: System.Data.OleDb.OleDbDataReader.VisibleFieldCount*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1127,12 +1223,6 @@ references:
   name: FieldCount
   nameWithType: OleDbDataReader.FieldCount
   fullName: System.Data.OleDb.OleDbDataReader.FieldCount
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetBoolean(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1145,12 +1235,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetByte(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1163,12 +1247,6 @@ references:
   name: Byte
   nameWithType: Byte
   fullName: System.Byte
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1181,36 +1259,20 @@ references:
   name: Int64
   nameWithType: Int64
   fullName: System.Int64
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Data.OleDb.OleDbDataReader.GetChar(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1223,54 +1285,26 @@ references:
   name: Char
   nameWithType: Char
   fullName: System.Char
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: GetChars(Int32,Int64,Char[],Int32,Int32)
   nameWithType: OleDbDataReader.GetChars(Int32,Int64,Char[],Int32,Int32)
   fullName: System.Data.OleDb.OleDbDataReader.GetChars(Int32,Int64,Char[],Int32,Int32)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Char
+- uid: System.Char[]
   parent: System
   isExternal: true
   name: Char
   nameWithType: Char
   fullName: System.Char[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
+  spec.csharp:
+  - uid: System.Char
+    name: Char
+    nameWithType: Char
+    fullName: Char[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Data.OleDb.OleDbDataReader.GetData(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1283,12 +1317,6 @@ references:
   name: OleDbDataReader
   nameWithType: OleDbDataReader
   fullName: System.Data.OleDb.OleDbDataReader
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetDataTypeName(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1301,12 +1329,6 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetDateTime(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1319,30 +1341,12 @@ references:
   name: DateTime
   nameWithType: DateTime
   fullName: System.DateTime
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetDbDataReader(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: GetDbDataReader(Int32)
   nameWithType: OleDbDataReader.GetDbDataReader(Int32)
   fullName: System.Data.OleDb.OleDbDataReader.GetDbDataReader(Int32)
-- uid: System.Data.Common.DbDataReader
-  parent: System.Data.Common
-  isExternal: false
-  name: DbDataReader
-  nameWithType: DbDataReader
-  fullName: System.Data.Common.DbDataReader
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetDecimal(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1355,12 +1359,6 @@ references:
   name: Decimal
   nameWithType: Decimal
   fullName: System.Decimal
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetDouble(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1373,12 +1371,6 @@ references:
   name: Double
   nameWithType: Double
   fullName: System.Double
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetEnumerator
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1403,12 +1395,6 @@ references:
   name: Type
   nameWithType: Type
   fullName: System.Type
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetFloat(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1421,12 +1407,6 @@ references:
   name: Single
   nameWithType: Single
   fullName: System.Single
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetGuid(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1439,12 +1419,6 @@ references:
   name: Guid
   nameWithType: Guid
   fullName: System.Guid
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetInt16(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1457,84 +1431,30 @@ references:
   name: Int16
   nameWithType: Int16
   fullName: System.Int16
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetInt32(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: GetInt32(Int32)
   nameWithType: OleDbDataReader.GetInt32(Int32)
   fullName: System.Data.OleDb.OleDbDataReader.GetInt32(Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetInt64(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: GetInt64(Int32)
   nameWithType: OleDbDataReader.GetInt64(Int32)
   fullName: System.Data.OleDb.OleDbDataReader.GetInt64(Int32)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetName(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: GetName(Int32)
   nameWithType: OleDbDataReader.GetName(Int32)
   fullName: System.Data.OleDb.OleDbDataReader.GetName(Int32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetOrdinal(System.String)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: GetOrdinal(String)
   nameWithType: OleDbDataReader.GetOrdinal(String)
   fullName: System.Data.OleDb.OleDbDataReader.GetOrdinal(String)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Data.OleDb.OleDbDataReader.GetSchemaTable
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1553,18 +1473,6 @@ references:
   name: GetString(Int32)
   nameWithType: OleDbDataReader.GetString(Int32)
   fullName: System.Data.OleDb.OleDbDataReader.GetString(Int32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetTimeSpan(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1577,12 +1485,6 @@ references:
   name: TimeSpan
   nameWithType: TimeSpan
   fullName: System.TimeSpan
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetValue(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
@@ -1595,156 +1497,80 @@ references:
   name: Object
   nameWithType: Object
   fullName: System.Object
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.GetValues(System.Object[])
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: GetValues(Object[])
   nameWithType: OleDbDataReader.GetValues(Object[])
   fullName: System.Data.OleDb.OleDbDataReader.GetValues(Object[])
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Object
+- uid: System.Object[]
   parent: System
   isExternal: true
   name: Object
   nameWithType: Object
   fullName: System.Object[]
+  spec.csharp:
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Data.OleDb.OleDbDataReader.HasRows
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: HasRows
   nameWithType: OleDbDataReader.HasRows
   fullName: System.Data.OleDb.OleDbDataReader.HasRows
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.OleDb.OleDbDataReader.IsClosed
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: IsClosed
   nameWithType: OleDbDataReader.IsClosed
   fullName: System.Data.OleDb.OleDbDataReader.IsClosed
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.OleDb.OleDbDataReader.IsDBNull(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: IsDBNull(Int32)
   nameWithType: OleDbDataReader.IsDBNull(Int32)
   fullName: System.Data.OleDb.OleDbDataReader.IsDBNull(Int32)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.Item(System.Int32)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: Item(Int32)
   nameWithType: OleDbDataReader.Item(Int32)
   fullName: System.Data.OleDb.OleDbDataReader.Item(Int32)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.Item(System.String)
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: Item(String)
   nameWithType: OleDbDataReader.Item(String)
   fullName: System.Data.OleDb.OleDbDataReader.Item(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Data.OleDb.OleDbDataReader.NextResult
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: NextResult()
   nameWithType: OleDbDataReader.NextResult()
   fullName: System.Data.OleDb.OleDbDataReader.NextResult()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.OleDb.OleDbDataReader.Read
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: Read()
   nameWithType: OleDbDataReader.Read()
   fullName: System.Data.OleDb.OleDbDataReader.Read()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.OleDb.OleDbDataReader.RecordsAffected
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: RecordsAffected
   nameWithType: OleDbDataReader.RecordsAffected
   fullName: System.Data.OleDb.OleDbDataReader.RecordsAffected
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.VisibleFieldCount
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false
   name: VisibleFieldCount
   nameWithType: OleDbDataReader.VisibleFieldCount
   fullName: System.Data.OleDb.OleDbDataReader.VisibleFieldCount
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.OleDb.OleDbDataReader.Close*
   parent: System.Data.OleDb.OleDbDataReader
   isExternal: false

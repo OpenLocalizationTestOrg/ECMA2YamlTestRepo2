@@ -23,8 +23,10 @@ items:
   nameWithType: WindowsTokenRoleProvider
   fullName: System.Web.Security.WindowsTokenRoleProvider
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets role information for an ASP.NET application from Windows group membership.
+  remarks: "The WindowsTokenRoleProvider class is a read-only role-membership provider that retrieves role information for a Windows user based on Windows security groups. It is most useful with ASP.NET applications that use Windows authentication mode where the IIS authentication settings disable anonymous authentication. You can configure ASP.NET applications to allow or deny access based on a user's membership in a particular Windows group.  \n  \n You cannot use the WindowsTokenRoleProvider class to create or delete roles or modify the membership of a role that is based on Windows group membership. This functionality is managed by the Windows operating system. The WindowsTokenRoleProvider class supports only the <xref:System.Web.Security.WindowsTokenRoleProvider.IsUserInRole%2A> and <xref:System.Web.Security.WindowsTokenRoleProvider.GetRolesForUser%2A> methods of the <xref:System.Web.Security.RoleProvider> abstract class."
+  example:
+  - "The following example shows the Web.config file for an ASP.NET application. It specifies that the application uses both Windows authentication and the WindowsTokenRoleProvider class to retrieve role information for Windows users. The  element specifies that only users in the BUILTIN\\Administrators group are allowed access to the application.  \n  \n```  \n<configuration>  \n  <system.web>  \n    <authentication mode=\"Windows\" />  \n  \n    <authorization>  \n      <allow roles=\"BUILTIN\\Administrators\" />  \n        <deny users=\"*\" />  \n      </authorization>  \n  \n    <roleManager defaultProvider=\"WindowsProvider\"   \n      enabled=\"true\"  \n      cacheRolesInCookie=\"false\">  \n      <providers>  \n        <add  \n          name=\"WindowsProvider\"  \n          type=\"System.Web.Security.WindowsTokenRoleProvider\" />  \n      </providers>  \n    </roleManager>  \n  \n  </system.web>  \n</configuration>  \n```"
   syntax:
     content: 'public class WindowsTokenRoleProvider : System.Web.Security.RoleProvider'
   inheritance:
@@ -47,12 +49,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of the  class.
+  remarks: The WindowsTokenRoleProvider constructor is called by ASP.NET to create an instance of the <xref:System.Web.Security.WindowsTokenRoleProvider> class as specified in the configuration for the application. This constructor is not intended to be used from your code.
   syntax:
     content: public WindowsTokenRoleProvider ();
     parameters: []
   overload: System.Web.Security.WindowsTokenRoleProvider.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -69,18 +72,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not supported by the Windows token role provider.
+  remarks: This method is not supported by the <xref:System.Web.Security.WindowsTokenRoleProvider> class and always throws a <xref:System.Configuration.Provider.ProviderException>.
   syntax:
     content: public override void AddUsersToRoles (string[] usernames, string[] roleNames);
     parameters:
     - id: usernames
       type: System.String[]
-      description: To be added.
+      description: A string array of user names to be added to the specified roles.
     - id: roleNames
       type: System.String[]
-      description: To be added.
+      description: A string array of role names to add the specified user names to.
   overload: System.Web.Security.WindowsTokenRoleProvider.AddUsersToRoles*
+  exceptions:
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: An unsupported method was called.
   platform:
   - net-11
   - net-20
@@ -97,14 +104,23 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the name of the application.
+  remarks: Unlike other role providers such as the <xref:System.Web.Security.SqlRoleProvider>, the <xref:System.Web.Security.WindowsTokenRoleProvider> class does not associate role information with an application. Instead, the role information is taken from the Windows groups on the local computer. Multiple applications on the same server that use the <xref:System.Web.Security.WindowsTokenRoleProvider> class always share the same role information. Although the `applicationName` can be configured in the Web.config file for the application, the ApplicationName property is not used to retrieve role information.
+  example:
+  - "The following example shows the  element in the `system.web` section of the Web.config file for an ASP.NET application. It specifies the application's <xref:System.Web.Security.WindowsTokenRoleProvider> instance and sets the ApplicationName property to `MyApplication`.  \n  \n```  \n<roleManager defaultProvider=\"WindowsProvider\"   \n  enabled=\"true\"  \n  cacheRolesInCookie=\"false\">  \n  <providers>  \n    <add  \n      name=\"WindowsProvider\"  \n      type=\"System.Web.Security.WindowsTokenRoleProvider\"   \n      applicationName=\"MyApplication\" />  \n  </providers>  \n</roleManager>  \n```"
   syntax:
     content: public override string ApplicationName { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The name of the application.
   overload: System.Web.Security.WindowsTokenRoleProvider.ApplicationName*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: An attempt was made to set the ApplicationName property by a caller that does not have  ASP.NET hosting permission.
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: An attempt was made to set the ApplicationName to a string that is longer than 256 characters.
   platform:
   - net-11
   - net-20
@@ -121,15 +137,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not supported by the Windows token role provider.
+  remarks: This method is not supported by the <xref:System.Web.Security.WindowsTokenRoleProvider> class and always throws a <xref:System.Configuration.Provider.ProviderException>.
   syntax:
     content: public override void CreateRole (string roleName);
     parameters:
     - id: roleName
       type: System.String
-      description: To be added.
+      description: The name of the role to create.
   overload: System.Web.Security.WindowsTokenRoleProvider.CreateRole*
+  exceptions:
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: An unsupported method was called.
   platform:
   - net-11
   - net-20
@@ -146,21 +166,24 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not supported by the Windows token role provider.
   syntax:
     content: public override bool DeleteRole (string roleName, bool throwOnPopulatedRole);
     parameters:
     - id: roleName
       type: System.String
-      description: To be added.
+      description: The name of the role to delete.
     - id: throwOnPopulatedRole
       type: System.Boolean
-      description: To be added.
+      description: If , an exception will be thrown on an attempt to delete a role that contains one or more members.
     return:
       type: System.Boolean
-      description: To be added.
+      description: None. The method is not supported by the  class and always throws a .
   overload: System.Web.Security.WindowsTokenRoleProvider.DeleteRole*
+  exceptions:
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: An unsupported method was called.
   platform:
   - net-11
   - net-20
@@ -177,21 +200,24 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not supported by the Windows token role provider.
   syntax:
     content: public override string[] FindUsersInRole (string roleName, string usernameToMatch);
     parameters:
     - id: roleName
       type: System.String
-      description: To be added.
+      description: The role to search in.
     - id: usernameToMatch
       type: System.String
-      description: To be added.
+      description: The user name to find in the role.
     return:
       type: System.String[]
-      description: To be added.
+      description: None. The method is not supported by the  class and always throws a .
   overload: System.Web.Security.WindowsTokenRoleProvider.FindUsersInRole*
+  exceptions:
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: An unsupported method was called.
   platform:
   - net-11
   - net-20
@@ -208,15 +234,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not supported by the Windows token role provider.
   syntax:
     content: public override string[] GetAllRoles ();
     parameters: []
     return:
       type: System.String[]
-      description: To be added.
+      description: None. The method is not supported by the  class and always throws a .
   overload: System.Web.Security.WindowsTokenRoleProvider.GetAllRoles*
+  exceptions:
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: An unsupported method was called.
   platform:
   - net-11
   - net-20
@@ -233,18 +262,30 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a list of the Windows groups that a user is in.
+  remarks: "This method is called by the <xref:System.Web.Security.Roles> class to retrieve from the Windows operating system a list of the Windows groups that the specified user is in. The GetRolesForUser method can be called only for the currently logged-on user, as identified by the LOGON_USER server variable. If the value supplied in the `username` parameter is not the name of the currently logged-on user, a <xref:System.Configuration.Provider.ProviderException?displayProperty=fullName> is thrown.  \n  \n For more information an ASP.NET and Windows authentication, see [ASP.NET Authentication](../Topic/ASP.NET%20Authentication.md)."
+  example:
+  - "The following code example uses the GetRolesForUser method to retrieve a list of roles for a specified user and binds the list of roles to a <xref:System.Web.UI.WebControls.GridView> control. For an example of a Web.config file that enables role management, see <xref:System.Web.Security.WindowsTokenRoleProvider>.  \n  \n [!code-vb[System.Web.Security.WindowsTokenRoleProvider#1](../../add/codesnippet/VisualBasic/m-system.web.security.wi_1.aspx)]\n [!code-cs[System.Web.Security.WindowsTokenRoleProvider#1](../../add/codesnippet/CSharp/m-system.web.security.wi_1.aspx)]"
   syntax:
     content: public override string[] GetRolesForUser (string username);
     parameters:
     - id: username
       type: System.String
-      description: To be added.
+      description: The user to return the list of Windows groups for in the form DOMAIN\username.
     return:
       type: System.String[]
-      description: To be added.
+      description: A string array containing the names of all the Windows groups that the specified user is in.
   overload: System.Web.Security.WindowsTokenRoleProvider.GetRolesForUser*
+  exceptions:
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "The currently executing user does not have an authenticated  attached to <xref:System.Web.UI.Page.User%2A?displayProperty=fullName>. For non-HTTP scenarios, the currently executing user does not have an authenticated  attached to <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName>.  \n  \n -or-  \n  \n username does not match the <xref:System.Security.Principal.WindowsIdentity.Name%2A> of the current .  \n  \n -or-  \n  \n A failure occurred while retrieving the user's Windows group information."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    username is ."
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: The trust level is less than .
   platform:
   - net-11
   - net-20
@@ -261,18 +302,21 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not supported by the Windows token role provider.
   syntax:
     content: public override string[] GetUsersInRole (string roleName);
     parameters:
     - id: roleName
       type: System.String
-      description: To be added.
+      description: The name of the role to get the list of users for.
     return:
       type: System.String[]
-      description: To be added.
+      description: None. The method is not supported by the  class and always throws a .
   overload: System.Web.Security.WindowsTokenRoleProvider.GetUsersInRole*
+  exceptions:
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: An unsupported method was called.
   platform:
   - net-11
   - net-20
@@ -289,18 +333,25 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes the Windows token role provider with the property values specified in the configuration file for the ASP.NET application. This method is not intended to be used directly from your code.
+  remarks: The Initialize method initializes the <xref:System.Web.Security.WindowsTokenRoleProvider> class with the property values specified in the ASP.NET application configuration file (Web.config) and is not intended to be used directly from your code.
   syntax:
     content: public override void Initialize (string name, System.Collections.Specialized.NameValueCollection config);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the  instance to initialize.
     - id: config
       type: System.Collections.Specialized.NameValueCollection
-      description: To be added.
+      description: A  constructor that contains the names and values of configuration options for the  class.
   overload: System.Web.Security.WindowsTokenRoleProvider.Initialize*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    config is ."
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "The  attribute in the configuration is longer than 256 characters.  \n  \n -or-  \n  \n The application configuration file for this  instance contains an unrecognized attribute."
   platform:
   - net-11
   - net-20
@@ -317,21 +368,30 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the specified user is in the specified built-in Windows role.
+  remarks: "The IsUserInRole method enables you to check whether a user is in one of the common Windows roles described by the <xref:System.Security.Principal.WindowsBuiltInRole> enumeration. This method is useful for applications that are localized into multiple languages. This overload of the IsUserInRole method is not part of the <xref:System.Web.Security.RoleProvider> base class and can only be accessed by casting the <xref:System.Web.Security.Roles.Provider%2A> property of the <xref:System.Web.Security.Roles> class as the <xref:System.Web.Security.WindowsTokenRoleProvider> type.  \n  \n You can call the IsUserInRole method only for the currently logged-on user, as identified by the LOGON_USER server variable. If the value supplied in the `username` parameter is not the name of the currently logged-on user, an <xref:System.Web.HttpException> is thrown.  \n  \n IsUserInRole method can only be called for the currently logged-on user identified by the LOGON_USER server variable. The current logged on user must be a Windows authenticated user. For more information on ASP.NET and Windows authentication, see [ASP.NET Authentication](../Topic/ASP.NET%20Authentication.md)."
+  example:
+  - "The following code example programmatically checks whether the currently logged-on user is in the Administrators role before allowing the user to view roles information for the application. For an example of a Web.config file that enables role management, see <xref:System.Web.Security.WindowsTokenRoleProvider>.  \n  \n [!code-cs[System.Web.Security.WindowsTokenRoleProvider#2](../../add/codesnippet/CSharp/f88a5130-a7a7-46a8-84f9-_1.aspx)]\n [!code-vb[System.Web.Security.WindowsTokenRoleProvider#2](../../add/codesnippet/VisualBasic/f88a5130-a7a7-46a8-84f9-_1.aspx)]"
   syntax:
     content: public bool IsUserInRole (string username, System.Security.Principal.WindowsBuiltInRole role);
     parameters:
     - id: username
       type: System.String
-      description: To be added.
+      description: The user name to search for in the form DOMAIN\username.
     - id: role
       type: System.Security.Principal.WindowsBuiltInRole
-      description: To be added.
+      description: The Windows role to search in.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the specified user is in the specified Windows role; otherwise, .
   overload: System.Web.Security.WindowsTokenRoleProvider.IsUserInRole*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    username is ."
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "The currently executing user does not have an authenticated  attached to <xref:System.Web.UI.Page.User%2A?displayProperty=fullName>. For non-HTTP scenarios, the currently executing user does not have an authenticated  attached to <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName>.  \n  \n -or-  \n  \n username does not match the <xref:System.Security.Principal.WindowsIdentity.Name%2A> of the current ."
   platform:
   - net-11
   - net-20
@@ -348,21 +408,30 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the specified user is in the specified Windows group.
+  remarks: The IsUserInRole method is called by the <xref:System.Web.Security.Roles> class and the <xref:System.Security.Principal.IPrincipal.IsInRole%2A> method of the <xref:System.Web.UI.Page.User%2A> property to determine whether a user is in a Windows group. You can call the IsUserInRole method only for the currently logged-on user, as identified by the LOGON_USER server variable. The current logged-on user must be a Windows authenticated user. For more information on ASP.NET and Windows authentication, see [ASP.NET Authentication](../Topic/ASP.NET%20Authentication.md).
+  example:
+  - "The following code example programmatically checks whether the currently logged-on user is in the Administrators role before allowing the user to view roles information for the application. For an example of a Web.config file that enables role management, see <xref:System.Web.Security.WindowsTokenRoleProvider>.  \n  \n [!code-vb[System.Web.Security.WindowsTokenRoleProvider#1](../../add/codesnippet/VisualBasic/e3ad81d7-d695-40b8-8e62-_1.aspx)]\n [!code-cs[System.Web.Security.WindowsTokenRoleProvider#1](../../add/codesnippet/CSharp/e3ad81d7-d695-40b8-8e62-_1.aspx)]"
   syntax:
     content: public override bool IsUserInRole (string username, string roleName);
     parameters:
     - id: username
       type: System.String
-      description: To be added.
+      description: The user name to search for in the form DOMAIN\username.
     - id: roleName
       type: System.String
-      description: To be added.
+      description: The Windows group to search in the form DOMAIN\rolename.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the specified user name is in the specified Windows group; otherwise, .
   overload: System.Web.Security.WindowsTokenRoleProvider.IsUserInRole*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    username is .  \n  \n -or-  \n  \n roleName is ."
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: "The currently executing user does not have an authenticated  attached to <xref:System.Web.UI.Page.User%2A?displayProperty=fullName>. For non-HTTP scenarios, the currently executing user does not have an authenticated  attached to <xref:System.Threading.Thread.CurrentPrincipal%2A?displayProperty=fullName>.  \n  \n -or-  \n  \n username does not match the <xref:System.Security.Principal.WindowsIdentity.Name%2A> of the current .  \n  \n -or-  \n  \n A failure occurred while retrieving the user's Windows group information."
   platform:
   - net-11
   - net-20
@@ -379,18 +448,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not supported by the Windows token role provider.
+  remarks: This method is not supported by the <xref:System.Web.Security.WindowsTokenRoleProvider> class and always throws a <xref:System.Configuration.Provider.ProviderException>.
   syntax:
     content: public override void RemoveUsersFromRoles (string[] usernames, string[] roleNames);
     parameters:
     - id: usernames
       type: System.String[]
-      description: To be added.
+      description: A string array of user names to be added to the specified roles.
     - id: roleNames
       type: System.String[]
-      description: To be added.
+      description: A string array of role names to add the specified user names to.
   overload: System.Web.Security.WindowsTokenRoleProvider.RemoveUsersFromRoles*
+  exceptions:
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: An unsupported method was called.
   platform:
   - net-11
   - net-20
@@ -407,18 +480,21 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Security
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not supported by the Windows token role provider.
   syntax:
     content: public override bool RoleExists (string roleName);
     parameters:
     - id: roleName
       type: System.String
-      description: To be added.
+      description: The name of the role to search for in the data source.
     return:
       type: System.Boolean
-      description: To be added.
+      description: None. The method is not supported by the  class and always throws a .
   overload: System.Web.Security.WindowsTokenRoleProvider.RoleExists*
+  exceptions:
+  - type: System.Configuration.Provider.ProviderException
+    commentId: T:System.Configuration.Provider.ProviderException
+    description: An unsupported method was called.
   platform:
   - net-11
   - net-20
@@ -439,18 +515,20 @@ references:
   name: AddUsersToRoles(String[],String[])
   nameWithType: WindowsTokenRoleProvider.AddUsersToRoles(String[],String[])
   fullName: System.Web.Security.WindowsTokenRoleProvider.AddUsersToRoles(String[],String[])
-- uid: System.String
+- uid: System.String[]
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Web.Security.WindowsTokenRoleProvider.ApplicationName
   parent: System.Web.Security.WindowsTokenRoleProvider
   isExternal: false
@@ -469,12 +547,6 @@ references:
   name: CreateRole(String)
   nameWithType: WindowsTokenRoleProvider.CreateRole(String)
   fullName: System.Web.Security.WindowsTokenRoleProvider.CreateRole(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Security.WindowsTokenRoleProvider.DeleteRole(System.String,System.Boolean)
   parent: System.Web.Security.WindowsTokenRoleProvider
   isExternal: false
@@ -487,102 +559,36 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.Security.WindowsTokenRoleProvider.FindUsersInRole(System.String,System.String)
   parent: System.Web.Security.WindowsTokenRoleProvider
   isExternal: false
   name: FindUsersInRole(String,String)
   nameWithType: WindowsTokenRoleProvider.FindUsersInRole(String,String)
   fullName: System.Web.Security.WindowsTokenRoleProvider.FindUsersInRole(String,String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Security.WindowsTokenRoleProvider.GetAllRoles
   parent: System.Web.Security.WindowsTokenRoleProvider
   isExternal: false
   name: GetAllRoles()
   nameWithType: WindowsTokenRoleProvider.GetAllRoles()
   fullName: System.Web.Security.WindowsTokenRoleProvider.GetAllRoles()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
 - uid: System.Web.Security.WindowsTokenRoleProvider.GetRolesForUser(System.String)
   parent: System.Web.Security.WindowsTokenRoleProvider
   isExternal: false
   name: GetRolesForUser(String)
   nameWithType: WindowsTokenRoleProvider.GetRolesForUser(String)
   fullName: System.Web.Security.WindowsTokenRoleProvider.GetRolesForUser(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Security.WindowsTokenRoleProvider.GetUsersInRole(System.String)
   parent: System.Web.Security.WindowsTokenRoleProvider
   isExternal: false
   name: GetUsersInRole(String)
   nameWithType: WindowsTokenRoleProvider.GetUsersInRole(String)
   fullName: System.Web.Security.WindowsTokenRoleProvider.GetUsersInRole(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Security.WindowsTokenRoleProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)
   parent: System.Web.Security.WindowsTokenRoleProvider
   isExternal: false
   name: Initialize(String,NameValueCollection)
   nameWithType: WindowsTokenRoleProvider.Initialize(String,NameValueCollection)
   fullName: System.Web.Security.WindowsTokenRoleProvider.Initialize(String,NameValueCollection)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Collections.Specialized.NameValueCollection
   parent: System.Collections.Specialized
   isExternal: false
@@ -595,18 +601,6 @@ references:
   name: IsUserInRole(String,WindowsBuiltInRole)
   nameWithType: WindowsTokenRoleProvider.IsUserInRole(String,WindowsBuiltInRole)
   fullName: System.Web.Security.WindowsTokenRoleProvider.IsUserInRole(String,WindowsBuiltInRole)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Principal.WindowsBuiltInRole
   parent: System.Security.Principal
   isExternal: false
@@ -619,60 +613,18 @@ references:
   name: IsUserInRole(String,String)
   nameWithType: WindowsTokenRoleProvider.IsUserInRole(String,String)
   fullName: System.Web.Security.WindowsTokenRoleProvider.IsUserInRole(String,String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Security.WindowsTokenRoleProvider.RemoveUsersFromRoles(System.String[],System.String[])
   parent: System.Web.Security.WindowsTokenRoleProvider
   isExternal: false
   name: RemoveUsersFromRoles(String[],String[])
   nameWithType: WindowsTokenRoleProvider.RemoveUsersFromRoles(String[],String[])
   fullName: System.Web.Security.WindowsTokenRoleProvider.RemoveUsersFromRoles(String[],String[])
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
 - uid: System.Web.Security.WindowsTokenRoleProvider.RoleExists(System.String)
   parent: System.Web.Security.WindowsTokenRoleProvider
   isExternal: false
   name: RoleExists(String)
   nameWithType: WindowsTokenRoleProvider.RoleExists(String)
   fullName: System.Web.Security.WindowsTokenRoleProvider.RoleExists(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Security.WindowsTokenRoleProvider.#ctor*
   parent: System.Web.Security.WindowsTokenRoleProvider
   isExternal: false

@@ -33,8 +33,10 @@ items:
   nameWithType: XmlSchemaSet
   fullName: System.Xml.Schema.XmlSchemaSet
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Contains a cache of XML Schema definition language (XSD) schemas.
+  remarks: "> [!IMPORTANT]\n>  -   Do not use schemas from unknown or untrusted sources or locations. Doing so will compromise the security of your code.  \n> -   XML schemas (including inline schemas) are inherently vulnerable to denial of service attacks; do not accept them in untrusted scenarios.  \n> -   Schema validation error messages and exceptions may expose sensitive information about the content model or URI paths to the schema file. Be careful not to expose this information to untrusted callers.  \n> -   Additional security considerations are covered in the \"Security Considerations\" section.  \n  \n XmlSchemaSet is a cache or library where you can store XML Schema definition language (XSD) schemas. XmlSchemaSet improves performance by caching schemas in memory instead of accessing them from a file or a URL. Each schema is identified by the namespace URI and location that was specified when the schema was added to the set. You use the <xref:System.Xml.XmlReaderSettings.Schemas%2A?displayProperty=fullName> property to assign the XmlSchemaSet object an XML reader should use for data validation.  \n  \n## Security Considerations  \n  \n-   Do not use schemas from unknown or untrusted sources. Doing so will compromise the security of your code. External namespaces or locations referenced in include, import, and redefine elements of a schema are resolved with respect to the base URI of the schema that includes or imports them. For example, if the base URI of the including or importing schema is empty or `null`, the external locations are resolved with respect to the current directory. The <xref:System.Xml.XmlUrlResolver> class is used to resolve external schemas by default. To disable resolution of include, import, and redefine elements of a schema, set the <xref:System.Xml.Schema.XmlSchemaSet.XmlResolver%2A?displayProperty=fullName> property to `null`.  \n  \n-   The XmlSchemaSet class uses the <xref:System.Text.RegularExpressions.Regex?displayProperty=fullName> class to parse and match regular expressions in an XML schema. Validation of pattern facets with regular expressions in an XML schema may involve increased CPU usage and should be avoided in high availability scenarios.  \n  \n-   Exceptions raised as a result of using the XmlSchemaSet class, such as the <xref:System.Xml.Schema.XmlSchemaException> class may contain sensitive information that should not be exposed in untrusted scenarios. For example, the <xref:System.Xml.Schema.XmlSchemaException.SourceUri%2A> property of an <xref:System.Xml.Schema.XmlSchemaException> returns the URI path to the schema file that caused the exception. The <xref:System.Xml.Schema.XmlSchemaException.SourceUri%2A> property should not be exposed in untrusted scenarios. Exceptions should be properly handled so that this sensitive information is not exposed in untrusted scenarios."
+  example:
+  - "The following example validates an XML file using schemas stored in the XmlSchemaSet. The namespace in the XML file, `urn:bookstore-schema`, identifies which schema in the XmlSchemaSet to use for validation.  \n  \n [!code-cpp[XmlReader_Validate_SchemaSet#1](../../add/codesnippet/CPP/t-system.xml.schema.xmls_0_1.cpp)]\n [!code-cs[XmlReader_Validate_SchemaSet#1](../../add/codesnippet/CSharp/t-system.xml.schema.xmls_0_1.cs)]\n [!code-vb[XmlReader_Validate_SchemaSet#1](../../add/codesnippet/VisualBasic/t-system.xml.schema.xmls_0_1.vb)]  \n  \n## Input  \n The sample uses the following two input files.  \n  \n **booksSchemaFail.xml:**  \n  \n [!code-xml[XmlReader_Validate_SchemaSet#2](../../add/codesnippet/XML/t-system.xml.schema.xmls_0_2.xml)]  \n  \n **books.xsd:**  \n  \n [!code-xml[XmlReader_Validate_SchemaSet#3](../../add/codesnippet/XML/t-system.xml.schema.xmls_0_3.xsd)]  \n  \n## Output  \n Validation Error: The element 'book' in namespace 'urn:bookstore-schema' has invalid child element 'author' in namespace 'urn:bookstore-schema'. Expected 'title' in namespace 'urn:bookstore-schema'.  \n  \n Validation Error: The element 'author' in namespace 'urn:bookstore-schema' has invalid child element 'name' in namespace 'urn:bookstore-schema'. Expected 'first-name' in namespace 'urn:bookstore-schema'."
   syntax:
     content: public class XmlSchemaSet
   inheritance:
@@ -57,12 +59,12 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public XmlSchemaSet ();
     parameters: []
   overload: System.Xml.Schema.XmlSchemaSet.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -79,15 +81,18 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified <xref:System.Xml.XmlNameTable>.
   syntax:
     content: public XmlSchemaSet (System.Xml.XmlNameTable nameTable);
     parameters:
     - id: nameTable
       type: System.Xml.XmlNameTable
-      description: To be added.
+      description: The <xref:System.Xml.XmlNameTable> object to use.
   overload: System.Xml.Schema.XmlSchemaSet.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The <xref:System.Xml.XmlNameTable> object passed as a parameter is .
   platform:
   - net-11
   - net-20
@@ -104,18 +109,25 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the given <xref:System.Xml.Schema.XmlSchema> to the .
+  remarks: "If the <xref:System.Xml.Schema.XmlSchema> object already exists in the <xref:System.Xml.Schema.XmlSchemaSet>, the Add method does nothing.  \n  \n The functionality of this method is identical to that of the <xref:System.Xml.Schema.XmlSchemaSet.Add%2A> method."
   syntax:
     content: public System.Xml.Schema.XmlSchema Add (System.Xml.Schema.XmlSchema schema);
     parameters:
     - id: schema
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: The <xref:System.Xml.Schema.XmlSchema> object to add to the .
     return:
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: An <xref:System.Xml.Schema.XmlSchema> object if the schema is valid. If the schema is not valid and a  is specified, then  is returned and the appropriate validation event is raised. Otherwise, an  is thrown.
   overload: System.Xml.Schema.XmlSchemaSet.Add*
+  exceptions:
+  - type: System.Xml.Schema.XmlSchemaException
+    commentId: T:System.Xml.Schema.XmlSchemaException
+    description: The schema is not valid.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The <xref:System.Xml.Schema.XmlSchema> object passed as a parameter is .
   platform:
   - net-11
   - net-20
@@ -132,15 +144,24 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds all the XML Schema definition language (XSD) schemas in the given  to the .
+  remarks: "Before a schema can be added to an <xref:System.Xml.Schema.XmlSchemaSet>, it has to be successfully preprocessed. Preprocessing performs the following basic tasks.  \n  \n1.  The schema is checked for structural validity according to the rules of W3C XML Schema, but the schema is not fully validated.  \n  \n2.  References to internal and external schema components are resolved. Any imported or included schemas that are successfully retrieved are also added to the <xref:System.Xml.Schema.XmlSchemaSet>. Imported schemas are added as separate <xref:System.Xml.Schema.XmlSchema> objects, and included schemas are made a part of the including <xref:System.Xml.Schema.XmlSchema>.  \n  \n If the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property of the <xref:System.Xml.Schema.XmlSchemaSet> to add is `true`, all schemas in the <xref:System.Xml.Schema.XmlSchemaSet> to add are added to the <xref:System.Xml.Schema.XmlSchemaSet>. If the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property of the <xref:System.Xml.Schema.XmlSchemaSet> to add is `false`, each schema added is preprocessed before being added. If any of the schemas in the newly added <xref:System.Xml.Schema.XmlSchemaSet> fails to be preprocessed, no schemas are added; instead, an <xref:System.Xml.Schema.XmlSchemaException> is thrown. As a result, the following two code example are not equivalent.  \n  \n```vb#  \n' First example  \nschemaSet.Add(schemaSet1)  \n  \n' Second example  \nDim schema As XmlSchema  \n  \nFor Each schema in schemaSet.Schemas()  \n  \n    schemaSet.Add(schema)  \n  \nNext  \n```  \n  \n```c#  \n// First example  \nschemaSet.Add(schemaSet1);  \n  \n// Second example  \nforeach(XmlSchema schema in schemaSet.Schemas())  \n{  \n    schemaSet.Add(schema);  \n}  \n```  \n  \n The previous two code examples are not equivalent. In the first example, if an invalid schema exists in `schemaSet1` and its <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property is set to `false`, no schemas are added to `schemaSet`. In the second example, a number of schemas can be added to `schemaSet` before an invalid schema is encountered and an exception is thrown."
+  example:
+  - "The following code example illustrates adding schemas to an <xref:System.Xml.Schema.XmlSchemaSet>, then adding the <xref:System.Xml.Schema.XmlSchemaSet> to a new <xref:System.Xml.Schema.XmlSchemaSet> using the Add method.  \n  \n```vb#  \nDim schemaSet1 As XmlSchemaSet = New XmlSchemaSet  \nschemaSet1.Add(\"http://www.contoso.com/retail\", \"http://www.contoso.com/retail.xsd\")  \nschemaSet1.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\")  \nschemaSet1.Add(\"http://www.contoso.com/music\", \"http://www.contoso.com/music.xsd\")  \n  \nDim schemaSet2 As XmlSchemaSet = New XmlSchemaSet  \nschemaSet2.Add(schemaSet1)  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet1 = new XmlSchemaSet();  \nschemaSet1.Add(\"http://www.contoso.com/retail\", \"http://www.contoso.com/retail.xsd\");  \nschemaSet1.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\");  \nschemaSet1.Add(\"http://www.contoso.com/music\", \"http://www.contoso.com/music.xsd\");  \n  \nXmlSchemaSet schemaSet2 = new XmlSchemaSet();  \nschemaSet2.Add(schemaSet1);  \n```"
   syntax:
     content: public void Add (System.Xml.Schema.XmlSchemaSet schemas);
     parameters:
     - id: schemas
       type: System.Xml.Schema.XmlSchemaSet
-      description: To be added.
+      description: The  object.
   overload: System.Xml.Schema.XmlSchemaSet.Add*
+  exceptions:
+  - type: System.Xml.Schema.XmlSchemaException
+    commentId: T:System.Xml.Schema.XmlSchemaException
+    description: A schema in the  is not valid.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The  object passed as a parameter is .
   platform:
   - net-11
   - net-20
@@ -157,21 +178,30 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the XML Schema definition language (XSD) schema at the URL specified to the .
+  remarks: "Before a schema can be added to an <xref:System.Xml.Schema.XmlSchemaSet>, it has to be successfully preprocessed. Preprocessing performs the following basic tasks.  \n  \n1.  The schema is checked for structural validity according to the rules of W3C XML Schema, but the schema is not fully validated.  \n  \n2.  References to internal and external schema components are resolved. Any imported or included schemas that are successfully retrieved are also added to the <xref:System.Xml.Schema.XmlSchemaSet>. Imported schemas are added as separate <xref:System.Xml.Schema.XmlSchema> objects, and included schemas are made a part of the including <xref:System.Xml.Schema.XmlSchema>.  \n  \n The following are important notes to consider when using the Add method.  \n  \n-   Adding a schema to the <xref:System.Xml.Schema.XmlSchemaSet> with the same target namespace and schema location URL as a schema already contained within the <xref:System.Xml.Schema.XmlSchemaSet> will return the original schema object.  \n  \n-   When a new schema is successfully added to an <xref:System.Xml.Schema.XmlSchemaSet>, the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property of the <xref:System.Xml.Schema.XmlSchemaSet> is set to `false`.  \n  \n-   Any include or import elements encountered in an XML schema are resolved when the Add method is called. Failure to resolve include and import elements results in a schema validation warning and if no <xref:System.Xml.Schema.XmlSchemaSet.ValidationEventHandler> has been specified for the <xref:System.Xml.Schema.XmlSchemaSet> object, these warning will not be reported.  \n  \n-   If a schema with the same target namespace as a schema that already exists in the <xref:System.Xml.Schema.XmlSchemaSet> is added to the <xref:System.Xml.Schema.XmlSchemaSet>, both schemas are added.  \n  \n    > [!NOTE]\n    >  This behavior differs from the obsolete <xref:System.Xml.Schema.XmlSchemaCollection> object.  \n  \n-   The Add method of the <xref:System.Xml.Schema.XmlSchemaSet> has the ability to use the target namespace defined in a schema, rather than requiring the target namespace be specified as a parameter when the Add method is called. Specifying `null` in the `targetNamespace` parameter of the Add method instructs the <xref:System.Xml.Schema.XmlSchemaSet> to use the target namespace defined in the schema, as illustrated in the following code example.  \n  \n```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet()  \nschemaSet.Add(Nothing, \"books.xsd\")  \n  \nDim schema As XmlSchema  \nFor Each schema In schemaSet.Schemas(\"http://www.contoso.com/books\")  \n    schema.Write(Console.Out)  \nNext  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nschemaSet.Add(null, \"books.xsd\");  \n  \nforeach(XmlSchema schema in schemaSet.Schemas(\"http://www.contoso.com/books\"))  \n{  \n    schema.Write(Console.Out);  \n}  \n```  \n  \n In the code example above, `null` is specified as the `targetNamespace` parameter to the Add method. As a result, the `targetNamespace` defined in the books.xml file is used. In this case, the result of calling the Add method would be identical if http://www.contoso.com/books had been specified as the `targetNamespace` parameter.  \n  \n-   W3C XML Schema allows schemas without a target namespace to be included in schemas with a target namespace defined. In this case, the schema without a target namespace defined is coerced into the target namespace of the including schema. The included schema is treated as if it had that target namespace defined. Similarly, schemas without a target namespace can be added to the <xref:System.Xml.Schema.XmlSchemaSet> and coerced into the target namespace specified by the Add method, as illustrated in the following example.  \n  \n```  \n<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">  \n    <xs:element name=\"A\" type=\"xs:string\" />  \n</xs:schema>  \n```  \n  \n If the schema above is added to the <xref:System.Xml.Schema.XmlSchemaSet> with the target namespace http://www.contoso.com/new/targetnamespace (as shown in the code below), it is treated as if the target namespace declared in the schema was `http://www.contoso.com/new/targetnamespace`.  \n  \n```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet()  \nschemaSet.Add(\"http://www.contoso.com/new/targetnamespace\", \"http://www.contoso.com/targetnamespace.xsd\")  \n  \nDim schema As XmlSchema  \n  \nFor Each schema in schemaSet.Schemas()  \n  \n    Console.WriteLine(schema.TargetNamespace)     \n  \nNext  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nschemaSet.Add(\"http://www.contoso.com/new/targetnamespace\", \"http://www.contoso.com/targetnamespace.xsd\");  \nforeach(XmlSchema schema in schemaSet.Schemas())  \n{  \n    Console.WriteLine(schema.TargetNamespace);  \n}  \n```"
+  example:
+  - "The following code example adds the http://www.contoso.com/books.xsd schema with a target namespace of http://www.contoso.com/books to the <xref:System.Xml.Schema.XmlSchemaSet>.  \n  \n```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet()  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\")  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\");  \n```  \n  \n The example uses the `books.xsd` file as input.  \n  \n [!code-xml[XmlSchemaSetOverall Example#3](../../add/codesnippet/XML/m-system.xml.schema.xmls_3_1.xsd)]"
   syntax:
     content: public System.Xml.Schema.XmlSchema Add (string targetNamespace, string schemaUri);
     parameters:
     - id: targetNamespace
       type: System.String
-      description: To be added.
+      description: The schema `targetNamespace` property, or  to use the `targetNamespace` specified in the schema.
     - id: schemaUri
       type: System.String
-      description: To be added.
+      description: The URL that specifies the schema to load.
     return:
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: An <xref:System.Xml.Schema.XmlSchema> object if the schema is valid. If the schema is not valid and a  is specified, then  is returned and the appropriate validation event is raised. Otherwise, an  is thrown.
   overload: System.Xml.Schema.XmlSchemaSet.Add*
+  exceptions:
+  - type: System.Xml.Schema.XmlSchemaException
+    commentId: T:System.Xml.Schema.XmlSchemaException
+    description: The schema is not valid.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The URL passed as a parameter is  or <xref:System.String.Empty>.
   platform:
   - net-11
   - net-20
@@ -188,21 +218,30 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the XML Schema definition language (XSD) schema contained in the <xref:System.Xml.XmlReader> to the .
+  remarks: "Before a schema can be added to an <xref:System.Xml.Schema.XmlSchemaSet>, it has to be successfully preprocessed. Preprocessing performs the following basic tasks.  \n  \n1.  The schema is checked for structural validity according to the rules of W3C XML Schema, but the schema is not fully validated.  \n  \n2.  References to internal and external schema components are resolved. Any imported or included schemas that are successfully retrieved are also added to the <xref:System.Xml.Schema.XmlSchemaSet>. Imported schemas are added as separate <xref:System.Xml.Schema.XmlSchema> objects, and included schemas are made a part of the including <xref:System.Xml.Schema.XmlSchema>.  \n  \n The following are important notes to consider when using the Add method.  \n  \n-   Successfully retrieved schemas imported or included by the schemas contained in the <xref:System.Xml.XmlReader> are also added to the <xref:System.Xml.Schema.XmlSchemaSet>.  \n  \n-   If the <xref:System.Xml.XmlReader> is not positioned on the root element, an <xref:System.Xml.Schema.XmlSchemaException> is thrown unless the current item is an element. If the current item is an `xs:schema` element, the schema document is read into the <xref:System.Xml.Schema.XmlSchemaSet>; otherwise, an <xref:System.Xml.Schema.XmlSchemaException> is thrown because the schema is not valid.  \n  \n-   If the <xref:System.Xml.XmlReader> is positioned over a sequence of XML nodes, only the first node in the sequence is added.  \n  \n-   If the schema was created from a <xref:System.Xml.XmlReader.Create%2A?displayProperty=fullName> method call, the value of the <xref:System.Xml.Schema.XmlSchemaValidationFlags> property is ignored, because inline schema processing is not applied for W3C XML Schema documents.  \n  \n-   The <xref:System.Xml.XmlResolver> property of the <xref:System.Xml.XmlReader> is not used to resolve references to namespaces or schema locations in include and import elements. Instead, the <xref:System.Xml.XmlResolver> property of the <xref:System.Xml.Schema.XmlSchemaSet> is used.  \n  \n-   The Add method of the <xref:System.Xml.Schema.XmlSchemaSet> has the ability to use the target namespace defined in a schema, rather than requiring the target namespace be specified as a parameter when the Add method is called. Specifying `null` or <xref:System.String.Empty?displayProperty=fullName> to the Add method instructs the <xref:System.Xml.Schema.XmlSchemaSet> to use the target namespace defined in the schema. For an example of this behavior, see the <xref:System.Xml.Schema.XmlSchemaSet.Add%2A> method.  \n  \n The remaining functionality of this method is identical to that of the <xref:System.Xml.Schema.XmlSchemaSet.Add%2A> method."
+  example:
+  - "The following code example adds the books.xsd schema contained in the <xref:System.Xml.XmlTextReader> with a target namespace of http://www.contoso.com/books to the <xref:System.Xml.Schema.XmlSchemaSet>.  \n  \n```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet()  \nschemaSet.Add(\"http://www.contoso.com/books\", New XmlTextReader(\"books.xsd\")  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nschemaSet.Add(\"http://www.contoso.com/books\", new XmlTextReader(\"books.xsd\");  \n```"
   syntax:
     content: public System.Xml.Schema.XmlSchema Add (string targetNamespace, System.Xml.XmlReader schemaDocument);
     parameters:
     - id: targetNamespace
       type: System.String
-      description: To be added.
+      description: The schema `targetNamespace` property, or  to use the `targetNamespace` specified in the schema.
     - id: schemaDocument
       type: System.Xml.XmlReader
-      description: To be added.
+      description: The <xref:System.Xml.XmlReader> object.
     return:
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: An <xref:System.Xml.Schema.XmlSchema> object if the schema is valid. If the schema is not valid and a  is specified, then  is returned and the appropriate validation event is raised. Otherwise, an  is thrown.
   overload: System.Xml.Schema.XmlSchemaSet.Add*
+  exceptions:
+  - type: System.Xml.Schema.XmlSchemaException
+    commentId: T:System.Xml.Schema.XmlSchemaException
+    description: The schema is not valid.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The <xref:System.Xml.XmlReader> object passed as a parameter is .
   platform:
   - net-11
   - net-20
@@ -219,14 +258,15 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the  for the .
+  remarks: The <xref:System.Xml.Schema.XmlSchemaCompilationSettings> class specifies Unique Particle Attribution (UPA) validation options for the <xref:System.Xml.Schema.XmlSchemaSet>. For more information about enabling UPA validation checks, see the <xref:System.Xml.Schema.XmlSchemaCompilationSettings.EnableUpaCheck%2A> property.
   syntax:
     content: public System.Xml.Schema.XmlSchemaCompilationSettings CompilationSettings { get; set; }
     return:
       type: System.Xml.Schema.XmlSchemaCompilationSettings
-      description: To be added.
+      description: The  for the . The default is an  instance with the <xref:System.Xml.Schema.XmlSchemaCompilationSettings.EnableUpaCheck%2A> property set to .
   overload: System.Xml.Schema.XmlSchemaSet.CompilationSettings*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -243,12 +283,18 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Compiles the XML Schema definition language (XSD) schemas added to the  into one logical schema.
+  remarks: "This method is called automatically when validation is needed and the <xref:System.Xml.Schema.XmlSchemaSet> has not been previously compiled—for example, when an <xref:System.Xml.Schema.XmlSchemaSet> is used as an input to create an <xref:System.Xml.XmlReader> object in the <xref:System.Xml.Schema.XmlSchemaSet.Schemas%2A> property of an <xref:System.Xml.XmlReaderSettings> object. If the <xref:System.Xml.Schema.XmlSchemaSet> is already in the compiled state, this method will not recompile the schemas. If this method executes successfully, the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property is set to `true`.  \n  \n Schemas that have been previously compiled by an <xref:System.Xml.Schema.XmlSchemaSet> are not recompiled. However, schemas that were compiled using the Compile method of the <xref:System.Xml.Schema.XmlSchema> will be recompiled.  \n  \n> [!NOTE]\n>  You need to call the <xref:System.Xml.Schema.XmlSchemaSet.Reprocess%2A> method if you have changed a schema (or one of its includes/imports) after adding it to the <xref:System.Xml.Schema.XmlSchemaSet>. The <xref:System.Xml.Schema.XmlSchemaSet.Reprocess%2A> method will check the schema for structural validity according to the rules of W3C XML Schema. However, it will not perform a full validation check. It will also resolve references to internal and external schema components. Any imported or included schemas that are successfully retrieved are also added to the <xref:System.Xml.Schema.XmlSchemaSet>. Imported schemas are added as separate <xref:System.Xml.Schema.XmlSchema> objects while included schemas are made part of the including <xref:System.Xml.Schema.XmlSchema>. If the call to reprocess is successful, the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property is set to false."
+  example:
+  - "```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet()  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\")  \nschemaSet.Compile()  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\");  \nschemaSet.Compile();  \n```"
   syntax:
     content: public void Compile ();
     parameters: []
   overload: System.Xml.Schema.XmlSchemaSet.Compile*
+  exceptions:
+  - type: System.Xml.Schema.XmlSchemaException
+    commentId: T:System.Xml.Schema.XmlSchemaException
+    description: An error occurred when validating and compiling the schemas in the .
   platform:
   - net-11
   - net-20
@@ -265,18 +311,19 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether an XML Schema definition language (XSD) schema with the specified target namespace URI is in the .
+  remarks: Schemas that are indirectly added to the <xref:System.Xml.Schema.XmlSchemaSet> are detected by the Contains method; for example, imported schemas. As a result, if a schema for the http://www.contoso.com/retail namespace which imports a schema for the http://www.contoso.com/books namespace is added to the <xref:System.Xml.Schema.XmlSchemaSet>, calling Contains with `http://www.contoso.com/books` as a parameter, it returns `true`.
   syntax:
     content: public bool Contains (string targetNamespace);
     parameters:
     - id: targetNamespace
       type: System.String
-      description: To be added.
+      description: The schema `targetNamespace` property.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a schema with the specified target namespace URI is in the ; otherwise, .
   overload: System.Xml.Schema.XmlSchemaSet.Contains*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -293,18 +340,21 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the specified XML Schema definition language (XSD) <xref:System.Xml.Schema.XmlSchema> object is in the .
   syntax:
     content: public bool Contains (System.Xml.Schema.XmlSchema schema);
     parameters:
     - id: schema
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: The <xref:System.Xml.Schema.XmlSchema> object.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Xml.Schema.XmlSchema> object is in the ; otherwise, .
   overload: System.Xml.Schema.XmlSchemaSet.Contains*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The  passed as a parameter is .
   platform:
   - net-11
   - net-20
@@ -321,18 +371,21 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Copies all the <xref:System.Xml.Schema.XmlSchema> objects from the  to the given array, starting at the given index.
+  remarks: ''
+  example:
+  - "The following example copies all the <xref:System.Xml.Schema.XmlSchema> objects in the <xref:System.Xml.Schema.XmlSchemaSet> to an array of <xref:System.Xml.Schema.XmlSchema> objects.  \n  \n```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet  \nschemaSet.Add(\"http://www.contoso.com/retail\", \"http://www.contoso.com/retail.xsd\")  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\")  \nschemaSet.Add(\"http://www.contoso.com/music\", \"http://www.contoso.com/music.xsd\")  \n  \nDim schemas(schemaSet.Count) As XmlSchema  \nschemaSet.CopyTo(schemas, 0)  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nschemaSet.Add(\"http://www.contoso.com/retail\", \"http://www.contoso.com/retail.xsd\");  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\");  \nschemaSet.Add(\"http://www.contoso.com/music\", \"http://www.contoso.com/music.xsd\");  \n  \nXmlSchema[] schemas = new XmlSchema[schemaSet.Count];  \nschemaSet.CopyTo(schemas, 0);  \n```"
   syntax:
     content: public void CopyTo (System.Xml.Schema.XmlSchema[] schemas, int index);
     parameters:
     - id: schemas
       type: System.Xml.Schema.XmlSchema[]
-      description: To be added.
+      description: The array to copy the objects to.
     - id: index
       type: System.Int32
-      description: To be added.
+      description: The index in the array where copying will begin.
   overload: System.Xml.Schema.XmlSchemaSet.CopyTo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -349,14 +402,15 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of logical XML Schema definition language (XSD) schemas in the .
+  remarks: If there are two schemas for the namespace `http://www.contoso.com` in the <xref:System.Xml.Schema.XmlSchemaSet>, the Count property would return 1 because the schemas are treated as a single logical schema for validation purposes. However, if a schema for the namespace `http://www.contoso.com/retail` imported a schema for the `http://www.contoso.com/books` namespace, the value of the Count property would be 2.
   syntax:
     content: public int Count { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of logical schemas in the .
   overload: System.Xml.Schema.XmlSchemaSet.Count*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -373,14 +427,14 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets all the global attributes in all the XML Schema definition language (XSD) schemas in the .
   syntax:
     content: public System.Xml.Schema.XmlSchemaObjectTable GlobalAttributes { get; }
     return:
       type: System.Xml.Schema.XmlSchemaObjectTable
-      description: To be added.
+      description: The collection of global attributes.
   overload: System.Xml.Schema.XmlSchemaSet.GlobalAttributes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -397,14 +451,14 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets all the global elements in all the XML Schema definition language (XSD) schemas in the .
   syntax:
     content: public System.Xml.Schema.XmlSchemaObjectTable GlobalElements { get; }
     return:
       type: System.Xml.Schema.XmlSchemaObjectTable
-      description: To be added.
+      description: The collection of global elements.
   overload: System.Xml.Schema.XmlSchemaSet.GlobalElements*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -421,14 +475,15 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets all of the global simple and complex types in all the XML Schema definition language (XSD) schemas in the .
+  remarks: The GlobalTypes property always returns a type that represents the `xs:anyType` complex type.
   syntax:
     content: public System.Xml.Schema.XmlSchemaObjectTable GlobalTypes { get; }
     return:
       type: System.Xml.Schema.XmlSchemaObjectTable
-      description: To be added.
+      description: The collection of global simple and complex types.
   overload: System.Xml.Schema.XmlSchemaSet.GlobalTypes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -445,14 +500,17 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the XML Schema definition language (XSD) schemas in the  have been compiled.
+  remarks: The IsCompiled property is not affected if schemas are edited while in the <xref:System.Xml.Schema.XmlSchemaSet>. Updates of the individual schemas in the <xref:System.Xml.Schema.XmlSchemaSet> are not tracked. As a result, the IsCompiled property can be `true` even though one of the schemas contained in the <xref:System.Xml.Schema.XmlSchemaSet> has been altered, as long as no schemas were added or removed from the <xref:System.Xml.Schema.XmlSchemaSet>.
+  example:
+  - For an example of the IsCompiled property, see the <xref:System.Xml.Schema.XmlSchemaSet.Reprocess%2A> method.
   syntax:
     content: public bool IsCompiled { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the schemas in the  have been compiled since the last time a schema was added or removed from the ; otherwise, .
   overload: System.Xml.Schema.XmlSchemaSet.IsCompiled*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -469,14 +527,14 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the default <xref:System.Xml.XmlNameTable> used by the  when loading new XML Schema definition language (XSD) schemas.
   syntax:
     content: public System.Xml.XmlNameTable NameTable { get; }
     return:
       type: System.Xml.XmlNameTable
-      description: To be added.
+      description: A table of atomized string objects.
   overload: System.Xml.Schema.XmlSchemaSet.NameTable*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -493,18 +551,27 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the specified XML Schema definition language (XSD) schema from the .
+  remarks: Removing a schema from the <xref:System.Xml.Schema.XmlSchemaSet> sets the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property to `false`.
+  example:
+  - "The following example illustrates adding multiple schemas to an <xref:System.Xml.Schema.XmlSchemaSet>, then removing one of the schemas using the Remove method.  \n  \n```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet()  \nschemaSet.Add(\"http://www.contoso.com/retail\", \"http://www.contoso.com/retail.xsd\")  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\")  \nschemaSet.Add(\"http://www.contoso.com/music\", \"http://www.contoso.com/music.xsd\")  \n  \nDim schema As XmlSchema  \n  \nFor Each schema In schemaSet.Schemas()  \n  \n    If schema.TargetNamespace = \"http://www.contoso.com/music\" Then  \n        schemaSet.Remove(schema)  \n    End If  \n  \nNext  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nschemaSet.Add(\"http://www.contoso.com/retail\", \"http://www.contoso.com/retail.xsd\");  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\");  \nschemaSet.Add(\"http://www.contoso.com/music\", \"http://www.contoso.com/music.xsd\");  \n  \nforeach (XmlSchema schema in schemaSet.Schemas())  \n{  \n    if (schema.TargetNamespace == \"http://www.contoso.com/music\")  \n    {  \n        schemaSet.Remove(schema);  \n    }  \n}  \n```"
   syntax:
     content: public System.Xml.Schema.XmlSchema Remove (System.Xml.Schema.XmlSchema schema);
     parameters:
     - id: schema
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: The <xref:System.Xml.Schema.XmlSchema> object to remove from the .
     return:
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: The <xref:System.Xml.Schema.XmlSchema> object removed from the  or  if the schema was not found in the .
   overload: System.Xml.Schema.XmlSchemaSet.Remove*
+  exceptions:
+  - type: System.Xml.Schema.XmlSchemaException
+    commentId: T:System.Xml.Schema.XmlSchemaException
+    description: The schema is not a valid schema.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The <xref:System.Xml.Schema.XmlSchema> passed as a parameter is .
   platform:
   - net-11
   - net-20
@@ -521,18 +588,24 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the specified XML Schema definition language (XSD) schema and all the schemas it imports from the .
+  remarks: "The RemoveRecursive method removes the specified schema and all the schemas it imports from the <xref:System.Xml.Schema.XmlSchemaSet>, as long as there are no dependencies on the schema or its imported schemas. If there are dependencies on the schema or its imported schemas in the <xref:System.Xml.Schema.XmlSchemaSet>, nothing is removed and RemoveRecursive returns `false`. If `false` is returned and a <xref:System.Xml.Schema.XmlSchemaSet.ValidationEventHandler> is defined, a warning is sent to the event handler describing the dependencies.  \n  \n If the specified schema imports other schemas and the specified schema was previously removed with the <xref:System.Xml.Schema.XmlSchemaSet.Remove%2A> method, the RemoveRecursive method will not remove the imported schemas and will return `false`. For example, if `parentSchema` imports `childSchema1` and `childSchema2` the following code will only remove `parentSchema`, but not the imported `childSchema1` and `childSchema2` schemas:  \n  \n```  \nXmlSchemaSet ss = new XmlSchemaSet();  \nXmlSchema xs = XmlSchema.Read(XmlReader.Create(\"parentSchema.xsd\"), null);  \nss.Add(xs);  \nss.Compile();  \nss.Remove(xs);  \nss.Compile();  \nss.RemoveRecursive(xs);  \nss.Compile();  \n```  \n  \n The following code will remove the `parentSchema` and the imported schemas:  \n  \n```  \nXmlSchemaSet ss = new XmlSchemaSet();  \nXmlSchema xs = XmlSchema.Read(XmlReader.Create(\"parentSchema.xsd\"), null);  \nss.Add(xs);  \nss.Compile();  \nss.RemoveRecursive(xs);  \nss.Compile();  \n```  \n  \n The RemoveRecursive method has no effect on the state of the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property."
+  example:
+  - "The following code example illustrates adding multiple schemas to an <xref:System.Xml.Schema.XmlSchemaSet>, then removing one of the schemas and all the schemas it imports using the RemoveRecursive method.  \n  \n```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet()  \nschemaSet.Add(\"http://www.contoso.com/retail\", \"http://www.contoso.com/retail.xsd\")  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\")  \nschemaSet.Add(\"http://www.contoso.com/music\", \"http://www.contoso.com/music.xsd\")  \n  \nDim schema As XmlSchema  \n  \nFor Each schema In schemaSet.Schemas()  \n  \n    If schema.TargetNamespace = \"http://www.contoso.com/music\" Then  \n        schemaSet.RemoveRecursive(schema)  \n    End If  \n  \nNext  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nschemaSet.Add(\"http://www.contoso.com/retail\", \"http://www.contoso.com/retail.xsd\");  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\");  \nschemaSet.Add(\"http://www.contoso.com/music\", \"http://www.contoso.com/music.xsd\");  \n  \nforeach (XmlSchema schema in schemaSet.Schemas())  \n{  \n    if (schema.TargetNamespace == \"http://www.contoso.com/music\")  \n    {  \n        schemaSet.RemoveRecursive(schema);  \n    }  \n}  \n```"
   syntax:
     content: public bool RemoveRecursive (System.Xml.Schema.XmlSchema schemaToRemove);
     parameters:
     - id: schemaToRemove
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: The <xref:System.Xml.Schema.XmlSchema> object to remove from the .
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Xml.Schema.XmlSchema> object and all its imports were successfully removed; otherwise, .
   overload: System.Xml.Schema.XmlSchemaSet.RemoveRecursive*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The <xref:System.Xml.Schema.XmlSchema> passed as a parameter is .
   platform:
   - net-11
   - net-20
@@ -549,18 +622,30 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Reprocesses an XML Schema definition language (XSD) schema that already exists in the .
+  remarks: "Reprocessing a schema performs all the preprocessing steps performed on a schema when the <xref:System.Xml.Schema.XmlSchemaSet.Add%2A> method is called. If the call to Reprocess is successful, the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property is set to `false`.  \n  \n The Reprocess method should be used after a schema in the <xref:System.Xml.Schema.XmlSchemaSet> has been modified, after the <xref:System.Xml.Schema.XmlSchemaSet> has performed compilation.  \n  \n> [!NOTE]\n>  You need to call the Reprocess method if you have changed a schema (or one of its includes/imports) after adding it to the <xref:System.Xml.Schema.XmlSchemaSet>. The Reprocess method will check the schema for structural validity according to the rules of W3C XML Schema. However, it will not perform a full validation check. It will also resolve references to internal and external schema components. Any imported or included schemas that are successfully retrieved are also added to the <xref:System.Xml.Schema.XmlSchemaSet>. Imported schemas are added as separate <xref:System.Xml.Schema.XmlSchema> objects while included schemas are made part of the including <xref:System.Xml.Schema.XmlSchema>. If the call to reprocess is successful, the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property is set to false."
+  example:
+  - "The following example illustrates reprocessing a schema added to the <xref:System.Xml.Schema.XmlSchemaSet>. After the <xref:System.Xml.Schema.XmlSchemaSet> is compiled using the <xref:System.Xml.Schema.XmlSchemaSet.Compile%2A> method, and the schema added to the <xref:System.Xml.Schema.XmlSchemaSet> is modified, the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property will be set to `true`, even though a schema in the <xref:System.Xml.Schema.XmlSchemaSet> has been modified. Calling the Reprocess method performs all the preprocessing performed by the <xref:System.Xml.Schema.XmlSchemaSet.Add%2A> method and sets the <xref:System.Xml.Schema.XmlSchemaSet.IsCompiled%2A> property to `false`.  \n  \n```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet()  \nDim schema As XmlSchema = schemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\")  \nschemaSet.Compile()  \n  \nDim element As XmlSchemaElement = New XmlSchemaElement()  \nschema.Items.Add(element)  \nelement.Name = \"book\"  \nelement.SchemaTypeName = New XmlQualifiedName(\"string\", \"http://www.w3.org/2001/XMLSchema\")  \n  \nschemaSet.Reprocess(schema)  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nXmlSchema schema = schemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\");  \nschemaSet.Compile();  \n  \nXmlSchemaElement element = new XmlSchemaElement();  \nschema.Items.Add(element);  \nelement.Name = \"book\";  \nelement.SchemaTypeName = new XmlQualifiedName(\"string\", \"http://www.w3.org/2001/XMLSchema\");  \n  \nschemaSet.Reprocess(schema);  \n```"
   syntax:
     content: public System.Xml.Schema.XmlSchema Reprocess (System.Xml.Schema.XmlSchema schema);
     parameters:
     - id: schema
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: The schema to reprocess.
     return:
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: An <xref:System.Xml.Schema.XmlSchema> object if the schema is a valid schema. If the schema is not valid and a  is specified,  is returned and the appropriate validation event is raised. Otherwise, an  is thrown.
   overload: System.Xml.Schema.XmlSchemaSet.Reprocess*
+  exceptions:
+  - type: System.Xml.Schema.XmlSchemaException
+    commentId: T:System.Xml.Schema.XmlSchemaException
+    description: The schema is not valid.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The <xref:System.Xml.Schema.XmlSchema> object passed as a parameter is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The <xref:System.Xml.Schema.XmlSchema> object passed as a parameter does not already exist in the .
   platform:
   - net-11
   - net-20
@@ -577,15 +662,18 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a collection of all the XML Schema definition language (XSD) schemas in the .
+  remarks: "This method returns schemas that were added indirectly to the <xref:System.Xml.Schema.XmlSchemaSet> because they were imported.  \n  \n> [!NOTE]\n>  The Schemas method is the equivalent of the <xref:System.Xml.Schema.XmlSchemaCollection.GetEnumerator%2A> method of the obsolete <xref:System.Xml.Schema.XmlSchemaCollection>."
+  example:
+  - "The following example illustrates how to iterate over all the schemas in the <xref:System.Xml.Schema.XmlSchemaSet>.  \n  \n```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\")  \n  \nDim schema As XmlSchema  \n  \nFor Each schema In schemaSet.Schemas()  \n  \n    schema.Write(Console.Out)  \n  \nNext  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\");  \n  \nforeach (XmlSchema schema in schemaSet.Schemas())  \n{  \n    schema.Write(Console.Out);  \n}  \n```"
   syntax:
     content: public System.Collections.ICollection Schemas ();
     parameters: []
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> object containing all the schemas that have been added to the . If no schemas have been added to the , an empty <xref:System.Collections.ICollection> object is returned.
   overload: System.Xml.Schema.XmlSchemaSet.Schemas*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -602,18 +690,21 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a collection of all the XML Schema definition language (XSD) schemas in the  that belong to the given namespace.
+  remarks: "If the `targetNamespace` parameter is `null` or <xref:System.String.Empty>, then all schemas without a namespace are returned.  \n  \n This method returns schemas that were added indirectly to the <xref:System.Xml.Schema.XmlSchemaSet> because they were imported.  \n  \n> [!NOTE]\n>  The Schemas method is the equivalent of the <xref:System.Xml.Schema.XmlSchemaCollection.Item%2A> method of the obsolete <xref:System.Xml.Schema.XmlSchemaCollection>."
+  example:
+  - "The following example illustrates how to iterate over all the schemas in the http://www.contoso.com/books namespace in the <xref:System.Xml.Schema.XmlSchemaSet>.  \n  \n```vb#  \nDim schemaSet As XmlSchemaSet = New XmlSchemaSet  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\")  \n  \nDim schema As XmlSchema  \n  \nFor Each schema In schemaSet.Schemas(\"http://www.contoso.com/books\")  \n  \n    schema.Write(Console.Out)  \n  \nNext  \n```  \n  \n```c#  \nXmlSchemaSet schemaSet = new XmlSchemaSet();  \nschemaSet.Add(\"http://www.contoso.com/books\", \"http://www.contoso.com/books.xsd\");  \n  \nforeach (XmlSchema schema in schemaSet.Schemas(\"http://www.contoso.com/books\"))  \n{  \n    schema.Write(Console.Out);  \n}  \n```"
   syntax:
     content: public System.Collections.ICollection Schemas (string targetNamespace);
     parameters:
     - id: targetNamespace
       type: System.String
-      description: To be added.
+      description: The schema `targetNamespace` property.
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> object containing all the schemas that have been added to the  that belong to the given namespace. If no schemas have been added to the , an empty <xref:System.Collections.ICollection> object is returned.
   overload: System.Xml.Schema.XmlSchemaSet.Schemas*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -630,13 +721,16 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies an event handler for receiving information about XML Schema definition language (XSD) schema validation errors.
+  remarks: "Sets an event handler for receiving information about schema validation errors when the <xref:System.Xml.Schema.XmlSchemaSet.Add%2A> or <xref:System.Xml.Schema.XmlSchemaSet.Compile%2A> methods of the <xref:System.Xml.Schema.XmlSchemaSet> are called.  \n  \n If an event handler is not defined, an <xref:System.Xml.Schema.XmlSchemaException> is thrown on any validation errors where the <xref:System.Xml.Schema.XmlSeverityType> is <xref:System.Xml.Schema.XmlSeverityType>. Exceptions are not thrown for validation errors with an <xref:System.Xml.Schema.XmlSeverityType> of <xref:System.Xml.Schema.XmlSeverityType>."
+  example:
+  - "The following code example illustrates adding a ValidationEventHandler to capture errors and warnings when validating an XML document against a schema.  \n  \n [!code-cs[XmlSchemaSetOverall Example#1](../../add/codesnippet/CSharp/e-system.xml.schema.xmls_2_1.cs)]\n [!code-cpp[XmlSchemaSetOverall Example#1](../../add/codesnippet/CPP/e-system.xml.schema.xmls_2_1.cpp)]\n [!code-vb[XmlSchemaSetOverall Example#1](../../add/codesnippet/VisualBasic/e-system.xml.schema.xmls_2_1.vb)]  \n  \n The example uses the books.xml file as an input.  \n  \n [!code-xml[XmlSchemaSetOverall Example#2](../../add/codesnippet/XML/e-system.xml.schema.xmls_2_2.xml)]  \n  \n The example uses the books.xsd file as an input.  \n  \n [!code-xml[XmlSchemaSetOverall Example#3](../../add/codesnippet/XML/e-system.xml.schema.xmls_2_3.xsd)]"
   syntax:
     content: public event System.Xml.Schema.ValidationEventHandler ValidationEventHandler;
     return:
       type: System.Xml.Schema.ValidationEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -653,14 +747,15 @@ items:
   assemblies:
   - System.Xml
   namespace: System.Xml.Schema
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the  used to resolve namespaces or locations referenced in include and import elements of a schema.
+  remarks: "The <xref:System.Xml.XmlResolver> of an <xref:System.Xml.Schema.XmlSchemaSet> is used to resolve namespaces or locations referenced in include and import elements of a schema, any time a schema is added using the <xref:System.Xml.Schema.XmlSchemaSet.Add%2A> or <xref:System.Xml.Schema.XmlSchemaSet.Reprocess%2A> methods.  \n  \n> [!IMPORTANT]\n>  External namespaces or locations referenced in include, import, and redefine elements of a schema are resolved with respect to the base URI of the schema that includes or imports them. For example, if the base URI of the including or importing schema is empty or `null`, the external locations are resolved with respect to the current directory. The <xref:System.Xml.XmlUrlResolver> class is used to resolve external schemas by default. To disable resolution of include, import, and redefine elements of a schema, set the XmlResolver property to `null`."
   syntax:
     content: public System.Xml.XmlResolver XmlResolver { set; }
     return:
       type: System.Xml.XmlResolver
-      description: To be added.
+      description: The  used to resolve namespaces or locations referenced in include and import elements of a schema.
   overload: System.Xml.Schema.XmlSchemaSet.XmlResolver*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -699,12 +794,6 @@ references:
   name: XmlSchema
   nameWithType: XmlSchema
   fullName: System.Xml.Schema.XmlSchema
-- uid: System.Xml.Schema.XmlSchema
-  parent: System.Xml.Schema
-  isExternal: true
-  name: XmlSchema
-  nameWithType: XmlSchema
-  fullName: System.Xml.Schema.XmlSchema
 - uid: System.Xml.Schema.XmlSchemaSet.Add(System.Xml.Schema.XmlSchemaSet)
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
@@ -723,18 +812,6 @@ references:
   name: Add(String,String)
   nameWithType: XmlSchemaSet.Add(String,String)
   fullName: System.Xml.Schema.XmlSchemaSet.Add(String,String)
-- uid: System.Xml.Schema.XmlSchema
-  parent: System.Xml.Schema
-  isExternal: true
-  name: XmlSchema
-  nameWithType: XmlSchema
-  fullName: System.Xml.Schema.XmlSchema
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.String
   parent: System
   isExternal: true
@@ -747,18 +824,6 @@ references:
   name: Add(String,XmlReader)
   nameWithType: XmlSchemaSet.Add(String,XmlReader)
   fullName: System.Xml.Schema.XmlSchemaSet.Add(String,XmlReader)
-- uid: System.Xml.Schema.XmlSchema
-  parent: System.Xml.Schema
-  isExternal: true
-  name: XmlSchema
-  nameWithType: XmlSchema
-  fullName: System.Xml.Schema.XmlSchema
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Xml.XmlReader
   parent: System.Xml
   isExternal: true
@@ -795,42 +860,32 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Xml.Schema.XmlSchemaSet.Contains(System.Xml.Schema.XmlSchema)
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
   name: Contains(XmlSchema)
   nameWithType: XmlSchemaSet.Contains(XmlSchema)
   fullName: System.Xml.Schema.XmlSchemaSet.Contains(XmlSchema)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Xml.Schema.XmlSchema
-  parent: System.Xml.Schema
-  isExternal: true
-  name: XmlSchema
-  nameWithType: XmlSchema
-  fullName: System.Xml.Schema.XmlSchema
 - uid: System.Xml.Schema.XmlSchemaSet.CopyTo(System.Xml.Schema.XmlSchema[],System.Int32)
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
   name: CopyTo(XmlSchema[],Int32)
   nameWithType: XmlSchemaSet.CopyTo(XmlSchema[],Int32)
   fullName: System.Xml.Schema.XmlSchemaSet.CopyTo(XmlSchema[],Int32)
-- uid: System.Xml.Schema.XmlSchema
+- uid: System.Xml.Schema.XmlSchema[]
   parent: System.Xml.Schema
   isExternal: true
   name: XmlSchema
   nameWithType: XmlSchema
   fullName: System.Xml.Schema.XmlSchema[]
+  spec.csharp:
+  - uid: System.Xml.Schema.XmlSchema
+    name: XmlSchema
+    nameWithType: XmlSchema
+    fullName: XmlSchema[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Int32
   parent: System
   isExternal: true
@@ -843,12 +898,6 @@ references:
   name: Count
   nameWithType: XmlSchemaSet.Count
   fullName: System.Xml.Schema.XmlSchemaSet.Count
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Xml.Schema.XmlSchemaSet.GlobalAttributes
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
@@ -867,102 +916,42 @@ references:
   name: GlobalElements
   nameWithType: XmlSchemaSet.GlobalElements
   fullName: System.Xml.Schema.XmlSchemaSet.GlobalElements
-- uid: System.Xml.Schema.XmlSchemaObjectTable
-  parent: System.Xml.Schema
-  isExternal: false
-  name: XmlSchemaObjectTable
-  nameWithType: XmlSchemaObjectTable
-  fullName: System.Xml.Schema.XmlSchemaObjectTable
 - uid: System.Xml.Schema.XmlSchemaSet.GlobalTypes
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
   name: GlobalTypes
   nameWithType: XmlSchemaSet.GlobalTypes
   fullName: System.Xml.Schema.XmlSchemaSet.GlobalTypes
-- uid: System.Xml.Schema.XmlSchemaObjectTable
-  parent: System.Xml.Schema
-  isExternal: false
-  name: XmlSchemaObjectTable
-  nameWithType: XmlSchemaObjectTable
-  fullName: System.Xml.Schema.XmlSchemaObjectTable
 - uid: System.Xml.Schema.XmlSchemaSet.IsCompiled
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
   name: IsCompiled
   nameWithType: XmlSchemaSet.IsCompiled
   fullName: System.Xml.Schema.XmlSchemaSet.IsCompiled
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Xml.Schema.XmlSchemaSet.NameTable
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
   name: NameTable
   nameWithType: XmlSchemaSet.NameTable
   fullName: System.Xml.Schema.XmlSchemaSet.NameTable
-- uid: System.Xml.XmlNameTable
-  parent: System.Xml
-  isExternal: true
-  name: XmlNameTable
-  nameWithType: XmlNameTable
-  fullName: System.Xml.XmlNameTable
 - uid: System.Xml.Schema.XmlSchemaSet.Remove(System.Xml.Schema.XmlSchema)
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
   name: Remove(XmlSchema)
   nameWithType: XmlSchemaSet.Remove(XmlSchema)
   fullName: System.Xml.Schema.XmlSchemaSet.Remove(XmlSchema)
-- uid: System.Xml.Schema.XmlSchema
-  parent: System.Xml.Schema
-  isExternal: true
-  name: XmlSchema
-  nameWithType: XmlSchema
-  fullName: System.Xml.Schema.XmlSchema
-- uid: System.Xml.Schema.XmlSchema
-  parent: System.Xml.Schema
-  isExternal: true
-  name: XmlSchema
-  nameWithType: XmlSchema
-  fullName: System.Xml.Schema.XmlSchema
 - uid: System.Xml.Schema.XmlSchemaSet.RemoveRecursive(System.Xml.Schema.XmlSchema)
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
   name: RemoveRecursive(XmlSchema)
   nameWithType: XmlSchemaSet.RemoveRecursive(XmlSchema)
   fullName: System.Xml.Schema.XmlSchemaSet.RemoveRecursive(XmlSchema)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Xml.Schema.XmlSchema
-  parent: System.Xml.Schema
-  isExternal: true
-  name: XmlSchema
-  nameWithType: XmlSchema
-  fullName: System.Xml.Schema.XmlSchema
 - uid: System.Xml.Schema.XmlSchemaSet.Reprocess(System.Xml.Schema.XmlSchema)
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
   name: Reprocess(XmlSchema)
   nameWithType: XmlSchemaSet.Reprocess(XmlSchema)
   fullName: System.Xml.Schema.XmlSchemaSet.Reprocess(XmlSchema)
-- uid: System.Xml.Schema.XmlSchema
-  parent: System.Xml.Schema
-  isExternal: true
-  name: XmlSchema
-  nameWithType: XmlSchema
-  fullName: System.Xml.Schema.XmlSchema
-- uid: System.Xml.Schema.XmlSchema
-  parent: System.Xml.Schema
-  isExternal: true
-  name: XmlSchema
-  nameWithType: XmlSchema
-  fullName: System.Xml.Schema.XmlSchema
 - uid: System.Xml.Schema.XmlSchemaSet.Schemas
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false
@@ -981,18 +970,6 @@ references:
   name: Schemas(String)
   nameWithType: XmlSchemaSet.Schemas(String)
   fullName: System.Xml.Schema.XmlSchemaSet.Schemas(String)
-- uid: System.Collections.ICollection
-  parent: System.Collections
-  isExternal: true
-  name: ICollection
-  nameWithType: ICollection
-  fullName: System.Collections.ICollection
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Xml.Schema.XmlSchemaSet.ValidationEventHandler
   parent: System.Xml.Schema.XmlSchemaSet
   isExternal: false

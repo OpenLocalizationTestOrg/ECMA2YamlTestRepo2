@@ -39,8 +39,8 @@ items:
   nameWithType: InstancePersistenceContext
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents execution state information while a persistence command is being executed.
+  remarks: An instance of this class is passed to the TryCommand method of persistence provider implementations. Persistence providers use this class to inspect the in-memory view of the instance as well as indicate the results of operations on the external store which may affect the view or other in-memory context.
   syntax:
     content: public sealed class InstancePersistenceContext
   inheritance:
@@ -63,15 +63,16 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully associated a key to the current instance in the instance store. The identifier of the key is specified as a parameter.
+  remarks: The instance key must be unassociated. The current instance handle must be bound to an instance as well as a lock on that instance.
   syntax:
     content: public void AssociatedInstanceKey (Guid key);
     parameters:
     - id: key
       type: System.Guid
-      description: To be added.
+      description: The instance key identifier  for the key that has been associated. Must not be Guid.Empty.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.AssociatedInstanceKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -88,27 +89,28 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Begin an asynchronous operation to bind an existing lock on an instance to the current instance handle. The version of the existing lock is passed as a parameter.
+  remarks: "When attempting to acquire a lock, the persistence provider may decide that the current instance is already locked in the current store. If the lock token matches the current handle’s lock token, then the persistence provider can attempt to reclaim the lock by inspecting its version and passing it to BeginBindReclaimedLock. The persistence provider must not make changes to the instance until the lock is successfully reclaimed. If no other handle is bound to the lock, then the BeginBindReclaimedLock operation succeeds and the current handle becomes bound to the lock. Otherwise, BeginBindReclaimedLock or EndBindReclaimedLock throws InstanceHandleConflictException. If commands are in progress on other handles, the operation may not complete while waiting for the outcome of those commands to decide whether the lock can be reclaimed.  \n  \n The current instance handle must be bound to an instance and a lock owner. The instance must not be completed. The lock token associated with the lock owner is used to identify the owner of the lock.  \n  \n Once a lock is bound to a handle, it remains bound for the lifetime of the handle. Neither the lock token nor the instance version can be changed."
   syntax:
     content: public IAsyncResult BeginBindReclaimedLock (long instanceVersion, TimeSpan timeout, AsyncCallback callback, object state);
     parameters:
     - id: instanceVersion
       type: System.Int64
-      description: To be added.
+      description: The version of the lock held on the instance, or zero if the persistence provider does not implement lock versions.
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: The timeout period for the asynchronous operation.
     - id: callback
       type: System.AsyncCallback
-      description: To be added.
+      description: The method to be called when the operation is completed.
     - id: state
       type: System.Object
-      description: To be added.
+      description: The state information associated with the asynchronous operation.
     return:
       type: System.IAsyncResult
-      description: To be added.
+      description: The status of an asynchronous operation.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BeginBindReclaimedLock*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -125,27 +127,28 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins executing a persistence command asynchronously.
+  remarks: A persistence provider can use this method to execute sub-commands as part of a command. The sub-command will be executed using BeginTryCommand, similar to commands passed to InstanceStore.BeginExecute. Commands can be nested, but a command must not execute more than one sub-command at a time.
   syntax:
     content: public IAsyncResult BeginExecute (System.Runtime.DurableInstancing.InstancePersistenceCommand command, TimeSpan timeout, AsyncCallback callback, object state);
     parameters:
     - id: command
       type: System.Runtime.DurableInstancing.InstancePersistenceCommand
-      description: To be added.
+      description: The persistence command to be executed.
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: The time-out value for the operation.
     - id: callback
       type: System.AsyncCallback
-      description: To be added.
+      description: The delegate that receives the notification of the asynchronous receive that a request operation completes.
     - id: state
       type: System.Object
-      description: To be added.
+      description: The state information.
     return:
       type: System.IAsyncResult
-      description: To be added.
+      description: The status of an asynchronous operation.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BeginExecute*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -162,15 +165,16 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Binds a newly acquired lock on an instance to the current instance handle. The version of the acquired lock is passed as a parameter.
+  remarks: "If a persistence provider implements lock versioning, then each time a lock is acquired on the instance, the version must be incremented by one in the external store. The first time the instance is locked, the version should be 1. Each lock acquisition invalidates the previous lock. The current instance handle must be bound to an instance and a lock owner. The instance must not be completed. The lock token associated with the lock owner is used to identify the owner of the lock  \n  \n Once a lock is bound to a handle, it remains bound for the lifetime of the handle. Neither the lock token nor the instance version can be changed."
   syntax:
     content: public void BindAcquiredLock (long instanceVersion);
     parameters:
     - id: instanceVersion
       type: System.Int64
-      description: To be added.
+      description: Version of the lock acquired on the instance, or zero if the persistence provider does not implement lock versions.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BindAcquiredLock*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -187,15 +191,15 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Binds an  to an instance handle.
   syntax:
     content: public void BindEvent (System.Runtime.DurableInstancing.InstancePersistenceEvent persistenceEvent);
     parameters:
     - id: persistenceEvent
       type: System.Runtime.DurableInstancing.InstancePersistenceEvent
-      description: To be added.
+      description: An  object containing information about the event.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BindEvent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -212,15 +216,16 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Binds an instance whose identifier is specified as a parameter to the current instance handle.
+  remarks: Once an instance is bound to a handle, it remains bound for the lifetime of the handle. No other instance can ever be bound to the handle.
   syntax:
     content: public void BindInstance (Guid instanceId);
     parameters:
     - id: instanceId
       type: System.Guid
-      description: To be added.
+      description: An instance identifier. Must not be Guid.Empty.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BindInstance*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -237,18 +242,19 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Binds an instance owner to the current instance handle.
+  remarks: Once an instance owner is bound to a handle, it remains bound for the lifetime of the handle. No other instance owner can ever be bound to the handle.
   syntax:
     content: public void BindInstanceOwner (Guid instanceOwnerId, Guid lockToken);
     parameters:
     - id: instanceOwnerId
       type: System.Guid
-      description: To be added.
+      description: The identifier for the instance owner.
     - id: lockToken
       type: System.Guid
-      description: To be added.
+      description: The lock token of the instance owner. A persistence provider may choose to use the same value for the instance owner identifier and the owner’s lock token.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BindInstanceOwner*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -265,18 +271,19 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Binds an existing lock on an instance to the current instance handle. The version of the existing lock is passed as a parameter.
+  remarks: "When attempting to acquire a lock, the persistence provider may decide that the current instance is already locked in the current store. If the lock token matches the current handle’s lock token, then the persistence provider can attempt to reclaim the lock by inspecting its version and passing it to BindReclaimedLock. The persistence provider must not make changes to the instance until the lock is successfully reclaimed. If no other handle is bound to the lock, then BindReclaimedLock succeeds and the current handle becomes bound to the lock. Otherwise, BindReclaimedLock throws InstanceHandleConflictException. If commands are in progress on other handles, BindReclaimedLock may block waiting for the outcome of those commands before deciding whether the lock can be reclaimed.  \n  \n The current instance handle must be bound to an instance and a lock owner. The instance must not be completed. The lock token associated with the lock owner is used to identify the owner of the lock.  \n  \n Once a lock is bound to a handle, it remains bound for the lifetime of the handle. Neither the lock token nor the instance version can be changed."
   syntax:
     content: public void BindReclaimedLock (long instanceVersion, TimeSpan timeout);
     parameters:
     - id: instanceVersion
       type: System.Int64
-      description: To be added.
+      description: Version of the lock held on the instance, or zero if the persistence provider does not implement lock versions.
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: The time-out value for the operation.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.BindReclaimedLock*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -293,12 +300,13 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully marked the current instance as complete in the instance store.
+  remarks: The current instance handle must be bound to an instance as well as a lock on that instance. The instance must be initialized and not be already completed. (An instance is initialized if a set of instance data has ever been persisted to it.) All of the keys associated to the instance must be completed.
   syntax:
     content: public void CompletedInstance ();
     parameters: []
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.CompletedInstance*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -315,15 +323,16 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully marked a key as complete in the external store. The identifier of the key is specified as a parameter.
+  remarks: The current instance handle must be bound to an instance as well as a lock on that instance. The instance key must be associated to the current instance and not be already completed.
   syntax:
     content: public void CompletedInstanceKey (Guid key);
     parameters:
     - id: key
       type: System.Guid
-      description: To be added.
+      description: The instance key identifier for the key that has been completed. Must not be Guid.Empty.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.CompletedInstanceKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -340,18 +349,19 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of an exception which can be thrown from TryCommand to trigger BindReclaimedLock behavior.
+  remarks: "Sample code:  \n  \n```  \n  \nprotected override bool TryCommand(InstancePersistenceContext context, InstancePersistenceCommand command, TimeSpan timeout)  \n{  \n    throw context.CreateBindReclaimedLockException(5);  \n}  \nis equivalent to  \nprotected override bool TryCommand(InstancePersistenceContext context, InstancePersistenceCommand command, TimeSpan timeout)  \n{  \n    context.BindReclaimedLock(5, timeout);  \n    throw new OperationCanceledException();  \n}  \n  \n```"
   syntax:
     content: public Exception CreateBindReclaimedLockException (long instanceVersion);
     parameters:
     - id: instanceVersion
       type: System.Int64
-      description: To be added.
+      description: The version of the lock held on the instance, or zero if the persistence provider does not implement lock versions.
     return:
       type: System.Exception
-      description: To be added.
+      description: An exception.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.CreateBindReclaimedLockException*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -368,15 +378,15 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Ends the asynchronous operation started by the <xref:System.Runtime.DurableInstancing.InstancePersistenceContext.BeginBindReclaimedLock%2A> method.
   syntax:
     content: public void EndBindReclaimedLock (IAsyncResult result);
     parameters:
     - id: result
       type: System.IAsyncResult
-      description: To be added.
+      description: The result of the asynchronous operation.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.EndBindReclaimedLock*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -393,15 +403,15 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Ends the asynchronous operation.
   syntax:
     content: public void EndExecute (IAsyncResult result);
     parameters:
     - id: result
       type: System.IAsyncResult
-      description: To be added.
+      description: The status of an asynchronous operation.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.EndExecute*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -418,18 +428,19 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Executes a persistence command.
+  remarks: A persistence provider can use this method to execute sub-commands as part of a command. The sub-command will be executed using TryCommand, similar to commands passed to InstanceStore.Execute. Commands can be nested, but a command must not execute more than one sub-command at a time.
   syntax:
     content: public void Execute (System.Runtime.DurableInstancing.InstancePersistenceCommand command, TimeSpan timeout);
     parameters:
     - id: command
       type: System.Runtime.DurableInstancing.InstancePersistenceCommand
-      description: To be added.
+      description: The persistence command to be executed.
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: The time-out value for the operation.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.Execute*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -446,14 +457,14 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the current instance handle.
   syntax:
     content: public System.Runtime.DurableInstancing.InstanceHandle InstanceHandle { get; }
     return:
       type: System.Runtime.DurableInstancing.InstanceHandle
-      description: To be added.
+      description: The current instance handle.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.InstanceHandle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -470,14 +481,15 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the version of the lock held on the current instance by the current instance handle.
+  remarks: The persistence provider should check this value against the lock version of the lock held on an instance in the instance store when performing an operation that requires a lock (such as persisting instance data) using a handle bound to the lock. If the lock version doesn’t match, the command should fail with InstanceLockLostException.
   syntax:
     content: public long InstanceVersion { get; }
     return:
       type: System.Int64
-      description: To be added.
+      description: The version of the instance lock bound to the current instance handle, or -1 if the handle isn’t bound to a lock.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.InstanceVersion*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -494,14 +506,14 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the instance view object that represents the in-memory state of the current instance. This view reflects updates as they are made by the command in progress.
   syntax:
     content: public System.Runtime.DurableInstancing.InstanceView InstanceView { get; }
     return:
       type: System.Runtime.DurableInstancing.InstanceView
-      description: To be added.
+      description: The instance view object.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.InstanceView*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -518,27 +530,28 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully retrieved the current instance from the instance store.
+  remarks: The current instance handle must be bound to an instance. If the instance handle is bound to a lock or the loaded instance is marked as complete, the loaded data is considered to be consistent; otherwise, it is considered to be in doubt.
   syntax:
     content: public void LoadedInstance (System.Runtime.DurableInstancing.InstanceState state, System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> instanceData, System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> instanceMetadata, System.Collections.Generic.IDictionary<Guid,System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>> associatedInstanceKeyMetadata, System.Collections.Generic.IDictionary<Guid,System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>> completedInstanceKeyMetadata);
     parameters:
     - id: state
       type: System.Runtime.DurableInstancing.InstanceState
-      description: To be added.
+      description: The instance state information.
     - id: instanceData
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: To be added.
+      description: The instance data as a dictionary of <xref:System.Xml.Linq.XName> and  objects.
     - id: instanceMetadata
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: To be added.
+      description: Instance metadata as a collection of <xref:System.Xml.Linq.XName> and  objects.
     - id: associatedInstanceKeyMetadata
       type: System.Collections.Generic.IDictionary{System.Guid,System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}}
-      description: To be added.
+      description: Associated instance key metadata as a dictionary of instance identifier and instance key metadata, which is a dictionary of <xref:System.Xml.Linq.XName> and  objects.
     - id: completedInstanceKeyMetadata
       type: System.Collections.Generic.IDictionary{System.Guid,System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}}
-      description: To be added.
+      description: Completed instance metadata as a dictionary of instance identifier and instance key metadata, which is a dictionary of <xref:System.Xml.Linq.XName> and  objects.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.LoadedInstance*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -555,14 +568,15 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the lock token of the instance owner bound to the current instance handle.
+  remarks: "The persistence provider should check this value against the lock token of the lock held on an instance in the instance store when performing an operation that requires a lock (such as persisting instance data) using a handle bound to the lock. If the lock token doesn’t match, the command should fail with InstanceLockLostException.  \n  \n The persistence provider should use this value as the lock token when acquiring a new lock on an instance (such as persisting instance data using a handle not already bound to a lock). If the instance is already locked in the instance store and the lock token matches this lock token, the persistence provider can attempt to reclaim the instance using BindReclaimedLock."
   syntax:
     content: public Guid LockToken { get; }
     return:
       type: System.Guid
-      description: To be added.
+      description: The lock token bound to the current instance handle, or Guid.Empty if the handle isn’t bound to an instance owner.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.LockToken*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -579,15 +593,16 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully persisted a set of instance data to the instance store. This has the effect of initializing the instance if it wasn’t already.
+  remarks: The current instance handle must be bound to an instance as well as a lock on that instance. Each set of instance data completely replaces the previous set. The set of instance data may be null – this is the same as empty. Persisting a null set of instance data deletes the existing set of instance data. (Persisting a set of instance data has no effect on instance metadata.)
   syntax:
     content: public void PersistedInstance (System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> data);
     parameters:
     - id: data
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: To be added.
+      description: Instance data as a dictionary of <xref:System.Xml.Linq.XName> and  objects.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.PersistedInstance*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -604,15 +619,15 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the  passed as a parameter to a list of  objects in an .
   syntax:
     content: public void QueriedInstanceStore (System.Runtime.DurableInstancing.InstanceStoreQueryResult queryResult);
     parameters:
     - id: queryResult
       type: System.Runtime.DurableInstancing.InstanceStoreQueryResult
-      description: To be added.
+      description: The results of a query against an instance store.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.QueriedInstanceStore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -629,21 +644,22 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully read some instance key metadata for a key associated to the current instance from the instance store.
+  remarks: The current instance handle must be bound to an instance. If the instance handle is bound to a lock or the current instance is marked as complete, the metadata is considered to be consistent; otherwise, it is considered to be in doubt.
   syntax:
     content: public void ReadInstanceKeyMetadata (Guid key, System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> metadata, bool complete);
     parameters:
     - id: key
       type: System.Guid
-      description: To be added.
+      description: The instance key identifier for the key whose metadata was read. Must not be Guid.Empty.
     - id: metadata
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: To be added.
+      description: The metadata as a dictionary of <xref:System.Xml.Linq.XName> and  objects.
     - id: complete
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the metadata represents all of the metadata associated to the instance key, otherwise ."
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.ReadInstanceKeyMetadata*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -660,18 +676,18 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully read some instance metadata for the current instance from the instance store.
   syntax:
     content: public void ReadInstanceMetadata (System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> metadata, bool complete);
     parameters:
     - id: metadata
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: To be added.
+      description: The metadata as a dictionary of <xref:System.Xml.Linq.XName> and  objects.
     - id: complete
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the metadata represents all of the metadata associated to the instance, otherwise ."
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.ReadInstanceMetadata*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -688,18 +704,19 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the instance owner metadata using the data passed in the parameter.
+  remarks: The current instance handle must be bound to an instance. If the instance handle is bound to a lock or the current instance is marked as complete, the metadata is considered to be consistent; otherwise, it is considered to be in doubt.
   syntax:
     content: public void ReadInstanceOwnerMetadata (System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue> metadata, bool complete);
     parameters:
     - id: metadata
       type: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-      description: To be added.
+      description: The dictionary of <xref:System.Xml.Linq.XName> and  objects.
     - id: complete
       type: System.Boolean
-      description: To be added.
+      description: The value to specify whether the consistency to be set to  or .
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.ReadInstanceOwnerMetadata*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -716,15 +733,16 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the cancellation handler to be called when the cancel of an operation is requested.
+  remarks: If the cancellation handler is called, the persistence provider should cancel all pending operations and throw OperationCanceledException from TryCommand to indicate that the persistence command was interrupted before it could be completed.
   syntax:
     content: public void SetCancellationHandler (Action<System.Runtime.DurableInstancing.InstancePersistenceContext> cancellationHandler);
     parameters:
     - id: cancellationHandler
       type: System.Action{System.Runtime.DurableInstancing.InstancePersistenceContext}
-      description: To be added.
+      description: The reference to a function to be called.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.SetCancellationHandler*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -741,15 +759,16 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully disassociated a key from the current instance in the instance store. The identifier of the key is specified as a parameter.
+  remarks: The current instance handle must be bound to an instance as well as a lock on that instance. The instance key must be associated to the current instance and must be marked complete. The current instance must not be marked complete.
   syntax:
     content: public void UnassociatedInstanceKey (Guid key);
     parameters:
     - id: key
       type: System.Guid
-      description: To be added.
+      description: The instance key identifier for the key that has been unassociated. Must not be Guid.Empty.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.UnassociatedInstanceKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -766,14 +785,15 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the user context information attached to the current instance handle.
+  remarks: The object is the one that is returned from InstanceStore.OnNewInstanceHandle for the current instance handle.
   syntax:
     content: public object UserContext { get; }
     return:
       type: System.Object
-      description: To be added.
+      description: The user context information.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.UserContext*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -790,21 +810,22 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully written a metadata value for an instance key that is associated with the current instance to the instance store
+  remarks: The current instance handle must be bound to an instance as well as a lock on that instance. The instance key must be associated with the current instance and must not be completed.
   syntax:
     content: public void WroteInstanceKeyMetadataValue (Guid key, System.Xml.Linq.XName name, System.Runtime.DurableInstancing.InstanceValue value);
     parameters:
     - id: key
       type: System.Guid
-      description: To be added.
+      description: The instance key identifier for the key. Must not be Guid.Empty.
     - id: name
       type: System.Xml.Linq.XName
-      description: To be added.
+      description: The name of the metadata property.
     - id: value
       type: System.Runtime.DurableInstancing.InstanceValue
-      description: To be added.
+      description: The value of the metadata property.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceKeyMetadataValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -821,18 +842,19 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully written a metadata value for the current instance to the external instance store.
+  remarks: The current instance handle must be bound to an instance as well as has a lock on that instance. The instance must not be completed.
   syntax:
     content: public void WroteInstanceMetadataValue (System.Xml.Linq.XName name, System.Runtime.DurableInstancing.InstanceValue value);
     parameters:
     - id: name
       type: System.Xml.Linq.XName
-      description: To be added.
+      description: The name of the metadata property.
     - id: value
       type: System.Runtime.DurableInstancing.InstanceValue
-      description: To be added.
+      description: The value of the metadata property.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceMetadataValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -849,18 +871,19 @@ items:
   assemblies:
   - System.Runtime.DurableInstancing
   namespace: System.Runtime.DurableInstancing
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates that the persistence provider has successfully written a metadata value for the current instance owner to the instance store.
+  remarks: The current instance handle must be bound to an instance owner.
   syntax:
     content: public void WroteInstanceOwnerMetadataValue (System.Xml.Linq.XName name, System.Runtime.DurableInstancing.InstanceValue value);
     parameters:
     - id: name
       type: System.Xml.Linq.XName
-      description: To be added.
+      description: The name of the metadata property.
     - id: value
       type: System.Runtime.DurableInstancing.InstanceValue
-      description: To be added.
+      description: The value of the metadata property.
   overload: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceOwnerMetadataValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -911,60 +934,24 @@ references:
   name: AsyncCallback
   nameWithType: AsyncCallback
   fullName: System.AsyncCallback
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.BeginExecute(System.Runtime.DurableInstancing.InstancePersistenceCommand,System.TimeSpan,System.AsyncCallback,System.Object)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: BeginExecute(InstancePersistenceCommand,TimeSpan,AsyncCallback,Object)
   nameWithType: InstancePersistenceContext.BeginExecute(InstancePersistenceCommand,TimeSpan,AsyncCallback,Object)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.BeginExecute(InstancePersistenceCommand,TimeSpan,AsyncCallback,Object)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.Runtime.DurableInstancing.InstancePersistenceCommand
   parent: System.Runtime.DurableInstancing
   isExternal: false
   name: InstancePersistenceCommand
   nameWithType: InstancePersistenceCommand
   fullName: System.Runtime.DurableInstancing.InstancePersistenceCommand
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
-- uid: System.AsyncCallback
-  parent: System
-  isExternal: true
-  name: AsyncCallback
-  nameWithType: AsyncCallback
-  fullName: System.AsyncCallback
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.BindAcquiredLock(System.Int64)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: BindAcquiredLock(Int64)
   nameWithType: InstancePersistenceContext.BindAcquiredLock(Int64)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.BindAcquiredLock(Int64)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.BindEvent(System.Runtime.DurableInstancing.InstancePersistenceEvent)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
@@ -983,48 +970,18 @@ references:
   name: BindInstance(Guid)
   nameWithType: InstancePersistenceContext.BindInstance(Guid)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.BindInstance(Guid)
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.BindInstanceOwner(System.Guid,System.Guid)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: BindInstanceOwner(Guid,Guid)
   nameWithType: InstancePersistenceContext.BindInstanceOwner(Guid,Guid)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.BindInstanceOwner(Guid,Guid)
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.BindReclaimedLock(System.Int64,System.TimeSpan)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: BindReclaimedLock(Int64,TimeSpan)
   nameWithType: InstancePersistenceContext.BindReclaimedLock(Int64,TimeSpan)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.BindReclaimedLock(Int64,TimeSpan)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.CompletedInstance
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
@@ -1037,12 +994,6 @@ references:
   name: CompletedInstanceKey(Guid)
   nameWithType: InstancePersistenceContext.CompletedInstanceKey(Guid)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.CompletedInstanceKey(Guid)
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.CreateBindReclaimedLockException(System.Int64)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
@@ -1055,54 +1006,24 @@ references:
   name: Exception
   nameWithType: Exception
   fullName: System.Exception
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.EndBindReclaimedLock(System.IAsyncResult)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: EndBindReclaimedLock(IAsyncResult)
   nameWithType: InstancePersistenceContext.EndBindReclaimedLock(IAsyncResult)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.EndBindReclaimedLock(IAsyncResult)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.EndExecute(System.IAsyncResult)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: EndExecute(IAsyncResult)
   nameWithType: InstancePersistenceContext.EndExecute(IAsyncResult)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.EndExecute(IAsyncResult)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.Execute(System.Runtime.DurableInstancing.InstancePersistenceCommand,System.TimeSpan)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: Execute(InstancePersistenceCommand,TimeSpan)
   nameWithType: InstancePersistenceContext.Execute(InstancePersistenceCommand,TimeSpan)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.Execute(InstancePersistenceCommand,TimeSpan)
-- uid: System.Runtime.DurableInstancing.InstancePersistenceCommand
-  parent: System.Runtime.DurableInstancing
-  isExternal: false
-  name: InstancePersistenceCommand
-  nameWithType: InstancePersistenceCommand
-  fullName: System.Runtime.DurableInstancing.InstancePersistenceCommand
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.InstanceHandle
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
@@ -1121,12 +1042,6 @@ references:
   name: InstanceVersion
   nameWithType: InstancePersistenceContext.InstanceVersion
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.InstanceVersion
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.InstanceView
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
@@ -1157,48 +1072,85 @@ references:
   name: IDictionary<XName,InstanceValue>
   nameWithType: IDictionary<XName,InstanceValue>
   fullName: System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>
-- uid: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IDictionary<XName,InstanceValue>
-  nameWithType: IDictionary<XName,InstanceValue>
-  fullName: System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Xml.Linq.XName
+    name: XName
+    nameWithType: XName
+    fullName: XName
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Runtime.DurableInstancing.InstanceValue
+    name: InstanceValue
+    nameWithType: InstanceValue
+    fullName: InstanceValue
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Collections.Generic.IDictionary{System.Guid,System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}}
   parent: System.Collections.Generic
   isExternal: true
   name: IDictionary<Guid,IDictionary<XName,InstanceValue>>
   nameWithType: IDictionary<Guid,IDictionary<XName,InstanceValue>>
   fullName: System.Collections.Generic.IDictionary<System.Guid,System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>>
-- uid: System.Collections.Generic.IDictionary{System.Guid,System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IDictionary<Guid,IDictionary<XName,InstanceValue>>
-  nameWithType: IDictionary<Guid,IDictionary<XName,InstanceValue>>
-  fullName: System.Collections.Generic.IDictionary<System.Guid,System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>>
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.Guid,System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Guid
+    name: Guid
+    nameWithType: Guid
+    fullName: Guid
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Xml.Linq.XName
+    name: XName
+    nameWithType: XName
+    fullName: XName
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Runtime.DurableInstancing.InstanceValue
+    name: InstanceValue
+    nameWithType: InstanceValue
+    fullName: InstanceValue
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.LockToken
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: LockToken
   nameWithType: InstancePersistenceContext.LockToken
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.LockToken
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.PersistedInstance(System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue})
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: PersistedInstance(IDictionary<XName,InstanceValue>)
   nameWithType: InstancePersistenceContext.PersistedInstance(IDictionary<XName,InstanceValue>)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.PersistedInstance(IDictionary<XName,InstanceValue>)
-- uid: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IDictionary<XName,InstanceValue>
-  nameWithType: IDictionary<XName,InstanceValue>
-  fullName: System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.QueriedInstanceStore(System.Runtime.DurableInstancing.InstanceStoreQueryResult)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
@@ -1217,18 +1169,6 @@ references:
   name: ReadInstanceKeyMetadata(Guid,IDictionary<XName,InstanceValue>,Boolean)
   nameWithType: InstancePersistenceContext.ReadInstanceKeyMetadata(Guid,IDictionary<XName,InstanceValue>,Boolean)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.ReadInstanceKeyMetadata(Guid,IDictionary<XName,InstanceValue>,Boolean)
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
-- uid: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IDictionary<XName,InstanceValue>
-  nameWithType: IDictionary<XName,InstanceValue>
-  fullName: System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -1241,36 +1181,12 @@ references:
   name: ReadInstanceMetadata(IDictionary<XName,InstanceValue>,Boolean)
   nameWithType: InstancePersistenceContext.ReadInstanceMetadata(IDictionary<XName,InstanceValue>,Boolean)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.ReadInstanceMetadata(IDictionary<XName,InstanceValue>,Boolean)
-- uid: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IDictionary<XName,InstanceValue>
-  nameWithType: IDictionary<XName,InstanceValue>
-  fullName: System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.ReadInstanceOwnerMetadata(System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue},System.Boolean)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: ReadInstanceOwnerMetadata(IDictionary<XName,InstanceValue>,Boolean)
   nameWithType: InstancePersistenceContext.ReadInstanceOwnerMetadata(IDictionary<XName,InstanceValue>,Boolean)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.ReadInstanceOwnerMetadata(IDictionary<XName,InstanceValue>,Boolean)
-- uid: System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IDictionary<XName,InstanceValue>
-  nameWithType: IDictionary<XName,InstanceValue>
-  fullName: System.Collections.Generic.IDictionary<System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue>
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.SetCancellationHandler(System.Action{System.Runtime.DurableInstancing.InstancePersistenceContext})
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
@@ -1283,42 +1199,39 @@ references:
   name: Action<InstancePersistenceContext>
   nameWithType: Action<InstancePersistenceContext>
   fullName: System.Action<System.Runtime.DurableInstancing.InstancePersistenceContext>
+  spec.csharp:
+  - uid: System.Action`1
+    name: Action
+    nameWithType: Action
+    fullName: Action<System.Runtime.DurableInstancing.InstancePersistenceContext>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Runtime.DurableInstancing.InstancePersistenceContext
+    name: InstancePersistenceContext
+    nameWithType: InstancePersistenceContext
+    fullName: InstancePersistenceContext
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.UnassociatedInstanceKey(System.Guid)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: UnassociatedInstanceKey(Guid)
   nameWithType: InstancePersistenceContext.UnassociatedInstanceKey(Guid)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.UnassociatedInstanceKey(Guid)
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.UserContext
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: UserContext
   nameWithType: InstancePersistenceContext.UserContext
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.UserContext
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceKeyMetadataValue(System.Guid,System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: WroteInstanceKeyMetadataValue(Guid,XName,InstanceValue)
   nameWithType: InstancePersistenceContext.WroteInstanceKeyMetadataValue(Guid,XName,InstanceValue)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceKeyMetadataValue(Guid,XName,InstanceValue)
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Xml.Linq.XName
   parent: System.Xml.Linq
   isExternal: true
@@ -1337,36 +1250,12 @@ references:
   name: WroteInstanceMetadataValue(XName,InstanceValue)
   nameWithType: InstancePersistenceContext.WroteInstanceMetadataValue(XName,InstanceValue)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceMetadataValue(XName,InstanceValue)
-- uid: System.Xml.Linq.XName
-  parent: System.Xml.Linq
-  isExternal: true
-  name: XName
-  nameWithType: XName
-  fullName: System.Xml.Linq.XName
-- uid: System.Runtime.DurableInstancing.InstanceValue
-  parent: System.Runtime.DurableInstancing
-  isExternal: false
-  name: InstanceValue
-  nameWithType: InstanceValue
-  fullName: System.Runtime.DurableInstancing.InstanceValue
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceOwnerMetadataValue(System.Xml.Linq.XName,System.Runtime.DurableInstancing.InstanceValue)
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false
   name: WroteInstanceOwnerMetadataValue(XName,InstanceValue)
   nameWithType: InstancePersistenceContext.WroteInstanceOwnerMetadataValue(XName,InstanceValue)
   fullName: System.Runtime.DurableInstancing.InstancePersistenceContext.WroteInstanceOwnerMetadataValue(XName,InstanceValue)
-- uid: System.Xml.Linq.XName
-  parent: System.Xml.Linq
-  isExternal: true
-  name: XName
-  nameWithType: XName
-  fullName: System.Xml.Linq.XName
-- uid: System.Runtime.DurableInstancing.InstanceValue
-  parent: System.Runtime.DurableInstancing
-  isExternal: false
-  name: InstanceValue
-  nameWithType: InstanceValue
-  fullName: System.Runtime.DurableInstancing.InstanceValue
 - uid: System.Runtime.DurableInstancing.InstancePersistenceContext.AssociatedInstanceKey*
   parent: System.Runtime.DurableInstancing.InstancePersistenceContext
   isExternal: false

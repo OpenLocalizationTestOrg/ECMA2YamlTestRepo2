@@ -49,8 +49,10 @@ items:
   nameWithType: ServiceHostBase
   fullName: System.ServiceModel.ServiceHostBase
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Extends the ServiceHostBase class to implement hosts that expose custom programming models.
+  remarks: "Use the ServiceHostBase class to create hosts that provide a custom programming model. The [!INCLUDE[indigo1](../../add/includes/indigo1-md.md)] service programming model uses the <xref:System.ServiceModel.ServiceHost> class.  \n  \n Special note for Managed C++ users deriving from this class:  \n  \n-   Put your cleanup code in (On)(Begin)Close (and/or OnAbort), not in a destructor.  \n  \n-   Avoid destructors; they cause the compiler to auto-generate <xref:System.IDisposable>.  \n  \n-   Avoid non-reference members; they can cause the compiler to auto-generate <xref:System.IDisposable>.  \n  \n-   Avoid finalizers; but if you include one, you should suppress the build warning and call <xref:System.GC.SuppressFinalize%28System.Object%29> and the finalizer itself from (On)(Begin)Close (and/or OnAbort) to emulate what would have been the auto-generated <xref:System.IDisposable> behavior."
+  example:
+  - "This sample uses the <xref:System.ServiceModel.ServiceHost> class, which is derived from ServiceHostBase.  \n  \n [!code-cs[S_SelfHost#1](../../add/codesnippet/CSharp/t-system.servicemodel.se_10_1.cs)]\n [!code-vb[S_SelfHost#1](../../add/codesnippet/VisualBasic/t-system.servicemodel.se_10_1.vb)]"
   syntax:
     content: 'public abstract class ServiceHostBase : System.ServiceModel.Channels.CommunicationObject, IDisposable, System.ServiceModel.IExtensibleObject<System.ServiceModel.ServiceHostBase>'
   inheritance:
@@ -75,12 +77,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: ''
+  example:
+  - '[!code-cs[S_SelfHost#30](../../add/codesnippet/CSharp/m-system.servicemodel.se_0_1.cs)]'
   syntax:
     content: protected ServiceHostBase ();
     parameters: []
   overload: System.ServiceModel.ServiceHostBase.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -97,15 +102,19 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a base address to the service host.
+  remarks: This property allows users extending <xref:System.ServiceModel.ServiceHostBase> to provide the base address after the host is constructed. AddBaseAddress can be used to add base addresses to an existing host, but throws an exception if the description is already initialized.
   syntax:
     content: protected void AddBaseAddress (Uri baseAddress);
     parameters:
     - id: baseAddress
       type: System.Uri
-      description: To be added.
+      description: A <xref:System.Uri> that contains the base address for services hosted on the current host.
   overload: System.ServiceModel.ServiceHostBase.AddBaseAddress*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The baseAddress cannot be called.
   platform:
   - net-11
   - net-20
@@ -122,15 +131,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds service endpoints for all base addresses in each contract found in the service host with the default binding.
   syntax:
     content: public virtual System.Collections.ObjectModel.ReadOnlyCollection<System.ServiceModel.Description.ServiceEndpoint> AddDefaultEndpoints ();
     parameters: []
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.ServiceModel.Description.ServiceEndpoint}
-      description: To be added.
+      description: A read-only collection of default endpoints.
   overload: System.ServiceModel.ServiceHostBase.AddDefaultEndpoints*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -147,15 +156,25 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the specified service endpoint to the hosted service.
+  remarks: "When using the method, the service host does a \"by-configuration-name\" validation on the contract description. In other words, the host verifies that <xref:System.ServiceModel.Description.ContractDescription.ConfigurationName%2A> exists in the list of configuration names of the service contracts implemented by the service. If the validation passes, the description in the <xref:System.ServiceModel.Description.ServiceEndpoint> is used as it is, even if the <xref:System.ServiceModel.Description.ContractDescription> reflected from the service is different.  \n  \n As an example, assume that the description in the ServiceEndpoint and the contract description reflected from the service have the same name, but different operation behaviors. The implication of only “by-configuration-name” validation is that there is no validation that the behaviors are the same and there are one updates to one description because of another description.  \n  \n If the `address` is a relative URI, one of the base addresses of the <xref:System.ServiceModel.ServiceHost> (depending on the binding protocol) is used as the endpoint's base address."
   syntax:
     content: public virtual void AddServiceEndpoint (System.ServiceModel.Description.ServiceEndpoint endpoint);
     parameters:
     - id: endpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The service endpoint.
   overload: System.ServiceModel.ServiceHostBase.AddServiceEndpoint*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    Endpoint is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The host is not in a Created or an Opening state or there is no  for the hosted service.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The Address, Binding,  or Contract property is .
   platform:
   - net-11
   - net-20
@@ -172,24 +191,33 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a service endpoint to the hosted service with a specified contract, binding, and endpoint address.
+  remarks: ''
+  example:
+  - '[!code-cs[S_SelfHost#40](../../add/codesnippet/CSharp/edf6e090-b786-4010-8e21-_1.cs)]'
   syntax:
     content: public System.ServiceModel.Description.ServiceEndpoint AddServiceEndpoint (string implementedContract, System.ServiceModel.Channels.Binding binding, string address);
     parameters:
     - id: implementedContract
       type: System.String
-      description: To be added.
+      description: The contract implemented by the endpoint.
     - id: binding
       type: System.ServiceModel.Channels.Binding
-      description: To be added.
+      description: The <xref:System.ServiceModel.Channels.Binding> for the endpoint added.
     - id: address
       type: System.String
-      description: To be added.
+      description: The address for the endpoint added. This can be an absolute or relative URI. If it is a relative URI, one of the base address of the  (depending on the binding protocol) is used as the endpoint's base address.
     return:
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The <xref:System.ServiceModel.Description.ServiceEndpoint> added to the hosted service.
   overload: System.ServiceModel.ServiceHostBase.AddServiceEndpoint*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    implementedContract or binding or address or is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The host is not in a <xref:System.ServiceModel.CommunicationState> or an <xref:System.ServiceModel.CommunicationState> state or there is no  for the hosted service and so an endpoint cannot be added or the binding lacks a transport of binding scheme.
   platform:
   - net-11
   - net-20
@@ -206,24 +234,30 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a service endpoint to the hosted service with a specified contract, binding, and a URI that contains the endpoint address.
   syntax:
     content: public System.ServiceModel.Description.ServiceEndpoint AddServiceEndpoint (string implementedContract, System.ServiceModel.Channels.Binding binding, Uri address);
     parameters:
     - id: implementedContract
       type: System.String
-      description: To be added.
+      description: The contract implemented by the endpoint.
     - id: binding
       type: System.ServiceModel.Channels.Binding
-      description: To be added.
+      description: The <xref:System.ServiceModel.Channels.Binding> for the endpoint added.
     - id: address
       type: System.Uri
-      description: To be added.
+      description: The <xref:System.Uri> that contains the address for the endpoint added. This can be an absolute or relative URI. If it is a relative URI, one of the base address of the  (depending on the binding protocol) is used as the endpoint's base address.
     return:
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The <xref:System.ServiceModel.Description.ServiceEndpoint> added to the hosted service.
   overload: System.ServiceModel.ServiceHostBase.AddServiceEndpoint*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    implementedContract or binding or address or is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The host is not in a <xref:System.ServiceModel.CommunicationState> or an <xref:System.ServiceModel.CommunicationState> state or there is no  for the hosted service and so an endpoint cannot be added.
   platform:
   - net-11
   - net-20
@@ -240,27 +274,34 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a service endpoint to the hosted service with a specified contract, binding, endpoint address and URI that contains the address at which it listens.
+  remarks: If the `address` is a relative URI, one of the base addresses of the <xref:System.ServiceModel.ServiceHost> (depending on the binding protocol) is used as the endpoint's base address.
   syntax:
     content: public System.ServiceModel.Description.ServiceEndpoint AddServiceEndpoint (string implementedContract, System.ServiceModel.Channels.Binding binding, string address, Uri listenUri);
     parameters:
     - id: implementedContract
       type: System.String
-      description: To be added.
+      description: The contract implemented by the endpoint.
     - id: binding
       type: System.ServiceModel.Channels.Binding
-      description: To be added.
+      description: The <xref:System.ServiceModel.Channels.Binding> for the endpoint added.
     - id: address
       type: System.String
-      description: To be added.
+      description: The address for the endpoint added. This address can be an absolute or relative URI. If it is a relative URI, one of the base address of the  (depending on the binding protocol) is used as the endpoint's base address.
     - id: listenUri
       type: System.Uri
-      description: To be added.
+      description: The <xref:System.Uri> that contains the address which the endpoint listens to for incoming messages. This URI can be relative or absolute.
     return:
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The <xref:System.ServiceModel.Description.ServiceEndpoint> added to the hosted service.
   overload: System.ServiceModel.ServiceHostBase.AddServiceEndpoint*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    implementedContract or binding or address or is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The host is not in a <xref:System.ServiceModel.CommunicationState> or an <xref:System.ServiceModel.CommunicationState> state or there is no  for the hosted service and so an endpoint cannot be added.
   platform:
   - net-11
   - net-20
@@ -277,27 +318,33 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a service endpoint to the hosted service with the specified contract, binding, and URIs that contain the endpoint and listening addresses.
   syntax:
     content: public System.ServiceModel.Description.ServiceEndpoint AddServiceEndpoint (string implementedContract, System.ServiceModel.Channels.Binding binding, Uri address, Uri listenUri);
     parameters:
     - id: implementedContract
       type: System.String
-      description: To be added.
+      description: The contract implemented by the endpoint.
     - id: binding
       type: System.ServiceModel.Channels.Binding
-      description: To be added.
+      description: The <xref:System.ServiceModel.Channels.Binding> for the endpoint added.
     - id: address
       type: System.Uri
-      description: To be added.
+      description: The <xref:System.Uri> that contains the address for the endpoint added. If it is a relative URI, one of the base address of the  (depending on the binding protocol) is used as the endpoint's base address.
     - id: listenUri
       type: System.Uri
-      description: To be added.
+      description: The <xref:System.Uri> that contains the address at which the endpoint listens for incoming messages.
     return:
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The <xref:System.ServiceModel.Description.ServiceEndpoint> added to the hosted service. This URI can be absolute or relative.
   overload: System.ServiceModel.ServiceHostBase.AddServiceEndpoint*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    implementedContract or binding or address or is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The host is not in a <xref:System.ServiceModel.CommunicationState> or an <xref:System.ServiceModel.CommunicationState> state or there is no  for the hosted service and so an endpoint cannot be added.
   platform:
   - net-11
   - net-20
@@ -314,12 +361,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Loads the service description information from the configuration file and applies it to the runtime being constructed.
   syntax:
     content: protected virtual void ApplyConfiguration ();
     parameters: []
   overload: System.ServiceModel.ServiceHostBase.ApplyConfiguration*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The description of the service hosted is .
   platform:
   - net-11
   - net-20
@@ -336,14 +386,14 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the service authentication behavior.
   syntax:
     content: public System.ServiceModel.Description.ServiceAuthenticationBehavior Authentication { get; }
     return:
       type: System.ServiceModel.Description.ServiceAuthenticationBehavior
-      description: To be added.
+      description: The service authentication behavior.
   overload: System.ServiceModel.ServiceHostBase.Authentication*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -360,14 +410,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the authorization behavior for the service hosted.
+  remarks: ''
+  example:
+  - '[!code-cs[S_SelfHost#36](../../add/codesnippet/CSharp/p-system.servicemodel.se_20_1.cs)]'
   syntax:
     content: public System.ServiceModel.Description.ServiceAuthorizationBehavior Authorization { get; }
     return:
       type: System.ServiceModel.Description.ServiceAuthorizationBehavior
-      description: To be added.
+      description: The  for the service hosted.
   overload: System.ServiceModel.ServiceHostBase.Authorization*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -384,14 +437,14 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the base addresses used by the hosted service.
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<Uri> BaseAddresses { get; }
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Uri}
-      description: To be added.
+      description: A <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> of type <xref:System.Uri> that contains the base addresses for the hosted service.
   overload: System.ServiceModel.ServiceHostBase.BaseAddresses*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -408,14 +461,14 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the collection of channel dispatchers used by the service host.
   syntax:
     content: public System.ServiceModel.Dispatcher.ChannelDispatcherCollection ChannelDispatchers { get; }
     return:
       type: System.ServiceModel.Dispatcher.ChannelDispatcherCollection
-      description: To be added.
+      description: The  that contains the channel dispatchers used by the service host.
   overload: System.ServiceModel.ServiceHostBase.ChannelDispatchers*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -432,14 +485,29 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the interval of time allowed for the service host to close.
+  remarks: ''
+  example:
+  - '[!code-cs[S_SelfHost#33](../../add/codesnippet/CSharp/p-system.servicemodel.se_0_1.cs)]'
   syntax:
     content: public TimeSpan CloseTimeout { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The <xref:System.TimeSpan> that specifies the interval of time allowed for the service host to close.
   overload: System.ServiceModel.ServiceHostBase.CloseTimeout*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value, in milliseconds, is less than zero or is larger than <xref:System.Int32.MaxValue> (2,147,483,647 or, in hexadecimal notation, 0X7FFFFFFF).
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The host is in an <xref:System.ServiceModel.CommunicationState> or <xref:System.ServiceModel.CommunicationState> state and cannot be modified.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The host is already in a <xref:System.ServiceModel.CommunicationState> state and cannot be modified.
+  - type: System.ServiceModel.CommunicationObjectFaultedException
+    commentId: T:System.ServiceModel.CommunicationObjectFaultedException
+    description: The host is in a <xref:System.ServiceModel.CommunicationState> state and cannot be modified.
   platform:
   - net-11
   - net-20
@@ -456,18 +524,21 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: When implemented in a derived class, creates the description of the hosted service.
+  remarks: ''
+  example:
+  - '[!code-cs[S_SelfHost#41](../../add/codesnippet/CSharp/08a56b4f-56f2-446f-b0f7-_1.cs)]'
   syntax:
     content: protected abstract System.ServiceModel.Description.ServiceDescription CreateDescription (out System.Collections.Generic.IDictionary<string,System.ServiceModel.Description.ContractDescription> implementedContracts);
     parameters:
     - id: implementedContracts
       type: System.Collections.Generic.IDictionary{System.String,System.ServiceModel.Description.ContractDescription}
-      description: To be added.
+      description: The <xref:System.Collections.Generic.IDictionary%602> that contains the <xref:System.ServiceModel.Description.ContractDescription> objects for the service.
     return:
       type: System.ServiceModel.Description.ServiceDescription
-      description: To be added.
+      description: The  for the hosted service.
   overload: System.ServiceModel.ServiceHostBase.CreateDescription*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -484,14 +555,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the credential for the service hosted.
+  remarks: ''
+  example:
+  - '[!code-cs[S_SelfHost#37](../../add/codesnippet/CSharp/p-system.servicemodel.se_11_1.cs)]'
   syntax:
     content: public System.ServiceModel.Description.ServiceCredentials Credentials { get; }
     return:
       type: System.ServiceModel.Description.ServiceCredentials
-      description: To be added.
+      description: The  for the service hosted.
   overload: System.ServiceModel.ServiceHostBase.Credentials*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -508,14 +582,14 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the default interval of time allowed for the service host to close.
   syntax:
     content: protected override TimeSpan DefaultCloseTimeout { get; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The <xref:System.TimeSpan> that specifies the default interval of time allowed for the service host to close.
   overload: System.ServiceModel.ServiceHostBase.DefaultCloseTimeout*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -532,14 +606,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the default interval of time allowed for the service host to open.
+  remarks: ''
+  example:
+  - '[!code-cs[S_SelfHost#35](../../add/codesnippet/CSharp/p-system.servicemodel.se_16_1.cs)]'
   syntax:
     content: protected override TimeSpan DefaultOpenTimeout { get; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The <xref:System.TimeSpan> that specifies the default interval of time allowed for the service host to open.
   overload: System.ServiceModel.ServiceHostBase.DefaultOpenTimeout*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -556,14 +633,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the description of the service hosted.
+  remarks: ''
+  example:
+  - '[!code-cs[S_SelfHost#38](../../add/codesnippet/CSharp/p-system.servicemodel.se_3_1.cs)]'
   syntax:
     content: public System.ServiceModel.Description.ServiceDescription Description { get; }
     return:
       type: System.ServiceModel.Description.ServiceDescription
-      description: To be added.
+      description: The  for the hosted service.
   overload: System.ServiceModel.ServiceHostBase.Description*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -580,14 +660,14 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the extensions for the current specified service host.
   syntax:
     content: public System.ServiceModel.IExtensionCollection<System.ServiceModel.ServiceHostBase> Extensions { get; }
     return:
       type: System.ServiceModel.IExtensionCollection{System.ServiceModel.ServiceHostBase}
-      description: To be added.
+      description: An <xref:System.ServiceModel.IExtensionCollection%601> of type .
   overload: System.ServiceModel.ServiceHostBase.Extensions*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -604,14 +684,14 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the contracts implemented by the service hosted.
   syntax:
     content: protected System.Collections.Generic.IDictionary<string,System.ServiceModel.Description.ContractDescription> ImplementedContracts { get; }
     return:
       type: System.Collections.Generic.IDictionary{System.String,System.ServiceModel.Description.ContractDescription}
-      description: To be added.
+      description: The <xref:System.Collections.Generic.IDictionary%602> that contains the <xref:System.ServiceModel.Description.ContractDescription> objects for the service.
   overload: System.ServiceModel.ServiceHostBase.ImplementedContracts*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -628,18 +708,24 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Increases the limit on the flow rate of messages to the hosted service by a specified increment.
+  remarks: This limit can be accessed using the <xref:System.ServiceModel.ServiceHostBase.ManualFlowControlLimit%2A> property.
+  example:
+  - '[!code-cs[S_SelfHost#42](../../add/codesnippet/CSharp/84777560-890d-4922-a9a5-_1.cs)]'
   syntax:
     content: public int IncrementManualFlowControlLimit (int incrementBy);
     parameters:
     - id: incrementBy
       type: System.Int32
-      description: To be added.
+      description: The number of messages by which to increase the flow control limit.
     return:
       type: System.Int32
-      description: To be added.
+      description: The new limit after the increment is added.
   overload: System.ServiceModel.ServiceHostBase.IncrementManualFlowControlLimit*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value is less than zero.
   platform:
   - net-11
   - net-20
@@ -656,15 +742,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates and initializes the service host with the contract and service descriptions.
   syntax:
     content: protected void InitializeDescription (System.ServiceModel.UriSchemeKeyedCollection baseAddresses);
     parameters:
     - id: baseAddresses
       type: System.ServiceModel.UriSchemeKeyedCollection
-      description: To be added.
+      description: A  that contains the base addresses for the service hosted.
   overload: System.ServiceModel.ServiceHostBase.InitializeDescription*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -681,12 +767,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes the runtime for the service host.
   syntax:
     content: protected virtual void InitializeRuntime ();
     parameters: []
   overload: System.ServiceModel.ServiceHostBase.InitializeRuntime*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The description of the service hosted is .
   platform:
   - net-11
   - net-20
@@ -703,15 +792,21 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Loads the service element from the configuration file of the hosted service.
   syntax:
     content: protected void LoadConfigurationSection (System.ServiceModel.Configuration.ServiceElement serviceSection);
     parameters:
     - id: serviceSection
       type: System.ServiceModel.Configuration.ServiceElement
-      description: To be added.
+      description: The  to be loaded from configuration.
   overload: System.ServiceModel.ServiceHostBase.LoadConfigurationSection*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    serviceSection is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The description of the service hosted is .
   platform:
   - net-11
   - net-20
@@ -728,14 +823,20 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the flow control limit for messages received by the service hosted.
+  remarks: This limit can be incremented using the <xref:System.ServiceModel.ServiceHostBase.IncrementManualFlowControlLimit%28System.Int32%29> method.
+  example:
+  - '[!code-cs[S_SelfHost#39](../../add/codesnippet/CSharp/p-system.servicemodel.se_10_1.cs)]'
   syntax:
     content: public int ManualFlowControlLimit { get; set; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The flow control limit for messages received by the service hosted.
   overload: System.ServiceModel.ServiceHostBase.ManualFlowControlLimit*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value is less than zero.
   platform:
   - net-11
   - net-20
@@ -752,12 +853,12 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Aborts the service.
   syntax:
     content: protected override void OnAbort ();
     parameters: []
   overload: System.ServiceModel.ServiceHostBase.OnAbort*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -774,24 +875,24 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins an asynchronous operation invoked on the close of the service host.
   syntax:
     content: protected override IAsyncResult OnBeginClose (TimeSpan timeout, AsyncCallback callback, object state);
     parameters:
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: The <xref:System.TimeSpan> that specifies how long the on-close operation has to complete before timing out.
     - id: callback
       type: System.AsyncCallback
-      description: To be added.
+      description: The <xref:System.AsyncCallback> delegate that receives the notification of the asynchronous operation on-close completion.
     - id: state
       type: System.Object
-      description: To be added.
+      description: An object, specified by the application, that contains state information associated with the asynchronous on-close operation.
     return:
       type: System.IAsyncResult
-      description: To be added.
+      description: The <xref:System.IAsyncResult> that references the asynchronous on-close operation.
   overload: System.ServiceModel.ServiceHostBase.OnBeginClose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -808,24 +909,24 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Begins an asynchronous operation invoked on the opening of the service host.
   syntax:
     content: protected override IAsyncResult OnBeginOpen (TimeSpan timeout, AsyncCallback callback, object state);
     parameters:
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: The <xref:System.TimeSpan> that specifies how long the on-open operation has to complete before timing out.
     - id: callback
       type: System.AsyncCallback
-      description: To be added.
+      description: The <xref:System.AsyncCallback> delegate that receives the notification of the asynchronous operation on-open completion.
     - id: state
       type: System.Object
-      description: To be added.
+      description: An object, specified by the application, that contains state information associated with the asynchronous on-open operation.
     return:
       type: System.IAsyncResult
-      description: To be added.
+      description: The <xref:System.IAsyncResult> that references the asynchronous on-open operation.
   overload: System.ServiceModel.ServiceHostBase.OnBeginOpen*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -842,15 +943,16 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Closes down the hosted service, including their channel dispatchers and associated instance contexts and listeners.
+  remarks: "Calling OnClose does the following:  \n  \n-   Closes all input to <xref:System.ServiceModel.Dispatcher.ChannelDispatcher>, which also closes their associated <xref:System.ServiceModel.Channels.IChannelListener> instances. This stops any new channels from being accepting.  \n  \n-   Calls <xref:System.ServiceModel.Dispatcher.ChannelDispatcher.CloseInput%2A> on all <xref:System.ServiceModel.InstanceContext> objects, which mean they stop accepting new messages.  \n  \n-   Waits for all <xref:System.ServiceModel.InstanceContext> objects to close down, which happens when their associated channels finish sending all pending messages.  \n  \n-   Closes the <xref:System.ServiceModel.Dispatcher.ChannelDispatcher> objects associated with the host."
   syntax:
     content: protected override void OnClose (TimeSpan timeout);
     parameters:
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: The <xref:System.TimeSpan> that specifies how long the on-close operation has to complete before timing out.
   overload: System.ServiceModel.ServiceHostBase.OnClose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -867,12 +969,12 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases resources used by the service host.
   syntax:
     content: protected override void OnClosed ();
     parameters: []
   overload: System.ServiceModel.ServiceHostBase.OnClosed*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -889,15 +991,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Completes an asynchronous operation invoked on the closing of the service host.
   syntax:
     content: protected override void OnEndClose (IAsyncResult result);
     parameters:
     - id: result
       type: System.IAsyncResult
-      description: To be added.
+      description: The <xref:System.IAsyncResult> returned by a call to the <xref:System.ServiceModel.ServiceHostBase.OnBeginClose%28System.TimeSpan%2CSystem.AsyncCallback%2CSystem.Object%29> method.
   overload: System.ServiceModel.ServiceHostBase.OnEndClose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -914,15 +1016,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Completes an asynchronous operation invoked on the opening of the service host.
   syntax:
     content: protected override void OnEndOpen (IAsyncResult result);
     parameters:
     - id: result
       type: System.IAsyncResult
-      description: To be added.
+      description: The <xref:System.IAsyncResult> returned by a call to the <xref:System.ServiceModel.ServiceHostBase.OnBeginOpen%28System.TimeSpan%2CSystem.AsyncCallback%2CSystem.Object%29> method.
   overload: System.ServiceModel.ServiceHostBase.OnEndOpen*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -939,15 +1041,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens the channel dispatchers.
   syntax:
     content: protected override void OnOpen (TimeSpan timeout);
     parameters:
     - id: timeout
       type: System.TimeSpan
-      description: To be added.
+      description: The <xref:System.TimeSpan> that specifies how long the on-open operation has to complete before timing out.
   overload: System.ServiceModel.ServiceHostBase.OnOpen*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -964,12 +1066,13 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the service credentials,service authentication and authorization behavior for the hosted service.
+  remarks: Once these behaviors are initialized when opening the service, they cannot be changed.
   syntax:
     content: protected override void OnOpened ();
     parameters: []
   overload: System.ServiceModel.ServiceHostBase.OnOpened*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -986,14 +1089,26 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the interval of time allowed for the service host to open.
   syntax:
     content: public TimeSpan OpenTimeout { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The <xref:System.TimeSpan> that specifies the interval of time allowed for the service host to open.
   overload: System.ServiceModel.ServiceHostBase.OpenTimeout*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The value is less than zero or is larger than <xref:System.Int32.MaxValue> (2,147,483,647 or, in hexadecimal notation, 0X7FFFFFFF).
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The host is in an <xref:System.ServiceModel.CommunicationState> or <xref:System.ServiceModel.CommunicationState> state and cannot be modified.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The host is already in a <xref:System.ServiceModel.CommunicationState> state and cannot be modified.
+  - type: System.ServiceModel.CommunicationObjectFaultedException
+    commentId: T:System.ServiceModel.CommunicationObjectFaultedException
+    description: The host is in a <xref:System.ServiceModel.CommunicationState> state and cannot be modified.
   platform:
   - net-11
   - net-20
@@ -1010,12 +1125,13 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the service and channel dispatcher performance counters for the hosted service.
+  remarks: "This method is invoked when calling <xref:System.ServiceModel.ServiceHostBase.OnClose%28System.TimeSpan%29> and  \n  \n <xref:System.ServiceModel.ServiceHostBase.OnEndClose%28System.IAsyncResult%29>."
   syntax:
     content: protected void ReleasePerformanceCounters ();
     parameters: []
   overload: System.ServiceModel.ServiceHostBase.ReleasePerformanceCounters*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1032,18 +1148,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the endpoint address of the specified endpoint to the specified address.
   syntax:
     content: public void SetEndpointAddress (System.ServiceModel.Description.ServiceEndpoint endpoint, string relativeAddress);
     parameters:
     - id: endpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The service endpoint.
     - id: relativeAddress
       type: System.String
-      description: To be added.
+      description: The endpoint address.
   overload: System.ServiceModel.ServiceHostBase.SetEndpointAddress*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1061,12 +1177,12 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Closes the service host.
   syntax:
     content: void IDisposable.Dispose ();
     parameters: []
   overload: System.ServiceModel.ServiceHostBase.System#IDisposable#Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1083,13 +1199,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when an unknown message is received.
+  remarks: >-
+    > [!WARNING]
+
+    >  When using <xref:System.ServiceModel.WorkflowServiceHost>, exposing a hosting endpoint, and a UnknownMessageReceived exception is thrown, the host passes the message to the event handler. If an attempt is made to read this message an <xref:System.InvalidOperationException> is thrown. The description of the exception will say “This message cannot support the operation because it has been read.”  The WCF infrastructure reads the message while extracting the message parameters. This message is then passed to the event handler and any attempt to read it causes an exception. If you need to access message parameters in your <xref:System.InvalidOperationException> handler from a hosting endpoint, define the hosting endpoint contract using MessageContract and place the needed data into a message header. [!INCLUDE[crabout](../../add/includes/crabout-md.md)] hosting endpoints see [Workflow Service Host Extensibility](../Topic/Workflow%20Service%20Host%20Extensibility.md)
   syntax:
     content: public event EventHandler<System.ServiceModel.UnknownMessageReceivedEventArgs> UnknownMessageReceived;
     return:
       type: System.EventHandler{System.ServiceModel.UnknownMessageReceivedEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1128,6 +1248,21 @@ references:
   name: ReadOnlyCollection<ServiceEndpoint>
   nameWithType: ReadOnlyCollection<ServiceEndpoint>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.ServiceModel.Description.ServiceEndpoint>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.ServiceModel.Description.ServiceEndpoint>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ServiceModel.Description.ServiceEndpoint
+    name: ServiceEndpoint
+    nameWithType: ServiceEndpoint
+    fullName: ServiceEndpoint
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ServiceModel.ServiceHostBase.AddServiceEndpoint(System.ServiceModel.Description.ServiceEndpoint)
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
@@ -1146,12 +1281,6 @@ references:
   name: AddServiceEndpoint(String,Binding,String)
   nameWithType: ServiceHostBase.AddServiceEndpoint(String,Binding,String)
   fullName: System.ServiceModel.ServiceHostBase.AddServiceEndpoint(String,Binding,String)
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
 - uid: System.String
   parent: System
   isExternal: true
@@ -1164,114 +1293,24 @@ references:
   name: Binding
   nameWithType: Binding
   fullName: System.ServiceModel.Channels.Binding
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceModel.ServiceHostBase.AddServiceEndpoint(System.String,System.ServiceModel.Channels.Binding,System.Uri)
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
   name: AddServiceEndpoint(String,Binding,Uri)
   nameWithType: ServiceHostBase.AddServiceEndpoint(String,Binding,Uri)
   fullName: System.ServiceModel.ServiceHostBase.AddServiceEndpoint(String,Binding,Uri)
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.ServiceModel.Channels.Binding
-  parent: System.ServiceModel.Channels
-  isExternal: true
-  name: Binding
-  nameWithType: Binding
-  fullName: System.ServiceModel.Channels.Binding
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.ServiceModel.ServiceHostBase.AddServiceEndpoint(System.String,System.ServiceModel.Channels.Binding,System.String,System.Uri)
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
   name: AddServiceEndpoint(String,Binding,String,Uri)
   nameWithType: ServiceHostBase.AddServiceEndpoint(String,Binding,String,Uri)
   fullName: System.ServiceModel.ServiceHostBase.AddServiceEndpoint(String,Binding,String,Uri)
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.ServiceModel.Channels.Binding
-  parent: System.ServiceModel.Channels
-  isExternal: true
-  name: Binding
-  nameWithType: Binding
-  fullName: System.ServiceModel.Channels.Binding
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.ServiceModel.ServiceHostBase.AddServiceEndpoint(System.String,System.ServiceModel.Channels.Binding,System.Uri,System.Uri)
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
   name: AddServiceEndpoint(String,Binding,Uri,Uri)
   nameWithType: ServiceHostBase.AddServiceEndpoint(String,Binding,Uri,Uri)
   fullName: System.ServiceModel.ServiceHostBase.AddServiceEndpoint(String,Binding,Uri,Uri)
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.ServiceModel.Channels.Binding
-  parent: System.ServiceModel.Channels
-  isExternal: true
-  name: Binding
-  nameWithType: Binding
-  fullName: System.ServiceModel.Channels.Binding
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.ServiceModel.ServiceHostBase.ApplyConfiguration
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
@@ -1314,6 +1353,21 @@ references:
   name: ReadOnlyCollection<Uri>
   nameWithType: ReadOnlyCollection<Uri>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Uri>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.Uri>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Uri
+    name: Uri
+    nameWithType: Uri
+    fullName: Uri
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ServiceModel.ServiceHostBase.ChannelDispatchers
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
@@ -1356,6 +1410,28 @@ references:
   name: IDictionary<String,ContractDescription>
   nameWithType: IDictionary<String,ContractDescription>
   fullName: System.Collections.Generic.IDictionary<System.String,System.ServiceModel.Description.ContractDescription>
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.String,System.ServiceModel.Description.ContractDescription>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.ServiceModel.Description.ContractDescription
+    name: ContractDescription
+    nameWithType: ContractDescription
+    fullName: ContractDescription
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ServiceModel.ServiceHostBase.Credentials
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
@@ -1374,36 +1450,18 @@ references:
   name: DefaultCloseTimeout
   nameWithType: ServiceHostBase.DefaultCloseTimeout
   fullName: System.ServiceModel.ServiceHostBase.DefaultCloseTimeout
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.ServiceModel.ServiceHostBase.DefaultOpenTimeout
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
   name: DefaultOpenTimeout
   nameWithType: ServiceHostBase.DefaultOpenTimeout
   fullName: System.ServiceModel.ServiceHostBase.DefaultOpenTimeout
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.ServiceModel.ServiceHostBase.Description
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
   name: Description
   nameWithType: ServiceHostBase.Description
   fullName: System.ServiceModel.ServiceHostBase.Description
-- uid: System.ServiceModel.Description.ServiceDescription
-  parent: System.ServiceModel.Description
-  isExternal: false
-  name: ServiceDescription
-  nameWithType: ServiceDescription
-  fullName: System.ServiceModel.Description.ServiceDescription
 - uid: System.ServiceModel.ServiceHostBase.Extensions
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
@@ -1416,30 +1474,33 @@ references:
   name: IExtensionCollection<ServiceHostBase>
   nameWithType: IExtensionCollection<ServiceHostBase>
   fullName: System.ServiceModel.IExtensionCollection<System.ServiceModel.ServiceHostBase>
+  spec.csharp:
+  - uid: System.ServiceModel.IExtensionCollection`1
+    name: IExtensionCollection
+    nameWithType: IExtensionCollection
+    fullName: IExtensionCollection<System.ServiceModel.ServiceHostBase>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ServiceModel.ServiceHostBase
+    name: ServiceHostBase
+    nameWithType: ServiceHostBase
+    fullName: ServiceHostBase
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ServiceModel.ServiceHostBase.ImplementedContracts
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
   name: ImplementedContracts
   nameWithType: ServiceHostBase.ImplementedContracts
   fullName: System.ServiceModel.ServiceHostBase.ImplementedContracts
-- uid: System.Collections.Generic.IDictionary{System.String,System.ServiceModel.Description.ContractDescription}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IDictionary<String,ContractDescription>
-  nameWithType: IDictionary<String,ContractDescription>
-  fullName: System.Collections.Generic.IDictionary<System.String,System.ServiceModel.Description.ContractDescription>
 - uid: System.ServiceModel.ServiceHostBase.IncrementManualFlowControlLimit(System.Int32)
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
   name: IncrementManualFlowControlLimit(Int32)
   nameWithType: ServiceHostBase.IncrementManualFlowControlLimit(Int32)
   fullName: System.ServiceModel.ServiceHostBase.IncrementManualFlowControlLimit(Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Int32
   parent: System
   isExternal: true
@@ -1482,12 +1543,6 @@ references:
   name: ManualFlowControlLimit
   nameWithType: ServiceHostBase.ManualFlowControlLimit
   fullName: System.ServiceModel.ServiceHostBase.ManualFlowControlLimit
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.ServiceModel.ServiceHostBase.OnAbort
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
@@ -1506,12 +1561,6 @@ references:
   name: IAsyncResult
   nameWithType: IAsyncResult
   fullName: System.IAsyncResult
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.AsyncCallback
   parent: System
   isExternal: true
@@ -1530,42 +1579,12 @@ references:
   name: OnBeginOpen(TimeSpan,AsyncCallback,Object)
   nameWithType: ServiceHostBase.OnBeginOpen(TimeSpan,AsyncCallback,Object)
   fullName: System.ServiceModel.ServiceHostBase.OnBeginOpen(TimeSpan,AsyncCallback,Object)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
-- uid: System.AsyncCallback
-  parent: System
-  isExternal: true
-  name: AsyncCallback
-  nameWithType: AsyncCallback
-  fullName: System.AsyncCallback
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ServiceModel.ServiceHostBase.OnClose(System.TimeSpan)
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
   name: OnClose(TimeSpan)
   nameWithType: ServiceHostBase.OnClose(TimeSpan)
   fullName: System.ServiceModel.ServiceHostBase.OnClose(TimeSpan)
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.ServiceModel.ServiceHostBase.OnClosed
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
@@ -1578,36 +1597,18 @@ references:
   name: OnEndClose(IAsyncResult)
   nameWithType: ServiceHostBase.OnEndClose(IAsyncResult)
   fullName: System.ServiceModel.ServiceHostBase.OnEndClose(IAsyncResult)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.ServiceModel.ServiceHostBase.OnEndOpen(System.IAsyncResult)
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
   name: OnEndOpen(IAsyncResult)
   nameWithType: ServiceHostBase.OnEndOpen(IAsyncResult)
   fullName: System.ServiceModel.ServiceHostBase.OnEndOpen(IAsyncResult)
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.ServiceModel.ServiceHostBase.OnOpen(System.TimeSpan)
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
   name: OnOpen(TimeSpan)
   nameWithType: ServiceHostBase.OnOpen(TimeSpan)
   fullName: System.ServiceModel.ServiceHostBase.OnOpen(TimeSpan)
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.ServiceModel.ServiceHostBase.OnOpened
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
@@ -1620,12 +1621,6 @@ references:
   name: OpenTimeout
   nameWithType: ServiceHostBase.OpenTimeout
   fullName: System.ServiceModel.ServiceHostBase.OpenTimeout
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.ServiceModel.ServiceHostBase.ReleasePerformanceCounters
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
@@ -1638,18 +1633,6 @@ references:
   name: SetEndpointAddress(ServiceEndpoint,String)
   nameWithType: ServiceHostBase.SetEndpointAddress(ServiceEndpoint,String)
   fullName: System.ServiceModel.ServiceHostBase.SetEndpointAddress(ServiceEndpoint,String)
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceModel.ServiceHostBase.System#IDisposable#Dispose
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false
@@ -1668,6 +1651,21 @@ references:
   name: EventHandler<UnknownMessageReceivedEventArgs>
   nameWithType: EventHandler<UnknownMessageReceivedEventArgs>
   fullName: System.EventHandler<System.ServiceModel.UnknownMessageReceivedEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.ServiceModel.UnknownMessageReceivedEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ServiceModel.UnknownMessageReceivedEventArgs
+    name: UnknownMessageReceivedEventArgs
+    nameWithType: UnknownMessageReceivedEventArgs
+    fullName: UnknownMessageReceivedEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ServiceModel.ServiceHostBase.#ctor*
   parent: System.ServiceModel.ServiceHostBase
   isExternal: false

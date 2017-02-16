@@ -19,8 +19,10 @@ items:
   nameWithType: AddInProcess
   fullName: System.AddIn.Hosting.AddInProcess
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides an external process for running add-ins out-of-process from the host application.
+  remarks: "To activate an add-in in an external process, pass an AddInProcess object to the appropriate <xref:System.AddIn.Hosting.AddInToken.Activate%60%601%28System.AddIn.Hosting.AddInProcess%2CSystem.Security.PermissionSet%29?displayProperty=fullName> method overload.  \n  \n The executable that runs the add-in is obtained from one of two files installed with the .NET Framework under the Windows directory. By default, the executable that matches the bits-per-word of the host application is used. If the host is a 64-bit process, AddInProcess.exe is run; otherwise, AddInProcess32.exe is run. To specify the way the executable is selected, use the <xref:System.AddIn.Hosting.AddInProcess.%23ctor%28System.AddIn.Hosting.Platform%29> constructor to create the AddInProcess object."
+  example:
+  - "The following example activates an add-in in an external process.  \n  \n [!code-vb[AddInP3Host#10](../../add/codesnippet/VisualBasic/addinp3hostvb/p3host.vb#10)]\n [!code-cs[AddInP3Host#10](../../add/codesnippet/CSharp/addinP3Host/P3Host.cs#10)]"
   syntax:
     content: public sealed class AddInProcess
   inheritance:
@@ -43,12 +45,13 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: This constructor has the same effect as using the <xref:System.AddIn.Hosting.AddInProcess.%23ctor%28System.AddIn.Hosting.Platform%29> constructor with the <xref:System.AddIn.Hosting.Platform?displayProperty=fullName> flag, to specify that the process that runs the add-in will have the same bits-per-word as the host process.
   syntax:
     content: public AddInProcess ();
     parameters: []
   overload: System.AddIn.Hosting.AddInProcess.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -65,15 +68,19 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class, specifying the bits-per-word of the process in which the add-in runs.
+  remarks: "The following table shows how `platform` affects the bits-per-word of the process on different operating systems:  \n  \n||32-bit operating system|64-bit operating system|  \n|-|------------------------------|------------------------------|  \n|Host|32-bit|Same as the host process|  \n|AnyCPU|32-bit|64-bit|  \n|X86|32-bit|32-bit|  \n|X64|Exception is thrown|64-bit|"
   syntax:
     content: public AddInProcess (System.AddIn.Hosting.Platform platform);
     parameters:
     - id: platform
       type: System.AddIn.Hosting.Platform
-      description: To be added.
+      description: A value that specifies the bits-per-word of the process that runs the add-in.
   overload: System.AddIn.Hosting.AddInProcess.#ctor*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The registry entry for the path to the executable (AddInProcess.exe or AddInProcess32.exe) is missing.  \n  \n -or-  \n  \n The executable is missing."
   platform:
   - net-11
   - net-20
@@ -90,14 +97,17 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the current  object represents the host application process.
+  remarks: "If the value of this property is `true`, the add-in is running in-process with the host application. In that case, using the <xref:System.AddIn.Hosting.AddInProcess.Start%2A> or <xref:System.AddIn.Hosting.AddInProcess.Shutdown%2A> method throws an <xref:System.InvalidOperationException>.  \n  \n> [!NOTE]\n>  The <xref:System.AddIn.Hosting.AddInEnvironment.Process%2A?displayProperty=fullName> property returns an <xref:System.AddIn.Hosting.AddInProcess> object that represents the host application process if the add-in is running in-process."
+  example:
+  - "The following example activates an add-in in an external process and uses the IsCurrentProcess property to determine whether the add-in is in the same process as the host application process.  \n  \n [!code-vb[AddInP3Host#10](../../add/codesnippet/VisualBasic/addinp3hostvb/p3host.vb#10)]\n [!code-cs[AddInP3Host#10](../../add/codesnippet/CSharp/addinP3Host/P3Host.cs#10)]"
   syntax:
     content: public bool IsCurrentProcess { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  object corresponds to the current process; otherwise, .
   overload: System.AddIn.Hosting.AddInProcess.IsCurrentProcess*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -114,14 +124,15 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether to keep the external process alive.
+  remarks: Set this property to `false` to aggressively shut down the external process after the last add-in inside the process has been shut down.
   syntax:
     content: public bool KeepAlive { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the external process should be kept alive; otherwise, . The default is .
   overload: System.AddIn.Hosting.AddInProcess.KeepAlive*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -138,14 +149,15 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the bits-per-word of the process in which the out-of-process add-in is run.
+  remarks: The bits-per-word is set when the <xref:System.AddIn.Hosting.AddInProcess> object is initialized, and cannot be changed.
   syntax:
     content: public System.AddIn.Hosting.Platform Platform { get; }
     return:
       type: System.AddIn.Hosting.Platform
-      description: To be added.
+      description: The bits-per-word of the process that runs the add-in.
   overload: System.AddIn.Hosting.AddInProcess.Platform*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -162,14 +174,15 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the process ID of the external process.
+  remarks: Use this property for debugging.
   syntax:
     content: public int ProcessId { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The process ID, or -1 if the external process has not started.
   overload: System.AddIn.Hosting.AddInProcess.ProcessId*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -186,15 +199,18 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Forcibly shuts down the external process.
   syntax:
     content: public bool Shutdown ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the external process was running and is successfully shut down;  if there is no active process associated with the .
   overload: System.AddIn.Hosting.AddInProcess.Shutdown*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The add-in is running in-process with the host application. Starting and stopping the process is allowed only for external processes, not for the host process.
   platform:
   - net-11
   - net-20
@@ -211,13 +227,13 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the process represented by the  object is about to be shut down.
   syntax:
     content: public event EventHandler<System.ComponentModel.CancelEventArgs> ShuttingDown;
     return:
       type: System.EventHandler{System.ComponentModel.CancelEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -234,15 +250,18 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Starts the external process.
   syntax:
     content: public bool Start ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the process is successfully started;  if the process is already running.
   overload: System.AddIn.Hosting.AddInProcess.Start*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The add-in is running in-process with the host application. Starting and stopping the process is allowed only for external processes, not for the host process.
   platform:
   - net-11
   - net-20
@@ -259,14 +278,21 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the number of seconds to allow for the process to start.
+  remarks: The default value is 10 seconds. This property is usually used during debugging, to increase the startup time for the process that runs the out-of-process add-in.
   syntax:
     content: public TimeSpan StartupTimeout { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The number of seconds to allow for process startup.
   overload: System.AddIn.Hosting.AddInProcess.StartupTimeout*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The process is already running.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The assigned value is less than 0 (zero).
   platform:
   - net-11
   - net-20
@@ -311,24 +337,12 @@ references:
   name: KeepAlive
   nameWithType: AddInProcess.KeepAlive
   fullName: System.AddIn.Hosting.AddInProcess.KeepAlive
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.AddIn.Hosting.AddInProcess.Platform
   parent: System.AddIn.Hosting.AddInProcess
   isExternal: false
   name: Platform
   nameWithType: AddInProcess.Platform
   fullName: System.AddIn.Hosting.AddInProcess.Platform
-- uid: System.AddIn.Hosting.Platform
-  parent: System.AddIn.Hosting
-  isExternal: false
-  name: Platform
-  nameWithType: Platform
-  fullName: System.AddIn.Hosting.Platform
 - uid: System.AddIn.Hosting.AddInProcess.ProcessId
   parent: System.AddIn.Hosting.AddInProcess
   isExternal: false
@@ -347,12 +361,6 @@ references:
   name: Shutdown()
   nameWithType: AddInProcess.Shutdown()
   fullName: System.AddIn.Hosting.AddInProcess.Shutdown()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.AddIn.Hosting.AddInProcess.ShuttingDown
   parent: System.AddIn.Hosting.AddInProcess
   isExternal: false
@@ -365,18 +373,27 @@ references:
   name: EventHandler<CancelEventArgs>
   nameWithType: EventHandler<CancelEventArgs>
   fullName: System.EventHandler<System.ComponentModel.CancelEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.ComponentModel.CancelEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ComponentModel.CancelEventArgs
+    name: CancelEventArgs
+    nameWithType: CancelEventArgs
+    fullName: CancelEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.AddIn.Hosting.AddInProcess.Start
   parent: System.AddIn.Hosting.AddInProcess
   isExternal: false
   name: Start()
   nameWithType: AddInProcess.Start()
   fullName: System.AddIn.Hosting.AddInProcess.Start()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.AddIn.Hosting.AddInProcess.StartupTimeout
   parent: System.AddIn.Hosting.AddInProcess
   isExternal: false

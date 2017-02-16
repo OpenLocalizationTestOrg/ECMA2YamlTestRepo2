@@ -19,8 +19,8 @@ items:
   nameWithType: UriParser
   fullName: System.UriParser
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Parses a new URI scheme. This is an abstract class.
+  remarks: "The UriParser class enables you to create parsers for new URI schemes. You can write these parsers in their entirety, or the parsers can be derived from well-known schemes (HTTP, FTP, and other schemes based on network protocols). If you want to create a completely new parser, inherit from <xref:System.GenericUriParser>. If you want to create a parser that extends a well-known URI scheme, inherit from <xref:System.FtpStyleUriParser>, <xref:System.HttpStyleUriParser>, <xref:System.FileStyleUriParser>, <xref:System.GopherStyleUriParser>, or <xref:System.LdapStyleUriParser>.  \n  \n Microsoft strongly recommends that you use a parser shipped with the .NET Framework. Building your own parser increases the complexity of your application, and will not perform as well as the shipped parsers."
   syntax:
     content: public abstract class UriParser
   inheritance:
@@ -43,12 +43,12 @@ items:
   assemblies:
   - System
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Constructs a default URI parser.
   syntax:
     content: protected UriParser ();
     parameters: []
   overload: System.UriParser.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -65,24 +65,31 @@ items:
   assemblies:
   - System
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the components from a URI.
+  remarks: "Use the GetComponents method to determine the value of various parts of the URI, such as the <xref:System.UriComponents>, <xref:System.UriComponents>, or <xref:System.UriComponents>.  \n  \n The components are returned in the order that they appear in the URI. For example, if <xref:System.UriComponents> is specified, it appears first."
   syntax:
     content: protected virtual string GetComponents (Uri uri, UriComponents components, UriFormat format);
     parameters:
     - id: uri
       type: System.Uri
-      description: To be added.
+      description: The URI to parse.
     - id: components
       type: System.UriComponents
-      description: To be added.
+      description: The <xref:System.UriComponents> to retrieve from `uri`.
     - id: format
       type: System.UriFormat
-      description: To be added.
+      description: One of the <xref:System.UriFormat> values that controls how special characters are escaped.
     return:
       type: System.String
-      description: To be added.
+      description: A string that contains the components.
   overload: System.UriParser.GetComponents*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    uriFormat is invalid.  \n  \n \\- or -  \n  \n uriComponents is not a combination of valid <xref:System.UriComponents> values."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    uri requires user-driven parsing  \n  \n \\- or -  \n  \n uri is not an absolute URI. Relative URIs cannot be used with this method."
   platform:
   - net-11
   - net-20
@@ -99,18 +106,19 @@ items:
   assemblies:
   - System
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Initialize the state of the parser and validate the URI.
+  remarks: The InitializeAndValidate method is called every time a <xref:System.Uri> is instantiated.
   syntax:
     content: protected virtual void InitializeAndValidate (Uri uri, out UriFormatException parsingError);
     parameters:
     - id: uri
       type: System.Uri
-      description: To be added.
+      description: The T:System.Uri to validate.
     - id: parsingError
       type: System.UriFormatException
-      description: To be added.
+      description: Validation errors, if any.
   overload: System.UriParser.InitializeAndValidate*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -127,21 +135,21 @@ items:
   assemblies:
   - System
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether baseUri is a base URI for relativeUri.
   syntax:
     content: protected virtual bool IsBaseOf (Uri baseUri, Uri relativeUri);
     parameters:
     - id: baseUri
       type: System.Uri
-      description: To be added.
+      description: The base URI.
     - id: relativeUri
       type: System.Uri
-      description: To be added.
+      description: The URI to test.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if baseUri is a base URI for relativeUri; otherwise, .
   overload: System.UriParser.IsBaseOf*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -158,18 +166,24 @@ items:
   assemblies:
   - System
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the parser for a scheme is registered.
   syntax:
     content: public static bool IsKnownScheme (string schemeName);
     parameters:
     - id: schemeName
       type: System.String
-      description: To be added.
+      description: The scheme name to check.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if schemeName has been registered; otherwise, .
   overload: System.UriParser.IsKnownScheme*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The schemeName parameter is null.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The schemeName parameter is not valid.
   platform:
   - net-11
   - net-20
@@ -186,18 +200,19 @@ items:
   assemblies:
   - System
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether a URI is well-formed.
+  remarks: "The IsWellFormedOriginalString method will return false if:  \n  \n-   The string is not correctly escaped per RFC 2396.  \n  \n-   The string represents an absolute URI that references an implicit file URI.  \n  \n-   The string represents an absolute URI that is missing a forward slash before the path component.  \n  \n-   The string contains unescaped backslashes, even if they will be treated as forward slashes."
   syntax:
     content: protected virtual bool IsWellFormedOriginalString (Uri uri);
     parameters:
     - id: uri
       type: System.Uri
-      description: To be added.
+      description: The URI to check.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if uri is well-formed; otherwise, .
   overload: System.UriParser.IsWellFormedOriginalString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -214,15 +229,16 @@ items:
   assemblies:
   - System
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Invoked by a <xref:System.Uri> constructor to get a  instance
+  remarks: The default implementation returns the same <xref:System.UriParser> instance. You may need to override this method and return a different <xref:System.UriParser> for each invocation if you are operating in a multithreaded environment.
   syntax:
     content: protected virtual UriParser OnNewUri ();
     parameters: []
     return:
       type: System.UriParser
-      description: To be added.
+      description: A  for the constructed <xref:System.Uri>.
   overload: System.UriParser.OnNewUri*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -239,18 +255,18 @@ items:
   assemblies:
   - System
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Invoked by the Framework when a  method is registered.
   syntax:
     content: protected virtual void OnRegister (string schemeName, int defaultPort);
     parameters:
     - id: schemeName
       type: System.String
-      description: To be added.
+      description: The scheme that is associated with this .
     - id: defaultPort
       type: System.Int32
-      description: To be added.
+      description: The port number of the scheme.
   overload: System.UriParser.OnRegister*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -267,21 +283,28 @@ items:
   assemblies:
   - System
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Associates a scheme and port number with a .
+  remarks: If the `defaultPort` parameter is set to -1, the Register method registers no default value for the port number.
   syntax:
     content: public static void Register (UriParser uriParser, string schemeName, int defaultPort);
     parameters:
     - id: uriParser
       type: System.UriParser
-      description: To be added.
+      description: The URI parser to register.
     - id: schemeName
       type: System.String
-      description: To be added.
+      description: The name of the scheme that is associated with this parser.
     - id: defaultPort
       type: System.Int32
-      description: To be added.
+      description: The default port number for the specified scheme.
   overload: System.UriParser.Register*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    uriParser parameter is null  \n  \n \\- or -  \n  \n schemeName parameter is null."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    schemeName parameter is not valid  \n  \n \\- or -  \n  \n defaultPort parameter is not valid. The defaultPort parameter is less than -1 or greater than 65,534."
   platform:
   - net-11
   - net-20
@@ -298,24 +321,28 @@ items:
   assemblies:
   - System
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Called by <xref:System.Uri> constructors and <xref:System.Uri.TryCreate%2A?displayProperty=fullName> to resolve a relative URI.
+  remarks: "<xref:System.Uri> constructors and <xref:System.Uri.TryCreate%2A?displayProperty=fullName> use Resolve to construct a URI from `baseUri` and `relativeUri`.  \n  \n If a parsing error occurs, the returned string for the resolved relative <xref:System.Uri> is null."
   syntax:
     content: protected virtual string Resolve (Uri baseUri, Uri relativeUri, out UriFormatException parsingError);
     parameters:
     - id: baseUri
       type: System.Uri
-      description: To be added.
+      description: A base URI.
     - id: relativeUri
       type: System.Uri
-      description: To be added.
+      description: A relative URI.
     - id: parsingError
       type: System.UriFormatException
-      description: To be added.
+      description: Errors during the resolve process, if any.
     return:
       type: System.String
-      description: To be added.
+      description: The string of the resolved relative <xref:System.Uri>.
   overload: System.UriParser.Resolve*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    baseUri parameter is not an absolute <xref:System.Uri>  \n  \n \\- or -  \n  \n baseUri parameter requires user-driven parsing."
   platform:
   - net-11
   - net-20
@@ -366,12 +393,6 @@ references:
   name: InitializeAndValidate(Uri,UriFormatException)
   nameWithType: UriParser.InitializeAndValidate(Uri,UriFormatException)
   fullName: System.UriParser.InitializeAndValidate(Uri,UriFormatException)
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.UriFormatException
   parent: System
   isExternal: true
@@ -390,54 +411,18 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.UriParser.IsKnownScheme(System.String)
   parent: System.UriParser
   isExternal: false
   name: IsKnownScheme(String)
   nameWithType: UriParser.IsKnownScheme(String)
   fullName: System.UriParser.IsKnownScheme(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.UriParser.IsWellFormedOriginalString(System.Uri)
   parent: System.UriParser
   isExternal: false
   name: IsWellFormedOriginalString(Uri)
   nameWithType: UriParser.IsWellFormedOriginalString(Uri)
   fullName: System.UriParser.IsWellFormedOriginalString(Uri)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.UriParser.OnNewUri
   parent: System.UriParser
   isExternal: false
@@ -456,12 +441,6 @@ references:
   name: OnRegister(String,Int32)
   nameWithType: UriParser.OnRegister(String,Int32)
   fullName: System.UriParser.OnRegister(String,Int32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Int32
   parent: System
   isExternal: true
@@ -474,54 +453,12 @@ references:
   name: Register(UriParser,String,Int32)
   nameWithType: UriParser.Register(UriParser,String,Int32)
   fullName: System.UriParser.Register(UriParser,String,Int32)
-- uid: System.UriParser
-  parent: System
-  isExternal: false
-  name: UriParser
-  nameWithType: UriParser
-  fullName: System.UriParser
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.UriParser.Resolve(System.Uri,System.Uri,System.UriFormatException@)
   parent: System.UriParser
   isExternal: false
   name: Resolve(Uri,Uri,UriFormatException)
   nameWithType: UriParser.Resolve(Uri,Uri,UriFormatException)
   fullName: System.UriParser.Resolve(Uri,Uri,UriFormatException)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
-- uid: System.UriFormatException
-  parent: System
-  isExternal: true
-  name: UriFormatException
-  nameWithType: UriFormatException
-  fullName: System.UriFormatException
 - uid: System.UriParser.#ctor*
   parent: System.UriParser
   isExternal: false

@@ -16,8 +16,10 @@ items:
   nameWithType: ServiceReference
   fullName: System.Web.UI.ServiceReference
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a Web service for use in a Web page.
+  remarks: "To call Web service methods from ECMAScript (JavaScript), you must include a service reference in the ASP.NET page and apply the <xref:System.Web.Script.Services.ScriptServiceAttribute> attribute to the Web service class definition. If you include a service reference to a Web service in the <xref:System.Web.UI.ScriptManager> or <xref:System.Web.UI.ScriptManagerProxy> control inside the ASP.NET page, JavaScript objects will be instantiated in the browser.  \n  \n The proxy objects will be used to do the following:  \n  \n-   Make asynchronous requests in JavaScript to Web service methods,  \n  \n-   Initialize instances of proxies of server data types, in particular for use as input parameters for invoking Web methods.  \n  \n> [!NOTE]\n>  The ServiceReference control can only be used for services in the same domain.  \n  \n You can define the Web service location declaratively by adding an `<asp:ServiceReference>` element to the `<Services>` element inside the `<asp:ScriptManager>` element on the page, and then setting its <xref:System.Web.UI.ServiceReference.Path%2A> attribute, as shown in the following example.  \n  \n```  \n<asp:ScriptManager runat=\"server\" ID=\"scriptManager\">  \n  <Services>  \n    <asp:ServiceReference Path=\"~/WebServices/SimpleWebService.asmx\" />  \n  </Services>  \n</asp:ScriptManager>  \n```  \n  \n You might use the <xref:System.Web.UI.ServiceReference.InlineScript%2A> property to indicate whether the proxy generation script is included in the page as an inline script block or is obtained by a separate request.  \n  \n You can also programmatically add a ServiceReference object through the <xref:System.Web.UI.ScriptManager.Services%2A?displayProperty=fullName> or <xref:System.Web.UI.ScriptManagerProxy.Services%2A?displayProperty=fullName> collection by using the <xref:System.Collections.ObjectModel.Collection%601.Add%2A> method of the <xref:System.Web.UI.ServiceReferenceCollection> class."
+  example:
+  - "The following example demonstrates how to add a reference to a Web service in the page markup to call the Web service methods from script.  \n  \n [!code-vb[System.Web.Script.Services.ScriptMethodAttribute#5](../../add/codesnippet/VisualBasic/t-system.web.ui.servicer_1.aspx)]\n [!code-cs[System.Web.Script.Services.ScriptMethodAttribute#5](../../add/codesnippet/CSharp/t-system.web.ui.servicer_1.aspx)]"
   syntax:
     content: >-
       [System.ComponentModel.DefaultProperty("Path")]
@@ -43,12 +45,12 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public ServiceReference ();
     parameters: []
   overload: System.Web.UI.ServiceReference.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -65,15 +67,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a specified path.
   syntax:
     content: public ServiceReference (string path);
     parameters:
     - id: path
       type: System.String
-      description: To be added.
+      description: The location of the Web service.
   overload: System.Web.UI.ServiceReference.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -90,21 +92,22 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a proxy script from a derived  object that can be overridden as a customization.
+  remarks: The `containingControl` parameter is the <xref:System.Web.UI.ScriptManager> object or <xref:System.Web.UI.ScriptManagerProxy> object on which the <xref:System.Web.UI.ServiceReference> object is defined. It should be used as a basis for relative URL resolution.
   syntax:
     content: protected virtual string GetProxyScript (System.Web.UI.ScriptManager scriptManager, System.Web.UI.Control containingControl);
     parameters:
     - id: scriptManager
       type: System.Web.UI.ScriptManager
-      description: To be added.
+      description: The  control on the page.
     - id: containingControl
       type: System.Web.UI.Control
-      description: To be added.
+      description: A  object.
     return:
       type: System.String
-      description: To be added.
+      description: The proxy script.
   overload: System.Web.UI.ServiceReference.GetProxyScript*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -121,21 +124,22 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a proxy URL from a derived  object can be overridden as a customization.
+  remarks: The `containingControl` parameter is the <xref:System.Web.UI.ScriptManager> object or <xref:System.Web.UI.ScriptManagerProxy> object on which the <xref:System.Web.UI.ServiceReference> object is defined and should be used as a basis for relative URL resolution.
   syntax:
     content: protected virtual string GetProxyUrl (System.Web.UI.ScriptManager scriptManager, System.Web.UI.Control containingControl);
     parameters:
     - id: scriptManager
       type: System.Web.UI.ScriptManager
-      description: To be added.
+      description: The  control on the page.
     - id: containingControl
       type: System.Web.UI.Control
-      description: To be added.
+      description: A  object.
     return:
       type: System.String
-      description: To be added.
+      description: A proxy URL.
   overload: System.Web.UI.ServiceReference.GetProxyUrl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -152,14 +156,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether the proxy generation script is included in the page as an inline script block or is obtained by a separate request.
+  remarks: "When the InlineScript property is not declared, the default value is `false`.  \n  \n When InlineScript is set to `false`, the script for generating the ECMAScript (JavaScript) proxies is downloaded as a separate script file by an additional request to the server. If you use browser caching, this option is helpful when multiple Web pages use the same service reference.  \n  \n When InlineScript is set to `true`, the proxy generation script is included as an inline script block in the page. This can improve server performance by reducing the number of network requests, especially if there are many service references in the page and other pages do not reference the same services. In addition, the <xref:System.Web.UI.ServiceReference.Path%2A> property must be set to a relative path when InlineScript is set to `true`."
   syntax:
     content: public virtual bool InlineScript { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the proxy generation script is included as an inline script block in the page;  if the proxy generation script is obtained by a separate request. The default is .
   overload: System.Web.UI.ServiceReference.InlineScript*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -176,14 +181,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the path of the referenced Web service.
+  remarks: "The Path property can point only to local Web services. In other words, this property can only point to Web services in the same domain as your AJAX-enabled ASP.NET Web application. Path can be a relative, application-relative, domain-relative, or absolute path.  \n  \n If the <xref:System.Web.UI.ServiceReference.InlineScript%2A> property is set to `true`, then you must use a relative path that points to the same Web application as the page that contains the <xref:System.Web.UI.ServiceReference> instance."
   syntax:
     content: public virtual string Path { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The path of the referenced Web service.
   overload: System.Web.UI.ServiceReference.Path*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -200,15 +206,15 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a string that represents the value of the <xref:System.Web.UI.ServiceReference.Path%2A> property or the type name.
   syntax:
     content: public override string ToString ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: The value of the <xref:System.Web.UI.ServiceReference.Path%2A> property, if it is defined; otherwise, the value of the <xref:System.Reflection.MemberInfo.Name%2A> property for the class.
   overload: System.Web.UI.ServiceReference.ToString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -241,12 +247,6 @@ references:
   name: GetProxyScript(ScriptManager,Control)
   nameWithType: ServiceReference.GetProxyScript(ScriptManager,Control)
   fullName: System.Web.UI.ServiceReference.GetProxyScript(ScriptManager,Control)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ScriptManager
   parent: System.Web.UI
   isExternal: false
@@ -265,24 +265,6 @@ references:
   name: GetProxyUrl(ScriptManager,Control)
   nameWithType: ServiceReference.GetProxyUrl(ScriptManager,Control)
   fullName: System.Web.UI.ServiceReference.GetProxyUrl(ScriptManager,Control)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Web.UI.ScriptManager
-  parent: System.Web.UI
-  isExternal: false
-  name: ScriptManager
-  nameWithType: ScriptManager
-  fullName: System.Web.UI.ScriptManager
-- uid: System.Web.UI.Control
-  parent: System.Web.UI
-  isExternal: false
-  name: Control
-  nameWithType: Control
-  fullName: System.Web.UI.Control
 - uid: System.Web.UI.ServiceReference.InlineScript
   parent: System.Web.UI.ServiceReference
   isExternal: false
@@ -301,24 +283,12 @@ references:
   name: Path
   nameWithType: ServiceReference.Path
   fullName: System.Web.UI.ServiceReference.Path
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ServiceReference.ToString
   parent: System.Web.UI.ServiceReference
   isExternal: false
   name: ToString()
   nameWithType: ServiceReference.ToString()
   fullName: System.Web.UI.ServiceReference.ToString()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.ServiceReference.#ctor*
   parent: System.Web.UI.ServiceReference
   isExternal: false

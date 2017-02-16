@@ -10,8 +10,10 @@ items:
   nameWithType: IDispatchOperationSelector
   fullName: System.ServiceModel.Dispatcher.IDispatchOperationSelector
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Defines the contract that associates incoming messages with a local operation to customize service execution behavior.
+  remarks: Implement and insert a custom operation selector to customize the selection of the operation to which an incoming message is dispatched in a service application. Assign the IDispatchOperationSelector object to the <xref:System.ServiceModel.Dispatcher.DispatchRuntime.OperationSelector%2A> property to insert the custom selector.
+  example:
+  - "```c#  \n  \npublic class QueryStringDispatcherBehavior : IDispatchOperationSelector  \n{  \n//Define the mapping from the Actions of the message to the operations.  \nNameValueCollection actionMap; { … }  \n  \n//Implement the SelectOperation method.  \npublic string SelectOperation( ref Message message )  \n        {  \n            Uri uri = new Uri(message.Headers.Action);  \n            string query = uri.Query;  \n  \n            string methodName = actionMap[message.Headers.Action.ToString()];  \n  \n            return methodName;  \n        }  \n}  \n```"
   syntax:
     content: public interface IDispatchOperationSelector
   implements: []
@@ -31,18 +33,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Dispatcher
-  summary: To be added.
-  remarks: To be added.
+  summary: Associates a local operation with the incoming method.
   syntax:
     content: public string SelectOperation (ref System.ServiceModel.Channels.Message message);
     parameters:
     - id: message
       type: System.ServiceModel.Channels.Message
-      description: To be added.
+      description: The incoming <xref:System.ServiceModel.Channels.Message> to be associated with an operation.
     return:
       type: System.String
-      description: To be added.
+      description: The name of the operation to be associated with the message.
   overload: System.ServiceModel.Dispatcher.IDispatchOperationSelector.SelectOperation*
+  exceptions: []
   platform:
   - net-11
   - net-20

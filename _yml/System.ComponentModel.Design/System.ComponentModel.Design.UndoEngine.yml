@@ -23,8 +23,8 @@ items:
   nameWithType: UndoEngine
   fullName: System.ComponentModel.Design.UndoEngine
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies generic undo/redo functionality at design time.
+  remarks: "The UndoEngine abstract class provides a default implementation of undo functionality at design time. An undo unit represents a single unit of undoable work. This unit is added to a stack and the user can then walk the stack to undo each action. Undo units typically are designed to toggle, which means that calling undo twice returns the application to its starting state.  \n  \n The UndoEngine class takes advantage of the following characteristics of objects running within the designer:  \n  \n-   All interesting objects can be persisted to some format by the designer loader.  \n  \n-   All objects raise property-change notifications when a property is changed.  \n  \n-   <xref:System.ComponentModel.Design.IDesignerHost> offers the idea of transactions, which can be used to fabricate an undo action that spans multiple smaller actions.  \n  \n With these features, UndoEngine can fabricate any undo units it needs automatically.  \n  \n> [!NOTE]\n>  Do not change property values directly. The UndoEngine class requires you to use the appropriate <xref:System.ComponentModel.TypeDescriptor> to change property values.  \n  \n UndoEngine monitors for change notifications to create undo units, and the units themselves consist of serialized object states. The following table shows the services that must be available when UndoEngine is created.  \n  \n|Service|Description|  \n|-------------|-----------------|  \n|<xref:System.ComponentModel.Design.Serialization.ComponentSerializationService>|Saves property and object values for a component before and after a change is made.|  \n|<xref:System.ComponentModel.Design.IComponentChangeService>|Notifies the undo engine of changes made to components.|  \n|<xref:System.ComponentModel.Design.IDesignerHost>|Used to track transactions.|  \n  \n> [!NOTE]\n>  Because the UndoEngine class requires <xref:System.ComponentModel.Design.Serialization.ComponentSerializationService> and <xref:System.ComponentModel.Design.IComponentChangeService>, it is available only at design time.  \n  \n The undo engine tracks transactions and creates a single undo unit that encompasses a transaction. As a result, the undo engine has control over the duration of an undoable action. Also, because transactions can be named, undoable actions inherit their names from the current transaction. If no transaction is available and a change is reported, the undo engine creates an undo name based on the type of change (for example, \"Change property 'Text'\")."
   syntax:
     content: 'public abstract class UndoEngine : IDisposable'
   inheritance:
@@ -48,15 +48,22 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: The <xref:System.ComponentModel.Design.UndoEngine> requires several services from the `provider` parameter to be useful.
   syntax:
     content: protected UndoEngine (IServiceProvider provider);
     parameters:
     - id: provider
       type: System.IServiceProvider
-      description: To be added.
+      description: A parenting service provider.
   overload: System.ComponentModel.Design.UndoEngine.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    provider is ."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: A required service cannot be found. See  for required services. If you have removed this service, ensure that you provide a replacement.
   platform:
   - net-11
   - net-20
@@ -73,8 +80,6 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected abstract void AddUndoUnit (System.ComponentModel.Design.UndoEngine.UndoUnit unit);
     parameters:
@@ -82,6 +87,7 @@ items:
       type: System.ComponentModel.Design.UndoEngine.UndoUnit
       description: To be added.
   overload: System.ComponentModel.Design.UndoEngine.AddUndoUnit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -98,21 +104,22 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new <xref:System.ComponentModel.Design.UndoEngine.UndoUnit>.
+  remarks: "The default implementation of the CreateUndoUnit method simply returns a new <xref:System.ComponentModel.Design.UndoEngine.UndoUnit>.  \n  \n By default, <xref:System.ComponentModel.Design.UndoEngine> does nothing with the `primary` parameter, but some implementations of undo, such as those involving the COM `Microsoft.VisualStudio.OLE.Interop.IOleParentUndoUnit` design pattern, may need to identify the difference between a primary unit and its children."
   syntax:
     content: protected virtual System.ComponentModel.Design.UndoEngine.UndoUnit CreateUndoUnit (string name, bool primary);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the unit to create.
     - id: primary
       type: System.Boolean
-      description: To be added.
+      description: "\n     to create the first of a series of nested units;  to create subsequent nested units."
     return:
       type: System.ComponentModel.Design.UndoEngine.UndoUnit
-      description: To be added.
+      description: A new <xref:System.ComponentModel.Design.UndoEngine.UndoUnit> with a specified name.
   overload: System.ComponentModel.Design.UndoEngine.CreateUndoUnit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -129,8 +136,6 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected virtual void DiscardUndoUnit (System.ComponentModel.Design.UndoEngine.UndoUnit unit);
     parameters:
@@ -138,6 +143,7 @@ items:
       type: System.ComponentModel.Design.UndoEngine.UndoUnit
       description: To be added.
   overload: System.ComponentModel.Design.UndoEngine.DiscardUndoUnit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -154,12 +160,12 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases all resources used by the .
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.ComponentModel.Design.UndoEngine.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -176,15 +182,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the unmanaged resources used by the  and optionally releases the managed resources.
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
   overload: System.ComponentModel.Design.UndoEngine.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -201,14 +207,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Enables or disables the .
   syntax:
     content: public bool Enabled { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  is enabled; otherwise, .
   overload: System.ComponentModel.Design.UndoEngine.Enabled*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -225,18 +231,24 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the requested service.
   syntax:
     content: protected object GetRequiredService (Type serviceType);
     parameters:
     - id: serviceType
       type: System.Type
-      description: To be added.
+      description: The type of service to retrieve.
     return:
       type: System.Object
-      description: To be added.
+      description: The requested service, if found.
   overload: System.ComponentModel.Design.UndoEngine.GetRequiredService*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    serviceType is ."
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: "\n    serviceType is required but cannot be found. If you have removed this service, ensure that you provide a replacement."
   platform:
   - net-11
   - net-20
@@ -253,18 +265,21 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the requested service.
   syntax:
     content: protected object GetService (Type serviceType);
     parameters:
     - id: serviceType
       type: System.Type
-      description: To be added.
+      description: The type of service to retrieve.
     return:
       type: System.Object
-      description: To be added.
+      description: The requested service, or  if the requested service is not found.
   overload: System.ComponentModel.Design.UndoEngine.GetService*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    serviceType is ."
   platform:
   - net-11
   - net-20
@@ -281,15 +296,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnUndoing (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: An <xref:System.EventArgs> that contains the event data.
   overload: System.ComponentModel.Design.UndoEngine.OnUndoing*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -306,15 +321,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnUndone (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: An <xref:System.EventArgs> that contains the event data.
   overload: System.ComponentModel.Design.UndoEngine.OnUndone*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -331,13 +346,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs immediately before an undo action is performed.
   syntax:
     content: public event EventHandler Undoing;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -354,14 +369,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates if an undo action is in progress.
   syntax:
     content: public bool UndoInProgress { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if an undo action is in progress; otherwise, .
   overload: System.ComponentModel.Design.UndoEngine.UndoInProgress*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -378,13 +393,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs immediately after an undo action is performed.
+  remarks: The Undone event is always raised, even if an exception is thrown.
   syntax:
     content: public event EventHandler Undone;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -423,12 +439,6 @@ references:
   name: CreateUndoUnit(String,Boolean)
   nameWithType: UndoEngine.CreateUndoUnit(String,Boolean)
   fullName: System.ComponentModel.Design.UndoEngine.CreateUndoUnit(String,Boolean)
-- uid: System.ComponentModel.Design.UndoEngine.UndoUnit
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: UndoEngine+UndoUnit
-  nameWithType: UndoEngine+UndoUnit
-  fullName: System.ComponentModel.Design.UndoEngine+UndoUnit
 - uid: System.String
   parent: System
   isExternal: true
@@ -447,12 +457,6 @@ references:
   name: DiscardUndoUnit(UndoEngine+UndoUnit)
   nameWithType: UndoEngine.DiscardUndoUnit(UndoEngine+UndoUnit)
   fullName: System.ComponentModel.Design.UndoEngine.DiscardUndoUnit(UndoEngine+UndoUnit)
-- uid: System.ComponentModel.Design.UndoEngine.UndoUnit
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: UndoEngine+UndoUnit
-  nameWithType: UndoEngine+UndoUnit
-  fullName: System.ComponentModel.Design.UndoEngine+UndoUnit
 - uid: System.ComponentModel.Design.UndoEngine.Dispose
   parent: System.ComponentModel.Design.UndoEngine
   isExternal: false
@@ -465,36 +469,18 @@ references:
   name: Dispose(Boolean)
   nameWithType: UndoEngine.Dispose(Boolean)
   fullName: System.ComponentModel.Design.UndoEngine.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ComponentModel.Design.UndoEngine.Enabled
   parent: System.ComponentModel.Design.UndoEngine
   isExternal: false
   name: Enabled
   nameWithType: UndoEngine.Enabled
   fullName: System.ComponentModel.Design.UndoEngine.Enabled
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ComponentModel.Design.UndoEngine.GetRequiredService(System.Type)
   parent: System.ComponentModel.Design.UndoEngine
   isExternal: false
   name: GetRequiredService(Type)
   nameWithType: UndoEngine.GetRequiredService(Type)
   fullName: System.ComponentModel.Design.UndoEngine.GetRequiredService(Type)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Type
   parent: System
   isExternal: true
@@ -507,18 +493,6 @@ references:
   name: GetService(Type)
   nameWithType: UndoEngine.GetService(Type)
   fullName: System.ComponentModel.Design.UndoEngine.GetService(Type)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.ComponentModel.Design.UndoEngine.OnUndoing(System.EventArgs)
   parent: System.ComponentModel.Design.UndoEngine
   isExternal: false
@@ -537,12 +511,6 @@ references:
   name: OnUndone(EventArgs)
   nameWithType: UndoEngine.OnUndone(EventArgs)
   fullName: System.ComponentModel.Design.UndoEngine.OnUndone(EventArgs)
-- uid: System.EventArgs
-  parent: System
-  isExternal: true
-  name: EventArgs
-  nameWithType: EventArgs
-  fullName: System.EventArgs
 - uid: System.ComponentModel.Design.UndoEngine.Undoing
   parent: System.ComponentModel.Design.UndoEngine
   isExternal: false
@@ -561,24 +529,12 @@ references:
   name: UndoInProgress
   nameWithType: UndoEngine.UndoInProgress
   fullName: System.ComponentModel.Design.UndoEngine.UndoInProgress
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ComponentModel.Design.UndoEngine.Undone
   parent: System.ComponentModel.Design.UndoEngine
   isExternal: false
   name: Undone
   nameWithType: UndoEngine.Undone
   fullName: System.ComponentModel.Design.UndoEngine.Undone
-- uid: System.EventHandler
-  parent: System
-  isExternal: true
-  name: EventHandler
-  nameWithType: EventHandler
-  fullName: System.EventHandler
 - uid: System.ComponentModel.Design.UndoEngine.#ctor*
   parent: System.ComponentModel.Design.UndoEngine
   isExternal: false

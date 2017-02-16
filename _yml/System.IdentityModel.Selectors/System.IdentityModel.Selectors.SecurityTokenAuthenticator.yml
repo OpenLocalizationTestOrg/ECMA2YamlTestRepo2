@@ -14,8 +14,8 @@ items:
   nameWithType: SecurityTokenAuthenticator
   fullName: System.IdentityModel.Selectors.SecurityTokenAuthenticator
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Authenticates a security token.
+  remarks: "The SecurityTokenAuthenticator class and the classes that derive from it authenticate security tokens. Typically, you would only derive a class directly from SecurityTokenAuthenticator when you create a custom security token. If you wanted to override the default authentication or authorization behaviors for built-in security tokens, derive from one of the classes that derive from SecurityTokenAuthenticator, such as <xref:System.IdentityModel.Selectors.SamlSecurityTokenAuthenticator>.  \n  \n When you derive a class from SecurityTokenAuthenticator, override the following two methods: <xref:System.IdentityModel.Selectors.SecurityTokenAuthenticator.ValidateTokenCore%2A> and <xref:System.IdentityModel.Selectors.SecurityTokenAuthenticator.CanValidateTokenCore%2A>. The <xref:System.IdentityModel.Selectors.SecurityTokenAuthenticator.CanValidateTokenCore%2A> method determines whether this security token authenticator can authenticate a specific security token. The <xref:System.IdentityModel.Selectors.SecurityTokenAuthenticator.ValidateTokenCore%2A> method authenticates the security token and establishes a set of authorization policies for authorization. The authorization policies map the claims found in the security token to claims required by the application."
   syntax:
     content: public abstract class SecurityTokenAuthenticator
   inheritance:
@@ -38,12 +38,12 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Selectors
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: protected SecurityTokenAuthenticator ();
     parameters: []
   overload: System.IdentityModel.Selectors.SecurityTokenAuthenticator.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -60,18 +60,22 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Selectors
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the specified security token can be validated by this security token authenticator.
+  remarks: The CanValidateToken method checks whether the token parameter is `null` and then calls the <xref:System.IdentityModel.Selectors.SecurityTokenAuthenticator.CanValidateTokenCore%2A> method to determine whether this security token authenticator can authenticate the security token type for `token`.
   syntax:
     content: public bool CanValidateToken (System.IdentityModel.Tokens.SecurityToken token);
     parameters:
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: To be added.
+      description: The  to be validated.
     return:
       type: System.Boolean
-      description: To be added.
+      description: when token can be validated; otherwise, .
   overload: System.IdentityModel.Selectors.SecurityTokenAuthenticator.CanValidateToken*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    token is ."
   platform:
   - net-11
   - net-20
@@ -88,18 +92,19 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Selectors
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, gets a value indicating whether the specified security token can be validated by this security token authenticator.
+  remarks: The CanValidateTokenCore method is called by the <xref:System.IdentityModel.Selectors.SecurityTokenAuthenticator.CanValidateToken%2A> method to determine whether this security token authenticator can authenticate the security token type for `token`. This does not authenticate the security token; that is performed by the <xref:System.IdentityModel.Selectors.SecurityTokenAuthenticator.ValidateToken%2A> method.
   syntax:
     content: protected abstract bool CanValidateTokenCore (System.IdentityModel.Tokens.SecurityToken token);
     parameters:
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: To be added.
+      description: The  to be validated.
     return:
       type: System.Boolean
-      description: To be added.
+      description: when token can be validated; otherwise, .
   overload: System.IdentityModel.Selectors.SecurityTokenAuthenticator.CanValidateTokenCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -116,18 +121,25 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Selectors
-  summary: To be added.
-  remarks: To be added.
+  summary: Authenticates the specified security token and returns the set of authorization policies for the security token.
+  remarks: The ValidateToken method checks whether the `token` parameter is `null`, calls the <xref:System.IdentityModel.Selectors.SecurityTokenAuthenticator.CanValidateToken%2A> method to determine if this security token authenticator can authenticate this security token, and then if it can, calls the <xref:System.IdentityModel.Selectors.SecurityTokenAuthenticator.ValidateTokenCore%2A> method.
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.IdentityModel.Policy.IAuthorizationPolicy> ValidateToken (System.IdentityModel.Tokens.SecurityToken token);
     parameters:
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: To be added.
+      description: The  to be validated.
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.IdentityModel.Policy.IAuthorizationPolicy}
-      description: To be added.
+      description: A <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> of type  that contains the set of authorization policies in effect for this application.
   overload: System.IdentityModel.Selectors.SecurityTokenAuthenticator.ValidateToken*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    token is ."
+  - type: System.IdentityModel.Tokens.SecurityTokenValidationException
+    commentId: T:System.IdentityModel.Tokens.SecurityTokenValidationException
+    description: "\n    token cannot be authenticated by this security token authenticator  \n  \n -or-  \n  \n token is not authenticated."
   platform:
   - net-11
   - net-20
@@ -144,18 +156,19 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Selectors
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, authenticates the specified security token and returns the set of authorization policies for the security token.
+  remarks: "Override the ValidateTokenCore method to authenticate a specific security token type.  \n  \n When the ValidateTokenCore method is overridden, follow these guidelines:  \n  \n-   When the security token passed into the `token` parameter cannot be validated, throw the <xref:System.IdentityModel.Tokens.SecurityTokenValidationException> exception.  \n  \n-   When there are no authorization policies in effect for this application, return an empty <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> of type <xref:System.IdentityModel.Policy.IAuthorizationPolicy>.  \n  \n When `null` is returned by this method, [!INCLUDE[vsindigo](../../add/includes/vsindigo-md.md)] throws the <xref:System.IdentityModel.Tokens.SecurityTokenValidationException> exception.  \n  \n The ValidateTokenCore method is called by the <xref:System.IdentityModel.Selectors.SecurityTokenAuthenticator.ValidateToken%2A> method."
   syntax:
     content: protected abstract System.Collections.ObjectModel.ReadOnlyCollection<System.IdentityModel.Policy.IAuthorizationPolicy> ValidateTokenCore (System.IdentityModel.Tokens.SecurityToken token);
     parameters:
     - id: token
       type: System.IdentityModel.Tokens.SecurityToken
-      description: To be added.
+      description: The  to be validated.
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.IdentityModel.Policy.IAuthorizationPolicy}
-      description: To be added.
+      description: A <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> of type  that contains the set of authorization policies in effect for this application.
   overload: System.IdentityModel.Selectors.SecurityTokenAuthenticator.ValidateTokenCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -194,18 +207,6 @@ references:
   name: CanValidateTokenCore(SecurityToken)
   nameWithType: SecurityTokenAuthenticator.CanValidateTokenCore(SecurityToken)
   fullName: System.IdentityModel.Selectors.SecurityTokenAuthenticator.CanValidateTokenCore(SecurityToken)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.IdentityModel.Tokens.SecurityToken
-  parent: System.IdentityModel.Tokens
-  isExternal: false
-  name: SecurityToken
-  nameWithType: SecurityToken
-  fullName: System.IdentityModel.Tokens.SecurityToken
 - uid: System.IdentityModel.Selectors.SecurityTokenAuthenticator.ValidateToken(System.IdentityModel.Tokens.SecurityToken)
   parent: System.IdentityModel.Selectors.SecurityTokenAuthenticator
   isExternal: false
@@ -218,30 +219,27 @@ references:
   name: ReadOnlyCollection<IAuthorizationPolicy>
   nameWithType: ReadOnlyCollection<IAuthorizationPolicy>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.IdentityModel.Policy.IAuthorizationPolicy>
-- uid: System.IdentityModel.Tokens.SecurityToken
-  parent: System.IdentityModel.Tokens
-  isExternal: false
-  name: SecurityToken
-  nameWithType: SecurityToken
-  fullName: System.IdentityModel.Tokens.SecurityToken
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.IdentityModel.Policy.IAuthorizationPolicy>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.IdentityModel.Policy.IAuthorizationPolicy
+    name: IAuthorizationPolicy
+    nameWithType: IAuthorizationPolicy
+    fullName: IAuthorizationPolicy
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.IdentityModel.Selectors.SecurityTokenAuthenticator.ValidateTokenCore(System.IdentityModel.Tokens.SecurityToken)
   parent: System.IdentityModel.Selectors.SecurityTokenAuthenticator
   isExternal: false
   name: ValidateTokenCore(SecurityToken)
   nameWithType: SecurityTokenAuthenticator.ValidateTokenCore(SecurityToken)
   fullName: System.IdentityModel.Selectors.SecurityTokenAuthenticator.ValidateTokenCore(SecurityToken)
-- uid: System.Collections.ObjectModel.ReadOnlyCollection{System.IdentityModel.Policy.IAuthorizationPolicy}
-  parent: System.Collections.ObjectModel
-  isExternal: true
-  name: ReadOnlyCollection<IAuthorizationPolicy>
-  nameWithType: ReadOnlyCollection<IAuthorizationPolicy>
-  fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.IdentityModel.Policy.IAuthorizationPolicy>
-- uid: System.IdentityModel.Tokens.SecurityToken
-  parent: System.IdentityModel.Tokens
-  isExternal: false
-  name: SecurityToken
-  nameWithType: SecurityToken
-  fullName: System.IdentityModel.Tokens.SecurityToken
 - uid: System.IdentityModel.Selectors.SecurityTokenAuthenticator.#ctor*
   parent: System.IdentityModel.Selectors.SecurityTokenAuthenticator
   isExternal: false

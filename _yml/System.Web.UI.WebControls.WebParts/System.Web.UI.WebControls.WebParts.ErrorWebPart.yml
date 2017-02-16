@@ -19,8 +19,8 @@ items:
   nameWithType: ErrorWebPart
   fullName: System.Web.UI.WebControls.WebParts.ErrorWebPart
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Inserted into a Web page as a placeholder when the attempt to load or create a new instance of a dynamic  control has failed.
+  remarks: "The ErrorWebPart class is used by the Web Parts control set as a placeholder for a <xref:System.Web.UI.WebControls.WebParts.WebPart> control that could not be added to the page. If the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control attempts to load or create a new instance of a dynamic <xref:System.Web.UI.WebControls.WebParts.WebPart> control in a zone, and the attempt fails for some reason, the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> then calls the <xref:System.Web.UI.WebControls.WebParts.WebPartManager.CreateErrorWebPart%2A> method, and inserts an ErrorWebPart control in place of the control that failed.  \n  \n The ErrorWebPart control is inserted to preserve previously existing personalization state information that might have existed on a control for users. For example, suppose there is a <xref:System.Web.UI.WebControls.WebParts.WebPart> control that has a personalizable property, so that users can save their own ZIP Code, and then the control can automatically display weather information for that ZIP Code each time the user visits the page. If at some point a problem occurs with the weather control so that it cannot be loaded during a specific request, and yet the rest of the page does load successfully, the custom personalization data that a user has saved for that control would be lost the next time the personalization data for the page is saved. By inserting the ErrorWebPart control in place of the failed control, you can notify the user that a problem has occurred, and also provide a mechanism for the Web Parts control set to preserve the user's personalization data on the failed control until the problem can be corrected.  \n  \n The ErrorWebPart class derives from the <xref:System.Web.UI.WebControls.WebParts.ProxyWebPart> class, as one of several types designed to be temporary placeholders for other types. To create an instance of the class, the <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control uses its public <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart.%23ctor%2A> constructor. The constructor requires several details of the failed control to be passed to it, such as the ID, the original type of the control (if the failed control is a server or user control wrapped in a <xref:System.Web.UI.WebControls.WebParts.GenericWebPart> object), the original path to the source file for the control (if the failed control is a user control), and the ID of a <xref:System.Web.UI.WebControls.WebParts.GenericWebPart> object if present.  \n  \n The ErrorWebPart class has a single public property called <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart.ErrorMessage%2A>. Developers can assign a value to this property that will be displayed in a Web page when the control is inserted.  \n  \n The ErrorWebPart class has three protected methods. The <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart.AddAttributesToRender%2A> method takes style characteristics from the <xref:System.Web.UI.WebControls.WebParts.WebZone.ErrorStyle%2A> object for the <xref:System.Web.UI.WebControls.WebParts.WebZone> zone that contains the control that failed to load. If any style settings exist in this object, the method applies them to the ErrorWebPart control. The <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart.EndLoadPersonalization%2A> method sets several important inherited properties on the ErrorWebPart control, to prevent users from personalizing the control by hiding, minimizing, editing, or exporting it, or changing its <xref:System.Web.UI.WebControls.WebParts.Part.ChromeState%2A> value. Finally, the <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart.RenderContents%2A> method encodes the value of the string in the <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart.ErrorMessage%2A> property, to prevent rendering problems or scripting attacks."
   syntax:
     content: >-
       [System.ComponentModel.ToolboxItem(false)]
@@ -245,24 +245,25 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the control.
+  remarks: "The <xref:System.Web.UI.WebControls.WebParts.WebPartManager> control creates a new instance of the <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart> control when it fails in an attempt to load or create an instance of a dynamic <xref:System.Web.UI.WebControls.WebParts.WebPart> control. Dynamic controls are controls that are added to a page programmatically, or by a user who adds the control from a catalog of controls, as opposed to static controls that are declared in the markup of a Web page.  \n  \n The ErrorWebPart method simply creates an instance of the base class, passing to it the four parameters that contain information about the failed control."
   syntax:
     content: public ErrorWebPart (string originalID, string originalTypeName, string originalPath, string genericWebPartID);
     parameters:
     - id: originalID
       type: System.String
-      description: To be added.
+      description: A string that is the control ID (not the unique ID) of the failing control. If a  control is involved in the failure, the ID is the ID of its child server control.
     - id: originalTypeName
       type: System.String
-      description: To be added.
+      description: A string that is the name of the <xref:System.Type> of the failed control. If a  control is involved in the failure, the type name is the type of its child server control.
     - id: originalPath
       type: System.String
-      description: To be added.
+      description: A string that contains the path to a user control, if a  control that contains a child user control is involved in the failure.
     - id: genericWebPartID
       type: System.String
-      description: To be added.
+      description: A string that returns the ID of a  control, if that type of control was involved in the failure to load or create a control. This is needed for controls that do not inherit from the  base class.
   overload: System.Web.UI.WebControls.WebParts.ErrorWebPart.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -279,15 +280,16 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies special error style attributes to an  object that is inserted into a page in place of another control.
+  remarks: The AddAttributesToRender method takes the style characteristics (if any) that are defined in the <xref:System.Web.UI.WebControls.WebParts.WebZone.ErrorStyle%2A> object for the <xref:System.Web.UI.WebControls.WebParts.WebZone> zone that contains an <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart> control. The styles are applied to the <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart> control prior to rendering.
   syntax:
     content: protected override void AddAttributesToRender (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: To be added.
+      description: An  that contains the HTML output to be rendered.
   overload: System.Web.UI.WebControls.WebParts.ErrorWebPart.AddAttributesToRender*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -304,12 +306,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets several important properties on the  control prior to rendering, to prevent users from being able to personalize the control.
+  remarks: The EndLoadPersonalization method sets properties on an <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart> control before it is rendered. These properties prevent users from hiding, minimizing, editing, or exporting the control, or changing its <xref:System.Web.UI.WebControls.WebParts.Part.ChromeState%2A> value. However, users can close or delete an <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart> control instance.
   syntax:
     content: protected virtual void EndLoadPersonalization ();
     parameters: []
   overload: System.Web.UI.WebControls.WebParts.ErrorWebPart.EndLoadPersonalization*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -326,14 +329,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the error message that is displayed in a Web page in place of a control that could not be successfully added to the page.
+  remarks: The ErrorMessage property can be assigned a value by a developer, so that a custom error message is displayed at the point where the <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart> control is inserted into a page.
   syntax:
     content: public string ErrorMessage { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: A string that contains the text of the error message. The default value is a culture-specific error message.
   overload: System.Web.UI.WebControls.WebParts.ErrorWebPart.ErrorMessage*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -350,15 +354,16 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Encodes the string value of the <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart.ErrorMessage%2A> property.
+  remarks: The RenderContents method encodes the string assigned to the <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart.ErrorMessage%2A> property to ensure that it renders properly, and to protect against script injection attacks.
   syntax:
     content: protected override void RenderContents (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: To be added.
+      description: An  that encodes the error message.
   overload: System.Web.UI.WebControls.WebParts.ErrorWebPart.RenderContents*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -376,12 +381,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is added only to implement the  interface.
   syntax:
     content: void ITrackingPersonalizable.BeginLoad ();
     parameters: []
   overload: System.Web.UI.WebControls.WebParts.ErrorWebPart.System#Web#UI#WebControls#WebParts#ITrackingPersonalizable#BeginLoad*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -399,12 +404,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is added only to implement the  interface.
   syntax:
     content: void ITrackingPersonalizable.BeginSave ();
     parameters: []
   overload: System.Web.UI.WebControls.WebParts.ErrorWebPart.System#Web#UI#WebControls#WebParts#ITrackingPersonalizable#BeginSave*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -422,12 +427,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Implements the  interface and calls the <xref:System.Web.UI.WebControls.WebParts.ErrorWebPart.EndLoadPersonalization%2A> method.
   syntax:
     content: void ITrackingPersonalizable.EndLoad ();
     parameters: []
   overload: System.Web.UI.WebControls.WebParts.ErrorWebPart.System#Web#UI#WebControls#WebParts#ITrackingPersonalizable#EndLoad*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -445,12 +450,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is added only to implement the  interface.
   syntax:
     content: void ITrackingPersonalizable.EndSave ();
     parameters: []
   overload: System.Web.UI.WebControls.WebParts.ErrorWebPart.System#Web#UI#WebControls#WebParts#ITrackingPersonalizable#EndSave*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -468,14 +473,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the control tracks the status of its changes.
   syntax:
     content: bool System.Web.UI.WebControls.WebParts.ITrackingPersonalizable.TracksChanges { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the Web Parts control is responsible for determining when the control is considered changed; otherwise, .
   overload: System.Web.UI.WebControls.WebParts.ErrorWebPart.System#Web#UI#WebControls#WebParts#ITrackingPersonalizable#TracksChanges*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -496,24 +501,6 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.WebControls.WebParts.ErrorWebPart.AddAttributesToRender(System.Web.UI.HtmlTextWriter)
   parent: System.Web.UI.WebControls.WebParts.ErrorWebPart
   isExternal: false
@@ -538,24 +525,12 @@ references:
   name: ErrorMessage
   nameWithType: ErrorWebPart.ErrorMessage
   fullName: System.Web.UI.WebControls.WebParts.ErrorWebPart.ErrorMessage
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.WebControls.WebParts.ErrorWebPart.RenderContents(System.Web.UI.HtmlTextWriter)
   parent: System.Web.UI.WebControls.WebParts.ErrorWebPart
   isExternal: false
   name: RenderContents(HtmlTextWriter)
   nameWithType: ErrorWebPart.RenderContents(HtmlTextWriter)
   fullName: System.Web.UI.WebControls.WebParts.ErrorWebPart.RenderContents(HtmlTextWriter)
-- uid: System.Web.UI.HtmlTextWriter
-  parent: System.Web.UI
-  isExternal: false
-  name: HtmlTextWriter
-  nameWithType: HtmlTextWriter
-  fullName: System.Web.UI.HtmlTextWriter
 - uid: System.Web.UI.WebControls.WebParts.ErrorWebPart.System#Web#UI#WebControls#WebParts#ITrackingPersonalizable#BeginLoad
   parent: System.Web.UI.WebControls.WebParts.ErrorWebPart
   isExternal: false

@@ -15,8 +15,8 @@ items:
   nameWithType: ExpressionContext
   fullName: System.ComponentModel.Design.Serialization.ExpressionContext
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a means of passing context state among serializers. This class cannot be inherited.
+  remarks: "An ExpressionContext is placed on the context stack and contains the most relevant expression during serialization. The following C# code demonstrates an assignment.  \n  \n```  \nbutton1.Text = \"Hello\";  \n```  \n  \n During serialization, several serializers are responsible for creating this single statement. One of those serializers is responsible for creating \"Hello\". There are times when that serializer may need to know the context in which it is creating its expression. In the previous example, this context is not needed. The following C# code shows a situation in which knowledge of the context is necessary.  \n  \n```  \nbutton1.Text = rm.GetString(\"button1_Text\");  \n```  \n  \n In this case, the serializer responsible for creating the resource expression needs to be informed of the names of the target objects. The ExpressionContext class can be used for this. As each serializer creates an expression and invokes a serializer to handle a smaller part of the statement as a whole, the serializer pushes an expression context on the context stack. Each expression context has a parent property that locates the next expression context on the stack. This provides a convenient traversal capability."
   syntax:
     content: public sealed class ExpressionContext
   inheritance:
@@ -39,21 +39,24 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the given expression and owner.
   syntax:
     content: public ExpressionContext (System.CodeDom.CodeExpression expression, Type expressionType, object owner);
     parameters:
     - id: expression
       type: System.CodeDom.CodeExpression
-      description: To be added.
+      description: The given code expression.
     - id: expressionType
       type: System.Type
-      description: To be added.
+      description: The given code expression type.
     - id: owner
       type: System.Object
-      description: To be added.
+      description: The given code expression owner.
   overload: System.ComponentModel.Design.Serialization.ExpressionContext.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    expression, expressionType, or owner is ."
   platform:
   - net-11
   - net-20
@@ -70,24 +73,27 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a current value.
   syntax:
     content: public ExpressionContext (System.CodeDom.CodeExpression expression, Type expressionType, object owner, object presetValue);
     parameters:
     - id: expression
       type: System.CodeDom.CodeExpression
-      description: To be added.
+      description: The given code expression.
     - id: expressionType
       type: System.Type
-      description: To be added.
+      description: The given code expression type.
     - id: owner
       type: System.Object
-      description: To be added.
+      description: The given code expression owner.
     - id: presetValue
       type: System.Object
-      description: To be added.
+      description: The given code expression preset value.
   overload: System.ComponentModel.Design.Serialization.ExpressionContext.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    expression, expressionType, or owner is ."
   platform:
   - net-11
   - net-20
@@ -104,14 +110,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the expression this context represents.
   syntax:
     content: public System.CodeDom.CodeExpression Expression { get; }
     return:
       type: System.CodeDom.CodeExpression
-      description: To be added.
+      description: The expression this context represents.
   overload: System.ComponentModel.Design.Serialization.ExpressionContext.Expression*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -128,14 +134,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the <xref:System.Type> of the expression.
+  remarks: You can use <xref:System.ComponentModel.Design.Serialization.ExpressionContext> to determine if a cast is needed when assigning to the expression.
   syntax:
     content: public Type ExpressionType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the expression.
   overload: System.ComponentModel.Design.Serialization.ExpressionContext.ExpressionType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -152,14 +159,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the object owning this expression.
+  remarks: If the expression is a property reference to the <xref:System.Windows.Forms.Control.Text%2A> property of an instance of <xref:System.Windows.Forms.Button> called `button1`, Owner returns `button1`.
   syntax:
     content: public object Owner { get; }
     return:
       type: System.Object
-      description: To be added.
+      description: The object owning this expression.
   overload: System.ComponentModel.Design.Serialization.ExpressionContext.Owner*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -176,14 +184,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the preset value of an expression.
+  remarks: "Contains the preset value of an expression, should one exist. For example, if the expression is a property reference expression referring to the <xref:System.Windows.Forms.Control.Controls%2A> property of a <xref:System.Windows.Forms.Button>, the PresetValue property contains the instance of the <xref:System.Windows.Forms.Control.Controls%2A> property. This is because the property is read-only and preset by the object to contain a value. On the other hand, a property such as <xref:System.Windows.Forms.Control.Text%2A> or <xref:System.Windows.Forms.Control.Visible%2A> does not have a preset value and therefore the PresetValue property returns `null`.  \n  \n The following C# code shows how serializers can use this information to guide serialization.  \n  \n [C#]  \n  \n```  \nPadding p = new Padding();  \np.Left = 5;  \nbutton1.Padding = p;  \n  \nbutton1.Padding.Left = 5;  \n```  \n  \n The serializer of the <xref:System.Windows.Forms.Padding> structure needs to be informed if it should generate the first or second form. The first form is generated by default. The second form is only generated if there is an <xref:System.ComponentModel.Design.Serialization.ExpressionContext> on the context stack that contains a PresetValue equal to the value of the <xref:System.Windows.Forms.Padding> currently being serialized."
   syntax:
     content: public object PresetValue { get; }
     return:
       type: System.Object
-      description: To be added.
+      description: The preset value of this expression, or  if not assigned.
   overload: System.ComponentModel.Design.Serialization.ExpressionContext.PresetValue*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -210,90 +219,36 @@ references:
   name: Type
   nameWithType: Type
   fullName: System.Type
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ComponentModel.Design.Serialization.ExpressionContext.#ctor(System.CodeDom.CodeExpression,System.Type,System.Object,System.Object)
   parent: System.ComponentModel.Design.Serialization.ExpressionContext
   isExternal: false
   name: ExpressionContext(CodeExpression,Type,Object,Object)
   nameWithType: ExpressionContext.ExpressionContext(CodeExpression,Type,Object,Object)
   fullName: System.ComponentModel.Design.Serialization.ExpressionContext.ExpressionContext(CodeExpression,Type,Object,Object)
-- uid: System.CodeDom.CodeExpression
-  parent: System.CodeDom
-  isExternal: false
-  name: CodeExpression
-  nameWithType: CodeExpression
-  fullName: System.CodeDom.CodeExpression
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ComponentModel.Design.Serialization.ExpressionContext.Expression
   parent: System.ComponentModel.Design.Serialization.ExpressionContext
   isExternal: false
   name: Expression
   nameWithType: ExpressionContext.Expression
   fullName: System.ComponentModel.Design.Serialization.ExpressionContext.Expression
-- uid: System.CodeDom.CodeExpression
-  parent: System.CodeDom
-  isExternal: false
-  name: CodeExpression
-  nameWithType: CodeExpression
-  fullName: System.CodeDom.CodeExpression
 - uid: System.ComponentModel.Design.Serialization.ExpressionContext.ExpressionType
   parent: System.ComponentModel.Design.Serialization.ExpressionContext
   isExternal: false
   name: ExpressionType
   nameWithType: ExpressionContext.ExpressionType
   fullName: System.ComponentModel.Design.Serialization.ExpressionContext.ExpressionType
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.ComponentModel.Design.Serialization.ExpressionContext.Owner
   parent: System.ComponentModel.Design.Serialization.ExpressionContext
   isExternal: false
   name: Owner
   nameWithType: ExpressionContext.Owner
   fullName: System.ComponentModel.Design.Serialization.ExpressionContext.Owner
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ComponentModel.Design.Serialization.ExpressionContext.PresetValue
   parent: System.ComponentModel.Design.Serialization.ExpressionContext
   isExternal: false
   name: PresetValue
   nameWithType: ExpressionContext.PresetValue
   fullName: System.ComponentModel.Design.Serialization.ExpressionContext.PresetValue
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ComponentModel.Design.Serialization.ExpressionContext.#ctor*
   parent: System.ComponentModel.Design.Serialization.ExpressionContext
   isExternal: false

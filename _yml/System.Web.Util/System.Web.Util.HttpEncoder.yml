@@ -19,8 +19,8 @@ items:
   nameWithType: HttpEncoder
   fullName: System.Web.Util.HttpEncoder
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides encoding and decoding logic.
+  remarks: "The class contains encoding and decoding logic that is used by methods in classes such as <xref:System.Web.HttpUtility>, <xref:System.Web.HttpServerUtility>, and <xref:System.Net.HttpResponseHeader>.  \n  \n You can inherit from the HttpEncoder class and override its behavior to customize the default encoding and decoding behavior of ASP.NET. You then set the <xref:System.Web.Configuration.HttpRuntimeSection.EncoderType%2A> property of the <xref:System.Web.Configuration.HttpRuntimeSection> class to configure your custom class.  \n  \n A custom class for encoding and decoding that derives from HttpEncoder can override the built-in ASP.NET encoding and decoding behavior or change only selected aspects of it.  \n  \n You can configure the custom encoding type for in ASP.NET to replace or supplement the following encoding behavior:  \n  \n-   HTML encoding  \n  \n-   HTML attribute encoding  \n  \n-   URL encoding  \n  \n-   URL path encoding  \n  \n-   HTTP header name and header value encoding  \n  \n By default, ASP.NET applications are configured to use the <xref:System.Web.Security.AntiXss.AntiXssEncoder> type for all output encoding.  \n  \n The following example from an application-level Web.config file shows how the <xref:System.Web.Security.AntiXss.AntiXssEncoder> type is set for an ASP.NET application:  \n  \n `<httpRuntime requestValidationMode=\"4.5\" encoderType=\"System.Web.Security.AntiXss.AntiXssEncoder, System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\"/>`  \n  \n The configuration setting in the example sets the <xref:System.Web.Security.AntiXss.AntiXssEncoder> class to perform all output encoding in the application. For more information, see the <xref:System.Web.Security.AntiXss.AntiXssEncoder> class overview."
   syntax:
     content: public class HttpEncoder
   inheritance:
@@ -43,12 +43,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Util
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public HttpEncoder ();
     parameters: []
   overload: System.Web.Util.HttpEncoder.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -65,14 +65,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Util
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or set the  type that will be used in an application.
+  remarks: "If a derived <xref:System.Web.Util.HttpEncoder> type is specified in the configuration file, the Current property returns a reference to the custom type. However, if no custom encoder is used, the property returns a reference to the default ASP.NET <xref:System.Web.Util.HttpEncoder> instance.  \n  \n The Current property is not thread-safe. Set this property only in the application's `Application_Start` method, because `Application_Start` runs on a single thread."
   syntax:
     content: public static System.Web.Util.HttpEncoder Current { get; set; }
     return:
       type: System.Web.Util.HttpEncoder
-      description: To be added.
+      description: A reference to the encoder/decoder type that will be used.
   overload: System.Web.Util.HttpEncoder.Current*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The encoder instance that is being assigned to this property is .
   platform:
   - net-11
   - net-20
@@ -89,14 +93,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Util
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a reference to the default encoder for ASP.NET.
+  remarks: A common encoding issue is that the default ASP.NET <xref:System.Web.Util.HttpEncoder.UrlEncode%2A> behavior converts spaces into the "+" character. Historically, the "+" character has been an Internet convention for encoding space characters in a URL into a more human-readable manner. However, according to standards, the space character is supposed to be encoded as "%20" and instead of as the "+" character. ASP.NET lets you implement a more standards compliant encoding algorithm.
   syntax:
     content: public static System.Web.Util.HttpEncoder Default { get; }
     return:
       type: System.Web.Util.HttpEncoder
-      description: To be added.
+      description: A reference to the default encoder.
   overload: System.Web.Util.HttpEncoder.Default*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -113,24 +118,25 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Util
-  summary: To be added.
-  remarks: To be added.
+  summary: Encodes a header name and value into a string that can be used as an HTTP header.
+  remarks: "The HeaderNameValueEncode method takes input strings from the `headerName` and `headerValue` parameters and encodes them. The encoded values are returned as out parameters.  \n  \n The HeaderNameValueEncode method uses the following logic to encode header names and values:  \n  \n-   All characters whose Unicode value is less than ASCII character 32, except ASCII character 9, are URL-encoded into a format of `%NN` where the `N` characters represent hexadecimal values.  \n  \n-   ASCII character 9 (the horizontal tab character) is not URL-encoded.  \n  \n-   ASCII character 127 is encoded as `%7F`.  \n  \n-   All other characters are not encoded.  \n  \n    > [!NOTE]\n    >  Although this method can be used for Unicode values, it is typically used for values in the ASCII range.  \n  \n The default implementation of the HeaderNameValueEncode method returns the value of `headerValue` in `encodedHeaderValue` if `headerValue` is `null` or is an empty string. Similarly, the default implementation returns the value of `headerName` in `encodedHeaderName` if `headerName` is `null` or is an empty string."
   syntax:
     content: protected virtual void HeaderNameValueEncode (string headerName, string headerValue, out string encodedHeaderName, out string encodedHeaderValue);
     parameters:
     - id: headerName
       type: System.String
-      description: To be added.
+      description: The HTTP header name to encode.
     - id: headerValue
       type: System.String
-      description: To be added.
+      description: The HTTP header value to encode.
     - id: encodedHeaderName
       type: System.String
-      description: To be added.
+      description: When this method returns, contains the encoded name to use for an HTTP header. This parameter is passed uninitialized.
     - id: encodedHeaderValue
       type: System.String
-      description: To be added.
+      description: When this method returns, contains the encoded value to use for an HTTP header. This parameter is passed uninitialized.
   overload: System.Web.Util.HttpEncoder.HeaderNameValueEncode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -147,18 +153,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Util
-  summary: To be added.
-  remarks: To be added.
+  summary: Encodes an incoming value into a string that can be inserted into an HTML attribute that is delimited by using single or double quotation marks.
+  remarks: "The HtmlAttributeEncode method encodes characters by using the standard HTML entities. For example, the `<` (left angle bracket) is encoded as `<` and the `\\` (backslash) is encoded as `\\`.  \n  \n It is safe to use HtmlAttributeEncode within single-quoted and double-quoted attributes. The values must be quoted."
   syntax:
     content: protected virtual void HtmlAttributeEncode (string value, System.IO.TextWriter output);
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The string to encode.
     - id: output
       type: System.IO.TextWriter
-      description: To be added.
+      description: The text writer to write the encoded value to.
   overload: System.Web.Util.HttpEncoder.HtmlAttributeEncode*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    output is ."
   platform:
   - net-11
   - net-20
@@ -175,18 +185,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Util
-  summary: To be added.
-  remarks: To be added.
+  summary: Decodes a value from an HTML-encoded string.
+  remarks: "The following table lists the character sequences that the ASP.NET decoding logic can decode.  \n  \n|Character sequence|Rule|  \n|------------------------|----------|  \n|`&#NNN;` (decimal codes for ASCII characters).|Decoded as the specified ASCII character. The character sequence starts at the first digit after the # character and finishes at the semicolon.|  \n|`&#xZZ;` (hexadecimal codes for ASCII characters).|Decoded as the specified ASCII character. The encoded form specifies the character by using hexadecimal characters instead of a decimal value. The character sequence starts at the first digit after the # character and finishes at the semicolon.|  \n|Named HTML entities.|Decoded as the equivalent ASCII character.|"
   syntax:
     content: protected virtual void HtmlDecode (string value, System.IO.TextWriter output);
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The string to decode.
     - id: output
       type: System.IO.TextWriter
-      description: To be added.
+      description: The text writer to write the decoded value to.
   overload: System.Web.Util.HttpEncoder.HtmlDecode*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    output is ."
   platform:
   - net-11
   - net-20
@@ -203,18 +217,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Util
-  summary: To be added.
-  remarks: To be added.
+  summary: Encodes a string into an HTML-encoded string.
+  remarks: "The following table lists the character sequences that the ASP.NET encoding logic can decode.  \n  \n|Character|Encoded as|  \n|---------------|----------------|  \n|`<` (left angle bracket)|`<`|  \n|`>` (right angle bracket)|`>`|  \n|`\"` (double quotation marks)|`\"`|  \n|`&` (ampersand)|`&`|  \n|`\\` (backslash)|`\\`|  \n|ASCII characters from 160 to 255|`&#NNN;`, where `NNN` is the three-digit decimal character code|  \n  \n If you override the HtmlEncode method, you must produce output that is also safe within double-quoted or single-quoted HTML attributes. This accommodates parsing by the Razor engine, where markup and code can be combined, such as \\<tag attr=\"@value\">. In addition, the @ operator is not context-aware when processed by the Razor engine, therefore it calls HtmlEncode rather than <xref:System.Web.Util.HttpEncoder.HtmlAttributeEncode%2A>."
   syntax:
     content: protected virtual void HtmlEncode (string value, System.IO.TextWriter output);
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The string to encode.
     - id: output
       type: System.IO.TextWriter
-      description: To be added.
+      description: The text writer to write the encoded value to.
   overload: System.Web.Util.HttpEncoder.HtmlEncode*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    output is ."
   platform:
   - net-11
   - net-20
@@ -231,18 +249,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Util
-  summary: To be added.
-  remarks: To be added.
+  summary: Encodes a string.
+  remarks: URL encoding makes sure that all browsers correctly transmit text in URL strings. Characters such as a question mark (?), ampersand (&), slash (/), and spaces might be truncated or corrupted by some browsers. Therefore, these characters must be encoded.
   syntax:
     content: protected virtual string JavaScriptStringEncode (string value);
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The string to encode.
     return:
       type: System.String
-      description: To be added.
+      description: An encoded string.
   overload: System.Web.Util.HttpEncoder.JavaScriptStringEncode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -259,24 +278,31 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Util
-  summary: To be added.
-  remarks: To be added.
+  summary: Encodes an array of characters that are not allowed in a URL into a hexadecimal character-entity equivalent.
+  remarks: "The UrlEncode method is called by several URL encoding methods in the <xref:System.Web.HttpUtility> class.  \n  \n The UrlEncode method URL-encodes any character that is not in the set of ASCII characters that is considered to be URL-safe. Spaces are encoded as the ASCII \"`+\"` character. URL-safe ASCII characters include the ASCI characters (A to Z and a to z), numerals (0 to 9), and some punctuation marks. The following table lists the punctuation marks that are considered URL-safe ASCII characters.  \n  \n|Character|Description|  \n|---------------|-----------------|  \n|-|Hyphen|  \n|_|Underscore|  \n|.|Period (dot)|  \n|!|Exclamation mark|  \n|*|Asterisk (star)|  \n|(|Opening parenthesis|  \n|)|Closing parenthesis|"
   syntax:
     content: protected virtual byte[] UrlEncode (byte[] bytes, int offset, int count);
     parameters:
     - id: bytes
       type: System.Byte[]
-      description: To be added.
+      description: An array of bytes to encode.
     - id: offset
       type: System.Int32
-      description: To be added.
+      description: The position in the `bytes` array at which to begin encoding.
     - id: count
       type: System.Int32
-      description: To be added.
+      description: The number of items in the `bytes` array to encode.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: An array of encoded characters.
   overload: System.Web.Util.HttpEncoder.UrlEncode*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    offset is less than zero or greater than the length of the bytes array.  \n  \n -or-  \n  \n count is less than zero or count plus offset is greater than the length of the bytes array."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    bytes is ."
   platform:
   - net-11
   - net-20
@@ -293,18 +319,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Util
-  summary: To be added.
-  remarks: To be added.
+  summary: Encodes a subsection of a URL.
+  remarks: "The UrlPathEncode method is called by the <xref:System.Web.HttpUtility.UrlPathEncode%2A> method. The <xref:System.Web.HttpUtility.UrlPathEncode%2A> method performs the following steps:  \n  \n-   Applies the encoding logic of the UrlPathEncode method to only the path part of the URL (which excludes the query string). The method assumes that the URL is encoded as a UTF-8 string.  \n  \n-   Encodes non-spaces so that only a subset of the first 128 ASCII characters is used in the resulting encoded string. Any characters at Unicode value 128 and greater, or 32 and less, are URL-encoded.  \n  \n-   Encodes spaces as %20."
   syntax:
     content: protected virtual string UrlPathEncode (string value);
     parameters:
     - id: value
       type: System.String
-      description: To be added.
+      description: The string to encode.
     return:
       type: System.String
-      description: To be added.
+      description: A URL-encoded string.
   overload: System.Web.Util.HttpEncoder.UrlPathEncode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -337,12 +364,6 @@ references:
   name: Default
   nameWithType: HttpEncoder.Default
   fullName: System.Web.Util.HttpEncoder.Default
-- uid: System.Web.Util.HttpEncoder
-  parent: System.Web.Util
-  isExternal: false
-  name: HttpEncoder
-  nameWithType: HttpEncoder
-  fullName: System.Web.Util.HttpEncoder
 - uid: System.Web.Util.HttpEncoder.HeaderNameValueEncode(System.String,System.String,System.String@,System.String@)
   parent: System.Web.Util.HttpEncoder
   isExternal: false
@@ -355,36 +376,12 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Util.HttpEncoder.HtmlAttributeEncode(System.String,System.IO.TextWriter)
   parent: System.Web.Util.HttpEncoder
   isExternal: false
   name: HtmlAttributeEncode(String,TextWriter)
   nameWithType: HttpEncoder.HtmlAttributeEncode(String,TextWriter)
   fullName: System.Web.Util.HttpEncoder.HtmlAttributeEncode(String,TextWriter)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.TextWriter
   parent: System.IO
   isExternal: true
@@ -397,78 +394,38 @@ references:
   name: HtmlDecode(String,TextWriter)
   nameWithType: HttpEncoder.HtmlDecode(String,TextWriter)
   fullName: System.Web.Util.HttpEncoder.HtmlDecode(String,TextWriter)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.TextWriter
-  parent: System.IO
-  isExternal: true
-  name: TextWriter
-  nameWithType: TextWriter
-  fullName: System.IO.TextWriter
 - uid: System.Web.Util.HttpEncoder.HtmlEncode(System.String,System.IO.TextWriter)
   parent: System.Web.Util.HttpEncoder
   isExternal: false
   name: HtmlEncode(String,TextWriter)
   nameWithType: HttpEncoder.HtmlEncode(String,TextWriter)
   fullName: System.Web.Util.HttpEncoder.HtmlEncode(String,TextWriter)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.IO.TextWriter
-  parent: System.IO
-  isExternal: true
-  name: TextWriter
-  nameWithType: TextWriter
-  fullName: System.IO.TextWriter
 - uid: System.Web.Util.HttpEncoder.JavaScriptStringEncode(System.String)
   parent: System.Web.Util.HttpEncoder
   isExternal: false
   name: JavaScriptStringEncode(String)
   nameWithType: HttpEncoder.JavaScriptStringEncode(String)
   fullName: System.Web.Util.HttpEncoder.JavaScriptStringEncode(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Util.HttpEncoder.UrlEncode(System.Byte[],System.Int32,System.Int32)
   parent: System.Web.Util.HttpEncoder
   isExternal: false
   name: UrlEncode(Byte[],Int32,Int32)
   nameWithType: HttpEncoder.UrlEncode(Byte[],Int32,Int32)
   fullName: System.Web.Util.HttpEncoder.UrlEncode(Byte[],Int32,Int32)
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Int32
   parent: System
   isExternal: true
@@ -481,18 +438,6 @@ references:
   name: UrlPathEncode(String)
   nameWithType: HttpEncoder.UrlPathEncode(String)
   fullName: System.Web.Util.HttpEncoder.UrlPathEncode(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Util.HttpEncoder.#ctor*
   parent: System.Web.Util.HttpEncoder
   isExternal: false

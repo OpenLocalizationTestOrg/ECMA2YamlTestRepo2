@@ -11,8 +11,10 @@ items:
   nameWithType: QueryInterceptorAttribute
   fullName: System.Data.Services.QueryInterceptorAttribute
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: The QueryInterceptorAttribute on a method annotates it as a query interceptor on the specified entity set.
+  remarks: "Entity set-level authorization and validation is implemented by methods annotated with the QueryInterceptorAttribute. [!INCLUDE[ssAstoria](../../add/includes/ssastoria-md.md)]s do not implement security policies but instead provide the infrastructure required for service developers to write their own security rules and business validation.  \n  \n Entity set access control and validation is enabled through query operations by using query composition. To control entity-based access, implement a method-per-entity set according to the following rules:  \n  \n The method must have public scope and be annotated with the QueryInterceptorAttribute, taking the name of a entity set as a parameter.  \n  \n The method must accept no parameters.  \n  \n The method must return an expression of type `Expression<Func<T, bool>>` that is the filter to be composed for the entity set."
+  example:
+  - "The following example controls access to the `Customers` entity set. Each `Customer` can only see `Orders` associated with that `Customer`.  \n  \n```  \n[QueryInterceptor(\"Orders\")]  \npublic Expression<Func<Order, bool>> FilterOrders()   \n{  \n    return o => o.Customer.Name == /* Current principal name. */;  \n}   \n  \n// Insures that the user accessing the customer(s) has the appropriate  \n// rights as defined in the QueryRules object to access the customer  \n// resource(s).  \n  \n[QueryInterceptor (\"Customers\")]  \npublic Expression<Func<Customer, bool>> FilterCustomers()   \n{  \n  return c => c.Name == /* Current principal name. */ &&  \n              this.CurrentDataSource.QueryRules.Contains(  \n                rule => rule.Name == c.Name &&  \n                        rule.CustomerAllowedToQuery == true  \n              );  \n}  \n  \n```"
   syntax:
     content: >-
       [System.AttributeUsage(System.AttributeTargets.Method, AllowMultiple=true, Inherited=true)]
@@ -38,15 +40,15 @@ items:
   assemblies:
   - System.Data.Services
   namespace: System.Data.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class for the entity set specified by the entitySetName parameter.
   syntax:
     content: public QueryInterceptorAttribute (string entitySetName);
     parameters:
     - id: entitySetName
       type: System.String
-      description: To be added.
+      description: The name of the entity set that contains the entity to which the interceptor applies.
   overload: System.Data.Services.QueryInterceptorAttribute.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -63,14 +65,14 @@ items:
   assemblies:
   - System.Data.Services
   namespace: System.Data.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the name of the entity set that contains the entity to which the interceptor applies.
   syntax:
     content: public string EntitySetName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A string that indicates the name of the entity set that contains the entity to which the interceptor applies.
   overload: System.Data.Services.QueryInterceptorAttribute.EntitySetName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -97,12 +99,6 @@ references:
   name: EntitySetName
   nameWithType: QueryInterceptorAttribute.EntitySetName
   fullName: System.Data.Services.QueryInterceptorAttribute.EntitySetName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Data.Services.QueryInterceptorAttribute.#ctor*
   parent: System.Data.Services.QueryInterceptorAttribute
   isExternal: false

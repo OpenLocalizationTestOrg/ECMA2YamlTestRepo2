@@ -17,8 +17,12 @@ items:
   nameWithType: DeliveryRequirementsAttribute
   fullName: System.ServiceModel.DeliveryRequirementsAttribute
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies the feature requirements that bindings must provide to the service or client implementation.
+  remarks: "Use the DeliveryRequirementsAttribute to instruct [!INCLUDE[indigo1](../../add/includes/indigo1-md.md)] to confirm that the binding provides the features required by the service or client implementation. If a DeliveryRequirementsAttribute attribute is detected when a service description is loaded from an application configuration file or built programmatically in code, [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] validates the configured binding and supports all the features that the attribute specifies. For example, your service may require the bindings to support queuing. Using DeliveryRequirementsAttribute allows [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] to confirm that the following requirements are met:  \n  \n-   The <xref:System.ServiceModel.DeliveryRequirementsAttribute.QueuedDeliveryRequirements%2A> property specifies the queuing requirements that a binding must meet.  \n  \n-   The <xref:System.ServiceModel.DeliveryRequirementsAttribute.RequireOrderedDelivery%2A> property indicates whether the binding must support ordered messaging.  \n  \n-   The <xref:System.ServiceModel.DeliveryRequirementsAttribute.TargetContract%2A> property indicates to which type the requirements apply.  \n  \n The DeliveryRequirementsAttribute attribute is applied to a class, which can implement any number of service contract interfaces. DeliveryRequirementsAttribute can be applied to all the contracts the class implements or to only one of them. The attribute can be applied to a class more than once."
+  example:
+  - >-
+    [!code-cs[UEDeliveryRequirementsAttribute#1](../../add/codesnippet/CSharp/t-system.servicemodel.de_23_1.cs)]
+     [!code-vb[UEDeliveryRequirementsAttribute#1](../../add/codesnippet/VisualBasic/t-system.servicemodel.de_23_1.vb)]
   syntax:
     content: >-
       [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Interface, AllowMultiple=true)]
@@ -46,12 +50,13 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: "The defaults are:  \n  \n-   The <xref:System.ServiceModel.DeliveryRequirementsAttribute.QueuedDeliveryRequirements%2A> property is set to <xref:System.ServiceModel.QueuedDeliveryRequirementsMode>.  \n  \n-   The <xref:System.ServiceModel.DeliveryRequirementsAttribute.RequireOrderedDelivery%2A> property is set to `false`."
   syntax:
     content: public DeliveryRequirementsAttribute ();
     parameters: []
   overload: System.ServiceModel.DeliveryRequirementsAttribute.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -68,14 +73,20 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies whether the binding for a service must support queued contracts.
+  remarks: The <xref:System.ServiceModel.QueuedDeliveryRequirementsMode> instructs [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] to confirm that the binding supports queued delivery. The <xref:System.ServiceModel.QueuedDeliveryRequirementsMode> value instructs [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] to confirm that the binding does not support queued delivery.
+  example:
+  - "The following code example uses the <xref:System.ServiceModel.DeliveryRequirementsAttribute> attribute to instruct [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] to confirm at runtime that the actual binding does not support queued contracts but does support ordered messages.  \n  \n [!code-cs[UEDeliveryRequirementsAttribute#1](../../add/codesnippet/CSharp/p-system.servicemodel.de_4_1.cs)]\n [!code-vb[UEDeliveryRequirementsAttribute#1](../../add/codesnippet/VisualBasic/p-system.servicemodel.de_4_1.vb)]"
   syntax:
     content: public System.ServiceModel.QueuedDeliveryRequirementsMode QueuedDeliveryRequirements { get; set; }
     return:
       type: System.ServiceModel.QueuedDeliveryRequirementsMode
-      description: To be added.
+      description: One of the  values; the default is .
   overload: System.ServiceModel.DeliveryRequirementsAttribute.QueuedDeliveryRequirements*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The value is not one of the  values.
   platform:
   - net-11
   - net-20
@@ -92,14 +103,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies whether the binding must support ordered messages.
+  remarks: Setting the RequireOrderedDelivery property to `false` instructs [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] to perform no validation.
+  example:
+  - "The following code example uses the <xref:System.ServiceModel.DeliveryRequirementsAttribute> attribute to instruct [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] to confirm at runtime that the actual binding does support ordered messages.  \n  \n [!code-cs[UEDeliveryRequirementsAttribute#1](../../add/codesnippet/CSharp/p-system.servicemodel.de_20_1.cs)]\n [!code-vb[UEDeliveryRequirementsAttribute#1](../../add/codesnippet/VisualBasic/p-system.servicemodel.de_20_1.vb)]"
   syntax:
     content: public bool RequireOrderedDelivery { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: instructs [!INCLUDE[indigo1](../../add/includes/indigo1-md.md)] to confirm that the binding must support the ordering of messages; otherwise, . The default is .
   overload: System.ServiceModel.DeliveryRequirementsAttribute.RequireOrderedDelivery*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -117,21 +131,21 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Implements the IContractBehavior.AddBindingParameters method to attach binding parameters correctly.
   syntax:
     content: void IContractBehavior.AddBindingParameters (System.ServiceModel.Description.ContractDescription description, System.ServiceModel.Description.ServiceEndpoint endpoint, System.ServiceModel.Channels.BindingParameterCollection parameters);
     parameters:
     - id: description
       type: System.ServiceModel.Description.ContractDescription
-      description: To be added.
+      description: The contract description.
     - id: endpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The service endpoint for the contract.
     - id: parameters
       type: System.ServiceModel.Channels.BindingParameterCollection
-      description: To be added.
+      description: The binding parameters.
   overload: System.ServiceModel.DeliveryRequirementsAttribute.System#ServiceModel#Description#IContractBehavior#AddBindingParameters*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -149,21 +163,21 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Implementation of the IContractBehavior.ApplyClientBehavior method for client support.
   syntax:
     content: void IContractBehavior.ApplyClientBehavior (System.ServiceModel.Description.ContractDescription description, System.ServiceModel.Description.ServiceEndpoint endpoint, System.ServiceModel.Dispatcher.ClientRuntime proxy);
     parameters:
     - id: description
       type: System.ServiceModel.Description.ContractDescription
-      description: To be added.
+      description: The contract description to which the behavior is attached.
     - id: endpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The endpoint for the contract.
     - id: proxy
       type: System.ServiceModel.Dispatcher.ClientRuntime
-      description: To be added.
+      description: The client runtime on which the behavior operates.
   overload: System.ServiceModel.DeliveryRequirementsAttribute.System#ServiceModel#Description#IContractBehavior#ApplyClientBehavior*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -181,21 +195,21 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Implementation of the <xref:System.ServiceModel.Description.IContractBehavior.ApplyDispatchBehavior%2A?displayProperty=fullName> method that enables service support.
   syntax:
     content: void IContractBehavior.ApplyDispatchBehavior (System.ServiceModel.Description.ContractDescription description, System.ServiceModel.Description.ServiceEndpoint endpoint, System.ServiceModel.Dispatcher.DispatchRuntime dispatch);
     parameters:
     - id: description
       type: System.ServiceModel.Description.ContractDescription
-      description: To be added.
+      description: The contract description to which the behavior is attached.
     - id: endpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The endpoint for the contract.
     - id: dispatch
       type: System.ServiceModel.Dispatcher.DispatchRuntime
-      description: To be added.
+      description: The dispatch runtime that supports the endpoint.
   overload: System.ServiceModel.DeliveryRequirementsAttribute.System#ServiceModel#Description#IContractBehavior#ApplyDispatchBehavior*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -213,18 +227,18 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Implements the IContractBehavior.Validate method to enable validation support.
   syntax:
     content: void IContractBehavior.Validate (System.ServiceModel.Description.ContractDescription description, System.ServiceModel.Description.ServiceEndpoint endpoint);
     parameters:
     - id: description
       type: System.ServiceModel.Description.ContractDescription
-      description: To be added.
+      description: The contract description.
     - id: endpoint
       type: System.ServiceModel.Description.ServiceEndpoint
-      description: To be added.
+      description: The endpoint to be validated.
   overload: System.ServiceModel.DeliveryRequirementsAttribute.System#ServiceModel#Description#IContractBehavior#Validate*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -241,14 +255,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the type to which it applies.
+  remarks: A service class can implement any number of service contract interfaces. Use the TargetContract property to validate that endpoints with the TargetContract have bindings that support the requirements. This attribute can be used any number of times on the same class.
+  example:
+  - "The following code example uses the <xref:System.ServiceModel.DeliveryRequirementsAttribute> attribute to instruct [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] to confirm at runtime that the actual binding does not support queued contracts but does support ordered messages. It also specifies the target contract to which this restriction should be applied.  \n  \n [!code-cs[UEDeliveryRequirementsAttribute#2](../../add/codesnippet/CSharp/p-system.servicemodel.de_6_1.cs)]\n [!code-vb[UEDeliveryRequirementsAttribute#2](../../add/codesnippet/VisualBasic/p-system.servicemodel.de_6_1.vb)]"
   syntax:
     content: public Type TargetContract { get; set; }
     return:
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> to which the attribute applies.
   overload: System.ServiceModel.DeliveryRequirementsAttribute.TargetContract*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -317,18 +334,6 @@ references:
   name: System.ServiceModel.Description.IContractBehavior.ApplyClientBehavior(ContractDescription,ServiceEndpoint,ClientRuntime)
   nameWithType: DeliveryRequirementsAttribute.System.ServiceModel.Description.IContractBehavior.ApplyClientBehavior(ContractDescription,ServiceEndpoint,ClientRuntime)
   fullName: System.ServiceModel.DeliveryRequirementsAttribute.System.ServiceModel.Description.IContractBehavior.ApplyClientBehavior(ContractDescription,ServiceEndpoint,ClientRuntime)
-- uid: System.ServiceModel.Description.ContractDescription
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ContractDescription
-  nameWithType: ContractDescription
-  fullName: System.ServiceModel.Description.ContractDescription
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
 - uid: System.ServiceModel.Dispatcher.ClientRuntime
   parent: System.ServiceModel.Dispatcher
   isExternal: true
@@ -341,18 +346,6 @@ references:
   name: System.ServiceModel.Description.IContractBehavior.ApplyDispatchBehavior(ContractDescription,ServiceEndpoint,DispatchRuntime)
   nameWithType: DeliveryRequirementsAttribute.System.ServiceModel.Description.IContractBehavior.ApplyDispatchBehavior(ContractDescription,ServiceEndpoint,DispatchRuntime)
   fullName: System.ServiceModel.DeliveryRequirementsAttribute.System.ServiceModel.Description.IContractBehavior.ApplyDispatchBehavior(ContractDescription,ServiceEndpoint,DispatchRuntime)
-- uid: System.ServiceModel.Description.ContractDescription
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ContractDescription
-  nameWithType: ContractDescription
-  fullName: System.ServiceModel.Description.ContractDescription
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
 - uid: System.ServiceModel.Dispatcher.DispatchRuntime
   parent: System.ServiceModel.Dispatcher
   isExternal: true
@@ -365,18 +358,6 @@ references:
   name: System.ServiceModel.Description.IContractBehavior.Validate(ContractDescription,ServiceEndpoint)
   nameWithType: DeliveryRequirementsAttribute.System.ServiceModel.Description.IContractBehavior.Validate(ContractDescription,ServiceEndpoint)
   fullName: System.ServiceModel.DeliveryRequirementsAttribute.System.ServiceModel.Description.IContractBehavior.Validate(ContractDescription,ServiceEndpoint)
-- uid: System.ServiceModel.Description.ContractDescription
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ContractDescription
-  nameWithType: ContractDescription
-  fullName: System.ServiceModel.Description.ContractDescription
-- uid: System.ServiceModel.Description.ServiceEndpoint
-  parent: System.ServiceModel.Description
-  isExternal: true
-  name: ServiceEndpoint
-  nameWithType: ServiceEndpoint
-  fullName: System.ServiceModel.Description.ServiceEndpoint
 - uid: System.ServiceModel.DeliveryRequirementsAttribute.TargetContract
   parent: System.ServiceModel.DeliveryRequirementsAttribute
   isExternal: false

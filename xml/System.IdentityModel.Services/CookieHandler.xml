@@ -10,8 +10,37 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Provides an abstract base class for reading, writing, and deleting session cookies on an HTTP client.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The <xref:System.IdentityModel.Services.SessionAuthenticationModule> (SAM) uses an instance of the CookieHandler class to read, write, and delete the cookie or cookies that contain the <xref:System.IdentityModel.Tokens.SessionSecurityToken> on the HTTP client. The cookie (or cookies, in the case where the session token is split across several cookies) that contains the session token is known as the session cookie.  
+  
+ Windows Identity Foundation (WIF) ships with a cookie handler called the chunked cookie handler that is implemented by the <xref:System.IdentityModel.Services.ChunkedCookieHandler> class. The chunked cookie handler splits the session token across one or more cookies according to a specified chunk size. This is to meet size limitations on individual cookies imposed by many browsers.  
+  
+ You can derive from CookieHandler to create your own cookie handler. When you do so, you must override the <xref:System.IdentityModel.Services.CookieHandler.DeleteCore%2A>, <xref:System.IdentityModel.Services.CookieHandler.ReadCore%2A>, and <xref:System.IdentityModel.Services.CookieHandler.WriteCore%2A> methods to perform the actual work of deleting, reading, and writing the session cookie. These methods typically read the cookie from the <xref:System.Web.HttpRequest.Cookies%2A?displayProperty=fullName> collection and write or delete cookies through the <xref:System.Web.HttpResponse.Cookies%2A?displayProperty=fullName> collection. The <xref:System.Web.HttpContext> object through which you can access the request and response is provided as a parameter to each of these methods. In addition to the required methods, you can optionally override other virtual methods properties exposed by the CookieHandler class to customize the behavior of your handler.  
+  
+ Several properties are exposed by the CookieHandler class that specify default behavior and properties for the session cookie. The <xref:System.IdentityModel.Services.CookieHandler.Name%2A>, <xref:System.IdentityModel.Services.CookieHandler.Domain%2A>, and <xref:System.IdentityModel.Services.CookieHandler.Path%2A> properties supply the base name for the cookie, the domain in which it is valid and the path under which it is stored on the client. The <xref:System.IdentityModel.Services.CookieHandler.HideFromClientScript%2A> property specifies whether the cookie is accessible to client-side scripts. The <xref:System.IdentityModel.Services.CookieHandler.RequireSsl%2A> property specifies whether the cookie should be transmitted only over secure (HTTPS) connections. If set, the <xref:System.IdentityModel.Services.CookieHandler.PersistentSessionLifetime%2A> property is used to set the expiration time for persistent sessions, that is for sessions that remain valid even after the browser is closed. All of these properties have equivalent properties that are typically set on the underlying <xref:System.Web.HttpCookie> object (or objects) by the "core" methods of the handler. For more information see the documentation for each property.  
+  
+ The cookie handler that is used by the SAM can be specified in configuration through the [\<cookieHandler>](../Topic/%3CcookieHandler%3E.md) element. The cookie handler set by this element can be modified in an event delegate for the <xref:System.IdentityModel.Services.FederatedAuthentication.FederationConfigurationCreated?displayProperty=fullName> event or it can be set or accessed directly through the <xref:System.IdentityModel.Services.SessionAuthenticationModule.CookieHandler%2A?displayProperty=fullName> property.  
+  
+   
+  
+## Examples  
+ The following example configures the SAM to use a custom cookie handler of type `MyNamespace.MyCustomCookieHandler`.  
+  
+```xml  
+<cookieHandler mode="Custom">  
+    <customCookieHandler type="MyNamespace.MyCustomCookieHandler, MyAssembly" />  
+</cookieHandler>  
+```  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -23,8 +52,11 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Called from constructors in derived classes to initialize the <see cref="T:System.IdentityModel.Services.CookieHandler" /> class.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Delete">
@@ -39,8 +71,18 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Deletes the cookie associated with the current request that has the default name, domain, and path.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The name, domain and path are specified by the <xref:System.IdentityModel.Services.CookieHandler.Name%2A>, <xref:System.IdentityModel.Services.CookieHandler.Domain%2A>, and <xref:System.IdentityModel.Services.CookieHandler.Path%2A> properties. The request is specified by <xref:System.Web.HttpContext.Current%2A?displayProperty=fullName>  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Delete">
@@ -57,9 +99,21 @@
         <Parameter Name="name" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="name">The name of the cookie.</param>
+        <summary>Deletes the cookie associated with the current request that has the specified name and the default domain and path.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The domain and path are specified by the <xref:System.IdentityModel.Services.CookieHandler.Domain%2A> and <xref:System.IdentityModel.Services.CookieHandler.Path%2A> properties. The request is specified by <xref:System.Web.HttpContext.Current%2A?displayProperty=fullName>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="name" /> is <see langword="null" /> or empty.</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Delete">
@@ -76,9 +130,19 @@
         <Parameter Name="context" Type="System.Web.HttpContext" />
       </Parameters>
       <Docs>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="context">The <see cref="T:System.Web.HttpContext" /> for the request.</param>
+        <summary>Deletes the cookie associated with the current request that has the default name, domain, and path.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The name, domain and path are specified by the <xref:System.IdentityModel.Services.CookieHandler.Name%2A>, <xref:System.IdentityModel.Services.CookieHandler.Domain%2A>, and <xref:System.IdentityModel.Services.CookieHandler.Path%2A> properties.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Delete">
@@ -96,10 +160,22 @@
         <Parameter Name="context" Type="System.Web.HttpContext" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="name">The name of the cookie.</param>
+        <param name="context">The <see cref="T:System.Web.HttpContext" /> for the request.</param>
+        <summary>Deletes the cookie associated with the specified request that has the specified name and the default domain and path.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The domain and path are specified by the <xref:System.IdentityModel.Services.CookieHandler.Domain%2A> and <xref:System.IdentityModel.Services.CookieHandler.Path%2A> properties.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="name" /> is <see langword="null" /> or empty.</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Delete">
@@ -119,12 +195,17 @@
         <Parameter Name="context" Type="System.Web.HttpContext" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <param name="path">To be added.</param>
-        <param name="domain">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="name">The name of the cookie.</param>
+        <param name="path">The path for the cookie.</param>
+        <param name="domain">The domain for the cookie</param>
+        <param name="context">The <see cref="T:System.Web.HttpContext" /> for the request</param>
+        <summary>Deletes the cookie associated with the specified request that has the specified name, path, and domain.</summary>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="name" /> is <see langword="null" /> or empty.</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="DeleteCore">
@@ -144,12 +225,22 @@
         <Parameter Name="context" Type="System.Web.HttpContext" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <param name="path">To be added.</param>
-        <param name="domain">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="name">The name of the cookie</param>
+        <param name="path">The path for the cookie</param>
+        <param name="domain">The domain for the cookie</param>
+        <param name="context">The <see cref="T:System.Web.HttpContext" /> for the request.</param>
+        <summary>When overridden in a derived class, deletes the cookie associated with the specified request that has the specified name, domain, and path.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Called from the overloaded <xref:System.IdentityModel.Services.CookieHandler.Delete%2A> methods to do the actual work of deleting the cookie. The <xref:System.IdentityModel.Services.CookieHandler.Delete%2A> methods will ensure that name and path are non-empty strings.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Domain">
@@ -163,9 +254,20 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the domain used for cookies.</summary>
+        <value>The domain used for cookies. The default is <see langword="null" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Corresponds to the <xref:System.Web.HttpCookie.Domain%2A?displayProperty=fullName> property.  
+  
+ The property can be initialized by specifying the `domain` attribute on the [\<cookieHandler>](../Topic/%3CcookieHandler%3E.md) element in configuration.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>The domain used for cookies. The default is <see langword="null" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="HideFromClientScript">
@@ -179,9 +281,24 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets a value that indicates whether the cookie should be hidden from client script.</summary>
+        <value>
+          <see langword="true" /> if the cookie should be hidden from client script; otherwise, <see langword="false" />. The default is <see langword="true" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Controls whether the "HttpOnly" flag is emitted in the Set-Cookie header for cookies written by the handler. Some web browsers honor this flag by keeping client-side script from accessing the cookie value.  
+  
+ This property corresponds to the <xref:System.Web.HttpCookie.HttpOnly%2A?displayProperty=fullName> property.  
+  
+ The property can be initialized by specifying the `hideFromScript` attribute on the [\<cookieHandler>](../Topic/%3CcookieHandler%3E.md) element in configuration.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>
+          <see langword="true" /> if the cookie should be hidden from client script; otherwise, <see langword="false" />. The default is <see langword="true" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="MatchCookiePath">
@@ -199,11 +316,13 @@
         <Parameter Name="targetUri" Type="System.Uri" />
       </Parameters>
       <Docs>
-        <param name="baseUri">To be added.</param>
-        <param name="targetUri">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="baseUri">The base URL of the request.</param>
+        <param name="targetUri">The URL to match</param>
+        <summary>If the target domain is within the cookie domain and the target path is within the cookie path, match the casing of the cookie path portion.</summary>
+        <returns>Returns &lt;xref:System.String&gt;.</returns>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <value>Returns &lt;xref:System.String&gt;.</value>
       </Docs>
     </Member>
     <Member MemberName="Name">
@@ -217,9 +336,21 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the base name for cookies written by the handler.</summary>
+        <value>The base name to use for cookies. The default is “FedAuth”.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This property corresponds to the <xref:System.Web.HttpCookie.Name%2A?displayProperty=fullName> property.  
+  
+ The property can be initialized by specifying the `name` attribute on the [\<cookieHandler>](../Topic/%3CcookieHandler%3E.md) element in configuration.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">An attempt to set a <see langword="null" /> or empty value occurs.</exception>
+        <threadsafe />
+        <returns>The base name to use for cookies. The default is “FedAuth”.</returns>
       </Docs>
     </Member>
     <Member MemberName="Path">
@@ -233,9 +364,21 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the virtual path for cookies written by the handler.</summary>
+        <value>The virtual path. Defaults to the root of the ASP.NET application.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This property corresponds to the <xref:System.Web.HttpCookie.Path%2A?displayProperty=fullName> property.  
+  
+ The property can be initialized by specifying the `path` attribute on the [\<cookieHandler>](../Topic/%3CcookieHandler%3E.md) element in configuration.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">An attempt to set a <see langword="null" /> or empty value occurs.</exception>
+        <threadsafe />
+        <returns>The virtual path. Defaults to the root of the ASP.NET application.</returns>
       </Docs>
     </Member>
     <Member MemberName="PersistentSessionLifetime">
@@ -249,9 +392,23 @@
         <ReturnType>System.Nullable&lt;System.TimeSpan&gt;</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>The lifetime of persistent sessions. If zero, transient sessions are always used.</summary>
+        <value>The session lifetime. The default is <see langword="null" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Tickets for persistent sessions are stored in file-based cookies, meaning that the sign-in session may continue after the web browser is closed and reopened.  
+  
+ This property is used to set the <xref:System.Web.HttpCookie.Expires%2A?displayProperty=fullName> property.  
+  
+ The property can be initialized by specifying the `persistentSessionLifetime` attribute on the [\<cookieHandler>](../Topic/%3CcookieHandler%3E.md) element in configuration.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">A value that is less than zero is specified.</exception>
+        <threadsafe />
+        <returns>The session lifetime. The default is <see langword="null" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="Read">
@@ -266,9 +423,18 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Reads the cookie associated with the current request that has the default name.</summary>
+        <returns>The cookie value or <see langword="null" /> if the cookie was not found.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The name of the cookie is specified by the <xref:System.IdentityModel.Services.CookieHandler.Name%2A> property. The request is specified by <xref:System.Web.HttpContext.Current%2A?displayProperty=fullName>.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>The cookie value or <see langword="null" /> if the cookie was not found.</value>
       </Docs>
     </Member>
     <Member MemberName="Read">
@@ -285,10 +451,21 @@
         <Parameter Name="name" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="name">The name of the cookie to read.</param>
+        <summary>Reads the cookie associated with the current request that has the specified name.</summary>
+        <returns>The cookie value or <see langword="null" /> if the cookie was not found.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The request is specified by <xref:System.Web.HttpContext.Current%2A?displayProperty=fullName>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">
+          <paramref name="name" /> is <see langword="null" /> or empty.</exception>
+        <threadsafe />
+        <value>The cookie value or <see langword="null" /> if the cookie was not found.</value>
       </Docs>
     </Member>
     <Member MemberName="Read">
@@ -305,10 +482,19 @@
         <Parameter Name="context" Type="System.Web.HttpContext" />
       </Parameters>
       <Docs>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="context">The <see cref="T:System.Web.HttpContext" /> for the request.</param>
+        <summary>Reads the cookie associated with the current request that has the default name, domain, and path.</summary>
+        <returns>The cookie value or <see langword="null" /> if the cookie was not found.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The name of the cookie is specified by the <xref:System.IdentityModel.Services.CookieHandler.Name%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>The cookie value or <see langword="null" /> if the cookie was not found.</value>
       </Docs>
     </Member>
     <Member MemberName="Read">
@@ -326,11 +512,15 @@
         <Parameter Name="context" Type="System.Web.HttpContext" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="name">The name of the cookie to read.</param>
+        <param name="context">The <see cref="T:System.Web.HttpContext" /> for the request.</param>
+        <summary>Reads the cookie associated with the specified request that has the specified name and the default domain and path.</summary>
+        <returns>The cookie value or <see langword="null" /> if the cookie was not found.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentException">
+          <paramref name="name" /> is <see langword="null" /> or empty.</exception>
+        <threadsafe />
+        <value>The cookie value or <see langword="null" /> if the cookie was not found.</value>
       </Docs>
     </Member>
     <Member MemberName="ReadCore">
@@ -348,11 +538,20 @@
         <Parameter Name="context" Type="System.Web.HttpContext" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="name">The name of the cookie</param>
+        <param name="context">The <see cref="T:System.Web.HttpContext" /> for the request.</param>
+        <summary>When overridden in a derived class, reads the cookie that has the specified name and that is associated with the specified request.</summary>
+        <returns>The cookie value or <see langword="null" /> if the cookie was not found</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Called from the overloaded <xref:System.IdentityModel.Services.CookieHandler.Read%2A> methods to do the actual work of reading the cookie. The <xref:System.IdentityModel.Services.CookieHandler.Read%2A> methods will ensure that `name` is a non-empty string.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>The cookie value or <see langword="null" /> if the cookie was not found</value>
       </Docs>
     </Member>
     <Member MemberName="RequireSsl">
@@ -366,9 +565,24 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets a value that specifies whether the cookie should be used only with SSL.</summary>
+        <value>
+          <see langword="true" /> if the cookie should only be used over an SSL connection; otherwise, <see langword="false" />. The default is <see langword="true" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Controls whether the "Secure" flag in the Set-Cookie header is emitted for any cookies written. If this value is `true`, the session cookies will only be available over HTTPS.  
+  
+ This property corresponds to the <xref:System.Web.HttpCookie.Secure%2A?displayProperty=fullName> property.  
+  
+ The property can be initialized by specifying the `requireSSL` attribute on the [\<cookieHandler>](../Topic/%3CcookieHandler%3E.md) element in configuration.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>
+          <see langword="true" /> if the cookie should only be used over an SSL connection; otherwise, <see langword="false" />. The default is <see langword="true" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="Write">
@@ -387,11 +601,26 @@
         <Parameter Name="tokenExpirationTime" Type="System.DateTime" />
       </Parameters>
       <Docs>
-        <param name="value">To be added.</param>
-        <param name="isPersistent">To be added.</param>
-        <param name="tokenExpirationTime">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="value">The cookie value.</param>
+        <param name="isPersistent">
+          <see langword="true" /> if the cookie is persistent; <see langword="false" /> if the cookie is session-only, that is, only valid until the browser on the client is closed.</param>
+        <param name="tokenExpirationTime">The expiration time for the underlying token.</param>
+        <summary>Writes a cookie associated with the current request that has the specified value, persistence, and expiration time.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ If the `isPersistent` parameter is `false`, the cookie expiration time is set to <xref:System.DateTime?displayProperty=fullName>. If the `isPersistent` parameter is `true`, the cookie expiration time is set to the value of the <xref:System.IdentityModel.Services.CookieHandler.PersistentSessionLifetime%2A> property if it is not `null` or, if the <xref:System.IdentityModel.Services.CookieHandler.PersistentSessionLifetime%2A> property is `null`, the expiration time is set to the value of the `tokenExpirationTime` parameter.  
+  
+ The cookie name, domain and path are specified by the <xref:System.IdentityModel.Services.CookieHandler.Name%2A>, <xref:System.IdentityModel.Services.CookieHandler.Domain%2A>, and <xref:System.IdentityModel.Services.CookieHandler.Path%2A> properties. The request is specified by <xref:System.Web.HttpContext.Current%2A>. Whether the cookie should be sent only over SSL is specified by the <xref:System.IdentityModel.Services.CookieHandler.RequireSsl%2A> property and whether the cookie should be hidden from client-side scripts is specified by the <xref:System.IdentityModel.Services.CookieHandler.HideFromClientScript%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="value" /> is <see langword="null" /> or empty.</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Write">
@@ -410,11 +639,25 @@
         <Parameter Name="expirationTime" Type="System.DateTime" />
       </Parameters>
       <Docs>
-        <param name="value">To be added.</param>
-        <param name="name">To be added.</param>
-        <param name="expirationTime">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="value">The cookie value.</param>
+        <param name="name">The name of the cookie.</param>
+        <param name="expirationTime">The expiration time for the cookie, or &lt;xref:System.DateTime&gt; for a session (session-only) cookie.</param>
+        <summary>Writes a cookie associated with the current request that has the specified name, value, and expiration time.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The cookie domain and path are specified by the <xref:System.IdentityModel.Services.CookieHandler.Domain%2A> and <xref:System.IdentityModel.Services.CookieHandler.Path%2A> properties. The request is specified by <xref:System.Web.HttpContext.Current%2A?displayProperty=fullName>.  The request is specified by <xref:System.Web.HttpContext.Current%2A>. Whether the cookie should be sent only over SSL is specified by the <xref:System.IdentityModel.Services.CookieHandler.RequireSsl%2A> property and whether the cookie should be hidden from client-side scripts is specified by the <xref:System.IdentityModel.Services.CookieHandler.HideFromClientScript%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="value" /> is <see langword="null" /> or empty.</exception>
+        <exception cref="T:System.ArgumentException">
+          <paramref name="name" /> is <see langword="null" /> or empty.</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Write">
@@ -434,12 +677,26 @@
         <Parameter Name="context" Type="System.Web.HttpContext" />
       </Parameters>
       <Docs>
-        <param name="value">To be added.</param>
-        <param name="name">To be added.</param>
-        <param name="expirationTime">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="value">The cookie value.</param>
+        <param name="name">The name of the cookie.</param>
+        <param name="expirationTime">The expiration time for the cookie, or &lt;xref:System.DateTime&gt; for a session (session-only) cookie.</param>
+        <param name="context">The <see cref="T:System.Web.HttpContext" /> for the request.</param>
+        <summary>Writes a cookie associated with the specified request that has the specified name, value, and expiration time.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The cookie domain and path are specified by the <xref:System.IdentityModel.Services.CookieHandler.Domain%2A> and <xref:System.IdentityModel.Services.CookieHandler.Path%2A> properties. The request is specified by <xref:System.Web.HttpContext.Current%2A>. Whether the cookie should be sent only over SSL is specified by the <xref:System.IdentityModel.Services.CookieHandler.RequireSsl%2A> property and whether the cookie should be hidden from client-side scripts is specified by the <xref:System.IdentityModel.Services.CookieHandler.HideFromClientScript%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="value" /> is <see langword="null" /> or empty.</exception>
+        <exception cref="T:System.ArgumentException">
+          <paramref name="name" /> is <see langword="null" /> or empty.</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Write">
@@ -463,16 +720,25 @@
         <Parameter Name="context" Type="System.Web.HttpContext" />
       </Parameters>
       <Docs>
-        <param name="value">To be added.</param>
-        <param name="name">To be added.</param>
-        <param name="path">To be added.</param>
-        <param name="domain">To be added.</param>
-        <param name="expirationTime">To be added.</param>
-        <param name="requiresSsl">To be added.</param>
-        <param name="hideFromClientScript">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="value">The cookie value.</param>
+        <param name="name">The name of the cookie.</param>
+        <param name="path">The path for the cookie</param>
+        <param name="domain">The domain for the cookie</param>
+        <param name="expirationTime">The expiration time for the cookie, or &lt;xref:System.DateTime&gt; for a session (session-only) cookie.</param>
+        <param name="requiresSsl">
+          <see langword="true" /> if the cookie should only be used over an SSL connection; otherwise, <see langword="false" />.</param>
+        <param name="hideFromClientScript">
+          <see langword="true" /> if the cookie should be hidden from client script; otherwise, <see langword="false" />.</param>
+        <param name="context">The <see cref="T:System.Web.HttpContext" /> for the request.</param>
+        <summary>Writes a cookie associated with the specified request that has the specified name, value, domain, path, expiration time, and visibility.</summary>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException">
+          <paramref name="value" /> is <see langword="null" /> or empty.</exception>
+        <exception cref="T:System.ArgumentException">
+          <paramref name="name" /> is <see langword="null" /> or empty.</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="WriteCore">
@@ -496,16 +762,28 @@
         <Parameter Name="context" Type="System.Web.HttpContext" />
       </Parameters>
       <Docs>
-        <param name="value">To be added.</param>
-        <param name="name">To be added.</param>
-        <param name="path">To be added.</param>
-        <param name="domain">To be added.</param>
-        <param name="expirationTime">To be added.</param>
-        <param name="secure">To be added.</param>
-        <param name="httpOnly">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="value">The cookie value.</param>
+        <param name="name">The name of the cookie.</param>
+        <param name="path">The path for the cookie</param>
+        <param name="domain">The domain for the cookie</param>
+        <param name="expirationTime">The expiration time for the cookie, or &lt;xref:System.DateTime&gt; for a session (session-only) cookie.</param>
+        <param name="secure">
+          <see langword="true" /> if the cookie should only be used over an SSL connection; otherwise, <see langword="false" />.</param>
+        <param name="httpOnly">
+          <see langword="true" /> if the cookie should be hidden from client script; otherwise, <see langword="false" />.</param>
+        <param name="context">The <see cref="T:System.Web.HttpContext" /> for the request.</param>
+        <summary>When overridden in a derived class, writes a cookie associated with the specified request that has the specified name, value, domain, path, expiration time, persistence and visibility.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Called from the overloaded <xref:System.IdentityModel.Services.CookieHandler.Write%2A> methods to do the actual work of writing the cookie. The <xref:System.IdentityModel.Services.CookieHandler.Write%2A> methods will ensure that `value` is a non-empty byte array and that `name` and `path` are non-empty strings.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
   </Members>

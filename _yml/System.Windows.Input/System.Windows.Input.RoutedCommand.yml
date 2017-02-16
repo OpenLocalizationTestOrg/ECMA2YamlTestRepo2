@@ -20,8 +20,8 @@ items:
   nameWithType: RoutedCommand
   fullName: System.Windows.Input.RoutedCommand
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Defines a command that implements <xref:System.Windows.Input.ICommand> and is routed through the element tree.
+  remarks: "The <xref:System.Windows.Input.RoutedCommand.Execute%2A> and <xref:System.Windows.Input.RoutedCommand.CanExecute%2A> methods on a RoutedCommand do not contain the application logic for the command as is the case with a typical <xref:System.Windows.Input.ICommand>, but rather, these methods raise events that traverse the element tree looking for an object with a <xref:System.Windows.Input.CommandBinding>.  The event handlers attached to the <xref:System.Windows.Input.CommandBinding> contain the command logic.  \n  \n The <xref:System.Windows.Input.RoutedCommand.Execute%2A> method raises the <xref:System.Windows.Input.CommandManager.PreviewExecuted> and <xref:System.Windows.Input.CommandManager.Executed> events.  The <xref:System.Windows.Input.RoutedCommand.CanExecute%2A> method raises the <xref:System.Windows.Input.CommandManager.PreviewCanExecute> and <xref:System.Windows.Input.CommandManager.CanExecute> events.  \n  \n<a name=\"xamlAttributeUsage_RoutedCommand\"></a>   \n## XAML Attribute Usage  \n \\<*object* *property*=\"*predefinedCommandName*\"/>  \n  \n \\- or -  \n  \n \\<*object* *property*=\"*predefinedClassName*.*predefinedCommandName*\"/>  \n  \n \\- or -  \n  \n \\<*object* *property*=\"{ *customClassName*.*customCommandName*}\"/>  \n  \n<a name=\"xamlValues_RoutedCommand\"></a>   \n## XAML Values  \n *predefinedClassName*  \n One of the predefined command classes.  \n  \n *predefinedCommandName*  \n One of the predefined commands.  \n  \n *customClassName*  \n A custom class which contains the custom command. Custom classes generally require an `xlmns` prefix mapping; see [XAML Namespaces and Namespace Mapping for WPF XAML](../Topic/XAML%20Namespaces%20and%20Namespace%20Mapping%20for%20WPF%20XAML.md).  \n  \n *customCommandName*  \n A custom command."
   syntax:
     content: >-
       [System.ComponentModel.TypeConverter("System.Windows.Input.CommandConverter, PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, Custom=null")]
@@ -50,12 +50,12 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public RoutedCommand ();
     parameters: []
   overload: System.Windows.Input.RoutedCommand.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -72,18 +72,24 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified name and owner type.
   syntax:
     content: public RoutedCommand (string name, Type ownerType);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: Declared name for serialization.
     - id: ownerType
       type: System.Type
-      description: To be added.
+      description: The type which is registering the command.
   overload: System.Windows.Input.RoutedCommand.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    ownerType is ."
   platform:
   - net-11
   - net-20
@@ -100,21 +106,27 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified name, owner type, and collection of gestures.
   syntax:
     content: public RoutedCommand (string name, Type ownerType, System.Windows.Input.InputGestureCollection inputGestures);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: Declared name for serialization.
     - id: ownerType
       type: System.Type
-      description: To be added.
+      description: The type that is registering the command.
     - id: inputGestures
       type: System.Windows.Input.InputGestureCollection
-      description: To be added.
+      description: Default input gestures associated with this command.
   overload: System.Windows.Input.RoutedCommand.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "the length of name is zero  \n  \n \\- or -  \n  \n ownerType is ."
   platform:
   - net-11
   - net-20
@@ -131,21 +143,27 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether this  can execute in its current state.
+  remarks: "The actual logic that determines if a <xref:System.Windows.Input.RoutedCommand> can execute on the current command target is not contained in the CanExecute methods, rather CanExecute raises the <xref:System.Windows.Input.CommandManager.PreviewCanExecute> and the <xref:System.Windows.Input.CommandManager.CanExecute> events which tunnel and bubble through element tree looking for a object with a <xref:System.Windows.Input.CommandBinding>.  If a <xref:System.Windows.Input.CommandBinding> for that <xref:System.Windows.Input.RoutedCommand> is found, then the <xref:System.Windows.Input.CanExecuteRoutedEventHandler> attached to <xref:System.Windows.Input.CommandBinding> is called.  These handlers supply the programming logic for determining if the <xref:System.Windows.Input.RoutedCommand> can execute or not.  \n  \n The <xref:System.Windows.Input.CommandManager.PreviewCanExecute> and <xref:System.Windows.Input.CommandManager.PreviewExecuted> events are raised on the <xref:System.Windows.Input.ICommandSource.CommandTarget%2A>.  If the <xref:System.Windows.Input.ICommandSource.CommandTarget%2A> is not set on the <xref:System.Windows.Input.ICommandSource>, the <xref:System.Windows.Input.CommandManager.PreviewCanExecute> and <xref:System.Windows.Input.CommandManager.CanExecute> events are raised on the element with keyboard focus."
+  example:
+  - "The following example is a <xref:System.Windows.Input.ICommand.CanExecuteChanged> event handler from a custom implementation of <xref:System.Windows.Input.ICommandSource>.  \n  \n `this.Command` in this example is the <xref:System.Windows.Input.ICommandSource.Command%2A> property on the <xref:System.Windows.Input.ICommandSource>.  If the command is not `null`, the command is cast to a <xref:System.Windows.Input.RoutedCommand>.  If the command is a <xref:System.Windows.Input.RoutedCommand>, then the CanExecute method is called passing the <xref:System.Windows.Input.ICommandSource.CommandTarget%2A> and the <xref:System.Windows.Input.ICommandSource.CommandParameter%2A>.  If command is not a <xref:System.Windows.Input.RoutedCommand>, it is cast to an <xref:System.Windows.Input.ICommand> and the <xref:System.Windows.Input.ICommand.CanExecute%2A> method is called passing the <xref:System.Windows.Input.ICommandSource.CommandParameter%2A>.  \n  \n If the CanExecute method returns `true`, then the control is enabled; otherwise, the control is disable.  \n  \n [!code-cs[ImplementICommandSource#ImplementICommandCanExecuteChanged](../../add/codesnippet/CSharp/ImplementICommandSource/CommandSlider.cs#implementicommandcanexecutechanged)]\n [!code-vb[ImplementICommandSource#ImplementICommandCanExecuteChanged](../../add/codesnippet/VisualBasic/implementicommandsource/commandslider.vb#implementicommandcanexecutechanged)]"
   syntax:
     content: public bool CanExecute (object parameter, System.Windows.IInputElement target);
     parameters:
     - id: parameter
       type: System.Object
-      description: To be added.
+      description: A user defined data type.
     - id: target
       type: System.Windows.IInputElement
-      description: To be added.
+      description: The command target.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the command can execute on the current command target; otherwise, .
   overload: System.Windows.Input.RoutedCommand.CanExecute*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    target is not a  or ."
   platform:
   - net-11
   - net-20
@@ -162,13 +180,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when changes to the command source are detected by the command manager. These changes often affect whether the command should execute on the current command target.
+  remarks: "The <xref:System.Windows.Input.RoutedCommand> listens for the <xref:System.Windows.Input.CommandManager.RequerySuggested> event, which is raised by the <xref:System.Windows.Input.CommandManager>. The <xref:System.Windows.Input.CommandManager.RequerySuggested> event is raised whenever conditions are met that may change the whether the command should execute, such as a change in keyboard focus.  When the command receives the <xref:System.Windows.Input.CommandManager.RequerySuggested> event, it raises the CanExecuteChanged event.  Generally, the command source will listen for this event and query the <xref:System.Windows.Input.RoutedCommand> by way of the <xref:System.Windows.Input.RoutedCommand.CanExecute%2A> method.  Most command sources will disable themselves if the command cannot be executed, as part of their command binding.  An example of this is when a <xref:System.Windows.Controls.MenuItem> grays itself out when the command cannot be executed.  \n  \n In some situations, the <xref:System.Windows.Input.CommandManager> is unaware of a change in conditions that alters the ability of a command to execute.  In these cases, you can force the <xref:System.Windows.Input.CommandManager> to raises the <xref:System.Windows.Input.CommandManager.RequerySuggested> event by calling the <xref:System.Windows.Input.CommandManager.InvalidateRequerySuggested%2A> method, this will in turn cause the <xref:System.Windows.Input.RoutedCommand> to raise the CanExecuteChanged event."
+  example:
+  - "The following example is a <xref:System.Windows.Input.ICommand.CanExecuteChanged> event handler from a custom implementation of <xref:System.Windows.Input.ICommandSource>.  \n  \n `this.Command` in this example is the <xref:System.Windows.Input.ICommandSource.Command%2A> property on the <xref:System.Windows.Input.ICommandSource>.  If the command is not `null`, the command is cast to a <xref:System.Windows.Input.RoutedCommand>.  If the command is a <xref:System.Windows.Input.RoutedCommand>, then the <xref:System.Windows.Input.RoutedCommand.CanExecute%2A> method is called passing the <xref:System.Windows.Input.ICommandSource.CommandTarget%2A> and the <xref:System.Windows.Input.ICommandSource.CommandParameter%2A>.  If command is not a <xref:System.Windows.Input.RoutedCommand>, it is cast to an <xref:System.Windows.Input.ICommand> and the <xref:System.Windows.Input.ICommand.CanExecute%2A> method is called passing the <xref:System.Windows.Input.ICommandSource.CommandParameter%2A>.  \n  \n If the <xref:System.Windows.Input.RoutedCommand.CanExecute%2A> method returns `true`, then the control is enabled; otherwise, the control is disabled.  \n  \n [!code-cs[ImplementICommandSource#ImplementICommandCanExecuteChanged](../../add/codesnippet/CSharp/ImplementICommandSource/CommandSlider.cs#implementicommandcanexecutechanged)]\n [!code-vb[ImplementICommandSource#ImplementICommandCanExecuteChanged](../../add/codesnippet/VisualBasic/implementicommandsource/commandslider.vb#implementicommandcanexecutechanged)]"
   syntax:
     content: public event EventHandler CanExecuteChanged;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -185,18 +206,24 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Executes the  on the current command target.
+  remarks: "The actual logic that executes the <xref:System.Windows.Input.RoutedCommand> is not contained in the Execute methods.  Execute raises the <xref:System.Windows.Input.CommandManager.PreviewExecuted> and <xref:System.Windows.Input.CommandManager.Executed> events, which tunnel and bubble through the element tree looking for an object with a <xref:System.Windows.Input.CommandBinding>.  If a <xref:System.Windows.Input.CommandBinding> for that <xref:System.Windows.Input.RoutedCommand> is found, then the <xref:System.Windows.Input.ExecutedRoutedEventHandler> attached to <xref:System.Windows.Input.CommandBinding> is called.  These handlers supply the programming logic that performs the <xref:System.Windows.Input.RoutedCommand>.  \n  \n The <xref:System.Windows.Input.CommandManager.PreviewExecuted> and <xref:System.Windows.Input.CommandManager.Executed> events are raised on the <xref:System.Windows.Input.ICommandSource.CommandTarget%2A>.  If the <xref:System.Windows.Input.ICommandSource.CommandTarget%2A> is not set on the <xref:System.Windows.Input.ICommandSource>, the <xref:System.Windows.Input.CommandManager.PreviewExecuted> and <xref:System.Windows.Input.CommandManager.Executed> events are raised on the element with keyboard focus."
+  example:
+  - "The following example is from a custom implementation of <xref:System.Windows.Input.ICommandSource> sample.  \n  \n `this.Command` in this example is the Command property on the <xref:System.Windows.Input.ICommandSource>.  If the command is not null, the command is cast to a <xref:System.Windows.Input.RoutedCommand>.  If it is a <xref:System.Windows.Input.RoutedCommand>, then the Execute method is called passing the <xref:System.Windows.Input.ICommandSource.CommandTarget%2A> and the <xref:System.Windows.Input.ICommandSource.CommandParameter%2A>.  If the command is not a <xref:System.Windows.Input.RoutedCommand>, it is cast to an <xref:System.Windows.Input.ICommand> and the <xref:System.Windows.Input.ICommand.Execute%2A> method is called passing the <xref:System.Windows.Input.ICommandSource.CommandParameter%2A>.  \n  \n [!code-cs[ImplementICommandSource#ImplementICommandExecute](../../add/codesnippet/CSharp/ImplementICommandSource/CommandSlider.cs#implementicommandexecute)]\n [!code-vb[ImplementICommandSource#ImplementICommandExecute](../../add/codesnippet/VisualBasic/implementicommandsource/commandslider.vb#implementicommandexecute)]"
   syntax:
     content: public void Execute (object parameter, System.Windows.IInputElement target);
     parameters:
     - id: parameter
       type: System.Object
-      description: To be added.
+      description: User defined parameter to be passed to the handler.
     - id: target
       type: System.Windows.IInputElement
-      description: To be added.
+      description: Element at which to begin looking for command handlers.
   overload: System.Windows.Input.RoutedCommand.Execute*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    target is not a  or ."
   platform:
   - net-11
   - net-20
@@ -213,14 +240,17 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the collection of  objects that are associated with this command.
+  remarks: ''
+  example:
+  - "The following example shows how to add a new <xref:System.Windows.Input.MouseGesture> to a <xref:System.Windows.Input.RoutedCommand>.  \n  \n [!code-cs[commandlibrarysnippets#MouseBindingAddedCommand](../../add/codesnippet/CSharp/CommandLibarySnippets/Window1.xaml.cs#mousebindingaddedcommand)]\n [!code-vb[commandlibrarysnippets#MouseBindingAddedCommand](../../add/codesnippet/VisualBasic/commandlibarysnippets/window1.xaml.vb#mousebindingaddedcommand)]"
   syntax:
     content: public System.Windows.Input.InputGestureCollection InputGestures { get; }
     return:
       type: System.Windows.Input.InputGestureCollection
-      description: To be added.
+      description: The input gestures.
   overload: System.Windows.Input.RoutedCommand.InputGestures*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -237,14 +267,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the name of the command.
+  remarks: This property can be used when referencing a <xref:System.Windows.Input.RoutedCommand> in [!INCLUDE[TLA#tla_titlexaml](../../add/includes/tlasharptla-titlexaml-md.md)].
   syntax:
     content: public string Name { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The name of the command.
   overload: System.Windows.Input.RoutedCommand.Name*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -261,14 +292,14 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type that is registered with the command.
   syntax:
     content: public Type OwnerType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: The type of the command owner.
   overload: System.Windows.Input.RoutedCommand.OwnerType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -286,18 +317,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this members, see <xref:System.Windows.Input.ICommand.CanExecute%2A>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Windows.Input.RoutedCommand> instance is cast to an <xref:System.Windows.Input.ICommand> interface.
   syntax:
     content: bool ICommand.CanExecute (object parameter);
     parameters:
     - id: parameter
       type: System.Object
-      description: To be added.
+      description: Data used by the command.  If the command does not require data to be passed, this object can be set to .
     return:
       type: System.Boolean
-      description: To be added.
+      description: if this command can be executed; otherwise, .
   overload: System.Windows.Input.RoutedCommand.System#Windows#Input#ICommand#CanExecute*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -315,15 +347,18 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this members, see <xref:System.Windows.Input.ICommand.Execute%2A>.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.Windows.Input.RoutedCommand> instance is cast to an <xref:System.Windows.Input.ICommand> interface.
+  example:
+  - "See Also  \n  \n <xref:System.Windows.Input.RoutedCommand.Execute%2A>"
   syntax:
     content: void ICommand.Execute (object parameter);
     parameters:
     - id: parameter
       type: System.Object
-      description: To be added.
+      description: Data used by the command.  If the command does not require data to be passed, this object can be set to .
   overload: System.Windows.Input.RoutedCommand.System#Windows#Input#ICommand#Execute*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -362,18 +397,6 @@ references:
   name: RoutedCommand(String,Type,InputGestureCollection)
   nameWithType: RoutedCommand.RoutedCommand(String,Type,InputGestureCollection)
   fullName: System.Windows.Input.RoutedCommand.RoutedCommand(String,Type,InputGestureCollection)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Windows.Input.InputGestureCollection
   parent: System.Windows.Input
   isExternal: false
@@ -392,12 +415,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.IInputElement
   parent: System.Windows
   isExternal: false
@@ -422,84 +439,36 @@ references:
   name: Execute(Object,IInputElement)
   nameWithType: RoutedCommand.Execute(Object,IInputElement)
   fullName: System.Windows.Input.RoutedCommand.Execute(Object,IInputElement)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Windows.IInputElement
-  parent: System.Windows
-  isExternal: false
-  name: IInputElement
-  nameWithType: IInputElement
-  fullName: System.Windows.IInputElement
 - uid: System.Windows.Input.RoutedCommand.InputGestures
   parent: System.Windows.Input.RoutedCommand
   isExternal: false
   name: InputGestures
   nameWithType: RoutedCommand.InputGestures
   fullName: System.Windows.Input.RoutedCommand.InputGestures
-- uid: System.Windows.Input.InputGestureCollection
-  parent: System.Windows.Input
-  isExternal: false
-  name: InputGestureCollection
-  nameWithType: InputGestureCollection
-  fullName: System.Windows.Input.InputGestureCollection
 - uid: System.Windows.Input.RoutedCommand.Name
   parent: System.Windows.Input.RoutedCommand
   isExternal: false
   name: Name
   nameWithType: RoutedCommand.Name
   fullName: System.Windows.Input.RoutedCommand.Name
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Input.RoutedCommand.OwnerType
   parent: System.Windows.Input.RoutedCommand
   isExternal: false
   name: OwnerType
   nameWithType: RoutedCommand.OwnerType
   fullName: System.Windows.Input.RoutedCommand.OwnerType
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Windows.Input.RoutedCommand.System#Windows#Input#ICommand#CanExecute(System.Object)
   parent: System.Windows.Input.RoutedCommand
   isExternal: false
   name: System.Windows.Input.ICommand.CanExecute(Object)
   nameWithType: RoutedCommand.System.Windows.Input.ICommand.CanExecute(Object)
   fullName: System.Windows.Input.RoutedCommand.System.Windows.Input.ICommand.CanExecute(Object)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Input.RoutedCommand.System#Windows#Input#ICommand#Execute(System.Object)
   parent: System.Windows.Input.RoutedCommand
   isExternal: false
   name: System.Windows.Input.ICommand.Execute(Object)
   nameWithType: RoutedCommand.System.Windows.Input.ICommand.Execute(Object)
   fullName: System.Windows.Input.RoutedCommand.System.Windows.Input.ICommand.Execute(Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Input.RoutedCommand.#ctor*
   parent: System.Windows.Input.RoutedCommand
   isExternal: false

@@ -17,8 +17,8 @@ items:
   nameWithType: ChunkedCookieHandler
   fullName: System.IdentityModel.Services.ChunkedCookieHandler
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a cookie handler that writes cookie data so that cookies never exceed a set size.
+  remarks: "The ChunkedCookieHandler class presents the cookie as a logical entity, so that, in the case of cookies with a size that exceeds a specified threshold (the chunk size), a single call to the [Write(Byte\\[\\], Boolean, DateTime)](assetId:///M:System.IdentityModel.Services.CookieHandler.Write(System.Byte[],System.Boolean,System.DateTime)?qualifyHint=False&autoUpgrade=True) method breaks the data into a series of actual client-side cookies, none of which exceeds the chunk size.  \n  \n Cookie names are constructed based on the `name` parameter to the <xref:System.IdentityModel.Services.CookieHandler.Write%2A>, <xref:System.IdentityModel.Services.CookieHandler.Read%2A>, or <xref:System.IdentityModel.Services.CookieHandler.Delete%2A> methods. The cookie names are constructed by appending a number to the base name: name, name1, name2, and so on."
   syntax:
     content: 'public sealed class ChunkedCookieHandler : System.IdentityModel.Services.CookieHandler'
   inheritance:
@@ -62,12 +62,13 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class that uses the default chunk size.
+  remarks: The default chunk size is specified by <xref:System.IdentityModel.Services.ChunkedCookieHandler.DefaultChunkSize>.
   syntax:
     content: public ChunkedCookieHandler ();
     parameters: []
   overload: System.IdentityModel.Services.ChunkedCookieHandler.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -84,15 +85,19 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class that uses a specified chunk size.
+  remarks: 'You must be careful when adjusting the chunk size. Web browsers have different limits on the size of cookies and the number of cookies that are allowed in total and per domain. For example, the original Netscape specification specified these limits: 300 cookies total, 4096 bytes per cookie header (including metadata, not just the cookie value), and 20 cookies per domain.'
   syntax:
     content: public ChunkedCookieHandler (int chunkSize);
     parameters:
     - id: chunkSize
       type: System.Int32
-      description: To be added.
+      description: The chunk size that will be used to write cookies.
   overload: System.IdentityModel.Services.ChunkedCookieHandler.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    chunkSize' is less than the minimum chunk size of 1000 ()."
   platform:
   - net-11
   - net-20
@@ -109,14 +114,14 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the chunk size used by the current instance.
   syntax:
     content: public int ChunkSize { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The chunk size, in bytes.
   overload: System.IdentityModel.Services.ChunkedCookieHandler.ChunkSize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -133,13 +138,13 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: The default chunk size of 2000 characters.
   syntax:
     content: public const int DefaultChunkSize = 2000;
     return:
       type: System.Int32
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -156,8 +161,6 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override void DeleteCore (string name, string path, string domain, System.Web.HttpContext context);
     parameters:
@@ -174,6 +177,7 @@ items:
       type: System.Web.HttpContext
       description: To be added.
   overload: System.IdentityModel.Services.ChunkedCookieHandler.DeleteCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -190,13 +194,13 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: The minimum chunk size of 1000 characters.
   syntax:
     content: public const int MinimumChunkSize = 1000;
     return:
       type: System.Int32
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -213,8 +217,6 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override byte[] ReadCore (string name, System.Web.HttpContext context);
     parameters:
@@ -228,6 +230,7 @@ items:
       type: System.Byte[]
       description: To be added.
   overload: System.IdentityModel.Services.ChunkedCookieHandler.ReadCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -244,8 +247,6 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override void WriteCore (byte[] value, string name, string path, string domain, DateTime expirationTime, bool secure, bool httpOnly, System.Web.HttpContext context);
     parameters:
@@ -274,6 +275,7 @@ items:
       type: System.Web.HttpContext
       description: To be added.
   overload: System.IdentityModel.Services.ChunkedCookieHandler.WriteCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -306,42 +308,18 @@ references:
   name: ChunkSize
   nameWithType: ChunkedCookieHandler.ChunkSize
   fullName: System.IdentityModel.Services.ChunkedCookieHandler.ChunkSize
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.IdentityModel.Services.ChunkedCookieHandler.DefaultChunkSize
   parent: System.IdentityModel.Services.ChunkedCookieHandler
   isExternal: false
   name: DefaultChunkSize
   nameWithType: ChunkedCookieHandler.DefaultChunkSize
   fullName: System.IdentityModel.Services.ChunkedCookieHandler.DefaultChunkSize
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.IdentityModel.Services.ChunkedCookieHandler.DeleteCore(System.String,System.String,System.String,System.Web.HttpContext)
   parent: System.IdentityModel.Services.ChunkedCookieHandler
   isExternal: false
   name: DeleteCore(String,String,String,HttpContext)
   nameWithType: ChunkedCookieHandler.DeleteCore(String,String,String,HttpContext)
   fullName: System.IdentityModel.Services.ChunkedCookieHandler.DeleteCore(String,String,String,HttpContext)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.String
   parent: System
   isExternal: true
@@ -360,66 +338,32 @@ references:
   name: MinimumChunkSize
   nameWithType: ChunkedCookieHandler.MinimumChunkSize
   fullName: System.IdentityModel.Services.ChunkedCookieHandler.MinimumChunkSize
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.IdentityModel.Services.ChunkedCookieHandler.ReadCore(System.String,System.Web.HttpContext)
   parent: System.IdentityModel.Services.ChunkedCookieHandler
   isExternal: false
   name: ReadCore(String,HttpContext)
   nameWithType: ChunkedCookieHandler.ReadCore(String,HttpContext)
   fullName: System.IdentityModel.Services.ChunkedCookieHandler.ReadCore(String,HttpContext)
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Web.HttpContext
-  parent: System.Web
-  isExternal: false
-  name: HttpContext
-  nameWithType: HttpContext
-  fullName: System.Web.HttpContext
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.IdentityModel.Services.ChunkedCookieHandler.WriteCore(System.Byte[],System.String,System.String,System.String,System.DateTime,System.Boolean,System.Boolean,System.Web.HttpContext)
   parent: System.IdentityModel.Services.ChunkedCookieHandler
   isExternal: false
   name: WriteCore(Byte[],String,String,String,DateTime,Boolean,Boolean,HttpContext)
   nameWithType: ChunkedCookieHandler.WriteCore(Byte[],String,String,String,DateTime,Boolean,Boolean,HttpContext)
   fullName: System.IdentityModel.Services.ChunkedCookieHandler.WriteCore(Byte[],String,String,String,DateTime,Boolean,Boolean,HttpContext)
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.DateTime
   parent: System
   isExternal: true
@@ -432,18 +376,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Web.HttpContext
-  parent: System.Web
-  isExternal: false
-  name: HttpContext
-  nameWithType: HttpContext
-  fullName: System.Web.HttpContext
 - uid: System.IdentityModel.Services.ChunkedCookieHandler.#ctor*
   parent: System.IdentityModel.Services.ChunkedCookieHandler
   isExternal: false

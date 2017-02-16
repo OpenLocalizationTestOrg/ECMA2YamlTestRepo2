@@ -15,8 +15,10 @@ items:
   nameWithType: MemberRelationshipService
   fullName: System.ComponentModel.Design.Serialization.MemberRelationshipService
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides the base class for relating one member to another.
+  remarks: "Designers serialize themselves to code through an engine that searches through the live property values of objects and generates those values as code. So, for example, the text of a button is generated in the following format.  \n  \n```c#  \nthis.okButton.Text = \"OK\";  \n```  \n  \n One of the limitations of this scheme is that it is difficult to retrieve a property from another location. For example, it is very difficult to emit code in the following format, because the only thing the code generator can rely on is the value in the property.  \n  \n```c#  \nthis.titleLabel.Text = this.Text;  \n```"
+  example:
+  - "The MemberRelationshipService simplifies retrieval of a property value from another location. A designer can access this service to dictate that one member is assigned the value of another. The code generator searches for such relationships when generating code, and if a relationship between two members is found the code generator, it emits code for the relationship rather than searching for the property value. Using the previous text assignment as an example, the following code example shows design time code used to establish a relationship.  \n  \n```c#  \nobject titleLabel, form;  \nPropertyDescriptor titleLabelText = TypeDescriptor.GetProperties(titleLabel)[\"Text\"];  \nPropertyDescriptor formText = TypeDescriptor.GetProperties(form)[\"Text\"];  \nMemberRelationshipService ms = GetService(typeof(MemberRelationshipService);  \nms[titleLabel, titleLabelText] = new MemberRelationship(form, formText);  \n```"
   syntax:
     content: public abstract class MemberRelationshipService
   inheritance:
@@ -39,12 +41,12 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: protected MemberRelationshipService ();
     parameters: []
   overload: System.ComponentModel.Design.Serialization.MemberRelationshipService.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -61,18 +63,19 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a relationship to the given source relationship.
+  remarks: The default implementation stores relationships in a dictionary using weak references, so the relationship table does not keep objects alive.
   syntax:
     content: protected virtual System.ComponentModel.Design.Serialization.MemberRelationship GetRelationship (System.ComponentModel.Design.Serialization.MemberRelationship source);
     parameters:
     - id: source
       type: System.ComponentModel.Design.Serialization.MemberRelationship
-      description: To be added.
+      description: The source relationship.
     return:
       type: System.ComponentModel.Design.Serialization.MemberRelationship
-      description: To be added.
+      description: A relationship to source, or  if no relationship exists.
   overload: System.ComponentModel.Design.Serialization.MemberRelationshipService.GetRelationship*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -89,18 +92,25 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Establishes a relationship between a source and target object.
+  remarks: If <xref:System.ComponentModel.Design.Serialization.MemberRelationship> is assigned to the source, any existing relationship is removed.
   syntax:
     content: public System.ComponentModel.Design.Serialization.MemberRelationship this[System.ComponentModel.Design.Serialization.MemberRelationship source] { get; set; }
     parameters:
     - id: source
       type: System.ComponentModel.Design.Serialization.MemberRelationship
-      description: To be added.
+      description: The source relationship. This is the left-hand side of a relationship assignment.
     return:
       type: System.ComponentModel.Design.Serialization.MemberRelationship
-      description: To be added.
+      description: The current relationship associated with source, or  if there is no relationship.
   overload: System.ComponentModel.Design.Serialization.MemberRelationshipService.Item*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    source is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    source is empty, or the relationship is not supported by the service."
   platform:
   - net-11
   - net-20
@@ -117,21 +127,27 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Establishes a relationship between a source and target object.
   syntax:
     content: public System.ComponentModel.Design.Serialization.MemberRelationship this[object sourceOwner, System.ComponentModel.MemberDescriptor sourceMember] { get; set; }
     parameters:
     - id: sourceOwner
       type: System.Object
-      description: To be added.
+      description: The owner of a source relationship.
     - id: sourceMember
       type: System.ComponentModel.MemberDescriptor
-      description: To be added.
+      description: The member of a source relationship.
     return:
       type: System.ComponentModel.Design.Serialization.MemberRelationship
-      description: To be added.
+      description: A  structure encapsulating the relationship between a source and target object, or  if there is no relationship.
   overload: System.ComponentModel.Design.Serialization.MemberRelationshipService.Item*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    sourceOwner or sourceMember is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    sourceOwner or sourceMember is empty, or the relationship is not supported by the service."
   platform:
   - net-11
   - net-20
@@ -148,18 +164,22 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a relationship between the source object and target relationship.
+  remarks: The SetRelationship method clears any existing relationship if the relationship parameter is <xref:System.ComponentModel.Design.Serialization.MemberRelationship>. The default implementation stores relationships in a dictionary using weak references so the relationship table does not keep objects alive.
   syntax:
     content: protected virtual void SetRelationship (System.ComponentModel.Design.Serialization.MemberRelationship source, System.ComponentModel.Design.Serialization.MemberRelationship relationship);
     parameters:
     - id: source
       type: System.ComponentModel.Design.Serialization.MemberRelationship
-      description: To be added.
+      description: The source relationship.
     - id: relationship
       type: System.ComponentModel.Design.Serialization.MemberRelationship
-      description: To be added.
+      description: The relationship to set into the source.
   overload: System.ComponentModel.Design.Serialization.MemberRelationshipService.SetRelationship*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The relationship is not supported by the service.
   platform:
   - net-11
   - net-20
@@ -176,21 +196,21 @@ items:
   assemblies:
   - System
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the given relationship is supported.
   syntax:
     content: public abstract bool SupportsRelationship (System.ComponentModel.Design.Serialization.MemberRelationship source, System.ComponentModel.Design.Serialization.MemberRelationship relationship);
     parameters:
     - id: source
       type: System.ComponentModel.Design.Serialization.MemberRelationship
-      description: To be added.
+      description: The source relationship.
     - id: relationship
       type: System.ComponentModel.Design.Serialization.MemberRelationship
-      description: To be added.
+      description: The relationship to set into the source.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a relationship between the given two objects is supported; otherwise, .
   overload: System.ComponentModel.Design.Serialization.MemberRelationshipService.SupportsRelationship*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -217,48 +237,18 @@ references:
   name: MemberRelationship
   nameWithType: MemberRelationship
   fullName: System.ComponentModel.Design.Serialization.MemberRelationship
-- uid: System.ComponentModel.Design.Serialization.MemberRelationship
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: MemberRelationship
-  nameWithType: MemberRelationship
-  fullName: System.ComponentModel.Design.Serialization.MemberRelationship
 - uid: System.ComponentModel.Design.Serialization.MemberRelationshipService.Item(System.ComponentModel.Design.Serialization.MemberRelationship)
   parent: System.ComponentModel.Design.Serialization.MemberRelationshipService
   isExternal: false
   name: Item(MemberRelationship)
   nameWithType: MemberRelationshipService.Item(MemberRelationship)
   fullName: System.ComponentModel.Design.Serialization.MemberRelationshipService.Item(MemberRelationship)
-- uid: System.ComponentModel.Design.Serialization.MemberRelationship
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: MemberRelationship
-  nameWithType: MemberRelationship
-  fullName: System.ComponentModel.Design.Serialization.MemberRelationship
-- uid: System.ComponentModel.Design.Serialization.MemberRelationship
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: MemberRelationship
-  nameWithType: MemberRelationship
-  fullName: System.ComponentModel.Design.Serialization.MemberRelationship
 - uid: System.ComponentModel.Design.Serialization.MemberRelationshipService.Item(System.Object,System.ComponentModel.MemberDescriptor)
   parent: System.ComponentModel.Design.Serialization.MemberRelationshipService
   isExternal: false
   name: Item(Object,MemberDescriptor)
   nameWithType: MemberRelationshipService.Item(Object,MemberDescriptor)
   fullName: System.ComponentModel.Design.Serialization.MemberRelationshipService.Item(Object,MemberDescriptor)
-- uid: System.ComponentModel.Design.Serialization.MemberRelationship
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: MemberRelationship
-  nameWithType: MemberRelationship
-  fullName: System.ComponentModel.Design.Serialization.MemberRelationship
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ComponentModel.MemberDescriptor
   parent: System.ComponentModel
   isExternal: false
@@ -271,18 +261,6 @@ references:
   name: SetRelationship(MemberRelationship,MemberRelationship)
   nameWithType: MemberRelationshipService.SetRelationship(MemberRelationship,MemberRelationship)
   fullName: System.ComponentModel.Design.Serialization.MemberRelationshipService.SetRelationship(MemberRelationship,MemberRelationship)
-- uid: System.ComponentModel.Design.Serialization.MemberRelationship
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: MemberRelationship
-  nameWithType: MemberRelationship
-  fullName: System.ComponentModel.Design.Serialization.MemberRelationship
-- uid: System.ComponentModel.Design.Serialization.MemberRelationship
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: MemberRelationship
-  nameWithType: MemberRelationship
-  fullName: System.ComponentModel.Design.Serialization.MemberRelationship
 - uid: System.ComponentModel.Design.Serialization.MemberRelationshipService.SupportsRelationship(System.ComponentModel.Design.Serialization.MemberRelationship,System.ComponentModel.Design.Serialization.MemberRelationship)
   parent: System.ComponentModel.Design.Serialization.MemberRelationshipService
   isExternal: false
@@ -295,18 +273,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.ComponentModel.Design.Serialization.MemberRelationship
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: MemberRelationship
-  nameWithType: MemberRelationship
-  fullName: System.ComponentModel.Design.Serialization.MemberRelationship
-- uid: System.ComponentModel.Design.Serialization.MemberRelationship
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: MemberRelationship
-  nameWithType: MemberRelationship
-  fullName: System.ComponentModel.Design.Serialization.MemberRelationship
 - uid: System.ComponentModel.Design.Serialization.MemberRelationshipService.#ctor*
   parent: System.ComponentModel.Design.Serialization.MemberRelationshipService
   isExternal: false

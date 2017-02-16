@@ -20,8 +20,8 @@ items:
   nameWithType: ManipulationProcessor2D
   fullName: System.Windows.Input.Manipulations.ManipulationProcessor2D
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Implements a multiple-input, single-output compositor for two-dimensional (2-D) transformations in a shared coordinate space.
+  remarks: "A ManipulationProcessor2D object treats a collection of manipulators as a composite object. Your application is then freed from the necessity of tracking and managing individual manipulators.  \n  \n A manipulation processor by itself does not cause an element to move. Your application begins a manipulation as necessary, and then receives information from a manipulation processor by listening to the <xref:System.Windows.Input.Manipulations.ManipulationProcessor2D.Started>, <xref:System.Windows.Input.Manipulations.ManipulationProcessor2D.Delta> and <xref:System.Windows.Input.Manipulations.ManipulationProcessor2D.Completed> events. The values received via these events enable you to change the location, size or orientation of an element as needed.  \n  \n You inform a manipulation processor which types of manipulations are allowed (translate, scale, rotate) by setting the <xref:System.Windows.Input.Manipulations.ManipulationProcessor2D.SupportedManipulations%2A> property. You can then provide non-conditional logic to the transformation of the element that is being manipulated. For instance, instead of checking if rotation is enabled before changing the orientation of an element, you can unconditionally apply the rotation factor received from the manipulation processor; if rotation is not enabled, the manipulation processor will report that no rotational change has occurred.  \n  \n When an element that is being manipulated is released (all manipulators are removed), you can use inertia processing to simulate friction and cause the element to gradually slow its movements before coming to a stop. For more information see the <xref:System.Windows.Input.Manipulations.InertiaProcessor2D> class."
   syntax:
     content: public class ManipulationProcessor2D
   inheritance:
@@ -44,15 +44,18 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new  object.
   syntax:
     content: public ManipulationProcessor2D (System.Windows.Input.Manipulations.Manipulations2D supportedManipulations);
     parameters:
     - id: supportedManipulations
       type: System.Windows.Input.Manipulations.Manipulations2D
-      description: To be added.
+      description: The initial set of supported manipulations.
   overload: System.Windows.Input.Manipulations.ManipulationProcessor2D.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The supportedManipulations parameter is not a valid combination of the  enumeration values.
   platform:
   - net-11
   - net-20
@@ -69,18 +72,21 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new  object.
   syntax:
     content: public ManipulationProcessor2D (System.Windows.Input.Manipulations.Manipulations2D supportedManipulations, System.Windows.Input.Manipulations.ManipulationPivot2D pivot);
     parameters:
     - id: supportedManipulations
       type: System.Windows.Input.Manipulations.Manipulations2D
-      description: To be added.
+      description: The initial set of supported manipulations.
     - id: pivot
       type: System.Windows.Input.Manipulations.ManipulationPivot2D
-      description: To be added.
+      description: Pivot information for single-manipulator rotations.
   overload: System.Windows.Input.Manipulations.ManipulationProcessor2D.#ctor*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The supportedManipulations parameter is not a valid combination of the  enumeration values.
   platform:
   - net-11
   - net-20
@@ -97,13 +103,13 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a manipulation has competed.
   syntax:
     content: public event EventHandler<System.Windows.Input.Manipulations.Manipulation2DCompletedEventArgs> Completed;
     return:
       type: System.EventHandler{System.Windows.Input.Manipulations.Manipulation2DCompletedEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -120,15 +126,18 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Forces the current manipulation to complete and raises the  event.
   syntax:
     content: public void CompleteManipulation (long timestamp);
     parameters:
     - id: timestamp
       type: System.Int64
-      description: To be added.
+      description: The timestamp to complete the manipulation, in 100-nanosecond ticks.
   overload: System.Windows.Input.Manipulations.ManipulationProcessor2D.CompleteManipulation*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The timestamp is less than the previous timestamp for the current manipulation.
   platform:
   - net-11
   - net-20
@@ -145,13 +154,16 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the manipulation origin has changed or when translation, scaling, or rotation have occurred.
+  remarks: The Delta event and the <xref:System.Windows.Input.Manipulations.InertiaProcessor2D.Delta?displayProperty=fullName> event are the same type. Typically, you can use the same event handler for both events.
+  example:
+  - '[!code-cs[ManipulationAPI#_ManipulationItem_OnManipulationOrInertiaDelta](../../add/codesnippet/CSharp/build/manipulationitem.xaml.cs#_manipulationitem_onmanipulationorinertiadelta)]'
   syntax:
     content: public event EventHandler<System.Windows.Input.Manipulations.Manipulation2DDeltaEventArgs> Delta;
     return:
       type: System.EventHandler{System.Windows.Input.Manipulations.Manipulation2DDeltaEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -168,14 +180,15 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the minimum radius, in coordinate units, necessary for a manipulator to participate in scaling and rotation.
+  remarks: "If a manipulator is extremely close to the center of mass of the manipulators currently being processed, a very small manipulator motion can become a very large change to rotation or scaling. To avoid this problem, set MinimumScaleRotateRadius to something greater than zero. Any manipulator that is closer than that distance to the center of mass will not be included in rotation and scaling operations.  \n  \n A typical value to use should be based on the likely magnitude of \"accidental\" motions of the manipulators. For example, if the manipulator is a human finger touching a screen, a radius corresponding to a centimeter or so might be appropriate.  \n  \n The value for MinimumScaleRotateRadius must be a finite, non-negative number."
   syntax:
     content: public float MinimumScaleRotateRadius { get; set; }
     return:
       type: System.Single
-      description: To be added.
+      description: The minimum radius, in coordinate units, necessary for a manipulator to participate in scaling and rotation.
   overload: System.Windows.Input.Manipulations.ManipulationProcessor2D.MinimumScaleRotateRadius*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -192,14 +205,15 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the pivot information for the manipulation processor.
+  remarks: The Pivot property is used to provide pivot information for single-manipulator rotations. Setting this property to null disables single-manipulator rotations.
   syntax:
     content: public System.Windows.Input.Manipulations.ManipulationPivot2D Pivot { get; set; }
     return:
       type: System.Windows.Input.Manipulations.ManipulationPivot2D
-      description: To be added.
+      description: The pivot information for the manipulation processor.
   overload: System.Windows.Input.Manipulations.ManipulationProcessor2D.Pivot*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -216,18 +230,24 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes the specified manipulators as a single batch action.
+  remarks: The parameter `manipulators` may be an empty list or null. If this results in the number of manipulators reaching zero, the <xref:System.Windows.Input.Manipulations.ManipulationProcessor2D.Completed> event is raised.
+  example:
+  - "In the following example, the <xref:System.Windows.UIElement.OnLostMouseCapture%2A> method of a <xref:System.Windows.UIElement> object is overridden to call the ProcessManipulators method with the list of <xref:System.Windows.Input.Manipulations.Manipulator2D> objects set to null.  \n  \n [!code-cs[ManipulationAPI#_ManipulationItem_OnLostMouseCapture](../../add/codesnippet/CSharp/build/manipulationitem.xaml.cs#_manipulationitem_onlostmousecapture)]  \n  \n [!code-cs[ManipulationAPI#_ManipulationItem_Timestamp](../../add/codesnippet/CSharp/build/manipulationitem.xaml.cs#_manipulationitem_timestamp)]"
   syntax:
     content: public void ProcessManipulators (long timestamp, System.Collections.Generic.IEnumerable<System.Windows.Input.Manipulations.Manipulator2D> manipulators);
     parameters:
     - id: timestamp
       type: System.Int64
-      description: To be added.
+      description: The timestamp for the batch, in 100-nanosecond ticks.
     - id: manipulators
       type: System.Collections.Generic.IEnumerable{System.Windows.Input.Manipulations.Manipulator2D}
-      description: To be added.
+      description: The set of manipulators that are currently in scope.
   overload: System.Windows.Input.Manipulations.ManipulationProcessor2D.ProcessManipulators*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The timestamp is less than the previous timestamp for the current manipulation.
   platform:
   - net-11
   - net-20
@@ -244,15 +264,15 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets parameters on the manipulation processor.
   syntax:
     content: public void SetParameters (System.Windows.Input.Manipulations.ManipulationParameters2D parameters);
     parameters:
     - id: parameters
       type: System.Windows.Input.Manipulations.ManipulationParameters2D
-      description: To be added.
+      description: Parameters to set.
   overload: System.Windows.Input.Manipulations.ManipulationProcessor2D.SetParameters*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -269,13 +289,16 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a new manipulation has started.
+  remarks: ''
+  example:
+  - "In the following example, an event handler for the Started event checks to see if inertia processing is running and if so, stops it.  \n  \n [!code-cs[ManipulationAPI#_ManipulationItem_OnManipulationStarted](../../add/codesnippet/CSharp/build/manipulationitem.xaml.cs#_manipulationitem_onmanipulationstarted)]  \n  \n [!code-cs[ManipulationAPI#_ManipulationItem_Timestamp](../../add/codesnippet/CSharp/build/manipulationitem.xaml.cs#_manipulationitem_timestamp)]"
   syntax:
     content: public event EventHandler<System.Windows.Input.Manipulations.Manipulation2DStartedEventArgs> Started;
     return:
       type: System.EventHandler{System.Windows.Input.Manipulations.Manipulation2DStartedEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -292,14 +315,17 @@ items:
   assemblies:
   - System.Windows.Input.Manipulations
   namespace: System.Windows.Input.Manipulations
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the current set of supported manipulations.
   syntax:
     content: public System.Windows.Input.Manipulations.Manipulations2D SupportedManipulations { get; set; }
     return:
       type: System.Windows.Input.Manipulations.Manipulations2D
-      description: To be added.
+      description: The current set of supported manipulations.
   overload: System.Windows.Input.Manipulations.ManipulationProcessor2D.SupportedManipulations*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The property tries to set a value that is not a valid combination of the   \n  \n enumeration values."
   platform:
   - net-11
   - net-20
@@ -326,12 +352,6 @@ references:
   name: ManipulationProcessor2D(Manipulations2D,ManipulationPivot2D)
   nameWithType: ManipulationProcessor2D.ManipulationProcessor2D(Manipulations2D,ManipulationPivot2D)
   fullName: System.Windows.Input.Manipulations.ManipulationProcessor2D.ManipulationProcessor2D(Manipulations2D,ManipulationPivot2D)
-- uid: System.Windows.Input.Manipulations.Manipulations2D
-  parent: System.Windows.Input.Manipulations
-  isExternal: false
-  name: Manipulations2D
-  nameWithType: Manipulations2D
-  fullName: System.Windows.Input.Manipulations.Manipulations2D
 - uid: System.Windows.Input.Manipulations.ManipulationPivot2D
   parent: System.Windows.Input.Manipulations
   isExternal: false
@@ -350,6 +370,21 @@ references:
   name: EventHandler<Manipulation2DCompletedEventArgs>
   nameWithType: EventHandler<Manipulation2DCompletedEventArgs>
   fullName: System.EventHandler<System.Windows.Input.Manipulations.Manipulation2DCompletedEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Windows.Input.Manipulations.Manipulation2DCompletedEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Windows.Input.Manipulations.Manipulation2DCompletedEventArgs
+    name: Manipulation2DCompletedEventArgs
+    nameWithType: Manipulation2DCompletedEventArgs
+    fullName: Manipulation2DCompletedEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Input.Manipulations.ManipulationProcessor2D.CompleteManipulation(System.Int64)
   parent: System.Windows.Input.Manipulations.ManipulationProcessor2D
   isExternal: false
@@ -374,6 +409,21 @@ references:
   name: EventHandler<Manipulation2DDeltaEventArgs>
   nameWithType: EventHandler<Manipulation2DDeltaEventArgs>
   fullName: System.EventHandler<System.Windows.Input.Manipulations.Manipulation2DDeltaEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Windows.Input.Manipulations.Manipulation2DDeltaEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Windows.Input.Manipulations.Manipulation2DDeltaEventArgs
+    name: Manipulation2DDeltaEventArgs
+    nameWithType: Manipulation2DDeltaEventArgs
+    fullName: Manipulation2DDeltaEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Input.Manipulations.ManipulationProcessor2D.MinimumScaleRotateRadius
   parent: System.Windows.Input.Manipulations.ManipulationProcessor2D
   isExternal: false
@@ -392,30 +442,33 @@ references:
   name: Pivot
   nameWithType: ManipulationProcessor2D.Pivot
   fullName: System.Windows.Input.Manipulations.ManipulationProcessor2D.Pivot
-- uid: System.Windows.Input.Manipulations.ManipulationPivot2D
-  parent: System.Windows.Input.Manipulations
-  isExternal: false
-  name: ManipulationPivot2D
-  nameWithType: ManipulationPivot2D
-  fullName: System.Windows.Input.Manipulations.ManipulationPivot2D
 - uid: System.Windows.Input.Manipulations.ManipulationProcessor2D.ProcessManipulators(System.Int64,System.Collections.Generic.IEnumerable{System.Windows.Input.Manipulations.Manipulator2D})
   parent: System.Windows.Input.Manipulations.ManipulationProcessor2D
   isExternal: false
   name: ProcessManipulators(Int64,IEnumerable<Manipulator2D>)
   nameWithType: ManipulationProcessor2D.ProcessManipulators(Int64,IEnumerable<Manipulator2D>)
   fullName: System.Windows.Input.Manipulations.ManipulationProcessor2D.ProcessManipulators(Int64,IEnumerable<Manipulator2D>)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.Collections.Generic.IEnumerable{System.Windows.Input.Manipulations.Manipulator2D}
   parent: System.Collections.Generic
   isExternal: true
   name: IEnumerable<Manipulator2D>
   nameWithType: IEnumerable<Manipulator2D>
   fullName: System.Collections.Generic.IEnumerable<System.Windows.Input.Manipulations.Manipulator2D>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Windows.Input.Manipulations.Manipulator2D>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Windows.Input.Manipulations.Manipulator2D
+    name: Manipulator2D
+    nameWithType: Manipulator2D
+    fullName: Manipulator2D
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Input.Manipulations.ManipulationProcessor2D.SetParameters(System.Windows.Input.Manipulations.ManipulationParameters2D)
   parent: System.Windows.Input.Manipulations.ManipulationProcessor2D
   isExternal: false
@@ -440,18 +493,27 @@ references:
   name: EventHandler<Manipulation2DStartedEventArgs>
   nameWithType: EventHandler<Manipulation2DStartedEventArgs>
   fullName: System.EventHandler<System.Windows.Input.Manipulations.Manipulation2DStartedEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Windows.Input.Manipulations.Manipulation2DStartedEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Windows.Input.Manipulations.Manipulation2DStartedEventArgs
+    name: Manipulation2DStartedEventArgs
+    nameWithType: Manipulation2DStartedEventArgs
+    fullName: Manipulation2DStartedEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Input.Manipulations.ManipulationProcessor2D.SupportedManipulations
   parent: System.Windows.Input.Manipulations.ManipulationProcessor2D
   isExternal: false
   name: SupportedManipulations
   nameWithType: ManipulationProcessor2D.SupportedManipulations
   fullName: System.Windows.Input.Manipulations.ManipulationProcessor2D.SupportedManipulations
-- uid: System.Windows.Input.Manipulations.Manipulations2D
-  parent: System.Windows.Input.Manipulations
-  isExternal: false
-  name: Manipulations2D
-  nameWithType: Manipulations2D
-  fullName: System.Windows.Input.Manipulations.Manipulations2D
 - uid: System.Windows.Input.Manipulations.ManipulationProcessor2D.#ctor*
   parent: System.Windows.Input.Manipulations.ManipulationProcessor2D
   isExternal: false

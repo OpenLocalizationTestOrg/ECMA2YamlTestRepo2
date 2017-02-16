@@ -17,8 +17,10 @@ items:
   nameWithType: SqlFunctionAttribute
   fullName: Microsoft.SqlServer.Server.SqlFunctionAttribute
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Used to mark a method definition of a user-defined aggregate as a function in SQL Server. The properties on the attribute reflect the physical characteristics used when the type is registered with SQL Server.
+  remarks: ''
+  example:
+  - "The following example shows an aggregate function that returns a list of files in the specified directory path.  \n  \n [!code-cs[DataWorks SqlFunctionAttribute Sample#1](../../add/codesnippet/CSharp/t-microsoft.sqlserver.se_0_1.cs)]\n [!code-vb[DataWorks SqlFunctionAttribute Sample#1](../../add/codesnippet/VisualBasic/t-microsoft.sqlserver.se_0_1.vb)]"
   syntax:
     content: >-
       [System.AttributeUsage(System.AttributeTargets.Method, AllowMultiple=false, Inherited=false)]
@@ -44,12 +46,12 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: An optional attribute on a user-defined aggregate, used to indicate that the method should be registered in SQL Server as a function. Also used to set the <xref:Microsoft.SqlServer.Server.SqlFunctionAttribute.DataAccess%2A>, <xref:Microsoft.SqlServer.Server.SqlFunctionAttribute.FillRowMethodName%2A>, <xref:Microsoft.SqlServer.Server.SqlFunctionAttribute.IsDeterministic%2A>, <xref:Microsoft.SqlServer.Server.SqlFunctionAttribute.IsPrecise%2A>, <xref:Microsoft.SqlServer.Server.SqlFunctionAttribute.Name%2A>, <xref:Microsoft.SqlServer.Server.SqlFunctionAttribute.SystemDataAccess%2A>, and <xref:Microsoft.SqlServer.Server.SqlFunctionAttribute.TableDefinition%2A> properties of the function attribute.
   syntax:
     content: public SqlFunctionAttribute ();
     parameters: []
   overload: Microsoft.SqlServer.Server.SqlFunctionAttribute.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -66,14 +68,15 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the function involves access to user data stored in the local instance of SQL Server.
+  remarks: "The default is <xref:Microsoft.SqlServer.Server.DataAccessKind>.DataAccess is also required when connecting to remote servers if transactions integration is required (the default).  \n  \n If a Transact-SQL query is executed from inside a table-valued function (TVF), the <xref:Microsoft.SqlServer.Server.DataAccessKind>.`Read` property should be set."
   syntax:
     content: public Microsoft.SqlServer.Server.DataAccessKind DataAccess { get; set; }
     return:
       type: Microsoft.SqlServer.Server.DataAccessKind
-      description: To be added.
+      description: '.: Does not access data. .: Only reads user data.'
   overload: Microsoft.SqlServer.Server.SqlFunctionAttribute.DataAccess*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -90,14 +93,19 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: The name of a method in the same class as the table-valued function (TVF) that is used by the TVF contract.
+  remarks: For more information, see [CLR Triggers](http://go.microsoft.com/fwlink/?LinkId=128026).
+  example:
+  - >-
+    [!code-cs[VbRaddataSQLObjects#10](../../add/codesnippet/CSharp/CS/Function1.cs#10)]
+     [!code-vb[VbRaddataSQLObjects#10](../../add/codesnippet/VisualBasic/VB/Function1.vb#10)]
   syntax:
     content: public string FillRowMethodName { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> value representing the name of a method used by the TVF contract.
   overload: Microsoft.SqlServer.Server.SqlFunctionAttribute.FillRowMethodName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -114,14 +122,15 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the user-defined function is deterministic.
+  remarks: "A user-defined function is said to be deterministic if it always produces the same output values given the same input values and the same database state.  \n  \n The IsDeterministic property is also useful for indexing the result of the function in the form of indexed computed columns and indexed views. If this property is not specified, the function is assumed to be non-deterministic.  \n  \n Functions that access local data can be deterministic. The data access characteristic is captured separately by the <xref:Microsoft.SqlServer.Server.SqlFunctionAttribute.DataAccess%2A> and <xref:Microsoft.SqlServer.Server.SqlFunctionAttribute.SystemDataAccess%2A> properties.  \n  \n Note that data access to remote servers (for example, using a <xref:System.Data.SqlClient.SqlConnection> to connect to another SQL Server instance) is available in user-defined functions. However, you must still honor the IsDeterministic declaration. If the common language runtime (CLR) function is marked as deterministic, it should not cause side-effects in the remote server. While side-effects against the context connection are restricted, SQL Server will not enforce the restriction for side-effects over remote connections.  \n  \n The default value of this attribute is `false`.  \n  \n Do not mark a function as deterministic if the function does not always produce the same output values, given the same input values and the same database state. Marking a function as deterministic when the function is not truly deterministic can result in corrupted indexed views and computed columns."
   syntax:
     content: public bool IsDeterministic { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the function is deterministic; otherwise .
   overload: Microsoft.SqlServer.Server.SqlFunctionAttribute.IsDeterministic*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -138,14 +147,15 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the function involves imprecise computations, such as floating point operations.
+  remarks: "Precision of a function is one of the properties used to determine if computed columns that use this function can be indexed.  \n  \n The default value of this attribute is `false`."
   syntax:
     content: public bool IsPrecise { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the function involves precise computations; otherwise .
   overload: Microsoft.SqlServer.Server.SqlFunctionAttribute.IsPrecise*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -162,14 +172,19 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: The name under which the function should be registered in SQL Server.
+  remarks: "This attribute is used only by Microsoft Visual Studio to automatically register the specified method as a user-defined function. It is not used by SQL Server.  \n  \n Thee following example specifies that the user-defined function is referenced using the name `sp_scalarFunc`."
+  example:
+  - >-
+    [!code-cs[VbRaddataSQLObjects#10](../../add/codesnippet/CSharp/CS/Function1.cs#10)]
+     [!code-vb[VbRaddataSQLObjects#10](../../add/codesnippet/VisualBasic/VB/Function1.vb#10)]
   syntax:
     content: public string Name { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> value representing the name under which the function should be registered.
   overload: Microsoft.SqlServer.Server.SqlFunctionAttribute.Name*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -186,14 +201,15 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether the function requires access to data stored in the system catalogs or virtual system tables of SQL Server.
+  remarks: The default is <xref:Microsoft.SqlServer.Server.SystemDataAccessKind>.
   syntax:
     content: public Microsoft.SqlServer.Server.SystemDataAccessKind SystemDataAccess { get; set; }
     return:
       type: Microsoft.SqlServer.Server.SystemDataAccessKind
-      description: To be added.
+      description: '.: Does not access system data. .: Only reads system data.'
   overload: Microsoft.SqlServer.Server.SqlFunctionAttribute.SystemDataAccess*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -210,14 +226,19 @@ items:
   assemblies:
   - System.Data
   namespace: Microsoft.SqlServer.Server
-  summary: To be added.
-  remarks: To be added.
+  summary: A string that represents the table definition of the results, if the method is used as a table-valued function (TVF).
+  remarks: "This attribute is used only by Microsoft Visual Studio to automatically register the specified method as a TVF. It is not used by SQL Server.  \n  \n The following example specifies that the user-defined function is referenced using the name `sp_tableFunc`. The `TableDefinition` property has the value `letter nchar(1)`."
+  example:
+  - >-
+    [!code-cs[VbRaddataSQLObjects#11](../../add/codesnippet/CSharp/CS/Function1.cs#11)]
+     [!code-vb[VbRaddataSQLObjects#11](../../add/codesnippet/VisualBasic/VB/Function1.vb#11)]
   syntax:
     content: public string TableDefinition { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> value representing the table definition of the results.
   overload: Microsoft.SqlServer.Server.SqlFunctionAttribute.TableDefinition*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -274,24 +295,12 @@ references:
   name: IsPrecise
   nameWithType: SqlFunctionAttribute.IsPrecise
   fullName: Microsoft.SqlServer.Server.SqlFunctionAttribute.IsPrecise
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: Microsoft.SqlServer.Server.SqlFunctionAttribute.Name
   parent: Microsoft.SqlServer.Server.SqlFunctionAttribute
   isExternal: false
   name: Name
   nameWithType: SqlFunctionAttribute.Name
   fullName: Microsoft.SqlServer.Server.SqlFunctionAttribute.Name
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.SqlServer.Server.SqlFunctionAttribute.SystemDataAccess
   parent: Microsoft.SqlServer.Server.SqlFunctionAttribute
   isExternal: false
@@ -310,12 +319,6 @@ references:
   name: TableDefinition
   nameWithType: SqlFunctionAttribute.TableDefinition
   fullName: Microsoft.SqlServer.Server.SqlFunctionAttribute.TableDefinition
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.SqlServer.Server.SqlFunctionAttribute.#ctor*
   parent: Microsoft.SqlServer.Server.SqlFunctionAttribute
   isExternal: false

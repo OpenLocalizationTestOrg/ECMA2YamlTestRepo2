@@ -14,8 +14,50 @@
     </Interface>
   </Interfaces>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Represents an entry in either back or forward navigation history.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ [!INCLUDE[TLA#tla_wpf](../../add/includes/tlasharptla-wpf-md.md)] implements a navigation history service that stores one entry for each piece of content that has been previously navigated to, just like navigation history in [!INCLUDE[TLA#tla_ie](../../add/includes/tlasharptla-ie-md.md)]. Navigation history comprises two stacks, one that remembers back navigation history, and one that remembers forward navigation history.  
+  
+ An entry for the current item is added to back navigation history when a forward navigation occurs. This occurs in the following situations:  
+  
+-   The `Navigate` method is called (<xref:System.Windows.Navigation.NavigationService.Navigate%2A?displayProperty=fullName>, <xref:System.Windows.Navigation.NavigationWindow.Navigate%2A?displayProperty=fullName>, <xref:System.Windows.Controls.Frame.Navigate%2A?displayProperty=fullName>).  
+  
+-   The `GoForward` method is called (<xref:System.Windows.Navigation.NavigationService.GoForward%2A?displayProperty=fullName>, <xref:System.Windows.Navigation.NavigationWindow.GoForward%2A?displayProperty=fullName>, <xref:System.Windows.Controls.Frame.GoForward%2A?displayProperty=fullName>).  
+  
+-   The forward button on the navigation [!INCLUDE[TLA2#tla_ui](../../add/includes/tla2sharptla-ui-md.md)] that is displayed from the current navigator ([!INCLUDE[TLA2#tla_xbap](../../add/includes/tla2sharptla-xbap-md.md)], <xref:System.Windows.Navigation.NavigationWindow>, <xref:System.Windows.Controls.Frame>).  
+  
+ Likewise, an entry for the current item is added to forward navigation history before a back navigation occurs, which happens when:  
+  
+-   The `GoBack` method is called (<xref:System.Windows.Navigation.NavigationService.GoBack%2A?displayProperty=fullName>, <xref:System.Windows.Navigation.NavigationWindow.GoBack%2A?displayProperty=fullName>, <xref:System.Windows.Controls.Frame.GoBack%2A?displayProperty=fullName>).  
+  
+-   The back button on the navigation [!INCLUDE[TLA2#tla_ui](../../add/includes/tla2sharptla-ui-md.md)] that is displayed from the current navigator ([!INCLUDE[TLA2#tla_xbap](../../add/includes/tla2sharptla-xbap-md.md)], <xref:System.Windows.Navigation.NavigationWindow>, <xref:System.Windows.Controls.Frame>).  
+  
+ Each entry in back and forward navigation history is an instance of the JournalEntry class.  
+  
+ Each JournalEntry object encapsulates information about a particular navigation, including a name for the entry (<xref:System.Windows.Navigation.JournalEntry.Name%2A>), whether the entry is kept alive (<xref:System.Windows.Navigation.JournalEntry.KeepAlive%2A>) and the [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)] for the content that is navigated to (<xref:System.Windows.Navigation.JournalEntry.Source%2A>).  
+  
+ You can retrieve all the JournalEntry objects in back navigation history by enumerating the <xref:System.Windows.Navigation.NavigationWindow.BackStack%2A?displayProperty=fullName> or <xref:System.Windows.Controls.Frame.BackStack%2A?displayProperty=fullName> properties. For forward navigation history, you can retrieve all the JournalEntry objects by enumerating the <xref:System.Windows.Navigation.NavigationWindow.ForwardStack%2A?displayProperty=fullName> or <xref:System.Windows.Controls.Frame.ForwardStack%2A?displayProperty=fullName> properties.  
+  
+ If you need to remove the most recent JournalEntry object from back navigation history, to prevent navigation to it, for example, you can call the `RemoveBackEntry` method (<xref:System.Windows.Navigation.NavigationService.RemoveBackEntry%2A?displayProperty=fullName>, <xref:System.Windows.Navigation.NavigationWindow.RemoveBackEntry%2A?displayProperty=fullName>, <xref:System.Windows.Controls.Frame.RemoveBackEntry%2A?displayProperty=fullName>), which removes the JournalEntry object and returns a reference to it.  
+  
+ You cannot add JournalEntry objects to navigation history, however, because you can neither instantiate nor derive from JournalEntry, and because no type implements a member to do so. However, you can add custom <xref:System.Windows.Navigation.CustomContentState> objects to back navigation history by calling the `AddBackEntry` method (<xref:System.Windows.Navigation.NavigationService.AddBackEntry%2A>, <xref:System.Windows.Navigation.NavigationWindow.AddBackEntry%2A>, <xref:System.Windows.Controls.Frame.AddBackEntry%2A>); <xref:System.Windows.Navigation.NavigationService> adds the <xref:System.Windows.Navigation.CustomContentState> object to an internally-created JournalEntry object, which is then added to the back navigation history.  
+  
+   
+  
+## Examples  
+ The following example shows how to retrieve the most recent JournalEntry object from the back navigation stack to get the <xref:System.Windows.Navigation.JournalEntry.Name%2A> and <xref:System.Windows.Navigation.JournalEntry.Source%2A> property values.  
+  
+ [!code-vb[JournalEntrySnippets#GetJournalEntryCODEBEHIND](../../add/codesnippet/VisualBasic/journalentrysnippets/datepage.xaml.vb#getjournalentrycodebehind)]
+ [!code-cs[JournalEntrySnippets#GetJournalEntryCODEBEHIND](../../add/codesnippet/CSharp/JournalEntrySnippets.CSharp/DatePage.xaml.cs#getjournalentrycodebehind)]  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -30,10 +72,13 @@
         <Parameter Name="context" Type="System.Runtime.Serialization.StreamingContext" />
       </Parameters>
       <Docs>
-        <param name="info">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="info">The serialization information.</param>
+        <param name="context">The streaming context.</param>
+        <summary>Initializes a new instance of the <see cref="T:System.Windows.Navigation.JournalEntry" /> class.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="CustomContentState">
@@ -47,9 +92,11 @@
         <ReturnType>System.Windows.Navigation.CustomContentState</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Gets or sets the <see cref="T:System.Windows.Navigation.CustomContentState" /> object that is associated with this journal entry.</summary>
+        <value>The <see cref="T:System.Windows.Navigation.CustomContentState" /> object that is associated with this journal entry. If one is not associated, <see langword="null" /> is returned.</value>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>The <see cref="T:System.Windows.Navigation.CustomContentState" /> object that is associated with this journal entry. If one is not associated, <see langword="null" /> is returned.</returns>
       </Docs>
     </Member>
     <Member MemberName="GetKeepAlive">
@@ -66,10 +113,12 @@
         <Parameter Name="dependencyObject" Type="System.Windows.DependencyObject" />
       </Parameters>
       <Docs>
-        <param name="dependencyObject">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="dependencyObject">The element from which to get the attached property value.</param>
+        <summary>Returns the &lt;xref:System.Windows.Navigation.JournalEntry.KeepAlive%2A&gt; attached property of the journal entry for the specified element.</summary>
+        <returns>The value of the &lt;xref:System.Windows.Navigation.JournalEntry.KeepAlive%2A&gt; attached property of the journal entry for the specified element.</returns>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <value>The value of the &lt;xref:System.Windows.Navigation.JournalEntry.KeepAlive%2A&gt; attached property of the journal entry for the specified element.</value>
       </Docs>
     </Member>
     <Member MemberName="GetName">
@@ -86,10 +135,12 @@
         <Parameter Name="dependencyObject" Type="System.Windows.DependencyObject" />
       </Parameters>
       <Docs>
-        <param name="dependencyObject">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="dependencyObject">The element from which to get the attached property value.</param>
+        <summary>Gets the &lt;xref:System.Windows.Navigation.JournalEntry.Name%2A&gt; attached property of the journal entry for the specified element.</summary>
+        <returns>The &lt;xref:System.Windows.Navigation.JournalEntry.Name%2A&gt; attached property of the journal entry for the specified element.</returns>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <value>The &lt;xref:System.Windows.Navigation.JournalEntry.Name%2A&gt; attached property of the journal entry for the specified element.</value>
       </Docs>
     </Member>
     <Member MemberName="GetObjectData">
@@ -112,10 +163,13 @@
         <Parameter Name="context" Type="System.Runtime.Serialization.StreamingContext" />
       </Parameters>
       <Docs>
-        <param name="info">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="info">The data that is required to serialize the target object.</param>
+        <param name="context">The streaming context.</param>
+        <summary>Called when this object is serialized.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="KeepAliveProperty">
@@ -129,8 +183,11 @@
         <ReturnType>System.Windows.DependencyProperty</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Identifies the &lt;xref:System.Windows.Navigation.JournalEntry.KeepAlive%2A&gt; attached property.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>The identifier for the &lt;xref:System.Windows.Navigation.JournalEntry.KeepAlive%2A&gt; attached property.</returns>
+        <value>The identifier for the &lt;xref:System.Windows.Navigation.JournalEntry.KeepAlive%2A&gt; attached property.</value>
       </Docs>
     </Member>
     <Member MemberName="Name">
@@ -144,9 +201,45 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the name of the journal entry.</summary>
+        <value>The name of the journal entry.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Content hosted by <xref:System.Windows.Navigation.NavigationWindow>, <xref:System.Windows.Controls.Frame>, or [!INCLUDE[TLA2#tla_ie7](../../add/includes/tla2sharptla-ie7-md.md)], display navigation [!INCLUDE[TLA2#tla_ui](../../add/includes/tla2sharptla-ui-md.md)] that allows users to navigate through back and forward navigation history. The text that is displayed for each entry in navigation history depends on which of the following pieces of data are used to automatically construct a navigation history entry name, in order of precedence:  
+  
+-   The attached Name attribute.  
+  
+-   <xref:System.Windows.Controls.Page.Title%2A>.  
+  
+-   <xref:System.Windows.Controls.Page.WindowTitle%2A> and the [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)] for the current page  
+  
+-   The [!INCLUDE[TLA#tla_uri](../../add/includes/tlasharptla-uri-md.md)] for the current page.  
+  
+<a name="xamlAttributeUsage_Name"></a>   
+## XAML Attribute Usage  
+ \<*object* **JournalEntry.Name**="<xref:System.String>"/>  
+  
+<a name="dependencyPropertyInfo_Name"></a>   
+## Dependency Property Information  
+  
+|||  
+|-|-|  
+|Identifier field|<xref:System.Windows.Navigation.JournalEntry.NameProperty>|  
+|Metadata properties set to `true`|None|  
+  
+   
+  
+## Examples  
+ The following example shows how to set the Name property for a <xref:System.Windows.Controls.Page> from markup, with a [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)] attached property usage.  
+  
+ [!code-xml[JournalEntrySnippets#JENameMARKUP](../../add/codesnippet/Xaml/JournalEntrySnippets.CSharp/JENamePage.xaml#jenamemarkup)]  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>The name of the journal entry.</returns>
       </Docs>
     </Member>
     <Member MemberName="NameProperty">
@@ -160,8 +253,11 @@
         <ReturnType>System.Windows.DependencyProperty</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Identifies the &lt;xref:System.Windows.Navigation.JournalEntry.Name%2A&gt; attached property.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>The identifier for the &lt;xref:System.Windows.Navigation.JournalEntry.Name%2A&gt; attached property.</returns>
+        <value>The identifier for the &lt;xref:System.Windows.Navigation.JournalEntry.Name%2A&gt; attached property.</value>
       </Docs>
     </Member>
     <Member MemberName="SetKeepAlive">
@@ -179,10 +275,14 @@
         <Parameter Name="keepAlive" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="dependencyObject">To be added.</param>
-        <param name="keepAlive">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="dependencyObject">The element on which to set the attached property value.</param>
+        <param name="keepAlive">
+          <see langword="true" /> to keep the journal entry in memory; otherwise, <see langword="false" />.</param>
+        <summary>Sets the &lt;xref:System.Windows.Navigation.JournalEntry.KeepAlive%2A&gt; attached property of the specified element.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="SetName">
@@ -200,10 +300,13 @@
         <Parameter Name="name" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="dependencyObject">To be added.</param>
-        <param name="name">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="dependencyObject">The element on which to set the attached property value.</param>
+        <param name="name">The name to be assigned to the attached property.</param>
+        <summary>Sets the &lt;xref:System.Windows.Navigation.JournalEntry.Name%2A&gt; attached property of the specified element.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Source">
@@ -217,9 +320,11 @@
         <ReturnType>System.Uri</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Gets or sets the URI of the content that was navigated to.</summary>
+        <value>The URI of the content that was navigated to, or <see langword="null" /> if no URI is associated with the entry.</value>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>The URI of the content that was navigated to, or <see langword="null" /> if no URI is associated with the entry.</returns>
       </Docs>
     </Member>
   </Members>

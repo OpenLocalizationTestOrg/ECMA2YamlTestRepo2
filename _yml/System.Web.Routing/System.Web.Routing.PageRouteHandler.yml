@@ -15,8 +15,8 @@ items:
   nameWithType: PageRouteHandler
   fullName: System.Web.Routing.PageRouteHandler
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides properties and methods for defining how a URL maps to a physical file.
+  remarks: You pass an instance of PageRouteHandler to the <xref:System.Web.Routing.Route> constructor in order to map a URL of a physical file. The PageRouteHandler object specifies the virtual path of the physical file and determines whether authorization rules for the physical URL is checked.
   syntax:
     content: 'public class PageRouteHandler : System.Web.Routing.IRouteHandler'
   inheritance:
@@ -40,15 +40,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Routing
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: When you use this constructor, the <xref:System.Web.Routing.PageRouteHandler.CheckPhysicalUrlAccess%2A> property is set to `true`.
   syntax:
     content: public PageRouteHandler (string virtualPath);
     parameters:
     - id: virtualPath
       type: System.String
-      description: To be added.
+      description: The virtual path of the physical file for this <xref:System.Web.Routing.RouteData.Route%2A> object. The file must be located in the current application. Therefore, the path must begin with a tilde (~).
   overload: System.Web.Routing.PageRouteHandler.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The virtualPath parameter is  or is an empty string or does not start with "~/".
   platform:
   - net-11
   - net-20
@@ -65,18 +69,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Routing
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: By default, the <xref:System.Web.Routing.PageRouteHandler.CheckPhysicalUrlAccess%2A> property is `true`. Therefore, if you want authorization rules to be applied to both the URL of the physical page and to the route URL, you can use the <xref:System.Web.Routing.PageRouteHandler.%23ctor%28System.String%29> constructor instead of this constructor.
   syntax:
     content: public PageRouteHandler (string virtualPath, bool checkPhysicalUrlAccess);
     parameters:
     - id: virtualPath
       type: System.String
-      description: To be added.
+      description: The virtual path of the physical file of this <xref:System.Web.Routing.RouteData.Route%2A> object. The file must be located in the current application. Therefore, the path must begin with a tilde (~).
     - id: checkPhysicalUrlAccess
       type: System.Boolean
-      description: To be added.
+      description: If this property is set to , authorization rules will be applied to the request URL and not to the URL of the physical page. If this property is set to , authorization rules will be applied to both the request URL and to the URL of the physical page.
   overload: System.Web.Routing.PageRouteHandler.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The virtualPath parameter is  or is an empty string or does not start with "~/".
   platform:
   - net-11
   - net-20
@@ -93,14 +101,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Routing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that determines whether authorization rules are applied to the physical file's URL.
+  remarks: "You can set the CheckPhysicalUrlAccess property when you use the <xref:System.Web.Routing.PageRouteHandler.%23ctor%28System.String%2CSystem.Boolean%29> constructor.  \n  \n The value of the CheckPhysicalUrlAccess property determines whether the <xref:System.Web.Routing.PageRouteHandler> object will check security permissions only for the route URL or for both the physical page and the route URL.  \n  \n When the CheckPhysicalUrlAccess property is set to `true` (which is its default value), a user must have permission to access both the route URL and the physical URL. When the CheckPhysicalUrlAccess property is set to `false`, a user requires only permission to access the route URL, and permissions for the physical URL are not checked.  \n  \n Permissions are defined in the Web.config file, as shown in the following example:  \n  \n```  \n<configuration>  \n  <location path=\"categoriespage.aspx\">  \n    <system.web>  \n      <authorization>  \n        <allow roles=\"admin\"/>  \n        <deny users=\"*\"/>  \n      </authorization>  \n    </system.web>  \n  </location>  \n  <location path=\"category\">  \n    <system.web>  \n      <authorization>  \n        <allow users=\"*\"/>  \n      </authorization>  \n    </system.web>  \n  </location>  \n</configuration>  \n```  \n  \n For a request URL that contains `Category/food/show` after the domain name, if the route URL pattern is `Category/{action}/{categoryName}` and the physical page is Categoriespage.aspx, [!INCLUDE[vstecasp](../../add/includes/vstecasp-md.md)] applies the permissions defined in the previous example in one of the following ways:  \n  \n-   If the CheckPhysicalUrlAccess property is `false`, all users are granted access, because all users are granted access to the URL pattern that starts with `category`.  \n  \n-   If the CheckPhysicalUrlAccess property is `true`, only `admin` users are granted access. All users have access to the URL pattern that begins with `category`, but only `admin` users have access to the physical page Categoriespage.aspx."
   syntax:
     content: public bool CheckPhysicalUrlAccess { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if authorization is checked for the URL of the physical file that is associated with the route; otherwise, . The default is .
   overload: System.Web.Routing.PageRouteHandler.CheckPhysicalUrlAccess*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -117,18 +126,21 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Routing
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the object that processes the request.
   syntax:
     content: public virtual System.Web.IHttpHandler GetHttpHandler (System.Web.Routing.RequestContext requestContext);
     parameters:
     - id: requestContext
       type: System.Web.Routing.RequestContext
-      description: To be added.
+      description: An object that encapsulates information about the request.
     return:
       type: System.Web.IHttpHandler
-      description: To be added.
+      description: The object that processes the request.
   overload: System.Web.Routing.PageRouteHandler.GetHttpHandler*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The requestContext parameter is .
   platform:
   - net-11
   - net-20
@@ -145,18 +157,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Routing
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the virtual path of the physical file for the route after substitutions have been applied to any replacement parameters.
+  remarks: If the <xref:System.Web.Routing.PageRouteHandler.VirtualPath%2A> value does not contain any replacement parameters, the GetSubstitutedVirtualPath method returns the same value as the <xref:System.Web.Routing.PageRouteHandler.VirtualPath%2A> property.
   syntax:
     content: public string GetSubstitutedVirtualPath (System.Web.Routing.RequestContext requestContext);
     parameters:
     - id: requestContext
       type: System.Web.Routing.RequestContext
-      description: To be added.
+      description: An object that encapsulates information about the request.
     return:
       type: System.String
-      description: To be added.
+      description: The URL of the physical file that was generated from a route.
   overload: System.Web.Routing.PageRouteHandler.GetSubstitutedVirtualPath*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The requestContext parameter is .
   platform:
   - net-11
   - net-20
@@ -173,14 +189,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.Routing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the virtual path of the Web page that is associated with this route.
+  remarks: You set the VirtualPath property in the <xref:System.Web.Routing.PageRouteHandler.%23ctor%2A?displayProperty=fullName> constructor or in the <xref:System.Web.Routing.PageRouteHandler.%23ctor%2A?displayProperty=fullName> constructor.
   syntax:
     content: public string VirtualPath { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The URL of the Web page, before substitutions have been applied for any replacement parameters.
   overload: System.Web.Routing.PageRouteHandler.VirtualPath*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -207,12 +224,6 @@ references:
   name: PageRouteHandler(String,Boolean)
   nameWithType: PageRouteHandler.PageRouteHandler(String,Boolean)
   fullName: System.Web.Routing.PageRouteHandler.PageRouteHandler(String,Boolean)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -225,12 +236,6 @@ references:
   name: CheckPhysicalUrlAccess
   nameWithType: PageRouteHandler.CheckPhysicalUrlAccess
   fullName: System.Web.Routing.PageRouteHandler.CheckPhysicalUrlAccess
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.Routing.PageRouteHandler.GetHttpHandler(System.Web.Routing.RequestContext)
   parent: System.Web.Routing.PageRouteHandler
   isExternal: false
@@ -255,30 +260,12 @@ references:
   name: GetSubstitutedVirtualPath(RequestContext)
   nameWithType: PageRouteHandler.GetSubstitutedVirtualPath(RequestContext)
   fullName: System.Web.Routing.PageRouteHandler.GetSubstitutedVirtualPath(RequestContext)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Web.Routing.RequestContext
-  parent: System.Web.Routing
-  isExternal: true
-  name: RequestContext
-  nameWithType: RequestContext
-  fullName: System.Web.Routing.RequestContext
 - uid: System.Web.Routing.PageRouteHandler.VirtualPath
   parent: System.Web.Routing.PageRouteHandler
   isExternal: false
   name: VirtualPath
   nameWithType: PageRouteHandler.VirtualPath
   fullName: System.Web.Routing.PageRouteHandler.VirtualPath
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Routing.PageRouteHandler.#ctor*
   parent: System.Web.Routing.PageRouteHandler
   isExternal: false

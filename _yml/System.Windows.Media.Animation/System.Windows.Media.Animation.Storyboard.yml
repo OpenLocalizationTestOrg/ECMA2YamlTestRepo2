@@ -78,8 +78,8 @@ items:
   nameWithType: Storyboard
   fullName: System.Windows.Media.Animation.Storyboard
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: A container timeline that provides object and property targeting information for its child animations.
+  remarks: "## Interactively Controlling Storyboards  \n A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in markup, you specify the <xref:System.Windows.Media.Animation.BeginStoryboard.Name%2A> property of the <xref:System.Windows.Media.Animation.BeginStoryboard> object that creates it; for an example, see [How to: Use Event Triggers to Control a Storyboard After It Starts](../Topic/How%20to:%20Use%20Event%20Triggers%20to%20Control%20a%20Storyboard%20After%20It%20Starts.md). To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n## Data Binding and Animating Timelines  \n Most timeline properties can be data bound or animated; however, because of the way the timing system works, data bound or animated timelines do not behave like other data bound or animated objects. To understand their behavior, it helps to understand what it means to activate a timeline.  \n  \n When a timeline is activated, copies are made of the timeline and its child timelines. These copies are frozen (made read-only) and <xref:System.Windows.Media.Animation.Clock> objects are created from them. These clocks do the actual work of animating the targeted properties. If a timeline is data bound or animated, a snapshot of its current values is made when its clock is created. Even though the original timeline might continue to change, its clock does not.  \n  \n For a timeline to reflect data binding or animation changes, its clock must be re-created. Clocks are not re-created for you automatically. The following are several ways to apply timeline changes:  \n  \n-   If the timeline is or belongs to a Storyboard, you can make it reflect changes by reapplying its storyboard using a <xref:System.Windows.Media.Animation.BeginStoryboard> or the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method. This has the side effect of also restarting the animation. In code, you can use the <xref:System.Windows.Media.Animation.Storyboard.Seek%2A> method to advance the storyboard back to its previous position.  \n  \n-   If you applied an animation directly to a property using the <xref:System.Windows.Media.Animation.Animatable.BeginAnimation%2A> method, call the <xref:System.Windows.Media.Animation.Animatable.BeginAnimation%2A> method again and pass it the animation that has been modified.  \n  \n-   If you are working directly at the clock level, create and apply a new set of clocks and use them to replace the previous set of created clocks.  \n  \n For an example of a data bound animation, see [Key Spline Animation Sample](http://go.microsoft.com/fwlink/?LinkID=160011) ."
   syntax:
     content: 'public class Storyboard : System.Windows.Media.Animation.ParallelTimeline'
   inheritance:
@@ -194,12 +194,12 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public Storyboard ();
     parameters: []
   overload: System.Windows.Media.Animation.Storyboard.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -216,12 +216,12 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets and initiates them.
   syntax:
     content: public void Begin ();
     parameters: []
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -238,15 +238,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets and initiates them.
+  remarks: "If the targeted properties are already animated, they are replaced using the <xref:System.Windows.Media.Animation.HandoffBehavior> handoff behavior.  \n  \n Storyboards started with this method cannot be paused, resumed, or otherwise interactively controlled after they are started. To make a storyboard controllable, use the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> or <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method.  \n  \n Beginning a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> events."
+  example:
+  - "The following example uses a storyboard to animate a <xref:System.Windows.Media.TextEffect>. The <xref:System.Windows.Media.TextEffect> is contained within a <xref:System.Windows.FrameworkContentElement>'s name scope.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementStoryboardExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementStoryboardExample.cs#frameworkcontentelementstoryboardexampleusingwholepage)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementStoryboardExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementstoryboardexample.vb#frameworkcontentelementstoryboardexampleusingwholepage)]"
   syntax:
     content: public void Begin (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: An object contained within the same name scope as the targets of this storyboard's animations. Animations without a <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -263,15 +266,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets and initiates them.
+  remarks: "If the targeted properties are already animated, they are replaced using the <xref:System.Windows.Media.Animation.HandoffBehavior> handoff behavior.  \n  \n Storyboards started with this method cannot be paused, resumed, or otherwise interactively controlled after they are started. To make a storyboard controllable, use the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkElement%2CSystem.Boolean%29> or <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkElement%2CSystem.Windows.Media.Animation.HandoffBehavior%2CSystem.Boolean%29> method.  \n  \n Beginning a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> events."
   syntax:
     content: public void Begin (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: An object contained within the same name scope as the targets of this storyboard's animations. Animations without a <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -288,18 +292,21 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets and initiates them.
+  remarks: "If the targeted properties are already animated, they are replaced using the <xref:System.Windows.Media.Animation.HandoffBehavior> handoff behavior.  \n  \n To interactively control this storyboard, you must specify the same `containingObject` when calling the interactive methods that you used to begin the storyboard  \n  \n When this method is called, <xref:System.Windows.Media.Animation.Clock> objects are created for the storyboard and any timelines it contains. These clocks are stored with `containingObject`.  \n  \n Beginning a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> events."
+  example:
+  - "The following example uses a controllable storyboard to animate a <xref:System.Windows.Media.TextEffect>. The <xref:System.Windows.Media.TextEffect> is contained within a <xref:System.Windows.FrameworkContentElement>'s name scope.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementControlStoryboardExample.cs#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementcontrolstoryboardexample.vb#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]"
   syntax:
     content: public void Begin (System.Windows.FrameworkContentElement containingObject, bool isControllable);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: An object contained within the same name scope as the targets of this storyboard's animations. Animations without a <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
     - id: isControllable
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the storyboard should be interactively controllable; otherwise, ."
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -316,18 +323,21 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets and initiates them, using the specified .
+  remarks: "When you apply a <xref:System.Windows.Media.Animation.Storyboard>, <xref:System.Windows.Media.Animation.AnimationTimeline>, or <xref:System.Windows.Media.Animation.AnimationClock> to a property using the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior>, any <xref:System.Windows.Media.Animation.Clock> objects previously associated with that property continue to consume system resources; the timing system does not remove these clocks automatically.  \n  \n To avoid performance issues when you apply a large number of clocks using <xref:System.Windows.Media.Animation.HandoffBehavior>, you should remove composing clocks from the animated property after they complete. There are several ways to remove a clock.  \n  \n-   To remove all clocks from a property, use the <xref:System.Windows.Media.Animation.Animatable.ApplyAnimationClock%28System.Windows.DependencyProperty%2CSystem.Windows.Media.Animation.AnimationClock%29> or <xref:System.Windows.Media.Animation.Animatable.BeginAnimation%28System.Windows.DependencyProperty%2CSystem.Windows.Media.Animation.AnimationTimeline%29> method of the animated object. Specify the property being animated as the first parameter, and `null` as the second. This removes all animation clocks from the property.  \n  \n-   To remove a specific <xref:System.Windows.Media.Animation.AnimationClock> from a list of clocks, use the <xref:System.Windows.Media.Animation.Clock.Controller%2A> property of the <xref:System.Windows.Media.Animation.AnimationClock> to retrieve a <xref:System.Windows.Media.Animation.ClockController>, then call the <xref:System.Windows.Media.Animation.ClockController.Remove%2A> method of the <xref:System.Windows.Media.Animation.ClockController>. This is typically done in the <xref:System.Windows.Media.Animation.Clock.Completed> event handler for a clock. Note that only root clocks can be controlled by a <xref:System.Windows.Media.Animation.ClockController>; the <xref:System.Windows.Media.Animation.Clock.Controller%2A> property of a child clock returns `null`. Note also that the <xref:System.Windows.Media.Animation.Clock.Completed> event is not called if the effective duration of the clock is forever.  In that case, the user must determine when to call <xref:System.Windows.Media.Animation.ClockController.Remove%2A>.  \n  \n This is primarily an issue for animations on objects that have a long lifetime.  When an object is garbage collected, its clocks are also disconnected and garbage collected.  \n  \n For more information about clock objects, see [Animation and Timing System Overview](../Topic/Animation%20and%20Timing%20System%20Overview.md)."
+  example:
+  - "The following example uses the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior> to animate when the user left-clicks, and the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior> when the user right-clicks.  \n  \n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementStoryboardWithHandoffBehaviorExampleWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementstoryboardwithhandoffbehaviorexample.vb#frameworkcontentelementstoryboardwithhandoffbehaviorexamplewholepage)]\n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementStoryboardWithHandoffBehaviorExampleWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementStoryboardWithHandoffBehaviorExample.cs#frameworkcontentelementstoryboardwithhandoffbehaviorexamplewholepage)]"
   syntax:
     content: public void Begin (System.Windows.FrameworkContentElement containingObject, System.Windows.Media.Animation.HandoffBehavior handoffBehavior);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: An object contained within the same name scope as the targets of this storyboard's animations. Animations without a <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
     - id: handoffBehavior
       type: System.Windows.Media.Animation.HandoffBehavior
-      description: To be added.
+      description: The behavior the new animation should use to interact with any current animations.
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -344,18 +354,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets and initiates them.
+  remarks: "If the targeted properties are already animated, they are replaced using the <xref:System.Windows.Media.Animation.HandoffBehavior> handoff behavior.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard  \n  \n When this method is called, <xref:System.Windows.Media.Animation.Clock> objects are created for the storyboard and any timelines it contains. These clocks are stored with `containingObject`.  \n  \n Beginning a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> events."
   syntax:
     content: public void Begin (System.Windows.FrameworkElement containingObject, bool isControllable);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: An object contained within the same name scope as the targets of this storyboard's animations. Animations without a <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
     - id: isControllable
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the storyboard should be interactively controllable; otherwise, ."
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -372,18 +383,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets within the specified template and initiates them.
+  remarks: "If the targeted properties are already animated, they are replaced using the <xref:System.Windows.Media.Animation.HandoffBehavior> handoff behavior.  \n  \n When this method is called, <xref:System.Windows.Media.Animation.Clock> objects are created for the storyboard and any timelines it contains. These clocks are stored with `containingObject`.  \n  \n Beginning a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> events."
   syntax:
     content: public void Begin (System.Windows.FrameworkElement containingObject, System.Windows.FrameworkTemplate frameworkTemplate);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object to which the specified `frameworkTemplate` has been applied. Animations without a <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
     - id: frameworkTemplate
       type: System.Windows.FrameworkTemplate
-      description: To be added.
+      description: The template to animate.
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -400,18 +412,21 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets and initiates them, using the specified .
+  remarks: ''
+  example:
+  - "The following example uses the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior> to animate when the user left-clicks, and the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior> when the user right-clicks.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#GraphicsMMFrameworkElementStoryboardHandoffBehaviorExample](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkElementStoryboardHandoffBehaviorExample.cs#graphicsmmframeworkelementstoryboardhandoffbehaviorexample)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#GraphicsMMFrameworkElementStoryboardHandoffBehaviorExample](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkelementstoryboardhandoffbehaviorexample.vb#graphicsmmframeworkelementstoryboardhandoffbehaviorexample)]"
   syntax:
     content: public void Begin (System.Windows.FrameworkElement containingObject, System.Windows.Media.Animation.HandoffBehavior handoffBehavior);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: An object contained within the same name scope as the targets of this storyboard's animations. Animations without a specified <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
     - id: handoffBehavior
       type: System.Windows.Media.Animation.HandoffBehavior
-      description: To be added.
+      description: The behavior the new animation should use to interact with any current animations.
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -428,21 +443,24 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets and initiates them, using the specified .
+  remarks: "If the targeted properties are already animated, they are replaced using the specified handoff behavior.  \n  \n To interactively control this storyboard, you must specify the same `containingObject` when calling the interactive methods that you used to begin the storyboard  \n  \n When this method is called, <xref:System.Windows.Media.Animation.Clock> objects are created for the storyboard and any timelines it contains. These clocks are stored with `containingObject`.  \n  \n Beginning a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> events.  \n  \n## Using the Compose HandoffBehavior  \n When you apply a <xref:System.Windows.Media.Animation.Storyboard>, <xref:System.Windows.Media.Animation.AnimationTimeline>, or <xref:System.Windows.Media.Animation.AnimationClock> to a property using the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior>, any <xref:System.Windows.Media.Animation.Clock> objects previously associated with that property continue to consume system resources; the timing system does not remove these clocks automatically.  \n  \n To avoid performance issues when you apply a large number of clocks using <xref:System.Windows.Media.Animation.HandoffBehavior>, you should remove composing clocks from the animated property after they complete. There are several ways to remove a clock.  \n  \n-   To remove all clocks from a property, use the <xref:System.Windows.Media.Animation.Animatable.ApplyAnimationClock%28System.Windows.DependencyProperty%2CSystem.Windows.Media.Animation.AnimationClock%29> or <xref:System.Windows.Media.Animation.Animatable.BeginAnimation%28System.Windows.DependencyProperty%2CSystem.Windows.Media.Animation.AnimationTimeline%29> method of the animated object. Specify the property being animated as the first parameter, and `null` as the second. This removes all animation clocks from the property.  \n  \n-   To remove a specific <xref:System.Windows.Media.Animation.AnimationClock> from a list of clocks, use the <xref:System.Windows.Media.Animation.Clock.Controller%2A> property of the <xref:System.Windows.Media.Animation.AnimationClock> to retrieve a <xref:System.Windows.Media.Animation.ClockController>, then call the <xref:System.Windows.Media.Animation.ClockController.Remove%2A> method of the <xref:System.Windows.Media.Animation.ClockController>. This is typically done in the <xref:System.Windows.Media.Animation.Clock.Completed> event handler for a clock. Note that only root clocks can be controlled by a <xref:System.Windows.Media.Animation.ClockController>; the <xref:System.Windows.Media.Animation.Clock.Controller%2A> property of a child clock returns `null`. Note also that the <xref:System.Windows.Media.Animation.Clock.Completed> event is not called if the effective duration of the clock is forever.  In that case, the user must determine when to call <xref:System.Windows.Media.Animation.ClockController.Remove%2A>.  \n  \n This is primarily an issue for animations on objects that have a long lifetime.  When an object is garbage collected, its clocks are also disconnected and garbage collected.  \n  \n For more information about clock objects, see [Animation and Timing System Overview](../Topic/Animation%20and%20Timing%20System%20Overview.md)."
+  example:
+  - "The following example uses a controllable storyboard to animate a <xref:System.Windows.Media.TextEffect>. The <xref:System.Windows.Media.TextEffect> is contained within a <xref:System.Windows.FrameworkContentElement>'s name scope.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementControlStoryboardExample.cs#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementcontrolstoryboardexample.vb#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]  \n  \n The next example uses the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior> to animate when the user left-clicks, and the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior> when the user right-clicks.  \n  \n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementStoryboardWithHandoffBehaviorExampleWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementstoryboardwithhandoffbehaviorexample.vb#frameworkcontentelementstoryboardwithhandoffbehaviorexamplewholepage)]\n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementStoryboardWithHandoffBehaviorExampleWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementStoryboardWithHandoffBehaviorExample.cs#frameworkcontentelementstoryboardwithhandoffbehaviorexamplewholepage)]"
   syntax:
     content: public void Begin (System.Windows.FrameworkContentElement containingObject, System.Windows.Media.Animation.HandoffBehavior handoffBehavior, bool isControllable);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: An object contained within the same name scope as the targets of this storyboard's animations. Animations without a specified <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
     - id: handoffBehavior
       type: System.Windows.Media.Animation.HandoffBehavior
-      description: To be added.
+      description: The behavior the new animation should use to interact with any current animations.
     - id: isControllable
       type: System.Boolean
-      description: To be added.
+      description: Declares whether the animation is controllable (can be paused) once started.
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -459,21 +477,22 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets within the specified template and initiates them.
+  remarks: "If the targeted properties are already animated, they are replaced using the <xref:System.Windows.Media.Animation.HandoffBehavior> handoff behavior.  \n  \n To interactively control this storyboard, you must specify the same `containingObject` when calling the interactive methods that you used to begin the storyboard  \n  \n When this method is called, <xref:System.Windows.Media.Animation.Clock> objects are created for the storyboard and any timelines it contains. These clocks are stored with `containingObject`.  \n  \n Beginning a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> events."
   syntax:
     content: public void Begin (System.Windows.FrameworkElement containingObject, System.Windows.FrameworkTemplate frameworkTemplate, bool isControllable);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object to which the specified `frameworkTemplate` has been applied.  Animations without a <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
     - id: frameworkTemplate
       type: System.Windows.FrameworkTemplate
-      description: To be added.
+      description: The template to animate.
     - id: isControllable
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the storyboard should be interactively controllable; otherwise, ."
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -490,21 +509,22 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets within the specified template and initiates them.
+  remarks: "When this method is called, <xref:System.Windows.Media.Animation.Clock> objects are created for the storyboard and any timelines it contains. These clocks are stored with `containingObject`.  \n  \n Beginning a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> events.  \n  \n## Using the Compose HandoffBehavior  \n When you apply a <xref:System.Windows.Media.Animation.Storyboard>, <xref:System.Windows.Media.Animation.AnimationTimeline>, or <xref:System.Windows.Media.Animation.AnimationClock> to a property using the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior>, any <xref:System.Windows.Media.Animation.Clock> objects previously associated with that property continue to consume system resources; the timing system does not remove these clocks automatically.  \n  \n To avoid performance issues when you apply a large number of clocks using <xref:System.Windows.Media.Animation.HandoffBehavior>, you should remove composing clocks from the animated property after they complete. There are several ways to remove a clock.  \n  \n-   To remove all clocks from a property, use the <xref:System.Windows.Media.Animation.Animatable.ApplyAnimationClock%28System.Windows.DependencyProperty%2CSystem.Windows.Media.Animation.AnimationClock%29> or <xref:System.Windows.Media.Animation.Animatable.BeginAnimation%28System.Windows.DependencyProperty%2CSystem.Windows.Media.Animation.AnimationTimeline%29> method of the animated object. Specify the property being animated as the first parameter, and `null` as the second. This removes all animation clocks from the property.  \n  \n-   To remove a specific <xref:System.Windows.Media.Animation.AnimationClock> from a list of clocks, use the <xref:System.Windows.Media.Animation.Clock.Controller%2A> property of the <xref:System.Windows.Media.Animation.AnimationClock> to retrieve a <xref:System.Windows.Media.Animation.ClockController>, then call the <xref:System.Windows.Media.Animation.ClockController.Remove%2A> method of the <xref:System.Windows.Media.Animation.ClockController>. This is typically done in the <xref:System.Windows.Media.Animation.Clock.Completed> event handler for a clock. Note that only root clocks can be controlled by a <xref:System.Windows.Media.Animation.ClockController>; the <xref:System.Windows.Media.Animation.Clock.Controller%2A> property of a child clock returns `null`. Note also that the <xref:System.Windows.Media.Animation.Clock.Completed> event is not called if the effective duration of the clock is forever.  In that case, the user must determine when to call <xref:System.Windows.Media.Animation.ClockController.Remove%2A>.  \n  \n This is primarily an issue for animations on objects that have a long lifetime.  When an object is garbage collected, its clocks are also disconnected and garbage collected.  \n  \n For more information about clock objects, see [Animation and Timing System Overview](../Topic/Animation%20and%20Timing%20System%20Overview.md)."
   syntax:
     content: public void Begin (System.Windows.FrameworkElement containingObject, System.Windows.FrameworkTemplate frameworkTemplate, System.Windows.Media.Animation.HandoffBehavior handoffBehavior);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object to which the specified `frameworkTemplate` has been applied. Animations without a <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
     - id: frameworkTemplate
       type: System.Windows.FrameworkTemplate
-      description: To be added.
+      description: The template to animate.
     - id: handoffBehavior
       type: System.Windows.Media.Animation.HandoffBehavior
-      description: To be added.
+      description: The behavior the new animation should use to interact with any current animations.
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -521,21 +541,24 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets and initiates them.
+  remarks: "To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard  \n  \n When this method is called, <xref:System.Windows.Media.Animation.Clock> objects are created for the storyboard and any timelines it contains. These clocks are stored with `containingObject`.  \n  \n Beginning a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> events.  \n  \n## Using the Compose HandoffBehavior  \n When you apply a <xref:System.Windows.Media.Animation.Storyboard>, <xref:System.Windows.Media.Animation.AnimationTimeline>, or <xref:System.Windows.Media.Animation.AnimationClock> to a property using the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior>, any <xref:System.Windows.Media.Animation.Clock> objects previously associated with that property continue to consume system resources; the timing system does not remove these clocks automatically.  \n  \n To avoid performance issues when you apply a large number of clocks using <xref:System.Windows.Media.Animation.HandoffBehavior>, you should remove composing clocks from the animated property after they complete. There are several ways to remove a clock.  \n  \n-   To remove all clocks from a property, use the <xref:System.Windows.Media.Animation.Animatable.ApplyAnimationClock%28System.Windows.DependencyProperty%2CSystem.Windows.Media.Animation.AnimationClock%29> or <xref:System.Windows.Media.Animation.Animatable.BeginAnimation%28System.Windows.DependencyProperty%2CSystem.Windows.Media.Animation.AnimationTimeline%29> method of the animated object. Specify the property being animated as the first parameter, and `null` as the second. This removes all animation clocks from the property.  \n  \n-   To remove a specific <xref:System.Windows.Media.Animation.AnimationClock> from a list of clocks, use the <xref:System.Windows.Media.Animation.Clock.Controller%2A> property of the <xref:System.Windows.Media.Animation.AnimationClock> to retrieve a <xref:System.Windows.Media.Animation.ClockController>, then call the <xref:System.Windows.Media.Animation.ClockController.Remove%2A> method of the <xref:System.Windows.Media.Animation.ClockController>. This is typically done in the <xref:System.Windows.Media.Animation.Clock.Completed> event handler for a clock. Note that only root clocks can be controlled by a <xref:System.Windows.Media.Animation.ClockController>; the <xref:System.Windows.Media.Animation.Clock.Controller%2A> property of a child clock returns `null`. Note also that the <xref:System.Windows.Media.Animation.Clock.Completed> event is not called if the effective duration of the clock is forever.  In that case, the user must determine when to call <xref:System.Windows.Media.Animation.ClockController.Remove%2A>.  \n  \n This is primarily an issue for animations on objects that have a long lifetime.  When an object is garbage collected, its clocks are also disconnected and garbage collected.  \n  \n For more information about clock objects, see [Animation and Timing System Overview](../Topic/Animation%20and%20Timing%20System%20Overview.md)."
+  example:
+  - "The following example shows how to create a controllable storyboard.  \n  \n [!code-cs[animation_ovws_procedural_snip#ControllableStoryboardExampleWholePage](../../add/codesnippet/CSharp/animation_ovws_procedural/ControllableStoryboardExample.cs#controllablestoryboardexamplewholepage)]\n [!code-vb[animation_ovws_procedural_snip#ControllableStoryboardExampleWholePage](../../add/codesnippet/VisualBasic/animation_ovws_procedural/controllablestoryboardexample.vb#controllablestoryboardexamplewholepage)]  \n  \n The next example uses the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior> to animate when the user left-clicks, and the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior> when the user right-clicks.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#GraphicsMMFrameworkElementStoryboardHandoffBehaviorExample](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkElementStoryboardHandoffBehaviorExample.cs#graphicsmmframeworkelementstoryboardhandoffbehaviorexample)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#GraphicsMMFrameworkElementStoryboardHandoffBehaviorExample](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkelementstoryboardhandoffbehaviorexample.vb#graphicsmmframeworkelementstoryboardhandoffbehaviorexample)]"
   syntax:
     content: public void Begin (System.Windows.FrameworkElement containingObject, System.Windows.Media.Animation.HandoffBehavior handoffBehavior, bool isControllable);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: An object contained within the same name scope as the targets of this storyboard's animations. Animations without a specified <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
     - id: handoffBehavior
       type: System.Windows.Media.Animation.HandoffBehavior
-      description: To be added.
+      description: The behavior the new animation should use to interact with any current animations.
     - id: isControllable
       type: System.Boolean
-      description: To be added.
+      description: Declares whether the animation is controllable (can be paused) once started.
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -552,24 +575,25 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Applies the animations associated with this  to their targets within the specified template and initiates them.
+  remarks: "To interactively control this storyboard, you must specify the same `containingObject` when calling the interactive methods that you used to begin the storyboard  \n  \n When this method is called, <xref:System.Windows.Media.Animation.Clock> objects are created for the storyboard and any timelines it contains. These clocks are stored with `containingObject`.  \n  \n Beginning a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> events.  \n  \n## Using the Compose HandoffBehavior  \n When you apply a <xref:System.Windows.Media.Animation.Storyboard>, <xref:System.Windows.Media.Animation.AnimationTimeline>, or <xref:System.Windows.Media.Animation.AnimationClock> to a property using the <xref:System.Windows.Media.Animation.HandoffBehavior> <xref:System.Windows.Media.Animation.HandoffBehavior>, any <xref:System.Windows.Media.Animation.Clock> objects previously associated with that property continue to consume system resources; the timing system does not remove these clocks automatically.  \n  \n To avoid performance issues when you apply a large number of clocks using <xref:System.Windows.Media.Animation.HandoffBehavior>, you should remove composing clocks from the animated property after they complete. There are several ways to remove a clock.  \n  \n-   To remove all clocks from a property, use the <xref:System.Windows.Media.Animation.Animatable.ApplyAnimationClock%28System.Windows.DependencyProperty%2CSystem.Windows.Media.Animation.AnimationClock%29> or <xref:System.Windows.Media.Animation.Animatable.BeginAnimation%28System.Windows.DependencyProperty%2CSystem.Windows.Media.Animation.AnimationTimeline%29> method of the animated object. Specify the property being animated as the first parameter, and `null` as the second. This removes all animation clocks from the property.  \n  \n-   To remove a specific <xref:System.Windows.Media.Animation.AnimationClock> from a list of clocks, use the <xref:System.Windows.Media.Animation.Clock.Controller%2A> property of the <xref:System.Windows.Media.Animation.AnimationClock> to retrieve a <xref:System.Windows.Media.Animation.ClockController>, then call the <xref:System.Windows.Media.Animation.ClockController.Remove%2A> method of the <xref:System.Windows.Media.Animation.ClockController>. This is typically done in the <xref:System.Windows.Media.Animation.Clock.Completed> event handler for a clock. Note that only root clocks can be controlled by a <xref:System.Windows.Media.Animation.ClockController>; the <xref:System.Windows.Media.Animation.Clock.Controller%2A> property of a child clock returns `null`. Note also that the <xref:System.Windows.Media.Animation.Clock.Completed> event is not called if the effective duration of the clock is forever.  In that case, the user must determine when to call <xref:System.Windows.Media.Animation.ClockController.Remove%2A>.  \n  \n This is primarily an issue for animations on objects that have a long lifetime.  When an object is garbage collected, its clocks are also disconnected and garbage collected.  \n  \n For more information about clock objects, see [Animation and Timing System Overview](../Topic/Animation%20and%20Timing%20System%20Overview.md)."
   syntax:
     content: public void Begin (System.Windows.FrameworkElement containingObject, System.Windows.FrameworkTemplate frameworkTemplate, System.Windows.Media.Animation.HandoffBehavior handoffBehavior, bool isControllable);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object to which the specified `frameworkTemplate` has been applied. Animations without a <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> are applied to `containingObject`.
     - id: frameworkTemplate
       type: System.Windows.FrameworkTemplate
-      description: To be added.
+      description: The template to animate.
     - id: handoffBehavior
       type: System.Windows.Media.Animation.HandoffBehavior
-      description: To be added.
+      description: The behavior the new animation should use to interact with any current animations.
     - id: isControllable
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the storyboard should be interactively controllable; otherwise, ."
   overload: System.Windows.Media.Animation.Storyboard.Begin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -586,15 +610,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a modifiable clone of this , making deep copies of this object's values. When copying dependency properties, this method copies resource references and data bindings (but they might no longer resolve) but not animations or their current values.
+  remarks: "This method is used to produce modifiable copies of frozen <xref:System.Windows.Freezable> objects (or any <xref:System.Windows.Freezable> object). For convenience, this method shadows the inherited version with a strongly typed implementation.  \n  \n For more information, see <xref:System.Windows.Freezable.Clone%2A?displayProperty=fullName>."
   syntax:
     content: public System.Windows.Media.Animation.Storyboard Clone ();
     parameters: []
     return:
       type: System.Windows.Media.Animation.Storyboard
-      description: To be added.
+      description: A modifiable clone of the current object. The cloned object's <xref:System.Windows.Freezable.IsFrozen%2A> property is  even if the source's <xref:System.Windows.Freezable.IsFrozen%2A> property is
   overload: System.Windows.Media.Animation.Storyboard.Clone*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -611,15 +636,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new instance of the  class.
+  remarks: This method is called internally by <xref:System.Windows.Freezable.CreateInstance%2A> when creating new instances of the <xref:System.Windows.Media.Animation.Storyboard> class for the various cloning methods (such as <xref:System.Windows.Freezable.Clone%2A> and <xref:System.Windows.Freezable.CloneCurrentValue%2A>).
+  example:
+  - "The following example shows a typical implementation of <xref:System.Windows.Freezable.CreateInstanceCore%2A>.  \n  \n [!code-vb[freezablesample_procedural#CreateInstanceCoreExample](../../add/codesnippet/VisualBasic/freezablesample_visualbasic/freezablesample.vb#createinstancecoreexample)]\n [!code-cs[freezablesample_procedural#CreateInstanceCoreExample](../../add/codesnippet/CSharp/freezablesample_csharp/freezablesample.cs#createinstancecoreexample)]"
   syntax:
     content: protected override System.Windows.Freezable CreateInstanceCore ();
     parameters: []
     return:
       type: System.Windows.Freezable
-      description: To be added.
+      description: A new  instance.
   overload: System.Windows.Media.Animation.Storyboard.CreateInstanceCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -636,15 +664,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentGlobalSpeed%2A> of the  that was created for this .
   syntax:
     content: public double GetCurrentGlobalSpeed ();
     parameters: []
     return:
       type: System.Double
-      description: To be added.
+      description: The current global speed, or 0 if the clock is stopped.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentGlobalSpeed*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -661,18 +689,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentGlobalSpeed%2A> of the  that was created for this .
+  remarks: "A clock's <xref:System.Windows.Media.Animation.Clock.CurrentGlobalSpeed%2A> speed is the rate at which its time is currently progressing, compared to real-world time.  \n  \n To use this method to retrieve information about a storyboard's clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public Nullable<double> GetCurrentGlobalSpeed (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkContentElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Nullable{System.Double}
-      description: To be added.
+      description: The current global speed, or  if the clock is stopped.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentGlobalSpeed*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -689,18 +718,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentGlobalSpeed%2A> of the  that was created for this .
+  remarks: "A clock's <xref:System.Windows.Media.Animation.Clock.CurrentGlobalSpeed%2A> speed is the rate at which its time is currently progressing, compared to real-world time.  \n  \n To use this method to retrieve information about a storyboard's clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public Nullable<double> GetCurrentGlobalSpeed (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Nullable{System.Double}
-      description: To be added.
+      description: The current global speed, or  if the clock is stopped.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentGlobalSpeed*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -717,15 +747,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentIteration%2A> of the  that was created for this .
+  remarks: "A clock's first iteration has a value of 1.  \n  \n If this storyboard has a <xref:System.Windows.Media.Animation.Timeline.AutoReverse%2A> setting of `true`, a full iteration consists of a forward-reverse pair, not just one of these segments.  \n  \n To use this method to retrieve information about a storyboard's clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public int GetCurrentIteration ();
     parameters: []
     return:
       type: System.Int32
-      description: To be added.
+      description: This clock's current iteration within its current active period, or  if this clock is stopped.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentIteration*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -742,18 +773,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentIteration%2A> of the  that was created for this .
+  remarks: "A clock's first iteration has a value of 1.  \n  \n If this storyboard has a <xref:System.Windows.Media.Animation.Timeline.AutoReverse%2A> setting of `true`, a full iteration consists of a forward-reverse pair, not just one of these segments.  \n  \n To use this method to retrieve information about a storyboard's clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public Nullable<int> GetCurrentIteration (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkContentElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Nullable{System.Int32}
-      description: To be added.
+      description: This clock's current iteration within its current active period, or  if this clock is stopped.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentIteration*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -770,18 +802,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentIteration%2A> of the  that was created for this .
+  remarks: "A clock's first iteration has a value of 1.  \n  \n If this clock's timeline has an <xref:System.Windows.Media.Animation.Timeline.AutoReverse%2A> setting of `true`, a full iteration consists of a forward-reverse pair, not just one of these segments.  \n  \n Regardless of its current iteration, seeking a clock returns its current iteration to 1. Restarting a clock also returns its current iteration to 1.  \n  \n To use this method to retrieve information about a storyboard's clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public Nullable<int> GetCurrentIteration (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Nullable{System.Int32}
-      description: To be added.
+      description: This clock's current iteration within its current active period, or  if this clock is stopped.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentIteration*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -798,15 +831,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentProgress%2A> of the  that was created for this .
+  remarks: 'To use this method to retrieve information about a storyboard''s clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public double GetCurrentProgress ();
     parameters: []
     return:
       type: System.Double
-      description: To be added.
+      description: if this clock is , or 0.0 if this clock is active and its <xref:System.Windows.Media.Animation.Clock.Timeline%2A> has a <xref:System.Windows.Media.Animation.Timeline.Duration%2A> of <xref:System.Windows.Duration.Forever%2A>; otherwise, a value between 0.0 and 1.0 that indicates the current progress of this clock within its current iteration. A value of 0.0 indicates no progress, and a value of 1.0 indicates that the clock is at the end of its current iteration.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentProgress*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -823,18 +857,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentProgress%2A> of the  that was created for this .
+  remarks: 'To use this method to retrieve information about a storyboard''s clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public Nullable<double> GetCurrentProgress (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkContentElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Nullable{System.Double}
-      description: To be added.
+      description: if this clock is , or 0.0 if this clock is active and its <xref:System.Windows.Media.Animation.Clock.Timeline%2A> has a <xref:System.Windows.Media.Animation.Timeline.Duration%2A> of <xref:System.Windows.Duration.Forever%2A>; otherwise, a value between 0.0 and 1.0 that indicates the current progress of this clock within its current iteration. A value of 0.0 indicates no progress, and a value of 1.0 indicates that the clock is at the end of its current iteration.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentProgress*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -851,18 +886,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentProgress%2A> of the  that was created for this .
+  remarks: 'To use this method to retrieve information about a storyboard''s clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public Nullable<double> GetCurrentProgress (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Nullable{System.Double}
-      description: To be added.
+      description: if this clock is , or 0.0 if this clock is active and its <xref:System.Windows.Media.Animation.Clock.Timeline%2A> has a <xref:System.Windows.Media.Animation.Timeline.Duration%2A> of <xref:System.Windows.Duration.Forever%2A>; otherwise, a value between 0.0 and 1.0 that indicates the current progress of this clock within its current iteration. A value of 0.0 indicates no progress, and a value of 1.0 indicates that the clock is at the end of its current iteration.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentProgress*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -879,15 +915,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentState%2A> of the  that was created for this .
+  remarks: "This method does not tell you whether a storyboard is paused. To determine whether a storyboard is paused, use the <xref:System.Windows.Media.Animation.Storyboard.GetIsPaused%2A> method.  \n  \n To use this method to retrieve information about a storyboard's clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public System.Windows.Media.Animation.ClockState GetCurrentState ();
     parameters: []
     return:
       type: System.Windows.Media.Animation.ClockState
-      description: To be added.
+      description: 'The current state of the clock created for this storyboard: , , or .'
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -904,18 +941,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentState%2A> of the  that was created for this .
+  remarks: "This method does not tell you whether a storyboard is paused. To determine whether a storyboard is paused, use the <xref:System.Windows.Media.Animation.Storyboard.GetIsPaused%2A> method.  \n  \n To use this method to retrieve information about a storyboard's clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public System.Windows.Media.Animation.ClockState GetCurrentState (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkContentElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Windows.Media.Animation.ClockState
-      description: To be added.
+      description: 'The current state of the clock created for this storyboard: , , or .'
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -932,18 +970,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentState%2A> of the  that was created for this .
+  remarks: "This method does not tell you whether a storyboard is paused. To determine whether a storyboard is paused, use the <xref:System.Windows.Media.Animation.Storyboard.GetIsPaused%2A> method.  \n  \n To use this method to retrieve information about a storyboard's clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public System.Windows.Media.Animation.ClockState GetCurrentState (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Windows.Media.Animation.ClockState
-      description: To be added.
+      description: 'The current state of the clock created for this storyboard: , , or .'
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -960,15 +999,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentTime%2A> of the  that was created for this .
+  remarks: 'To use this method to retrieve information about a storyboard''s clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public TimeSpan GetCurrentTime ();
     parameters: []
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: if this storyboard's clock is ; otherwise, the current time of the storyboard's clock.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentTime*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -985,18 +1025,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentTime%2A> of the  that was created for this .
+  remarks: 'To use this method to retrieve information about a storyboard''s clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public Nullable<TimeSpan> GetCurrentTime (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkContentElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Nullable{System.TimeSpan}
-      description: To be added.
+      description: if this storyboard's clock is ; otherwise, the current time of the storyboard's clock.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentTime*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1013,18 +1054,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Clock.CurrentTime%2A> of the  that was created for this .
+  remarks: 'To use this method to retrieve information about a storyboard''s clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public Nullable<TimeSpan> GetCurrentTime (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Nullable{System.TimeSpan}
-      description: To be added.
+      description: if this storyboard's clock is ; otherwise, the current time of the storyboard's clock.
   overload: System.Windows.Media.Animation.Storyboard.GetCurrentTime*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1041,15 +1083,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a value that indicates whether the  that was created for this  is paused.
+  remarks: 'To use this method to retrieve information about a storyboard''s clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public bool GetIsPaused ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  created for this  is paused; otherwise, .
   overload: System.Windows.Media.Animation.Storyboard.GetIsPaused*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1066,18 +1109,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a value that indicates whether the  that was created for this  is paused.
+  remarks: 'To use this method to retrieve information about a storyboard''s clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public bool GetIsPaused (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkContentElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  created for this  is paused; otherwise, .
   overload: System.Windows.Media.Animation.Storyboard.GetIsPaused*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1094,18 +1138,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a value that indicates whether the  that was created for this  is paused.
+  remarks: 'To use this method to retrieve information about a storyboard''s clock, the storyboard must be controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public bool GetIsPaused (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  created for this  is paused; otherwise, .
   overload: System.Windows.Media.Animation.Storyboard.GetIsPaused*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1122,18 +1167,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Storyboard.Target%2A> value of the specified .
+  remarks: Use the <xref:System.Windows.Media.Animation.Storyboard.Target%2A> attached property with animation timelines to indicate the object that they target. For more information about how storyboard targeting works, see <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A>. For more information about how attached properties work, see [Attached Properties Overview](../Topic/Attached%20Properties%20Overview.md).
   syntax:
     content: public static System.Windows.DependencyObject GetTarget (System.Windows.DependencyObject element);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The timeline from which to retrieve the <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A>.
     return:
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The dependency object targeted by element.
   overload: System.Windows.Media.Animation.Storyboard.GetTarget*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1150,18 +1196,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> value of the specified .
+  remarks: This method gets the <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> attached property on the specified object. For more information about how storyboard targeting works, see <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A>. For more information about how attached properties work, see [Attached Properties Overview](../Topic/Attached%20Properties%20Overview.md).
   syntax:
     content: public static string GetTargetName (System.Windows.DependencyObject element);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The timeline from which to retrieve the <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A>.
     return:
       type: System.String
-      description: To be added.
+      description: The name of the dependency object targeted by element.
   overload: System.Windows.Media.Animation.Storyboard.GetTargetName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1178,18 +1225,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the <xref:System.Windows.Media.Animation.Storyboard.TargetProperty%2A> value of the specified .
+  remarks: "This method gets the <xref:System.Windows.Media.Animation.Storyboard.TargetProperty%2A> attached property on the specified object. For more information about how storyboard targeting works, see <xref:System.Windows.Media.Animation.Storyboard.TargetProperty%2A> attached property. For more information about how attached properties work, see [Attached Properties Overview](../Topic/Attached%20Properties%20Overview.md).  \n  \n Note that if the <xref:System.Windows.Media.Animation.Storyboard.TargetProperty%2A> was set in markup, this method returns an empty <xref:System.Windows.PropertyPath> because the property reference is resolved and stored internally when it is parsed."
   syntax:
     content: public static System.Windows.PropertyPath GetTargetProperty (System.Windows.DependencyObject element);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The dependency object from which to get the <xref:System.Windows.Media.Animation.Storyboard.TargetProperty%2A>.
     return:
       type: System.Windows.PropertyPath
-      description: To be added.
+      description: The property targeted by element.
   overload: System.Windows.Media.Animation.Storyboard.GetTargetProperty*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1206,12 +1254,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Pauses the  that was created for this .
+  remarks: "This method pauses the storyboard, but has no discernible effect if it is not active or currently paused. As a side effect, all associated children are also paused.  \n  \n A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n## Beginning a Paused Storyboard  \n When you <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> a storyboard that was paused, it appears to resume and restart. However, that is not what actually happens. The <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method actually replaces the paused <xref:System.Windows.Media.Animation.Storyboard> with a new unpaused version. Each time the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method is called, clock objects are created for the storyboard. These clocks are distributed to the properties they animate. So, when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method is called again, it does not restart its clocks; it replaces them with new clocks."
   syntax:
     content: public void Pause ();
     parameters: []
   overload: System.Windows.Media.Animation.Storyboard.Pause*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1228,15 +1277,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Pauses the  of the specified  associated with this .
+  remarks: "This method pauses the storyboard, but has no discernible effect if it is not active or currently paused. As a side effect, all associated children are also paused.  \n  \n Seeking a paused storyboard does not resume it. The only way to resume a paused storyboard is to use the <xref:System.Windows.Media.Animation.Storyboard.Resume%2A> method. Calling the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method again replaces the paused storyboard with a new one, which has the appearance of resuming it.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. Fro an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n Pausing a storyboard's clock triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> event.  \n  \n## Beginning a Paused Storyboard  \n When you <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> a storyboard that was paused, it appears to resume and restart. However, that is not what actually happens. The <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method actually replaces itself with an unpaused version. Each time the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method is called, clock objects are created for the storyboard. These clocks are distributed to the properties they animate. So, when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method is called again, it does not restart its clocks; it replaces them with new clocks."
+  example:
+  - "The following example uses a controllable storyboard to animate a <xref:System.Windows.Media.TextEffect>. The <xref:System.Windows.Media.TextEffect> is contained within a <xref:System.Windows.FrameworkContentElement>'s name scope.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementControlStoryboardExample.cs#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementcontrolstoryboardexample.vb#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]"
   syntax:
     content: public void Pause (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method was called. This object contains the  objects that were created for this storyboard and its children.
   overload: System.Windows.Media.Animation.Storyboard.Pause*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1253,15 +1305,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Pauses the  of the specified  associated with this .
+  remarks: "This method pauses the storyboard, but has no discernible effect if it is not active or currently paused. As a side effect, all associated children are also paused.  \n  \n Seeking a paused storyboard does not resume it. The only way to resume a paused storyboard is to use the <xref:System.Windows.Media.Animation.Storyboard.Resume%2A> method. Calling the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method again replaces the paused storyboard with a new one, which has the appearance of resuming it.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n Pausing a storyboard's clock triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> event.  \n  \n## Beginning a Paused Storyboard  \n When you <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> a storyboard that was paused, it appears to resume and restart. However, that is not what actually happens. The <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method actually replaces itself with an unpaused version. Each time the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method is called, clock objects are created for the storyboard. These clocks are distributed to the properties they animate. So, when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method is called again, it does not restart its clocks; it replaces them with new clocks."
   syntax:
     content: public void Pause (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
   overload: System.Windows.Media.Animation.Storyboard.Pause*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1278,12 +1331,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the  objects that were created for this . Animations that belong to this  no longer affect the properties they once animated, regardless of their <xref:System.Windows.Media.Animation.Timeline.FillBehavior%2A> setting.
+  remarks: "A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n All interactive actions taken on a <xref:System.Windows.Media.Animation.Clock>, and therefore also on a <xref:System.Windows.Media.Animation.Storyboard>, occur on the next tick of the timing engine, which happens shortly before the next render. This means that the <xref:System.Windows.Media.Animation.Storyboard.Remove%2A> method still affects the animated properties until this time. In other words, the next time the frame is displayed, the storyboard is removed. If you need to disassociate an animation from a property before this time, use the <xref:System.Windows.UIElement.BeginAnimation%2A> method with an `animation` parameter value of `null`."
   syntax:
     content: public void Remove ();
     parameters: []
   overload: System.Windows.Media.Animation.Storyboard.Remove*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1300,15 +1354,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the  objects that were created for this . Animations that belong to this  no longer affect the properties they once animated, regardless of their <xref:System.Windows.Media.Animation.Timeline.FillBehavior%2A> setting.
+  remarks: "To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n Removing a storyboard's clock triggers the <xref:System.Windows.Media.Animation.Timeline.RemoveRequested> event."
   syntax:
     content: public void Remove (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A?displayProperty=fullName> method was called. This object contains the  objects that were created for this storyboard and its children.
   overload: System.Windows.Media.Animation.Storyboard.Remove*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1325,15 +1380,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the  objects that were created for this . Animations that belong to this  no longer affect the properties they once animated, regardless of their <xref:System.Windows.Media.Animation.Timeline.FillBehavior%2A> setting.
+  remarks: "To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n Removing a storyboard's clock triggers the <xref:System.Windows.Media.Animation.Timeline.RemoveRequested> event."
   syntax:
     content: public void Remove (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A?displayProperty=fullName> method was called. This object contains the  objects that were created for this storyboard and its children.
   overload: System.Windows.Media.Animation.Storyboard.Remove*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1350,12 +1406,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Resumes the  that was created for this .
+  remarks: 'A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public void Resume ();
     parameters: []
   overload: System.Windows.Media.Animation.Storyboard.Resume*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1372,15 +1429,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Resumes the  that was created for this .
+  remarks: "Resuming a storyboard that is not paused has no effect.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n Seeking a paused storyboard does not resume it. The only way to resume a paused storyboard is to use the Resume method. Calling the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method after the storyboard has started replaces the old storyboard, which has the appearance of resuming it.  \n  \n Resuming a paused a storyboard's clock triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> event."
+  example:
+  - "The following example uses a controllable storyboard to animate a <xref:System.Windows.Media.TextEffect>. The <xref:System.Windows.Media.TextEffect> is contained within a <xref:System.Windows.FrameworkContentElement>'s name scope.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementControlStoryboardExample.cs#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementcontrolstoryboardexample.vb#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]"
   syntax:
     content: public void Resume (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method was called. This object contains the  objects that were created for this storyboard and its children.
   overload: System.Windows.Media.Animation.Storyboard.Resume*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1397,15 +1457,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Resumes the  that was created for this .
+  remarks: "Resuming a storyboard that is not paused has no effect.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n Seeking a paused storyboard does not resume it. The only way to resume a paused storyboard is to use the Resume method. Calling the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method after the storyboard has started replaces the old storyboard, which has the appearance of resuming it.  \n  \n Resuming a paused a storyboard's clock triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> event."
   syntax:
     content: public void Resume (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method was called. This object contains the  objects that were created for this storyboard and its children.
   overload: System.Windows.Media.Animation.Storyboard.Resume*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1422,15 +1483,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Seeks this  to the specified position. The  performs the requested seek when the next clock tick occurs.
+  remarks: "Note that seek operations do not take the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> or <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A> settings into account. The storyboard is treated as though it has a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 1 and no <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A>.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public void Seek (TimeSpan offset);
     parameters:
     - id: offset
       type: System.TimeSpan
-      description: To be added.
+      description: A positive or negative value that describes the amount by which the timeline should move forward or backward.
   overload: System.Windows.Media.Animation.Storyboard.Seek*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1447,18 +1509,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Seeks this  to the specified position. The  performs the requested seek when the next clock tick occurs.
+  remarks: "Note that seek operations do not take the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> or <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A> settings into account. The storyboard is treated as though it has a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 1 and no <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A>.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public void Seek (TimeSpan offset, System.Windows.Media.Animation.TimeSeekOrigin origin);
     parameters:
     - id: offset
       type: System.TimeSpan
-      description: To be added.
+      description: A positive or negative value that describes the amount by which the timeline should move forward or backward from the specified `origin`.
     - id: origin
       type: System.Windows.Media.Animation.TimeSeekOrigin
-      description: To be added.
+      description: The position from which `offset` is applied.
   overload: System.Windows.Media.Animation.Storyboard.Seek*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1475,21 +1538,24 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Seeks this  to the specified position. The  performs the requested seek when the next clock tick occurs.
+  remarks: "Note that seek operations do not take the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> or <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A> settings into account. The storyboard is treated as though it has a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 1 and no <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A>.  \n  \n This method changes the storyboard clock's <xref:System.Windows.Media.Animation.Clock.CurrentState%2A> to <xref:System.Windows.Media.Animation.ClockState>. This method has no effect on the timing tree until the next time a tick is processed. As a side-effect, the appropriate events are also not raised until then.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n Seeking a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> events."
+  example:
+  - "The following example shows both the <xref:System.Windows.Media.Animation.Storyboard.Seek%2A> and <xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A> methods.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementSeekExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementSeekExample.cs#frameworkcontentelementseekexampleusingwholepage)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementSeekExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementseekexample.vb#frameworkcontentelementseekexampleusingwholepage)]"
   syntax:
     content: public void Seek (System.Windows.FrameworkContentElement containingObject, TimeSpan offset, System.Windows.Media.Animation.TimeSeekOrigin origin);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkContentElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     - id: offset
       type: System.TimeSpan
-      description: To be added.
+      description: A positive or negative value that describes the amount by which the timeline should move forward or backward from the specified `origin`.
     - id: origin
       type: System.Windows.Media.Animation.TimeSeekOrigin
-      description: To be added.
+      description: The position from which `offset` is applied.
   overload: System.Windows.Media.Animation.Storyboard.Seek*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1506,21 +1572,24 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Seeks this  to the specified position. The  performs the requested seek when the next clock tick occurs.
+  remarks: "Note that seek operations do not take the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> or <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A> settings into account. The storyboard is treated as though it has a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 1 and no <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A>.  \n  \n This method changes the storyboard clock's <xref:System.Windows.Media.Animation.Clock.CurrentState%2A> to <xref:System.Windows.Media.Animation.ClockState>. This method has no effect on the timing tree until the next time a tick is processed. As a side-effect, the appropriate events are also not raised until then.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed if it is made controllable. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n Seeking a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> events."
+  example:
+  - "The following example shows how to seek (skip) to one second after a Storyboard begins.  \n  \n [!code-cs[timingbehaviors_procedural_snip#SeekStoryboardExampleWholePage](../../add/codesnippet/CSharp/TimingBehavior_csharp/SeekStoryboardExample.cs#seekstoryboardexamplewholepage)]\n [!code-vb[timingbehaviors_procedural_snip#SeekStoryboardExampleWholePage](../../add/codesnippet/VisualBasic/timingbehavior_vb/seekstoryboardexample.vb#seekstoryboardexamplewholepage)]  \n  \n The next example shows both the Seek and <xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A> methods.  \n  \n [!code-vb[StoryboardBeginAnimation_procedural_snip#SeekExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/seekexample.vb#seekexampleusingwholepage)]\n [!code-cs[StoryboardBeginAnimation_procedural_snip#SeekExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/SeekExample.cs#seekexampleusingwholepage)]"
   syntax:
     content: public void Seek (System.Windows.FrameworkElement containingObject, TimeSpan offset, System.Windows.Media.Animation.TimeSeekOrigin origin);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method was called. This object contains the  objects that were created for this storyboard and its children.
     - id: offset
       type: System.TimeSpan
-      description: To be added.
+      description: A positive or negative value that describes the amount by which the timeline should move forward or backward from the specified `origin`.
     - id: origin
       type: System.Windows.Media.Animation.TimeSeekOrigin
-      description: To be added.
+      description: The position from which `offset` is applied.
   overload: System.Windows.Media.Animation.Storyboard.Seek*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1537,15 +1606,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Seeks this  to a new position immediately (synchronously).
+  remarks: "<xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A> aligns the seeked time of the <xref:System.Windows.Media.Animation.Storyboard> with the last clock tick. Values are immediately updated to reflect the changes due to <xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A>, even though the screen does not reflect these changes until the screen updates.  \n  \n Note that seek operations do not take the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> or <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A> settings into account. The storyboard is treated as though it has a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 1 and no <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A>.  \n  \n To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public void SeekAlignedToLastTick (TimeSpan offset);
     parameters:
     - id: offset
       type: System.TimeSpan
-      description: To be added.
+      description: A positive or negative value that describes the amount by which the timeline should move forward or backward.
   overload: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1562,18 +1632,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Seeks this  to a new position immediately (synchronously).
+  remarks: "<xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A> aligns the seeked time of the <xref:System.Windows.Media.Animation.Storyboard> with the last clock tick. Values are immediately updated to reflect the changes due to <xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A>, even though the screen does not reflect these changes until the screen updates.  \n  \n Note that seek operations do not take the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> or <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A> settings into account. The storyboard is treated as though it has a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 1 and no <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A>.  \n  \n To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public void SeekAlignedToLastTick (TimeSpan offset, System.Windows.Media.Animation.TimeSeekOrigin origin);
     parameters:
     - id: offset
       type: System.TimeSpan
-      description: To be added.
+      description: A positive or negative value that describes the amount by which the timeline should move forward or backward from the specified `origin`.
     - id: origin
       type: System.Windows.Media.Animation.TimeSeekOrigin
-      description: To be added.
+      description: The position from which `offset` is applied.
   overload: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1590,21 +1661,24 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Seeks this  to a new position immediately (synchronously).
+  remarks: "<xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A> aligns the seeked time of the <xref:System.Windows.Media.Animation.Storyboard> with the last clock tick. Values are immediately updated to reflect the changes due to <xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A>, even though the screen does not reflect these changes until the screen updates.  \n  \n Note that seek operations do not take the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> or <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A> settings into account. The storyboard is treated as though it has a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 1 and no <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A>.  \n  \n This method changes the storyboard clock's <xref:System.Windows.Media.Animation.Clock.CurrentState%2A> to  \n  \n <xref:System.Windows.Media.Animation.ClockState>.  \n  \n Seeking a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> events.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
+  example:
+  - "The following example shows both the <xref:System.Windows.Media.Animation.Storyboard.Seek%2A> and <xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A> methods.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementSeekExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementSeekExample.cs#frameworkcontentelementseekexampleusingwholepage)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementSeekExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementseekexample.vb#frameworkcontentelementseekexampleusingwholepage)]"
   syntax:
     content: public void SeekAlignedToLastTick (System.Windows.FrameworkContentElement containingObject, TimeSpan offset, System.Windows.Media.Animation.TimeSeekOrigin origin);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkContentElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     - id: offset
       type: System.TimeSpan
-      description: To be added.
+      description: A positive or negative value that describes the amount by which the timeline should move forward or backward from the specified `origin`.
     - id: origin
       type: System.Windows.Media.Animation.TimeSeekOrigin
-      description: To be added.
+      description: The position from which `offset` is applied.
   overload: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1621,21 +1695,24 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Seeks this  to a new position immediately (synchronously).
+  remarks: "<xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A> aligns the seeked time of the <xref:System.Windows.Media.Animation.Storyboard> with the last clock tick. Values are immediately updated to reflect the changes due to <xref:System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick%2A>, even though the screen does not reflect these changes until the screen updates.  \n  \n Note that seek operations do not take the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> or <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A> settings into account. The storyboard is treated as though it has a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 1 and no <xref:System.Windows.Media.Animation.ParallelTimeline.SlipBehavior%2A>.  \n  \n This method changes the storyboard clock's <xref:System.Windows.Media.Animation.Clock.CurrentState%2A> to  \n  \n <xref:System.Windows.Media.Animation.ClockState>.  \n  \n Seeking a storyboard triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> events.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
+  example:
+  - "The following example shows both the <xref:System.Windows.Media.Animation.Storyboard.Seek%2A> and SeekAlignedToLastTick methods.  \n  \n [!code-vb[StoryboardBeginAnimation_procedural_snip#SeekExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/seekexample.vb#seekexampleusingwholepage)]\n [!code-cs[StoryboardBeginAnimation_procedural_snip#SeekExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/SeekExample.cs#seekexampleusingwholepage)]"
   syntax:
     content: public void SeekAlignedToLastTick (System.Windows.FrameworkElement containingObject, TimeSpan offset, System.Windows.Media.Animation.TimeSeekOrigin origin);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%28System.Windows.FrameworkElement%2CSystem.Boolean%29> method was called. This object contains the  objects that were created for this storyboard and its children.
     - id: offset
       type: System.TimeSpan
-      description: To be added.
+      description: A positive or negative value that describes the amount by which the timeline should move forward or backward from the specified `origin`.
     - id: origin
       type: System.Windows.Media.Animation.TimeSeekOrigin
-      description: To be added.
+      description: The position from which `offset` is applied.
   overload: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1652,15 +1729,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the interactive speed ratio for the  that was created for this .
+  remarks: 'A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public void SetSpeedRatio (double speedRatio);
     parameters:
     - id: speedRatio
       type: System.Double
-      description: To be added.
+      description: A finite value greater than zero that is the new interactive speed ratio of the storyboard. This value is multiplied against the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> value to determine the storyboard's effective speed. This value does not overwrite the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> property. For example, calling this method and specifying an interactive speed ratio of 3 on a storyboard with a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 0.5 gives the storyboard an effective speed of 1.5.
   overload: System.Windows.Media.Animation.Storyboard.SetSpeedRatio*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1677,18 +1755,21 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the interactive speed ratio of the  that was created for this .
+  remarks: "To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n Calling this method triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> event."
+  example:
+  - "The following example uses a controllable storyboard to animate a <xref:System.Windows.Media.TextEffect>. The <xref:System.Windows.Media.TextEffect> is contained within a <xref:System.Windows.FrameworkContentElement>'s name scope.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementControlStoryboardExample.cs#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementcontrolstoryboardexample.vb#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]"
   syntax:
     content: public void SetSpeedRatio (System.Windows.FrameworkContentElement containingObject, double speedRatio);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method was called. This object contains the  objects that were created for this storyboard and its children.
     - id: speedRatio
       type: System.Double
-      description: To be added.
+      description: A finite value greater than zero that is the new interactive speed ratio of the storyboard. This value is multiplied against the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> value to determine the storyboard's effective speed. This value does not overwrite the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> property. For example, calling this method and specifying an interactive speed ratio of 3 on a storyboard with a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 0.5 gives the storyboard an effective speed of 1.5.
   overload: System.Windows.Media.Animation.Storyboard.SetSpeedRatio*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1705,18 +1786,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the interactive speed ratio of the  that was created for this .
+  remarks: "To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).  \n  \n Calling this method triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> event."
   syntax:
     content: public void SetSpeedRatio (System.Windows.FrameworkElement containingObject, double speedRatio);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method was called. This object contains the  objects that were created for this storyboard and its children.
     - id: speedRatio
       type: System.Double
-      description: To be added.
+      description: A finite value greater than zero that is the new interactive speed ratio of the storyboard. This value is multiplied against the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> value to determine the storyboard's effective speed. This value does not overwrite the storyboard's <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> property. For example, calling this method and specifying an interactive speed ratio of 3 on a storyboard with a <xref:System.Windows.Media.Animation.Timeline.SpeedRatio%2A> of 0.5 gives the storyboard an effective speed of 1.5.
   overload: System.Windows.Media.Animation.Storyboard.SetSpeedRatio*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1733,18 +1815,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Makes the specified  target the dependency object.
+  remarks: "This method sets the <xref:System.Windows.Media.Animation.Storyboard.Target%2A> attached property on the specified object. For more information about how storyboard targeting works, see <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A>. For more information about how attached properties work, see [Attached Properties Overview](../Topic/Attached%20Properties%20Overview.md).  \n  \n> [!NOTE]\n>  The <xref:System.Windows.Media.Animation.Storyboard.Target%2A> property is not serializable, because it can be set to any <xref:System.Windows.DependencyObject>. It is not guaranteed that this object can be correctly referenced from XAML."
   syntax:
     content: public static void SetTarget (System.Windows.DependencyObject element, System.Windows.DependencyObject value);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The  that should target the specified dependency object.
     - id: value
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The dependency object to target.
   overload: System.Windows.Media.Animation.Storyboard.SetTarget*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1761,18 +1844,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Makes the specified  target the dependency object with the specified name.
+  remarks: This method sets the <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> attached property on the specified object. For more information about how storyboard targeting works, see <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A>. For more information about how attached properties work, see [Attached Properties Overview](../Topic/Attached%20Properties%20Overview.md).
   syntax:
     content: public static void SetTargetName (System.Windows.DependencyObject element, string name);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The  that should target the specified dependency object.
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the dependency object to target.
   overload: System.Windows.Media.Animation.Storyboard.SetTargetName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1789,18 +1873,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Makes the specified  target the specified dependency property.
+  remarks: This method sets the <xref:System.Windows.Media.Animation.Storyboard.TargetProperty%2A> attached property on the specified object. For more information about how storyboard targeting works, see <xref:System.Windows.Media.Animation.Storyboard.TargetProperty%2A>. For more information about how attached properties work, see [Attached Properties Overview](../Topic/Attached%20Properties%20Overview.md).
   syntax:
     content: public static void SetTargetProperty (System.Windows.DependencyObject element, System.Windows.PropertyPath path);
     parameters:
     - id: element
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The  with which to associate the specified dependency property.
     - id: path
       type: System.Windows.PropertyPath
-      description: To be added.
+      description: A path that describe the dependency property to be animated.
   overload: System.Windows.Media.Animation.Storyboard.SetTargetProperty*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1817,12 +1902,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Advances the current time of this storyboard's  to the end of its active period.
+  remarks: 'A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard''s <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md).'
   syntax:
     content: public void SkipToFill ();
     parameters: []
   overload: System.Windows.Media.Animation.Storyboard.SkipToFill*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1839,15 +1925,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Advances the current time of this storyboard's  to the end of its active period.
+  remarks: "This method advances the storyboard's current time to the end of its active period; the storyboard's behavior at this point is specified by its <xref:System.Windows.Media.Animation.Timeline.FillBehavior%2A> setting. If <xref:System.Windows.Media.Animation.Timeline.FillBehavior%2A> is set to <xref:System.Windows.Media.Animation.FillBehavior>, the storyboard fills; if the property is set to <xref:System.Windows.Media.Animation.FillBehavior>, the storyboard stops.  \n  \n Calling this method on a storyboard with an infinite duration, an infinite number of repetitions has no effect. Calling this method on an inactive storyboard has no effect.  \n  \n Advancing a clock to its fill period triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> events.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
+  example:
+  - "The following example uses a controllable storyboard to animate a <xref:System.Windows.Media.TextEffect>. The <xref:System.Windows.Media.TextEffect> is contained within a <xref:System.Windows.FrameworkContentElement>'s name scope.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementControlStoryboardExample.cs#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementcontrolstoryboardexample.vb#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]"
   syntax:
     content: public void SkipToFill (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method was called. This object contains the  objects that were created for this storyboard and its children.
   overload: System.Windows.Media.Animation.Storyboard.SkipToFill*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1864,15 +1953,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Advances the current time of this storyboard's  to the end of its active period.
+  remarks: "This method advances the storyboard's current time to the end of its active period; the storyboard's behavior at this point is specified by its <xref:System.Windows.Media.Animation.Timeline.FillBehavior%2A> setting. If <xref:System.Windows.Media.Animation.Timeline.FillBehavior%2A> is set to <xref:System.Windows.Media.Animation.FillBehavior>, the storyboard fills; if the property is set to <xref:System.Windows.Media.Animation.FillBehavior>, the storyboard stops.  \n  \n Calling this method on a storyboard with an infinite duration, an infinite number of repetitions has no effect. Calling this method on an inactive storyboard has no effect.  \n  \n Advancing a clock to its fill period triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> events.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public void SkipToFill (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method was called. This object contains the  objects that were created for this storyboard and its children.
   overload: System.Windows.Media.Animation.Storyboard.SkipToFill*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1889,12 +1979,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Stops the  that was created for this .
+  remarks: Note that stopping a storyboard does not fire the <xref:System.Windows.Media.Animation.Timeline.Completed> event.
   syntax:
     content: public void Stop ();
     parameters: []
   overload: System.Windows.Media.Animation.Storyboard.Stop*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1911,15 +2002,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Stops the  that was created for this .
+  remarks: "A <xref:System.Windows.Media.Animation.ClockState> storyboard no longer affects its target properties: properties that were animated revert to their previous values.  \n  \n Stopping a clock triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> events, but not the <xref:System.Windows.Media.Animation.Timeline.Completed> event.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
+  example:
+  - "The following example uses a controllable storyboard to animate a <xref:System.Windows.Media.TextEffect>. The <xref:System.Windows.Media.TextEffect> is contained within a <xref:System.Windows.FrameworkContentElement>'s name scope.  \n  \n [!code-cs[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/CSharp/AnimateProperty_Storyboards_csharp/FrameworkContentElementControlStoryboardExample.cs#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]\n [!code-vb[StoryboardBeginAnimation_procedural_snip#FrameworkContentElementControlStoryboardExampleUsingWholePage](../../add/codesnippet/VisualBasic/animateproperty_storyboards_vb/frameworkcontentelementcontrolstoryboardexample.vb#frameworkcontentelementcontrolstoryboardexampleusingwholepage)]"
   syntax:
     content: public void Stop (System.Windows.FrameworkContentElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method was called. This object contains the  objects that were created for this storyboard and its children.
   overload: System.Windows.Media.Animation.Storyboard.Stop*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1936,15 +2030,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Stops the  that was created for this .
+  remarks: "A <xref:System.Windows.Media.Animation.ClockState> storyboard no longer affects its target properties: properties that were animated revert to their previous values.  \n  \n Stopping a clock triggers the <xref:System.Windows.Media.Animation.Timeline.CurrentGlobalSpeedInvalidated> and <xref:System.Windows.Media.Animation.Timeline.CurrentStateInvalidated> events, but not the <xref:System.Windows.Media.Animation.Timeline.Completed> event.  \n  \n To interactively control this storyboard, you must use the same `containingObject` parameter when calling the interactive methods that you used to begin the storyboard. A controllable storyboard can pause, resume, seek, stop, and be removed. To make a storyboard controllable in code, you must use the appropriate overload of the storyboard's <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method and specify `true` to make it controllable. For an example, see [How to: Control a Storyboard After It Starts](../Topic/How%20to:%20Control%20a%20Storyboard%20After%20It%20Starts.md)."
   syntax:
     content: public void Stop (System.Windows.FrameworkElement containingObject);
     parameters:
     - id: containingObject
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object specified when the <xref:System.Windows.Media.Animation.Storyboard.Begin%2A> method was called. This object contains the  objects that were created for this storyboard and its children.
   overload: System.Windows.Media.Animation.Storyboard.Stop*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1961,13 +2056,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Identifies the <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> attached property.
   syntax:
     content: public static readonly System.Windows.DependencyProperty TargetNameProperty;
     return:
       type: System.Windows.DependencyProperty
-      description: To be added.
+      description: The identifier for the <xref:System.Windows.Media.Animation.Storyboard.TargetName%2A> attached property.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1984,13 +2079,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Identifies the <xref:System.Windows.Media.Animation.Storyboard.Target%2A> attached property.
   syntax:
     content: public static readonly System.Windows.DependencyProperty TargetProperty;
     return:
       type: System.Windows.DependencyProperty
-      description: To be added.
+      description: The identifier for the <xref:System.Windows.Media.Animation.Storyboard.Target%2A> attached property.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2007,13 +2102,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Media.Animation
-  summary: To be added.
-  remarks: To be added.
+  summary: Identifies the <xref:System.Windows.Media.Animation.Storyboard.TargetProperty%2A> attached property.
   syntax:
     content: public static readonly System.Windows.DependencyProperty TargetPropertyProperty;
     return:
       type: System.Windows.DependencyProperty
-      description: To be added.
+      description: The identifier for the <xref:System.Windows.Media.Animation.Storyboard.TargetProperty%2A> attached property.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -2064,12 +2159,6 @@ references:
   name: Begin(FrameworkContentElement,Boolean)
   nameWithType: Storyboard.Begin(FrameworkContentElement,Boolean)
   fullName: System.Windows.Media.Animation.Storyboard.Begin(FrameworkContentElement,Boolean)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -2082,12 +2171,6 @@ references:
   name: Begin(FrameworkContentElement,HandoffBehavior)
   nameWithType: Storyboard.Begin(FrameworkContentElement,HandoffBehavior)
   fullName: System.Windows.Media.Animation.Storyboard.Begin(FrameworkContentElement,HandoffBehavior)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
 - uid: System.Windows.Media.Animation.HandoffBehavior
   parent: System.Windows.Media.Animation
   isExternal: false
@@ -2100,30 +2183,12 @@ references:
   name: Begin(FrameworkElement,Boolean)
   nameWithType: Storyboard.Begin(FrameworkElement,Boolean)
   fullName: System.Windows.Media.Animation.Storyboard.Begin(FrameworkElement,Boolean)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Media.Animation.Storyboard.Begin(System.Windows.FrameworkElement,System.Windows.FrameworkTemplate)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Begin(FrameworkElement,FrameworkTemplate)
   nameWithType: Storyboard.Begin(FrameworkElement,FrameworkTemplate)
   fullName: System.Windows.Media.Animation.Storyboard.Begin(FrameworkElement,FrameworkTemplate)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.FrameworkTemplate
   parent: System.Windows
   isExternal: false
@@ -2136,144 +2201,36 @@ references:
   name: Begin(FrameworkElement,HandoffBehavior)
   nameWithType: Storyboard.Begin(FrameworkElement,HandoffBehavior)
   fullName: System.Windows.Media.Animation.Storyboard.Begin(FrameworkElement,HandoffBehavior)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
-- uid: System.Windows.Media.Animation.HandoffBehavior
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: HandoffBehavior
-  nameWithType: HandoffBehavior
-  fullName: System.Windows.Media.Animation.HandoffBehavior
 - uid: System.Windows.Media.Animation.Storyboard.Begin(System.Windows.FrameworkContentElement,System.Windows.Media.Animation.HandoffBehavior,System.Boolean)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Begin(FrameworkContentElement,HandoffBehavior,Boolean)
   nameWithType: Storyboard.Begin(FrameworkContentElement,HandoffBehavior,Boolean)
   fullName: System.Windows.Media.Animation.Storyboard.Begin(FrameworkContentElement,HandoffBehavior,Boolean)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
-- uid: System.Windows.Media.Animation.HandoffBehavior
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: HandoffBehavior
-  nameWithType: HandoffBehavior
-  fullName: System.Windows.Media.Animation.HandoffBehavior
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Media.Animation.Storyboard.Begin(System.Windows.FrameworkElement,System.Windows.FrameworkTemplate,System.Boolean)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Begin(FrameworkElement,FrameworkTemplate,Boolean)
   nameWithType: Storyboard.Begin(FrameworkElement,FrameworkTemplate,Boolean)
   fullName: System.Windows.Media.Animation.Storyboard.Begin(FrameworkElement,FrameworkTemplate,Boolean)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
-- uid: System.Windows.FrameworkTemplate
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkTemplate
-  nameWithType: FrameworkTemplate
-  fullName: System.Windows.FrameworkTemplate
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Media.Animation.Storyboard.Begin(System.Windows.FrameworkElement,System.Windows.FrameworkTemplate,System.Windows.Media.Animation.HandoffBehavior)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Begin(FrameworkElement,FrameworkTemplate,HandoffBehavior)
   nameWithType: Storyboard.Begin(FrameworkElement,FrameworkTemplate,HandoffBehavior)
   fullName: System.Windows.Media.Animation.Storyboard.Begin(FrameworkElement,FrameworkTemplate,HandoffBehavior)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
-- uid: System.Windows.FrameworkTemplate
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkTemplate
-  nameWithType: FrameworkTemplate
-  fullName: System.Windows.FrameworkTemplate
-- uid: System.Windows.Media.Animation.HandoffBehavior
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: HandoffBehavior
-  nameWithType: HandoffBehavior
-  fullName: System.Windows.Media.Animation.HandoffBehavior
 - uid: System.Windows.Media.Animation.Storyboard.Begin(System.Windows.FrameworkElement,System.Windows.Media.Animation.HandoffBehavior,System.Boolean)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Begin(FrameworkElement,HandoffBehavior,Boolean)
   nameWithType: Storyboard.Begin(FrameworkElement,HandoffBehavior,Boolean)
   fullName: System.Windows.Media.Animation.Storyboard.Begin(FrameworkElement,HandoffBehavior,Boolean)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
-- uid: System.Windows.Media.Animation.HandoffBehavior
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: HandoffBehavior
-  nameWithType: HandoffBehavior
-  fullName: System.Windows.Media.Animation.HandoffBehavior
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Media.Animation.Storyboard.Begin(System.Windows.FrameworkElement,System.Windows.FrameworkTemplate,System.Windows.Media.Animation.HandoffBehavior,System.Boolean)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Begin(FrameworkElement,FrameworkTemplate,HandoffBehavior,Boolean)
   nameWithType: Storyboard.Begin(FrameworkElement,FrameworkTemplate,HandoffBehavior,Boolean)
   fullName: System.Windows.Media.Animation.Storyboard.Begin(FrameworkElement,FrameworkTemplate,HandoffBehavior,Boolean)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
-- uid: System.Windows.FrameworkTemplate
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkTemplate
-  nameWithType: FrameworkTemplate
-  fullName: System.Windows.FrameworkTemplate
-- uid: System.Windows.Media.Animation.HandoffBehavior
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: HandoffBehavior
-  nameWithType: HandoffBehavior
-  fullName: System.Windows.Media.Animation.HandoffBehavior
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Media.Animation.Storyboard.Clone
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -2322,30 +2279,27 @@ references:
   name: Nullable<Double>
   nameWithType: Nullable<Double>
   fullName: System.Nullable<System.Double>
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    nameWithType: Nullable
+    fullName: Nullable<System.Double>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: Double
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Media.Animation.Storyboard.GetCurrentGlobalSpeed(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetCurrentGlobalSpeed(FrameworkElement)
   nameWithType: Storyboard.GetCurrentGlobalSpeed(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.GetCurrentGlobalSpeed(FrameworkElement)
-- uid: System.Nullable{System.Double}
-  parent: System
-  isExternal: true
-  name: Nullable<Double>
-  nameWithType: Nullable<Double>
-  fullName: System.Nullable<System.Double>
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.GetCurrentIteration
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -2370,78 +2324,45 @@ references:
   name: Nullable<Int32>
   nameWithType: Nullable<Int32>
   fullName: System.Nullable<System.Int32>
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    nameWithType: Nullable
+    fullName: Nullable<System.Int32>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Int32
+    name: Int32
+    nameWithType: Int32
+    fullName: Int32
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Media.Animation.Storyboard.GetCurrentIteration(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetCurrentIteration(FrameworkElement)
   nameWithType: Storyboard.GetCurrentIteration(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.GetCurrentIteration(FrameworkElement)
-- uid: System.Nullable{System.Int32}
-  parent: System
-  isExternal: true
-  name: Nullable<Int32>
-  nameWithType: Nullable<Int32>
-  fullName: System.Nullable<System.Int32>
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.GetCurrentProgress
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetCurrentProgress()
   nameWithType: Storyboard.GetCurrentProgress()
   fullName: System.Windows.Media.Animation.Storyboard.GetCurrentProgress()
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: System.Windows.Media.Animation.Storyboard.GetCurrentProgress(System.Windows.FrameworkContentElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetCurrentProgress(FrameworkContentElement)
   nameWithType: Storyboard.GetCurrentProgress(FrameworkContentElement)
   fullName: System.Windows.Media.Animation.Storyboard.GetCurrentProgress(FrameworkContentElement)
-- uid: System.Nullable{System.Double}
-  parent: System
-  isExternal: true
-  name: Nullable<Double>
-  nameWithType: Nullable<Double>
-  fullName: System.Nullable<System.Double>
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
 - uid: System.Windows.Media.Animation.Storyboard.GetCurrentProgress(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetCurrentProgress(FrameworkElement)
   nameWithType: Storyboard.GetCurrentProgress(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.GetCurrentProgress(FrameworkElement)
-- uid: System.Nullable{System.Double}
-  parent: System
-  isExternal: true
-  name: Nullable<Double>
-  nameWithType: Nullable<Double>
-  fullName: System.Nullable<System.Double>
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.GetCurrentState
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -2460,36 +2381,12 @@ references:
   name: GetCurrentState(FrameworkContentElement)
   nameWithType: Storyboard.GetCurrentState(FrameworkContentElement)
   fullName: System.Windows.Media.Animation.Storyboard.GetCurrentState(FrameworkContentElement)
-- uid: System.Windows.Media.Animation.ClockState
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: ClockState
-  nameWithType: ClockState
-  fullName: System.Windows.Media.Animation.ClockState
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
 - uid: System.Windows.Media.Animation.Storyboard.GetCurrentState(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetCurrentState(FrameworkElement)
   nameWithType: Storyboard.GetCurrentState(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.GetCurrentState(FrameworkElement)
-- uid: System.Windows.Media.Animation.ClockState
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: ClockState
-  nameWithType: ClockState
-  fullName: System.Windows.Media.Animation.ClockState
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.GetCurrentTime
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -2514,90 +2411,51 @@ references:
   name: Nullable<TimeSpan>
   nameWithType: Nullable<TimeSpan>
   fullName: System.Nullable<System.TimeSpan>
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    nameWithType: Nullable
+    fullName: Nullable<System.TimeSpan>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.TimeSpan
+    name: TimeSpan
+    nameWithType: TimeSpan
+    fullName: TimeSpan
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Media.Animation.Storyboard.GetCurrentTime(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetCurrentTime(FrameworkElement)
   nameWithType: Storyboard.GetCurrentTime(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.GetCurrentTime(FrameworkElement)
-- uid: System.Nullable{System.TimeSpan}
-  parent: System
-  isExternal: true
-  name: Nullable<TimeSpan>
-  nameWithType: Nullable<TimeSpan>
-  fullName: System.Nullable<System.TimeSpan>
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.GetIsPaused
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetIsPaused()
   nameWithType: Storyboard.GetIsPaused()
   fullName: System.Windows.Media.Animation.Storyboard.GetIsPaused()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Media.Animation.Storyboard.GetIsPaused(System.Windows.FrameworkContentElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetIsPaused(FrameworkContentElement)
   nameWithType: Storyboard.GetIsPaused(FrameworkContentElement)
   fullName: System.Windows.Media.Animation.Storyboard.GetIsPaused(FrameworkContentElement)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
 - uid: System.Windows.Media.Animation.Storyboard.GetIsPaused(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetIsPaused(FrameworkElement)
   nameWithType: Storyboard.GetIsPaused(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.GetIsPaused(FrameworkElement)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.GetTarget(System.Windows.DependencyObject)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: GetTarget(DependencyObject)
   nameWithType: Storyboard.GetTarget(DependencyObject)
   fullName: System.Windows.Media.Animation.Storyboard.GetTarget(DependencyObject)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
 - uid: System.Windows.DependencyObject
   parent: System.Windows
   isExternal: false
@@ -2616,12 +2474,6 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
 - uid: System.Windows.Media.Animation.Storyboard.GetTargetProperty(System.Windows.DependencyObject)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -2634,12 +2486,6 @@ references:
   name: PropertyPath
   nameWithType: PropertyPath
   fullName: System.Windows.PropertyPath
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
 - uid: System.Windows.Media.Animation.Storyboard.Pause
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -2652,24 +2498,12 @@ references:
   name: Pause(FrameworkContentElement)
   nameWithType: Storyboard.Pause(FrameworkContentElement)
   fullName: System.Windows.Media.Animation.Storyboard.Pause(FrameworkContentElement)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
 - uid: System.Windows.Media.Animation.Storyboard.Pause(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Pause(FrameworkElement)
   nameWithType: Storyboard.Pause(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.Pause(FrameworkElement)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.Remove
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -2682,24 +2516,12 @@ references:
   name: Remove(FrameworkContentElement)
   nameWithType: Storyboard.Remove(FrameworkContentElement)
   fullName: System.Windows.Media.Animation.Storyboard.Remove(FrameworkContentElement)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
 - uid: System.Windows.Media.Animation.Storyboard.Remove(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Remove(FrameworkElement)
   nameWithType: Storyboard.Remove(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.Remove(FrameworkElement)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.Resume
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -2712,48 +2534,24 @@ references:
   name: Resume(FrameworkContentElement)
   nameWithType: Storyboard.Resume(FrameworkContentElement)
   fullName: System.Windows.Media.Animation.Storyboard.Resume(FrameworkContentElement)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
 - uid: System.Windows.Media.Animation.Storyboard.Resume(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Resume(FrameworkElement)
   nameWithType: Storyboard.Resume(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.Resume(FrameworkElement)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.Seek(System.TimeSpan)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Seek(TimeSpan)
   nameWithType: Storyboard.Seek(TimeSpan)
   fullName: System.Windows.Media.Animation.Storyboard.Seek(TimeSpan)
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Windows.Media.Animation.Storyboard.Seek(System.TimeSpan,System.Windows.Media.Animation.TimeSeekOrigin)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Seek(TimeSpan,TimeSeekOrigin)
   nameWithType: Storyboard.Seek(TimeSpan,TimeSeekOrigin)
   fullName: System.Windows.Media.Animation.Storyboard.Seek(TimeSpan,TimeSeekOrigin)
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Windows.Media.Animation.TimeSeekOrigin
   parent: System.Windows.Media.Animation
   isExternal: false
@@ -2766,228 +2564,72 @@ references:
   name: Seek(FrameworkContentElement,TimeSpan,TimeSeekOrigin)
   nameWithType: Storyboard.Seek(FrameworkContentElement,TimeSpan,TimeSeekOrigin)
   fullName: System.Windows.Media.Animation.Storyboard.Seek(FrameworkContentElement,TimeSpan,TimeSeekOrigin)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
-- uid: System.Windows.Media.Animation.TimeSeekOrigin
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: TimeSeekOrigin
-  nameWithType: TimeSeekOrigin
-  fullName: System.Windows.Media.Animation.TimeSeekOrigin
 - uid: System.Windows.Media.Animation.Storyboard.Seek(System.Windows.FrameworkElement,System.TimeSpan,System.Windows.Media.Animation.TimeSeekOrigin)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Seek(FrameworkElement,TimeSpan,TimeSeekOrigin)
   nameWithType: Storyboard.Seek(FrameworkElement,TimeSpan,TimeSeekOrigin)
   fullName: System.Windows.Media.Animation.Storyboard.Seek(FrameworkElement,TimeSpan,TimeSeekOrigin)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
-- uid: System.Windows.Media.Animation.TimeSeekOrigin
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: TimeSeekOrigin
-  nameWithType: TimeSeekOrigin
-  fullName: System.Windows.Media.Animation.TimeSeekOrigin
 - uid: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick(System.TimeSpan)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SeekAlignedToLastTick(TimeSpan)
   nameWithType: Storyboard.SeekAlignedToLastTick(TimeSpan)
   fullName: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick(TimeSpan)
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick(System.TimeSpan,System.Windows.Media.Animation.TimeSeekOrigin)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SeekAlignedToLastTick(TimeSpan,TimeSeekOrigin)
   nameWithType: Storyboard.SeekAlignedToLastTick(TimeSpan,TimeSeekOrigin)
   fullName: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick(TimeSpan,TimeSeekOrigin)
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
-- uid: System.Windows.Media.Animation.TimeSeekOrigin
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: TimeSeekOrigin
-  nameWithType: TimeSeekOrigin
-  fullName: System.Windows.Media.Animation.TimeSeekOrigin
 - uid: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick(System.Windows.FrameworkContentElement,System.TimeSpan,System.Windows.Media.Animation.TimeSeekOrigin)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SeekAlignedToLastTick(FrameworkContentElement,TimeSpan,TimeSeekOrigin)
   nameWithType: Storyboard.SeekAlignedToLastTick(FrameworkContentElement,TimeSpan,TimeSeekOrigin)
   fullName: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick(FrameworkContentElement,TimeSpan,TimeSeekOrigin)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
-- uid: System.Windows.Media.Animation.TimeSeekOrigin
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: TimeSeekOrigin
-  nameWithType: TimeSeekOrigin
-  fullName: System.Windows.Media.Animation.TimeSeekOrigin
 - uid: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick(System.Windows.FrameworkElement,System.TimeSpan,System.Windows.Media.Animation.TimeSeekOrigin)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SeekAlignedToLastTick(FrameworkElement,TimeSpan,TimeSeekOrigin)
   nameWithType: Storyboard.SeekAlignedToLastTick(FrameworkElement,TimeSpan,TimeSeekOrigin)
   fullName: System.Windows.Media.Animation.Storyboard.SeekAlignedToLastTick(FrameworkElement,TimeSpan,TimeSeekOrigin)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
-- uid: System.Windows.Media.Animation.TimeSeekOrigin
-  parent: System.Windows.Media.Animation
-  isExternal: false
-  name: TimeSeekOrigin
-  nameWithType: TimeSeekOrigin
-  fullName: System.Windows.Media.Animation.TimeSeekOrigin
 - uid: System.Windows.Media.Animation.Storyboard.SetSpeedRatio(System.Double)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SetSpeedRatio(Double)
   nameWithType: Storyboard.SetSpeedRatio(Double)
   fullName: System.Windows.Media.Animation.Storyboard.SetSpeedRatio(Double)
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: System.Windows.Media.Animation.Storyboard.SetSpeedRatio(System.Windows.FrameworkContentElement,System.Double)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SetSpeedRatio(FrameworkContentElement,Double)
   nameWithType: Storyboard.SetSpeedRatio(FrameworkContentElement,Double)
   fullName: System.Windows.Media.Animation.Storyboard.SetSpeedRatio(FrameworkContentElement,Double)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: System.Windows.Media.Animation.Storyboard.SetSpeedRatio(System.Windows.FrameworkElement,System.Double)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SetSpeedRatio(FrameworkElement,Double)
   nameWithType: Storyboard.SetSpeedRatio(FrameworkElement,Double)
   fullName: System.Windows.Media.Animation.Storyboard.SetSpeedRatio(FrameworkElement,Double)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
 - uid: System.Windows.Media.Animation.Storyboard.SetTarget(System.Windows.DependencyObject,System.Windows.DependencyObject)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SetTarget(DependencyObject,DependencyObject)
   nameWithType: Storyboard.SetTarget(DependencyObject,DependencyObject)
   fullName: System.Windows.Media.Animation.Storyboard.SetTarget(DependencyObject,DependencyObject)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
 - uid: System.Windows.Media.Animation.Storyboard.SetTargetName(System.Windows.DependencyObject,System.String)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SetTargetName(DependencyObject,String)
   nameWithType: Storyboard.SetTargetName(DependencyObject,String)
   fullName: System.Windows.Media.Animation.Storyboard.SetTargetName(DependencyObject,String)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Media.Animation.Storyboard.SetTargetProperty(System.Windows.DependencyObject,System.Windows.PropertyPath)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SetTargetProperty(DependencyObject,PropertyPath)
   nameWithType: Storyboard.SetTargetProperty(DependencyObject,PropertyPath)
   fullName: System.Windows.Media.Animation.Storyboard.SetTargetProperty(DependencyObject,PropertyPath)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.Windows.PropertyPath
-  parent: System.Windows
-  isExternal: false
-  name: PropertyPath
-  nameWithType: PropertyPath
-  fullName: System.Windows.PropertyPath
 - uid: System.Windows.Media.Animation.Storyboard.SkipToFill
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -3000,24 +2642,12 @@ references:
   name: SkipToFill(FrameworkContentElement)
   nameWithType: Storyboard.SkipToFill(FrameworkContentElement)
   fullName: System.Windows.Media.Animation.Storyboard.SkipToFill(FrameworkContentElement)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
 - uid: System.Windows.Media.Animation.Storyboard.SkipToFill(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: SkipToFill(FrameworkElement)
   nameWithType: Storyboard.SkipToFill(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.SkipToFill(FrameworkElement)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.Stop
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -3030,24 +2660,12 @@ references:
   name: Stop(FrameworkContentElement)
   nameWithType: Storyboard.Stop(FrameworkContentElement)
   fullName: System.Windows.Media.Animation.Storyboard.Stop(FrameworkContentElement)
-- uid: System.Windows.FrameworkContentElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkContentElement
-  nameWithType: FrameworkContentElement
-  fullName: System.Windows.FrameworkContentElement
 - uid: System.Windows.Media.Animation.Storyboard.Stop(System.Windows.FrameworkElement)
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: Stop(FrameworkElement)
   nameWithType: Storyboard.Stop(FrameworkElement)
   fullName: System.Windows.Media.Animation.Storyboard.Stop(FrameworkElement)
-- uid: System.Windows.FrameworkElement
-  parent: System.Windows
-  isExternal: false
-  name: FrameworkElement
-  nameWithType: FrameworkElement
-  fullName: System.Windows.FrameworkElement
 - uid: System.Windows.Media.Animation.Storyboard.TargetNameProperty
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
@@ -3066,24 +2684,12 @@ references:
   name: TargetProperty
   nameWithType: Storyboard.TargetProperty
   fullName: System.Windows.Media.Animation.Storyboard.TargetProperty
-- uid: System.Windows.DependencyProperty
-  parent: System.Windows
-  isExternal: false
-  name: DependencyProperty
-  nameWithType: DependencyProperty
-  fullName: System.Windows.DependencyProperty
 - uid: System.Windows.Media.Animation.Storyboard.TargetPropertyProperty
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false
   name: TargetPropertyProperty
   nameWithType: Storyboard.TargetPropertyProperty
   fullName: System.Windows.Media.Animation.Storyboard.TargetPropertyProperty
-- uid: System.Windows.DependencyProperty
-  parent: System.Windows
-  isExternal: false
-  name: DependencyProperty
-  nameWithType: DependencyProperty
-  fullName: System.Windows.DependencyProperty
 - uid: System.Windows.Media.Animation.Storyboard.#ctor*
   parent: System.Windows.Media.Animation.Storyboard
   isExternal: false

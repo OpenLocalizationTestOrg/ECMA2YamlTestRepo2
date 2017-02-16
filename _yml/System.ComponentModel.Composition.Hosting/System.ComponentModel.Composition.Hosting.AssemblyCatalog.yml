@@ -24,8 +24,10 @@ items:
   nameWithType: AssemblyCatalog
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Discovers attributed parts in a managed code assembly.
+  remarks: "An AssemblyCatalog is used to parse all the parts present in a specified assembly. The target assembly can be indicated either by object reference or by path.  \n  \n> [!IMPORTANT]\n>  This type implements the <xref:System.IDisposable> interface. When you have finished using the type, you should dispose of it either directly or indirectly. To dispose of the type directly, call its <xref:System.IDisposable.Dispose%2A> method in a `try`/`catch` block. To dispose of it indirectly, use a language construct such as `using` (in C#) or `Using` (in Visual Basic). For more information, see the “Using an Object that Implements IDisposable” section in the <xref:System.IDisposable> interface topic.  \n  \n This type is thread safe."
+  example:
+  - "The following code demonstrates the common scenario of an application creating an AssemblyCatalog to parse its own assembly. This is a straightforward way to load parts contained in a single project into the Managed Extensibility Framework (MEF).  \n  \n [!code-cs[Composition.CompositionContainer#1](../../add/codesnippet/CSharp/composition.compositioncontainer.consoleapplication1/program.cs#1)]\n [!code-vb[Composition.CompositionContainer#1](../../add/codesnippet/VisualBasic/compositioncontainerexample/module1.vb#1)]"
   syntax:
     content: >-
       [System.Diagnostics.DebuggerTypeProxy(typeof(System.ComponentModel.Composition.Hosting.AssemblyCatalogDebuggerProxy))]
@@ -56,15 +58,18 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified assembly.
   syntax:
     content: public AssemblyCatalog (System.Reflection.Assembly assembly);
     parameters:
     - id: assembly
       type: System.Reflection.Assembly
-      description: To be added.
+      description: The assembly that contains the attributed <xref:System.Type> objects to add to the  object.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    assembly is .  \n  \n -or-  \n  \n assembly was loaded in the reflection-only context."
   platform:
   - net-11
   - net-20
@@ -81,15 +86,37 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified code base.
+  remarks: The assembly referenced by `codeBase` is loaded into the load context.
   syntax:
     content: public AssemblyCatalog (string codeBase);
     parameters:
     - id: codeBase
       type: System.String
-      description: To be added.
+      description: A string that specifies the code base of the assembly (that is, the path to the assembly file) that contains the attributed <xref:System.Type> objects to add to the  object.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor*
+  exceptions:
+  - type: System.BadImageFormatException
+    commentId: T:System.BadImageFormatException
+    description: "\n    codeBase is not a valid assembly.  \n  \n -or-  \n  \n Version 2.0 or earlier of the common language runtime is currently loaded and codeBase was compiled with a later version."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have path discovery permission.
+  - type: System.IO.FileLoadException
+    commentId: T:System.IO.FileLoadException
+    description: "\n    codeBase could not be loaded.  \n  \n -or-  \n  \n codeBase specified a directory."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    codeBase is ."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: "\n    codeBase is not found."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    codeBase is a zero-length string, contains only white space, or contains one or more invalid characters as defined by <xref:System.IO.Path.InvalidPathChars>."
+  - type: System.IO.PathTooLongException
+    commentId: T:System.IO.PathTooLongException
+    description: The specified path, file name, or both exceed the system-defined maximum length.
   platform:
   - net-11
   - net-20
@@ -106,18 +133,21 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified assembly.
   syntax:
     content: public AssemblyCatalog (System.Reflection.Assembly assembly, System.ComponentModel.Composition.Primitives.ICompositionElement definitionOrigin);
     parameters:
     - id: assembly
       type: System.Reflection.Assembly
-      description: To be added.
+      description: The assembly that contains the attributed <xref:System.Type> objects to add to the  object.
     - id: definitionOrigin
       type: System.ComponentModel.Composition.Primitives.ICompositionElement
-      description: To be added.
+      description: The element used by diagnostics to identify the sources of parts.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    assembly or definitionOrigin is .  \n  \n -or-  \n  \n assembly was loaded in the reflection-only context."
   platform:
   - net-11
   - net-20
@@ -134,18 +164,21 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified assembly and reflection context.
   syntax:
     content: public AssemblyCatalog (System.Reflection.Assembly assembly, System.Reflection.ReflectionContext reflectionContext);
     parameters:
     - id: assembly
       type: System.Reflection.Assembly
-      description: To be added.
+      description: The assembly that contains the attributed <xref:System.Type> objects to add to the  object.
     - id: reflectionContext
       type: System.Reflection.ReflectionContext
-      description: To be added.
+      description: The context used by the catalog to interpret types.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    assembly or reflectionContext is .  \n  \n -or-  \n  \n assembly was loaded in the reflection-only context."
   platform:
   - net-11
   - net-20
@@ -162,18 +195,39 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified code base.
   syntax:
     content: public AssemblyCatalog (string codeBase, System.ComponentModel.Composition.Primitives.ICompositionElement definitionOrigin);
     parameters:
     - id: codeBase
       type: System.String
-      description: To be added.
+      description: A string that specifies the code base of the assembly (that is, the path to the assembly file) that contains the attributed <xref:System.Type> objects to add to the  object.
     - id: definitionOrigin
       type: System.ComponentModel.Composition.Primitives.ICompositionElement
-      description: To be added.
+      description: The element used by diagnostics to identify the sources of parts.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor*
+  exceptions:
+  - type: System.BadImageFormatException
+    commentId: T:System.BadImageFormatException
+    description: "\n    codeBase is not a valid assembly.  \n  \n -or-  \n  \n Version 2.0 or later of the common language runtime is currently loaded and codeBase was compiled with a later version."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have path discovery permission.
+  - type: System.IO.FileLoadException
+    commentId: T:System.IO.FileLoadException
+    description: "\n    codeBase could not be loaded.  \n  \n -or-  \n  \n codeBase specified a directory."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    codebase or definitionOrigin is ."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: "\n    codeBase is not found."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    codeBase is a zero-length string, contains only white space, or contains one or more invalid characters as defined by <xref:System.IO.Path.InvalidPathChars>."
+  - type: System.IO.PathTooLongException
+    commentId: T:System.IO.PathTooLongException
+    description: The specified path, file name, or both exceed the system-defined maximum length.
   platform:
   - net-11
   - net-20
@@ -190,18 +244,39 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified code base and reflection context.
   syntax:
     content: public AssemblyCatalog (string codeBase, System.Reflection.ReflectionContext reflectionContext);
     parameters:
     - id: codeBase
       type: System.String
-      description: To be added.
+      description: A string that specifies the code base of the assembly (that is, the path to the assembly file) that contains the attributed <xref:System.Type> objects to add to the  object.
     - id: reflectionContext
       type: System.Reflection.ReflectionContext
-      description: To be added.
+      description: The context used by the catalog to interpret types.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor*
+  exceptions:
+  - type: System.BadImageFormatException
+    commentId: T:System.BadImageFormatException
+    description: "\n    codeBase is not a valid assembly.  \n  \n -or-  \n  \n Version 2.0 or later of the common language runtime is currently loaded and codeBase was compiled with a later version."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have path discovery permission.
+  - type: System.IO.FileLoadException
+    commentId: T:System.IO.FileLoadException
+    description: "\n    codeBase could not be loaded.  \n  \n -or-  \n  \n codeBase specified a directory."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    codebase or reflectionContext is ."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: "\n    codeBase is not found."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    codeBase is a zero-length string, contains only white space, or contains one or more invalid characters as defined by <xref:System.IO.Path.InvalidPathChars>."
+  - type: System.IO.PathTooLongException
+    commentId: T:System.IO.PathTooLongException
+    description: The specified path, file name, or both exceed the system-defined maximum length.
   platform:
   - net-11
   - net-20
@@ -218,21 +293,24 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified assembly and reflection context.
   syntax:
     content: public AssemblyCatalog (System.Reflection.Assembly assembly, System.Reflection.ReflectionContext reflectionContext, System.ComponentModel.Composition.Primitives.ICompositionElement definitionOrigin);
     parameters:
     - id: assembly
       type: System.Reflection.Assembly
-      description: To be added.
+      description: The assembly that contains the attributed <xref:System.Type> objects to add to the  object.
     - id: reflectionContext
       type: System.Reflection.ReflectionContext
-      description: To be added.
+      description: The context used by the catalog to interpret types.
     - id: definitionOrigin
       type: System.ComponentModel.Composition.Primitives.ICompositionElement
-      description: To be added.
+      description: The element used by diagnostics to identify the sources of parts.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    assembly, definitionOrigin, or reflectionContext is .  \n  \n -or-  \n  \n assembly was loaded in the reflection-only context."
   platform:
   - net-11
   - net-20
@@ -249,21 +327,42 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified code base and reflection context.
   syntax:
     content: public AssemblyCatalog (string codeBase, System.Reflection.ReflectionContext reflectionContext, System.ComponentModel.Composition.Primitives.ICompositionElement definitionOrigin);
     parameters:
     - id: codeBase
       type: System.String
-      description: To be added.
+      description: A string that specifies the code base of the assembly (that is, the path to the assembly file) that contains the attributed <xref:System.Type> objects to add to the  object.
     - id: reflectionContext
       type: System.Reflection.ReflectionContext
-      description: To be added.
+      description: The context used by the catalog to interpret types.
     - id: definitionOrigin
       type: System.ComponentModel.Composition.Primitives.ICompositionElement
-      description: To be added.
+      description: The element used by diagnostics to identify the sources of parts.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor*
+  exceptions:
+  - type: System.BadImageFormatException
+    commentId: T:System.BadImageFormatException
+    description: "\n    codeBase is not a valid assembly.  \n  \n -or-  \n  \n Version 2.0 or later of the common language runtime is currently loaded and codeBase was compiled with a later version."
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The caller does not have path discovery permission.
+  - type: System.IO.FileLoadException
+    commentId: T:System.IO.FileLoadException
+    description: "\n    codeBase could not be loaded.  \n  \n -or-  \n  \n codeBase specified a directory."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    codebase, definitionOrigin or reflectionContext is ."
+  - type: System.IO.FileNotFoundException
+    commentId: T:System.IO.FileNotFoundException
+    description: "\n    codeBase is not found."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    codeBase is a zero-length string, contains only white space, or contains one or more invalid characters as defined by <xref:System.IO.Path.InvalidPathChars>."
+  - type: System.IO.PathTooLongException
+    commentId: T:System.IO.PathTooLongException
+    description: The specified path, file name, or both exceed the system-defined maximum length.
   platform:
   - net-11
   - net-20
@@ -280,14 +379,14 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the assembly whose attributed types are contained in the assembly catalog.
   syntax:
     content: public System.Reflection.Assembly Assembly { get; }
     return:
       type: System.Reflection.Assembly
-      description: To be added.
+      description: The assembly whose attributed <xref:System.Type> objects are contained in the .
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.Assembly*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -304,15 +403,15 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the unmanaged resources used by the  and optionally releases the managed resources.
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -329,15 +428,15 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an enumerator that iterates through the catalog.
   syntax:
     content: public override System.Collections.Generic.IEnumerator<System.ComponentModel.Composition.Primitives.ComposablePartDefinition> GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.Generic.IEnumerator{System.ComponentModel.Composition.Primitives.ComposablePartDefinition}
-      description: To be added.
+      description: An enumerator that can be used to iterate through the catalog.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -354,18 +453,18 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of exports that match the conditions specified by the import definition.
   syntax:
     content: public override System.Collections.Generic.IEnumerable<Tuple<System.ComponentModel.Composition.Primitives.ComposablePartDefinition,System.ComponentModel.Composition.Primitives.ExportDefinition>> GetExports (System.ComponentModel.Composition.Primitives.ImportDefinition definition);
     parameters:
     - id: definition
       type: System.ComponentModel.Composition.Primitives.ImportDefinition
-      description: To be added.
+      description: Conditions that specify which exports to match.
     return:
       type: System.Collections.Generic.IEnumerable{System.Tuple{System.ComponentModel.Composition.Primitives.ComposablePartDefinition,System.ComponentModel.Composition.Primitives.ExportDefinition}}
-      description: To be added.
+      description: A collection of exports that match the conditions specified by definition.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.GetExports*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -383,14 +482,15 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the display name of the  object.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.ComponentModel.Composition.Hosting.AssemblyCatalog> instance is cast to an <xref:System.ComponentModel.Composition.Primitives.ICompositionElement> interface.
   syntax:
     content: string System.ComponentModel.Composition.Primitives.ICompositionElement.DisplayName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A string that represents the type and assembly of this  object.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.System#ComponentModel#Composition#Primitives#ICompositionElement#DisplayName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -408,14 +508,15 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the composition element that this element originated from.
+  remarks: This member is an explicit interface member implementation. It can be used only when the <xref:System.ComponentModel.Composition.Hosting.AssemblyCatalog> instance is cast to an <xref:System.ComponentModel.Composition.Primitives.ICompositionElement> interface.
   syntax:
     content: System.ComponentModel.Composition.Primitives.ICompositionElement System.ComponentModel.Composition.Primitives.ICompositionElement.Origin { get; }
     return:
       type: System.ComponentModel.Composition.Primitives.ICompositionElement
-      description: To be added.
+      description: Always .
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.System#ComponentModel#Composition#Primitives#ICompositionElement#Origin*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -432,15 +533,15 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a string representation of the assembly catalog.
   syntax:
     content: public override string ToString ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: A representation of the assembly catalog.
   overload: System.ComponentModel.Composition.Hosting.AssemblyCatalog.ToString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -479,12 +580,6 @@ references:
   name: AssemblyCatalog(Assembly,ICompositionElement)
   nameWithType: AssemblyCatalog.AssemblyCatalog(Assembly,ICompositionElement)
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog.AssemblyCatalog(Assembly,ICompositionElement)
-- uid: System.Reflection.Assembly
-  parent: System.Reflection
-  isExternal: true
-  name: Assembly
-  nameWithType: Assembly
-  fullName: System.Reflection.Assembly
 - uid: System.ComponentModel.Composition.Primitives.ICompositionElement
   parent: System.ComponentModel.Composition.Primitives
   isExternal: false
@@ -497,12 +592,6 @@ references:
   name: AssemblyCatalog(Assembly,ReflectionContext)
   nameWithType: AssemblyCatalog.AssemblyCatalog(Assembly,ReflectionContext)
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog.AssemblyCatalog(Assembly,ReflectionContext)
-- uid: System.Reflection.Assembly
-  parent: System.Reflection
-  isExternal: true
-  name: Assembly
-  nameWithType: Assembly
-  fullName: System.Reflection.Assembly
 - uid: System.Reflection.ReflectionContext
   parent: System.Reflection
   isExternal: true
@@ -515,96 +604,30 @@ references:
   name: AssemblyCatalog(String,ICompositionElement)
   nameWithType: AssemblyCatalog.AssemblyCatalog(String,ICompositionElement)
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog.AssemblyCatalog(String,ICompositionElement)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.ComponentModel.Composition.Primitives.ICompositionElement
-  parent: System.ComponentModel.Composition.Primitives
-  isExternal: false
-  name: ICompositionElement
-  nameWithType: ICompositionElement
-  fullName: System.ComponentModel.Composition.Primitives.ICompositionElement
 - uid: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor(System.String,System.Reflection.ReflectionContext)
   parent: System.ComponentModel.Composition.Hosting.AssemblyCatalog
   isExternal: false
   name: AssemblyCatalog(String,ReflectionContext)
   nameWithType: AssemblyCatalog.AssemblyCatalog(String,ReflectionContext)
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog.AssemblyCatalog(String,ReflectionContext)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Reflection.ReflectionContext
-  parent: System.Reflection
-  isExternal: true
-  name: ReflectionContext
-  nameWithType: ReflectionContext
-  fullName: System.Reflection.ReflectionContext
 - uid: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor(System.Reflection.Assembly,System.Reflection.ReflectionContext,System.ComponentModel.Composition.Primitives.ICompositionElement)
   parent: System.ComponentModel.Composition.Hosting.AssemblyCatalog
   isExternal: false
   name: AssemblyCatalog(Assembly,ReflectionContext,ICompositionElement)
   nameWithType: AssemblyCatalog.AssemblyCatalog(Assembly,ReflectionContext,ICompositionElement)
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog.AssemblyCatalog(Assembly,ReflectionContext,ICompositionElement)
-- uid: System.Reflection.Assembly
-  parent: System.Reflection
-  isExternal: true
-  name: Assembly
-  nameWithType: Assembly
-  fullName: System.Reflection.Assembly
-- uid: System.Reflection.ReflectionContext
-  parent: System.Reflection
-  isExternal: true
-  name: ReflectionContext
-  nameWithType: ReflectionContext
-  fullName: System.Reflection.ReflectionContext
-- uid: System.ComponentModel.Composition.Primitives.ICompositionElement
-  parent: System.ComponentModel.Composition.Primitives
-  isExternal: false
-  name: ICompositionElement
-  nameWithType: ICompositionElement
-  fullName: System.ComponentModel.Composition.Primitives.ICompositionElement
 - uid: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor(System.String,System.Reflection.ReflectionContext,System.ComponentModel.Composition.Primitives.ICompositionElement)
   parent: System.ComponentModel.Composition.Hosting.AssemblyCatalog
   isExternal: false
   name: AssemblyCatalog(String,ReflectionContext,ICompositionElement)
   nameWithType: AssemblyCatalog.AssemblyCatalog(String,ReflectionContext,ICompositionElement)
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog.AssemblyCatalog(String,ReflectionContext,ICompositionElement)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Reflection.ReflectionContext
-  parent: System.Reflection
-  isExternal: true
-  name: ReflectionContext
-  nameWithType: ReflectionContext
-  fullName: System.Reflection.ReflectionContext
-- uid: System.ComponentModel.Composition.Primitives.ICompositionElement
-  parent: System.ComponentModel.Composition.Primitives
-  isExternal: false
-  name: ICompositionElement
-  nameWithType: ICompositionElement
-  fullName: System.ComponentModel.Composition.Primitives.ICompositionElement
 - uid: System.ComponentModel.Composition.Hosting.AssemblyCatalog.Assembly
   parent: System.ComponentModel.Composition.Hosting.AssemblyCatalog
   isExternal: false
   name: Assembly
   nameWithType: AssemblyCatalog.Assembly
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog.Assembly
-- uid: System.Reflection.Assembly
-  parent: System.Reflection
-  isExternal: true
-  name: Assembly
-  nameWithType: Assembly
-  fullName: System.Reflection.Assembly
 - uid: System.ComponentModel.Composition.Hosting.AssemblyCatalog.Dispose(System.Boolean)
   parent: System.ComponentModel.Composition.Hosting.AssemblyCatalog
   isExternal: false
@@ -629,6 +652,21 @@ references:
   name: IEnumerator<ComposablePartDefinition>
   nameWithType: IEnumerator<ComposablePartDefinition>
   fullName: System.Collections.Generic.IEnumerator<System.ComponentModel.Composition.Primitives.ComposablePartDefinition>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerator`1
+    name: IEnumerator
+    nameWithType: IEnumerator
+    fullName: IEnumerator<System.ComponentModel.Composition.Primitives.ComposablePartDefinition>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ComponentModel.Composition.Primitives.ComposablePartDefinition
+    name: ComposablePartDefinition
+    nameWithType: ComposablePartDefinition
+    fullName: ComposablePartDefinition
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ComponentModel.Composition.Hosting.AssemblyCatalog.GetExports(System.ComponentModel.Composition.Primitives.ImportDefinition)
   parent: System.ComponentModel.Composition.Hosting.AssemblyCatalog
   isExternal: false
@@ -641,6 +679,38 @@ references:
   name: IEnumerable<Tuple<ComposablePartDefinition,ExportDefinition>>
   nameWithType: IEnumerable<Tuple<ComposablePartDefinition,ExportDefinition>>
   fullName: System.Collections.Generic.IEnumerable<System.Tuple<System.ComponentModel.Composition.Primitives.ComposablePartDefinition,System.ComponentModel.Composition.Primitives.ExportDefinition>>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Tuple<System.ComponentModel.Composition.Primitives.ComposablePartDefinition,System.ComponentModel.Composition.Primitives.ExportDefinition>>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Tuple`2
+    name: Tuple
+    nameWithType: Tuple
+    fullName: Tuple<System.ComponentModel.Composition.Primitives.ComposablePartDefinition,System.ComponentModel.Composition.Primitives.ExportDefinition>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ComponentModel.Composition.Primitives.ComposablePartDefinition
+    name: ComposablePartDefinition
+    nameWithType: ComposablePartDefinition
+    fullName: ComposablePartDefinition
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.ComponentModel.Composition.Primitives.ExportDefinition
+    name: ExportDefinition
+    nameWithType: ExportDefinition
+    fullName: ExportDefinition
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ComponentModel.Composition.Primitives.ImportDefinition
   parent: System.ComponentModel.Composition.Primitives
   isExternal: false
@@ -653,36 +723,18 @@ references:
   name: System.ComponentModel.Composition.Primitives.ICompositionElement.DisplayName
   nameWithType: AssemblyCatalog.System.ComponentModel.Composition.Primitives.ICompositionElement.DisplayName
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog.System.ComponentModel.Composition.Primitives.ICompositionElement.DisplayName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ComponentModel.Composition.Hosting.AssemblyCatalog.System#ComponentModel#Composition#Primitives#ICompositionElement#Origin
   parent: System.ComponentModel.Composition.Hosting.AssemblyCatalog
   isExternal: false
   name: System.ComponentModel.Composition.Primitives.ICompositionElement.Origin
   nameWithType: AssemblyCatalog.System.ComponentModel.Composition.Primitives.ICompositionElement.Origin
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog.System.ComponentModel.Composition.Primitives.ICompositionElement.Origin
-- uid: System.ComponentModel.Composition.Primitives.ICompositionElement
-  parent: System.ComponentModel.Composition.Primitives
-  isExternal: false
-  name: ICompositionElement
-  nameWithType: ICompositionElement
-  fullName: System.ComponentModel.Composition.Primitives.ICompositionElement
 - uid: System.ComponentModel.Composition.Hosting.AssemblyCatalog.ToString
   parent: System.ComponentModel.Composition.Hosting.AssemblyCatalog
   isExternal: false
   name: ToString()
   nameWithType: AssemblyCatalog.ToString()
   fullName: System.ComponentModel.Composition.Hosting.AssemblyCatalog.ToString()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ComponentModel.Composition.Hosting.AssemblyCatalog.#ctor*
   parent: System.ComponentModel.Composition.Hosting.AssemblyCatalog
   isExternal: false

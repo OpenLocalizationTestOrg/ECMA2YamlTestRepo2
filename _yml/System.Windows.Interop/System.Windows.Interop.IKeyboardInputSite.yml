@@ -12,8 +12,8 @@ items:
   nameWithType: IKeyboardInputSite
   fullName: System.Windows.Interop.IKeyboardInputSite
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Manages keyboard focus within the container.  This interface implements keyboard message management in [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)]-[!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] interoperation scenarios.
+  remarks: "A container should provide a unique instance of this interface for each of its contained components.  \n  \n The IKeyboardInputSite interface and the <xref:System.Windows.Interop.IKeyboardInputSink> are used together to provide support for keyboard actions across interoperation boundaries. A site (IKeyboardInputSite implementation) represents a parent of a sink (<xref:System.Windows.Interop.IKeyboardInputSink>). The sink (<xref:System.Windows.Interop.IKeyboardInputSink>) implements the majority of keyboard behavior. Each site must also provide a sink, because the site-specific sink is returned by a property of the IKeyboardInputSite interface.  \n  \n For a discussion of the input architecture specifically implemented for [!INCLUDE[TLA#tla_winforms](../../add/includes/tlasharptla-winforms-md.md)] interoperation, see [Windows Forms and WPF Interoperability Input Architecture](../Topic/Windows%20Forms%20and%20WPF%20Interoperability%20Input%20Architecture.md).  \n  \n For more information about [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)]-[!INCLUDE[TLA2#tla_win32](../../add/includes/tla2sharptla-win32-md.md)] interoperation scenarios, see [WPF and Win32 Interoperation](../Topic/WPF%20and%20Win32%20Interoperation.md)."
   syntax:
     content: public interface IKeyboardInputSite
   implements: []
@@ -33,18 +33,19 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Called by a contained component when it has reached its last tab stop and has no further items to tab to.
+  remarks: Components call OnNoMoreTabStops when the component attempts a requested focus move but there are no further tab stops in that direction within that own component.
   syntax:
     content: public bool OnNoMoreTabStops (System.Windows.Input.TraversalRequest request);
     parameters:
     - id: request
       type: System.Windows.Input.TraversalRequest
-      description: To be added.
+      description: Specifies whether focus should be set to the first or the last tab stop.
     return:
       type: System.Boolean
-      description: To be added.
+      description: If this method returns , the site has shifted focus to another component. If this method returns , focus is still within the calling component. The component should "wrap around" and set focus to its first contained tab stop.
   overload: System.Windows.Interop.IKeyboardInputSite.OnNoMoreTabStops*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -61,14 +62,15 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the keyboard sink associated with this site.
+  remarks: This property does not return the parent <xref:System.Windows.Interop.IKeyboardInputSink> interface.
   syntax:
     content: public System.Windows.Interop.IKeyboardInputSink Sink { get; }
     return:
       type: System.Windows.Interop.IKeyboardInputSink
-      description: To be added.
+      description: The current site's  interface.
   overload: System.Windows.Interop.IKeyboardInputSite.Sink*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -85,12 +87,13 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Unregisters a child keyboard input sink from this site.
+  remarks: This property does not affect the site on the container.
   syntax:
     content: public void Unregister ();
     parameters: []
   overload: System.Windows.Interop.IKeyboardInputSite.Unregister*
+  exceptions: []
   platform:
   - net-11
   - net-20

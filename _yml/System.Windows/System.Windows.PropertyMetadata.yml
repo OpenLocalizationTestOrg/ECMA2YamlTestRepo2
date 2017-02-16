@@ -20,8 +20,8 @@ items:
   nameWithType: PropertyMetadata
   fullName: System.Windows.PropertyMetadata
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Defines certain behavior aspects of a dependency property as it is applied to a specific type, including conditions it was registered with.
+  remarks: "Property metadata can be defined and used during dependency property registration when calling the <xref:System.Windows.DependencyProperty.Register%2A> method (or variations for attached properties or read-only dependency properties), or after original owner registration when calling the <xref:System.Windows.DependencyPropertyKey.OverrideMetadata%2A> method. <xref:System.Windows.DependencyProperty.AddOwner%2A> also takes property metadata.  \n  \n This class is a concrete base class that can be used in each of these calls. However, it is very common to specify metadata using one of the derived classes such as <xref:System.Windows.FrameworkPropertyMetadata>. These derived classes support more detailed metadata carried as Boolean property values, which are useful for either detecting or enabling some property system and layout behaviors that are only implemented at the [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] framework level.  \n  \n Several properties of this class are read-write to the object model, but can only be written prior to the instance being used in a property system operation such as <xref:System.Windows.DependencyProperty.Register%2A> or <xref:System.Windows.DependencyPropertyKey.OverrideMetadata%2A>. Each of these properties could also have been set by the constructor but are exposed so that <xref:System.Windows.PropertyMetadata.Merge%2A> method implementations can set them.  \n  \n<a name=\"xamlTextUsage_PropertyMetadata\"></a>   \n## XAML Text Usage  \n This type, and members of this type, are not typically used in [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)]."
   syntax:
     content: public class PropertyMetadata
   inheritance:
@@ -44,12 +44,12 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public PropertyMetadata ();
     parameters: []
   overload: System.Windows.PropertyMetadata.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -66,15 +66,21 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a specified default value for the dependency property that this metadata will be applied to.
+  remarks: "The type of the value provided for `defaultValue` must be match or be related to the type specified in the original registration of the dependency property that this metadata will be applied to. Mismatches between metadata default value type and the type of the dependency property it is being applied to can be difficult to debug, because the mismatch is not detectable during compilation (the mismatch will raise a run-time exception).  \n  \n Although it is the default per the parameterless constructor, a `defaultValue` of <xref:System.Windows.DependencyProperty.UnsetValue> cannot be specified. Attempting to do so will raise an exception."
+  example:
+  - "[!code-cs[PropertyMetadataAPIs#Initpm](../../add/codesnippet/CSharp/PropertyMetadataAPIs/Class1.cs#initpm)]  \n[!code-cs[PropertyMetadataAPIs#PMCtor1param](../../add/codesnippet/CSharp/PropertyMetadataAPIs/Class1.cs#pmctor1param)]"
   syntax:
     content: public PropertyMetadata (object defaultValue);
     parameters:
     - id: defaultValue
       type: System.Object
-      description: To be added.
+      description: The default value to specify for a dependency property, usually provided as a value of some specific type.
   overload: System.Windows.PropertyMetadata.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    defaultValue cannot be set to the value ; see Remarks."
   platform:
   - net-11
   - net-20
@@ -91,15 +97,18 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified  implementation reference.
+  remarks: ''
+  example:
+  - "[!code-cs[PropertyMetadataAPIs#Initpm](../../add/codesnippet/CSharp/PropertyMetadataAPIs/Class1.cs#initpm)]  \n[!code-cs[PropertyMetadataAPIs#PMCtor1paramcallback](../../add/codesnippet/CSharp/PropertyMetadataAPIs/Class1.cs#pmctor1paramcallback)]"
   syntax:
     content: public PropertyMetadata (System.Windows.PropertyChangedCallback propertyChangedCallback);
     parameters:
     - id: propertyChangedCallback
       type: System.Windows.PropertyChangedCallback
-      description: To be added.
+      description: Reference to a handler implementation that is to be called by the property system whenever the effective value of the property changes.
   overload: System.Windows.PropertyMetadata.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -116,18 +125,24 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified default value and  implementation reference.
+  remarks: "The type of the value provided `defaultValue` must be match or be related to the type specified in the original registration of the dependency property that this metadata will be applied to. Mismatches between metadata default value type and the type of the dependency property it is being applied to can be difficult to debug, because the mismatch is not detectable during compilation (the mismatch will raise a run-time exception).  \n  \n Although it is the default per the parameterless constructor, a `defaultValue` of <xref:System.Windows.DependencyProperty.UnsetValue> cannot be specified. Attempting to do so will raise an exception."
+  example:
+  - "[!code-cs[PropertyMetadataAPIs#Initpm](../../add/codesnippet/CSharp/PropertyMetadataAPIs/Class1.cs#initpm)]  \n[!code-cs[PropertyMetadataAPIs#PMCtor2param](../../add/codesnippet/CSharp/PropertyMetadataAPIs/Class1.cs#pmctor2param)]"
   syntax:
     content: public PropertyMetadata (object defaultValue, System.Windows.PropertyChangedCallback propertyChangedCallback);
     parameters:
     - id: defaultValue
       type: System.Object
-      description: To be added.
+      description: The default value of the dependency property, usually provided as a value of some specific type.
     - id: propertyChangedCallback
       type: System.Windows.PropertyChangedCallback
-      description: To be added.
+      description: Reference to a handler implementation that is to be called by the property system whenever the effective value of the property changes.
   overload: System.Windows.PropertyMetadata.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    defaultValue cannot be set to the value ; see Remarks."
   platform:
   - net-11
   - net-20
@@ -144,21 +159,27 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified default value and callbacks.
+  remarks: "If you want to specify a <xref:System.Windows.CoerceValueCallback> but not a <xref:System.Windows.PropertyChangedCallback>, you can pass `null` for the `propertyChangedCallback` parameter.  \n  \n The type of the value provided for `defaultValue` must be match or be related to the type specified in the original registration of the dependency property that this metadata will be applied to. Mismatches between metadata default value type and the type of the dependency property it is being applied to can be difficult to debug, because the mismatch is not detectable during compilation (the mismatch will raise a run-time exception).  \n  \n Although it is the default per the parameterless constructor, a `defaultValue` of <xref:System.Windows.DependencyProperty.UnsetValue> cannot be specified. Attempting to do so will raise an exception."
+  example:
+  - "[!code-cs[PropertyMetadataAPIs#Initpm](../../add/codesnippet/CSharp/PropertyMetadataAPIs/Class1.cs#initpm)]  \n[!code-cs[PropertyMetadataAPIs#PMCtor3param](../../add/codesnippet/CSharp/PropertyMetadataAPIs/Class1.cs#pmctor3param)]"
   syntax:
     content: public PropertyMetadata (object defaultValue, System.Windows.PropertyChangedCallback propertyChangedCallback, System.Windows.CoerceValueCallback coerceValueCallback);
     parameters:
     - id: defaultValue
       type: System.Object
-      description: To be added.
+      description: The default value of the dependency property, usually provided as a value of some specific type.
     - id: propertyChangedCallback
       type: System.Windows.PropertyChangedCallback
-      description: To be added.
+      description: Reference to a handler implementation that is to be called by the property system whenever the effective value of the property changes.
     - id: coerceValueCallback
       type: System.Windows.CoerceValueCallback
-      description: To be added.
+      description: Reference to a handler implementation that is to be called whenever the property system calls <xref:System.Windows.DependencyObject.CoerceValue%2A> against this property.
   overload: System.Windows.PropertyMetadata.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    defaultValue cannot be set to the value ; see Remarks."
   platform:
   - net-11
   - net-20
@@ -175,14 +196,18 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a reference to a  implementation specified in this metadata.
+  remarks: "The callbacks in property metadata are not typically public members on the containing type, so the value of this property is not important for most scenarios that just consume an existing dependency property's metadata. One reason this property is exposed is so that metadata subclasses can perform their desired merge logic if both base metadata and overriding/adding metadata specify a <xref:System.Windows.CoerceValueCallback>. However, the default merge logic for a CoerceValueCallback is to replace the previous one.  \n  \n CoerceValueCallback is defined in the object model as read-write. This is so CoerceValueCallback can be adjusted after initialization of the <xref:System.Windows.PropertyMetadata> object itself. However, once the metadata is consumed as part of a call to <xref:System.Windows.DependencyProperty.Register%2A>, <xref:System.Windows.DependencyProperty.AddOwner%2A>, or <xref:System.Windows.DependencyProperty.OverrideMetadata%2A>, the property system will seal that metadata instance and the properties are now considered immutable. Attempting to set CoerceValueCallback once <xref:System.Windows.PropertyMetadata.IsSealed%2A> is `true` on this metadata instance will raise an exception."
   syntax:
     content: public System.Windows.CoerceValueCallback CoerceValueCallback { get; set; }
     return:
       type: System.Windows.CoerceValueCallback
-      description: To be added.
+      description: A  implementation reference.
   overload: System.Windows.PropertyMetadata.CoerceValueCallback*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: Cannot set a metadata property once it is applied to a dependency property operation.
   platform:
   - net-11
   - net-20
@@ -199,14 +224,21 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the default value of the dependency property.
+  remarks: "DefaultValue is defined in the object model as read-write. This is so DefaultValue can be adjusted after initialization of the <xref:System.Windows.PropertyMetadata> object itself. However, once the metadata is consumed as part of a call to <xref:System.Windows.DependencyProperty.Register%2A>, <xref:System.Windows.DependencyProperty.AddOwner%2A>, or <xref:System.Windows.DependencyProperty.OverrideMetadata%2A>, the property system will seal that metadata instance and the properties are now considered immutable. Attempting to set DefaultValue once <xref:System.Windows.PropertyMetadata.IsSealed%2A> is `true` on this metadata instance will raise an exception.  \n  \n Although it is the default per the parameterless constructor, a `defaultValue` of <xref:System.Windows.DependencyProperty.UnsetValue> cannot be set using either DefaultValue or the constructor. Attempting to do so will raise an exception.  \n  \n<a name=\"xamlTextUsage_PropertyChangedCallback\"></a>   \n## XAML Text Usage  \n Members of this type are not typically used in [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)]."
   syntax:
     content: public object DefaultValue { get; set; }
     return:
       type: System.Object
-      description: To be added.
+      description: The default value of the property. The default value on a  instance created with the parameterless constructor will be ; see Remarks.
   overload: System.Windows.PropertyMetadata.DefaultValue*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: Cannot be set to the value  once created; see Remarks.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: Cannot set a metadata property once it is applied to a dependency property operation.
   platform:
   - net-11
   - net-20
@@ -223,14 +255,17 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that determines whether the metadata has been applied to a property in some way, resulting in the immutable state of that metadata instance.
+  remarks: Various properties of <xref:System.Windows.PropertyMetadata>, such as <xref:System.Windows.PropertyMetadata.DefaultValue%2A>, are defined in the object model as read-write. This is so those properties can be adjusted after initialization of the <xref:System.Windows.PropertyMetadata> object itself. However, once the metadata is applied to a dependency property as part of a call to <xref:System.Windows.DependencyProperty.Register%2A>, <xref:System.Windows.DependencyProperty.AddOwner%2A>, or <xref:System.Windows.DependencyProperty.OverrideMetadata%2A>, the property system will seal that metadata instance and the properties are now considered immutable. At the time of one of these calls, <xref:System.Windows.PropertyMetadata.OnApply%2A> is called, and the value of this property is set to `true`.
+  example:
+  - "The following example  checks IsSealed prior to a set operation of a custom metadata property.  \n  \n [!code-cs[PropertyMetadataAPIs#MergeImpl](../../add/codesnippet/CSharp/PropertyMetadataAPIs/Class1.cs#mergeimpl)]"
   syntax:
     content: protected bool IsSealed { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the metadata instance is immutable; otherwise, .
   overload: System.Windows.PropertyMetadata.IsSealed*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -247,18 +282,21 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Merges this metadata with the base metadata.
+  remarks: This method is used internally when metadata is being overridden (<xref:System.Windows.DependencyProperty.OverrideMetadata%2A> method).
+  example:
+  - "The following example implements a merge for a custom metadata type that adds an additional property to the property metadata.  \n  \n [!code-cs[PropertyMetadataAPIs#MergeImpl](../../add/codesnippet/CSharp/PropertyMetadataAPIs/Class1.cs#mergeimpl)]"
   syntax:
     content: protected virtual void Merge (System.Windows.PropertyMetadata baseMetadata, System.Windows.DependencyProperty dp);
     parameters:
     - id: baseMetadata
       type: System.Windows.PropertyMetadata
-      description: To be added.
+      description: The base metadata to merge with this instance's values.
     - id: dp
       type: System.Windows.DependencyProperty
-      description: To be added.
+      description: The dependency property to which this metadata is being applied.
   overload: System.Windows.PropertyMetadata.Merge*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -275,18 +313,19 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Called when this metadata has been applied to a property, which indicates that the metadata is being sealed.
+  remarks: Subclasses should assure that any mutability of the data structure of a <xref:System.Windows.PropertyMetadata> subclass should be marked as immutable once OnApply is called. This will be called once the metadata is applied to a property system operation (register, add owner, override metadata).
   syntax:
     content: protected virtual void OnApply (System.Windows.DependencyProperty dp, Type targetType);
     parameters:
     - id: dp
       type: System.Windows.DependencyProperty
-      description: To be added.
+      description: The dependency property to which the metadata has been applied.
     - id: targetType
       type: System.Type
-      description: To be added.
+      description: The type associated with this metadata if this is type-specific metadata. If this is default metadata, this value is a null reference.
   overload: System.Windows.PropertyMetadata.OnApply*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -303,14 +342,18 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a reference to a  implementation specified in this metadata.
+  remarks: "The callbacks in property metadata are not typically public members on the defining type, so the value of this property is not important for most scenarios that just consume an existing dependency property's metadata. One reason this property is exposed is so that metadata classes can perform their desired merge logic if both base metadata and overriding/adding metadata specify a <xref:System.Windows.PropertyChangedCallback>. The default merge logic for is to maintain all PropertyChangedCallback implementations in a table and call each of them, with callbacks established by the deepest class in hierarchy running first.  \n  \n PropertyChangedCallback is defined in the object model as read-write. This is so PropertyChangedCallback can be adjusted after initialization of the <xref:System.Windows.PropertyMetadata> object itself. However, once the metadata is consumed as part of a call to <xref:System.Windows.DependencyProperty.Register%2A>, <xref:System.Windows.DependencyProperty.AddOwner%2A>, or <xref:System.Windows.DependencyProperty.OverrideMetadata%2A>, the property system will seal that metadata instance and the properties are now considered immutable. Attempting to set PropertyChangedCallback once <xref:System.Windows.PropertyMetadata.IsSealed%2A> is `true` on this metadata instance will raise an exception."
   syntax:
     content: public System.Windows.PropertyChangedCallback PropertyChangedCallback { get; set; }
     return:
       type: System.Windows.PropertyChangedCallback
-      description: To be added.
+      description: A  implementation reference.
   overload: System.Windows.PropertyMetadata.PropertyChangedCallback*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: Cannot set a metadata property once it is applied to a dependency property operation.
   platform:
   - net-11
   - net-20
@@ -331,12 +374,6 @@ references:
   name: PropertyMetadata(Object)
   nameWithType: PropertyMetadata.PropertyMetadata(Object)
   fullName: System.Windows.PropertyMetadata.PropertyMetadata(Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.PropertyMetadata.#ctor(System.Windows.PropertyChangedCallback)
   parent: System.Windows.PropertyMetadata
   isExternal: false
@@ -355,36 +392,12 @@ references:
   name: PropertyMetadata(Object,PropertyChangedCallback)
   nameWithType: PropertyMetadata.PropertyMetadata(Object,PropertyChangedCallback)
   fullName: System.Windows.PropertyMetadata.PropertyMetadata(Object,PropertyChangedCallback)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Windows.PropertyChangedCallback
-  parent: System.Windows
-  isExternal: false
-  name: PropertyChangedCallback
-  nameWithType: PropertyChangedCallback
-  fullName: System.Windows.PropertyChangedCallback
 - uid: System.Windows.PropertyMetadata.#ctor(System.Object,System.Windows.PropertyChangedCallback,System.Windows.CoerceValueCallback)
   parent: System.Windows.PropertyMetadata
   isExternal: false
   name: PropertyMetadata(Object,PropertyChangedCallback,CoerceValueCallback)
   nameWithType: PropertyMetadata.PropertyMetadata(Object,PropertyChangedCallback,CoerceValueCallback)
   fullName: System.Windows.PropertyMetadata.PropertyMetadata(Object,PropertyChangedCallback,CoerceValueCallback)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Windows.PropertyChangedCallback
-  parent: System.Windows
-  isExternal: false
-  name: PropertyChangedCallback
-  nameWithType: PropertyChangedCallback
-  fullName: System.Windows.PropertyChangedCallback
 - uid: System.Windows.CoerceValueCallback
   parent: System.Windows
   isExternal: false
@@ -397,24 +410,12 @@ references:
   name: CoerceValueCallback
   nameWithType: PropertyMetadata.CoerceValueCallback
   fullName: System.Windows.PropertyMetadata.CoerceValueCallback
-- uid: System.Windows.CoerceValueCallback
-  parent: System.Windows
-  isExternal: false
-  name: CoerceValueCallback
-  nameWithType: CoerceValueCallback
-  fullName: System.Windows.CoerceValueCallback
 - uid: System.Windows.PropertyMetadata.DefaultValue
   parent: System.Windows.PropertyMetadata
   isExternal: false
   name: DefaultValue
   nameWithType: PropertyMetadata.DefaultValue
   fullName: System.Windows.PropertyMetadata.DefaultValue
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.PropertyMetadata.IsSealed
   parent: System.Windows.PropertyMetadata
   isExternal: false
@@ -451,12 +452,6 @@ references:
   name: OnApply(DependencyProperty,Type)
   nameWithType: PropertyMetadata.OnApply(DependencyProperty,Type)
   fullName: System.Windows.PropertyMetadata.OnApply(DependencyProperty,Type)
-- uid: System.Windows.DependencyProperty
-  parent: System.Windows
-  isExternal: false
-  name: DependencyProperty
-  nameWithType: DependencyProperty
-  fullName: System.Windows.DependencyProperty
 - uid: System.Type
   parent: System
   isExternal: true
@@ -469,12 +464,6 @@ references:
   name: PropertyChangedCallback
   nameWithType: PropertyMetadata.PropertyChangedCallback
   fullName: System.Windows.PropertyMetadata.PropertyChangedCallback
-- uid: System.Windows.PropertyChangedCallback
-  parent: System.Windows
-  isExternal: false
-  name: PropertyChangedCallback
-  nameWithType: PropertyChangedCallback
-  fullName: System.Windows.PropertyChangedCallback
 - uid: System.Windows.PropertyMetadata.#ctor*
   parent: System.Windows.PropertyMetadata
   isExternal: false

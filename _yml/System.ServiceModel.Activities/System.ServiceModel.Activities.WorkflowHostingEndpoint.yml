@@ -15,8 +15,10 @@ items:
   nameWithType: WorkflowHostingEndpoint
   fullName: System.ServiceModel.Activities.WorkflowHostingEndpoint
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: An abstract implementation of <xref:System.ServiceModel.Description.ServiceEndpoint>. Derive from this class to expose contracts that support workflow creation and bookmark resumption.
+  remarks: ''
+  example:
+  - "The following example shows how to derive a class from the WorkflowHostingEndpoint class.  \n  \n [!code-cs[CreationEndpoint2#2](../../add/codesnippet/CSharp/t-system.servicemodel.ac_0_1.cs)]"
   syntax:
     content: 'public abstract class WorkflowHostingEndpoint : System.ServiceModel.Description.ServiceEndpoint'
   inheritance:
@@ -39,15 +41,15 @@ items:
   assemblies:
   - System.ServiceModel.Activities
   namespace: System.ServiceModel.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new instance of the  class with the specified contract type.
   syntax:
     content: protected WorkflowHostingEndpoint (Type contractType);
     parameters:
     - id: contractType
       type: System.Type
-      description: To be added.
+      description: The type of the contract that defines the basic message exchange patterns for a workflow hosting operation.
   overload: System.ServiceModel.Activities.WorkflowHostingEndpoint.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -64,21 +66,21 @@ items:
   assemblies:
   - System.ServiceModel.Activities
   namespace: System.ServiceModel.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new instance of the  class with the specified contract type, binding, and endpoint address.
   syntax:
     content: protected WorkflowHostingEndpoint (Type contractType, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress address);
     parameters:
     - id: contractType
       type: System.Type
-      description: To be added.
+      description: The service contract for the endpoint.
     - id: binding
       type: System.ServiceModel.Channels.Binding
-      description: To be added.
+      description: The binding for the endpoint.
     - id: address
       type: System.ServiceModel.EndpointAddress
-      description: To be added.
+      description: The address of the endpoint.
   overload: System.ServiceModel.Activities.WorkflowHostingEndpoint.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -95,14 +97,15 @@ items:
   assemblies:
   - System.ServiceModel.Activities
   namespace: System.ServiceModel.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of  instances .
+  remarks: Populate this collection with queries that are run when a message arrives on the endpoint to determine which workflow instance the message should be sent to. This property does not need to be used if custom instance resolution is provided by overriding <xref:System.ServiceModel.Activities.WorkflowHostingEndpoint.OnGetInstanceId%2A>.
   syntax:
     content: public System.Collections.ObjectModel.Collection<System.ServiceModel.CorrelationQuery> CorrelationQueries { get; }
     return:
       type: System.Collections.ObjectModel.Collection{System.ServiceModel.CorrelationQuery}
-      description: To be added.
+      description: A collection of correlation queries.
   overload: System.ServiceModel.Activities.WorkflowHostingEndpoint.CorrelationQueries*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -119,27 +122,30 @@ items:
   assemblies:
   - System.ServiceModel.Activities
   namespace: System.ServiceModel.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Override to create a new instance.
+  remarks: ''
+  example:
+  - "The following example shows how to implement the OnGetCreationContext method.  \n  \n [!CODE [CreationEndpoint#2](../CodeSnippet/VS_Snippets_CFX/creationendpoint#2)]"
   syntax:
     content: protected virtual System.ServiceModel.Activities.WorkflowCreationContext OnGetCreationContext (object[] inputs, System.ServiceModel.OperationContext operationContext, Guid instanceId, System.ServiceModel.Activities.WorkflowHostingResponseContext responseContext);
     parameters:
     - id: inputs
       type: System.Object[]
-      description: To be added.
+      description: The inputs to the service operation.
     - id: operationContext
       type: System.ServiceModel.OperationContext
-      description: To be added.
+      description: Provides the execution context of the service operation invoked.
     - id: instanceId
       type: System.Guid
-      description: To be added.
+      description: The instance ID of the workflow instance being created.
     - id: responseContext
       type: System.ServiceModel.Activities.WorkflowHostingResponseContext
-      description: To be added.
+      description: The <xref:System.ServiceModel.Activities.WorkflowHostingEndpointResponseContext> object that can be used to send replies back to the message source for a request/reply contract.
     return:
       type: System.ServiceModel.Activities.WorkflowCreationContext
-      description: To be added.
+      description: A workflow creation context object.
   overload: System.ServiceModel.Activities.WorkflowHostingEndpoint.OnGetCreationContext*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -156,21 +162,24 @@ items:
   assemblies:
   - System.ServiceModel.Activities
   namespace: System.ServiceModel.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Override to return the instance ID for the workflow instance being created.
+  remarks: Return null to indicate that an instance ID should be automatically generated.
+  example:
+  - "The following example shows how to implement the OnGetInstanceId method.  \n  \n [!code-cs[CreationEndpoint#0](../../add/codesnippet/CSharp/cea2a45b-e184-4b82-884c-_1.cs)]"
   syntax:
     content: protected virtual Guid OnGetInstanceId (object[] inputs, System.ServiceModel.OperationContext operationContext);
     parameters:
     - id: inputs
       type: System.Object[]
-      description: To be added.
+      description: The inputs to the service operation.
     - id: operationContext
       type: System.ServiceModel.OperationContext
-      description: To be added.
+      description: The operation context of the service operation.
     return:
       type: System.Guid
-      description: To be added.
+      description: The instance ID for the newly created workflow instance.
   overload: System.ServiceModel.Activities.WorkflowHostingEndpoint.OnGetInstanceId*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -187,27 +196,30 @@ items:
   assemblies:
   - System.ServiceModel.Activities
   namespace: System.ServiceModel.Activities
-  summary: To be added.
-  remarks: To be added.
+  summary: Override to return a bookmark to be resumed on the workflow instance.
+  remarks: ''
+  example:
+  - "The following example shows how to implement the OnResolveBookmark method.  \n  \n [!code-cs[ResumeBookmarkEndpoint#0](../../add/codesnippet/CSharp/318c1ab2-0f8e-43e3-ae9f-_1.cs)]"
   syntax:
     content: protected virtual System.Activities.Bookmark OnResolveBookmark (object[] inputs, System.ServiceModel.OperationContext operationContext, System.ServiceModel.Activities.WorkflowHostingResponseContext responseContext, out object value);
     parameters:
     - id: inputs
       type: System.Object[]
-      description: To be added.
+      description: The inputs to the service operation.
     - id: operationContext
       type: System.ServiceModel.OperationContext
-      description: To be added.
+      description: The execution context of the service operation being invoked.
     - id: responseContext
       type: System.ServiceModel.Activities.WorkflowHostingResponseContext
-      description: To be added.
+      description: The  object that can be used to send replies back to the message source for a request/reply contract.
     - id: value
       type: System.Object
-      description: To be added.
+      description: A value to be passed back to the workflow instance when the bookmark is resumed
     return:
       type: System.Activities.Bookmark
-      description: To be added.
+      description: A bookmark.
   overload: System.ServiceModel.Activities.WorkflowHostingEndpoint.OnResolveBookmark*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -234,12 +246,6 @@ references:
   name: WorkflowHostingEndpoint(Type,Binding,EndpointAddress)
   nameWithType: WorkflowHostingEndpoint.WorkflowHostingEndpoint(Type,Binding,EndpointAddress)
   fullName: System.ServiceModel.Activities.WorkflowHostingEndpoint.WorkflowHostingEndpoint(Type,Binding,EndpointAddress)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.ServiceModel.Channels.Binding
   parent: System.ServiceModel.Channels
   isExternal: true
@@ -264,6 +270,21 @@ references:
   name: Collection<CorrelationQuery>
   nameWithType: Collection<CorrelationQuery>
   fullName: System.Collections.ObjectModel.Collection<System.ServiceModel.CorrelationQuery>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.Collection`1
+    name: Collection
+    nameWithType: Collection
+    fullName: Collection<System.ServiceModel.CorrelationQuery>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ServiceModel.CorrelationQuery
+    name: CorrelationQuery
+    nameWithType: CorrelationQuery
+    fullName: CorrelationQuery
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ServiceModel.Activities.WorkflowHostingEndpoint.OnGetCreationContext(System.Object[],System.ServiceModel.OperationContext,System.Guid,System.ServiceModel.Activities.WorkflowHostingResponseContext)
   parent: System.ServiceModel.Activities.WorkflowHostingEndpoint
   isExternal: false
@@ -276,12 +297,20 @@ references:
   name: WorkflowCreationContext
   nameWithType: WorkflowCreationContext
   fullName: System.ServiceModel.Activities.WorkflowCreationContext
-- uid: System.Object
+- uid: System.Object[]
   parent: System
   isExternal: true
   name: Object
   nameWithType: Object
   fullName: System.Object[]
+  spec.csharp:
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.ServiceModel.OperationContext
   parent: System.ServiceModel
   isExternal: true
@@ -306,24 +335,6 @@ references:
   name: OnGetInstanceId(Object[],OperationContext)
   nameWithType: WorkflowHostingEndpoint.OnGetInstanceId(Object[],OperationContext)
   fullName: System.ServiceModel.Activities.WorkflowHostingEndpoint.OnGetInstanceId(Object[],OperationContext)
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object[]
-- uid: System.ServiceModel.OperationContext
-  parent: System.ServiceModel
-  isExternal: true
-  name: OperationContext
-  nameWithType: OperationContext
-  fullName: System.ServiceModel.OperationContext
 - uid: System.ServiceModel.Activities.WorkflowHostingEndpoint.OnResolveBookmark(System.Object[],System.ServiceModel.OperationContext,System.ServiceModel.Activities.WorkflowHostingResponseContext,System.Object@)
   parent: System.ServiceModel.Activities.WorkflowHostingEndpoint
   isExternal: false
@@ -336,24 +347,6 @@ references:
   name: Bookmark
   nameWithType: Bookmark
   fullName: System.Activities.Bookmark
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object[]
-- uid: System.ServiceModel.OperationContext
-  parent: System.ServiceModel
-  isExternal: true
-  name: OperationContext
-  nameWithType: OperationContext
-  fullName: System.ServiceModel.OperationContext
-- uid: System.ServiceModel.Activities.WorkflowHostingResponseContext
-  parent: System.ServiceModel.Activities
-  isExternal: false
-  name: WorkflowHostingResponseContext
-  nameWithType: WorkflowHostingResponseContext
-  fullName: System.ServiceModel.Activities.WorkflowHostingResponseContext
 - uid: System.Object
   parent: System
   isExternal: true

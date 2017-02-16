@@ -16,8 +16,10 @@ items:
   nameWithType: ContractHandle
   fullName: System.AddIn.Pipeline.ContractHandle
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides methods that control the lifetime of an add-in.
+  remarks: "Because the add-in model provides the ability for add-ins to communicate between application domains and between processes, it cannot rely on the garbage collector to reclaim them. This class provides a reference counting mechanism for the add-in by obtaining a lifetime token to its contract.  \n  \n When a ContractHandle object is constructed, it calls the <xref:System.AddIn.Pipeline.ContractBase.AcquireLifetimeToken%2A> method on the contract that is passed to the constructor. When the ContractHandle object is disposed or finalized, it calls the <xref:System.AddIn.Pipeline.ContractBase.RevokeLifetimeToken%2A> method on the contract, which removes its hold on the contract.  \n  \n Adapters implement the contract. The ContractHandle class is designed to be used in a contract-to-view adapter to help pipeline developers manage the lifetime of the contract that is being adapted. Typically, an instance of this class is instantiated during the construction of the adapter class and is stored in an instance field of the adapter. When the adapter class is garbage-collected, the ContractHandle object will also be collected and the ContractHandle object will revoke the lifetime token on the contract.  \n  \n It is recommended that your view-to-contract adapters inherit from the <xref:System.AddIn.Pipeline.ContractBase> class. You can then use a default implementation for the members of <xref:System.AddIn.Contract.IContract>, which means you need to implement only the members of your specific contract."
+  example:
+  - "The following example shows how to set the lifetime token handle in a contract-to-view adapter on the add-in side of a pipeline.  \n  \n [!code-vb[AddinP2HostSideAdapters#2](../../add/codesnippet/VisualBasic/Calc2HostSideAdapter/Calc2ContractToViewHostSideAdapter.vb#2)]\n [!code-cs[AddinP2HostSideAdapters#2](../../add/codesnippet/CSharp/Calc2HostSideAdapter/Calc2ContractToViewHostSideAdapter.cs#2)]"
   syntax:
     content: 'public class ContractHandle : IDisposable'
   inheritance:
@@ -41,15 +43,18 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public ContractHandle (System.AddIn.Contract.IContract contract);
     parameters:
     - id: contract
       type: System.AddIn.Contract.IContract
-      description: To be added.
+      description: The contract to use in the pipeline.
   overload: System.AddIn.Pipeline.ContractHandle.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    contract is ."
   platform:
   - net-11
   - net-20
@@ -66,18 +71,22 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the instance of the add-in-side adapter when the application domain was created.
+  remarks: "The add-in-side adapters are typed as <xref:System.AddIn.Contract.IContract>.  \n  \n If the application domain was previously created by a user, there is no owner."
   syntax:
     content: public static System.AddIn.Contract.IContract AppDomainOwner (AppDomain domain);
     parameters:
     - id: domain
       type: System.AppDomain
-      description: To be added.
+      description: The application domain to check.
     return:
       type: System.AddIn.Contract.IContract
-      description: To be added.
+      description: An  object that represents the owner of the application domain.
   overload: System.AddIn.Pipeline.ContractHandle.AppDomainOwner*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    domain is ."
   platform:
   - net-11
   - net-20
@@ -94,14 +103,14 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the contract used by a pipeline.
   syntax:
     content: public System.AddIn.Contract.IContract Contract { get; }
     return:
       type: System.AddIn.Contract.IContract
-      description: To be added.
+      description: The contract, which is derived from .
   overload: System.AddIn.Pipeline.ContractHandle.Contract*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -118,21 +127,24 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether an application domain is owned by the specified contract.
   syntax:
     content: public static bool ContractOwnsAppDomain (System.AddIn.Contract.IContract contract, AppDomain domain);
     parameters:
     - id: contract
       type: System.AddIn.Contract.IContract
-      description: To be added.
+      description: The contract to check.
     - id: domain
       type: System.AppDomain
-      description: To be added.
+      description: The application domain to check.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the contract owns the application domain; otherwise, .
   overload: System.AddIn.Pipeline.ContractHandle.ContractOwnsAppDomain*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    contract or domain is ."
   platform:
   - net-11
   - net-20
@@ -149,12 +161,12 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Revokes the lifetime token on a contract, regardless of input.
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.AddIn.Pipeline.ContractHandle.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -171,15 +183,15 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Revokes the lifetime token on the contract regardless of input and optionally releases the managed resources.
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
   overload: System.AddIn.Pipeline.ContractHandle.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -196,12 +208,13 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the resources associated with the  instance.
+  remarks: "This method overrides <xref:System.Object.Finalize%2A?displayProperty=fullName>. Application code should not call this method; an object's Finalize method is automatically invoked during garbage collection, unless finalization by the garbage collector has been disabled by a call to the <xref:System.GC.SuppressFinalize%2A?displayProperty=fullName> method.  \n  \n When called by the garbage collector, this method calls the <xref:System.AddIn.Pipeline.ContractHandle.Dispose%28System.Boolean%29> method."
   syntax:
     content: ~ContractHandle ();
     parameters: []
   overload: System.AddIn.Pipeline.ContractHandle.Finalize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -228,12 +241,6 @@ references:
   name: AppDomainOwner(AppDomain)
   nameWithType: ContractHandle.AppDomainOwner(AppDomain)
   fullName: System.AddIn.Pipeline.ContractHandle.AppDomainOwner(AppDomain)
-- uid: System.AddIn.Contract.IContract
-  parent: System.AddIn.Contract
-  isExternal: false
-  name: IContract
-  nameWithType: IContract
-  fullName: System.AddIn.Contract.IContract
 - uid: System.AppDomain
   parent: System
   isExternal: false
@@ -246,12 +253,6 @@ references:
   name: Contract
   nameWithType: ContractHandle.Contract
   fullName: System.AddIn.Pipeline.ContractHandle.Contract
-- uid: System.AddIn.Contract.IContract
-  parent: System.AddIn.Contract
-  isExternal: false
-  name: IContract
-  nameWithType: IContract
-  fullName: System.AddIn.Contract.IContract
 - uid: System.AddIn.Pipeline.ContractHandle.ContractOwnsAppDomain(System.AddIn.Contract.IContract,System.AppDomain)
   parent: System.AddIn.Pipeline.ContractHandle
   isExternal: false
@@ -264,18 +265,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.AddIn.Contract.IContract
-  parent: System.AddIn.Contract
-  isExternal: false
-  name: IContract
-  nameWithType: IContract
-  fullName: System.AddIn.Contract.IContract
-- uid: System.AppDomain
-  parent: System
-  isExternal: false
-  name: AppDomain
-  nameWithType: AppDomain
-  fullName: System.AppDomain
 - uid: System.AddIn.Pipeline.ContractHandle.Dispose
   parent: System.AddIn.Pipeline.ContractHandle
   isExternal: false
@@ -288,12 +277,6 @@ references:
   name: Dispose(Boolean)
   nameWithType: ContractHandle.Dispose(Boolean)
   fullName: System.AddIn.Pipeline.ContractHandle.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.AddIn.Pipeline.ContractHandle.Finalize
   parent: System.AddIn.Pipeline.ContractHandle
   isExternal: false

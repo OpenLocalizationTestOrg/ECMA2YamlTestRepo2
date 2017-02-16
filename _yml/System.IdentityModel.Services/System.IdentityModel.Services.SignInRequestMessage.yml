@@ -25,8 +25,10 @@ items:
   nameWithType: SignInRequestMessage
   fullName: System.IdentityModel.Services.SignInRequestMessage
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a WS-Federation Sign-In Request message.
+  remarks: "A WS-Federation sign-in message is sent by a relying party (RP) to a security token service (STS) to request a security token. The wa parameter must be set to “wsignout1.0” and the wtrealm parameter should be set to the security realm of the requested resource (this is often the URL of the requested resource). Other optional parameters may also be specified in the request.  \n  \n A <xref:System.IdentityModel.Services.SignOutRequestMessage> message is created by the static methods of the <xref:System.IdentityModel.Services.SignOutRequestMessage> class, for example the <xref:System.IdentityModel.Services.WSFederationMessage.CreateFromUri%2A> method, when the wa parameter is set to “wsignin1.0”, there is no wresult or wresultptr parameter present, and either a wtrealm parameter or a wreply parameter is present.  \n  \n> [!IMPORTANT]\n>  For backward compatibility with Active Directory Federation Services (AD FS) version 1.0, Windows Identity Foundation (WIF) allows either the wtrealm parameter or the wreply parameter to be set (or both) for a sign-in message to be valid; however, the WS-Federation protocol requires that the wtrealm parameter be present in a sign-in request. In most scenarios, you should ensure that the wtrealm parameter is specified.  \n  \n The SignInRequestMessage class exposes several properties that can be used to set or access individual message parameters. These parameters can also be set or accessed through the <xref:System.IdentityModel.Services.FederationMessage.Parameters%2A> dictionary. For example, you can read the wtrealm parameter in the message either through the <xref:System.IdentityModel.Services.SignInRequestMessage.Realm%2A> property or by specifying “wtrealm” as the key to the <xref:System.IdentityModel.Services.FederationMessage.Parameters%2A> dictionary.  \n  \n [!INCLUDE[wif_wsfed_ref](../../add/includes/wif-wsfed-ref-md.md)]"
+  example:
+  - '[!code-cs[WifSignInMessage#2](../../add/codesnippet/CSharp/signinrequestmessage/default.aspx.cs#2)]'
   syntax:
     content: 'public class SignInRequestMessage : System.IdentityModel.Services.WSFederationMessage'
   inheritance:
@@ -68,18 +70,22 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified base URL and wtrealm parameter.
+  remarks: The wa message parameter (the <xref:System.IdentityModel.Services.WSFederationMessage.Action%2A> property) is initialized to “wsignin1.0”.
   syntax:
     content: public SignInRequestMessage (Uri baseUrl, string realm);
     parameters:
     - id: baseUrl
       type: System.Uri
-      description: To be added.
+      description: The base URL to which the sign-in message applies.
     - id: realm
       type: System.String
-      description: To be added.
+      description: The value of the wtrealm message parameter. Sets the <xref:System.IdentityModel.Services.SignInRequestMessage.Realm%2A> property.
   overload: System.IdentityModel.Services.SignInRequestMessage.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    realm is  or an empty string."
   platform:
   - net-11
   - net-20
@@ -96,21 +102,25 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified base URI, wtrealm parameter, and wreply parameter. Supports non-standard message creation for backward compatibility.
+  remarks: "The wa message parameter (the <xref:System.IdentityModel.Services.WSFederationMessage.Action%2A> property) is initialized to “wsignin1.0”.  \n  \n Supports non-standard message creation for backward compatibility. In the typical case, a wtrealm message parameter must be specified. This constructor allows only a wreply message parameter to be specified for backward compatibility with Active Directory Federation Service (AD FS) version 1.0."
   syntax:
     content: public SignInRequestMessage (Uri baseUrl, string realm, string reply);
     parameters:
     - id: baseUrl
       type: System.Uri
-      description: To be added.
+      description: The Base URL to which the sign-in message applies.
     - id: realm
       type: System.String
-      description: To be added.
+      description: The value of the wtrealm message parameter. If not  or empty, sets the <xref:System.IdentityModel.Services.SignInRequestMessage.Realm%2A> property.
     - id: reply
       type: System.String
-      description: To be added.
+      description: The URI to which to reply. (The value of the wreply message parameter.) If not null or empty, sets the <xref:System.IdentityModel.Services.SignInRequestMessage.Reply%2A> property.
   overload: System.IdentityModel.Services.SignInRequestMessage.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: Both realm and reply are  or an empty string.
   platform:
   - net-11
   - net-20
@@ -127,14 +137,18 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the wauth parameter of the message.
+  remarks: "The wauth parameter is like the wst:AuthenticationType element defined in WS-Trust. The value should be set to a string that contains a URI that identifies the type of authentication that is used.  \n  \n The wauth parameter is optional. Set the AuthenticationType property to `null` or an empty string to remove the wauth parameter from the message."
   syntax:
     content: public string AuthenticationType { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The authentication type. This is specified as a URI.
   overload: System.IdentityModel.Services.SignInRequestMessage.AuthenticationType*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An attempt to set a value that is not a valid, absolute URI occurs.
   platform:
   - net-11
   - net-20
@@ -151,14 +165,18 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the wct parameter of the message.
+  remarks: The wct parameter specifies the current time at the instant that the message was created. The wct parameter is optional. Set to the CurrentTime property `null` or an empty string to remove the wct parameter from the message.
   syntax:
     content: public string CurrentTime { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the wct parameter specified as a datetime string in UTC.
   overload: System.IdentityModel.Services.SignInRequestMessage.CurrentTime*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An attempt to set a value that is not a valid datetime string occurs.
   platform:
   - net-11
   - net-20
@@ -175,14 +193,15 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the wfed parameter of the message.
+  remarks: The wfed parameter specifies the federation context for the message. The wfed parameter is optional. Set to the Federation property `null` or an empty string to remove the wfed parameter from the message.
   syntax:
     content: public string Federation { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the wfed parameter. This is specified as a URI.
   overload: System.IdentityModel.Services.SignInRequestMessage.Federation*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -199,14 +218,18 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the wfresh parameter of the message.
+  remarks: The wfresh parameter indicates the maximum age in minutes that the authentication is valid. The wfresh parameter is optional. Set the Freshness property to `null` or an empty string to remove the wfresh parameter from the message.
   syntax:
     content: public string Freshness { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the wfresh parameter. This should be an integer represented as a string. It specifies the maximum age in minutes that the authentication is valid. Zero indicates that the user should be prompted before the token is issued.
   overload: System.IdentityModel.Services.SignInRequestMessage.Freshness*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An attempt to set a value that is not a string representation of an integer.
   platform:
   - net-11
   - net-20
@@ -223,14 +246,15 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the whr parameter of the message.
+  remarks: The whr parameter identifies the security realm of the identity provider to use for the request. It can be specified as the URL of the IP-STS to use or as an identifier that is understood by the receiver of the request. The whr parameter is optional Set the HomeRealm property to `null` or an empty string to remove the whr parameter from the message.
   syntax:
     content: public string HomeRealm { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the whr parameter. This is specified as a URI.
   overload: System.IdentityModel.Services.SignInRequestMessage.HomeRealm*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -247,14 +271,18 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the wp parameter of the message.
+  remarks: Identifies the policy to be used for the request. It typically applies to the action (wa parameter), but may have broader implications. The wp parameter is optional. Set the Policy property to `null` or an empty string to remove the wp parameter from the message.
   syntax:
     content: public string Policy { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the wp parameter. This is specified as a URI.
   overload: System.IdentityModel.Services.SignInRequestMessage.Policy*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An attempt to set a value that is not a valid, absolute URI occurs.
   platform:
   - net-11
   - net-20
@@ -271,14 +299,18 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the wtrealm parameter of the message.
+  remarks: "The wtrealm parameter specifies the security realm to which the requested resource belongs. This is often the URL of the requested resource.  \n  \n> [!IMPORTANT]\n>  For backward compatibility with Active Directory Federation Services (AD FS) version 1.0, Windows Identity Foundation (WIF) allows either the wtrealm parameter or the wreply parameter to be set (or both) for a sign-in message to be valid; however, the WS-Federation protocol requires that the wtrealm parameter be present in a sign-in request. In most scenarios, you should ensure that the wtrealm parameter is specified.  \n  \n Set the Realm property to `null` or an empty string to remove the wtrealm parameter from the message."
   syntax:
     content: public string Realm { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the wtrealm parameter. This is specified as a URI.
   overload: System.IdentityModel.Services.SignInRequestMessage.Realm*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An attempt to set a value that is not a valid, absolute URI occurs.
   platform:
   - net-11
   - net-20
@@ -295,14 +327,18 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the wreply parameter of the message.
+  remarks: "Contains the URI to which responses should be directed. The wtrealm parameter is often used to specify this URI. However, in more complex scenarios, the wtrealm parameter can be used to specify the security realm for the request, for example, the entire web site, and the wreply parameter can be used to specify a specific resource within that realm, for example, a document, page, or endpoint. The wreply parameter is optional. Set the Reply property to `null` or an empty string to remove the wreply parameter from the message.  \n  \n> [!IMPORTANT]\n>  For backward compatibility with Active Directory Federation Services (AD FS) version 1.0, Windows Identity Foundation (WIF) allows either the wtrealm parameter or the wreply parameter to be set (or both) for a sign-in message to be valid; however, the WS-Federation protocol requires that the wtrealm parameter be present in a sign-in request. In most scenarios, you should ensure that the wtrealm parameter is specified."
   syntax:
     content: public string Reply { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the wreply parameter. This is specified as a URI.
   overload: System.IdentityModel.Services.SignInRequestMessage.Reply*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An attempt to set a value that is not a valid, absolute URI occurs.
   platform:
   - net-11
   - net-20
@@ -319,14 +355,15 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the wreq parameter of the message.
+  remarks: "The wreq parameter specifies a token request using either a `<wst:RequestSecurityToken>` element or a full request message as described in WS-Trust. The wreq parameter is optional. Set the Request property to `null` or an empty string to remove the wreq parameter from the message.  \n  \n If the Request property is specified, the <xref:System.IdentityModel.Services.SignInRequestMessage.RequestPtr%2A> property cannot be specified."
   syntax:
     content: public string Request { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the wreq parameter.
   overload: System.IdentityModel.Services.SignInRequestMessage.Request*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -343,14 +380,18 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the wreqptr parameter of the message.
+  remarks: "Specifies a URL that indicates where to find the request expressed as a `<wst:RequestSecurityToken>` element. The wreqptr parameter is optional. Set the RequestPtr property to `null` or an empty string to remove the wreqptr parameter from the message.  \n  \n If the RequestPtr property is specified, the <xref:System.IdentityModel.Services.SignInRequestMessage.Request%2A> property cannot be specified."
   syntax:
     content: public string RequestPtr { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the wreqptr parameter.
   overload: System.IdentityModel.Services.SignInRequestMessage.RequestPtr*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An attempt to set a value that is not a valid, absolute URI occurs.
   platform:
   - net-11
   - net-20
@@ -367,14 +408,15 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a string representation of the URL that corresponds to this message.
+  remarks: The string contains a URL (including query parameters) that is created by serializing the current instance. The <xref:System.IdentityModel.Services.SignInRequestMessage.Write%2A> method is invoked to perform the serialization.
   syntax:
     content: public string RequestUrl { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A URL serialized from the current instance.
   overload: System.IdentityModel.Services.SignInRequestMessage.RequestUrl*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -391,14 +433,18 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the wres parameter of the message.
+  remarks: Specifies the URL for the resource to be accessed. The wres parameter is a legacy parameter. Typically, the wtrealm parameter (the <xref:System.IdentityModel.Services.SignInRequestMessage.Realm%2A> property) is used instead. The wres parameter is optional. Set to the Resource property to `null` or an empty string to remove the wres parameter from the message.
   syntax:
     content: public string Resource { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The value of the wres parameter.
   overload: System.IdentityModel.Services.SignInRequestMessage.Resource*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An attempt to set a value that is not a valid, absolute URI occurs.
   platform:
   - net-11
   - net-20
@@ -415,12 +461,22 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Validates the current instance.
+  remarks: >-
+    > [!IMPORTANT]
+
+    >  For backward compatibility with Active Directory Federation Services (AD FS) version 1.0, Windows Identity Foundation (WIF) allows either the wtrealm parameter or the wreply parameter to be set (or both) for a sign-in message to be valid; however, the WS-Federation protocol requires that the wtrealm parameter be present in a sign-in request. In most scenarios, you should ensure that the wtrealm parameter is specified.
   syntax:
     content: protected override void Validate ();
     parameters: []
   overload: System.IdentityModel.Services.SignInRequestMessage.Validate*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The wa parameter (the <xref:System.IdentityModel.Services.WSFederationMessage.Action%2A> property) is not set to “wsignin1.0”.
+  - type: System.IdentityModel.Services.WSFederationMessageException
+    commentId: T:System.IdentityModel.Services.WSFederationMessageException
+    description: "Neither the wtrealm parameter nor the wreply parameter is present. (The <xref:System.IdentityModel.Services.SignInRequestMessage.Realm%2A> property and the <xref:System.IdentityModel.Services.SignInRequestMessage.Reply%2A> property are  or empty.)  \n  \n -or-  \n  \n Both the wreq parameter and the wreqptr parameter are present. (The <xref:System.IdentityModel.Services.SignInRequestMessage.Request%2A> property and the <xref:System.IdentityModel.Services.SignInRequestMessage.RequestPtr%2A> property are both set.)"
   platform:
   - net-11
   - net-20
@@ -437,15 +493,19 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: To be added.
-  remarks: To be added.
+  summary: Writes this message in query string form to the specified text writer.
+  remarks: This method calls the <xref:System.IdentityModel.Services.SignInRequestMessage.Validate%2A> method before writing the message.
   syntax:
     content: public override void Write (System.IO.TextWriter writer);
     parameters:
     - id: writer
       type: System.IO.TextWriter
-      description: To be added.
+      description: The <xref:System.IO.TextWriter> to which to write the message.
   overload: System.IdentityModel.Services.SignInRequestMessage.Write*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    writer is ."
   platform:
   - net-11
   - net-20
@@ -478,168 +538,78 @@ references:
   name: SignInRequestMessage(Uri,String,String)
   nameWithType: SignInRequestMessage.SignInRequestMessage(Uri,String,String)
   fullName: System.IdentityModel.Services.SignInRequestMessage.SignInRequestMessage(Uri,String,String)
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.AuthenticationType
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: AuthenticationType
   nameWithType: SignInRequestMessage.AuthenticationType
   fullName: System.IdentityModel.Services.SignInRequestMessage.AuthenticationType
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.CurrentTime
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: CurrentTime
   nameWithType: SignInRequestMessage.CurrentTime
   fullName: System.IdentityModel.Services.SignInRequestMessage.CurrentTime
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.Federation
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: Federation
   nameWithType: SignInRequestMessage.Federation
   fullName: System.IdentityModel.Services.SignInRequestMessage.Federation
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.Freshness
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: Freshness
   nameWithType: SignInRequestMessage.Freshness
   fullName: System.IdentityModel.Services.SignInRequestMessage.Freshness
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.HomeRealm
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: HomeRealm
   nameWithType: SignInRequestMessage.HomeRealm
   fullName: System.IdentityModel.Services.SignInRequestMessage.HomeRealm
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.Policy
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: Policy
   nameWithType: SignInRequestMessage.Policy
   fullName: System.IdentityModel.Services.SignInRequestMessage.Policy
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.Realm
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: Realm
   nameWithType: SignInRequestMessage.Realm
   fullName: System.IdentityModel.Services.SignInRequestMessage.Realm
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.Reply
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: Reply
   nameWithType: SignInRequestMessage.Reply
   fullName: System.IdentityModel.Services.SignInRequestMessage.Reply
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.Request
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: Request
   nameWithType: SignInRequestMessage.Request
   fullName: System.IdentityModel.Services.SignInRequestMessage.Request
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.RequestPtr
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: RequestPtr
   nameWithType: SignInRequestMessage.RequestPtr
   fullName: System.IdentityModel.Services.SignInRequestMessage.RequestPtr
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.RequestUrl
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: RequestUrl
   nameWithType: SignInRequestMessage.RequestUrl
   fullName: System.IdentityModel.Services.SignInRequestMessage.RequestUrl
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.Resource
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false
   name: Resource
   nameWithType: SignInRequestMessage.Resource
   fullName: System.IdentityModel.Services.SignInRequestMessage.Resource
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Services.SignInRequestMessage.Validate
   parent: System.IdentityModel.Services.SignInRequestMessage
   isExternal: false

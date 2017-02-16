@@ -39,8 +39,8 @@ items:
   nameWithType: DataAdapter
   fullName: System.Data.Common.DataAdapter
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a set of SQL commands and a database connection that are used to fill the  and update the data source.
+  remarks: "The DataAdapter serves as a bridge between a <xref:System.Data.DataSet> and a data source for retrieving and saving data. The DataAdapter provides this bridge by mapping <xref:System.Data.Common.DataAdapter.Fill%2A>, which changes the data in the <xref:System.Data.DataSet> to match the data in the data source, and <xref:System.Data.IDataAdapter.Update%2A>, which changes the data in the data source to match the data in the <xref:System.Data.DataSet>.  \n  \n If you are connecting to a SQL Server database, you can increase overall performance by using the <xref:System.Data.SqlClient.SqlDataAdapter> along with its associated <xref:System.Data.SqlClient.SqlCommand> and <xref:System.Data.SqlClient.SqlConnection> objects. For OLE DB-supported data sources, use the DataAdapter with its associated <xref:System.Data.OleDb.OleDbCommand> and <xref:System.Data.OleDb.OleDbConnection> objects. For ODBC-supported data sources, use the DataAdapter with its associated <xref:System.Data.Odbc.OdbcCommand> and <xref:System.Data.Odbc.OdbcConnection> objects. For Oracle databases, use the DataAdapter with its associated <xref:System.Data.OracleClient.OracleCommand> and <xref:System.Data.OracleClient.OracleConnection> objects.  \n  \n When an instance of DataAdapter is created, the read/write properties are set to initial values. For a list of these values, see the DataAdapter constructor."
   syntax:
     content: 'public class DataAdapter : System.ComponentModel.Component, System.Data.IDataAdapter'
   inheritance:
@@ -79,12 +79,13 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of a  class.
+  remarks: "When an instance of <xref:System.Data.Common.DataAdapter> is created, the following read/write properties are set to the following initial values.  \n  \n|Properties|Initial value|  \n|----------------|-------------------|  \n|<xref:System.Data.Common.DataAdapter.MissingMappingAction%2A>|`MissingMappingAction.Passthrough`|  \n|<xref:System.Data.Common.DataAdapter.MissingSchemaAction%2A>|`MissingSchemaAction.Add`|  \n|<xref:System.Data.Common.DataAdapter.TableMappings%2A>|An array of <xref:System.Data.Common.DataAdapter.TableMappings%2A> objects.|  \n  \n You can change the value of any of these properties through a separate call to the property."
   syntax:
     content: protected DataAdapter ();
     parameters: []
   overload: System.Data.Common.DataAdapter.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -101,15 +102,16 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of a  class from an existing object of the same type.
+  remarks: This overload of the <xref:System.Data.Common.DataAdapter> constructor is designed for use by a .NET Framework data provider when implementing a similar constructor for use in a clone implementation.
   syntax:
     content: protected DataAdapter (System.Data.Common.DataAdapter from);
     parameters:
     - id: from
       type: System.Data.Common.DataAdapter
-      description: To be added.
+      description: A  object used to create the new .
   overload: System.Data.Common.DataAdapter.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -126,14 +128,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value indicating whether <xref:System.Data.DataRow.AcceptChanges%2A> is called on a  after it is added to the  during any of the **Fill** operations.
+  remarks: If `false`, <xref:System.Data.DataRow.AcceptChanges%2A> is not called, and the newly added rows are treated as inserted rows.
   syntax:
     content: public bool AcceptChangesDuringFill { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if <xref:System.Data.DataRow.AcceptChanges%2A> is called on the ; otherwise . The default is .
   overload: System.Data.Common.DataAdapter.AcceptChangesDuringFill*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -150,14 +153,17 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets whether <xref:System.Data.DataRow.AcceptChanges%2A> is called during a <xref:System.Data.Common.DataAdapter.Update%2A>.
+  remarks: "During a call to the `Update` method of a `DataAdapter`, the database can send data back to your ADO.NET application as output parameters or as the first returned record of a result set. ADO.NET can retrieve these values and update the corresponding columns in the <xref:System.Data.DataRow> being updated. By default, ADO.NET calls the `AcceptChanges` method of the `DataRow` after the update. However, if you want to merge the updated row back into another <xref:System.Data.DataTable>, you may want to preserver the original value of a primary key column. For example, a primary key column corresponding to an automatically incrementing column in the database, such as an identity column, can contain new values that are assigned by the database that do not match the original values assigned in the `DataRow`. By default, `AcceptChanges` is called implicitly after an update, and the original values in the row, which may have been <xref:System.Data.DataColumn.AutoIncrement%2A> values assigned by ADO.NET, are lost. You can preserve the original values in the `DataRow` by preventing `ADO.NET` from calling `AcceptChanges` after it performs an update on a row, by setting the AcceptChangesDuringUpdate property to `false`, which preserves the original values.  \n  \n> [!NOTE]\n>  Setting the `AcceptChangesDuringUpdate` property to `false` applies to all data modifications, not only inserts. If you want to edit or delete rows in the same update, and if you want to suppress the call to `AcceptChanges` only for inserts, then instead of setting `AccceptChangesDuringUpdate` to `false`, use an event handler for the `RowUpdated` event of the `DataAdapter`. In the event handler you can check the <xref:System.Data.Common.RowUpdatedEventArgs.StatementType%2A> to determine if the data modification is an insert, and if `true`, set the <xref:System.Data.Common.RowUpdatedEventArgs.Status%2A> property of the <xref:System.Data.Common.RowUpdatedEventArgs> to <xref:System.Data.UpdateStatus>. For more information and an example, see [Retrieving Identity or Autonumber Values](../Topic/Retrieving%20Identity%20or%20Autonumber%20Values.md)."
+  example:
+  - "This example demonstrates extracting changed rows from a `DataTable` and using a <xref:System.Data.SqlClient.SqlDataAdapter> to update the data source and retrieve a new identity column value. By setting the `AcceptChangesDuringUpdate` property of the <xref:System.Data.SqlClient.SqlDataAdapter> to `false` to preserve the original auto increment value, the new data can then be merged into the original <xref:System.Data.DataTable>, even if the new identity value does not match the original auto increment value in the `DataTable`.  \n  \n [!code-vb[DataWorks SqlClient.AcceptChangesDuringUpdate#1](../../add/codesnippet/VisualBasic/p-system.data.common.dat_7_1.vb)]\n [!code-cs[DataWorks SqlClient.AcceptChangesDuringUpdate#1](../../add/codesnippet/CSharp/p-system.data.common.dat_7_1.cs)]"
   syntax:
     content: public bool AcceptChangesDuringUpdate { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if <xref:System.Data.DataRow.AcceptChanges%2A> is called during an <xref:System.Data.Common.DataAdapter.Update%2A>; otherwise . The default is .
   overload: System.Data.Common.DataAdapter.AcceptChangesDuringUpdate*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -174,15 +180,16 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a copy of this instance of .
+  remarks: "This method is deprecated. The <xref:System.Data.Common.DataAdapter.%23ctor%2A> constructor should be used instead of this method.  \n  \n All the commands, the <xref:System.Data.Common.DataAdapter.TableMappings%2A>, the <xref:System.Data.Common.DataAdapter.MissingSchemaAction%2A>, and the <xref:System.Data.Common.DataAdapter.MissingMappingAction%2A> are cloned. However, the connections for the commands are not copied, but shared. Thus, the cloned <xref:System.Data.Common.DataAdapter> can be used against the same connection as the original."
   syntax:
     content: protected virtual System.Data.Common.DataAdapter CloneInternals ();
     parameters: []
     return:
       type: System.Data.Common.DataAdapter
-      description: To be added.
+      description: The cloned instance of .
   overload: System.Data.Common.DataAdapter.CloneInternals*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -199,14 +206,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that specifies whether to generate an exception when an error is encountered during a row update.
+  remarks: "If `ContinueUpdateOnError` is set to `true`, no exception is thrown when an error occurs during the update of a row. The update of the row is skipped and the error information is placed in the <xref:System.Data.DataRow.RowError%2A> property of the row in error. The <xref:System.Data.Common.DataAdapter> continues to update subsequent rows.  \n  \n If `ContinueUpdateOnError` is set to `false`, an exception is thrown when an error occurs during the update of a row."
   syntax:
     content: public bool ContinueUpdateOnError { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: to continue the update without generating an exception; otherwise . The default is .
   overload: System.Data.Common.DataAdapter.ContinueUpdateOnError*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -223,15 +231,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new .
   syntax:
     content: protected virtual System.Data.Common.DataTableMappingCollection CreateTableMappings ();
     parameters: []
     return:
       type: System.Data.Common.DataTableMappingCollection
-      description: To be added.
+      description: A new table mapping collection.
   overload: System.Data.Common.DataAdapter.CreateTableMappings*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -248,15 +256,16 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the unmanaged resources used by the  and optionally releases the managed resources.
+  remarks: "This method is called by the public <xref:System.IDisposable.Dispose%2A> method and the <xref:System.Object.Finalize%2A> method. `Dispose` invokes the protected `Dispose(Boolean)` method with the `disposing` parameter set to `true`. <xref:System.Object.Finalize%2A> invokes `Dispose` with `disposing` set to `false`.  \n  \n When the `disposing` parameter is `true`, this method releases all resources held by any managed objects that this <xref:System.Data.Common.DataAdapter> references. This method invokes the `Dispose` method of each referenced object."
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
   overload: System.Data.Common.DataAdapter.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -273,18 +282,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds or refreshes rows in the  to match those in the data source.
+  remarks: "The Fill method retrieves rows from the data source using the SELECT statement specified by an associated <xref:System.Data.IDbDataAdapter.SelectCommand%2A> property. The connection object associated with the SELECT statement must be valid, but it does not need to be open. If the connection is closed before Fill is called, it is opened to retrieve data, then closed. If the connection is open before Fill is called, it remains open.  \n  \n The Fill operation then adds the rows to destination <xref:System.Data.DataTable> objects in the <xref:System.Data.DataSet>, creating the <xref:System.Data.DataTable> objects if they do not already exist. When creating <xref:System.Data.DataTable> objects, the Fill operation normally creates only column name metadata. However, if the <xref:System.Data.IDataAdapter.MissingSchemaAction%2A> property is set to `AddWithKey`, appropriate primary keys and constraints are also created.  \n  \n If the `SelectCommand` returns the results of an OUTER JOIN, the `DataAdapter` does not set a <xref:System.Data.DataTable.PrimaryKey%2A> value for the resulting <xref:System.Data.DataTable>. You must explicitly define the primary key to ensure that duplicate rows are resolved correctly. For more information, see [Defining Primary Keys](../Topic/Defining%20Primary%20Keys.md).  \n  \n If the data adapter encounters duplicate columns while populating a <xref:System.Data.DataTable>, it generates names for the subsequent columns, using the pattern \"columnname1\", \"columnname2\", \"columnname3\", and so on. If the incoming data contains unnamed columns, they are placed in the <xref:System.Data.DataSet> according to the pattern \"Column1\", \"Column2\", and so on. When multiple result sets are added to the <xref:System.Data.DataSet> each result set is placed in a separate table. Additional result sets are named by appending integral values to the specified table name (for example, \"Table\", \"Table1\", \"Table2\", and so on). Applications using column and table names should ensure that conflicts with these naming patterns does not occur.  \n  \n When the SELECT statement used to populate the <xref:System.Data.DataSet> returns multiple results, such as a batch SQL statements, if one of the results contains an error, all subsequent results are skipped and not added to the <xref:System.Data.DataSet>.  \n  \n You can use the Fill method multiple times on the same <xref:System.Data.DataTable>. If a primary key exists, incoming rows are merged with matching rows that already exist. If no primary key exists, incoming rows are appended to the <xref:System.Data.DataTable>.  \n  \n> [!NOTE]\n>  When handling batch SQL statements that return multiple results, the implementation of <xref:System.Data.Common.DbDataAdapter.FillSchema%2A> for the .NET Framework Data Provider for OLE DB retrieves schema information for only the first result. To retrieve schema information for multiple results, use <xref:System.Data.Common.DbDataAdapter.Fill%2A> with the <xref:System.Data.MissingSchemaAction> set to `AddWithKey`."
   syntax:
     content: public virtual int Fill (System.Data.DataSet dataSet);
     parameters:
     - id: dataSet
       type: System.Data.DataSet
-      description: To be added.
+      description: A  to fill with records and, if necessary, schema.
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of rows successfully added to or refreshed in the . This does not include rows affected by statements that do not return rows.
   overload: System.Data.Common.DataAdapter.Fill*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -301,21 +311,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds or refreshes rows in the  to match those in the data source using the  name and the specified .
+  remarks: See the remarks for `System.Data.Common.DataAdapter.Fill(System.Data.DataSet)` for additional information.
   syntax:
     content: protected virtual int Fill (System.Data.DataTable dataTable, System.Data.IDataReader dataReader);
     parameters:
     - id: dataTable
       type: System.Data.DataTable
-      description: To be added.
+      description: A  to fill with records.
     - id: dataReader
       type: System.Data.IDataReader
-      description: To be added.
+      description: An instance of .
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of rows successfully added to or refreshed in the . This does not include rows affected by statements that do not return rows.
   overload: System.Data.Common.DataAdapter.Fill*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -332,27 +343,28 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds or refreshes rows in a specified range in the collection of  objects to match those in the data source.
+  remarks: See the remarks for `System.Data.Common.DataAdapter.Fill(System.Data.DataSet)` for additional information.
   syntax:
     content: protected virtual int Fill (System.Data.DataTable[] dataTables, System.Data.IDataReader dataReader, int startRecord, int maxRecords);
     parameters:
     - id: dataTables
       type: System.Data.DataTable[]
-      description: To be added.
+      description: A collection of  objects to fill with records.
     - id: dataReader
       type: System.Data.IDataReader
-      description: To be added.
+      description: An instance of .
     - id: startRecord
       type: System.Int32
-      description: To be added.
+      description: The zero-based index of the starting record.
     - id: maxRecords
       type: System.Int32
-      description: To be added.
+      description: An integer indicating the maximum number of records.
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of rows successfully added to or refreshed in the . This does not include rows affected by statements that do not return rows.
   overload: System.Data.Common.DataAdapter.Fill*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -369,30 +381,31 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds or refreshes rows in a specified range in the  to match those in the data source using the  and  names.
+  remarks: See the remarks for `System.Data.Common.DataAdapter.Fill(System.Data.DataSet)` for additional information.
   syntax:
     content: protected virtual int Fill (System.Data.DataSet dataSet, string srcTable, System.Data.IDataReader dataReader, int startRecord, int maxRecords);
     parameters:
     - id: dataSet
       type: System.Data.DataSet
-      description: To be added.
+      description: A  to fill with records.
     - id: srcTable
       type: System.String
-      description: To be added.
+      description: A string indicating the name of the source table.
     - id: dataReader
       type: System.Data.IDataReader
-      description: To be added.
+      description: An instance of .
     - id: startRecord
       type: System.Int32
-      description: To be added.
+      description: The zero-based index of the starting record.
     - id: maxRecords
       type: System.Int32
-      description: To be added.
+      description: An integer indicating the maximum number of records.
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of rows successfully added to or refreshed in the . This does not include rows affected by statements that do not return rows.
   overload: System.Data.Common.DataAdapter.Fill*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -409,13 +422,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Returned when an error occurs during a fill operation.
+  remarks: "The **FillError** event allows a user to determine whether or not the fill operation should continue after the error occurs. Examples of when the **FillError** event might occur are:  \n  \n-   The data being added to a `DataSet` cannot be converted to a common language runtime type without losing precision.  \n  \n-   The row being added contains data that violates a Constraint that must be enforced on a `DataColumn` in the `DataSet`."
   syntax:
     content: public event System.Data.FillErrorEventHandler FillError;
     return:
       type: System.Data.FillErrorEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -432,14 +446,14 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the  that determines how the adapter fills the  from the .
   syntax:
     content: public System.Data.LoadOption FillLoadOption { get; set; }
     return:
       type: System.Data.LoadOption
-      description: To be added.
+      description: A  value.
   overload: System.Data.Common.DataAdapter.FillLoadOption*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -456,21 +470,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a  to the specified  and configures the schema to match that in the data source based on the specified .
+  remarks: "The FillSchema method retrieves the schema from the data source using the <xref:System.Data.IDbDataAdapter.SelectCommand%2A>. The connection object associated with the <xref:System.Data.IDbDataAdapter.SelectCommand%2A> must be valid, but it does not need to be open. If the connection is closed before FillSchema is called, it is opened to retrieve data and then closed. If the connection is open before FillSchema is called, it remains open.  \n  \n A FillSchema operation adds a <xref:System.Data.DataTable> to the destination <xref:System.Data.DataSet>. It then adds columns to the <xref:System.Data.DataColumnCollection> of the <xref:System.Data.DataTable>, and configures the following <xref:System.Data.DataColumn> properties if they exist at the data source:  \n  \n-   <xref:System.Data.DataColumn.AllowDBNull%2A>  \n  \n-   <xref:System.Data.DataColumn.AutoIncrement%2A>. You must set <xref:System.Data.DataColumn.AutoIncrementStep%2A> and <xref:System.Data.DataColumn.AutoIncrementSeed%2A> separately.  \n  \n-   <xref:System.Data.DataColumn.MaxLength%2A>  \n  \n-   <xref:System.Data.DataColumn.ReadOnly%2A>  \n  \n-   <xref:System.Data.DataColumn.Unique%2A>  \n  \n FillSchema also configures the <xref:System.Data.DataTable.PrimaryKey%2A> and <xref:System.Data.DataTable.Constraints%2A> properties according to the following rules:  \n  \n-   If one or more primary key columns are returned by the <xref:System.Data.IDbDataAdapter.SelectCommand%2A>, they are used as the primary key columns for the <xref:System.Data.DataTable>.  \n  \n-   If no primary key columns are returned but unique columns are, the unique columns are used as the primary key if, and only if, all the unique columns are nonnullable. If any of the columns are nullable, a <xref:System.Data.UniqueConstraint> is added to the <xref:System.Data.ConstraintCollection>, but the <xref:System.Data.DataTable.PrimaryKey%2A> property is not set.  \n  \n-   If both primary key columns and unique columns are returned, the primary key columns are used as the primary key columns for the <xref:System.Data.DataTable>.  \n  \n> [!NOTE]\n>  The underlying data store may allow column attributes that are not supported in a <xref:System.Data.DataColumn>, which causes some column attributes to not translate correctly. For example, [!INCLUDE[ssNoVersion](../../add/includes/ssnoversion-md.md)] allows an identity column with a data type of tinyint whereas a <xref:System.Data.DataColumn> only allows Int16, Int32, and Int64 to have the <xref:System.Data.DataColumn.AutoIncrement%2A> property set. `FillSchema` silently ignores cases where the <xref:System.Data.DataColumn> cannot accurately mirror the data source and throws no exception.  \n  \n Note that primary keys and unique constraints are added to the <xref:System.Data.ConstraintCollection> according to the preceding rules, but other constraint types are not added.  \n  \n If a unique clustered index is defined on a column or columns in a SQL Server table and the primary key constraint is defined on a separate set of columns, then the names of the columns in the clustered index will be returned. To return the name or names of the primary key columns, use a query hint with the SELECT statement that specifies the name of the primary key index. For more information about specifying query hints, see [Query Hint (Transact-SQL)](http://msdn.microsoft.com/library/ms181714.aspx).  \n  \n If the <xref:System.Data.Common.DataAdapter> encounters duplicate columns while populating a <xref:System.Data.DataTable>, it generates names for the subsequent columns, using the pattern \"*columnname*1\", \"*columnname*2\", \"*columnname*3\", and so on. If the incoming data contains unnamed columns, they are placed in the <xref:System.Data.DataSet> according to the pattern \"Column1\", \"Column2\", and so on. When multiple result sets are added to the <xref:System.Data.DataSet> each result set is placed in a separate table. Additional result sets are named by appending integral values to the specified table name (for example, \"Table\", \"Table1\", \"Table2\", and so on). Applications using column and table names should ensure that conflicts with these naming patterns does not occur.  \n  \n FillSchema does not return any rows. Use the <xref:System.Data.Common.DataAdapter.Fill%2A> method to add rows to a <xref:System.Data.DataTable>.  \n  \n> [!NOTE]\n>  When handling batch SQL statements that return multiple results, the implementation of <xref:System.Data.Common.DbDataAdapter.FillSchema%2A> for the .NET Framework Data Provider for OLE DB retrieves schema information for only the first result. To retrieve schema information for multiple results, use <xref:System.Data.Common.DbDataAdapter.Fill%2A> with the <xref:System.Data.MissingSchemaAction> set to `AddWithKey`."
   syntax:
     content: public virtual System.Data.DataTable[] FillSchema (System.Data.DataSet dataSet, System.Data.SchemaType schemaType);
     parameters:
     - id: dataSet
       type: System.Data.DataSet
-      description: To be added.
+      description: The  to be filled with the schema from the data source.
     - id: schemaType
       type: System.Data.SchemaType
-      description: To be added.
+      description: One of the  values.
     return:
       type: System.Data.DataTable[]
-      description: To be added.
+      description: A  object that contains schema information returned from the data source.
   overload: System.Data.Common.DataAdapter.FillSchema*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -487,24 +502,24 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a  to the specified .
   syntax:
     content: protected virtual System.Data.DataTable FillSchema (System.Data.DataTable dataTable, System.Data.SchemaType schemaType, System.Data.IDataReader dataReader);
     parameters:
     - id: dataTable
       type: System.Data.DataTable
-      description: To be added.
+      description: The  to be filled from the .
     - id: schemaType
       type: System.Data.SchemaType
-      description: To be added.
+      description: One of the  values.
     - id: dataReader
       type: System.Data.IDataReader
-      description: To be added.
+      description: The  to be used as the data source when filling the .
     return:
       type: System.Data.DataTable
-      description: To be added.
+      description: A  object that contains schema information returned from the data source.
   overload: System.Data.Common.DataAdapter.FillSchema*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -521,27 +536,27 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a  to the specified .
   syntax:
     content: protected virtual System.Data.DataTable[] FillSchema (System.Data.DataSet dataSet, System.Data.SchemaType schemaType, string srcTable, System.Data.IDataReader dataReader);
     parameters:
     - id: dataSet
       type: System.Data.DataSet
-      description: To be added.
+      description: The  to be filled from the .
     - id: schemaType
       type: System.Data.SchemaType
-      description: To be added.
+      description: One of the  values.
     - id: srcTable
       type: System.String
-      description: To be added.
+      description: The name of the source table to use for table mapping.
     - id: dataReader
       type: System.Data.IDataReader
-      description: To be added.
+      description: The  to be used as the data source when filling the .
     return:
       type: System.Data.DataTable[]
-      description: To be added.
+      description: A reference to a collection of  objects that were added to the .
   overload: System.Data.Common.DataAdapter.FillSchema*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -558,15 +573,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the parameters set by the user when executing an SQL SELECT statement.
   syntax:
     content: public virtual System.Data.IDataParameter[] GetFillParameters ();
     parameters: []
     return:
       type: System.Data.IDataParameter[]
-      description: To be added.
+      description: An array of  objects that contains the parameters set by the user.
   overload: System.Data.Common.DataAdapter.GetFillParameters*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -583,15 +598,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates whether a  has been created.
   syntax:
     content: protected bool HasTableMappings ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if a  has been created; otherwise .
   overload: System.Data.Common.DataAdapter.HasTableMappings*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -608,14 +623,20 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines the action to take when incoming data does not have a matching table or column.
+  remarks: The <xref:System.Data.Common.DataAdapter.TableMappings%2A> property provides the master mapping between the returned records and the <xref:System.Data.DataSet>.
+  example:
+  - "The following example creates a derived class, <xref:System.Data.OleDb.OleDbDataAdapter> and sets some of its properties.  \n  \n [!code-vb[Classic WebData DataAdapter.MissingMappingAction Example#1](../../add/codesnippet/VisualBasic/p-system.data.common.dat_4_1.vb)]\n [!code-cs[Classic WebData DataAdapter.MissingMappingAction Example#1](../../add/codesnippet/CSharp/p-system.data.common.dat_4_1.cs)]"
   syntax:
     content: public System.Data.MissingMappingAction MissingMappingAction { get; set; }
     return:
       type: System.Data.MissingMappingAction
-      description: To be added.
+      description: One of the  values. The default is .
   overload: System.Data.Common.DataAdapter.MissingMappingAction*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The value set is not one of the  values.
   platform:
   - net-11
   - net-20
@@ -632,14 +653,20 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines the action to take when existing  schema does not match incoming data.
+  remarks: ''
+  example:
+  - "The following example creates a derived class, <xref:System.Data.OleDb.OleDbDataAdapter> and sets some of its properties.  \n  \n [!code-vb[Classic WebData DataAdapter.MissingMappingAction Example#1](../../add/codesnippet/VisualBasic/p-system.data.common.dat_9_1.vb)]\n [!code-cs[Classic WebData DataAdapter.MissingMappingAction Example#1](../../add/codesnippet/CSharp/p-system.data.common.dat_9_1.cs)]"
   syntax:
     content: public System.Data.MissingSchemaAction MissingSchemaAction { get; set; }
     return:
       type: System.Data.MissingSchemaAction
-      description: To be added.
+      description: One of the  values. The default is .
   overload: System.Data.Common.DataAdapter.MissingSchemaAction*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The value set is not one of the  values.
   platform:
   - net-11
   - net-20
@@ -656,15 +683,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Invoked when an error occurs during a .
   syntax:
     content: protected virtual void OnFillError (System.Data.FillErrorEventArgs value);
     parameters:
     - id: value
       type: System.Data.FillErrorEventArgs
-      description: To be added.
+      description: A  object.
   overload: System.Data.Common.DataAdapter.OnFillError*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -681,12 +708,12 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Resets <xref:System.Data.Common.DataAdapter.FillLoadOption%2A> to its default state and causes <xref:System.Data.Common.DataAdapter.Fill%2A?displayProperty=fullName> to honor <xref:System.Data.Common.DataAdapter.AcceptChangesDuringFill%2A>.
   syntax:
     content: public void ResetFillLoadOption ();
     parameters: []
   overload: System.Data.Common.DataAdapter.ResetFillLoadOption*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -703,14 +730,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets whether the  method should return provider-specific values or common CLS-compliant values.
+  remarks: The default value is `false`.
   syntax:
     content: public virtual bool ReturnProviderSpecificTypes { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  method should return provider-specific values; otherwise  to return common CLS-compliant values.
   overload: System.Data.Common.DataAdapter.ReturnProviderSpecificTypes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -727,15 +755,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the <xref:System.Data.Common.DataAdapter.AcceptChangesDuringFill%2A> property should be persisted.
   syntax:
     content: public virtual bool ShouldSerializeAcceptChangesDuringFill ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Data.Common.DataAdapter.AcceptChangesDuringFill%2A> property is persisted; otherwise .
   overload: System.Data.Common.DataAdapter.ShouldSerializeAcceptChangesDuringFill*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -752,15 +780,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether the <xref:System.Data.Common.DataAdapter.FillLoadOption%2A> property should be persisted.
   syntax:
     content: public virtual bool ShouldSerializeFillLoadOption ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.Data.Common.DataAdapter.FillLoadOption%2A> property is persisted; otherwise .
   overload: System.Data.Common.DataAdapter.ShouldSerializeFillLoadOption*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -777,15 +805,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether one or more  objects exist and they should be persisted.
   syntax:
     content: protected virtual bool ShouldSerializeTableMappings ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if one or more  objects exist; otherwise .
   overload: System.Data.Common.DataAdapter.ShouldSerializeTableMappings*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -803,14 +831,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Indicates how a source table is mapped to a dataset table.
+  remarks: "This member is an explicit interface member implementation. It can be used only when the <xref:System.Data.Common.DataAdapter> instance is cast to an <xref:System.Data.IDataAdapter> interface.  \n  \n Fore more information, see <xref:System.Data.IDataAdapter.TableMappings%2A>."
   syntax:
     content: System.Data.ITableMappingCollection System.Data.IDataAdapter.TableMappings { get; }
     return:
       type: System.Data.ITableMappingCollection
-      description: To be added.
+      description: A collection that provides the master mapping between the returned records and the . The default value is an empty collection.
   overload: System.Data.Common.DataAdapter.System#Data#IDataAdapter#TableMappings*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -827,14 +856,17 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection that provides the master mapping between a source table and a .
+  remarks: When reconciling changes, the <xref:System.Data.Common.DataAdapter> uses the <xref:System.Data.Common.DataTableMappingCollection> collection to associate the column names used by the data source with the column names used by the <xref:System.Data.DataSet>.
+  example:
+  - "The following example uses a derived class, <xref:System.Data.OleDb.OleDbDataAdapter>, to add <xref:System.Data.Common.DataTableMapping> objects to its TableMappings collection and display a list of those mapped source tables. This example assumes that an <xref:System.Data.OleDb.OleDbDataAdapter> has already been created.  \n  \n [!code-vb[Classic WebData DataAdapter.TableMappings Example#1](../../add/codesnippet/VisualBasic/p-system.data.common.dat_14_1.vb)]\n [!code-cs[Classic WebData DataAdapter.TableMappings Example#1](../../add/codesnippet/CSharp/p-system.data.common.dat_14_1.cs)]"
   syntax:
     content: public System.Data.Common.DataTableMappingCollection TableMappings { get; }
     return:
       type: System.Data.Common.DataTableMappingCollection
-      description: To be added.
+      description: A collection that provides the master mapping between the returned records and the . The default value is an empty collection.
   overload: System.Data.Common.DataAdapter.TableMappings*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -851,18 +883,27 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.Common
-  summary: To be added.
-  remarks: To be added.
+  summary: Calls the respective INSERT, UPDATE, or DELETE statements for each inserted, updated, or deleted row in the specified  from a  named "Table."
+  remarks: "The update is performed on a by-row basis. For every inserted, modified, and deleted row, the Update method determines the type of change that has been performed on it (Insert, Update or Delete). Depending on the type of change, the `Insert`, `Update,` or `Delete` command template executes to propagate the modified row to the data source. When an application calls the Update method, the <xref:System.Data.Common.DataAdapter> examines the <xref:System.Data.DataRow.RowState%2A> property, and executes the required INSERT, UPDATE, or DELETE statements iteratively for each row, based on the order of the indexes configured in the <xref:System.Data.DataSet>. For example, Update might execute a DELETE statement, followed by an INSERT statement, and then another DELETE statement, due to the ordering of the rows in the <xref:System.Data.DataTable>.  \n  \n It should be noted that these statements are not performed as a batch process; each row is updated individually. An application can call the <xref:System.Data.DataSet.GetChanges%2A> method in situations where you must control the sequence of statement types (for example, INSERT before UPDATE). For more information, see [Updating Data Sources with DataAdapters](../Topic/Updating%20Data%20Sources%20with%20DataAdapters.md).  \n  \n If INSERT, UPDATE, or DELETE statements have not been specified, the Update method generates an exception. However, you can create a <xref:System.Data.SqlClient.SqlCommandBuilder> or <xref:System.Data.OleDb.OleDbCommandBuilder> object to automatically generate SQL statements for single-table updates if you set the `SelectCommand` property of a .NET Framework data provider. Then, any additional SQL statements that you do not set are generated by the **CommandBuilder**. This generation logic requires key column information to be present in the <xref:System.Data.DataSet>. For more information see [Generating Commands with CommandBuilders](../Topic/Generating%20Commands%20with%20CommandBuilders.md).  \n  \n The Update method retrieves rows from the table listed in the first mapping before performing an update. The Update then refreshes the row using the value of the <xref:System.Data.IDbCommand.UpdatedRowSource%2A> property. Any additional rows returned are ignored.  \n  \n After any data is loaded back into the <xref:System.Data.DataSet>, the <xref:System.Data.Common.DbDataAdapter.OnRowUpdated%2A> event is raised, allowing the user to inspect the reconciled <xref:System.Data.DataSet> row and any output parameters returned by the command. After a row updates successfully, the changes to that row are accepted.  \n  \n When using Update, the order of execution is as follows:  \n  \n1.  The values in the <xref:System.Data.DataRow> are moved to the parameter values.  \n  \n2.  The <xref:System.Data.Common.DbDataAdapter.OnRowUpdating%2A> event is raised.  \n  \n3.  The command executes.  \n  \n4.  If the command is set to `FirstReturnedRecord`, then the first returned result is placed in the <xref:System.Data.DataRow>.  \n  \n5.  If there are output parameters, they are placed in the <xref:System.Data.DataRow>.  \n  \n6.  The <xref:System.Data.Common.DbDataAdapter.OnRowUpdated%2A> event is raised.  \n  \n7.  <xref:System.Data.DataRow.AcceptChanges%2A?displayProperty=fullName> is called. This will raise both the <xref:System.Data.DataTable.RowChanging?displayProperty=fullName> and <xref:System.Data.DataTable.RowChanged?displayProperty=fullName> events for the updated <xref:System.Data.DataRow>.  \n  \n Each command associated with the <xref:System.Data.Common.DataAdapter> usually has a parameters collection associated with it. Parameters are mapped to the current row through the `SourceColumn` and `SourceVersion` properties of a.NET data provider's `Parameter` class. `SourceColumn` refers to a <xref:System.Data.DataTable> column that the <xref:System.Data.Common.DataAdapter> references to obtain parameter values for the current row.  \n  \n `SourceColumn` refers to the unmapped column name before any table mappings have been applied. If `SourceColumn` refers to a nonexistent column, the action taken depends on one of the following <xref:System.Data.MissingMappingAction> values.  \n  \n|Enumeration value|Action taken|  \n|-----------------------|------------------|  \n|`MissingMappingAction.Passthrough`|Use the source column names and table names in the <xref:System.Data.DataSet> if no mapping is present.|  \n|`MissingMappingAction.Ignore`|A <xref:System.SystemException> is generated. When the mappings are explicitly set, a missing mapping for an input parameter is usually the result of an error.|  \n|`MissingMappingAction.Error`|A <xref:System.SystemException> is generated.|  \n  \n The `SourceColumn` property is also used to map the value for output or input/output parameters back to the `DataSet`. An exception is generated if it refers to a nonexistent column.  \n  \n The `SourceVersion` property of a .NET data provider's `Parameter` class determines whether to use the Original, Current, or Proposed version of the column value. This capability is often used to include original values in the WHERE clause of an UPDATE statement to check for optimistic concurrency violations.  \n  \n Calling the <xref:System.Data.DataSet.AcceptChanges%2A> method or <xref:System.Data.DataTable.AcceptChanges%2A> method will commit all changes in the <xref:System.Data.DataSet> or <xref:System.Data.DataTable>. If either of these methods are called before the <xref:System.Data.Common.DbDataAdapter.Update%2A> method is called, no changes will be committed when the <xref:System.Data.Common.DbDataAdapter.Update%2A> method is called, unless further changes have been made since <xref:System.Data.DataSet.AcceptChanges%2A> or <xref:System.Data.DataTable.AcceptChanges%2A> was called.  \n  \n> [!NOTE]\n>  If an error occurs while updating a row, an exception is thrown and execution of the update is discontinued. To continue the update operation without generating exceptions when an error is encountered, set the <xref:System.Data.Common.DataAdapter.ContinueUpdateOnError%2A> property to `true` before calling <xref:System.Data.Common.DbDataAdapter.Update%2A>. You may also respond to errors on a per-row basis within the `RowUpdated` event of a DataAdapter. To continue the update operation without generating an exception within the `RowUpdated` event, set the <xref:System.Data.Common.RowUpdatedEventArgs.Status%2A> property of the <xref:System.Data.Common.RowUpdatedEventArgs> to <xref:System.Data.UpdateStatus>.  \n>   \n>  For every column that you propagate to the data source onUpdate, a parameter should be added to the `InsertCommand`, `UpdateCommand`, or `DeleteCommand`. The `SourceColumn` property of the parameter should be set to the name of the column. This setting indicates that the value of the parameter is not set manually, but is taken from the particular column in the currently processed row."
+  example:
+  - "The following example uses the derived class, <xref:System.Data.OleDb.OleDbDataAdapter>, to Update the data source.  \n  \n [!code-cs[Classic WebData DataAdapter.IDataAdapter.Update Example#1](../../add/codesnippet/CSharp/m-system.data.common.dat_26_1.cs)]\n [!code-vb[Classic WebData DataAdapter.IDataAdapter.Update Example#1](../../add/codesnippet/VisualBasic/m-system.data.common.dat_26_1.vb)]"
   syntax:
     content: public virtual int Update (System.Data.DataSet dataSet);
     parameters:
     - id: dataSet
       type: System.Data.DataSet
-      description: To be added.
+      description: The  used to update the data source.
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of rows successfully updated from the .
   overload: System.Data.Common.DataAdapter.Update*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The source table is invalid.
+  - type: System.Data.DBConcurrencyException
+    commentId: T:System.Data.DBConcurrencyException
+    description: An attempt to execute an INSERT, UPDATE, or DELETE statement resulted in zero records affected.
   platform:
   - net-11
   - net-20
@@ -907,36 +948,18 @@ references:
   name: AcceptChangesDuringUpdate
   nameWithType: DataAdapter.AcceptChangesDuringUpdate
   fullName: System.Data.Common.DataAdapter.AcceptChangesDuringUpdate
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Common.DataAdapter.CloneInternals
   parent: System.Data.Common.DataAdapter
   isExternal: false
   name: CloneInternals()
   nameWithType: DataAdapter.CloneInternals()
   fullName: System.Data.Common.DataAdapter.CloneInternals()
-- uid: System.Data.Common.DataAdapter
-  parent: System.Data.Common
-  isExternal: false
-  name: DataAdapter
-  nameWithType: DataAdapter
-  fullName: System.Data.Common.DataAdapter
 - uid: System.Data.Common.DataAdapter.ContinueUpdateOnError
   parent: System.Data.Common.DataAdapter
   isExternal: false
   name: ContinueUpdateOnError
   nameWithType: DataAdapter.ContinueUpdateOnError
   fullName: System.Data.Common.DataAdapter.ContinueUpdateOnError
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Common.DataAdapter.CreateTableMappings
   parent: System.Data.Common.DataAdapter
   isExternal: false
@@ -955,12 +978,6 @@ references:
   name: Dispose(Boolean)
   nameWithType: DataAdapter.Dispose(Boolean)
   fullName: System.Data.Common.DataAdapter.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Common.DataAdapter.Fill(System.Data.DataSet)
   parent: System.Data.Common.DataAdapter
   isExternal: false
@@ -985,12 +1002,6 @@ references:
   name: Fill(DataTable,IDataReader)
   nameWithType: DataAdapter.Fill(DataTable,IDataReader)
   fullName: System.Data.Common.DataAdapter.Fill(DataTable,IDataReader)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.DataTable
   parent: System.Data
   isExternal: false
@@ -1009,78 +1020,32 @@ references:
   name: Fill(DataTable[],IDataReader,Int32,Int32)
   nameWithType: DataAdapter.Fill(DataTable[],IDataReader,Int32,Int32)
   fullName: System.Data.Common.DataAdapter.Fill(DataTable[],IDataReader,Int32,Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.DataTable
+- uid: System.Data.DataTable[]
   parent: System.Data
   isExternal: false
   name: DataTable
   nameWithType: DataTable
   fullName: System.Data.DataTable[]
-- uid: System.Data.IDataReader
-  parent: System.Data
-  isExternal: false
-  name: IDataReader
-  nameWithType: IDataReader
-  fullName: System.Data.IDataReader
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
+  spec.csharp:
+  - uid: System.Data.DataTable
+    name: DataTable
+    nameWithType: DataTable
+    fullName: DataTable[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Data.Common.DataAdapter.Fill(System.Data.DataSet,System.String,System.Data.IDataReader,System.Int32,System.Int32)
   parent: System.Data.Common.DataAdapter
   isExternal: false
   name: Fill(DataSet,String,IDataReader,Int32,Int32)
   nameWithType: DataAdapter.Fill(DataSet,String,IDataReader,Int32,Int32)
   fullName: System.Data.Common.DataAdapter.Fill(DataSet,String,IDataReader,Int32,Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.DataSet
-  parent: System.Data
-  isExternal: false
-  name: DataSet
-  nameWithType: DataSet
-  fullName: System.Data.DataSet
 - uid: System.String
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Data.IDataReader
-  parent: System.Data
-  isExternal: false
-  name: IDataReader
-  nameWithType: IDataReader
-  fullName: System.Data.IDataReader
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Data.Common.DataAdapter.FillError
   parent: System.Data.Common.DataAdapter
   isExternal: false
@@ -1111,18 +1076,6 @@ references:
   name: FillSchema(DataSet,SchemaType)
   nameWithType: DataAdapter.FillSchema(DataSet,SchemaType)
   fullName: System.Data.Common.DataAdapter.FillSchema(DataSet,SchemaType)
-- uid: System.Data.DataTable
-  parent: System.Data
-  isExternal: false
-  name: DataTable
-  nameWithType: DataTable
-  fullName: System.Data.DataTable[]
-- uid: System.Data.DataSet
-  parent: System.Data
-  isExternal: false
-  name: DataSet
-  nameWithType: DataSet
-  fullName: System.Data.DataSet
 - uid: System.Data.SchemaType
   parent: System.Data
   isExternal: false
@@ -1135,90 +1088,38 @@ references:
   name: FillSchema(DataTable,SchemaType,IDataReader)
   nameWithType: DataAdapter.FillSchema(DataTable,SchemaType,IDataReader)
   fullName: System.Data.Common.DataAdapter.FillSchema(DataTable,SchemaType,IDataReader)
-- uid: System.Data.DataTable
-  parent: System.Data
-  isExternal: false
-  name: DataTable
-  nameWithType: DataTable
-  fullName: System.Data.DataTable
-- uid: System.Data.DataTable
-  parent: System.Data
-  isExternal: false
-  name: DataTable
-  nameWithType: DataTable
-  fullName: System.Data.DataTable
-- uid: System.Data.SchemaType
-  parent: System.Data
-  isExternal: false
-  name: SchemaType
-  nameWithType: SchemaType
-  fullName: System.Data.SchemaType
-- uid: System.Data.IDataReader
-  parent: System.Data
-  isExternal: false
-  name: IDataReader
-  nameWithType: IDataReader
-  fullName: System.Data.IDataReader
 - uid: System.Data.Common.DataAdapter.FillSchema(System.Data.DataSet,System.Data.SchemaType,System.String,System.Data.IDataReader)
   parent: System.Data.Common.DataAdapter
   isExternal: false
   name: FillSchema(DataSet,SchemaType,String,IDataReader)
   nameWithType: DataAdapter.FillSchema(DataSet,SchemaType,String,IDataReader)
   fullName: System.Data.Common.DataAdapter.FillSchema(DataSet,SchemaType,String,IDataReader)
-- uid: System.Data.DataTable
-  parent: System.Data
-  isExternal: false
-  name: DataTable
-  nameWithType: DataTable
-  fullName: System.Data.DataTable[]
-- uid: System.Data.DataSet
-  parent: System.Data
-  isExternal: false
-  name: DataSet
-  nameWithType: DataSet
-  fullName: System.Data.DataSet
-- uid: System.Data.SchemaType
-  parent: System.Data
-  isExternal: false
-  name: SchemaType
-  nameWithType: SchemaType
-  fullName: System.Data.SchemaType
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Data.IDataReader
-  parent: System.Data
-  isExternal: false
-  name: IDataReader
-  nameWithType: IDataReader
-  fullName: System.Data.IDataReader
 - uid: System.Data.Common.DataAdapter.GetFillParameters
   parent: System.Data.Common.DataAdapter
   isExternal: false
   name: GetFillParameters()
   nameWithType: DataAdapter.GetFillParameters()
   fullName: System.Data.Common.DataAdapter.GetFillParameters()
-- uid: System.Data.IDataParameter
+- uid: System.Data.IDataParameter[]
   parent: System.Data
   isExternal: false
   name: IDataParameter
   nameWithType: IDataParameter
   fullName: System.Data.IDataParameter[]
+  spec.csharp:
+  - uid: System.Data.IDataParameter
+    name: IDataParameter
+    nameWithType: IDataParameter
+    fullName: IDataParameter[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Data.Common.DataAdapter.HasTableMappings
   parent: System.Data.Common.DataAdapter
   isExternal: false
   name: HasTableMappings()
   nameWithType: DataAdapter.HasTableMappings()
   fullName: System.Data.Common.DataAdapter.HasTableMappings()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Common.DataAdapter.MissingMappingAction
   parent: System.Data.Common.DataAdapter
   isExternal: false
@@ -1267,48 +1168,24 @@ references:
   name: ReturnProviderSpecificTypes
   nameWithType: DataAdapter.ReturnProviderSpecificTypes
   fullName: System.Data.Common.DataAdapter.ReturnProviderSpecificTypes
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Common.DataAdapter.ShouldSerializeAcceptChangesDuringFill
   parent: System.Data.Common.DataAdapter
   isExternal: false
   name: ShouldSerializeAcceptChangesDuringFill()
   nameWithType: DataAdapter.ShouldSerializeAcceptChangesDuringFill()
   fullName: System.Data.Common.DataAdapter.ShouldSerializeAcceptChangesDuringFill()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Common.DataAdapter.ShouldSerializeFillLoadOption
   parent: System.Data.Common.DataAdapter
   isExternal: false
   name: ShouldSerializeFillLoadOption()
   nameWithType: DataAdapter.ShouldSerializeFillLoadOption()
   fullName: System.Data.Common.DataAdapter.ShouldSerializeFillLoadOption()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Common.DataAdapter.ShouldSerializeTableMappings
   parent: System.Data.Common.DataAdapter
   isExternal: false
   name: ShouldSerializeTableMappings()
   nameWithType: DataAdapter.ShouldSerializeTableMappings()
   fullName: System.Data.Common.DataAdapter.ShouldSerializeTableMappings()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Data.Common.DataAdapter.System#Data#IDataAdapter#TableMappings
   parent: System.Data.Common.DataAdapter
   isExternal: false
@@ -1327,30 +1204,12 @@ references:
   name: TableMappings
   nameWithType: DataAdapter.TableMappings
   fullName: System.Data.Common.DataAdapter.TableMappings
-- uid: System.Data.Common.DataTableMappingCollection
-  parent: System.Data.Common
-  isExternal: false
-  name: DataTableMappingCollection
-  nameWithType: DataTableMappingCollection
-  fullName: System.Data.Common.DataTableMappingCollection
 - uid: System.Data.Common.DataAdapter.Update(System.Data.DataSet)
   parent: System.Data.Common.DataAdapter
   isExternal: false
   name: Update(DataSet)
   nameWithType: DataAdapter.Update(DataSet)
   fullName: System.Data.Common.DataAdapter.Update(DataSet)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Data.DataSet
-  parent: System.Data
-  isExternal: false
-  name: DataSet
-  nameWithType: DataSet
-  fullName: System.Data.DataSet
 - uid: System.Data.Common.DataAdapter.#ctor*
   parent: System.Data.Common.DataAdapter
   isExternal: false

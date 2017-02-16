@@ -14,8 +14,11 @@
     </Interface>
   </Interfaces>
   <Docs>
-    <summary>To be added.</summary>
+    <summary>This class is the public entry point for executing builds.</summary>
     <remarks>To be added.</remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -27,8 +30,11 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Gets a new build manager without specifying a name.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -42,9 +48,19 @@
         <Parameter Name="hostName" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="hostName">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="hostName">The host for the build manager.</param>
+        <summary>Creates a new unnamed build manager.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Create a new BuildManager. Creating multiple multi-processor aware build managers is not supported due to conflicts in the NodeManager.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="BeginBuild">
@@ -61,9 +77,13 @@
         <Parameter Name="parameters" Type="Microsoft.Build.Execution.BuildParameters" />
       </Parameters>
       <Docs>
-        <param name="parameters">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="parameters">The build parameters. May be null.</param>
+        <summary>Prepares the BuildManager to receive build requests.</summary>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.InvalidOperationException">Thrown if a build is already in progress.</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Build">
@@ -81,11 +101,21 @@
         <Parameter Name="requestData" Type="Microsoft.Build.Execution.BuildRequestData" />
       </Parameters>
       <Docs>
-        <param name="parameters">To be added.</param>
-        <param name="requestData">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="parameters">Build parameters.</param>
+        <param name="requestData">Build request data.</param>
+        <summary>Submits a lone build request and blocks until results are available.</summary>
+        <returns>Returns the build result.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Convenience method.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Thrown if a build is already in progress.</exception>
+        <threadsafe />
+        <value>Returns the build result.</value>
       </Docs>
     </Member>
     <Member MemberName="BuildRequest">
@@ -102,10 +132,20 @@
         <Parameter Name="requestData" Type="Microsoft.Build.Execution.BuildRequestData" />
       </Parameters>
       <Docs>
-        <param name="requestData">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="requestData">Build request.</param>
+        <summary>Submits a build request and blocks until the results are available.</summary>
+        <returns>Returns the build result.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Convenience method.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Thrown if StartBuild has not been called or if EndBuild has been called.</exception>
+        <threadsafe />
+        <value>Returns the build result.</value>
       </Docs>
     </Member>
     <Member MemberName="CancelAllSubmissions">
@@ -120,8 +160,11 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Cancels all outstanding submissions asynchronously.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="DefaultBuildManager">
@@ -135,9 +178,11 @@
         <ReturnType>Microsoft.Build.Execution.BuildManager</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
+        <summary>Gets the singleton instance of the Build Manager.</summary>
+        <value>Returns the singleton instance of the Build Manager.</value>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns>Returns the singleton instance of the Build Manager.</returns>
       </Docs>
     </Member>
     <Member MemberName="Dispose">
@@ -152,8 +197,11 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Dispose of the build manager.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="EndBuild">
@@ -168,8 +216,19 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Signals that no more build requests are expected (or allowed) and that the BuildManager may clean up.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This call blocks until all currently pending requests are complete.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">Thrown if there is no build in progress.</exception>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Finalize">
@@ -184,8 +243,11 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Finalize the building manager.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="GetProjectInstanceForBuild">
@@ -202,10 +264,12 @@
         <Parameter Name="project" Type="Microsoft.Build.Evaluation.Project" />
       </Parameters>
       <Docs>
-        <param name="project">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="project">The project for which an instance should be retrieved.</param>
+        <summary>Gets a matching ProjectInstance from the BuildManager cache of previously built projects.</summary>
+        <returns>Returns a matching ProjectInstance from the BuildManager cache of previously built projects. If none exist, a new project instance will be created from the specified project.</returns>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <value>Returns a matching ProjectInstance from the BuildManager cache of previously built projects. If none exist, a new project instance will be created from the specified project.</value>
       </Docs>
     </Member>
     <Member MemberName="PendBuildRequest">
@@ -222,10 +286,13 @@
         <Parameter Name="requestData" Type="Microsoft.Build.Execution.BuildRequestData" />
       </Parameters>
       <Docs>
-        <param name="requestData">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="requestData">Build request data.</param>
+        <summary>Submits a build request to the current build but does not start it immediately. Allows the user to perform asynchronous execution or access the submission ID prior to executing the request.</summary>
+        <returns>Returns the submission that will be built.</returns>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.InvalidOperationException">Thrown if StartBuild has not been called or if EndBuild has been called.</exception>
+        <threadsafe />
+        <value>Returns the submission that will be built.</value>
       </Docs>
     </Member>
     <Member MemberName="ResetCaches">
@@ -240,8 +307,11 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Clears out all of the build manager cached information.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
   </Members>

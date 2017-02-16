@@ -34,8 +34,10 @@ items:
   nameWithType: ECDiffieHellmanCng
   fullName: System.Security.Cryptography.ECDiffieHellmanCng
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a Cryptography Next Generation (CNG) implementation of the Elliptic Curve Diffie-Hellman (ECDH) algorithm. This class is used to perform cryptographic operations.
+  remarks: "The ECDiffieHellmanCng class enables two parties to exchange private key material even if they are communicating through a public channel.  Both parties can calculate the same secret value, which is referred to as the *secret agreement* in the managed Diffie-Hellman classes. The secret agreement can then be used for a variety of purposes, including as a symmetric key. However, instead of exposing the secret agreement directly, the ECDiffieHellmanCng class does some post-processing on the agreement before providing the value. This post processing is referred to as the *key derivation function (KDF)*; you can select which KDF you want to use and set its parameters through a set of properties on the instance of the Diffie-Hellman object.  \n  \n|Key derivation function|Properties|  \n|-----------------------------|----------------|  \n|<xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction>|<xref:System.Security.Cryptography.ECDiffieHellmanCng.HashAlgorithm%2A> - The hash algorithm that is used to process the secret agreement.<br /><br /> <xref:System.Security.Cryptography.ECDiffieHellmanCng.SecretPrepend%2A> - An optional byte array to prepend to the secret agreement before hashing it.<br /><br /> <xref:System.Security.Cryptography.ECDiffieHellmanCng.SecretAppend%2A> - An optional byte array to append to the secret agreement before hashing it.|  \n|<xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction>|<xref:System.Security.Cryptography.ECDiffieHellmanCng.HashAlgorithm%2A> - The hash algorithm that is used to process the secret agreement.<br /><br /> <xref:System.Security.Cryptography.ECDiffieHellmanCng.SecretPrepend%2A>- An optional byte array to prepend to the secret agreement before hashing it.<br /><br /> <xref:System.Security.Cryptography.ECDiffieHellmanCng.SecretAppend%2A> - An optional byte array to append to the secret agreement before hashing it.|  \n|<xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction>|<xref:System.Security.Cryptography.ECDiffieHellmanCng.Label%2A> - The label for key derivation.<br /><br /> <xref:System.Security.Cryptography.ECDiffieHellmanCng.Seed%2A> - The seed for key derivation.|  \n  \n The result of passing the secret agreement through the key derivation function is a byte array that may be used as key material for your application. The number of bytes of key material generated is dependent on the key derivation function; for example, SHA-256 will generate 256 bits of key material, whereas SHA-512 will generate 512 bits of key material.The basic flow of an ECDH key exchange is as follows:  \n  \n1.  Alice and Bob create a key pair to use for the Diffie-Hellman key exchange operation  \n  \n2.  Alice and Bob configure the KDF using parameters the agree on.  \n  \n3.  Alice sends Bob her public key.  \n  \n4.  Bob sends Alice his public key.  \n  \n5.  Alice and Bob use each other's public keys to generate the secret agreement, and apply the KDF to the secret agreement to generate key material."
+  example:
+  - "The following example shows how to use the ECDiffieHellmanCng class to establish a key exchange and how to use that key to encrypt a message that can be sent over a public channel and decrypted by the receiver.  \n  \n [!code-vb[ECDiffieHellmanCng#1](../../add/codesnippet/VisualBasic/t-system.security.crypto_88_1.vb)]\n [!code-cs[ECDiffieHellmanCng#1](../../add/codesnippet/CSharp/t-system.security.crypto_88_1.cs)]"
   syntax:
     content: 'public sealed class ECDiffieHellmanCng : System.Security.Cryptography.ECDiffieHellman'
   inheritance:
@@ -72,12 +74,13 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a random key pair.
+  remarks: The random key pair has a default public key length of 521 bits.
   syntax:
     content: public ECDiffieHellmanCng ();
     parameters: []
   overload: System.Security.Cryptography.ECDiffieHellmanCng.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -94,15 +97,22 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a random key pair, using the specified key size.
+  remarks: The random key pair will have the public key length defined by the `keySize` parameter.
   syntax:
     content: public ECDiffieHellmanCng (int keySize);
     parameters:
     - id: keySize
       type: System.Int32
-      description: To be added.
+      description: The size of the key. Valid key sizes are 256, 384, and 521 bits.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    keySize specifies an invalid length."
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: Cryptography Next Generation (CNG) classes are not supported on this system.
   platform:
   - net-11
   - net-20
@@ -119,15 +129,24 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class by using the specified  object.
   syntax:
     content: public ECDiffieHellmanCng (System.Security.Cryptography.CngKey key);
     parameters:
     - id: key
       type: System.Security.Cryptography.CngKey
-      description: To be added.
+      description: The key that will be used as input to the cryptographic operations performed by the current object.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    key is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    key does not specify an Elliptic Curve Diffie-Hellman (ECDH) algorithm group."
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: Cryptography Next Generation (CNG) classes are not supported on this system.
   platform:
   - net-11
   - net-20
@@ -144,27 +163,37 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Derives bytes that can be used as a key using a hash function, given another party's public key, hash algorithm's name, a prepend value and an append value.
+  remarks: If the value of `secretPrepend` or `secretAppend` is `null`, they are treated as empty arrays.
   syntax:
     content: public override byte[] DeriveKeyFromHash (System.Security.Cryptography.ECDiffieHellmanPublicKey otherPartyPublicKey, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, byte[] secretPrepend, byte[] secretAppend);
     parameters:
     - id: otherPartyPublicKey
       type: System.Security.Cryptography.ECDiffieHellmanPublicKey
-      description: To be added.
+      description: The other party's public key.
     - id: hashAlgorithm
       type: System.Security.Cryptography.HashAlgorithmName
-      description: To be added.
+      description: The hash algorithm  to use to derive the key material.
     - id: secretPrepend
       type: System.Byte[]
-      description: To be added.
+      description: A value to prepend to the derived secret before hashing.
     - id: secretAppend
       type: System.Byte[]
-      description: To be added.
+      description: A value to append to the derived secret before hashing.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The key material from the key exchange with the other party’s public key.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyFromHash*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    otherPartyPublicKey is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    otherPartyPublicKey is not an ECDH key, or it is not the correct size.  \n  \n -or-  \n  \n hashAlgorithm.<xref:System.Security.Cryptography.HashAlgorithmName.Name%2A> is  or <xref:System.String.Empty?displayProperty=fullName>."
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: All other errors.
   platform:
   - net-11
   - net-20
@@ -181,30 +210,40 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Derives bytes that can be used as a key using a Hash-based Message Authentication Code (HMAC).
+  remarks: If the value of `secretPrepend` or `secretAppend` is `null`, they are treated as empty arrays. If the value of `hmacKey` is `null`, the result of the Elliptic Curve Diffie-Hellman (ECDH) algorithm will be used as the HMAC key.
   syntax:
     content: public override byte[] DeriveKeyFromHmac (System.Security.Cryptography.ECDiffieHellmanPublicKey otherPartyPublicKey, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, byte[] hmacKey, byte[] secretPrepend, byte[] secretAppend);
     parameters:
     - id: otherPartyPublicKey
       type: System.Security.Cryptography.ECDiffieHellmanPublicKey
-      description: To be added.
+      description: The other party's public key.
     - id: hashAlgorithm
       type: System.Security.Cryptography.HashAlgorithmName
-      description: To be added.
+      description: The hash algorithm to use to derive the key material.
     - id: hmacKey
       type: System.Byte[]
-      description: To be added.
+      description: The key for the HMAC.
     - id: secretPrepend
       type: System.Byte[]
-      description: To be added.
+      description: A value to prepend to the derived secret before hashing.
     - id: secretAppend
       type: System.Byte[]
-      description: To be added.
+      description: A value to append to the derived secret before hashing.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The key material from the key exchange with the other party’s public key.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyFromHmac*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    otherPartyPublicKey is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    otherPartyPublicKey is not an ECDH key, or it is not the correct size.  \n  \n -or-  \n  \n hashAlgorithm.<xref:System.Security.Cryptography.HashAlgorithmName.Name%2A> is  or <xref:System.String.Empty?displayProperty=fullName>."
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: All other errors.
   platform:
   - net-11
   - net-20
@@ -221,18 +260,30 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Derives the key material that is generated from the secret agreement between two parties, given a  object that contains the second party's public key.
   syntax:
     content: public byte[] DeriveKeyMaterial (System.Security.Cryptography.CngKey otherPartyPublicKey);
     parameters:
     - id: otherPartyPublicKey
       type: System.Security.Cryptography.CngKey
-      description: To be added.
+      description: An object that contains the public part of the Elliptic Curve Diffie-Hellman (ECDH) key from the other party in the key exchange.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: A byte array that contains the key material. This information is generated from the secret agreement that is calculated from the current object's private key and the specified public key.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyMaterial*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    otherPartyPublicKey is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    otherPartyPublicKey is invalid. Either its <xref:System.Security.Cryptography.CngKey.AlgorithmGroup%2A> property does not specify <xref:System.Security.Cryptography.CngAlgorithmGroup.ECDiffieHellman%2A> or its key size does not match the key size of this instance."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: This object's <xref:System.Security.Cryptography.ECDiffieHellmanCng.KeyDerivationFunction%2A> property specifies the  key derivation function, but either <xref:System.Security.Cryptography.ECDiffieHellmanCng.Label%2A> or <xref:System.Security.Cryptography.ECDiffieHellmanCng.Seed%2A> is .
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: All other errors.
   platform:
   - net-11
   - net-20
@@ -249,18 +300,24 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Derives the key material that is generated from the secret agreement between two parties, given an  object that contains the second party's public key.
   syntax:
     content: public override byte[] DeriveKeyMaterial (System.Security.Cryptography.ECDiffieHellmanPublicKey otherPartyPublicKey);
     parameters:
     - id: otherPartyPublicKey
       type: System.Security.Cryptography.ECDiffieHellmanPublicKey
-      description: To be added.
+      description: The public key from the other party in the key exchange.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: A byte array that contains the key material. This information is generated from the secret agreement that is calculated from the current object's private key and the specified public key.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyMaterial*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    otherPartyPublicKey is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    otherPartyPublicKey is not an  key."
   platform:
   - net-11
   - net-20
@@ -277,24 +334,33 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Derives bytes that can be used as a key using a Transport Layer Security (TLS) Pseudo-Random Function (PRF) derivation algorithm.
   syntax:
     content: public override byte[] DeriveKeyTls (System.Security.Cryptography.ECDiffieHellmanPublicKey otherPartyPublicKey, byte[] prfLabel, byte[] prfSeed);
     parameters:
     - id: otherPartyPublicKey
       type: System.Security.Cryptography.ECDiffieHellmanPublicKey
-      description: To be added.
+      description: The other party's public key.
     - id: prfLabel
       type: System.Byte[]
-      description: To be added.
+      description: The ASCII-encoded PRF label.
     - id: prfSeed
       type: System.Byte[]
-      description: To be added.
+      description: The 64-byte PRF seed.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The key material from the key exchange with the other party’s public key.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyTls*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    otherPartyPublicKey is .  \n  \n -or-  \n  \n prfLabel is .  \n  \n -or-  \n  \n prfSeed is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    otherPartyPublicKey is not an ECDH key, or it is not the correct size."
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: "\n    prfSeed is not exactly 64 bytes in length.  \n  \n -or-  \n  \n All other cryptographic errors."
   platform:
   - net-11
   - net-20
@@ -311,18 +377,27 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a handle to the secret agreement generated between two parties, given a  object that contains the second party's public key.
   syntax:
     content: public Microsoft.Win32.SafeHandles.SafeNCryptSecretHandle DeriveSecretAgreementHandle (System.Security.Cryptography.CngKey otherPartyPublicKey);
     parameters:
     - id: otherPartyPublicKey
       type: System.Security.Cryptography.CngKey
-      description: To be added.
+      description: An object that contains the public part of the Elliptic Curve Diffie-Hellman (ECDH) key from the other party in the key exchange.
     return:
       type: Microsoft.Win32.SafeHandles.SafeNCryptSecretHandle
-      description: To be added.
+      description: A handle to the secret agreement. This information is calculated from the current object's private key and the specified public key.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.DeriveSecretAgreementHandle*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    otherPartyPublicKey is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    otherPartyPublicKey is not an ECDH key, or it is not the correct size."
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: All other errors.
   platform:
   - net-11
   - net-20
@@ -339,18 +414,24 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a handle to the secret agreement generated between two parties, given an  object that contains the second party's public key.
   syntax:
     content: public Microsoft.Win32.SafeHandles.SafeNCryptSecretHandle DeriveSecretAgreementHandle (System.Security.Cryptography.ECDiffieHellmanPublicKey otherPartyPublicKey);
     parameters:
     - id: otherPartyPublicKey
       type: System.Security.Cryptography.ECDiffieHellmanPublicKey
-      description: To be added.
+      description: The public key from the other party in the key exchange.
     return:
       type: Microsoft.Win32.SafeHandles.SafeNCryptSecretHandle
-      description: To be added.
+      description: A handle to the secret agreement. This information is calculated from the current object's private key and the specified public key.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.DeriveSecretAgreementHandle*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    otherPartyPublicKey is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    otherPartyPublicKey is not an  key."
   platform:
   - net-11
   - net-20
@@ -367,8 +448,6 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
@@ -376,6 +455,7 @@ items:
       type: System.Boolean
       description: To be added.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -392,15 +472,19 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not implemented.
+  remarks: To deserialize an XML key, use the <xref:System.Security.Cryptography.ECDiffieHellmanCng.FromXmlString%28System.String%2CSystem.Security.Cryptography.ECKeyXmlFormat%29> overload instead.
   syntax:
     content: public override void FromXmlString (string xmlString);
     parameters:
     - id: xmlString
       type: System.String
-      description: To be added.
+      description: The XML-based key information to be deserialized.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.FromXmlString*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: This method was not overridden for this instance.
   platform:
   - net-11
   - net-20
@@ -417,18 +501,30 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Deserializes the key information from an XML string by using the specified format.
   syntax:
     content: public void FromXmlString (string xml, System.Security.Cryptography.ECKeyXmlFormat format);
     parameters:
     - id: xml
       type: System.String
-      description: To be added.
+      description: The XML-based key information to be deserialized.
     - id: format
       type: System.Security.Cryptography.ECKeyXmlFormat
-      description: To be added.
+      description: One of the enumeration values that specifies the format of the XML string. The only currently accepted format is .
   overload: System.Security.Cryptography.ECDiffieHellmanCng.FromXmlString*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    xml is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    xml is malformed."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    format specifies an invalid format. The only accepted value is ."
+  - type: System.Security.Cryptography.CryptographicException
+    commentId: T:System.Security.Cryptography.CryptographicException
+    description: All other errors.
   platform:
   - net-11
   - net-20
@@ -445,14 +541,18 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the hash algorithm to use when generating key material.
+  remarks: "This property is used by Cryptography Next Generation (CNG) objects only if the <xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction> or <xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction> value is set in the <xref:System.Security.Cryptography.ECDiffieHellmanCng.KeyDerivationFunction%2A> property.  \n  \n This property accepts the following algorithms: <xref:System.Security.Cryptography.CngAlgorithm.MD5%2A>, <xref:System.Security.Cryptography.CngAlgorithm.Sha1%2A>, <xref:System.Security.Cryptography.CngAlgorithm.Sha256%2A>, <xref:System.Security.Cryptography.CngAlgorithm.Sha384%2A>, and <xref:System.Security.Cryptography.CngAlgorithm.Sha512%2A>.  \n  \n Other custom hash algorithms may also be used.  \n  \n The default algorithm is <xref:System.Security.Cryptography.CngAlgorithm.Sha256%2A>."
   syntax:
     content: public System.Security.Cryptography.CngAlgorithm HashAlgorithm { get; set; }
     return:
       type: System.Security.Cryptography.CngAlgorithm
-      description: To be added.
+      description: An object that specifies the hash algorithm.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.HashAlgorithm*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: 'The value is '
   platform:
   - net-11
   - net-20
@@ -469,14 +569,15 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the Hash-based Message Authentication Code (HMAC) key to use when deriving key material.
+  remarks: This property applies only when the <xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction> value is set in the <xref:System.Security.Cryptography.ECDiffieHellmanCng.KeyDerivationFunction%2A> property, and the <xref:System.Security.Cryptography.ECDiffieHellmanCng.UseSecretAgreementAsHmacKey%2A> property is `false`. By default, the value is `null`.
   syntax:
     content: public byte[] HmacKey { get; set; }
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The Hash-based Message Authentication Code (HMAC) key to use when deriving key material.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.HmacKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -493,14 +594,14 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies the  that is used by the current object for cryptographic operations.
   syntax:
     content: public System.Security.Cryptography.CngKey Key { get; }
     return:
       type: System.Security.Cryptography.CngKey
-      description: To be added.
+      description: The key pair used by this object to perform cryptographic operations.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.Key*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -517,14 +618,18 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the key derivation function for the  class.
+  remarks: This property specifies the key derivation function that is used to transform the secret agreement into key material.
   syntax:
     content: public System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction KeyDerivationFunction { get; set; }
     return:
       type: System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction
-      description: To be added.
+      description: 'One of the  enumeration values: , , or . The default value is .'
   overload: System.Security.Cryptography.ECDiffieHellmanCng.KeyDerivationFunction*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The enumeration value is out of range.
   platform:
   - net-11
   - net-20
@@ -541,14 +646,15 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the label value that is used for key derivation.
+  remarks: This value is used for key derivation if the <xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction> value is set in the <xref:System.Security.Cryptography.ECDiffieHellmanCng.KeyDerivationFunction%2A> property. By default, it is `null`.
   syntax:
     content: public byte[] Label { get; set; }
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The label value.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.Label*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -565,14 +671,14 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the public key that can be used by another  object to generate a shared secret agreement.
   syntax:
     content: public override System.Security.Cryptography.ECDiffieHellmanPublicKey PublicKey { get; }
     return:
       type: System.Security.Cryptography.ECDiffieHellmanPublicKey
-      description: To be added.
+      description: The public key that is associated with this instance of the  object.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.PublicKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -589,14 +695,15 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that will be appended to the secret agreement when generating key material.
+  remarks: This value is used for key derivation if the <xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction> or <xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction> key derivation function (KDF) is used. The value is appended to the secret agreement, and the combined value is passed to the KDF to generate the key material. By default, the value is `null`.
   syntax:
     content: public byte[] SecretAppend { get; set; }
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The value that is appended to the secret agreement.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.SecretAppend*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -613,14 +720,15 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that will be added to the beginning of the secret agreement when deriving key material.
+  remarks: "This value is used for key derivation if the <xref:System.Security.Cryptography.ECDiffieHellmanCng.KeyDerivationFunction%2A> property is set to one of the following values:  \n  \n-   <xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction>  \n  \n-   <xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction>  \n  \n The value is prepended to the secret agreement, and the combined value is passed to the key derivation function (KDF) to generate the key material. By default, the value is `null`."
   syntax:
     content: public byte[] SecretPrepend { get; set; }
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The value that is appended to the beginning of the secret agreement during key derivation.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.SecretPrepend*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -637,14 +745,15 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the seed value that will be used when deriving key material.
+  remarks: This value is used for key derivation if the <xref:System.Security.Cryptography.ECDiffieHellmanCng.KeyDerivationFunction%2A> property is set to <xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction>. By default, the value is `null`.
   syntax:
     content: public byte[] Seed { get; set; }
     return:
       type: System.Byte[]
-      description: To be added.
+      description: The seed value.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.Seed*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -661,18 +770,22 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not implemented.
+  remarks: To convert the current key to an XML representation, use the <xref:System.Security.Cryptography.ECDiffieHellmanCng.ToXmlString%28System.Security.Cryptography.ECKeyXmlFormat%29> overload instead.
   syntax:
     content: public override string ToXmlString (bool includePrivateParameters);
     parameters:
     - id: includePrivateParameters
       type: System.Boolean
-      description: To be added.
+      description: "\n     to include private parameters; otherwise, ."
     return:
       type: System.String
-      description: To be added.
+      description: Not applicable.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.ToXmlString*
+  exceptions:
+  - type: System.NotImplementedException
+    commentId: T:System.NotImplementedException
+    description: This method was not overridden for this instance.
   platform:
   - net-11
   - net-20
@@ -689,18 +802,21 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes the key information to an XML string by using the specified format.
   syntax:
     content: public string ToXmlString (System.Security.Cryptography.ECKeyXmlFormat format);
     parameters:
     - id: format
       type: System.Security.Cryptography.ECKeyXmlFormat
-      description: To be added.
+      description: One of the enumeration values that specifies the format of the XML string. The only currently accepted format is .
     return:
       type: System.String
-      description: To be added.
+      description: A string object that contains the key information, serialized to an XML string, according to the requested format.
   overload: System.Security.Cryptography.ECDiffieHellmanCng.ToXmlString*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    format specifies an invalid format. The only accepted value is ."
   platform:
   - net-11
   - net-20
@@ -717,14 +833,15 @@ items:
   assemblies:
   - System.Core
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the secret agreement is used as a Hash-based Message Authentication Code (HMAC) key to derive key material.
+  remarks: '-   This value is used for key derivation if the <xref:System.Security.Cryptography.ECDiffieHellmanCng.KeyDerivationFunction%2A> property is set to <xref:System.Security.Cryptography.ECDiffieHellmanKeyDerivationFunction>. By default, the value is `false`.'
   syntax:
     content: public bool UseSecretAgreementAsHmacKey { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the secret agreement is used as an HMAC key to derive key material; otherwise, .
   overload: System.Security.Cryptography.ECDiffieHellmanCng.UseSecretAgreementAsHmacKey*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -769,12 +886,20 @@ references:
   name: DeriveKeyFromHash(ECDiffieHellmanPublicKey,HashAlgorithmName,Byte[],Byte[])
   nameWithType: ECDiffieHellmanCng.DeriveKeyFromHash(ECDiffieHellmanPublicKey,HashAlgorithmName,Byte[],Byte[])
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyFromHash(ECDiffieHellmanPublicKey,HashAlgorithmName,Byte[],Byte[])
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Security.Cryptography.ECDiffieHellmanPublicKey
   parent: System.Security.Cryptography
   isExternal: false
@@ -787,126 +912,30 @@ references:
   name: HashAlgorithmName
   nameWithType: HashAlgorithmName
   fullName: System.Security.Cryptography.HashAlgorithmName
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyFromHmac(System.Security.Cryptography.ECDiffieHellmanPublicKey,System.Security.Cryptography.HashAlgorithmName,System.Byte[],System.Byte[],System.Byte[])
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: DeriveKeyFromHmac(ECDiffieHellmanPublicKey,HashAlgorithmName,Byte[],Byte[],Byte[])
   nameWithType: ECDiffieHellmanCng.DeriveKeyFromHmac(ECDiffieHellmanPublicKey,HashAlgorithmName,Byte[],Byte[],Byte[])
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyFromHmac(ECDiffieHellmanPublicKey,HashAlgorithmName,Byte[],Byte[],Byte[])
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Security.Cryptography.ECDiffieHellmanPublicKey
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: ECDiffieHellmanPublicKey
-  nameWithType: ECDiffieHellmanPublicKey
-  fullName: System.Security.Cryptography.ECDiffieHellmanPublicKey
-- uid: System.Security.Cryptography.HashAlgorithmName
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: HashAlgorithmName
-  nameWithType: HashAlgorithmName
-  fullName: System.Security.Cryptography.HashAlgorithmName
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyMaterial(System.Security.Cryptography.CngKey)
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: DeriveKeyMaterial(CngKey)
   nameWithType: ECDiffieHellmanCng.DeriveKeyMaterial(CngKey)
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyMaterial(CngKey)
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Security.Cryptography.CngKey
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: CngKey
-  nameWithType: CngKey
-  fullName: System.Security.Cryptography.CngKey
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyMaterial(System.Security.Cryptography.ECDiffieHellmanPublicKey)
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: DeriveKeyMaterial(ECDiffieHellmanPublicKey)
   nameWithType: ECDiffieHellmanCng.DeriveKeyMaterial(ECDiffieHellmanPublicKey)
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyMaterial(ECDiffieHellmanPublicKey)
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Security.Cryptography.ECDiffieHellmanPublicKey
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: ECDiffieHellmanPublicKey
-  nameWithType: ECDiffieHellmanPublicKey
-  fullName: System.Security.Cryptography.ECDiffieHellmanPublicKey
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyTls(System.Security.Cryptography.ECDiffieHellmanPublicKey,System.Byte[],System.Byte[])
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: DeriveKeyTls(ECDiffieHellmanPublicKey,Byte[],Byte[])
   nameWithType: ECDiffieHellmanCng.DeriveKeyTls(ECDiffieHellmanPublicKey,Byte[],Byte[])
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.DeriveKeyTls(ECDiffieHellmanPublicKey,Byte[],Byte[])
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Security.Cryptography.ECDiffieHellmanPublicKey
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: ECDiffieHellmanPublicKey
-  nameWithType: ECDiffieHellmanPublicKey
-  fullName: System.Security.Cryptography.ECDiffieHellmanPublicKey
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.DeriveSecretAgreementHandle(System.Security.Cryptography.CngKey)
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
@@ -919,30 +948,12 @@ references:
   name: SafeNCryptSecretHandle
   nameWithType: SafeNCryptSecretHandle
   fullName: Microsoft.Win32.SafeHandles.SafeNCryptSecretHandle
-- uid: System.Security.Cryptography.CngKey
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: CngKey
-  nameWithType: CngKey
-  fullName: System.Security.Cryptography.CngKey
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.DeriveSecretAgreementHandle(System.Security.Cryptography.ECDiffieHellmanPublicKey)
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: DeriveSecretAgreementHandle(ECDiffieHellmanPublicKey)
   nameWithType: ECDiffieHellmanCng.DeriveSecretAgreementHandle(ECDiffieHellmanPublicKey)
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.DeriveSecretAgreementHandle(ECDiffieHellmanPublicKey)
-- uid: Microsoft.Win32.SafeHandles.SafeNCryptSecretHandle
-  parent: Microsoft.Win32.SafeHandles
-  isExternal: false
-  name: SafeNCryptSecretHandle
-  nameWithType: SafeNCryptSecretHandle
-  fullName: Microsoft.Win32.SafeHandles.SafeNCryptSecretHandle
-- uid: System.Security.Cryptography.ECDiffieHellmanPublicKey
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: ECDiffieHellmanPublicKey
-  nameWithType: ECDiffieHellmanPublicKey
-  fullName: System.Security.Cryptography.ECDiffieHellmanPublicKey
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.Dispose(System.Boolean)
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
@@ -973,12 +984,6 @@ references:
   name: FromXmlString(String,ECKeyXmlFormat)
   nameWithType: ECDiffieHellmanCng.FromXmlString(String,ECKeyXmlFormat)
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.FromXmlString(String,ECKeyXmlFormat)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Security.Cryptography.ECKeyXmlFormat
   parent: System.Security.Cryptography
   isExternal: false
@@ -1003,24 +1008,12 @@ references:
   name: HmacKey
   nameWithType: ECDiffieHellmanCng.HmacKey
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.HmacKey
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.Key
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: Key
   nameWithType: ECDiffieHellmanCng.Key
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.Key
-- uid: System.Security.Cryptography.CngKey
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: CngKey
-  nameWithType: CngKey
-  fullName: System.Security.Cryptography.CngKey
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.KeyDerivationFunction
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
@@ -1039,108 +1032,48 @@ references:
   name: Label
   nameWithType: ECDiffieHellmanCng.Label
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.Label
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.PublicKey
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: PublicKey
   nameWithType: ECDiffieHellmanCng.PublicKey
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.PublicKey
-- uid: System.Security.Cryptography.ECDiffieHellmanPublicKey
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: ECDiffieHellmanPublicKey
-  nameWithType: ECDiffieHellmanPublicKey
-  fullName: System.Security.Cryptography.ECDiffieHellmanPublicKey
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.SecretAppend
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: SecretAppend
   nameWithType: ECDiffieHellmanCng.SecretAppend
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.SecretAppend
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.SecretPrepend
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: SecretPrepend
   nameWithType: ECDiffieHellmanCng.SecretPrepend
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.SecretPrepend
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.Seed
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: Seed
   nameWithType: ECDiffieHellmanCng.Seed
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.Seed
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.ToXmlString(System.Boolean)
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: ToXmlString(Boolean)
   nameWithType: ECDiffieHellmanCng.ToXmlString(Boolean)
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.ToXmlString(Boolean)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.ToXmlString(System.Security.Cryptography.ECKeyXmlFormat)
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: ToXmlString(ECKeyXmlFormat)
   nameWithType: ECDiffieHellmanCng.ToXmlString(ECKeyXmlFormat)
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.ToXmlString(ECKeyXmlFormat)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Security.Cryptography.ECKeyXmlFormat
-  parent: System.Security.Cryptography
-  isExternal: false
-  name: ECKeyXmlFormat
-  nameWithType: ECKeyXmlFormat
-  fullName: System.Security.Cryptography.ECKeyXmlFormat
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.UseSecretAgreementAsHmacKey
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false
   name: UseSecretAgreementAsHmacKey
   nameWithType: ECDiffieHellmanCng.UseSecretAgreementAsHmacKey
   fullName: System.Security.Cryptography.ECDiffieHellmanCng.UseSecretAgreementAsHmacKey
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.Cryptography.ECDiffieHellmanCng.#ctor*
   parent: System.Security.Cryptography.ECDiffieHellmanCng
   isExternal: false

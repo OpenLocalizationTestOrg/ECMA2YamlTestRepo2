@@ -16,8 +16,8 @@ items:
   nameWithType: ClientChannelSinkStack
   fullName: System.Runtime.Remoting.Channels.ClientChannelSinkStack
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Holds the stack of client channel sinks that must be invoked during an asynchronous message response decoding.
+  remarks: This class makes a link demand. A security exception is thrown if the immediate caller does not have infrastructure permission. See [Link Demands](../Topic/Link%20Demands.md) for more information.
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -46,12 +46,12 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with default values.
   syntax:
     content: public ClientChannelSinkStack ();
     parameters: []
   overload: System.Runtime.Remoting.Channels.ClientChannelSinkStack.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -68,15 +68,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified reply sink.
   syntax:
     content: public ClientChannelSinkStack (System.Runtime.Remoting.Messaging.IMessageSink replySink);
     parameters:
     - id: replySink
       type: System.Runtime.Remoting.Messaging.IMessageSink
-      description: To be added.
+      description: The  that the current stack can use to reply to messages.
   overload: System.Runtime.Remoting.Channels.ClientChannelSinkStack.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -93,18 +93,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Requests asynchronous processing of a method call on the sinks that are in the current sink stack.
+  remarks: The AsyncProcessResponse method initializes asynchronous processing on the top sink in the current sink stack. For additional information, see <xref:System.Runtime.Remoting.Channels.IClientChannelSink.AsyncProcessResponse%2A?displayProperty=fullName>.
   syntax:
     content: public void AsyncProcessResponse (System.Runtime.Remoting.Channels.ITransportHeaders headers, System.IO.Stream stream);
     parameters:
     - id: headers
       type: System.Runtime.Remoting.Channels.ITransportHeaders
-      description: To be added.
+      description: The headers that are retrieved from the server response stream.
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: The stream that is returning from the transport sink.
   overload: System.Runtime.Remoting.Channels.ClientChannelSinkStack.AsyncProcessResponse*
+  exceptions:
+  - type: System.Runtime.Remoting.RemotingException
+    commentId: T:System.Runtime.Remoting.RemotingException
+    description: The current sink stack is empty.
   platform:
   - net-11
   - net-20
@@ -121,15 +125,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Dispatches the specified exception on the reply sink.
+  remarks: The DispatchException method dispatches the specified exception to the server through the reply sink that is specified in the constructor of the current sink stack. If the current sink stack was created without a reply sink, the exception is not transmitted, and no new exception is thrown.
   syntax:
     content: public void DispatchException (Exception e);
     parameters:
     - id: e
       type: System.Exception
-      description: To be added.
+      description: The exception to dispatch to the server.
   overload: System.Runtime.Remoting.Channels.ClientChannelSinkStack.DispatchException*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -146,15 +151,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Dispatches the specified reply message on the reply sink.
+  remarks: The DispatchReplyMessage method dispatches the specified message to the server through the reply sink that is specified in the constructor of the current sink stack. If the current sink stack was created without a reply sink, the message is not transmitted, and no new exception is thrown.
   syntax:
     content: public void DispatchReplyMessage (System.Runtime.Remoting.Messaging.IMessage msg);
     parameters:
     - id: msg
       type: System.Runtime.Remoting.Messaging.IMessage
-      description: To be added.
+      description: The  to dispatch.
   overload: System.Runtime.Remoting.Channels.ClientChannelSinkStack.DispatchReplyMessage*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -171,18 +177,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Pops the information that is associated with all the sinks from the sink stack up to and including the specified sink.
   syntax:
     content: public object Pop (System.Runtime.Remoting.Channels.IClientChannelSink sink);
     parameters:
     - id: sink
       type: System.Runtime.Remoting.Channels.IClientChannelSink
-      description: To be added.
+      description: The sink to remove and return from the sink stack.
     return:
       type: System.Object
-      description: To be added.
+      description: Information generated on the request side and associated with the specified sink.
   overload: System.Runtime.Remoting.Channels.ClientChannelSinkStack.Pop*
+  exceptions:
+  - type: System.Runtime.Remoting.RemotingException
+    commentId: T:System.Runtime.Remoting.RemotingException
+    description: The current sink stack is empty, or the specified sink was never pushed onto the current stack.
   platform:
   - net-11
   - net-20
@@ -199,18 +208,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Pushes the specified sink and information that is associated with it onto the sink stack.
+  remarks: The information generated on the request side and specified in the `state` parameter is returned in the `state` parameter of the <xref:System.Runtime.Remoting.Channels.IClientChannelSink.AsyncProcessResponse%2A> method on the corresponding sink.
   syntax:
     content: public void Push (System.Runtime.Remoting.Channels.IClientChannelSink sink, object state);
     parameters:
     - id: sink
       type: System.Runtime.Remoting.Channels.IClientChannelSink
-      description: To be added.
+      description: The sink to push onto the sink stack.
     - id: state
       type: System.Object
-      description: To be added.
+      description: Information generated on the request side that is needed on the response side.
   overload: System.Runtime.Remoting.Channels.ClientChannelSinkStack.Push*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -285,12 +295,6 @@ references:
   name: Pop(IClientChannelSink)
   nameWithType: ClientChannelSinkStack.Pop(IClientChannelSink)
   fullName: System.Runtime.Remoting.Channels.ClientChannelSinkStack.Pop(IClientChannelSink)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Runtime.Remoting.Channels.IClientChannelSink
   parent: System.Runtime.Remoting.Channels
   isExternal: false
@@ -303,18 +307,6 @@ references:
   name: Push(IClientChannelSink,Object)
   nameWithType: ClientChannelSinkStack.Push(IClientChannelSink,Object)
   fullName: System.Runtime.Remoting.Channels.ClientChannelSinkStack.Push(IClientChannelSink,Object)
-- uid: System.Runtime.Remoting.Channels.IClientChannelSink
-  parent: System.Runtime.Remoting.Channels
-  isExternal: false
-  name: IClientChannelSink
-  nameWithType: IClientChannelSink
-  fullName: System.Runtime.Remoting.Channels.IClientChannelSink
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Runtime.Remoting.Channels.ClientChannelSinkStack.#ctor*
   parent: System.Runtime.Remoting.Channels.ClientChannelSinkStack
   isExternal: false

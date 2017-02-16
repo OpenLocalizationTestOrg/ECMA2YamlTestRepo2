@@ -41,8 +41,8 @@ items:
   nameWithType: XmlnsDictionary
   fullName: System.Windows.Markup.XmlnsDictionary
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a dictionary that contains xmlns mappings for XAML namespaces in WPF.
+  remarks: "XmlnsDictionary maps XAML namespace prefixes to the complete XAML namespace URI. For XAML usage in applications and XAML namespaces in general, the URI is often not a schema-style URI that includes `http://`. It is instead a user-defined mapping to a CLR namespace and assembly. That assembly contains the backing types being referred to. For details, see [XAML Namespaces and Namespace Mapping for WPF XAML](../Topic/XAML%20Namespaces%20and%20Namespace%20Mapping%20for%20WPF%20XAML.md).  \n  \n The XmlnsDictionary adds the concept of scope for a XAML namespace. A default <xref:System.Collections.IDictionary> might contain prefix keys and XML namespace URI values. The scope concept in XmlnsDictionary parallels the XML concept that a prefix might be redefined. If so, the redefinition only applies at that level or below in a DOM view of the XML (the previous definition applies at higher level in the DOM). The scope concept is mostly abstracted away in the XmlnsDictionary API, such that you can call APIs such as <xref:System.Windows.Markup.XmlnsDictionary.LookupNamespace%2A> without being concerned about scope. However, XmlnsDictionary does expose <xref:System.Windows.Markup.XmlnsDictionary.PushScope%2A> and <xref:System.Windows.Markup.XmlnsDictionary.PopScope%2A> so that a custom <xref:System.Windows.Markup.ParserContext> implementation that changes scope can synchronize with the scope for the XmlnsDictionary.  \n  \n<a name=\"xamlTextUsage_XmlnsDictionary\"></a>   \n## XAML Text Usage"
   syntax:
     content: 'public class XmlnsDictionary : System.Collections.IDictionary, System.Xaml.IXamlNamespaceResolver'
   inheritance:
@@ -67,12 +67,12 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public XmlnsDictionary ();
     parameters: []
   overload: System.Windows.Markup.XmlnsDictionary.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -89,15 +89,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class by using the specified dictionary as a copy source.
+  remarks: All values from the source `xmlnsDictionary` including the index entries are copied except for <xref:System.Windows.Markup.XmlnsDictionary.Sealed%2A>, which is set to `false` in the new instance.
   syntax:
     content: public XmlnsDictionary (System.Windows.Markup.XmlnsDictionary xmlnsDictionary);
     parameters:
     - id: xmlnsDictionary
       type: System.Windows.Markup.XmlnsDictionary
-      description: To be added.
+      description: The dictionary on which to base the new .
   overload: System.Windows.Markup.XmlnsDictionary.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    xmlnsDictionary is ."
   platform:
   - net-11
   - net-20
@@ -114,18 +118,28 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a prefix-URI pair to this .
+  remarks: After initial type-checking, this implementation forwards to the type-safe method <xref:System.Windows.Markup.XmlnsDictionary.Add%2A?displayProperty=fullName>.
   syntax:
     content: public void Add (object prefix, object xmlNamespace);
     parameters:
     - id: prefix
       type: System.Object
-      description: To be added.
+      description: The prefix of the XAML namespace to be added.
     - id: xmlNamespace
       type: System.Object
-      description: To be added.
+      description: The XAML namespace URI the prefix maps to.
   overload: System.Windows.Markup.XmlnsDictionary.Add*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    prefix or xmlNamespace is not a string."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    prefix or xmlNamespace is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  is sealed.
   platform:
   - net-11
   - net-20
@@ -142,18 +156,24 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a prefix-URI pair to this .
   syntax:
     content: public void Add (string prefix, string xmlNamespace);
     parameters:
     - id: prefix
       type: System.String
-      description: To be added.
+      description: The prefix of this XML namespace.
     - id: xmlNamespace
       type: System.String
-      description: To be added.
+      description: The XML namespace URI the prefix maps to.
   overload: System.Windows.Markup.XmlnsDictionary.Add*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    prefix or xmlNamespace is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  is sealed.
   platform:
   - net-11
   - net-20
@@ -170,12 +190,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes all entries from this .
   syntax:
     content: public void Clear ();
     parameters: []
   overload: System.Windows.Markup.XmlnsDictionary.Clear*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  is sealed.
   platform:
   - net-11
   - net-20
@@ -192,18 +215,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the specified prefix key is in this .
   syntax:
     content: public bool Contains (object key);
     parameters:
     - id: key
       type: System.Object
-      description: To be added.
+      description: The prefix key to search for.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the requested prefix key is in the dictionary; otherwise, .
   overload: System.Windows.Markup.XmlnsDictionary.Contains*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -220,18 +243,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Copies the entries in the  to the specified array.
   syntax:
     content: public void CopyTo (Array array, int index);
     parameters:
     - id: array
       type: System.Array
-      description: To be added.
+      description: The array to copy the table data into.
     - id: index
       type: System.Int32
-      description: To be added.
+      description: The zero-based index in the destination array where copying starts.
   overload: System.Windows.Markup.XmlnsDictionary.CopyTo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -248,18 +271,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Copies the entries in the  to the specified <xref:System.Collections.DictionaryEntry> array.
   syntax:
     content: public void CopyTo (System.Collections.DictionaryEntry[] array, int index);
     parameters:
     - id: array
       type: System.Collections.DictionaryEntry[]
-      description: To be added.
+      description: The array to copy the table data into.
     - id: index
       type: System.Int32
-      description: To be added.
+      description: The zero-based index in the destination array where copying starts.
   overload: System.Windows.Markup.XmlnsDictionary.CopyTo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -276,14 +299,14 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of items in the .
   syntax:
     content: public int Count { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of items in the .
   overload: System.Windows.Markup.XmlnsDictionary.Count*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -300,15 +323,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Looks up the XAML namespace that corresponds to the default XAML namespace.
+  remarks: From a mapping perspective, the default XML namespace is the XML namespace that is mapped to empty string. In WPF XAML parsing for application purposes, the acting default namespace identifier is [!INCLUDE[TLA#tla_wpfxmlnsv1](../../add/includes/tlasharptla-wpfxmlnsv1-md.md)], but that value is not explicitly returned by this API.
   syntax:
     content: public string DefaultNamespace ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: The namespace that corresponds to the default XML namespace if one exists; otherwise, .
   overload: System.Windows.Markup.XmlnsDictionary.DefaultNamespace*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -325,15 +349,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a dictionary enumerator that iterates through this .
+  remarks: This API exists so that derived classes can obtain an enumerator where the scoping concept for the XML namespaces is reported as a dimension of the dictionary enumerator.
   syntax:
     content: protected System.Collections.IDictionaryEnumerator GetDictionaryEnumerator ();
     parameters: []
     return:
       type: System.Collections.IDictionaryEnumerator
-      description: To be added.
+      description: The dictionary enumerator for this dictionary.
   overload: System.Windows.Markup.XmlnsDictionary.GetDictionaryEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -350,15 +375,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an enumerator that iterates through this .
+  remarks: This API exists so that derived classes can obtain an enumerator. This enumerator provides enumeration over the <xref:System.Windows.Markup.XmlnsDictionary.Keys%2A> collection.
   syntax:
     content: protected System.Collections.IEnumerator GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.IEnumerator
-      description: To be added.
+      description: The enumerator for this dictionary.
   overload: System.Windows.Markup.XmlnsDictionary.GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -375,18 +401,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a XAML namespace for the provided prefix string.
   syntax:
     content: public string GetNamespace (string prefix);
     parameters:
     - id: prefix
       type: System.String
-      description: To be added.
+      description: The prefix to retrieve the XAML namespace for.
     return:
       type: System.String
-      description: To be added.
+      description: The requested XAML namespace URI.
   overload: System.Windows.Markup.XmlnsDictionary.GetNamespace*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -403,15 +429,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns all possible prefix-XAML namespace mappings ( values) that are available in the active schema context.
   syntax:
     content: public System.Collections.Generic.IEnumerable<System.Xaml.NamespaceDeclaration> GetNamespacePrefixes ();
     parameters: []
     return:
       type: System.Collections.Generic.IEnumerable{System.Xaml.NamespaceDeclaration}
-      description: To be added.
+      description: An enumerable set of  values. To get the prefix strings specifically, get the <xref:System.Xaml.NamespaceDeclaration.Prefix%2A?displayProperty=fullName> value from each value returned.
   overload: System.Windows.Markup.XmlnsDictionary.GetNamespacePrefixes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -428,14 +454,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the size of the  is fixed.
+  remarks: This implementation always returns `false`, even if <xref:System.Windows.Markup.XmlnsDictionary.IsReadOnly%2A> is `true`.
   syntax:
     content: public bool IsFixedSize { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the size is fixed; otherwise, .
   overload: System.Windows.Markup.XmlnsDictionary.IsFixedSize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -452,14 +479,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the  is read-only.
+  remarks: The <xref:System.Windows.Markup.XmlnsDictionary> is read-only after <xref:System.Windows.Markup.XmlnsDictionary.Seal%2A> is called.
   syntax:
     content: public bool IsReadOnly { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the dictionary is read-only; otherwise, .
   overload: System.Windows.Markup.XmlnsDictionary.IsReadOnly*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -476,14 +504,14 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether access to this  is thread safe.
   syntax:
     content: public bool IsSynchronized { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if access to this dictionary is thread-safe; otherwise, .
   overload: System.Windows.Markup.XmlnsDictionary.IsSynchronized*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -500,18 +528,25 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the XAML namespace URI associated with the specified prefix.
+  remarks: "<a name=\"xamlTextUsage_Object\"></a>   \n## XAML Text Usage"
   syntax:
     content: public object this[object prefix] { get; set; }
     parameters:
     - id: prefix
       type: System.Object
-      description: To be added.
+      description: The prefix from which to get or set the associated XML namespace URI.
     return:
       type: System.Object
-      description: To be added.
+      description: The corresponding XAML namespace URI.
   overload: System.Windows.Markup.XmlnsDictionary.Item*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    prefix is not a string  \n  \n -or-  \n  \n The value to set is not a string."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    prefix is   \n  \n -or-  \n  \n The value to set is ."
   platform:
   - net-11
   - net-20
@@ -528,18 +563,21 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the XAML namespace URI associated with the specified prefix.
   syntax:
     content: public string this[string prefix] { get; set; }
     parameters:
     - id: prefix
       type: System.String
-      description: To be added.
+      description: The prefix from which to get or set the associated namespace.
     return:
       type: System.String
-      description: To be added.
+      description: The corresponding XML namespace URI.
   overload: System.Windows.Markup.XmlnsDictionary.Item*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    prefix is   \n  \n -or-  \n  \n The value to set is ."
   platform:
   - net-11
   - net-20
@@ -556,14 +594,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of all the keys in the .
+  remarks: "<a name=\"xamlTextUsage_Keys\"></a>   \n## XAML Text Usage"
   syntax:
     content: public System.Collections.ICollection Keys { get; }
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: The collection of all the keys in the dictionary.
   overload: System.Windows.Markup.XmlnsDictionary.Keys*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -580,18 +619,21 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the XAML namespace URI that corresponds to the specified XML namespace prefix.
   syntax:
     content: public string LookupNamespace (string prefix);
     parameters:
     - id: prefix
       type: System.String
-      description: To be added.
+      description: The XAML namespace prefix to look up.
     return:
       type: System.String
-      description: To be added.
+      description: The XAML namespace URI that corresponds to the specified prefix if it exists in this ; otherwise, .
   overload: System.Windows.Markup.XmlnsDictionary.LookupNamespace*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    prefix is ."
   platform:
   - net-11
   - net-20
@@ -608,18 +650,22 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the prefix that corresponds to the specified XAML namespace URI.
+  remarks: If you request the prefix for the default namespace, an empty string is returned.
   syntax:
     content: public string LookupPrefix (string xmlNamespace);
     parameters:
     - id: xmlNamespace
       type: System.String
-      description: To be added.
+      description: The XAML namespace URI to look up.
     return:
       type: System.String
-      description: To be added.
+      description: The XML prefix that corresponds to the given namespace; otherwise, .
   overload: System.Windows.Markup.XmlnsDictionary.LookupPrefix*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    xmlNamespace is ."
   platform:
   - net-11
   - net-20
@@ -636,12 +682,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Pops the scope of the .
+  remarks: Use this method only if you are implementing a <xref:System.Windows.Markup.ParserContext> that also works at an element scope level.
   syntax:
     content: public void PopScope ();
     parameters: []
   overload: System.Windows.Markup.XmlnsDictionary.PopScope*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  is sealed.
   platform:
   - net-11
   - net-20
@@ -658,12 +708,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Pushes the scope of the .
+  remarks: Use this method only if you are implementing a <xref:System.Windows.Markup.ParserContext> that also works at an element scope level.
   syntax:
     content: public void PushScope ();
     parameters: []
   overload: System.Windows.Markup.XmlnsDictionary.PushScope*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  is sealed.
   platform:
   - net-11
   - net-20
@@ -680,15 +734,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the item with the specified prefix key from the .
+  remarks: This implementation forwards to the type-safe method <xref:System.Windows.Markup.XmlnsDictionary.Remove%28System.String%29?displayProperty=fullName>.
   syntax:
     content: public void Remove (object prefix);
     parameters:
     - id: prefix
       type: System.Object
-      description: To be added.
+      description: The prefix key to remove.
   overload: System.Windows.Markup.XmlnsDictionary.Remove*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  is sealed.
   platform:
   - net-11
   - net-20
@@ -705,15 +763,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the item with the specified prefix key from the .
   syntax:
     content: public void Remove (string prefix);
     parameters:
     - id: prefix
       type: System.String
-      description: To be added.
+      description: The prefix key to remove.
   overload: System.Windows.Markup.XmlnsDictionary.Remove*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  is sealed.
   platform:
   - net-11
   - net-20
@@ -730,12 +791,13 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Locks the dictionary so that it cannot be changed.
+  remarks: This must be done before setting the <xref:System.Windows.Markup.XmlnsDictionary> to a property (typically on a <xref:System.Windows.Markup.ParserContext>). Attempting to modify the dictionary after the <xref:System.Windows.Markup.XmlnsDictionary> is sealed throws an <xref:System.InvalidOperationException>.
   syntax:
     content: public void Seal ();
     parameters: []
   overload: System.Windows.Markup.XmlnsDictionary.Seal*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -752,14 +814,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the  is sealed.
+  remarks: This property is an alias for <xref:System.Windows.Markup.XmlnsDictionary.IsReadOnly%2A>.
   syntax:
     content: public bool Sealed { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the dictionary is sealed; otherwise, .
   overload: System.Windows.Markup.XmlnsDictionary.Sealed*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -776,14 +839,14 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets an object that can be used to synchronize access to the .
   syntax:
     content: public object SyncRoot { get; }
     return:
       type: System.Object
-      description: To be added.
+      description: An object that can be used to synchronize access to the .
   overload: System.Windows.Markup.XmlnsDictionary.SyncRoot*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -801,15 +864,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Collections.IDictionary.GetEnumerator%2A?displayProperty=fullName>.
   syntax:
     content: System.Collections.IDictionaryEnumerator IDictionary.GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.IDictionaryEnumerator
-      description: To be added.
+      description: An <xref:System.Collections.IDictionaryEnumerator> object that can be used to iterate through the collection.
   overload: System.Windows.Markup.XmlnsDictionary.System#Collections#IDictionary#GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -827,15 +890,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: For a description of this member, see <xref:System.Collections.IEnumerable.GetEnumerator%2A?displayProperty=fullName>.
   syntax:
     content: System.Collections.IEnumerator IEnumerable.GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.IEnumerator
-      description: To be added.
+      description: An <xref:System.Collections.IEnumerator> object that can be used to iterate through the collection.
   overload: System.Windows.Markup.XmlnsDictionary.System#Collections#IEnumerable#GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -852,14 +915,14 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of all the values in the .
   syntax:
     content: public System.Collections.ICollection Values { get; }
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: A collection of all the values in the .
   overload: System.Windows.Markup.XmlnsDictionary.Values*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -892,30 +955,12 @@ references:
   name: Add(Object,Object)
   nameWithType: XmlnsDictionary.Add(Object,Object)
   fullName: System.Windows.Markup.XmlnsDictionary.Add(Object,Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Markup.XmlnsDictionary.Add(System.String,System.String)
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: Add(String,String)
   nameWithType: XmlnsDictionary.Add(String,String)
   fullName: System.Windows.Markup.XmlnsDictionary.Add(String,String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.String
   parent: System
   isExternal: true
@@ -940,12 +985,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Markup.XmlnsDictionary.CopyTo(System.Array,System.Int32)
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
@@ -970,42 +1009,32 @@ references:
   name: CopyTo(DictionaryEntry[],Int32)
   nameWithType: XmlnsDictionary.CopyTo(DictionaryEntry[],Int32)
   fullName: System.Windows.Markup.XmlnsDictionary.CopyTo(DictionaryEntry[],Int32)
-- uid: System.Collections.DictionaryEntry
+- uid: System.Collections.DictionaryEntry[]
   parent: System.Collections
   isExternal: true
   name: DictionaryEntry
   nameWithType: DictionaryEntry
   fullName: System.Collections.DictionaryEntry[]
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
+  spec.csharp:
+  - uid: System.Collections.DictionaryEntry
+    name: DictionaryEntry
+    nameWithType: DictionaryEntry
+    fullName: DictionaryEntry[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Windows.Markup.XmlnsDictionary.Count
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: Count
   nameWithType: XmlnsDictionary.Count
   fullName: System.Windows.Markup.XmlnsDictionary.Count
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Windows.Markup.XmlnsDictionary.DefaultNamespace
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: DefaultNamespace()
   nameWithType: XmlnsDictionary.DefaultNamespace()
   fullName: System.Windows.Markup.XmlnsDictionary.DefaultNamespace()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Markup.XmlnsDictionary.GetDictionaryEnumerator
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
@@ -1036,18 +1065,6 @@ references:
   name: GetNamespace(String)
   nameWithType: XmlnsDictionary.GetNamespace(String)
   fullName: System.Windows.Markup.XmlnsDictionary.GetNamespace(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Markup.XmlnsDictionary.GetNamespacePrefixes
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
@@ -1060,78 +1077,51 @@ references:
   name: IEnumerable<NamespaceDeclaration>
   nameWithType: IEnumerable<NamespaceDeclaration>
   fullName: System.Collections.Generic.IEnumerable<System.Xaml.NamespaceDeclaration>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Xaml.NamespaceDeclaration>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Xaml.NamespaceDeclaration
+    name: NamespaceDeclaration
+    nameWithType: NamespaceDeclaration
+    fullName: NamespaceDeclaration
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Markup.XmlnsDictionary.IsFixedSize
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: IsFixedSize
   nameWithType: XmlnsDictionary.IsFixedSize
   fullName: System.Windows.Markup.XmlnsDictionary.IsFixedSize
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Markup.XmlnsDictionary.IsReadOnly
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: IsReadOnly
   nameWithType: XmlnsDictionary.IsReadOnly
   fullName: System.Windows.Markup.XmlnsDictionary.IsReadOnly
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Markup.XmlnsDictionary.IsSynchronized
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: IsSynchronized
   nameWithType: XmlnsDictionary.IsSynchronized
   fullName: System.Windows.Markup.XmlnsDictionary.IsSynchronized
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Markup.XmlnsDictionary.Item(System.Object)
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: Item(Object)
   nameWithType: XmlnsDictionary.Item(Object)
   fullName: System.Windows.Markup.XmlnsDictionary.Item(Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Markup.XmlnsDictionary.Item(System.String)
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: Item(String)
   nameWithType: XmlnsDictionary.Item(String)
   fullName: System.Windows.Markup.XmlnsDictionary.Item(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Markup.XmlnsDictionary.Keys
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
@@ -1150,36 +1140,12 @@ references:
   name: LookupNamespace(String)
   nameWithType: XmlnsDictionary.LookupNamespace(String)
   fullName: System.Windows.Markup.XmlnsDictionary.LookupNamespace(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Markup.XmlnsDictionary.LookupPrefix(System.String)
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: LookupPrefix(String)
   nameWithType: XmlnsDictionary.LookupPrefix(String)
   fullName: System.Windows.Markup.XmlnsDictionary.LookupPrefix(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Markup.XmlnsDictionary.PopScope
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
@@ -1198,24 +1164,12 @@ references:
   name: Remove(Object)
   nameWithType: XmlnsDictionary.Remove(Object)
   fullName: System.Windows.Markup.XmlnsDictionary.Remove(Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Markup.XmlnsDictionary.Remove(System.String)
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: Remove(String)
   nameWithType: XmlnsDictionary.Remove(String)
   fullName: System.Windows.Markup.XmlnsDictionary.Remove(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Markup.XmlnsDictionary.Seal
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
@@ -1228,60 +1182,30 @@ references:
   name: Sealed
   nameWithType: XmlnsDictionary.Sealed
   fullName: System.Windows.Markup.XmlnsDictionary.Sealed
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Markup.XmlnsDictionary.SyncRoot
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: SyncRoot
   nameWithType: XmlnsDictionary.SyncRoot
   fullName: System.Windows.Markup.XmlnsDictionary.SyncRoot
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Markup.XmlnsDictionary.System#Collections#IDictionary#GetEnumerator
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: System.Collections.IDictionary.GetEnumerator()
   nameWithType: XmlnsDictionary.System.Collections.IDictionary.GetEnumerator()
   fullName: System.Windows.Markup.XmlnsDictionary.System.Collections.IDictionary.GetEnumerator()
-- uid: System.Collections.IDictionaryEnumerator
-  parent: System.Collections
-  isExternal: true
-  name: IDictionaryEnumerator
-  nameWithType: IDictionaryEnumerator
-  fullName: System.Collections.IDictionaryEnumerator
 - uid: System.Windows.Markup.XmlnsDictionary.System#Collections#IEnumerable#GetEnumerator
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: System.Collections.IEnumerable.GetEnumerator()
   nameWithType: XmlnsDictionary.System.Collections.IEnumerable.GetEnumerator()
   fullName: System.Windows.Markup.XmlnsDictionary.System.Collections.IEnumerable.GetEnumerator()
-- uid: System.Collections.IEnumerator
-  parent: System.Collections
-  isExternal: true
-  name: IEnumerator
-  nameWithType: IEnumerator
-  fullName: System.Collections.IEnumerator
 - uid: System.Windows.Markup.XmlnsDictionary.Values
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false
   name: Values
   nameWithType: XmlnsDictionary.Values
   fullName: System.Windows.Markup.XmlnsDictionary.Values
-- uid: System.Collections.ICollection
-  parent: System.Collections
-  isExternal: true
-  name: ICollection
-  nameWithType: ICollection
-  fullName: System.Collections.ICollection
 - uid: System.Windows.Markup.XmlnsDictionary.#ctor*
   parent: System.Windows.Markup.XmlnsDictionary
   isExternal: false

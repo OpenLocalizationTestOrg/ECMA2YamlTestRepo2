@@ -15,8 +15,8 @@ items:
   nameWithType: DpapiDataProtector
   fullName: System.Security.Cryptography.DpapiDataProtector
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides simple data protection methods.
+  remarks: "The DpapiDataProtector class provides a structured way to protect data by using the <xref:System.Security.Cryptography.ProtectedData> class. The class constructor has purpose parameters that serve like a password to identify the protected data. All three parameters are hashed and included as part of the encrypted data string. You must know the purpose parameters to unprotect the data. The <xref:System.Security.Cryptography.ProtectedData.Protect%2A?displayProperty=fullName> method that is called to encrypt the data has an `optionalEntropy` parameter that allows you to add qualifying information to encrypt the data more securely. The hash of the purpose parameters is used for optional entropy. Because you do not need a key to decrypt the data, carefully choosing the purpose data adds another level of security to data protection.  \n  \n If you use a <xref:System.Security.Cryptography.DpapiDataProtector.Scope%2A> setting of <xref:System.Security.Cryptography.DataProtectionScope>, only a user with logon credentials that match those of the user who encrypted the data can decrypt the data. In addition, decryption usually can be done only on the computer where the data was encrypted. The Windows function that encrypts the data creates a session key to perform the encryption. The session key is derived again when the data is to be decrypted. For a detailed description of how data is protected by using session keys, see [Windows Data Protection](http://go.microsoft.com/fwlink/?LinkId=224686).  \n  \n If you use a <xref:System.Security.Cryptography.DpapiDataProtector.Scope%2A> setting of <xref:System.Security.Cryptography.DataProtectionScope> when protecting the data and do not carefully identify the purpose parameters, any other application on that computer that knows the purposes can access and unprotect the data."
   syntax:
     content: 'public sealed class DpapiDataProtector : System.Security.Cryptography.DataProtector'
   inheritance:
@@ -47,21 +47,25 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new instance of the  class by using the specified application name, primary purpose, and specific purposes.
+  remarks: The application name specified by the `appName` parameter is considered to be a part of the purpose for the protected data. The three parameters are hashed, and the hash is used for both protecting and unprotecting the data. Examples of `primaryPurpose` and `specificPurposes` values are **Giftcard** and **\<gift card number>** or **Invoice** and **\<invoice number>**.
   syntax:
     content: public DpapiDataProtector (string appName, string primaryPurpose, string[] specificPurpose);
     parameters:
     - id: appName
       type: System.String
-      description: To be added.
+      description: The name of the application.
     - id: primaryPurpose
       type: System.String
-      description: To be added.
+      description: The primary purpose for the data protector.
     - id: specificPurpose
       type: System.String[]
-      description: To be added.
+      description: The specific purpose(s) for the data protector.
   overload: System.Security.Cryptography.DpapiDataProtector.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    appName is an empty string or .  \n  \n -or-  \n  \n primaryPurpose is an empty string or .  \n  \n -or-  \n  \n specificPurposes contains an empty string or ."
   platform:
   - net-11
   - net-20
@@ -78,18 +82,19 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines if the data must be re-encrypted.
+  remarks: This method always returns `true`.
   syntax:
     content: public override bool IsReprotectRequired (byte[] encryptedData);
     parameters:
     - id: encryptedData
       type: System.Byte[]
-      description: To be added.
+      description: The encrypted data to be checked.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the data must be re-encrypted; otherwise, .
   overload: System.Security.Cryptography.DpapiDataProtector.IsReprotectRequired*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -106,14 +111,13 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override bool PrependHashedPurposeToPlaintext { get; }
     return:
       type: System.Boolean
       description: To be added.
   overload: System.Security.Cryptography.DpapiDataProtector.PrependHashedPurposeToPlaintext*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -130,8 +134,6 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override byte[] ProviderProtect (byte[] userData);
     parameters:
@@ -142,6 +144,7 @@ items:
       type: System.Byte[]
       description: To be added.
   overload: System.Security.Cryptography.DpapiDataProtector.ProviderProtect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -158,8 +161,6 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override byte[] ProviderUnprotect (byte[] encryptedData);
     parameters:
@@ -170,6 +171,7 @@ items:
       type: System.Byte[]
       description: To be added.
   overload: System.Security.Cryptography.DpapiDataProtector.ProviderUnprotect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -186,14 +188,15 @@ items:
   assemblies:
   - System.Security
   namespace: System.Security.Cryptography
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the scope of the data protection.
+  remarks: Data protection encrypts the data on the disk so it cannot be read by other programs.  You do not need a key to protect or unprotect the data. If you set the Scope to <xref:System.Security.Cryptography.DataProtectionScope>, only applications running on your credentials can unprotect the data; however, that means that any application running on your credentials can access the protected data.  If you set the Scope to <xref:System.Security.Cryptography.DataProtectionScope>, any full-trust application on the computer can unprotect, access, and modify the data if it knows the application name, the primary purpose, and the specific purpose.
   syntax:
     content: public System.Security.Cryptography.DataProtectionScope Scope { get; set; }
     return:
       type: System.Security.Cryptography.DataProtectionScope
-      description: To be added.
+      description: One of the enumeration values that specifies the scope of the data protection (either the current user or the local machine). The default is .
   overload: System.Security.Cryptography.DpapiDataProtector.Scope*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -214,18 +217,20 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
+- uid: System.String[]
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Security.Cryptography.DpapiDataProtector.IsReprotectRequired(System.Byte[])
   parent: System.Security.Cryptography.DpapiDataProtector
   isExternal: false
@@ -238,60 +243,38 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Security.Cryptography.DpapiDataProtector.PrependHashedPurposeToPlaintext
   parent: System.Security.Cryptography.DpapiDataProtector
   isExternal: false
   name: PrependHashedPurposeToPlaintext
   nameWithType: DpapiDataProtector.PrependHashedPurposeToPlaintext
   fullName: System.Security.Cryptography.DpapiDataProtector.PrependHashedPurposeToPlaintext
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Security.Cryptography.DpapiDataProtector.ProviderProtect(System.Byte[])
   parent: System.Security.Cryptography.DpapiDataProtector
   isExternal: false
   name: ProviderProtect(Byte[])
   nameWithType: DpapiDataProtector.ProviderProtect(Byte[])
   fullName: System.Security.Cryptography.DpapiDataProtector.ProviderProtect(Byte[])
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.DpapiDataProtector.ProviderUnprotect(System.Byte[])
   parent: System.Security.Cryptography.DpapiDataProtector
   isExternal: false
   name: ProviderUnprotect(Byte[])
   nameWithType: DpapiDataProtector.ProviderUnprotect(Byte[])
   fullName: System.Security.Cryptography.DpapiDataProtector.ProviderUnprotect(Byte[])
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Security.Cryptography.DpapiDataProtector.Scope
   parent: System.Security.Cryptography.DpapiDataProtector
   isExternal: false

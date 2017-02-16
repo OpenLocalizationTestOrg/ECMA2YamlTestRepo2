@@ -18,8 +18,8 @@ items:
   nameWithType: ArgIterator
   fullName: System.ArgIterator
   type: Struct
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a variable-length argument list; that is, the parameters of a function that takes a variable number of arguments.
+  remarks: "Developers who write compilers use the ArgIterator structure to enumerate the mandatory and optional arguments in an argument list. The ArgIterator structure is not generally useful for applications other than compilers.  \n  \n The functionality in the ArgIterator structure is typically hidden in the syntax of a specific programming language. For example, in the C++ programming language you declare a variable-length argument list by specifying an ellipsis (\"...\") at the end of the argument list. The ArgIterator structure is useful primarily when a development language does not provide direct support for accessing variable-length parameters."
   syntax:
     content: public struct ArgIterator
   inheritance:
@@ -41,15 +41,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  structure using the specified argument list.
+  remarks: The new <xref:System.ArgIterator> object enumerates the argument list starting from the first optional argument.
   syntax:
     content: public ArgIterator (RuntimeArgumentHandle arglist);
     parameters:
     - id: arglist
       type: System.RuntimeArgumentHandle
-      description: To be added.
+      description: An argument list consisting of mandatory and optional arguments.
   overload: System.ArgIterator.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -66,18 +67,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  structure using the specified argument list and a pointer to an item in the list.
+  remarks: The new <xref:System.ArgIterator> object enumerates the argument list starting from the argument specified by `ptr`, or the first mandatory argument if `ptr` is `null`.
   syntax:
     content: public ArgIterator (RuntimeArgumentHandle arglist, void* ptr);
     parameters:
     - id: arglist
       type: System.RuntimeArgumentHandle
-      description: To be added.
+      description: An argument list consisting of mandatory and optional arguments.
     - id: ptr
       type: System.Void*
-      description: To be added.
+      description: A pointer to the argument in `arglist` to access first, or the first mandatory argument in `arglist` if `ptr` is .
   overload: System.ArgIterator.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -94,12 +96,13 @@ items:
   assemblies:
   - mscorlib
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Concludes processing of the variable-length argument list represented by this instance.
+  remarks: "Conceptually, End concludes the processing of a variable-length argument list. However, this method has no actual implementation; the End method body is empty. You can use this method in your code as a marker to indicate where variable-length argument list processing logically ends.  \n  \n The End method corresponds to the `va_end` method in the C standard library."
   syntax:
     content: public void End ();
     parameters: []
   overload: System.ArgIterator.End*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -116,18 +119,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: This method is not supported, and always throws <xref:System.NotSupportedException>.
   syntax:
     content: public override bool Equals (object o);
     parameters:
     - id: o
       type: System.Object
-      description: To be added.
+      description: An object to be compared to this instance.
     return:
       type: System.Boolean
-      description: To be added.
+      description: This comparison is not supported. No value is returned.
   overload: System.ArgIterator.Equals*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: This method is not supported.
   platform:
   - net-11
   - net-20
@@ -144,15 +150,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the hash code of this object.
   syntax:
     content: public override int GetHashCode ();
     parameters: []
     return:
       type: System.Int32
-      description: To be added.
+      description: A 32-bit signed integer hash code.
   overload: System.ArgIterator.GetHashCode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -169,15 +175,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the next argument in a variable-length argument list.
+  remarks: The iterator is automatically advanced to the next argument.
   syntax:
     content: public TypedReference GetNextArg ();
     parameters: []
     return:
       type: System.TypedReference
-      description: To be added.
+      description: The next argument as a  object.
   overload: System.ArgIterator.GetNextArg*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An attempt was made to read beyond the end of the list.
   platform:
   - net-11
   - net-20
@@ -194,18 +204,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the next argument in a variable-length argument list that has a specified type.
+  remarks: The iterator is automatically advanced to the next argument.
   syntax:
     content: public TypedReference GetNextArg (RuntimeTypeHandle rth);
     parameters:
     - id: rth
       type: System.RuntimeTypeHandle
-      description: To be added.
+      description: A runtime type handle that identifies the type of the argument to retrieve.
     return:
       type: System.TypedReference
-      description: To be added.
+      description: The next argument as a  object.
   overload: System.ArgIterator.GetNextArg*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An attempt was made to read beyond the end of the list.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The pointer to the remaining arguments is zero.
   platform:
   - net-11
   - net-20
@@ -222,15 +239,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the type of the next argument.
+  remarks: "This method does not advance the iterator to the next argument.  \n  \n GetNextArgType returns the type of the argument as specified in the calling function. For example, if an argument is type <xref:System.String>, but the calling function specifies the argument as type <xref:System.Object>, GetNextArgType reports the argument as type <xref:System.Object>."
   syntax:
     content: public RuntimeTypeHandle GetNextArgType ();
     parameters: []
     return:
       type: System.RuntimeTypeHandle
-      description: To be added.
+      description: The type of the next argument.
   overload: System.ArgIterator.GetNextArgType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -247,15 +265,15 @@ items:
   assemblies:
   - mscorlib
   namespace: System
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the number of arguments remaining in the argument list.
   syntax:
     content: public int GetRemainingCount ();
     parameters: []
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of remaining arguments.
   overload: System.ArgIterator.GetRemainingCount*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -282,12 +300,6 @@ references:
   name: ArgIterator(RuntimeArgumentHandle,Void*)
   nameWithType: ArgIterator.ArgIterator(RuntimeArgumentHandle,Void*)
   fullName: System.ArgIterator.ArgIterator(RuntimeArgumentHandle,Void*)
-- uid: System.RuntimeArgumentHandle
-  parent: System
-  isExternal: false
-  name: RuntimeArgumentHandle
-  nameWithType: RuntimeArgumentHandle
-  fullName: System.RuntimeArgumentHandle
 - uid: System.ArgIterator.End
   parent: System.ArgIterator
   isExternal: false
@@ -342,12 +354,6 @@ references:
   name: GetNextArg(RuntimeTypeHandle)
   nameWithType: ArgIterator.GetNextArg(RuntimeTypeHandle)
   fullName: System.ArgIterator.GetNextArg(RuntimeTypeHandle)
-- uid: System.TypedReference
-  parent: System
-  isExternal: false
-  name: TypedReference
-  nameWithType: TypedReference
-  fullName: System.TypedReference
 - uid: System.RuntimeTypeHandle
   parent: System
   isExternal: true
@@ -360,24 +366,12 @@ references:
   name: GetNextArgType()
   nameWithType: ArgIterator.GetNextArgType()
   fullName: System.ArgIterator.GetNextArgType()
-- uid: System.RuntimeTypeHandle
-  parent: System
-  isExternal: true
-  name: RuntimeTypeHandle
-  nameWithType: RuntimeTypeHandle
-  fullName: System.RuntimeTypeHandle
 - uid: System.ArgIterator.GetRemainingCount
   parent: System.ArgIterator
   isExternal: false
   name: GetRemainingCount()
   nameWithType: ArgIterator.GetRemainingCount()
   fullName: System.ArgIterator.GetRemainingCount()
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.ArgIterator.#ctor*
   parent: System.ArgIterator
   isExternal: false

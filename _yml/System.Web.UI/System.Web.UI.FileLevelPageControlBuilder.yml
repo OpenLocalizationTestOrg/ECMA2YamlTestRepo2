@@ -12,8 +12,8 @@ items:
   nameWithType: FileLevelPageControlBuilder
   fullName: System.Web.UI.FileLevelPageControlBuilder
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Parses page files and is the default  class for parsing page files.
+  remarks: Control builders support the page parser in building a control and the child controls that the control contains. The FileLevelPageControlBuilder class is the default <xref:System.Web.UI.ControlBuilder> class for individual page files. Override the FileLevelPageControlBuilder methods to provide custom page parsing.
   syntax:
     content: 'public class FileLevelPageControlBuilder : System.Web.UI.RootBuilder'
   inheritance:
@@ -82,12 +82,13 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: The FileLevelPageControlBuilder constructor is used by ASP.NET when parsing the page and is not intended for use in your code.
   syntax:
     content: public FileLevelPageControlBuilder ();
     parameters: []
   overload: System.Web.UI.FileLevelPageControlBuilder.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -104,15 +105,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the specified literal content to a control.
+  remarks: Use the AppendLiteralString method to add literal content to the control. Literal content can be any text that is passed by the browser to the server control. For example, any HTML elements and text, between their opening and closing tags, are literal content.
   syntax:
     content: public override void AppendLiteralString (string text);
     parameters:
     - id: text
       type: System.String
-      description: To be added.
+      description: The content to add to the control.
   overload: System.Web.UI.FileLevelPageControlBuilder.AppendLiteralString*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: The AppendLiteralString method cannot append the literal string to a content page.
   platform:
   - net-11
   - net-20
@@ -129,15 +134,22 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a  object to the  object for any child controls that belong to the container control.
+  remarks: The AppendSubBuilder method overrides the <xref:System.Web.UI.ControlBuilder.AppendSubBuilder%2A?displayProperty=fullName> method to provide custom logic when master pages and content pages are being used. In a content page, anything that is not inside the <xref:System.Web.UI.WebControls.Content> control (except script blocks for server code) raises an <xref:System.Web.HttpParseException> exception. Adding a <xref:System.Web.UI.ControlBuilder> object for a child control that is a <xref:System.Web.UI.WebControls.Content> control raises an <xref:System.Web.HttpException> exception. For more information about master and content pages, see [ASP.NET Master Pages](../Topic/ASP.NET%20Master%20Pages.md).
   syntax:
     content: public override void AppendSubBuilder (System.Web.UI.ControlBuilder subBuilder);
     parameters:
     - id: subBuilder
       type: System.Web.UI.ControlBuilder
-      description: To be added.
+      description: The  assigned to the child control.
   overload: System.Web.UI.FileLevelPageControlBuilder.AppendSubBuilder*
+  exceptions:
+  - type: System.Web.HttpException
+    commentId: T:System.Web.HttpException
+    description: The  that was added is associated with a  control and is only allowed on pages that contain  controls.
+  - type: System.Web.HttpParseException
+    commentId: T:System.Web.HttpParseException
+    description: The content page contained a literal other than a  control.
   platform:
   - net-11
   - net-20

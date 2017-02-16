@@ -27,8 +27,10 @@ items:
   nameWithType: CompositionContainer
   fullName: System.ComponentModel.Composition.Hosting.CompositionContainer
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Manages the composition of parts.
+  remarks: "A CompositionContainer object serves two major purposes in an application. First, it keeps track of which parts are available for composition and what their dependencies are, and performs composition whenever the set of available parts changes. Second, it provides the methods by which the application gets instances of composed parts or fills the dependencies of a composable part.  \n  \n> [!IMPORTANT]\n>  This type implements the <xref:System.IDisposable> interface. When you have finished using the type, you should dispose of it either directly or indirectly. To dispose of the type directly, call its <xref:System.IDisposable.Dispose%2A> method in a `try`/`catch` block. To dispose of it indirectly, use a language construct such as `using` (in C#) or `Using` (in Visual Basic). For more information, see the “Using an Object that Implements IDisposable” section in the <xref:System.IDisposable> interface topic.  \n  \n Parts can be made available to the container either directly or through the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer.Catalog%2A> property. All the parts discoverable in this <xref:System.ComponentModel.Composition.Primitives.ComposablePartCatalog> are available to the container to fulfill imports, along with any parts added directly.  \n  \n The <xref:System.ComponentModel.Composition.Hosting.CompositionContainer.Compose%2A> method allows instantiated parts to be added to an existing container. Assuming composition is successful, these parts will have their imports filled with parts retrieved from the container, and their exports will be available to other parts. Imports marked as recomposable will be registered for recomposition.  \n  \n The <xref:System.ComponentModel.Composition.Hosting.CompositionContainer.SatisfyImportsOnce%2A> method allows a part to have its imports filled without being added to the container. If the composition is successful, the part's imports will be filled, but the part's exports will not be available to other parts and no imports will be registered for recomposition.  \n  \n CompositionContainer objects should always be disposed. When the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer.Dispose%2A> method is called, the CompositionContainer object also disposes all the parts that it has created.  \n  \n A CompositionContainer object that can be accessed from multiple threads must be constructed with the `isThreadSafe` parameter set to `true`, using the [CompositionContainer(ComposablePartCatalog, Boolean, ExportProvider\\[\\])](assetId:///M:System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor(System.ComponentModel.Composition.Primitives.ComposablePartCatalog,System.Boolean,System.ComponentModel.Composition.Hosting.ExportProvider[])?qualifyHint=False&autoUpgrade=False) constructor. Performance will be slightly slower when `isThreadSafe` is `true`, so we recommend that you set this parameter to `false` in single-threaded scenarios. The default is `false`.  \n  \n> [!WARNING]\n>  A CompositionContainer should never import itself, or a part that has a reference to it. Such a reference could allow an untrusted part to gain access all the parts in the container."
+  example:
+  - "In the following example, a CompositionContainer object is initialized with a catalog and is used to fill the imports of a part. This example uses the Attributed Programming Model.  \n  \n [!code-cs[Composition.CompositionContainer#1](../../add/codesnippet/CSharp/composition.compositioncontainer.consoleapplication1/program.cs#1)]\n [!code-vb[Composition.CompositionContainer#1](../../add/codesnippet/VisualBasic/compositioncontainerexample/module1.vb#1)]"
   syntax:
     content: 'public class CompositionContainer : System.ComponentModel.Composition.Hosting.ExportProvider, IDisposable, System.ComponentModel.Composition.ICompositionService'
   inheritance:
@@ -76,12 +78,12 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public CompositionContainer ();
     parameters: []
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -98,15 +100,18 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified export providers.
   syntax:
     content: public CompositionContainer (System.ComponentModel.Composition.Hosting.ExportProvider[] providers);
     parameters:
     - id: providers
       type: System.ComponentModel.Composition.Hosting.ExportProvider[]
-      description: To be added.
+      description: An array of  objects that provide the  access to  objects, or  to set <xref:System.ComponentModel.Composition.Hosting.CompositionContainer.Providers%2A> to an empty <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    providers contains an element that is ."
   platform:
   - net-11
   - net-20
@@ -123,18 +128,21 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified export providers and options.
   syntax:
     content: public CompositionContainer (System.ComponentModel.Composition.Hosting.CompositionOptions compositionOptions, System.ComponentModel.Composition.Hosting.ExportProvider[] providers);
     parameters:
     - id: compositionOptions
       type: System.ComponentModel.Composition.Hosting.CompositionOptions
-      description: To be added.
+      description: An object that specifies the behavior of this container.
     - id: providers
       type: System.ComponentModel.Composition.Hosting.ExportProvider[]
-      description: To be added.
+      description: An array of  objects that provide the  access to  objects, or  to set <xref:System.ComponentModel.Composition.Hosting.CompositionContainer.Providers%2A> to an empty <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    providers contains an element that is ."
   platform:
   - net-11
   - net-20
@@ -151,18 +159,21 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified catalog and export providers.
   syntax:
     content: public CompositionContainer (System.ComponentModel.Composition.Primitives.ComposablePartCatalog catalog, System.ComponentModel.Composition.Hosting.ExportProvider[] providers);
     parameters:
     - id: catalog
       type: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
-      description: To be added.
+      description: A catalog that provides  objects to the .
     - id: providers
       type: System.ComponentModel.Composition.Hosting.ExportProvider[]
-      description: To be added.
+      description: An array of  objects that provide the  access to  objects, or  to set <xref:System.ComponentModel.Composition.Hosting.CompositionContainer.Providers%2A> to an empty <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    providers contains an element that is ."
   platform:
   - net-11
   - net-20
@@ -179,21 +190,25 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified catalog, thread-safe mode, and export providers.
+  remarks: A <xref:System.ComponentModel.Composition.Hosting.CompositionContainer> object that can be accessed from multiple threads must set the `isThreadSafe` parameter to `true`. Performance will be slightly slower when `isThreadSafe` is `true`, so we recommend that you set this parameter to `false` in single-threaded scenarios. The default is `false`.
   syntax:
     content: public CompositionContainer (System.ComponentModel.Composition.Primitives.ComposablePartCatalog catalog, bool isThreadSafe, System.ComponentModel.Composition.Hosting.ExportProvider[] providers);
     parameters:
     - id: catalog
       type: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
-      description: To be added.
+      description: A catalog that provides  objects to the .
     - id: isThreadSafe
       type: System.Boolean
-      description: To be added.
+      description: "\n     if this  object must be thread-safe; otherwise, ."
     - id: providers
       type: System.ComponentModel.Composition.Hosting.ExportProvider[]
-      description: To be added.
+      description: An array of  objects that provide the  access to  objects, or  to set the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer.Providers%2A> property to an empty <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: One or more elements of providers are .
   platform:
   - net-11
   - net-20
@@ -210,21 +225,24 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the specified catalog, options, and export providers.
   syntax:
     content: public CompositionContainer (System.ComponentModel.Composition.Primitives.ComposablePartCatalog catalog, System.ComponentModel.Composition.Hosting.CompositionOptions compositionOptions, System.ComponentModel.Composition.Hosting.ExportProvider[] providers);
     parameters:
     - id: catalog
       type: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
-      description: To be added.
+      description: A catalog that provides  objects to the .
     - id: compositionOptions
       type: System.ComponentModel.Composition.Hosting.CompositionOptions
-      description: To be added.
+      description: An object that specifies options that affect the behavior of the container.
     - id: providers
       type: System.ComponentModel.Composition.Hosting.ExportProvider[]
-      description: To be added.
+      description: An array of  objects that provide the  access to  objects, or  to set <xref:System.ComponentModel.Composition.Hosting.CompositionContainer.Providers%2A> to an empty <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    providers contains an element that is ."
   platform:
   - net-11
   - net-20
@@ -241,14 +259,17 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  that provides the container access to  objects.
   syntax:
     content: public System.ComponentModel.Composition.Primitives.ComposablePartCatalog Catalog { get; }
     return:
       type: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
-      description: To be added.
+      description: The catalog that provides the  access to exports produced from  objects. The default is .
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.Catalog*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  object has been disposed of.
   platform:
   - net-11
   - net-20
@@ -265,15 +286,18 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds or removes the parts in the specified  from the container and executes composition.
+  remarks: "This method is the primary way of directly adding or removing parts from the container. The <xref:System.ComponentModel.Composition.Hosting.CompositionContainer> will always maintain a stable, composed state. Therefore, calling Compose with an empty <xref:System.ComponentModel.Composition.Hosting.CompositionBatch> is never necessary to start composition. Instead, call the Compose method whenever you need to make changes to the parts available to the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer>.  \n  \n The <xref:System.ComponentModel.Composition.Hosting.CompositionBatch> can contain both parts to be added and parts to be removed.  Recomposition will take place only once for each call to Compose."
+  example:
+  - "In this simple example, three parts are created and added to the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer>, and one part is retrieved to show that all imports have been filled. This example uses the Attributed Programming Model.  \n  \n [!code-vb[Composition.CompositionContainer.Compose#1](../../add/codesnippet/VisualBasic/consoleapplication6/module1.vb#1)]\n [!code-cs[Composition.CompositionContainer.Compose#1](../../add/codesnippet/CSharp/consoleapplication5/program.cs#1)]"
   syntax:
     content: public void Compose (System.ComponentModel.Composition.Hosting.CompositionBatch batch);
     parameters:
     - id: batch
       type: System.ComponentModel.Composition.Hosting.CompositionBatch
-      description: To be added.
+      description: Changes to the  to include during the composition.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.Compose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -290,12 +314,13 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases all resources used by the current instance of the  class.
+  remarks: "Call `Dispose` when you are finished using the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer>. The `Dispose` method leaves the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer> in an unusable state. After calling `Dispose`, you must release all references to the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer> so the garbage collector can reclaim the memory that the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer> was occupying.  \n  \n For more information, see [Cleaning Up Unmanaged Resources](../Topic/Cleaning%20Up%20Unmanaged%20Resources.md) and [Implementing a Dispose Method](../Topic/Implementing%20a%20Dispose%20Method.md).  \n  \n> [!NOTE]\n>  Always call `Dispose` before you release your last reference to the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer>. Otherwise, the resources it is using will not be freed until the garbage collector calls the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer> object's `Finalize` method."
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -312,15 +337,15 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the unmanaged resources used by the  and optionally releases the managed resources.
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -337,21 +362,22 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a collection of all exports that match the conditions in the specified  object.
+  remarks: Implementations should not treat cardinality-related mismatches as errors and should not throw exceptions for cardinality-related mismatches. For example, if the import requests exactly one export and the provider has either no matching exports or more than one, the GetExportsCore method should return an empty <xref:System.Collections.Generic.IEnumerable%601> collection of <xref:System.ComponentModel.Composition.Primitives.Export> objects.
   syntax:
     content: protected override System.Collections.Generic.IEnumerable<System.ComponentModel.Composition.Primitives.Export> GetExportsCore (System.ComponentModel.Composition.Primitives.ImportDefinition definition, System.ComponentModel.Composition.Hosting.AtomicComposition atomicComposition);
     parameters:
     - id: definition
       type: System.ComponentModel.Composition.Primitives.ImportDefinition
-      description: To be added.
+      description: The object that defines the conditions of the  objects to get.
     - id: atomicComposition
       type: System.ComponentModel.Composition.Hosting.AtomicComposition
-      description: To be added.
+      description: The composition transaction to use, or  to disable transactional composition.
     return:
       type: System.Collections.Generic.IEnumerable{System.ComponentModel.Composition.Primitives.Export}
-      description: To be added.
+      description: A collection of all the  objects in this  object that match the conditions specified by definition.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.GetExportsCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -368,14 +394,17 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the export providers that provide the container access to additional  objects.
   syntax:
     content: public System.Collections.ObjectModel.ReadOnlyCollection<System.ComponentModel.Composition.Hosting.ExportProvider> Providers { get; }
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.ComponentModel.Composition.Hosting.ExportProvider}
-      description: To be added.
+      description: A collection of  objects that provide the  access to additional  objects. The default is an empty <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.Providers*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  has been disposed of.
   platform:
   - net-11
   - net-20
@@ -392,15 +421,19 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the specified  object from the .
+  remarks: "The behavior of this method may vary depending on the implementation of the <xref:System.ComponentModel.Composition.Hosting.ExportProvider> that produced the <xref:System.ComponentModel.Composition.Primitives.Export> instance. As a rule, non-shared exports should be detached from the container.  \n  \n For example, the <xref:System.ComponentModel.Composition.Hosting.CatalogExportProvider> will only release an <xref:System.ComponentModel.Composition.Primitives.Export> if it comes from a <xref:System.ComponentModel.Composition.Primitives.ComposablePart> that was constructed under a <xref:System.ComponentModel.Composition.CreationPolicy> context. Release in this context means walking the dependency chain of the <xref:System.ComponentModel.Composition.Primitives.Export> objects, detaching references from the container and calling `Dispose` on the <xref:System.ComponentModel.Composition.Primitives.ComposablePart> objects as needed. If the <xref:System.ComponentModel.Composition.Primitives.Export> was constructed under a <xref:System.ComponentModel.Composition.CreationPolicy> context the <xref:System.ComponentModel.Composition.Hosting.CatalogExportProvider> will do nothing, as the specified <xref:System.ComponentModel.Composition.Primitives.Export> may being used by other requestors. Those will only be detached when the container is itself disposed."
   syntax:
     content: public void ReleaseExport (System.ComponentModel.Composition.Primitives.Export export);
     parameters:
     - id: export
       type: System.ComponentModel.Composition.Primitives.Export
-      description: To be added.
+      description: The  that needs to be released.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExport*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    export is ."
   platform:
   - net-11
   - net-20
@@ -417,8 +450,6 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public void ReleaseExport<T> (Lazy<T> export);
     parameters:
@@ -426,6 +457,7 @@ items:
       type: System.Lazy{T}
       description: To be added.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExport<T>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -442,15 +474,22 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases a set of  objects from the .
+  remarks: The behavior of this method may vary depending on the context in which the <xref:System.ComponentModel.Composition.Primitives.Export> was constructed. For more information, see the <xref:System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExport%2A> method.
   syntax:
     content: public void ReleaseExports (System.Collections.Generic.IEnumerable<System.ComponentModel.Composition.Primitives.Export> exports);
     parameters:
     - id: exports
       type: System.Collections.Generic.IEnumerable{System.ComponentModel.Composition.Primitives.Export}
-      description: To be added.
+      description: A collection of  objects to be released.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExports*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    exports is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    exports contains an element that is ."
   platform:
   - net-11
   - net-20
@@ -467,8 +506,6 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public void ReleaseExports<T> (System.Collections.Generic.IEnumerable<Lazy<T>> exports);
     parameters:
@@ -476,6 +513,7 @@ items:
       type: System.Collections.Generic.IEnumerable{System.Lazy{T}}
       description: To be added.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExports<T>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -492,8 +530,6 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public void ReleaseExports<T,TMetadataView> (System.Collections.Generic.IEnumerable<Lazy<T,TMetadataView>> exports);
     parameters:
@@ -501,6 +537,7 @@ items:
       type: System.Collections.Generic.IEnumerable{System.Lazy{T,TMetadataView}}
       description: To be added.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExports<T,TMetadataView>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -517,15 +554,24 @@ items:
   assemblies:
   - System.ComponentModel.Composition
   namespace: System.ComponentModel.Composition.Hosting
-  summary: To be added.
-  remarks: To be added.
+  summary: Satisfies the imports of the specified  object without registering it for recomposition.
   syntax:
     content: public void SatisfyImportsOnce (System.ComponentModel.Composition.Primitives.ComposablePart part);
     parameters:
     - id: part
       type: System.ComponentModel.Composition.Primitives.ComposablePart
-      description: To be added.
+      description: The part to satisfy the imports of.
   overload: System.ComponentModel.Composition.Hosting.CompositionContainer.SatisfyImportsOnce*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: The  object has been disposed of.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    part is ."
+  - type: System.ComponentModel.Composition.CompositionException
+    commentId: T:System.ComponentModel.Composition.CompositionException
+    description: An error occurred during composition. <xref:System.ComponentModel.Composition.CompositionException.Errors%2A> will contain a collection of the errors that occurred.
   platform:
   - net-11
   - net-20
@@ -546,12 +592,20 @@ references:
   name: CompositionContainer(ExportProvider[])
   nameWithType: CompositionContainer.CompositionContainer(ExportProvider[])
   fullName: System.ComponentModel.Composition.Hosting.CompositionContainer.CompositionContainer(ExportProvider[])
-- uid: System.ComponentModel.Composition.Hosting.ExportProvider
+- uid: System.ComponentModel.Composition.Hosting.ExportProvider[]
   parent: System.ComponentModel.Composition.Hosting
   isExternal: false
   name: ExportProvider
   nameWithType: ExportProvider
   fullName: System.ComponentModel.Composition.Hosting.ExportProvider[]
+  spec.csharp:
+  - uid: System.ComponentModel.Composition.Hosting.ExportProvider
+    name: ExportProvider
+    nameWithType: ExportProvider
+    fullName: ExportProvider[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor(System.ComponentModel.Composition.Hosting.CompositionOptions,System.ComponentModel.Composition.Hosting.ExportProvider[])
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
@@ -564,12 +618,6 @@ references:
   name: CompositionOptions
   nameWithType: CompositionOptions
   fullName: System.ComponentModel.Composition.Hosting.CompositionOptions
-- uid: System.ComponentModel.Composition.Hosting.ExportProvider
-  parent: System.ComponentModel.Composition.Hosting
-  isExternal: false
-  name: ExportProvider
-  nameWithType: ExportProvider
-  fullName: System.ComponentModel.Composition.Hosting.ExportProvider[]
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor(System.ComponentModel.Composition.Primitives.ComposablePartCatalog,System.ComponentModel.Composition.Hosting.ExportProvider[])
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
@@ -582,72 +630,30 @@ references:
   name: ComposablePartCatalog
   nameWithType: ComposablePartCatalog
   fullName: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
-- uid: System.ComponentModel.Composition.Hosting.ExportProvider
-  parent: System.ComponentModel.Composition.Hosting
-  isExternal: false
-  name: ExportProvider
-  nameWithType: ExportProvider
-  fullName: System.ComponentModel.Composition.Hosting.ExportProvider[]
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor(System.ComponentModel.Composition.Primitives.ComposablePartCatalog,System.Boolean,System.ComponentModel.Composition.Hosting.ExportProvider[])
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
   name: CompositionContainer(ComposablePartCatalog,Boolean,ExportProvider[])
   nameWithType: CompositionContainer.CompositionContainer(ComposablePartCatalog,Boolean,ExportProvider[])
   fullName: System.ComponentModel.Composition.Hosting.CompositionContainer.CompositionContainer(ComposablePartCatalog,Boolean,ExportProvider[])
-- uid: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
-  parent: System.ComponentModel.Composition.Primitives
-  isExternal: false
-  name: ComposablePartCatalog
-  nameWithType: ComposablePartCatalog
-  fullName: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
 - uid: System.Boolean
   parent: System
   isExternal: true
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.ComponentModel.Composition.Hosting.ExportProvider
-  parent: System.ComponentModel.Composition.Hosting
-  isExternal: false
-  name: ExportProvider
-  nameWithType: ExportProvider
-  fullName: System.ComponentModel.Composition.Hosting.ExportProvider[]
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.#ctor(System.ComponentModel.Composition.Primitives.ComposablePartCatalog,System.ComponentModel.Composition.Hosting.CompositionOptions,System.ComponentModel.Composition.Hosting.ExportProvider[])
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
   name: CompositionContainer(ComposablePartCatalog,CompositionOptions,ExportProvider[])
   nameWithType: CompositionContainer.CompositionContainer(ComposablePartCatalog,CompositionOptions,ExportProvider[])
   fullName: System.ComponentModel.Composition.Hosting.CompositionContainer.CompositionContainer(ComposablePartCatalog,CompositionOptions,ExportProvider[])
-- uid: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
-  parent: System.ComponentModel.Composition.Primitives
-  isExternal: false
-  name: ComposablePartCatalog
-  nameWithType: ComposablePartCatalog
-  fullName: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
-- uid: System.ComponentModel.Composition.Hosting.CompositionOptions
-  parent: System.ComponentModel.Composition.Hosting
-  isExternal: false
-  name: CompositionOptions
-  nameWithType: CompositionOptions
-  fullName: System.ComponentModel.Composition.Hosting.CompositionOptions
-- uid: System.ComponentModel.Composition.Hosting.ExportProvider
-  parent: System.ComponentModel.Composition.Hosting
-  isExternal: false
-  name: ExportProvider
-  nameWithType: ExportProvider
-  fullName: System.ComponentModel.Composition.Hosting.ExportProvider[]
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.Catalog
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
   name: Catalog
   nameWithType: CompositionContainer.Catalog
   fullName: System.ComponentModel.Composition.Hosting.CompositionContainer.Catalog
-- uid: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
-  parent: System.ComponentModel.Composition.Primitives
-  isExternal: false
-  name: ComposablePartCatalog
-  nameWithType: ComposablePartCatalog
-  fullName: System.ComponentModel.Composition.Primitives.ComposablePartCatalog
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.Compose(System.ComponentModel.Composition.Hosting.CompositionBatch)
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
@@ -672,12 +678,6 @@ references:
   name: Dispose(Boolean)
   nameWithType: CompositionContainer.Dispose(Boolean)
   fullName: System.ComponentModel.Composition.Hosting.CompositionContainer.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.GetExportsCore(System.ComponentModel.Composition.Primitives.ImportDefinition,System.ComponentModel.Composition.Hosting.AtomicComposition)
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
@@ -690,6 +690,21 @@ references:
   name: IEnumerable<Export>
   nameWithType: IEnumerable<Export>
   fullName: System.Collections.Generic.IEnumerable<System.ComponentModel.Composition.Primitives.Export>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.ComponentModel.Composition.Primitives.Export>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ComponentModel.Composition.Primitives.Export
+    name: Export
+    nameWithType: Export
+    fullName: Export
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ComponentModel.Composition.Primitives.ImportDefinition
   parent: System.ComponentModel.Composition.Primitives
   isExternal: false
@@ -714,6 +729,21 @@ references:
   name: ReadOnlyCollection<ExportProvider>
   nameWithType: ReadOnlyCollection<ExportProvider>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.ComponentModel.Composition.Hosting.ExportProvider>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.ComponentModel.Composition.Hosting.ExportProvider>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.ComponentModel.Composition.Hosting.ExportProvider
+    name: ExportProvider
+    nameWithType: ExportProvider
+    fullName: ExportProvider
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExport(System.ComponentModel.Composition.Primitives.Export)
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
@@ -738,18 +768,27 @@ references:
   name: Lazy<T>
   nameWithType: Lazy<T>
   fullName: System.Lazy<T>
+  spec.csharp:
+  - uid: System.Lazy`1
+    name: Lazy
+    nameWithType: Lazy
+    fullName: Lazy<T>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: T
+    name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExports(System.Collections.Generic.IEnumerable{System.ComponentModel.Composition.Primitives.Export})
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
   name: ReleaseExports(IEnumerable<Export>)
   nameWithType: CompositionContainer.ReleaseExports(IEnumerable<Export>)
   fullName: System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExports(IEnumerable<Export>)
-- uid: System.Collections.Generic.IEnumerable{System.ComponentModel.Composition.Primitives.Export}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IEnumerable<Export>
-  nameWithType: IEnumerable<Export>
-  fullName: System.Collections.Generic.IEnumerable<System.ComponentModel.Composition.Primitives.Export>
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExports``1(System.Collections.Generic.IEnumerable{System.Lazy{``0}})
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
@@ -762,6 +801,31 @@ references:
   name: IEnumerable<Lazy<T>>
   nameWithType: IEnumerable<Lazy<T>>
   fullName: System.Collections.Generic.IEnumerable<System.Lazy<T>>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Lazy<T>>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Lazy`1
+    name: Lazy
+    nameWithType: Lazy
+    fullName: Lazy<T>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: T
+    name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.ReleaseExports``2(System.Collections.Generic.IEnumerable{System.Lazy{``0,``0MetadataView}})
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false
@@ -774,6 +838,38 @@ references:
   name: IEnumerable<Lazy<T,TMetadataView>>
   nameWithType: IEnumerable<Lazy<T,TMetadataView>>
   fullName: System.Collections.Generic.IEnumerable<System.Lazy<T,TMetadataView>>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Lazy<T,TMetadataView>>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Lazy`2
+    name: Lazy
+    nameWithType: Lazy
+    fullName: Lazy<T,TMetadataView>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: T
+    name: T
+    nameWithType: T
+    fullName: T
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: TMetadataView
+    name: TMetadataView
+    nameWithType: TMetadataView
+    fullName: TMetadataView
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ComponentModel.Composition.Hosting.CompositionContainer.SatisfyImportsOnce(System.ComponentModel.Composition.Primitives.ComposablePart)
   parent: System.ComponentModel.Composition.Hosting.CompositionContainer
   isExternal: false

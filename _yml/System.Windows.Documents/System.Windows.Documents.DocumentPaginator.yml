@@ -27,8 +27,8 @@ items:
   nameWithType: DocumentPaginator
   fullName: System.Windows.Documents.DocumentPaginator
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides an abstract base class that supports creation of multiple-page elements from a single document.
+  remarks: If you need automatic background repagination in response to events such as changing the page size of a <xref:System.Windows.Documents.FlowDocument>, then use <xref:System.Windows.Documents.DynamicDocumentPaginator> as your base class.
   syntax:
     content: public abstract class DocumentPaginator
   inheritance:
@@ -51,12 +51,12 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: protected DocumentPaginator ();
     parameters: []
   overload: System.Windows.Documents.DocumentPaginator.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -73,15 +73,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Cancels a previous <xref:System.Windows.Documents.DocumentPaginator.GetPageAsync%2A> or <xref:System.Windows.Documents.DynamicDocumentPaginator.GetPageNumberAsync%2A?displayProperty=fullName> operation.
+  remarks: If `userState` is `null`, then all asynchronous tasks are cancelled.
   syntax:
     content: public virtual void CancelAsync (object userState);
     parameters:
     - id: userState
       type: System.Object
-      description: To be added.
+      description: The original `userState` passed to <xref:System.Windows.Documents.DocumentPaginator.GetPageAsync%2A>, <xref:System.Windows.Documents.DynamicDocumentPaginator.GetPageNumberAsync%2A?displayProperty=fullName>, or <xref:System.Windows.Documents.DocumentPaginator.ComputePageCountAsync%2A> that identifies the asynchronous task to cancel.
   overload: System.Windows.Documents.DocumentPaginator.CancelAsync*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -98,12 +99,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Forces a pagination of the content, updates <xref:System.Windows.Documents.DocumentPaginator.PageCount%2A> with the new total, and sets <xref:System.Windows.Documents.DocumentPaginator.IsPageCountValid%2A> to .
+  remarks: <xref:System.Windows.Documents.DocumentPaginator.IsPageCountValid%2A> will be `true` immediately after this is called. If content is modified or <xref:System.Windows.Documents.DocumentPaginator.PageSize%2A> is changed after this method is called, <xref:System.Windows.Documents.DocumentPaginator.IsPageCountValid%2A> will likely revert to `false`.
   syntax:
     content: public virtual void ComputePageCount ();
     parameters: []
   overload: System.Windows.Documents.DocumentPaginator.ComputePageCount*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -120,12 +122,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Asynchronously, forces a pagination of the content, updates <xref:System.Windows.Documents.DocumentPaginator.PageCount%2A> with the new total, and sets <xref:System.Windows.Documents.DocumentPaginator.IsPageCountValid%2A> to .
+  remarks: 'The only way to cancel the asynchronous operation of this method is to cancel all asynchronous operations. Contrast this with the other overload of this method: <xref:System.Windows.Documents.DocumentPaginator.ComputePageCountAsync%28System.Object%29>.'
   syntax:
     content: public virtual void ComputePageCountAsync ();
     parameters: []
   overload: System.Windows.Documents.DocumentPaginator.ComputePageCountAsync*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -142,15 +145,16 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Asynchronously, forces a pagination of the content, updates <xref:System.Windows.Documents.DocumentPaginator.PageCount%2A> with the new total, sets <xref:System.Windows.Documents.DocumentPaginator.IsPageCountValid%2A> to .
+  remarks: "The specified ID is assigned to the asynchronous task.  \n  \n This overload of the method makes it possible to cancel this asynchronous operation without cancelling all asynchronous operations."
   syntax:
     content: public virtual void ComputePageCountAsync (object userState);
     parameters:
     - id: userState
       type: System.Object
-      description: To be added.
+      description: A unique identifier for the asynchronous task.
   overload: System.Windows.Documents.DocumentPaginator.ComputePageCountAsync*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -167,13 +171,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a <xref:System.Windows.Documents.DocumentPaginator.ComputePageCountAsync%2A> operation has finished.
   syntax:
     content: public event System.ComponentModel.AsyncCompletedEventHandler ComputePageCountCompleted;
     return:
       type: System.ComponentModel.AsyncCompletedEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -190,18 +194,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, gets the  for the specified page number.
+  remarks: "If pages prior to `pageNumber` have not been formatted, they will be paginated synchronously prior to returning the requested page.  \n  \n <xref:System.Windows.Documents.DocumentPaginator.GetPageAsync%2A> provides similar functionality as GetPage, but for asynchronous operation."
   syntax:
     content: public abstract System.Windows.Documents.DocumentPage GetPage (int pageNumber);
     parameters:
     - id: pageNumber
       type: System.Int32
-      description: To be added.
+      description: The zero-based page number of the document page that is needed.
     return:
       type: System.Windows.Documents.DocumentPage
-      description: To be added.
+      description: The  for the specified pageNumber, or  if the page does not exist.
   overload: System.Windows.Documents.DocumentPaginator.GetPage*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    pageNumber is negative."
   platform:
   - net-11
   - net-20
@@ -218,15 +226,19 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Asynchronously returns (through the  event) the  for the specified page number.
+  remarks: "The only way to cancel the asynchronous operation of this method is to cancel all asynchronous operations. Contrast this with the other overload of this method: <xref:System.Windows.Documents.DocumentPaginator.GetPageAsync%28System.Int32%2CSystem.Object%29>.  \n  \n This method raises the <xref:System.Windows.Documents.DocumentPaginator.GetPageCompleted> event. The <xref:System.Windows.Documents.DocumentPage> is passed to the event as one of the event arguments. See <xref:System.Windows.Documents.DocumentPaginator.GetPageAsync%28System.Int32%2CSystem.Object%29> for how to use this method to get the page."
   syntax:
     content: public virtual void GetPageAsync (int pageNumber);
     parameters:
     - id: pageNumber
       type: System.Int32
-      description: To be added.
+      description: The zero-based page number of the document page that is needed.
   overload: System.Windows.Documents.DocumentPaginator.GetPageAsync*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    pageNumber is negative."
   platform:
   - net-11
   - net-20
@@ -243,18 +255,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Asynchronously returns (through the  event) the  for the specified page number and assigns the specified ID to the asynchronous task.
+  remarks: "This overload of the method makes it possible to cancel this asynchronous operation without cancelling all asynchronous operations.  \n  \n This method raises the <xref:System.Windows.Documents.DocumentPaginator.GetPageCompleted> event. The <xref:System.Windows.Documents.DocumentPage> is passed to the event as one of the event arguments.  \n  \n The following steps illustrate how to retrieve a <xref:System.Windows.Documents.DocumentPage> asynchronously:  \n  \n1.  Create a <xref:System.Windows.Documents.GetPageCompletedEventHandler> delegate and add it to be notified of <xref:System.Windows.Documents.DocumentPaginator.GetPageCompleted> events.  \n  \n2.  Call GetPageAsync specifying the `pageNumber` desired and a unique `userState`, which will be used to identify the completion of the asynchronous event.  \n  \n3.  When the event occurs and the delegate is called, compare the event's <xref:System.Windows.Documents.GetPageCompletedEventArgs>.<xref:System.ComponentModel.AsyncCompletedEventArgs.UserState%2A> property with the original GetPageAsync `userState` parameter.  (The <xref:System.Windows.Documents.GetPageCompletedEventArgs>.<xref:System.Windows.Documents.GetPageCompletedEventArgs.PageNumber%2A> property will also match the `pageNumber` specified in the GetPageAsync call.)  \n  \n4.  When the <xref:System.Windows.Documents.GetPageCompletedEventArgs>.<xref:System.ComponentModel.AsyncCompletedEventArgs.UserState%2A> property matches the original GetPageAsync `userState`, the operation is complete and the page is ready.  \n  \n5.  Call <xref:System.Windows.Documents.DocumentPaginator.GetPage%2A> to retrieve the formatted <xref:System.Windows.Documents.DocumentPage>."
   syntax:
     content: public virtual void GetPageAsync (int pageNumber, object userState);
     parameters:
     - id: pageNumber
       type: System.Int32
-      description: To be added.
+      description: The zero-based page number of the  to get.
     - id: userState
       type: System.Object
-      description: To be added.
+      description: A unique identifier for the asynchronous task.
   overload: System.Windows.Documents.DocumentPaginator.GetPageAsync*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    pageNumber is negative."
   platform:
   - net-11
   - net-20
@@ -271,13 +287,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when <xref:System.Windows.Documents.DocumentPaginator.GetPageAsync%2A> has completed.
   syntax:
     content: public event System.Windows.Documents.GetPageCompletedEventHandler GetPageCompleted;
     return:
       type: System.Windows.Documents.GetPageCompletedEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -294,14 +310,14 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, gets a value indicating whether <xref:System.Windows.Documents.DocumentPaginator.PageCount%2A> is the total number of pages.
   syntax:
     content: public abstract bool IsPageCountValid { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: "if pagination is complete and <xref:System.Windows.Documents.DocumentPaginator.PageCount%2A> is the total number of pages; otherwise, , if pagination is in process and <xref:System.Windows.Documents.DocumentPaginator.PageCount%2A> is the number of pages currently formatted (not the total).  \n  \n This value may revert to , after being , if <xref:System.Windows.Documents.DocumentPaginator.PageSize%2A> or content changes; because those events would force a repagination."
   overload: System.Windows.Documents.DocumentPaginator.IsPageCountValid*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -318,15 +334,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnComputePageCountCompleted (System.ComponentModel.AsyncCompletedEventArgs e);
     parameters:
     - id: e
       type: System.ComponentModel.AsyncCompletedEventArgs
-      description: To be added.
+      description: An <xref:System.ComponentModel.AsyncCompletedEventArgs> that contains the event data.
   overload: System.Windows.Documents.DocumentPaginator.OnComputePageCountCompleted*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -343,15 +359,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnGetPageCompleted (System.Windows.Documents.GetPageCompletedEventArgs e);
     parameters:
     - id: e
       type: System.Windows.Documents.GetPageCompletedEventArgs
-      description: To be added.
+      description: A  that contains the event data.
   overload: System.Windows.Documents.DocumentPaginator.OnGetPageCompleted*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -368,15 +384,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnPagesChanged (System.Windows.Documents.PagesChangedEventArgs e);
     parameters:
     - id: e
       type: System.Windows.Documents.PagesChangedEventArgs
-      description: To be added.
+      description: A  that contains the event data.
   overload: System.Windows.Documents.DocumentPaginator.OnPagesChanged*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -393,14 +409,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, gets a count of the number of pages currently formatted
+  remarks: "If <xref:System.Windows.Documents.DocumentPaginator.IsPageCountValid%2A> is `true`, pagination is complete and PageCount is the total number of pages in the document.  \n  \n If <xref:System.Windows.Documents.DocumentPaginator.IsPageCountValid%2A> is `false`, pagination is in process and PageCount is the number of pages currently formatted (not the total).  \n  \n This value may change if <xref:System.Windows.Documents.DocumentPaginator.PageSize%2A> or content changes, because those events would force a repagination."
   syntax:
     content: public abstract int PageCount { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: A count of the number of pages that have been formatted.
   overload: System.Windows.Documents.DocumentPaginator.PageCount*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -417,13 +434,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the document content is changed.
   syntax:
     content: public event System.Windows.Documents.PagesChangedEventHandler PagesChanged;
     return:
       type: System.Windows.Documents.PagesChangedEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -440,14 +457,17 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, gets or sets the suggested width and height of each page.
+  remarks: The <xref:System.Windows.Documents.DocumentPaginator> may override the value of this property. Users should check <xref:System.Windows.Documents.DocumentPage.Size%2A?displayProperty=fullName>.
+  example:
+  - "The following example shows how to set the PageSize.  \n  \n [!code-vb[XpsSave#CreateFixedDocument](../../add/codesnippet/VisualBasic/xpssave/xpfcontent.vb#createfixeddocument)]\n [!code-cs[XpsSave#CreateFixedDocument](../../add/codesnippet/CSharp/XpsSave/XpfContent.cs#createfixeddocument)]"
   syntax:
     content: public abstract System.Windows.Size PageSize { get; set; }
     return:
       type: System.Windows.Size
-      description: To be added.
+      description: A  representing the width and height of each page.
   overload: System.Windows.Documents.DocumentPaginator.PageSize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -464,14 +484,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Documents
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, returns the element being paginated.
+  remarks: The object returned has this <xref:System.Windows.Documents.DocumentPaginator> as the value of its <xref:System.Windows.Documents.IDocumentPaginatorSource.DocumentPaginator%2A> property. It is guaranteed to have such a property because it implements <xref:System.Windows.Documents.IDocumentPaginatorSource>.
   syntax:
     content: public abstract System.Windows.Documents.IDocumentPaginatorSource Source { get; }
     return:
       type: System.Windows.Documents.IDocumentPaginatorSource
-      description: To be added.
+      description: An  representing the element being paginated.
   overload: System.Windows.Documents.DocumentPaginator.Source*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -492,12 +513,6 @@ references:
   name: CancelAsync(Object)
   nameWithType: DocumentPaginator.CancelAsync(Object)
   fullName: System.Windows.Documents.DocumentPaginator.CancelAsync(Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Documents.DocumentPaginator.ComputePageCount
   parent: System.Windows.Documents.DocumentPaginator
   isExternal: false
@@ -516,12 +531,6 @@ references:
   name: ComputePageCountAsync(Object)
   nameWithType: DocumentPaginator.ComputePageCountAsync(Object)
   fullName: System.Windows.Documents.DocumentPaginator.ComputePageCountAsync(Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Documents.DocumentPaginator.ComputePageCountCompleted
   parent: System.Windows.Documents.DocumentPaginator
   isExternal: false
@@ -558,30 +567,12 @@ references:
   name: GetPageAsync(Int32)
   nameWithType: DocumentPaginator.GetPageAsync(Int32)
   fullName: System.Windows.Documents.DocumentPaginator.GetPageAsync(Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Windows.Documents.DocumentPaginator.GetPageAsync(System.Int32,System.Object)
   parent: System.Windows.Documents.DocumentPaginator
   isExternal: false
   name: GetPageAsync(Int32,Object)
   nameWithType: DocumentPaginator.GetPageAsync(Int32,Object)
   fullName: System.Windows.Documents.DocumentPaginator.GetPageAsync(Int32,Object)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Documents.DocumentPaginator.GetPageCompleted
   parent: System.Windows.Documents.DocumentPaginator
   isExternal: false
@@ -648,12 +639,6 @@ references:
   name: PageCount
   nameWithType: DocumentPaginator.PageCount
   fullName: System.Windows.Documents.DocumentPaginator.PageCount
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Windows.Documents.DocumentPaginator.PagesChanged
   parent: System.Windows.Documents.DocumentPaginator
   isExternal: false

@@ -14,8 +14,41 @@
     </Interface>
   </Interfaces>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Provides the <see langword="abstract" /> base class for the listeners who monitor trace and debug output.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ For examples of how to implement a TraceListener, see the <xref:System.Diagnostics.DefaultTraceListener>, <xref:System.Diagnostics.TextWriterTraceListener> and the <xref:System.Diagnostics.EventLogTraceListener> classes.  
+  
+ You must enable tracing or debugging to use a trace listener. The following syntax is compiler specific. If you use compilers other than C# or Visual Basic, refer to the documentation for your compiler.  
+  
+-   To enable debugging in C#, add the `/d:DEBUG` flag to the compiler command line when you compile your code, or you can add `#define DEBUG` to the top of your file. In Visual Basic, add the `/d:DEBUG=True` flag to the compiler command line.  
+  
+-   To enable tracing in C#, add the `/d:TRACE` flag to the compiler command line when you compile your code, or add `#define TRACE` to the top of your file. In Visual Basic, add the `/d:TRACE=True` flag to the compiler command line.  
+  
+ To add a trace listener, edit the configuration file that corresponds to the name of your application. Within this file, you can add a listener, set its type and set its parameter, remove a listener, or clear all the listeners previously set by the application. The configuration file should be formatted similar to the following example.  
+  
+```  
+<configuration>  
+  <system.diagnostics>  
+    <trace autoflush="false" indentsize="4">  
+      <listeners>  
+        <add name="myListener" type="System.Diagnostics.TextWriterTraceListener" initializeData="TextWriterOutput.log" />  
+        <remove name="Default" />  
+      </listeners>  
+    </trace>  
+  </system.diagnostics>  
+</configuration>  
+```  
+  
+ For more information on using configuration files for tracing, see [\<system.diagnostics>](../Topic/%3Csystem.diagnostics%3E%20Element.md).  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe>This type is thread safe.</threadsafe>
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -27,8 +60,24 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.TraceListener" /> class.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The following table shows initial property values for an instance of <xref:System.Diagnostics.TraceListener>.  
+  
+|Property|Default Value|  
+|--------------|-------------------|  
+|Name|The empty string ("").|  
+|Indent|Zero.|  
+|IndentSize|Four spaces.|  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -42,9 +91,12 @@
         <Parameter Name="name" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="name">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="name">The name of the <see cref="T:System.Diagnostics.TraceListener" />.</param>
+        <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.TraceListener" /> class using the specified name as the listener.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Attributes">
@@ -58,9 +110,31 @@
         <ReturnType>System.Collections.Specialized.StringDictionary</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets the custom trace listener attributes defined in the application configuration file.</summary>
+        <value>A <see cref="T:System.Collections.Specialized.StringDictionary" /> containing the custom attributes for the trace listener.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Classes that inherit from the <xref:System.Diagnostics.TraceListener> class can add custom attributes by overriding the <xref:System.Diagnostics.TraceListener.GetSupportedAttributes%2A> method and returning a string array of custom attribute names. The Attributes property identifies the custom attributes that are referenced in the application's configuration file. For example, in the following configuration file excerpt the <xref:System.Diagnostics.DelimitedListTraceListener> custom attribute "delimiter" is referenced. In this case, the Attributes property returns a <xref:System.Collections.Specialized.StringDictionary> containing the string "delimiter".  
+  
+```  
+<listeners>  
+  <add name="delimitedListener"   
+    type="System.Diagnostics.DelimitedListTraceListener"   
+    delimiter=":"   
+    initializeData="delimitedOutput.txt"   
+    traceOutputOptions="ProcessId, DateTime" />  
+  <remove name="Default" />  
+</listeners>  
+```  
+  
+ Unreferenced custom attributes are not enumerated.  For more information, see the <xref:System.Diagnostics.TraceListener.GetSupportedAttributes%2A> method.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>A <see cref="T:System.Collections.Specialized.StringDictionary" /> containing the custom attributes for the trace listener.</returns>
       </Docs>
     </Member>
     <Member MemberName="Close">
@@ -75,8 +149,18 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>When overridden in a derived class, closes the output stream so it no longer receives tracing or debugging output.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Use this method when the output is going to a file, such as to the <xref:System.Diagnostics.TextWriterTraceListener>. After a call to this method, you must reinitialize the object.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Dispose">
@@ -91,8 +175,18 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Releases all resources used by the <see cref="T:System.Diagnostics.TraceListener" />.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Calling Dispose allows the resources used by the <xref:System.Diagnostics.TraceListener> to be reallocated for other purposes. For more information about Dispose, see [Cleaning Up Unmanaged Resources](../Topic/Cleaning%20Up%20Unmanaged%20Resources.md).  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Dispose">
@@ -109,9 +203,22 @@
         <Parameter Name="disposing" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="disposing">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="disposing">
+          <see langword="true" /> to release both managed and unmanaged resources; <see langword="false" /> to release only unmanaged resources.</param>
+        <summary>Releases the unmanaged resources used by the <see cref="T:System.Diagnostics.TraceListener" /> and optionally releases the managed resources.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method is called by the public <xref:System.Diagnostics.TraceListener.Dispose%2A> method and the <xref:System.Object.Finalize%2A> method. `Dispose` invokes the protected <xref:System.Diagnostics.TraceListener.Dispose%2A> method with the `disposing` parameter set to `true`. <xref:System.Object.Finalize%2A> invokes `Dispose` with `disposing` set to `false`.  
+  
+ When the `disposing` parameter is `true`, this method releases all resources held by any managed objects that this <xref:System.Diagnostics.TraceListener> references. This method invokes the `Dispose` method of each referenced object.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Fail">
@@ -128,9 +235,19 @@
         <Parameter Name="message" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="message">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="message">A message to emit.</param>
+        <summary>Emits an error message to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The default behavior is to display the specified message in a message box when the application is running in a user-interface mode, and to the <xref:System.Diagnostics.TraceListener> instances in a <xref:System.Diagnostics.TraceListenerCollection> collection. By default, the <xref:System.Diagnostics.TraceListenerCollection> collection has an instance of a <xref:System.Diagnostics.DefaultTraceListener>. You can customize this behavior by adding a <xref:System.Diagnostics.TraceListener> to or removing one from the collection.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Fail">
@@ -148,10 +265,20 @@
         <Parameter Name="detailMessage" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="message">To be added.</param>
-        <param name="detailMessage">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="message">A message to emit.</param>
+        <param name="detailMessage">A detailed message to emit.</param>
+        <summary>Emits an error message and a detailed error message to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The default behavior is to display the message and detailed message in a message box when the application is running in a user-interface mode, and to the <xref:System.Diagnostics.TraceListener> instances in a <xref:System.Diagnostics.TraceListenerCollection> collection. By default, the <xref:System.Diagnostics.TraceListenerCollection> collection has an instance of a <xref:System.Diagnostics.DefaultTraceListener>. You can customize this behavior by adding a <xref:System.Diagnostics.TraceListener> to or removing one from the collection.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Filter">
@@ -170,9 +297,26 @@
         <ReturnType>System.Diagnostics.TraceFilter</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets and sets the trace filter for the trace listener.</summary>
+        <value>An object derived from the <see cref="T:System.Diagnostics.TraceFilter" /> base class.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ A trace filter can be added to a trace listener to provide a layer of screening beyond that provided to the trace source by switches. For example, the <xref:System.Diagnostics.EventTypeFilter> can be added to a trace listener to control the event types that are output by the listener.  Listeners that are called because the switch criteria are met can query their filter, if present, to determine if a trace is to be sent to output.  
+  
+   
+  
+## Examples  
+ The following code example shows how to use the Filter property to add a source filter to a console trace listener. This code example is part of a larger example provided for the <xref:System.Diagnostics.TraceSource> class.  
+  
+ [!code-cs[System.Diagnostics.TraceSource2#28](../../add/codesnippet/CSharp/p-system.diagnostics.tra_6_1.cs)]
+ [!code-vb[System.Diagnostics.TraceSource2#28](../../add/codesnippet/VisualBasic/p-system.diagnostics.tra_6_1.vb)]  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>An object derived from the <see cref="T:System.Diagnostics.TraceFilter" /> base class.</returns>
       </Docs>
     </Member>
     <Member MemberName="Flush">
@@ -187,8 +331,11 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>When overridden in a derived class, flushes the output buffer.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="GetSupportedAttributes">
@@ -203,9 +350,26 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Gets the custom attributes supported by the trace listener.</summary>
+        <returns>A string array naming the custom attributes supported by the trace listener, or <see langword="null" /> if there are no custom attributes.</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The default implementation for GetSupportedAttributes returns `null`.  
+  
+   
+  
+## Examples  
+ The following code sample shows an override of the GetSupportedAttributes method for a custom trace listener.  
+  
+ [!code-cs[System.Diagnostics.TraceListener.CustomAttributes#1](../../add/codesnippet/CSharp/m-system.diagnostics.tra_22_1.cs)]
+ [!code-vb[System.Diagnostics.TraceListener.CustomAttributes#1](../../add/codesnippet/VisualBasic/m-system.diagnostics.tra_22_1.vb)]  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <value>A string array naming the custom attributes supported by the trace listener, or <see langword="null" /> if there are no custom attributes.</value>
       </Docs>
     </Member>
     <Member MemberName="IndentLevel">
@@ -219,9 +383,18 @@
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the indent level.</summary>
+        <value>The indent level. The default is zero.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The IndentLevel property represents the number of times that the indent specified by the <xref:System.Diagnostics.TraceListener.IndentSize%2A> property is applied. This property is stored on per-thread/per-request basis.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>The indent level. The default is zero.</returns>
       </Docs>
     </Member>
     <Member MemberName="IndentSize">
@@ -235,9 +408,19 @@
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the number of spaces in an indent.</summary>
+        <value>The number of spaces in an indent. The default is four spaces.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The property is stored on per-thread/per-request basis.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">Set operation failed because the value is less than zero.</exception>
+        <threadsafe />
+        <returns>The number of spaces in an indent. The default is four spaces.</returns>
       </Docs>
     </Member>
     <Member MemberName="IsThreadSafe">
@@ -251,9 +434,20 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets a value indicating whether the trace listener is thread safe.</summary>
+        <value>
+          <see langword="true" /> if the trace listener is thread safe; otherwise, <see langword="false" />. The default is <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The value of IsThreadSafe is used to determine whether to use a global lock when writing to the listener. If the value of IsThreadSafe is `false`, the global lock is used regardless of the value of <xref:System.Diagnostics.Trace.UseGlobalLock%2A>. The global lock is not used only if the value of IsThreadSafe is `true` and the value of <xref:System.Diagnostics.Trace.UseGlobalLock%2A> is `false`. The default behavior is to use the global lock whenever writing to the listener.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>
+          <see langword="true" /> if the trace listener is thread safe; otherwise, <see langword="false" />. The default is <see langword="false" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="Name">
@@ -267,9 +461,18 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets a name for this <see cref="T:System.Diagnostics.TraceListener" />.</summary>
+        <value>A name for this <see cref="T:System.Diagnostics.TraceListener" />. The default is an empty string ("").</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The name can be used to organize and access listeners in a <xref:System.Diagnostics.TraceListenerCollection> collection.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>A name for this <see cref="T:System.Diagnostics.TraceListener" />. The default is an empty string ("").</returns>
       </Docs>
     </Member>
     <Member MemberName="NeedIndent">
@@ -283,9 +486,20 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets a value indicating whether to indent the output.</summary>
+        <value>
+          <see langword="true" /> if the output should be indented; otherwise, <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ **Note** The <xref:System.Diagnostics.TraceListener.WriteIndent%2A> method, called by the <xref:System.Diagnostics.DefaultTraceListener> and <xref:System.Diagnostics.TextWriterTraceListener> classes, sets the NeedIndent property value to `false` to prevent later, unnecessary indents. You must set the NeedIndent property to `true` each time you wish to indent trace output.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>
+          <see langword="true" /> if the output should be indented; otherwise, <see langword="false" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="TraceData">
@@ -311,13 +525,27 @@
         <Parameter Name="data" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="eventCache">To be added.</param>
-        <param name="source">To be added.</param>
-        <param name="eventType">To be added.</param>
-        <param name="id">To be added.</param>
-        <param name="data">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="eventCache">A <see cref="T:System.Diagnostics.TraceEventCache" /> object that contains the current process ID, thread ID, and stack trace information.</param>
+        <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        <param name="eventType">One of the <see cref="T:System.Diagnostics.TraceEventType" /> values specifying the type of event that has caused the trace.</param>
+        <param name="id">A numeric identifier for the event.</param>
+        <param name="data">The trace data to emit.</param>
+        <summary>Writes trace information, a data object and event information to the listener specific output.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!IMPORTANT]
+>  This method is not intended to be called directly by application code but by members of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data to output.  
+  
+ The default implementation writes the `eventCache`, `source`, `eventType` and `id` parameters in the header and footer of the trace. The `data` parameter is written as the body of the trace message. The `ToString` method of the data object is used to convert the object to a <xref:System.String>.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="TraceData">
@@ -349,13 +577,27 @@
         </Parameter>
       </Parameters>
       <Docs>
-        <param name="eventCache">To be added.</param>
-        <param name="source">To be added.</param>
-        <param name="eventType">To be added.</param>
-        <param name="id">To be added.</param>
-        <param name="data">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="eventCache">A <see cref="T:System.Diagnostics.TraceEventCache" /> object that contains the current process ID, thread ID, and stack trace information.</param>
+        <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        <param name="eventType">One of the <see cref="T:System.Diagnostics.TraceEventType" /> values specifying the type of event that has caused the trace.</param>
+        <param name="id">A numeric identifier for the event.</param>
+        <param name="data">An array of objects to emit as data.</param>
+        <summary>Writes trace information, an array of data objects and event information to the listener specific output.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!IMPORTANT]
+>  This method is not intended to be called directly by application code but by members of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data to output.  
+  
+ The default implementation writes the values of the `source`, `eventType` and `id` parameters as a header. The data objects are converted to strings using the `ToString` method of each object. The `eventCache` data is written as a footer, the nature of the output data being dependent on the value of the <xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="TraceEvent">
@@ -380,12 +622,26 @@
         <Parameter Name="id" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="eventCache">To be added.</param>
-        <param name="source">To be added.</param>
-        <param name="eventType">To be added.</param>
-        <param name="id">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="eventCache">A <see cref="T:System.Diagnostics.TraceEventCache" /> object that contains the current process ID, thread ID, and stack trace information.</param>
+        <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        <param name="eventType">One of the <see cref="T:System.Diagnostics.TraceEventType" /> values specifying the type of event that has caused the trace.</param>
+        <param name="id">A numeric identifier for the event.</param>
+        <summary>Writes trace and event information to the listener specific output.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!IMPORTANT]
+>  This method is not intended to be called directly by application code but by members of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data to output.  
+  
+ The default implementation writes the values of the `source`, `eventType` and `id` parameters as a header. The `eventCache` data is written as a footer, the nature of the output data being dependent on the value of the <xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="TraceEvent">
@@ -411,13 +667,27 @@
         <Parameter Name="message" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="eventCache">To be added.</param>
-        <param name="source">To be added.</param>
-        <param name="eventType">To be added.</param>
-        <param name="id">To be added.</param>
-        <param name="message">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="eventCache">A <see cref="T:System.Diagnostics.TraceEventCache" /> object that contains the current process ID, thread ID, and stack trace information.</param>
+        <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        <param name="eventType">One of the <see cref="T:System.Diagnostics.TraceEventType" /> values specifying the type of event that has caused the trace.</param>
+        <param name="id">A numeric identifier for the event.</param>
+        <param name="message">A message to write.</param>
+        <summary>Writes trace information, a message, and event information to the listener specific output.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!IMPORTANT]
+>  This method is not intended to be called directly by application code but by members of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data to output.  
+  
+ The default implementation writes the values of the `source`, `eventType` and `id` parameters as a header, followed by the `message` data. The `eventCache` data is written as a footer, the nature of the output data being dependent on the value of the <xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="TraceEvent">
@@ -450,14 +720,28 @@
         </Parameter>
       </Parameters>
       <Docs>
-        <param name="eventCache">To be added.</param>
-        <param name="source">To be added.</param>
-        <param name="eventType">To be added.</param>
-        <param name="id">To be added.</param>
-        <param name="format">To be added.</param>
-        <param name="args">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="eventCache">A <see cref="T:System.Diagnostics.TraceEventCache" /> object that contains the current process ID, thread ID, and stack trace information.</param>
+        <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        <param name="eventType">One of the <see cref="T:System.Diagnostics.TraceEventType" /> values specifying the type of event that has caused the trace.</param>
+        <param name="id">A numeric identifier for the event.</param>
+        <param name="format">A format string that contains zero or more format items, which correspond to objects in the `args` array.</param>
+        <param name="args">An <see langword="object" /> array containing zero or more objects to format.</param>
+        <summary>Writes trace information, a formatted array of objects and event information to the listener specific output.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!IMPORTANT]
+>  This method is not intended to be called directly by application code but by members of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data to output.  
+  
+ The default implementation writes the values of the `source`, `eventType` and `id` parameters as a header. The `args` object array is converted to a string using the <xref:System.String.Format%2A> method, passing the `format` string and `args` array to format the string as the message portion of the trace. The `eventCache` data is written as a footer, the nature of the output data being dependent on the value of the <xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A> property.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="TraceOutputOptions">
@@ -476,9 +760,35 @@
         <ReturnType>System.Diagnostics.TraceOptions</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the trace output options.</summary>
+        <value>A bitwise combination of the enumeration values. The default is <see cref="T:System.Diagnostics.TraceOptions" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The TraceOutputOptions property determines the optional content of trace output. The property can be set in the configuration file or programmatically during execution to include additional data specifically for a section of code. For example, you can set the TraceOutputOptions property for the console trace listener to <xref:System.Diagnostics.TraceOptions?displayProperty=fullName> to add call stack information to the trace output.  
+  
+ The <xref:System.Diagnostics.TraceOptions> enumeration is not used by the following classes and methods:  
+  
+-   The <xref:System.Diagnostics.EventLogTraceListener> class, because it can cause a large volume of data to be written to the log.  
+  
+-   The `Write` and `WriteLine` methods of the <xref:System.Diagnostics.ConsoleTraceListener>, <xref:System.Diagnostics.DefaultTraceListener>, and <xref:System.Diagnostics.TextWriterTraceListener> classes.  
+  
+-   The <xref:System.Diagnostics.TraceListener.Write%2A> and <xref:System.Diagnostics.TraceListener.WriteLine%2A> methods of the <xref:System.Diagnostics.TraceListener> class when they are not overridden in a derived class.  
+  
+   
+  
+## Examples  
+ The following example shows the setting of the TraceOutputOptions property for a console trace listener. The console trace listener is one of the listeners enumerated in the <xref:System.Diagnostics.TraceSource.Listeners%2A> property of a trace source. This code example is part of a larger example provided for the <xref:System.Diagnostics.TraceSource> class.  
+  
+ [!code-cs[System.Diagnostics.TraceSource2#16](../../add/codesnippet/CSharp/p-system.diagnostics.tra_9_1.cs)]
+ [!code-vb[System.Diagnostics.TraceSource2#16](../../add/codesnippet/VisualBasic/p-system.diagnostics.tra_9_1.vb)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">Set operation failed because the value is invalid.</exception>
+        <threadsafe />
+        <returns>A bitwise combination of the enumeration values. The default is <see cref="T:System.Diagnostics.TraceOptions" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="TraceTransfer">
@@ -504,13 +814,27 @@
         <Parameter Name="relatedActivityId" Type="System.Guid" />
       </Parameters>
       <Docs>
-        <param name="eventCache">To be added.</param>
-        <param name="source">To be added.</param>
-        <param name="id">To be added.</param>
-        <param name="message">To be added.</param>
-        <param name="relatedActivityId">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="eventCache">A <see cref="T:System.Diagnostics.TraceEventCache" /> object that contains the current process ID, thread ID, and stack trace information.</param>
+        <param name="source">A name used to identify the output, typically the name of the application that generated the trace event.</param>
+        <param name="id">A numeric identifier for the event.</param>
+        <param name="message">A message to write.</param>
+        <param name="relatedActivityId">A &lt;xref:System.Guid&gt; object identifying a related activity.</param>
+        <summary>Writes trace information, a message, a related activity identity and event information to the listener specific output.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!IMPORTANT]
+>  This method is not intended to be called directly by application code but by members of the <xref:System.Diagnostics.Debug>, <xref:System.Diagnostics.Trace>, and <xref:System.Diagnostics.TraceSource> classes to write trace data to output.  
+  
+ The <xref:System.Diagnostics.XmlWriterTraceListener.TraceTransfer%2A> method is used for the correlation of related traces. The TraceTransfer method calls the <xref:System.Diagnostics.TraceListener.TraceEvent%2A> method to process the call, with the eventType level set to <xref:System.Diagnostics.TraceEventType> and the `relatedActivityId`<xref:System.Guid> as a string appended to the message.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Write">
@@ -527,9 +851,12 @@
         <Parameter Name="o" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="o">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="o">An &lt;xref:System.Object&gt; whose fully qualified class name you want to write.</param>
+        <summary>Writes the value of the object's &lt;xref:System.Object.ToString%2A&gt; method to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Write">
@@ -546,9 +873,12 @@
         <Parameter Name="message" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="message">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="message">A message to write.</param>
+        <summary>When overridden in a derived class, writes the specified message to the listener you create in the derived class.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Write">
@@ -566,10 +896,13 @@
         <Parameter Name="category" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="o">To be added.</param>
-        <param name="category">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="o">An &lt;xref:System.Object&gt; whose fully qualified class name you want to write.</param>
+        <param name="category">A category name used to organize the output.</param>
+        <summary>Writes a category name and the value of the object's &lt;xref:System.Object.ToString%2A&gt; method to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="Write">
@@ -587,10 +920,13 @@
         <Parameter Name="category" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="message">To be added.</param>
-        <param name="category">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="message">A message to write.</param>
+        <param name="category">A category name used to organize the output.</param>
+        <summary>Writes a category name and a message to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="WriteIndent">
@@ -605,8 +941,18 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Writes the indent to the listener you create when you implement this class, and resets the &lt;xref:System.Diagnostics.TraceListener.NeedIndent%2A&gt; property to <see langword="false" />.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ This method writes the indent and resets the <xref:System.Diagnostics.TraceListener.NeedIndent%2A> property to `false`. Call this method if <xref:System.Diagnostics.TraceListener.NeedIndent%2A> is `true` when you are overriding the <xref:System.Diagnostics.TraceListener.Write%2A> and <xref:System.Diagnostics.TraceListener.WriteLine%2A> methods. By default, this method uses blank spaces for indentation. The size of the indent is determined by the values of the <xref:System.Diagnostics.TraceListener.IndentSize%2A> and <xref:System.Diagnostics.TraceListener.IndentLevel%2A> properties. The <xref:System.Diagnostics.TraceListener.IndentLevel%2A> property represents the number of times the indent of the size specified by the <xref:System.Diagnostics.TraceListener.IndentSize%2A> property is applied. This method is called by the <xref:System.Diagnostics.DefaultTraceListener> and <xref:System.Diagnostics.TextWriterTraceListener> classes.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="WriteLine">
@@ -623,9 +969,19 @@
         <Parameter Name="o" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="o">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="o">An &lt;xref:System.Object&gt; whose fully qualified class name you want to write.</param>
+        <summary>Writes the value of the object's &lt;xref:System.Object.ToString%2A&gt; method to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class, followed by a line terminator.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The typical line terminator you might implement is a carriage return followed by a line feed (\r\n).  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="WriteLine">
@@ -642,9 +998,19 @@
         <Parameter Name="message" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="message">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="message">A message to write.</param>
+        <summary>When overridden in a derived class, writes a message to the listener you create in the derived class, followed by a line terminator.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The typical line terminator you might implement is a carriage return followed by a line feed (\r\n).  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="WriteLine">
@@ -662,10 +1028,20 @@
         <Parameter Name="category" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="o">To be added.</param>
-        <param name="category">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="o">An &lt;xref:System.Object&gt; whose fully qualified class name you want to write.</param>
+        <param name="category">A category name used to organize the output.</param>
+        <summary>Writes a category name and the value of the object's &lt;xref:System.Object.ToString%2A&gt; method to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class, followed by a line terminator.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The typical line terminator you might implement is a carriage return followed by a line feed (\r\n).  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="WriteLine">
@@ -683,10 +1059,20 @@
         <Parameter Name="category" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="message">To be added.</param>
-        <param name="category">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="message">A message to write.</param>
+        <param name="category">A category name used to organize the output.</param>
+        <summary>Writes a category name and a message to the listener you create when you implement the <see cref="T:System.Diagnostics.TraceListener" /> class, followed by a line terminator.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The typical line terminator you might implement is a carriage return followed by a line feed (\r\n).  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
   </Members>

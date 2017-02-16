@@ -23,8 +23,8 @@ items:
   nameWithType: XamlServices
   fullName: System.Xaml.XamlServices
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides higher-level services (static methods) for the common XAML tasks of reading XAML and writing an object graph; or reading an object graph and writing XAML file output for serialization purposes.
+  remarks: "The modes of the XamlServices class that are used in the most common XAML reading and writing scenarios rely on creating instances of XAML readers and XAML writers. These readers and writers are specialized but internal implementations of public classes, such as <xref:System.Xml.XmlReader>, <xref:System.Xaml.XamlXmlReader>, and <xref:System.Xaml.XamlObjectWriter>. To use XamlServices for most scenarios, you can rely on the default internal implementations to obtain the results that you want. For more specialized scenarios, you might define readers and writers yourself, and then pass them as arguments for overloads of the XamlServices methods.  \n  \n> [!IMPORTANT]\n>  XamlServices is not the recommended XAML reading or XAML writing API set if you are processing WPF-defined types, or types based on WPF. For [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] usage, use <xref:System.Windows.Markup.XamlReader?displayProperty=fullName> for reading or loading XAML (or BAML); and <xref:System.Windows.Markup.XamlWriter?displayProperty=fullName> for writing back XAML. These classes use .NET Framework XAML Services APIs and the XAML readers and XAML writers internally in their implementation; however, they also provide support and specialized XAML schema context for WPF-specific concepts, such as optimizations for dependency properties and WPF known types."
   syntax:
     content: public static class XamlServices
   inheritance:
@@ -47,18 +47,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Loads a <xref:System.IO.Stream> source for a XAML reader and writes its output as an object graph.
+  remarks: "Different signatures for the Load method specify different types of input for the source XAML. The Load internal implementation first creates an <xref:System.Xml.XmlReader> by calling <xref:System.Xml.XmlReader.Create%28System.IO.Stream%29> and then creates a new instance of a specialized <xref:System.Xaml.XamlReader> that processes the input.  \n  \n In order for the Load call to successfully create an object graph, the following must be true:  \n  \n-   The source is well-formed and valid XML.  \n  \n-   The source is valid XAML at the language level.  \n  \n-   The XAML types that are specified in the source XAML must resolve to backing types in the relevant XAML namespaces. For example, XAML types for WPF namespaces can resolve to a WPF XAML namespace as specified in the XAML; the assemblies for WPF must be included in the project or available in the run time; and so on.  \n  \n> [!IMPORTANT]\n>  <xref:System.Xaml.XamlServices> is not the recommended XAML reading or XAML writing API set if you are processing [!INCLUDE[TLA#tla_winclient](../../add/includes/tlasharptla-winclient-md.md)] types, or types based on [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)]. For [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] usage, use <xref:System.Windows.Markup.XamlReader?displayProperty=fullName> for reading or loading XAML; and <xref:System.Windows.Markup.XamlWriter?displayProperty=fullName> for writing back XAML. These classes use <xref:System.Xaml> APIs internally in their implementation; however, they also provide support for WPF-specific concepts that influence the nature of XAML reading and writing, such as optimizations for dependency properties."
   syntax:
     content: public static object Load (System.IO.Stream stream);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: The stream to load as input.
     return:
       type: System.Object
-      description: To be added.
+      description: The object graph that is written as output.
   overload: System.Xaml.XamlServices.Load*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    stream is ."
   platform:
   - net-11
   - net-20
@@ -75,18 +79,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a XAML reader from a <xref:System.IO.TextReader>, and returns an object graph.
+  remarks: In order to return the object graph, the `textReader` input should be constructed by using its relevant input. For example, it should pass a <xref:System.IO.StringReader> that is constructed by using a valid XAML-as-string input for the <xref:System.IO.StringReader.%23ctor%28System.String%29> constructor.
   syntax:
     content: public static object Load (System.IO.TextReader textReader);
     parameters:
     - id: textReader
       type: System.IO.TextReader
-      description: To be added.
+      description: The <xref:System.IO.TextReader> to use as the basis for the created <xref:System.Xml.XmlReader>.
     return:
       type: System.Object
-      description: To be added.
+      description: The object graph that is returned.
   overload: System.Xaml.XamlServices.Load*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    textReader is ."
   platform:
   - net-11
   - net-20
@@ -103,18 +111,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Loads a <xref:System.IO.Stream> source for a XAML reader and returns an object graph.
+  remarks: "Different signatures for the Load method specify different types of input for the source XAML. The Load internal implementation first creates an <xref:System.Xml.XmlReader> by calling <xref:System.Xml.XmlReader.Create%28System.String%29> and then creates a new instance of a specialized <xref:System.Xaml.XamlReader> that processes the input.  \n  \n In order for the Load call to successfully create an object graph, the following must be true:  \n  \n-   The source is well-formed and valid XML.  \n  \n-   The source is valid XAML at the language level.  \n  \n-   The XAML types that are specified in the source XAML must resolve to backing types in the relevant XAML namespaces. For example, XAML types for WPF namespaces can resolve to a WPF XAML namespace as specified in the XAML; the assemblies for WPF must be included in the project or be available in the run time; and so on."
   syntax:
     content: public static object Load (string fileName);
     parameters:
     - id: fileName
       type: System.String
-      description: To be added.
+      description: The file name to load and use as source.
     return:
       type: System.Object
-      description: To be added.
+      description: The object graph that is returned.
   overload: System.Xaml.XamlServices.Load*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    fileName input is ."
   platform:
   - net-11
   - net-20
@@ -131,18 +143,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Loads a specific XAML reader implementation and returns an object graph.
+  remarks: "You should typically use this signature only in the following cases:  \n  \n-   You defined your own implementation of a <xref:System.Xaml.XamlReader>.  \n  \n-   You specified settings for a <xref:System.Xaml.XamlReader> that differ from the default settings."
   syntax:
     content: public static object Load (System.Xaml.XamlReader xamlReader);
     parameters:
     - id: xamlReader
       type: System.Xaml.XamlReader
-      description: To be added.
+      description: The XAML reader implementation to use as the reader for this  operation.
     return:
       type: System.Object
-      description: To be added.
+      description: The object graph that is returned.
   overload: System.Xaml.XamlServices.Load*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    xamlReader input is ."
   platform:
   - net-11
   - net-20
@@ -159,18 +175,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Loads a specific XML reader implementation and returns an object graph.
+  remarks: You should typically use this signature only if you defined your own implementation of a <xref:System.Xml.XmlReader>.
   syntax:
     content: public static object Load (System.Xml.XmlReader xmlReader);
     parameters:
     - id: xmlReader
       type: System.Xml.XmlReader
-      description: To be added.
+      description: The <xref:System.Xml.XmlReader> implementation to use as the reader for this  operation.
     return:
       type: System.Object
-      description: To be added.
+      description: The output object graph.
   overload: System.Xaml.XamlServices.Load*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    xamlReader input is ."
   platform:
   - net-11
   - net-20
@@ -187,18 +207,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Reads XAML as string output and returns an object graph.
+  remarks: "In order for the Parse call to successfully create an object tree, the following must be true:  \n  \n-   The `xaml` input is well-formed and valid XML.  \n  \n-   The `xaml` input is valid XAML at the language level.  \n  \n-   The XAML types that are specified in the `xaml` input must resolve to backing types in the relevant XAML namespaces. For example, XAML types for a WPF namespace can resolve to a WPF XAML namespace as specified in the XAML; the assemblies for WPF must be included in the project or be available in the run time; and so on.  \n  \n> [!IMPORTANT]\n>  <xref:System.Xaml.XamlServices> is not the recommended XAML reading or XAML writing API set if you are processing [!INCLUDE[TLA#tla_winclient](../../add/includes/tlasharptla-winclient-md.md)] types, or types based on [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)]. For [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] usage, use <xref:System.Windows.Markup.XamlReader?displayProperty=fullName> for reading or loading XAML, and <xref:System.Windows.Markup.XamlWriter?displayProperty=fullName> for writing back XAML. These classes use <xref:System.Xaml> APIs internally in their implementation; however, they also provide support for WPF-specific concepts that influence the nature of XAML reading and writing, such as optimizations for dependency properties."
   syntax:
     content: public static object Parse (string xaml);
     parameters:
     - id: xaml
       type: System.String
-      description: To be added.
+      description: The XAML string input to parse.
     return:
       type: System.Object
-      description: To be added.
+      description: The object graph that is returned.
   overload: System.Xaml.XamlServices.Parse*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    xaml input is ."
   platform:
   - net-11
   - net-20
@@ -215,18 +239,19 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a provided object tree into a XAML node representation, and returns a string representation of the output XAML.
+  remarks: "The output from this method is the `ToString` result of an <xref:System.Xml.XmlWriter> that is created by the method call. That <xref:System.Xml.XmlWriter> is created by using the following settings: <xref:System.Xml.XmlWriterSettings.Indent%2A?displayProperty=fullName> is `true`; and <xref:System.Xml.XmlWriterSettings.OmitXmlDeclaration%2A?displayProperty=fullName> is `true`.  \n  \n The returned string can be loaded as valid XML through the <xref:System.Xml.XmlReader.Create%2A> method if you processed the string into a stream, or into a reader more specifically dedicated for XAML."
   syntax:
     content: public static string Save (object instance);
     parameters:
     - id: instance
       type: System.Object
-      description: To be added.
+      description: The root of the object graph to process.
     return:
       type: System.String
-      description: To be added.
+      description: The XAML markup output as a string.
   overload: System.Xaml.XamlServices.Save*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -243,18 +268,25 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a provided object graph into a XAML node representation and then into an output stream for serialization.
+  remarks: >-
+    > [!IMPORTANT]
+
+    >  <xref:System.Xaml.XamlServices> is not the recommended XAML reading or XAML writing API set if you are processing [!INCLUDE[TLA#tla_winclient](../../add/includes/tlasharptla-winclient-md.md)] types, or types based on [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)]. For [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] usage, use <xref:System.Windows.Markup.XamlReader?displayProperty=fullName> for reading or loading XAML; and <xref:System.Windows.Markup.XamlWriter?displayProperty=fullName> for writing back XAML. These classes use <xref:System.Xaml> APIs internally in their implementation; however, they also provide support for WPF-specific concepts that influence the nature of XAML reading and writing, such as optimizations for dependency properties.
   syntax:
     content: public static void Save (System.IO.Stream stream, object instance);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: The destination stream.
     - id: instance
       type: System.Object
-      description: To be added.
+      description: The root of the object graph to process.
   overload: System.Xaml.XamlServices.Save*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    stream input is ."
   platform:
   - net-11
   - net-20
@@ -271,18 +303,21 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a provided object graph into a XAML node representation and then into an output that goes to the provided <xref:System.IO.TextWriter>.
   syntax:
     content: public static void Save (System.IO.TextWriter writer, object instance);
     parameters:
     - id: writer
       type: System.IO.TextWriter
-      description: To be added.
+      description: The <xref:System.IO.TextWriter> that writes the output.
     - id: instance
       type: System.Object
-      description: To be added.
+      description: The root of the object graph to process.
   overload: System.Xaml.XamlServices.Save*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    writer input is ."
   platform:
   - net-11
   - net-20
@@ -299,18 +334,25 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a provided object graph into a XAML node representation and then writes it to an output file at a provided location.
+  remarks: The `fileName` parameter value is used as the `outputFileName` input for a call to <xref:System.Xml.XmlWriter.Create%2A?displayProperty=fullName>, which creates a <xref:System.Xml.XmlWriter> as part of the method call.
   syntax:
     content: public static void Save (string fileName, object instance);
     parameters:
     - id: fileName
       type: System.String
-      description: To be added.
+      description: The name and location of the file to write the output to.
     - id: instance
       type: System.Object
-      description: To be added.
+      description: The root of the object graph to process.
   overload: System.Xaml.XamlServices.Save*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    fileName is an empty string."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    fileName is ."
   platform:
   - net-11
   - net-20
@@ -327,18 +369,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a provided object graph into a XAML node representation and then writes it to the provided XAML writer.
+  remarks: "You should typically use this signature only in the following cases:  \n  \n-   You defined your own implementation of a <xref:System.Xaml.XamlWriter>.  \n  \n-   You specified settings for the <xref:System.Xaml.XamlWriter> that differ from the default settings."
   syntax:
     content: public static void Save (System.Xaml.XamlWriter writer, object instance);
     parameters:
     - id: writer
       type: System.Xaml.XamlWriter
-      description: To be added.
+      description: The  implementation to use.
     - id: instance
       type: System.Object
-      description: To be added.
+      description: The root of the object graph to process.
   overload: System.Xaml.XamlServices.Save*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    writer input is ."
   platform:
   - net-11
   - net-20
@@ -355,18 +401,21 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Processes a provided object graph into a XAML node representation and then writes it to the provided <xref:System.Xml.XmlWriter>.
   syntax:
     content: public static void Save (System.Xml.XmlWriter writer, object instance);
     parameters:
     - id: writer
       type: System.Xml.XmlWriter
-      description: To be added.
+      description: The <xref:System.Xml.XmlWriter> implementation to use.
     - id: instance
       type: System.Object
-      description: To be added.
+      description: The root of the object graph to process.
   overload: System.Xaml.XamlServices.Save*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    writer input is ."
   platform:
   - net-11
   - net-20
@@ -383,18 +432,25 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Connects a  and a  to use a common XAML node set intermediary. Potentially transforms the content, depending on the types of readers and writers that are provided.
+  remarks: This method is a wrapper around <xref:System.Xaml.XamlServices.Transform%28System.Xaml.XamlReader%2CSystem.Xaml.XamlWriter%2CSystem.Boolean%29>, where `closeWriter` is specified as `true`.
   syntax:
     content: public static void Transform (System.Xaml.XamlReader xamlReader, System.Xaml.XamlWriter xamlWriter);
     parameters:
     - id: xamlReader
       type: System.Xaml.XamlReader
-      description: To be added.
+      description: The  implementation to use.
     - id: xamlWriter
       type: System.Xaml.XamlWriter
-      description: To be added.
+      description: The  to use.
   overload: System.Xaml.XamlServices.Transform*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    xamlReader or xamlWriter input is ."
+  - type: System.Xaml.XamlException
+    commentId: T:System.Xaml.XamlException
+    description: The XAML schema context does not match between the provided xamlReader and xamlWriter.
   platform:
   - net-11
   - net-20
@@ -411,21 +467,27 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Connects a  and a  to use a common XAML node set intermediary. Potentially transforms the content, depending on the types of readers and writers that are provided. Provides a parameter for specifying whether to close the writer after the call is completed.
   syntax:
     content: public static void Transform (System.Xaml.XamlReader xamlReader, System.Xaml.XamlWriter xamlWriter, bool closeWriter);
     parameters:
     - id: xamlReader
       type: System.Xaml.XamlReader
-      description: To be added.
+      description: The  implementation to use.
     - id: xamlWriter
       type: System.Xaml.XamlWriter
-      description: To be added.
+      description: The  to use.
     - id: closeWriter
       type: System.Boolean
-      description: To be added.
+      description: "\n     to close the writer after the call is complete;  to leave the writer active at the last written position."
   overload: System.Xaml.XamlServices.Transform*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    xamlReader or xamlWriter input is ."
+  - type: System.Xaml.XamlException
+    commentId: T:System.Xaml.XamlException
+    description: The XAML schema context does not match between the provided xamlReader and xamlWriter.
   platform:
   - net-11
   - net-20
@@ -440,12 +502,6 @@ references:
   name: Load(Stream)
   nameWithType: XamlServices.Load(Stream)
   fullName: System.Xaml.XamlServices.Load(Stream)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.IO.Stream
   parent: System.IO
   isExternal: true
@@ -458,12 +514,6 @@ references:
   name: Load(TextReader)
   nameWithType: XamlServices.Load(TextReader)
   fullName: System.Xaml.XamlServices.Load(TextReader)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.IO.TextReader
   parent: System.IO
   isExternal: true
@@ -476,12 +526,6 @@ references:
   name: Load(String)
   nameWithType: XamlServices.Load(String)
   fullName: System.Xaml.XamlServices.Load(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.String
   parent: System
   isExternal: true
@@ -494,12 +538,6 @@ references:
   name: Load(XamlReader)
   nameWithType: XamlServices.Load(XamlReader)
   fullName: System.Xaml.XamlServices.Load(XamlReader)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.XamlReader
   parent: System.Xaml
   isExternal: false
@@ -512,12 +550,6 @@ references:
   name: Load(XmlReader)
   nameWithType: XamlServices.Load(XmlReader)
   fullName: System.Xaml.XamlServices.Load(XmlReader)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xml.XmlReader
   parent: System.Xml
   isExternal: true
@@ -530,54 +562,18 @@ references:
   name: Parse(String)
   nameWithType: XamlServices.Parse(String)
   fullName: System.Xaml.XamlServices.Parse(String)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Xaml.XamlServices.Save(System.Object)
   parent: System.Xaml.XamlServices
   isExternal: false
   name: Save(Object)
   nameWithType: XamlServices.Save(Object)
   fullName: System.Xaml.XamlServices.Save(Object)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.XamlServices.Save(System.IO.Stream,System.Object)
   parent: System.Xaml.XamlServices
   isExternal: false
   name: Save(Stream,Object)
   nameWithType: XamlServices.Save(Stream,Object)
   fullName: System.Xaml.XamlServices.Save(Stream,Object)
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.XamlServices.Save(System.IO.TextWriter,System.Object)
   parent: System.Xaml.XamlServices
   isExternal: false
@@ -590,30 +586,12 @@ references:
   name: TextWriter
   nameWithType: TextWriter
   fullName: System.IO.TextWriter
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.XamlServices.Save(System.String,System.Object)
   parent: System.Xaml.XamlServices
   isExternal: false
   name: Save(String,Object)
   nameWithType: XamlServices.Save(String,Object)
   fullName: System.Xaml.XamlServices.Save(String,Object)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.XamlServices.Save(System.Xaml.XamlWriter,System.Object)
   parent: System.Xaml.XamlServices
   isExternal: false
@@ -626,12 +604,6 @@ references:
   name: XamlWriter
   nameWithType: XamlWriter
   fullName: System.Xaml.XamlWriter
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.XamlServices.Save(System.Xml.XmlWriter,System.Object)
   parent: System.Xaml.XamlServices
   isExternal: false
@@ -644,48 +616,18 @@ references:
   name: XmlWriter
   nameWithType: XmlWriter
   fullName: System.Xml.XmlWriter
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.XamlServices.Transform(System.Xaml.XamlReader,System.Xaml.XamlWriter)
   parent: System.Xaml.XamlServices
   isExternal: false
   name: Transform(XamlReader,XamlWriter)
   nameWithType: XamlServices.Transform(XamlReader,XamlWriter)
   fullName: System.Xaml.XamlServices.Transform(XamlReader,XamlWriter)
-- uid: System.Xaml.XamlReader
-  parent: System.Xaml
-  isExternal: false
-  name: XamlReader
-  nameWithType: XamlReader
-  fullName: System.Xaml.XamlReader
-- uid: System.Xaml.XamlWriter
-  parent: System.Xaml
-  isExternal: false
-  name: XamlWriter
-  nameWithType: XamlWriter
-  fullName: System.Xaml.XamlWriter
 - uid: System.Xaml.XamlServices.Transform(System.Xaml.XamlReader,System.Xaml.XamlWriter,System.Boolean)
   parent: System.Xaml.XamlServices
   isExternal: false
   name: Transform(XamlReader,XamlWriter,Boolean)
   nameWithType: XamlServices.Transform(XamlReader,XamlWriter,Boolean)
   fullName: System.Xaml.XamlServices.Transform(XamlReader,XamlWriter,Boolean)
-- uid: System.Xaml.XamlReader
-  parent: System.Xaml
-  isExternal: false
-  name: XamlReader
-  nameWithType: XamlReader
-  fullName: System.Xaml.XamlReader
-- uid: System.Xaml.XamlWriter
-  parent: System.Xaml
-  isExternal: false
-  name: XamlWriter
-  nameWithType: XamlWriter
-  fullName: System.Xaml.XamlWriter
 - uid: System.Boolean
   parent: System
   isExternal: true

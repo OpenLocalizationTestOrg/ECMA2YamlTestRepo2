@@ -15,8 +15,8 @@ items:
   nameWithType: ProfileService
   fullName: System.Web.ApplicationServices.ProfileService
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Enables access to ASP.NET user profiles through a Web service.
+  remarks: "The ProfileService class enables you to get and set a user's profile properties through a Windows Communication Foundation (WCF) service. You can keep custom information for users through profile properties. For information about profile properties, see [ASP.NET Profile Properties Overview](../Topic/ASP.NET%20Profile%20Properties%20Overview.md).  \n  \n The ProfileService class contains the following methods that should be accessed only through a WCF service:  \n  \n-   <xref:System.Web.ApplicationServices.ProfileService.GetPropertiesForCurrentUser%2A>  \n  \n-   <xref:System.Web.ApplicationServices.ProfileService.GetAllPropertiesForCurrentUser%2A>  \n  \n-   <xref:System.Web.ApplicationServices.ProfileService.SetPropertiesForCurrentUser%2A>  \n  \n-   <xref:System.Web.ApplicationServices.ProfileService.GetPropertiesMetadata%2A>  \n  \n To call these methods, you must enable the profile service on the Web server and then connect a WCF-compatible client application to the Web service. For information about how to configure the profile service, see [How to: Enable the WCF Profile Service](../Topic/How%20to:%20Enable%20the%20WCF%20Profile%20Service.md).  \n  \n The <xref:System.Web.ApplicationServices.ProfileService.ValidatingProperties> event is raised when a user's profile properties are set. You can create an event handler for the <xref:System.Web.ApplicationServices.ProfileService.ValidatingProperties> event to validate property values or to dynamically change their values.  \n  \n For an example of how to use the WCF profile service from a console application, see [Walkthrough: Using ASP.NET Application Services](../Topic/Walkthrough:%20Using%20ASP.NET%20Application%20Services.md)."
   syntax:
     content: >-
       [System.ServiceModel.Activation.AspNetCompatibilityRequirements(RequirementsMode=System.ServiceModel.Activation.AspNetCompatibilityRequirementsMode.Required)]
@@ -48,12 +48,12 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.ApplicationServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public ProfileService ();
     parameters: []
   overload: System.Web.ApplicationServices.ProfileService.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -70,18 +70,19 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.ApplicationServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves all the profile properties and values that are available to the profile service for the current user.
+  remarks: Use the GetAllPropertiesForCurrentUser method to retrieve all the user's profile properties through one Web service call. For example, you can call this method and then store the profile properties in the client application and retrieve values as needed. The GetAllPropertiesForCurrentUser method returns values only for the profile properties that have been configured to be accessed through a Web service. You set whether a profile property can be accessed through a Web service by setting either the <xref:System.Web.Configuration.ScriptingProfileServiceSection.ReadAccessProperties%2A> property or the <xref:System.Web.Configuration.ScriptingProfileServiceSection.WriteAccessProperties%2A> property to `true`.
   syntax:
     content: public System.Collections.Generic.Dictionary<string,object> GetAllPropertiesForCurrentUser (bool authenticatedUserOnly);
     parameters:
     - id: authenticatedUserOnly
       type: System.Boolean
-      description: To be added.
+      description: A value that indicates whether properties are returned only for users who have been authenticated.
     return:
       type: System.Collections.Generic.Dictionary{System.String,System.Object}
-      description: To be added.
+      description: The profile properties and values.
   overload: System.Web.ApplicationServices.ProfileService.GetAllPropertiesForCurrentUser*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -98,21 +99,25 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.ApplicationServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the specified profile properties and values for the current user.
+  remarks: To get specific profile property values for the current users, you use the GetPropertiesForCurrentUser method to specify which profile properties are retrieved. The GetPropertiesForCurrentUser method returns values only for profile properties that are configured for access through a Web service. You configure a profile property for access through a Web service by setting the <xref:System.Web.Configuration.ScriptingProfileServiceSection.ReadAccessProperties%2A> property or <xref:System.Web.Configuration.ScriptingProfileServiceSection.WriteAccessProperties%2A> property to `true`.
   syntax:
     content: public System.Collections.Generic.Dictionary<string,object> GetPropertiesForCurrentUser (System.Collections.Generic.IEnumerable<string> properties, bool authenticatedUserOnly);
     parameters:
     - id: properties
       type: System.Collections.Generic.IEnumerable{System.String}
-      description: To be added.
+      description: A collection of string values that contains the names of the profile properties to retrieve.
     - id: authenticatedUserOnly
       type: System.Boolean
-      description: To be added.
+      description: A value that indicates whether properties are returned only for users who have been authenticated.
     return:
       type: System.Collections.Generic.Dictionary{System.String,System.Object}
-      description: To be added.
+      description: The profile property information and values.
   overload: System.Web.ApplicationServices.ProfileService.GetPropertiesForCurrentUser*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The properties parameter or an item in the properties collection is .
   platform:
   - net-11
   - net-20
@@ -129,15 +134,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.ApplicationServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves information about the profile properties that are available through the profile service.
+  remarks: "Use the GetPropertiesMetadata method to retrieve information about profile properties from a client application that is compatible with the Windows Communication Framework (WCF). You can retrieve information such as the following:  \n  \n-   The name and type of the properties.  \n  \n-   Whether they are read-only.  \n  \n-   Whether they can be accessed by users who have not been authenticated.  \n  \n-   The default values for the properties.  \n  \n After retrieving these values, a client application can take appropriate actions such as not trying to set a read-only property. The current user does not have to be authenticated in order to call the GetPropertiesMetadata method, because the properties apply to all users."
   syntax:
     content: public System.Web.ApplicationServices.ProfilePropertyMetadata[] GetPropertiesMetadata ();
     parameters: []
     return:
       type: System.Web.ApplicationServices.ProfilePropertyMetadata[]
-      description: To be added.
+      description: An array of  objects that contain information about the profile properties.
   overload: System.Web.ApplicationServices.ProfileService.GetPropertiesMetadata*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -154,21 +160,22 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.ApplicationServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the values of the specified properties in the user profile.
+  remarks: "You use the SetPropertiesForCurrentUser method to set a user's profile properties from an application that is compatible with the Windows Communication Foundation (WCF). The SetPropertiesForCurrentUser method returns any values that are not set, which might be for any one of the following reasons:  \n  \n-   The specified profile property is read only (the <xref:System.Web.Configuration.ScriptingProfileServiceSection.WriteAccessProperties%2A> property for a specified profile property is not set to `true`).  \n  \n-   The user profile does not have a profile property that has the matching name.  \n  \n-   Validation of the value failed."
   syntax:
     content: public System.Collections.ObjectModel.Collection<string> SetPropertiesForCurrentUser (System.Collections.Generic.IDictionary<string,object> values, bool authenticatedUserOnly);
     parameters:
     - id: values
       type: System.Collections.Generic.IDictionary{System.String,System.Object}
-      description: To be added.
+      description: A collection that contains names and values of the profile properties to set.
     - id: authenticatedUserOnly
       type: System.Boolean
-      description: To be added.
+      description: A value that indicates whether properties are set only for users who have been authenticated.
     return:
       type: System.Collections.ObjectModel.Collection{System.String}
-      description: To be added.
+      description: The properties that were not set for the user profile, if any.
   overload: System.Web.ApplicationServices.ProfileService.SetPropertiesForCurrentUser*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -185,13 +192,16 @@ items:
   assemblies:
   - System.Web.Extensions
   namespace: System.Web.ApplicationServices
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a user's profile properties are set.
+  remarks: "You can create an event handler for the ValidatingProperties event to validate property values or to dynamically change their values. The ValidatingProperties event is raised when the <xref:System.Web.ApplicationServices.ProfileService.SetPropertiesForCurrentUser%2A> method is called. If the value for a property fails validation, add that property to the <xref:System.Web.ApplicationServices.ValidatingPropertiesEventArgs.FailedProperties%2A> collection of the <xref:System.Web.ApplicationServices.ValidatingPropertiesEventArgs> class. Any properties that are in the <xref:System.Web.ApplicationServices.ValidatingPropertiesEventArgs.FailedProperties%2A> collection will not be saved to the user profile.  \n  \n You can add and register the event handler in the Global.asax file."
+  example:
+  - "The following example shows an event handler for the ValidatingProperties event. When the value passed for `FirstName` property is empty or `null`, the `FirstName` property is added to the <xref:System.Web.ApplicationServices.ValidatingPropertiesEventArgs.FailedProperties%2A> collection.  \n  \n [!code-vb[System.Web.ApplicationServices.ProfileService#1](../../add/codesnippet/VisualBasic/e-system.web.application_2_1.asax)]\n [!code-cs[System.Web.ApplicationServices.ProfileService#1](../../add/codesnippet/CSharp/e-system.web.application_2_1.asax)]"
   syntax:
     content: public static event EventHandler<System.Web.ApplicationServices.ValidatingPropertiesEventArgs> ValidatingProperties;
     return:
       type: System.EventHandler{System.Web.ApplicationServices.ValidatingPropertiesEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -218,6 +228,28 @@ references:
   name: Dictionary<String,Object>
   nameWithType: Dictionary<String,Object>
   fullName: System.Collections.Generic.Dictionary<System.String,System.Object>
+  spec.csharp:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    nameWithType: Dictionary
+    fullName: Dictionary<System.String,System.Object>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -230,36 +262,47 @@ references:
   name: GetPropertiesForCurrentUser(IEnumerable<String>,Boolean)
   nameWithType: ProfileService.GetPropertiesForCurrentUser(IEnumerable<String>,Boolean)
   fullName: System.Web.ApplicationServices.ProfileService.GetPropertiesForCurrentUser(IEnumerable<String>,Boolean)
-- uid: System.Collections.Generic.Dictionary{System.String,System.Object}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: Dictionary<String,Object>
-  nameWithType: Dictionary<String,Object>
-  fullName: System.Collections.Generic.Dictionary<System.String,System.Object>
 - uid: System.Collections.Generic.IEnumerable{System.String}
   parent: System.Collections.Generic
   isExternal: true
   name: IEnumerable<String>
   nameWithType: IEnumerable<String>
   fullName: System.Collections.Generic.IEnumerable<System.String>
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.String>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.ApplicationServices.ProfileService.GetPropertiesMetadata
   parent: System.Web.ApplicationServices.ProfileService
   isExternal: false
   name: GetPropertiesMetadata()
   nameWithType: ProfileService.GetPropertiesMetadata()
   fullName: System.Web.ApplicationServices.ProfileService.GetPropertiesMetadata()
-- uid: System.Web.ApplicationServices.ProfilePropertyMetadata
+- uid: System.Web.ApplicationServices.ProfilePropertyMetadata[]
   parent: System.Web.ApplicationServices
   isExternal: false
   name: ProfilePropertyMetadata
   nameWithType: ProfilePropertyMetadata
   fullName: System.Web.ApplicationServices.ProfilePropertyMetadata[]
+  spec.csharp:
+  - uid: System.Web.ApplicationServices.ProfilePropertyMetadata
+    name: ProfilePropertyMetadata
+    nameWithType: ProfilePropertyMetadata
+    fullName: ProfilePropertyMetadata[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Web.ApplicationServices.ProfileService.SetPropertiesForCurrentUser(System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean)
   parent: System.Web.ApplicationServices.ProfileService
   isExternal: false
@@ -272,18 +315,49 @@ references:
   name: Collection<String>
   nameWithType: Collection<String>
   fullName: System.Collections.ObjectModel.Collection<System.String>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.Collection`1
+    name: Collection
+    nameWithType: Collection
+    fullName: Collection<System.String>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Collections.Generic.IDictionary{System.String,System.Object}
   parent: System.Collections.Generic
   isExternal: true
   name: IDictionary<String,Object>
   nameWithType: IDictionary<String,Object>
   fullName: System.Collections.Generic.IDictionary<System.String,System.Object>
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.String,System.Object>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.ApplicationServices.ProfileService.ValidatingProperties
   parent: System.Web.ApplicationServices.ProfileService
   isExternal: false
@@ -296,6 +370,21 @@ references:
   name: EventHandler<ValidatingPropertiesEventArgs>
   nameWithType: EventHandler<ValidatingPropertiesEventArgs>
   fullName: System.EventHandler<System.Web.ApplicationServices.ValidatingPropertiesEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Web.ApplicationServices.ValidatingPropertiesEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Web.ApplicationServices.ValidatingPropertiesEventArgs
+    name: ValidatingPropertiesEventArgs
+    nameWithType: ValidatingPropertiesEventArgs
+    fullName: ValidatingPropertiesEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Web.ApplicationServices.ProfileService.#ctor*
   parent: System.Web.ApplicationServices.ProfileService
   isExternal: false

@@ -15,8 +15,8 @@ items:
   nameWithType: LogicalTreeHelper
   fullName: System.Windows.LogicalTreeHelper
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides static helper methods for querying objects in the logical tree.
+  remarks: "The LogicalTreeHelper class provides methods that you can use to return child collections of objects, or specific objects from within subnodes of the logical tree. However, most of the object tree operations that you typically perform are also exposed by similar methods or properties on <xref:System.Windows.FrameworkElement> or <xref:System.Windows.FrameworkContentElement>. For example, try the following:  \n  \n-   Instead of calling the static <xref:System.Windows.LogicalTreeHelper.GetChildren%2A> method, which returns an enumerator for the logical child objects, use the dedicated collection exposed in the content model for that object. Nearly all objects that support a content model expose some property that contains the collection of child objects, and provides collection interface support directly on that collection.  \n  \n-   Instead of calling the static <xref:System.Windows.LogicalTreeHelper.FindLogicalNode%2A> method to obtain a child object by specifying its name, call the <xref:System.Windows.FrameworkElement.FindName%2A?displayProperty=fullName> or <xref:System.Windows.FrameworkContentElement.FindName%2A?displayProperty=fullName> method on specific objects.  \n  \n LogicalTreeHelper is most useful for analysis scenarios where you are traveling up or down the logical tree recursively through multiple levels, and want to use a consistent approach for examining the various parent or child objects. In this case, you might be accessing a mixture of content models, and using the more content-model specific APIs would be too complex."
   syntax:
     content: public static class LogicalTreeHelper
   inheritance:
@@ -39,15 +39,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Attempts to bring the requested UI element into view and raises the  event on the target in order to report the results.
+  remarks: "It is typically more convenient to call the instance methods <xref:System.Windows.FrameworkElement.BringIntoView%2A?displayProperty=fullName> or <xref:System.Windows.FrameworkContentElement.BringIntoView%2A?displayProperty=fullName> rather than this static utility method. The behavior of the instance methods is equivalent to the behavior of the static method.  \n  \n Even if the `current` UI element provided was a <xref:System.Windows.FrameworkContentElement>, the resulting event is still the same <xref:System.Windows.FrameworkElement.RequestBringIntoView?displayProperty=fullName> event, with the originating <xref:System.Windows.FrameworkContentElement> identifiable by checking the event data of the event."
   syntax:
     content: public static void BringIntoView (System.Windows.DependencyObject current);
     parameters:
     - id: current
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The UI element to bring into view.
   overload: System.Windows.LogicalTreeHelper.BringIntoView*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -64,21 +65,22 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Attempts to find and return an object that has the specified name. The search starts from the specified object and continues into subnodes of the logical tree.
+  remarks: "The methods <xref:System.Windows.FrameworkContentElement.FindName%2A?displayProperty=fullName> and <xref:System.Windows.FrameworkElement.FindName%2A?displayProperty=fullName> are superficially similar to FindLogicalNode, but operate by different logic:  \n  \n-   The search direction for FindLogicalNode is toward child objects (down the tree); the search direction for the `FindName` methods is towards parent objects (up the tree).  \n  \n-   The `FindName` methods are governed by the concept of a XAML namescope. Using `FindName` you are guaranteed that only one object of that name exists, because XAML namescopes enforce uniqueness. In contrast, FindLogicalNode ignores XAML namescope and might cross XAML namescope boundaries during the search. As such, there is no guarantee of uniqueness of the `elementName` name once boundaries are crossed. For more information about XAML namescopes, see [WPF XAML Namescopes](../Topic/WPF%20XAML%20Namescopes.md)."
   syntax:
     content: public static System.Windows.DependencyObject FindLogicalNode (System.Windows.DependencyObject logicalTreeNode, string elementName);
     parameters:
     - id: logicalTreeNode
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The object to start searching from. This object must be either a  or a .
     - id: elementName
       type: System.String
-      description: To be added.
+      description: The name of the object to find.
     return:
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The object with the matching name, if one is found; returns  if no matching name was found in the logical tree.
   overload: System.Windows.LogicalTreeHelper.FindLogicalNode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -95,18 +97,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the collection of immediate child objects of the specified object, by processing the logical tree.
+  remarks: Use this signature and helper method primarily when you are unsure whether `current` is a <xref:System.Windows.FrameworkElement> or <xref:System.Windows.FrameworkContentElement> and are also unsure whether that object's class supports its own content model collection. If you can determine the type of the object you are querying, check the specific content property that you know exists on that type. For example, if you know that the object you are querying is an <xref:System.Windows.Controls.ItemsControl>, check the <xref:System.Windows.Controls.ItemsControl.Items%2A> property to get a strongly typed collection, which has collection interface support and is probably more useful than an enumerator.
   syntax:
     content: public static System.Collections.IEnumerable GetChildren (System.Windows.DependencyObject current);
     parameters:
     - id: current
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The object from which to start processing the logical tree. This is expected to be either a  or .
     return:
       type: System.Collections.IEnumerable
-      description: To be added.
+      description: The enumerable collection of immediate child objects from the logical tree of the specified object.
   overload: System.Windows.LogicalTreeHelper.GetChildren*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -123,18 +126,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the collection of immediate child objects of the specified  by processing the logical tree.
   syntax:
     content: public static System.Collections.IEnumerable GetChildren (System.Windows.FrameworkContentElement current);
     parameters:
     - id: current
       type: System.Windows.FrameworkContentElement
-      description: To be added.
+      description: The object from which to start processing the logical tree.
     return:
       type: System.Collections.IEnumerable
-      description: To be added.
+      description: The enumerable collection of immediate child objects starting from current in the logical tree.
   overload: System.Windows.LogicalTreeHelper.GetChildren*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -151,18 +154,18 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the collection of immediate child objects of the specified  by processing the logical tree.
   syntax:
     content: public static System.Collections.IEnumerable GetChildren (System.Windows.FrameworkElement current);
     parameters:
     - id: current
       type: System.Windows.FrameworkElement
-      description: To be added.
+      description: The object from which to start processing the logical tree.
     return:
       type: System.Collections.IEnumerable
-      description: To be added.
+      description: The enumerable collection of immediate child objects starting from current in the logical tree.
   overload: System.Windows.LogicalTreeHelper.GetChildren*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -179,18 +182,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the parent object of the specified object by processing the logical tree.
+  remarks: This method is merely a wrapper that gets the appropriate type version (<xref:System.Windows.FrameworkElement> or <xref:System.Windows.FrameworkContentElement>) of the <xref:System.Windows.FrameworkElement.Parent%2A?displayProperty=fullName> or <xref:System.Windows.FrameworkContentElement.Parent%2A?displayProperty=fullName> property; so unless you are unable to determine the `current` type, you might want to check the respective instance properties instead.
   syntax:
     content: public static System.Windows.DependencyObject GetParent (System.Windows.DependencyObject current);
     parameters:
     - id: current
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The object to find the parent object for. This is expected to be either a  or a .
     return:
       type: System.Windows.DependencyObject
-      description: To be added.
+      description: The requested parent object.
   overload: System.Windows.LogicalTreeHelper.GetParent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -217,18 +221,6 @@ references:
   name: FindLogicalNode(DependencyObject,String)
   nameWithType: LogicalTreeHelper.FindLogicalNode(DependencyObject,String)
   fullName: System.Windows.LogicalTreeHelper.FindLogicalNode(DependencyObject,String)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
 - uid: System.String
   parent: System
   isExternal: true
@@ -247,24 +239,12 @@ references:
   name: IEnumerable
   nameWithType: IEnumerable
   fullName: System.Collections.IEnumerable
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
 - uid: System.Windows.LogicalTreeHelper.GetChildren(System.Windows.FrameworkContentElement)
   parent: System.Windows.LogicalTreeHelper
   isExternal: false
   name: GetChildren(FrameworkContentElement)
   nameWithType: LogicalTreeHelper.GetChildren(FrameworkContentElement)
   fullName: System.Windows.LogicalTreeHelper.GetChildren(FrameworkContentElement)
-- uid: System.Collections.IEnumerable
-  parent: System.Collections
-  isExternal: true
-  name: IEnumerable
-  nameWithType: IEnumerable
-  fullName: System.Collections.IEnumerable
 - uid: System.Windows.FrameworkContentElement
   parent: System.Windows
   isExternal: false
@@ -277,12 +257,6 @@ references:
   name: GetChildren(FrameworkElement)
   nameWithType: LogicalTreeHelper.GetChildren(FrameworkElement)
   fullName: System.Windows.LogicalTreeHelper.GetChildren(FrameworkElement)
-- uid: System.Collections.IEnumerable
-  parent: System.Collections
-  isExternal: true
-  name: IEnumerable
-  nameWithType: IEnumerable
-  fullName: System.Collections.IEnumerable
 - uid: System.Windows.FrameworkElement
   parent: System.Windows
   isExternal: false
@@ -295,18 +269,6 @@ references:
   name: GetParent(DependencyObject)
   nameWithType: LogicalTreeHelper.GetParent(DependencyObject)
   fullName: System.Windows.LogicalTreeHelper.GetParent(DependencyObject)
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
-- uid: System.Windows.DependencyObject
-  parent: System.Windows
-  isExternal: false
-  name: DependencyObject
-  nameWithType: DependencyObject
-  fullName: System.Windows.DependencyObject
 - uid: System.Windows.LogicalTreeHelper.BringIntoView*
   parent: System.Windows.LogicalTreeHelper
   isExternal: false

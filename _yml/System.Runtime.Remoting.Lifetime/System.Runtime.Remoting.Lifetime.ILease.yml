@@ -18,8 +18,8 @@ items:
   nameWithType: ILease
   fullName: System.Runtime.Remoting.Lifetime.ILease
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Defines a lifetime lease object that is used by the remoting lifetime service.
+  remarks: "Distributed garbage collection controls when server applications can be deleted. Traditionally, distributed garbage collection uses reference counts and pinging for control. This works well when there are a few clients per object, but does not work well when there are thousands of clients per each object. The lifetime service can assume the function of a traditional distributed garbage collector, and scales well when the number of clients increases.  \n  \n The lifetime service associates a lease with each remotely activated object. When the lease expires, the object is removed. A lease can specify that an object has an infinite lifetime.  \n  \n Each <xref:System.AppDomain> contains a lease manager that administers the leases in the domain. The lease manager periodically examines the leases for time expiration. If a lease has expired, it can either be canceled by removing its reference to the lease, or renewed by invoking one or more of the lease's sponsors.  \n  \n A lease contains properties that determine its policies, and methods that renew the lease time. The lease exposes the ILease interface.  \n  \n For an example showing how to use the ILease interface see [Lifetimes](http://msdn.microsoft.com/en-us/334a30e5-33cb-4f0f-a38a-ed4abc5560fa)."
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -42,14 +42,17 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Lifetime
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the amount of time remaining on the lease.
   syntax:
     content: public TimeSpan CurrentLeaseTime { get; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The amount of time remaining on the lease.
   overload: System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -66,14 +69,17 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Lifetime
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the current  of the lease.
   syntax:
     content: public System.Runtime.Remoting.Lifetime.LeaseState CurrentState { get; }
     return:
       type: System.Runtime.Remoting.Lifetime.LeaseState
-      description: To be added.
+      description: The current  of the lease.
   overload: System.Runtime.Remoting.Lifetime.ILease.CurrentState*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -90,14 +96,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Lifetime
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the initial time for the lease.
+  remarks: If the InitialLeaseTime property is set to <xref:System.TimeSpan?displayProperty=fullName>, then the lease will never time out and the object associated with it will have an infinite lifetime.
   syntax:
     content: public TimeSpan InitialLeaseTime { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The initial time for the lease.
   overload: System.Runtime.Remoting.Lifetime.ILease.InitialLeaseTime*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -114,15 +124,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Lifetime
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a sponsor for the lease without renewing the lease.
+  remarks: If a sponsor is registered with the current method, the lease is not renewed.
   syntax:
     content: public void Register (System.Runtime.Remoting.Lifetime.ISponsor obj);
     parameters:
     - id: obj
       type: System.Runtime.Remoting.Lifetime.ISponsor
-      description: To be added.
+      description: The callback object of the sponsor.
   overload: System.Runtime.Remoting.Lifetime.ILease.Register*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -139,18 +153,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Lifetime
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a sponsor for the lease, and renews it by the specified <xref:System.TimeSpan>.
   syntax:
     content: public void Register (System.Runtime.Remoting.Lifetime.ISponsor obj, TimeSpan renewalTime);
     parameters:
     - id: obj
       type: System.Runtime.Remoting.Lifetime.ISponsor
-      description: To be added.
+      description: The callback object of the sponsor.
     - id: renewalTime
       type: System.TimeSpan
-      description: To be added.
+      description: The length of time to renew the lease by.
   overload: System.Runtime.Remoting.Lifetime.ILease.Register*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -167,18 +184,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Lifetime
-  summary: To be added.
-  remarks: To be added.
+  summary: Renews a lease for the specified time.
+  remarks: The lease time is set to the maximum of the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> or the current time plus the renewal time.
   syntax:
     content: public TimeSpan Renew (TimeSpan renewalTime);
     parameters:
     - id: renewalTime
       type: System.TimeSpan
-      description: To be added.
+      description: The length of time to renew the lease by.
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The new expiration time of the lease.
   overload: System.Runtime.Remoting.Lifetime.ILease.Renew*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -195,14 +216,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Lifetime
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the amount of time by which a call to the remote object renews the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A>.
+  remarks: When you make a call to a remote object, the lifetime service adds the RenewOnCallTime to the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> only if the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> has dropped below the RenewOnCallTime. Sequential calls therefore do not increase the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> without bound. Instead, immediately after any call, the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> is guaranteed to be the RenewOnCallTime or longer.
   syntax:
     content: public TimeSpan RenewOnCallTime { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The amount of time by which a call to the remote object renews the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A>.
   overload: System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -219,14 +244,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Lifetime
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the amount of time to wait for a sponsor to return with a lease renewal time.
+  remarks: "If the SponsorshipTimeout is <xref:System.TimeSpan?displayProperty=fullName>, then this lease will not take sponsors.  \n  \n If a sponsor does not respond to a call to renew a lease within the time-out period, it is assumed to be dead and is removed from the list of sponsors for the current lease."
   syntax:
     content: public TimeSpan SponsorshipTimeout { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The amount of time to wait for a sponsor to return with a lease renewal time.
   overload: System.Runtime.Remoting.Lifetime.ILease.SponsorshipTimeout*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -243,15 +272,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Lifetime
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes a sponsor from the sponsor list.
   syntax:
     content: public void Unregister (System.Runtime.Remoting.Lifetime.ISponsor obj);
     parameters:
     - id: obj
       type: System.Runtime.Remoting.Lifetime.ISponsor
-      description: To be added.
+      description: The lease sponsor to unregister.
   overload: System.Runtime.Remoting.Lifetime.ILease.Unregister*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -287,12 +319,6 @@ references:
   name: InitialLeaseTime
   nameWithType: ILease.InitialLeaseTime
   fullName: System.Runtime.Remoting.Lifetime.ILease.InitialLeaseTime
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Runtime.Remoting.Lifetime.ILease.Register(System.Runtime.Remoting.Lifetime.ISponsor)
   parent: System.Runtime.Remoting.Lifetime.ILease
   isExternal: false
@@ -311,72 +337,30 @@ references:
   name: Register(ISponsor,TimeSpan)
   nameWithType: ILease.Register(ISponsor,TimeSpan)
   fullName: System.Runtime.Remoting.Lifetime.ILease.Register(ISponsor,TimeSpan)
-- uid: System.Runtime.Remoting.Lifetime.ISponsor
-  parent: System.Runtime.Remoting.Lifetime
-  isExternal: false
-  name: ISponsor
-  nameWithType: ISponsor
-  fullName: System.Runtime.Remoting.Lifetime.ISponsor
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Runtime.Remoting.Lifetime.ILease.Renew(System.TimeSpan)
   parent: System.Runtime.Remoting.Lifetime.ILease
   isExternal: false
   name: Renew(TimeSpan)
   nameWithType: ILease.Renew(TimeSpan)
   fullName: System.Runtime.Remoting.Lifetime.ILease.Renew(TimeSpan)
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime
   parent: System.Runtime.Remoting.Lifetime.ILease
   isExternal: false
   name: RenewOnCallTime
   nameWithType: ILease.RenewOnCallTime
   fullName: System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Runtime.Remoting.Lifetime.ILease.SponsorshipTimeout
   parent: System.Runtime.Remoting.Lifetime.ILease
   isExternal: false
   name: SponsorshipTimeout
   nameWithType: ILease.SponsorshipTimeout
   fullName: System.Runtime.Remoting.Lifetime.ILease.SponsorshipTimeout
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Runtime.Remoting.Lifetime.ILease.Unregister(System.Runtime.Remoting.Lifetime.ISponsor)
   parent: System.Runtime.Remoting.Lifetime.ILease
   isExternal: false
   name: Unregister(ISponsor)
   nameWithType: ILease.Unregister(ISponsor)
   fullName: System.Runtime.Remoting.Lifetime.ILease.Unregister(ISponsor)
-- uid: System.Runtime.Remoting.Lifetime.ISponsor
-  parent: System.Runtime.Remoting.Lifetime
-  isExternal: false
-  name: ISponsor
-  nameWithType: ISponsor
-  fullName: System.Runtime.Remoting.Lifetime.ISponsor
 - uid: System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime*
   parent: System.Runtime.Remoting.Lifetime.ILease
   isExternal: false

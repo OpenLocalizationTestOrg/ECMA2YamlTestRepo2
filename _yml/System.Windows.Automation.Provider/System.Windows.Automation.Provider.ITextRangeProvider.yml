@@ -27,8 +27,8 @@ items:
   nameWithType: ITextRangeProvider
   fullName: System.Windows.Automation.Provider.ITextRangeProvider
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Exposes methods and properties to support UI Automation client access to a span of continuous text in a text container that implements .
+  remarks: "Implemented on a UI Automation provider that must support the <xref:System.Windows.Automation.TextPattern> control pattern.  \n  \n A <xref:System.Windows.Automation.Text.TextPatternRange> can represent an insertion point, a subset, or all of the text in a <xref:System.Windows.Automation.TextPattern> container."
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -55,12 +55,16 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds to the collection of highlighted text in a text container that supports multiple, disjoint selections.
+  remarks: "The text insertion point moves to the area of the new selection.  \n  \n Providing a degenerate text range moves the insertion point."
   syntax:
     content: public void AddToSelection ();
     parameters: []
   overload: System.Windows.Automation.Provider.ITextRangeProvider.AddToSelection*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: If text provider does not support multiple, disjoint selections (that is, <xref:System.Windows.Automation.Provider.ITextProvider.SupportedTextSelection%2A> must have a value of ).
   platform:
   - net-11
   - net-20
@@ -77,15 +81,16 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a new  identical to the original  and inheriting all properties of the original.
+  remarks: The new range can be manipulated independently from the original.
   syntax:
     content: public System.Windows.Automation.Provider.ITextRangeProvider Clone ();
     parameters: []
     return:
       type: System.Windows.Automation.Provider.ITextRangeProvider
-      description: To be added.
+      description: The new text range. A null reference ( in [!INCLUDE[TLA#tla_visualbnet](../../add/includes/tlasharptla-visualbnet-md.md)]) is never returned.
   overload: System.Windows.Automation.Provider.ITextRangeProvider.Clone*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -102,18 +107,21 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the span (the  endpoint to the  endpoint) of a text range is the same as another text range.
   syntax:
     content: public bool Compare (System.Windows.Automation.Provider.ITextRangeProvider range);
     parameters:
     - id: range
       type: System.Windows.Automation.Provider.ITextRangeProvider
-      description: To be added.
+      description: A text range to compare
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the span of both text ranges is identical; otherwise .
   overload: System.Windows.Automation.Provider.ITextRangeProvider.Compare*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: If the range being compared does not come from the same text provider.
   platform:
   - net-11
   - net-20
@@ -130,24 +138,27 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that specifies whether two text ranges have identical endpoints.
   syntax:
     content: public int CompareEndpoints (System.Windows.Automation.Text.TextPatternRangeEndpoint endpoint, System.Windows.Automation.Provider.ITextRangeProvider targetRange, System.Windows.Automation.Text.TextPatternRangeEndpoint targetEndpoint);
     parameters:
     - id: endpoint
       type: System.Windows.Automation.Text.TextPatternRangeEndpoint
-      description: To be added.
+      description: The  or  endpoint of the caller.
     - id: targetRange
       type: System.Windows.Automation.Provider.ITextRangeProvider
-      description: To be added.
+      description: The target range for comparison.
     - id: targetEndpoint
       type: System.Windows.Automation.Text.TextPatternRangeEndpoint
-      description: To be added.
+      description: The  or  endpoint of the target.
     return:
       type: System.Int32
-      description: To be added.
+      description: "Returns a negative value if the caller's endpoint occurs earlier in the text than the target endpoint.  \n  \n Returns zero if the caller's endpoint is at the same location as the target endpoint.  \n  \n Returns a positive value if the caller's endpoint occurs later in the text than the target endpoint."
   overload: System.Windows.Automation.Provider.ITextRangeProvider.CompareEndpoints*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: If targetRange is from a different text provider.
   platform:
   - net-11
   - net-20
@@ -164,15 +175,16 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Expands the text range to the specified text unit.
+  remarks: "If the range is already an exact quantity of the specified units then it remains unchanged.  \n  \n There is a series of steps are involved behind the scenes in order for the <xref:System.Windows.Automation.Provider.ITextRangeProvider.Move%2A> method to execute successfully.  \n  \n1.  The text range is normalized; that is, the text range is collapsed to a degenerate range at the <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> endpoint, which makes the <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> endpoint superfluous. This step is necessary to remove ambiguity in situations where a text range spans `unit` boundaries; for example, \"{The U}RL [http://www.microsoft.com](http://www.microsoft.com) is embedded in text\" where \"{\" and \"}\" are the text range endpoints.  \n  \n2.  The resulting range is moved backward in the <xref:System.Windows.Automation.Provider.ITextProvider.DocumentRange%2A> to the beginning of the requested `unit` boundary.  \n  \n3.  The range is moved forward or backward in the <xref:System.Windows.Automation.Provider.ITextProvider.DocumentRange%2A> by the requested number of `unit` boundaries.  \n  \n4.  The range is then expanded from a degenerate range state by moving the <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> endpoint by one requested `unit` boundary.  \n  \n ![Range adjustments by Move & ExpandToEnclosingUnit](../../add/media/uia-textpattern-moveandexpand-examples.png \"Range adjustments by Move & ExpandToEnclosingUnit\")  \nExamples of how a text range is adjusted for Move() and ExpandToEnclosingUnit()  \n  \n> [!NOTE]\n>  These steps are necessary since it is common for a screen reader to read out a full word, sentence, or entire paragraph at the insertion point or any virtual cursor position.  \n  \n ExpandToEnclosingUnit respects both hidden and visible text.  \n  \n ExpandToEnclosingUnit defers to the next largest <xref:System.Windows.Automation.Text.TextUnit> supported if the given <xref:System.Windows.Automation.Text.TextUnit> is not supported by the control.  \n  \n The order, from smallest unit to largest, is listed below.  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>"
   syntax:
     content: public void ExpandToEnclosingUnit (System.Windows.Automation.Text.TextUnit unit);
     parameters:
     - id: unit
       type: System.Windows.Automation.Text.TextUnit
-      description: To be added.
+      description: The textual unit.
   overload: System.Windows.Automation.Provider.ITextRangeProvider.ExpandToEnclosingUnit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -189,24 +201,25 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a text range subset that has the specified attribute value.
+  remarks: There is no differentiation between hidden and visible text.
   syntax:
     content: public System.Windows.Automation.Provider.ITextRangeProvider FindAttribute (int attribute, object value, bool backward);
     parameters:
     - id: attribute
       type: System.Int32
-      description: To be added.
+      description: The attribute to search for.
     - id: value
       type: System.Object
-      description: To be added.
+      description: The attribute value to search for. This value must match the type specified for the attribute.
     - id: backward
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the last occurring text range should be returned instead of the first; otherwise ."
     return:
       type: System.Windows.Automation.Provider.ITextRangeProvider
-      description: To be added.
+      description: A text range having a matching attribute and attribute value; otherwise null ( in [!INCLUDE[TLA#tla_visualbnet](../../add/includes/tlasharptla-visualbnet-md.md)]).
   overload: System.Windows.Automation.Provider.ITextRangeProvider.FindAttribute*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -223,24 +236,25 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a text range subset that contains the specified text.
+  remarks: There is no differentiation between hidden and visible text.
   syntax:
     content: public System.Windows.Automation.Provider.ITextRangeProvider FindText (string text, bool backward, bool ignoreCase);
     parameters:
     - id: text
       type: System.String
-      description: To be added.
+      description: The text string to search for.
     - id: backward
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the last occurring text range should be returned instead of the first; otherwise ."
     - id: ignoreCase
       type: System.Boolean
-      description: To be added.
+      description: "\n     if case should be ignored; otherwise ."
     return:
       type: System.Windows.Automation.Provider.ITextRangeProvider
-      description: To be added.
+      description: A text range matching the specified text; otherwise null ( in [!INCLUDE[TLA#tla_visualbnet](../../add/includes/tlasharptla-visualbnet-md.md)]).
   overload: System.Windows.Automation.Provider.ITextRangeProvider.FindText*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -257,18 +271,22 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the value of the specified attribute across the text range.
+  remarks: There is no differentiation between hidden and visible text.
   syntax:
     content: public object GetAttributeValue (int attribute);
     parameters:
     - id: attribute
       type: System.Int32
-      description: To be added.
+      description: The text attribute.
     return:
       type: System.Object
-      description: To be added.
+      description: "Retrieves an object representing the value of the specified attribute. For example, `GetAttributeValue(TextPattern.FontNameAttribute)` would return a string that represents the font name of the text range while `GetAttributeValue(TextPattern.IsItalicAttribute)` would return a value of type <xref:System.Boolean>.  \n  \n Returns  if the value of the specified attribute varies over the text range.  \n  \n Returns  if the specified attribute is not supported by the provider or the control."
   overload: System.Windows.Automation.Provider.ITextRangeProvider.GetAttributeValue*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: If the specified attribute is not valid.
   platform:
   - net-11
   - net-20
@@ -285,15 +303,15 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a collection of bounding rectangles for each fully or partially visible line of text in a text range.
   syntax:
     content: public double[] GetBoundingRectangles ();
     parameters: []
     return:
       type: System.Double[]
-      description: To be added.
+      description: "An array of bounding rectangles for each full or partial line of text in a text range.  \n  \n An empty array for a degenerate range.  \n  \n An empty array for a text range that has screen coordinates placing it completely off-screen, scrolled out of view, or obscured by an overlapping window."
   overload: System.Windows.Automation.Provider.ITextRangeProvider.GetBoundingRectangles*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -310,15 +328,15 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a collection of all embedded objects that fall within the text range.
   syntax:
     content: public System.Windows.Automation.Provider.IRawElementProviderSimple[] GetChildren ();
     parameters: []
     return:
       type: System.Windows.Automation.Provider.IRawElementProviderSimple[]
-      description: To be added.
+      description: "A collection of child objects that fall within the range. Children that overlap with the text range but are not entirely enclosed by it will also be included in the collection.  \n  \n Returns an empty collection if there are no child objects."
   overload: System.Windows.Automation.Provider.ITextRangeProvider.GetChildren*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -335,15 +353,15 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the innermost control that encloses the text range.
   syntax:
     content: public System.Windows.Automation.Provider.IRawElementProviderSimple GetEnclosingElement ();
     parameters: []
     return:
       type: System.Windows.Automation.Provider.IRawElementProviderSimple
-      description: To be added.
+      description: The enclosing control, typically the text provider that supplies the text range. However, if the text provider supports child elements such as tables or hyperlinks, then the enclosing element could be a descendant of the text provider.
   overload: System.Windows.Automation.Provider.ITextRangeProvider.GetEnclosingElement*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -360,18 +378,22 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the plain text of the range.
+  remarks: "GetText respects both hidden and visible text.  \n  \n If `maxLength` is greater than the length of the text span of the caller, the string returned will be the plain text of the text range.  \n  \n GetText will not be affected by the order of endpoints in the text flow; it will always return the text between the Start and End endpoints of the text range in the logical text flow order."
   syntax:
     content: public string GetText (int maxLength);
     parameters:
     - id: maxLength
       type: System.Int32
-      description: To be added.
+      description: The maximum length of the string to return. Use `-1` if no limit is required.
     return:
       type: System.String
-      description: To be added.
+      description: The plain text of the text range, possibly truncated at the specified maxLength.
   overload: System.Windows.Automation.Provider.ITextRangeProvider.GetText*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: If maxLength is less than -1.
   platform:
   - net-11
   - net-20
@@ -388,21 +410,22 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Moves the text range the specified number of text units.
+  remarks: "When it is necessary to traverse the content of a text range, a series of steps are involved behind the scenes in order for the Move method to execute successfully.  \n  \n1.  The text range is normalized; that is, the text range is collapsed to a degenerate range at the <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> endpoint, which makes the <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> endpoint superfluous. This step is necessary to remove ambiguity in situations where a text range spans `unit` boundaries; for example, \"{The U}RL [http://www.microsoft.com](http://www.microsoft.com) is embedded in text\" where \"{\" and \"}\" are the text range endpoints.  \n  \n2.  The resulting range is moved backward in the <xref:System.Windows.Automation.Provider.ITextProvider.DocumentRange%2A> to the beginning of the requested `unit` boundary.  \n  \n3.  The range is moved forward or backward in the <xref:System.Windows.Automation.Provider.ITextProvider.DocumentRange%2A> by the requested number of `unit` boundaries.  \n  \n4.  The range is then expanded from a degenerate range state by moving the <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> endpoint by one requested `unit` boundary.  \n  \n ![Range adjustments by Move & ExpandToEnclosingUnit](../../add/media/uia-textpattern-moveandexpand-examples.png \"Range adjustments by Move & ExpandToEnclosingUnit\")  \nExamples of how a text range is adjusted for Move() and ExpandToEnclosingUnit()  \n  \n The textual content (or inner text) of a text container and an embedded object, such as a hyperlink or table cell, is exposed as a single, continuous text stream in both the control view and the content view of the [!INCLUDE[TLA2#tla_uiautomation](../../add/includes/tla2sharptla-uiautomation-md.md)] tree; object boundaries are ignored.  \n  \n ![Text ranges spanned by embedded objects.](../../add/media/uia-textpattern-embeddedobjecttextranges.png \"Text ranges spanned by embedded objects.\")  \nExample of a text stream with embedded objects and their range spans  \n  \n Move respects both hidden and visible text.  \n  \n Move defers to the next largest <xref:System.Windows.Automation.Text.TextUnit> supported if the given <xref:System.Windows.Automation.Text.TextUnit> is not supported by the control.  \n  \n The order, from smallest unit to largest, is listed below.  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n The text is not altered in any way, the text range just spans a different part of the text."
   syntax:
     content: public int Move (System.Windows.Automation.Text.TextUnit unit, int count);
     parameters:
     - id: unit
       type: System.Windows.Automation.Text.TextUnit
-      description: To be added.
+      description: The text unit boundary.
     - id: count
       type: System.Int32
-      description: To be added.
+      description: "The number of text units to move.  \n  \n A positive value moves the text range forward, a negative value moves the text range backward, and 0 has no effect."
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of units actually moved. This can be less than the number requested if either of the new text range endpoints is greater than or less than the <xref:System.Windows.Automation.Provider.ITextProvider.DocumentRange%2A> endpoints.
   overload: System.Windows.Automation.Provider.ITextRangeProvider.Move*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -419,21 +442,22 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Moves one endpoint of a text range to the specified endpoint of a second text range.
+  remarks: If the endpoint being moved crosses the other endpoint of the same text range then that other endpoint is moved also, resulting in a degenerate range and ensuring the correct ordering of the endpoints (that is, <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> is always less than or equal to <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint>).
   syntax:
     content: public void MoveEndpointByRange (System.Windows.Automation.Text.TextPatternRangeEndpoint endpoint, System.Windows.Automation.Provider.ITextRangeProvider targetRange, System.Windows.Automation.Text.TextPatternRangeEndpoint targetEndpoint);
     parameters:
     - id: endpoint
       type: System.Windows.Automation.Text.TextPatternRangeEndpoint
-      description: To be added.
+      description: The endpoint to move.
     - id: targetRange
       type: System.Windows.Automation.Provider.ITextRangeProvider
-      description: To be added.
+      description: Another range from the same text provider.
     - id: targetEndpoint
       type: System.Windows.Automation.Text.TextPatternRangeEndpoint
-      description: To be added.
+      description: An endpoint on the other range.
   overload: System.Windows.Automation.Provider.ITextRangeProvider.MoveEndpointByRange*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -450,24 +474,25 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Moves one endpoint of the text range the specified number of text units within the document range.
+  remarks: "When it is necessary to traverse the content of a text range, a series of steps are involved behind the scenes in order for the <xref:System.Windows.Automation.Provider.ITextRangeProvider.Move%2A> method to execute successfully.  \n  \n1.  The text range is normalized; that is, the text range is collapsed to a degenerate range at the <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> endpoint, which makes the <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> endpoint superfluous. This step is necessary to remove ambiguity in situations where a text range spans `unit` boundaries; for example, \"{The U}RL [http://www.microsoft.com](http://www.microsoft.com) is embedded in text\" where \"{\" and \"}\" are the text range endpoints.  \n  \n2.  The resulting range is moved backward in the <xref:System.Windows.Automation.Provider.ITextProvider.DocumentRange%2A> to the beginning of the requested `unit` boundary.  \n  \n3.  The range is then expanded from a degenerate range state by moving the <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> endpoint by one requested `unit` boundary.  \n  \n ![Range adjustments by Move & ExpandToEnclosingUnit](../../add/media/uia-textpattern-moveandexpand-examples.png \"Range adjustments by Move & ExpandToEnclosingUnit\")  \nExamples of how a text range is adjusted for Move() and ExpandToEnclosingUnit()  \n  \n MoveEndpointByUnit defers to the next largest <xref:System.Windows.Automation.Text.TextUnit> supported if the given <xref:System.Windows.Automation.Text.TextUnit> is not supported by the control.  \n  \n The order, from smallest unit to largest, is listed below.  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>  \n  \n-   <xref:System.Windows.Automation.Text.TextUnit>"
   syntax:
     content: public int MoveEndpointByUnit (System.Windows.Automation.Text.TextPatternRangeEndpoint endpoint, System.Windows.Automation.Text.TextUnit unit, int count);
     parameters:
     - id: endpoint
       type: System.Windows.Automation.Text.TextPatternRangeEndpoint
-      description: To be added.
+      description: The endpoint to move.
     - id: unit
       type: System.Windows.Automation.Text.TextUnit
-      description: To be added.
+      description: The textual unit for moving.
     - id: count
       type: System.Int32
-      description: To be added.
+      description: The number of units to move. A positive value moves the endpoint forward. A negative value moves backward. A value of 0 has no effect.
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of units actually moved, which can be less than the number requested if moving the endpoint runs into the beginning or end of the document.
   overload: System.Windows.Automation.Provider.ITextRangeProvider.MoveEndpointByUnit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -484,12 +509,16 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes a highlighted section of text, corresponding to the caller's  and  endpoints, from the collection of highlighted text in a text container that supports multiple, disjoint selections.
+  remarks: "The text insertion point will move to the area of the removed highlight.  \n  \n Providing a degenerate text range will move the insertion point."
   syntax:
     content: public void RemoveFromSelection ();
     parameters: []
   overload: System.Windows.Automation.Provider.ITextRangeProvider.RemoveFromSelection*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: If text provider does not support multiple, disjoint selections (for example, <xref:System.Windows.Automation.TextPattern.SupportedTextSelection%2A> must have a value of ).
   platform:
   - net-11
   - net-20
@@ -506,15 +535,16 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Causes the text control to scroll vertically until the text range is visible in the viewport.
+  remarks: "ScrollIntoView respects both hidden and visible text.  \n  \n If the text range is hidden, the text control will scroll only if the hidden text has an anchor in the viewport."
   syntax:
     content: public void ScrollIntoView (bool alignToTop);
     parameters:
     - id: alignToTop
       type: System.Boolean
-      description: To be added.
+      description: "\n     if the text control should be scrolled so the text range is flush with the top of the viewport;  if it should be flush with the bottom of the viewport."
   overload: System.Windows.Automation.Provider.ITextRangeProvider.ScrollIntoView*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -531,12 +561,16 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Highlights text in the text control corresponding to the text range  and  endpoints.
+  remarks: If a degenerate text range is provided, the text insertion point will move to the <xref:System.Windows.Automation.Text.TextPatternRangeEndpoint> endpoint of the text range.
   syntax:
     content: public void Select ();
     parameters: []
   overload: System.Windows.Automation.Provider.ITextRangeProvider.Select*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: Occurs when text selection is not supported by the text control.
   platform:
   - net-11
   - net-20
@@ -572,12 +606,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Windows.Automation.Provider.ITextRangeProvider
-  parent: System.Windows.Automation.Provider
-  isExternal: false
-  name: ITextRangeProvider
-  nameWithType: ITextRangeProvider
-  fullName: System.Windows.Automation.Provider.ITextRangeProvider
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.CompareEndpoints(System.Windows.Automation.Text.TextPatternRangeEndpoint,System.Windows.Automation.Provider.ITextRangeProvider,System.Windows.Automation.Text.TextPatternRangeEndpoint)
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false
@@ -590,18 +618,6 @@ references:
   name: Int32
   nameWithType: Int32
   fullName: System.Int32
-- uid: System.Windows.Automation.Text.TextPatternRangeEndpoint
-  parent: System.Windows.Automation.Text
-  isExternal: false
-  name: TextPatternRangeEndpoint
-  nameWithType: TextPatternRangeEndpoint
-  fullName: System.Windows.Automation.Text.TextPatternRangeEndpoint
-- uid: System.Windows.Automation.Provider.ITextRangeProvider
-  parent: System.Windows.Automation.Provider
-  isExternal: false
-  name: ITextRangeProvider
-  nameWithType: ITextRangeProvider
-  fullName: System.Windows.Automation.Provider.ITextRangeProvider
 - uid: System.Windows.Automation.Text.TextPatternRangeEndpoint
   parent: System.Windows.Automation.Text
   isExternal: false
@@ -626,102 +642,70 @@ references:
   name: FindAttribute(Int32,Object,Boolean)
   nameWithType: ITextRangeProvider.FindAttribute(Int32,Object,Boolean)
   fullName: System.Windows.Automation.Provider.ITextRangeProvider.FindAttribute(Int32,Object,Boolean)
-- uid: System.Windows.Automation.Provider.ITextRangeProvider
-  parent: System.Windows.Automation.Provider
-  isExternal: false
-  name: ITextRangeProvider
-  nameWithType: ITextRangeProvider
-  fullName: System.Windows.Automation.Provider.ITextRangeProvider
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Object
   parent: System
   isExternal: true
   name: Object
   nameWithType: Object
   fullName: System.Object
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.FindText(System.String,System.Boolean,System.Boolean)
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false
   name: FindText(String,Boolean,Boolean)
   nameWithType: ITextRangeProvider.FindText(String,Boolean,Boolean)
   fullName: System.Windows.Automation.Provider.ITextRangeProvider.FindText(String,Boolean,Boolean)
-- uid: System.Windows.Automation.Provider.ITextRangeProvider
-  parent: System.Windows.Automation.Provider
-  isExternal: false
-  name: ITextRangeProvider
-  nameWithType: ITextRangeProvider
-  fullName: System.Windows.Automation.Provider.ITextRangeProvider
 - uid: System.String
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.GetAttributeValue(System.Int32)
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false
   name: GetAttributeValue(Int32)
   nameWithType: ITextRangeProvider.GetAttributeValue(Int32)
   fullName: System.Windows.Automation.Provider.ITextRangeProvider.GetAttributeValue(Int32)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.GetBoundingRectangles
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false
   name: GetBoundingRectangles()
   nameWithType: ITextRangeProvider.GetBoundingRectangles()
   fullName: System.Windows.Automation.Provider.ITextRangeProvider.GetBoundingRectangles()
-- uid: System.Double
+- uid: System.Double[]
   parent: System
   isExternal: true
   name: Double
   nameWithType: Double
   fullName: System.Double[]
+  spec.csharp:
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: Double[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.GetChildren
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false
   name: GetChildren()
   nameWithType: ITextRangeProvider.GetChildren()
   fullName: System.Windows.Automation.Provider.ITextRangeProvider.GetChildren()
-- uid: System.Windows.Automation.Provider.IRawElementProviderSimple
+- uid: System.Windows.Automation.Provider.IRawElementProviderSimple[]
   parent: System.Windows.Automation.Provider
   isExternal: false
   name: IRawElementProviderSimple
   nameWithType: IRawElementProviderSimple
   fullName: System.Windows.Automation.Provider.IRawElementProviderSimple[]
+  spec.csharp:
+  - uid: System.Windows.Automation.Provider.IRawElementProviderSimple
+    name: IRawElementProviderSimple
+    nameWithType: IRawElementProviderSimple
+    fullName: IRawElementProviderSimple[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.GetEnclosingElement
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false
@@ -740,96 +724,24 @@ references:
   name: GetText(Int32)
   nameWithType: ITextRangeProvider.GetText(Int32)
   fullName: System.Windows.Automation.Provider.ITextRangeProvider.GetText(Int32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.Move(System.Windows.Automation.Text.TextUnit,System.Int32)
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false
   name: Move(TextUnit,Int32)
   nameWithType: ITextRangeProvider.Move(TextUnit,Int32)
   fullName: System.Windows.Automation.Provider.ITextRangeProvider.Move(TextUnit,Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Windows.Automation.Text.TextUnit
-  parent: System.Windows.Automation.Text
-  isExternal: false
-  name: TextUnit
-  nameWithType: TextUnit
-  fullName: System.Windows.Automation.Text.TextUnit
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.MoveEndpointByRange(System.Windows.Automation.Text.TextPatternRangeEndpoint,System.Windows.Automation.Provider.ITextRangeProvider,System.Windows.Automation.Text.TextPatternRangeEndpoint)
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false
   name: MoveEndpointByRange(TextPatternRangeEndpoint,ITextRangeProvider,TextPatternRangeEndpoint)
   nameWithType: ITextRangeProvider.MoveEndpointByRange(TextPatternRangeEndpoint,ITextRangeProvider,TextPatternRangeEndpoint)
   fullName: System.Windows.Automation.Provider.ITextRangeProvider.MoveEndpointByRange(TextPatternRangeEndpoint,ITextRangeProvider,TextPatternRangeEndpoint)
-- uid: System.Windows.Automation.Text.TextPatternRangeEndpoint
-  parent: System.Windows.Automation.Text
-  isExternal: false
-  name: TextPatternRangeEndpoint
-  nameWithType: TextPatternRangeEndpoint
-  fullName: System.Windows.Automation.Text.TextPatternRangeEndpoint
-- uid: System.Windows.Automation.Provider.ITextRangeProvider
-  parent: System.Windows.Automation.Provider
-  isExternal: false
-  name: ITextRangeProvider
-  nameWithType: ITextRangeProvider
-  fullName: System.Windows.Automation.Provider.ITextRangeProvider
-- uid: System.Windows.Automation.Text.TextPatternRangeEndpoint
-  parent: System.Windows.Automation.Text
-  isExternal: false
-  name: TextPatternRangeEndpoint
-  nameWithType: TextPatternRangeEndpoint
-  fullName: System.Windows.Automation.Text.TextPatternRangeEndpoint
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.MoveEndpointByUnit(System.Windows.Automation.Text.TextPatternRangeEndpoint,System.Windows.Automation.Text.TextUnit,System.Int32)
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false
   name: MoveEndpointByUnit(TextPatternRangeEndpoint,TextUnit,Int32)
   nameWithType: ITextRangeProvider.MoveEndpointByUnit(TextPatternRangeEndpoint,TextUnit,Int32)
   fullName: System.Windows.Automation.Provider.ITextRangeProvider.MoveEndpointByUnit(TextPatternRangeEndpoint,TextUnit,Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Windows.Automation.Text.TextPatternRangeEndpoint
-  parent: System.Windows.Automation.Text
-  isExternal: false
-  name: TextPatternRangeEndpoint
-  nameWithType: TextPatternRangeEndpoint
-  fullName: System.Windows.Automation.Text.TextPatternRangeEndpoint
-- uid: System.Windows.Automation.Text.TextUnit
-  parent: System.Windows.Automation.Text
-  isExternal: false
-  name: TextUnit
-  nameWithType: TextUnit
-  fullName: System.Windows.Automation.Text.TextUnit
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.RemoveFromSelection
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false
@@ -842,12 +754,6 @@ references:
   name: ScrollIntoView(Boolean)
   nameWithType: ITextRangeProvider.ScrollIntoView(Boolean)
   fullName: System.Windows.Automation.Provider.ITextRangeProvider.ScrollIntoView(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Automation.Provider.ITextRangeProvider.Select
   parent: System.Windows.Automation.Provider.ITextRangeProvider
   isExternal: false

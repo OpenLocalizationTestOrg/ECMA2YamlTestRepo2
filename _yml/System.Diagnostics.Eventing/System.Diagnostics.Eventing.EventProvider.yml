@@ -26,8 +26,8 @@ items:
   nameWithType: EventProvider
   fullName: System.Diagnostics.Eventing.EventProvider
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Use this class to write events.
+  remarks: "To consume events written using the <xref:System.Diagnostics.Eventing.EventProvider.WriteEvent%2A> and <xref:System.Diagnostics.Eventing.EventProvider.WriteTransferEvent%2A> methods, the events must be defined in a manifest; events written using the <xref:System.Diagnostics.Eventing.EventProvider.WriteMessageEvent%2A> method do not require a manifest.  \n  \n Events can contain the following managed data types:  \n  \n-   bool  \n  \n-   Boolean  \n  \n-   byte  \n  \n-   char  \n  \n-   decimal  \n  \n-   double  \n  \n-   float  \n  \n-   Guid  \n  \n-   int  \n  \n-   IntPtr  \n  \n-   long  \n  \n-   sbyte  \n  \n-   short  \n  \n-   string  \n  \n-   uint  \n  \n-   UInt64  \n  \n If an event in your manifest uses the `Boolean` in-type, you cannot write the data element using a `Boolean` data type in your managed code. The `Boolean` in-type in your manifest expects a 4-byte value, and a `Boolean` data type in managed code is 1-byte. Instead, you must use an `int` data type to write the value. If you want to log a `Boolean` value, use the UInt8 in-type in your manifest."
   syntax:
     content: 'public class EventProvider : IDisposable'
   inheritance:
@@ -51,15 +51,28 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
+  remarks: Registers the provider. To remove the registration when finished, call the <xref:System.Diagnostics.Eventing.EventProvider.Close%2A> method.
   syntax:
     content: public EventProvider (Guid providerGuid);
     parameters:
     - id: providerGuid
       type: System.Guid
-      description: To be added.
+      description: Guid that uniquely identifies the provider.
   overload: System.Diagnostics.Eventing.EventProvider.#ctor*
+  exceptions:
+  - type: System.InsufficientMemoryException
+    commentId: T:System.InsufficientMemoryException
+    description: There is not enough memory to complete the operation.
+  - type: System.PlatformNotSupportedException
+    commentId: T:System.PlatformNotSupportedException
+    description: The classes in the  namespace work only on Windows Vista.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The providerGuid parameter cannot be null.
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error returned by the ETW subsystem.
   platform:
   - net-11
   - net-20
@@ -76,12 +89,16 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the provider's registration from the ETW subsystem and releases all unmanaged resources.
+  remarks: You should call this method when finished instead of waiting for the system to dispose of the resources.
   syntax:
     content: public virtual void Close ();
     parameters: []
   overload: System.Diagnostics.Eventing.EventProvider.Close*
+  exceptions:
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: An error returned by the ETW subsystem.
   platform:
   - net-11
   - net-20
@@ -98,15 +115,16 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a unique activity identifier for the provider.
+  remarks: This is a static method.
   syntax:
     content: public static Guid CreateActivityId ();
     parameters: []
     return:
       type: System.Guid
-      description: To be added.
+      description: A unique Guid that you use when calling the <xref:System.Diagnostics.Eventing.EventProvider.SetActivityId%2A> method to set the activity identifier for the provider.
   overload: System.Diagnostics.Eventing.EventProvider.CreateActivityId*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -123,12 +141,12 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the resources used by this  object.
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.Diagnostics.Eventing.EventProvider.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -145,15 +163,15 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the resources used by this  object.
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: This parameter is ignored by this method since there are no unmanaged resources.
   overload: System.Diagnostics.Eventing.EventProvider.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -170,12 +188,12 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Frees resources and performs internal cleanup before the instance is reclaimed by garbage collection.
   syntax:
     content: ~EventProvider ();
     parameters: []
   overload: System.Diagnostics.Eventing.EventProvider.Finalize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -192,15 +210,16 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the last error associated with an event write failure.
+  remarks: "The <xref:System.Diagnostics.Eventing.EventProvider.WriteEvent%2A>, <xref:System.Diagnostics.Eventing.EventProvider.WriteMessageEvent%2A>, and <xref:System.Diagnostics.Eventing.EventProvider.WriteTransferEvent%2A> methods set this value if they fail to write the event.  \n  \n This is a static method."
   syntax:
     content: public static System.Diagnostics.Eventing.EventProvider.WriteEventErrorCode GetLastWriteEventError ();
     parameters: []
     return:
       type: System.Diagnostics.Eventing.EventProvider.WriteEventErrorCode
-      description: To be added.
+      description: Use the value to determine the cause of an event write failure.
   overload: System.Diagnostics.Eventing.EventProvider.GetLastWriteEventError*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -217,15 +236,16 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether any session enabled the provider, regardless of the level and keyword values used to enable the provider.
+  remarks: Typically, a provider does not call this method to determine whether the provider has been enabled by a session; the provider simply writes the event, and ETW determines whether the event is logged to the session. A provider may want to call this function if the provider needs to perform extra work to generate the event. In this case, calling this function first may save resources and time.
   syntax:
     content: public bool IsEnabled ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: Is  if the provider is enabled to any session; otherwise, .
   overload: System.Diagnostics.Eventing.EventProvider.IsEnabled*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -242,21 +262,22 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines whether any session is requesting the specified event from the provider.
+  remarks: Typically, a provider does not call this method to determine whether a session requested the specified event; the provider simply writes the event, and ETW determines whether the event is logged to a session. A provider may want to call this function if the provider needs to perform extra work to generate the event. In this case, calling this function first to determine if a session requested the event or not, may save resources and time.
   syntax:
     content: public bool IsEnabled (byte level, long keywords);
     parameters:
     - id: level
       type: System.Byte
-      description: To be added.
+      description: Level of detail included in the event.
     - id: keywords
       type: System.Int64
-      description: To be added.
+      description: Bit mask that specifies the event category. This mask should be the same keyword mask that is defined in the manifest for the event.
     return:
       type: System.Boolean
-      description: To be added.
+      description: Is  if any session is requesting the specified event; otherwise, .
   overload: System.Diagnostics.Eventing.EventProvider.IsEnabled*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -273,15 +294,16 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the current activity identifier used by the <xref:System.Diagnostics.Eventing.EventProvider.WriteEvent%2A> methods.
+  remarks: "The identifier is stored in the thread context.  \n  \n Note that in version 3.5 of the .NET framework, you had to set the `id` parameter of this method and the <xref:System.Diagnostics.CorrelationManager.ActivityId%2A> property value to the same identifier value. However, in version 4.0 of the framework, the SetActivityId method automatically sets the correlation activity identifier for you.  \n  \n This is a static method."
   syntax:
     content: public static void SetActivityId (ref Guid id);
     parameters:
     - id: id
       type: System.Guid
-      description: To be added.
+      description: A unique activity identifier that the <xref:System.Diagnostics.Eventing.EventProvider.CreateActivityId%2A> method returns.
   overload: System.Diagnostics.Eventing.EventProvider.SetActivityId*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -298,21 +320,27 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Writes an event. The event data is specified as an array of objects.
+  remarks: "If you call the <xref:System.Diagnostics.Eventing.EventProvider.SetActivityId%2A> method to specify an activity identifier for the event, this method retrieves the identifier from the thread context and includes it with the event.  \n  \n If the object type is not supported, the method writes the value of the object's <xref:System.Object.ToString%2A?displayProperty=fullName> method in the payload. For a list of supported object types, see the Remarks for the <xref:System.Diagnostics.Eventing.EventProvider> class."
+  example:
+  - "```  \nprivate static Guid providerId = new Guid(\"{FB33FDA8-45FB-4df0-8A55-EEB4BA88E7E7}\");  \n  \nenum Keyword  \n{  \n    Read = 0x1,  \n    Write = 0x2,  \n    Local = 0x4,  \n    Remote = 0x8  \n}  \n  \nenum Level  \n{  \n    Critical = 1,  \n    Error,  \n    Warning,  \n    Information,  \n    Verbose  \n}  \n  \n    EventProvider provider = new EventProvider(providerId);  \n    EventDescriptor readEvent;  \n    string path = @\"<PATHGOESHERE>\";  \n    UInt64 bytesRead = <ASSIGNVALUE>;  \n  \n    if (provider.IsEnabled(Level.Information, (long)Keyword.Read))  \n    {  \n        unchecked  \n        {  \n            readEvent = new EventDescriptor(0x1, 0x0, 0x10, 0x4, 0x0, 0x0, (long)0x8000000000000005);  \n        }  \n  \n        if (!provider.WriteEvent(ref readEvent, new object[] { path, bytesRead }))  \n            Console.WriteLine(EventProvider.GetLastWriteEventError());  \n    }  \n  \n    provider.Close();  \n```"
   syntax:
     content: public bool WriteEvent (ref System.Diagnostics.Eventing.EventDescriptor eventDescriptor, object[] eventPayload);
     parameters:
     - id: eventDescriptor
       type: System.Diagnostics.Eventing.EventDescriptor
-      description: To be added.
+      description: An instance of  that identifies the event to write.
     - id: eventPayload
       type: System.Object[]
-      description: To be added.
+      description: "An array of objects that contain the event data to write. The object must be in the order specified in the manifest. The array is limited to 32 objects, of which only eight may be strings. The maximum data size for the event is limited to 64 KB minus the size of the event headers. The event size is less if the session's buffer size is less and the session includes extended data items with the event.  \n  \n This parameter can be null."
     return:
       type: System.Boolean
-      description: To be added.
+      description: Is  if the event is written; otherwise, . If false, call the <xref:System.Diagnostics.Eventing.EventProvider.GetLastWriteEventError%2A?displayProperty=fullName> method to determine the cause of the failure.
   overload: System.Diagnostics.Eventing.EventProvider.WriteEvent*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The eventPayload parameter contains too many objects or strings.
   platform:
   - net-11
   - net-20
@@ -329,21 +357,27 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Writes an event. The event data is specified as a string.
+  remarks: "If you call the <xref:System.Diagnostics.Eventing.EventProvider.SetActivityId%2A> method to specify an activity identifier for the event, this method retrieves the identifier from the thread context and includes it with the event.  \n  \n The maximum string length is limited to 64 KB minus the size of the event headers. The event size is less if the session's buffer size is less and the session includes extended data items with the event."
+  example:
+  - "```  \nprivate static Guid providerId = new Guid(\"{FB33FDA8-45FB-4df0-8A55-EEB4BA88E7E7}\");  \n  \nEventProvider provider = new EventProvider(providerId);  \nEventDescriptor writeEvent;  \n  \nif (provider.IsEnabled())  \n{  \n     unchecked  \n     {  \n          writeEvent = new EventDescriptor(0x2, 0x0, 0x10, 0x3, 0x0, 0x0, (long)0x8000000000000006);  \n     }  \n  \n     if (!provider.WriteEvent(ref writeEvent, \"Write event.\"))  \n          Console.WriteLine(EventProvider.GetLastWriteEventError());  \n}  \n  \nprovider.Close();  \n```"
   syntax:
     content: public bool WriteEvent (ref System.Diagnostics.Eventing.EventDescriptor eventDescriptor, string data);
     parameters:
     - id: eventDescriptor
       type: System.Diagnostics.Eventing.EventDescriptor
-      description: To be added.
+      description: An instance of  that identifies the event to write.
     - id: data
       type: System.String
-      description: To be added.
+      description: The string to write as the event data.
     return:
       type: System.Boolean
-      description: To be added.
+      description: Is  if the event is written; otherwise, . If false, call the <xref:System.Diagnostics.Eventing.EventProvider.GetLastWriteEventError%2A?displayProperty=fullName> method to determine the cause of the failure.
   overload: System.Diagnostics.Eventing.EventProvider.WriteEvent*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: If data is .
   platform:
   - net-11
   - net-20
@@ -360,24 +394,25 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Writes an event. The event data is specified as a block of memory.
+  remarks: If you call the <xref:System.Diagnostics.Eventing.EventProvider.SetActivityId%2A> method to specify an activity identifier for the event, this method retrieves the identifier from the thread context and includes it with the event.
   syntax:
     content: protected bool WriteEvent (ref System.Diagnostics.Eventing.EventDescriptor eventDescriptor, int dataCount, IntPtr data);
     parameters:
     - id: eventDescriptor
       type: System.Diagnostics.Eventing.EventDescriptor
-      description: To be added.
+      description: An instance of  that identifies the event to write.
     - id: dataCount
       type: System.Int32
-      description: To be added.
+      description: Size of the event data to which the `data` parameter points. The maximum event data size is limited to 64 KB minus the size of the event headers. The event size is less if the session's buffer size is less and the session includes extended data items with the event.
     - id: data
       type: System.IntPtr
-      description: To be added.
+      description: Pointer to the event data to write.
     return:
       type: System.Boolean
-      description: To be added.
+      description: Is  if the event is written; otherwise, . If false, call the <xref:System.Diagnostics.Eventing.EventProvider.GetLastWriteEventError%2A?displayProperty=fullName> method to determine the cause of the failure.
   overload: System.Diagnostics.Eventing.EventProvider.WriteEvent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -394,18 +429,24 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Writes an event that contains a string as its data.
+  remarks: The maximum string length is limited to 64 KB minus the size of the event headers. The event size is less if the session's buffer size is less and the session includes extended data items with the event.
+  example:
+  - "```  \nif (!provider.WriteMessageEvent(\"Event string.\"))  \n    Console.WriteLine(EventProvider.GetLastWriteEventError());  \n```"
   syntax:
     content: public bool WriteMessageEvent (string eventMessage);
     parameters:
     - id: eventMessage
       type: System.String
-      description: To be added.
+      description: String to write as the event data.
     return:
       type: System.Boolean
-      description: To be added.
+      description: Is  if the event is written; otherwise, . If false, call the <xref:System.Diagnostics.Eventing.EventProvider.GetLastWriteEventError%2A?displayProperty=fullName> method to determine the cause of the failure.
   overload: System.Diagnostics.Eventing.EventProvider.WriteMessageEvent*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: If eventMessage is .
   platform:
   - net-11
   - net-20
@@ -422,24 +463,30 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Writes an event that contains a string as its data if the level and keyword value match the events requested by the session.
+  remarks: The maximum string length is limited to 64 KB minus the size of the event headers. The event size is less if the session's buffer size is less and the session includes extended data items with the event.
+  example:
+  - "```  \n// Calling this method with level and keyword set to zero is the same  \n// as calling WriteMessageEvent(string); the event is always written.  \nif (!provider.WriteMessageEvent(\"Event string.\", 0, 0))  \n    Console.WriteLine(EventProvider.GetLastWriteEventError());  \n  \n// Event is written if the level value of the session is less than or equal to 3, and bit 1 of the session  \n// keyword bit-mask is set.  \nif (!provider.WriteMessageEvent(\"Event string.\", 3, 2))  \n    Console.WriteLine(EventProvider.GetLastWriteEventError());  \n```"
   syntax:
     content: public bool WriteMessageEvent (string eventMessage, byte eventLevel, long eventKeywords);
     parameters:
     - id: eventMessage
       type: System.String
-      description: To be added.
+      description: String to write as the event data.
     - id: eventLevel
       type: System.Byte
-      description: To be added.
+      description: Level of detail included in the event. If the provider uses a manifest to define the event, set this value to the same level defined in the manifest.
     - id: eventKeywords
       type: System.Int64
-      description: To be added.
+      description: Bit mask that specifies the event category. If the provider uses a manifest to define the event, set this value to the same keyword mask defined in the manifest.
     return:
       type: System.Boolean
-      description: To be added.
+      description: Is  if the event is written; otherwise, . If false, call the <xref:System.Diagnostics.Eventing.EventProvider.GetLastWriteEventError%2A?displayProperty=fullName> method to determine the cause of the failure.
   overload: System.Diagnostics.Eventing.EventProvider.WriteMessageEvent*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: If eventMessage is .
   platform:
   - net-11
   - net-20
@@ -456,24 +503,28 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Links events together when tracing events in an end-to-end scenario. The event data is specified as an array of objects.
+  remarks: "The method uses the activity ID set in the thread context to identify this component. To set the activity ID, call the <xref:System.Diagnostics.Eventing.EventProvider.SetActivityId%2A> method.  \n  \n If you use the <xref:System.Diagnostics.Trace> class, you do not use the <xref:System.Diagnostics.Eventing.EventProvider.SetActivityId%2A> method to specify the activity ID. Instead, access the <xref:System.Diagnostics.Trace.CorrelationManager%2A> property to get the <xref:System.Diagnostics.CorrelationManager> object. Then, set the <xref:System.Diagnostics.CorrelationManager.ActivityId%2A> property to the activity ID. You must also set the `relatedActivityId` to a <xref:System.Diagnostics.CorrelationManager.ActivityId%2A> value."
   syntax:
     content: public bool WriteTransferEvent (ref System.Diagnostics.Eventing.EventDescriptor eventDescriptor, Guid relatedActivityId, object[] eventPayload);
     parameters:
     - id: eventDescriptor
       type: System.Diagnostics.Eventing.EventDescriptor
-      description: To be added.
+      description: An instance of  that identifies the event to write.
     - id: relatedActivityId
       type: System.Guid
-      description: To be added.
+      description: Activity identifier from the previous component. Use this parameter to link your component's events to the previous component's events.
     - id: eventPayload
       type: System.Object[]
-      description: To be added.
+      description: An array of objects that contain the event data to write. The data must be in the order specified in the manifest. The array is limited to 32 objects, of which only eight may be strings. The maximum data size for the event is limited to 64 KB minus the size of the event headers. The event size is less if the session's buffer size is less and the session includes extended data items with the event.
     return:
       type: System.Boolean
-      description: To be added.
+      description: Is  if the event is written; otherwise, . If false, call the <xref:System.Diagnostics.Eventing.EventProvider.GetLastWriteEventError%2A> method to determine the cause of the failure.
   overload: System.Diagnostics.Eventing.EventProvider.WriteTransferEvent*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: If eventPayload contains too many objects or strings.
   platform:
   - net-11
   - net-20
@@ -490,27 +541,28 @@ items:
   assemblies:
   - System.Core
   namespace: System.Diagnostics.Eventing
-  summary: To be added.
-  remarks: To be added.
+  summary: Links events together when tracing events in an end-to-end scenario. The event data is specified as a block of memory.
+  remarks: The method uses the activity ID set in the thread context to identify this component. To set the activity ID, call the <xref:System.Diagnostics.Eventing.EventProvider.SetActivityId%2A> method.
   syntax:
     content: protected bool WriteTransferEvent (ref System.Diagnostics.Eventing.EventDescriptor eventDescriptor, Guid relatedActivityId, int dataCount, IntPtr data);
     parameters:
     - id: eventDescriptor
       type: System.Diagnostics.Eventing.EventDescriptor
-      description: To be added.
+      description: An instance of  that identifies the event to write.
     - id: relatedActivityId
       type: System.Guid
-      description: To be added.
+      description: Activity identifier from the previous component. Use this parameter to link your component's events to the previous component's events.
     - id: dataCount
       type: System.Int32
-      description: To be added.
+      description: Size of the event data to which the `data` parameter points. The maximum event data size is limited to 64 KB minus the size of the event headers. The event size is less if the session's buffer size is less and the session includes extended data items with the event.
     - id: data
       type: System.IntPtr
-      description: To be added.
+      description: Pointer to the event data to write.
     return:
       type: System.Boolean
-      description: To be added.
+      description: Is  if the event is written; otherwise, . If false, call the <xref:System.Diagnostics.Eventing.EventProvider.GetLastWriteEventError%2A> method to determine the cause of the failure.
   overload: System.Diagnostics.Eventing.EventProvider.WriteTransferEvent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -543,12 +595,6 @@ references:
   name: CreateActivityId()
   nameWithType: EventProvider.CreateActivityId()
   fullName: System.Diagnostics.Eventing.EventProvider.CreateActivityId()
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Diagnostics.Eventing.EventProvider.Dispose
   parent: System.Diagnostics.Eventing.EventProvider
   isExternal: false
@@ -591,24 +637,12 @@ references:
   name: IsEnabled()
   nameWithType: EventProvider.IsEnabled()
   fullName: System.Diagnostics.Eventing.EventProvider.IsEnabled()
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Diagnostics.Eventing.EventProvider.IsEnabled(System.Byte,System.Int64)
   parent: System.Diagnostics.Eventing.EventProvider
   isExternal: false
   name: IsEnabled(Byte,Int64)
   nameWithType: EventProvider.IsEnabled(Byte,Int64)
   fullName: System.Diagnostics.Eventing.EventProvider.IsEnabled(Byte,Int64)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Byte
   parent: System
   isExternal: true
@@ -627,54 +661,38 @@ references:
   name: SetActivityId(Guid)
   nameWithType: EventProvider.SetActivityId(Guid)
   fullName: System.Diagnostics.Eventing.EventProvider.SetActivityId(Guid)
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Diagnostics.Eventing.EventProvider.WriteEvent(System.Diagnostics.Eventing.EventDescriptor@,System.Object[])
   parent: System.Diagnostics.Eventing.EventProvider
   isExternal: false
   name: WriteEvent(EventDescriptor,Object[])
   nameWithType: EventProvider.WriteEvent(EventDescriptor,Object[])
   fullName: System.Diagnostics.Eventing.EventProvider.WriteEvent(EventDescriptor,Object[])
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Diagnostics.Eventing.EventDescriptor
   parent: System.Diagnostics.Eventing
   isExternal: false
   name: EventDescriptor
   nameWithType: EventDescriptor
   fullName: System.Diagnostics.Eventing.EventDescriptor
-- uid: System.Object
+- uid: System.Object[]
   parent: System
   isExternal: true
   name: Object
   nameWithType: Object
   fullName: System.Object[]
+  spec.csharp:
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Diagnostics.Eventing.EventProvider.WriteEvent(System.Diagnostics.Eventing.EventDescriptor@,System.String)
   parent: System.Diagnostics.Eventing.EventProvider
   isExternal: false
   name: WriteEvent(EventDescriptor,String)
   nameWithType: EventProvider.WriteEvent(EventDescriptor,String)
   fullName: System.Diagnostics.Eventing.EventProvider.WriteEvent(EventDescriptor,String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Diagnostics.Eventing.EventDescriptor
-  parent: System.Diagnostics.Eventing
-  isExternal: false
-  name: EventDescriptor
-  nameWithType: EventDescriptor
-  fullName: System.Diagnostics.Eventing.EventDescriptor
 - uid: System.String
   parent: System
   isExternal: true
@@ -687,18 +705,6 @@ references:
   name: WriteEvent(EventDescriptor,Int32,IntPtr)
   nameWithType: EventProvider.WriteEvent(EventDescriptor,Int32,IntPtr)
   fullName: System.Diagnostics.Eventing.EventProvider.WriteEvent(EventDescriptor,Int32,IntPtr)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Diagnostics.Eventing.EventDescriptor
-  parent: System.Diagnostics.Eventing
-  isExternal: false
-  name: EventDescriptor
-  nameWithType: EventDescriptor
-  fullName: System.Diagnostics.Eventing.EventDescriptor
 - uid: System.Int32
   parent: System
   isExternal: true
@@ -717,114 +723,24 @@ references:
   name: WriteMessageEvent(String)
   nameWithType: EventProvider.WriteMessageEvent(String)
   fullName: System.Diagnostics.Eventing.EventProvider.WriteMessageEvent(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Diagnostics.Eventing.EventProvider.WriteMessageEvent(System.String,System.Byte,System.Int64)
   parent: System.Diagnostics.Eventing.EventProvider
   isExternal: false
   name: WriteMessageEvent(String,Byte,Int64)
   nameWithType: EventProvider.WriteMessageEvent(String,Byte,Int64)
   fullName: System.Diagnostics.Eventing.EventProvider.WriteMessageEvent(String,Byte,Int64)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
 - uid: System.Diagnostics.Eventing.EventProvider.WriteTransferEvent(System.Diagnostics.Eventing.EventDescriptor@,System.Guid,System.Object[])
   parent: System.Diagnostics.Eventing.EventProvider
   isExternal: false
   name: WriteTransferEvent(EventDescriptor,Guid,Object[])
   nameWithType: EventProvider.WriteTransferEvent(EventDescriptor,Guid,Object[])
   fullName: System.Diagnostics.Eventing.EventProvider.WriteTransferEvent(EventDescriptor,Guid,Object[])
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Diagnostics.Eventing.EventDescriptor
-  parent: System.Diagnostics.Eventing
-  isExternal: false
-  name: EventDescriptor
-  nameWithType: EventDescriptor
-  fullName: System.Diagnostics.Eventing.EventDescriptor
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object[]
 - uid: System.Diagnostics.Eventing.EventProvider.WriteTransferEvent(System.Diagnostics.Eventing.EventDescriptor@,System.Guid,System.Int32,System.IntPtr)
   parent: System.Diagnostics.Eventing.EventProvider
   isExternal: false
   name: WriteTransferEvent(EventDescriptor,Guid,Int32,IntPtr)
   nameWithType: EventProvider.WriteTransferEvent(EventDescriptor,Guid,Int32,IntPtr)
   fullName: System.Diagnostics.Eventing.EventProvider.WriteTransferEvent(EventDescriptor,Guid,Int32,IntPtr)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Diagnostics.Eventing.EventDescriptor
-  parent: System.Diagnostics.Eventing
-  isExternal: false
-  name: EventDescriptor
-  nameWithType: EventDescriptor
-  fullName: System.Diagnostics.Eventing.EventDescriptor
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.Diagnostics.Eventing.EventProvider.#ctor*
   parent: System.Diagnostics.Eventing.EventProvider
   isExternal: false

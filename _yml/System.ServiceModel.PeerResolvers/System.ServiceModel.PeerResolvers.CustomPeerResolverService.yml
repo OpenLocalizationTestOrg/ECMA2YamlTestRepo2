@@ -22,8 +22,8 @@ items:
   nameWithType: CustomPeerResolverService
   fullName: System.ServiceModel.PeerResolvers.CustomPeerResolverService
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a basic implementation of a custom peer resolver service.
+  remarks: The CustomPeerResolverService class defines the base implementation of a custom peer resolver service and provides lookup for the resolution of registration IDs to peer endpoint addresses within the mesh maintained by this resolver.
   syntax:
     content: >-
       [System.Obsolete("PeerChannel feature is obsolete and will be removed in the future.", false)]
@@ -52,12 +52,12 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new default instance of the  class.
   syntax:
     content: public CustomPeerResolverService ();
     parameters: []
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -74,14 +74,21 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the recurring length of time after which stale entries are deleted from the peer resolver service's registration lookup table.
+  remarks: "This property must be set before the peer resolver service has been and must not be zero. The default interval is 1 minute.  \n  \n This value must be less than the value of <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.RefreshInterval%2A> to avoid the occurrence of stale entries in the peer resolver service's registration lookup table."
   syntax:
     content: public TimeSpan CleanupInterval { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: <xref:System.TimeSpan> that specifies the time interval after which stale entries are deleted from the peer resolver service's registration lookup table.
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.CleanupInterval*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The interval is either zero or greater than <xref:System.Int32.MaxValue>.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An attempt to set the property was made after a call to <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.Open%2A>.
   platform:
   - net-11
   - net-20
@@ -98,12 +105,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Closes the peer resolver service.
   syntax:
     content: public virtual void Close ();
     parameters: []
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Close*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service has been closed by a previous call to this method.
   platform:
   - net-11
   - net-20
@@ -120,14 +130,14 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets whether referrals are shared by the peer resolver service.
   syntax:
     content: public bool ControlShape { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: True if referrals are shared by the peer resolver service; false if they are not.
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.ControlShape*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -144,15 +154,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains the specific response settings for the peer resolver service.
   syntax:
     content: public virtual System.ServiceModel.PeerResolvers.ServiceSettingsResponseInfo GetServiceSettings ();
     parameters: []
     return:
       type: System.ServiceModel.PeerResolvers.ServiceSettingsResponseInfo
-      description: To be added.
+      description: that contains the specific response settings for the custom peer resolver service, including cleanup and refresh interval settings.
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.GetServiceSettings*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -169,12 +179,19 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Opens the peer resolver service.
+  remarks: When this method is called, it schedules the first registration lookup table cleanup based on the value set for the <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.CleanupInterval%2A> property.
   syntax:
     content: public virtual void Open ();
     parameters: []
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Open*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.CleanupInterval%2A> or <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.RefreshInterval%2A> are set to a time span interval of 0.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The service has been started by a previous call to this method.
   platform:
   - net-11
   - net-20
@@ -191,18 +208,25 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Refreshes the expiry of an entry in the peer resolver service's registration lookup table.
+  remarks: A refresh of an entry extends the length of time for which it remains valid. All information used to uniquely identify the entry must be supplied in the <xref:System.ServiceModel.PeerResolvers.RefreshInfo> object supplied to this method.
   syntax:
     content: public virtual System.ServiceModel.PeerResolvers.RefreshResponseInfo Refresh (System.ServiceModel.PeerResolvers.RefreshInfo refreshInfo);
     parameters:
     - id: refreshInfo
       type: System.ServiceModel.PeerResolvers.RefreshInfo
-      description: To be added.
+      description: "\n     object that contains the mesh ID and the registration ID of the entry to refresh in the peer resolver service's registration lookup table."
     return:
       type: System.ServiceModel.PeerResolvers.RefreshResponseInfo
-      description: To be added.
+      description: that contains the newly refreshed registration entry.
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Refresh*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    refreshInfo is set to null."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The custom peer resolver service has not been started with a previous call to <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.Open%2A>.
   platform:
   - net-11
   - net-20
@@ -219,14 +243,21 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the length of time that entries remain valid in a peer resolver service's registration lookup table.
+  remarks: "This property must be set before the peer resolver service has been and must not be zero. The default interval is 2 minutes.  \n  \n When the amount of time supplied to this property has passed for a given entry in a peer resolver service's registration lookup table, that entry is marked for deletion. The delete occurs when interval specified in the <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.CleanupInterval%2A> property occurs.  For example, if this property is set to a timespan of 10 minutes, entries in the registration lookup table will become stale and marked for deletion after the interval has passed. As a result, the peer resolver client must update every ten minutes to avoid having their entry deleted."
   syntax:
     content: public TimeSpan RefreshInterval { get; set; }
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: <xref:System.TimeSpan> that specifies the length of time that entries remain valid in a peer resolver service's registration lookup table.
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.RefreshInterval*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The interval is either zero or greater than <xref:System.Int32.MaxValue>.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An attempt to set the property was made after a call to <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.Open%2A>.
   platform:
   - net-11
   - net-20
@@ -243,18 +274,31 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a new entry to the registration lookup table of the peer resolver service.
+  remarks: This method adds a new entry to the registration lookup table of the peer resolver service. Note that registrations made after the service is closed  have no effect -- these entries are not returned by resolve requests.
   syntax:
     content: public virtual System.ServiceModel.PeerResolvers.RegisterResponseInfo Register (System.ServiceModel.PeerResolvers.RegisterInfo registerInfo);
     parameters:
     - id: registerInfo
       type: System.ServiceModel.PeerResolvers.RegisterInfo
-      description: To be added.
+      description: "\n     that contains information about the registration entry to register with the peer resolver service."
     return:
       type: System.ServiceModel.PeerResolvers.RegisterResponseInfo
-      description: To be added.
+      description: that contains a copy of the entry added to the peer resolver service's registration lookup table.
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Register*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A registration entry with the same GUID already exists in the lookup table, or the custom peer resolver service has not been started with a previous call to <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.Open%2A>.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The  object supplied to this method was either null or not correctly formed.
+  - type: System.NullReferenceException
+    commentId: T:System.NullReferenceException
+    description: The AddressInfo property of the object supplied to the registerInfo parameter was null.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The meshId value supplied to this method is set to null.
   platform:
   - net-11
   - net-20
@@ -271,24 +315,36 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a new entry to the registration lookup table of the peer resolver service.
   syntax:
     content: public virtual System.ServiceModel.PeerResolvers.RegisterResponseInfo Register (Guid clientId, string meshId, System.ServiceModel.PeerNodeAddress address);
     parameters:
     - id: clientId
       type: System.Guid
-      description: To be added.
+      description: A <xref:System.Guid> that specifies a unique identifier for the registration entry to register with the resolver service.
     - id: meshId
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> that specifies the mesh ID of the peer mesh in which the registration entry participates.
     - id: address
       type: System.ServiceModel.PeerNodeAddress
-      description: To be added.
+      description: A  that contains the endpoint address of the registration entry.
     return:
       type: System.ServiceModel.PeerResolvers.RegisterResponseInfo
-      description: To be added.
+      description: A  that contains a copy of the entry added to the peer resolver service's registration lookup table.
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Register*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A registration entry with the same GUID already exists in the lookup table, or the custom peer resolver service has not been started with a previous call to <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.Open%2A>.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The  object supplied to this method was either null or not correctly formed.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The MeshId and/or the RegistrationId property of object supplied to the refreshInfo parameter was null.
+  - type: System.NullReferenceException
+    commentId: T:System.NullReferenceException
+    description: The MeshId property of the object supplied to the refreshInfo parameter is unknown.
   platform:
   - net-11
   - net-20
@@ -305,18 +361,25 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a list of known endpoints for a registration entry.
+  remarks: This method looks up a registration entry based on the data supplied in a <xref:System.ServiceModel.PeerResolvers.ResolveInfo> object and returns any corresponding endpoint addresses found in the peer resolver service's registration lookup table. The number of endpoint addresses returned is equal to or less than the value of the  <xref:System.ServiceModel.PeerResolvers.ResolveInfo.MaxAddresses%2A> property set on the <xref:System.ServiceModel.PeerResolvers.ResolveInfo> object.
   syntax:
     content: public virtual System.ServiceModel.PeerResolvers.ResolveResponseInfo Resolve (System.ServiceModel.PeerResolvers.ResolveInfo resolveInfo);
     parameters:
     - id: resolveInfo
       type: System.ServiceModel.PeerResolvers.ResolveInfo
-      description: To be added.
+      description: "\n     that contains information on the registration entry for which endpoints, if known, are to be looked up by the peer resolver service."
     return:
       type: System.ServiceModel.PeerResolvers.ResolveResponseInfo
-      description: To be added.
+      description: that contains the endpoints for the registration entry in the lookup table that matches the information supplied in the resolveInfo parameter.
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Resolve*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The  object is null or is not correctly formed.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A registration entry with the same GUID already exists in the lookup table, or the custom peer resolver service has not been started with a previous call to <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.Open%2A>.
   platform:
   - net-11
   - net-20
@@ -333,15 +396,21 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes a specific entry from the registration lookup table of the peer resolver service.
   syntax:
     content: public virtual void Unregister (System.ServiceModel.PeerResolvers.UnregisterInfo unregisterInfo);
     parameters:
     - id: unregisterInfo
       type: System.ServiceModel.PeerResolvers.UnregisterInfo
-      description: To be added.
+      description: "\n     that contains the information used to uniquely identify the registration entry to remove from the registration lookup table."
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Unregister*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An entry for the specified registration entry could not be found, or the supplied  object is null or not correctly formed.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A registration entry with the same GUID already exists in the lookup table, or the custom peer resolver service has not been started with a previous call to <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.Open%2A>.
   platform:
   - net-11
   - net-20
@@ -358,18 +427,24 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.PeerResolvers
-  summary: To be added.
-  remarks: To be added.
+  summary: Updates an existing registration entry entry in the registration lookup table of the peer resolver service.
   syntax:
     content: public virtual System.ServiceModel.PeerResolvers.RegisterResponseInfo Update (System.ServiceModel.PeerResolvers.UpdateInfo updateInfo);
     parameters:
     - id: updateInfo
       type: System.ServiceModel.PeerResolvers.UpdateInfo
-      description: To be added.
+      description: "\n     that uniquely identifies a specific registration entry and provides updated information for it."
     return:
       type: System.ServiceModel.PeerResolvers.RegisterResponseInfo
-      description: To be added.
+      description: that contains a copy of the updated registration entry entry.
   overload: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Update*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An entry for the specified registration entry could not be found, or the supplied  object was not correctly formed.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A registration entry with the same GUID already exists in the lookup table, or the custom peer resolver service has not been started with a previous call to <xref:System.ServiceModel.PeerResolvers.CustomPeerResolverService.Open%2A>.
   platform:
   - net-11
   - net-20
@@ -456,12 +531,6 @@ references:
   name: RefreshInterval
   nameWithType: CustomPeerResolverService.RefreshInterval
   fullName: System.ServiceModel.PeerResolvers.CustomPeerResolverService.RefreshInterval
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Register(System.ServiceModel.PeerResolvers.RegisterInfo)
   parent: System.ServiceModel.PeerResolvers.CustomPeerResolverService
   isExternal: false
@@ -486,12 +555,6 @@ references:
   name: Register(Guid,String,PeerNodeAddress)
   nameWithType: CustomPeerResolverService.Register(Guid,String,PeerNodeAddress)
   fullName: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Register(Guid,String,PeerNodeAddress)
-- uid: System.ServiceModel.PeerResolvers.RegisterResponseInfo
-  parent: System.ServiceModel.PeerResolvers
-  isExternal: false
-  name: RegisterResponseInfo
-  nameWithType: RegisterResponseInfo
-  fullName: System.ServiceModel.PeerResolvers.RegisterResponseInfo
 - uid: System.Guid
   parent: System
   isExternal: true
@@ -546,12 +609,6 @@ references:
   name: Update(UpdateInfo)
   nameWithType: CustomPeerResolverService.Update(UpdateInfo)
   fullName: System.ServiceModel.PeerResolvers.CustomPeerResolverService.Update(UpdateInfo)
-- uid: System.ServiceModel.PeerResolvers.RegisterResponseInfo
-  parent: System.ServiceModel.PeerResolvers
-  isExternal: false
-  name: RegisterResponseInfo
-  nameWithType: RegisterResponseInfo
-  fullName: System.ServiceModel.PeerResolvers.RegisterResponseInfo
 - uid: System.ServiceModel.PeerResolvers.UpdateInfo
   parent: System.ServiceModel.PeerResolvers
   isExternal: false

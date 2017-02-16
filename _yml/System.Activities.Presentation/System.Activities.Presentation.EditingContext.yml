@@ -17,8 +17,10 @@ items:
   nameWithType: EditingContext
   fullName: System.Activities.Presentation.EditingContext
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Contains contextual state information for a designer, such as the . This includes permanent state information, such as the list of services running in the designer. It also includes transient state consisting of context items including the set of currently selected objects as well as the editing tool being used to manipulate objects on the design surface.
+  remarks: The EditingContext represents the communication boundary that is shared between the hosting application and the [!INCLUDE[wfd1](../../add/includes/wfd1-md.md)]. The EditingContext was implemented as a concrete class for ease of use. Override <xref:System.Activities.Presentation.EditingContext.CreateServiceManager%2A> and <xref:System.Activities.Presentation.EditingContext.CreateContextItemManager%2A> to use customized managers derived from <xref:System.Activities.Presentation.ServiceManager> and <xref:System.Activities.Presentation.ContextItemManager>.
+  example:
+  - '[!CODE [EditingContext#1](EditingContext#1)]'
   syntax:
     content: 'public class EditingContext : IDisposable'
   inheritance:
@@ -42,12 +44,12 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public EditingContext ();
     parameters: []
   overload: System.Activities.Presentation.EditingContext.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -64,15 +66,16 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of the context item manager that is returned by the <xref:System.Activities.Presentation.EditingContext.Items%2A> property.
+  remarks: The default implementation creates a <xref:System.Activities.Presentation.ContextItemManager> that supports delayed activation of design editor managers through the declaration of a <xref:System.Activities.Presentation.SubscribeContextCallback> attribute on the design editor manager.
   syntax:
     content: protected virtual System.Activities.Presentation.ContextItemManager CreateContextItemManager ();
     parameters: []
     return:
       type: System.Activities.Presentation.ContextItemManager
-      description: To be added.
+      description: <xref:System.Activites.Design.ContextItemManager>.
   overload: System.Activities.Presentation.EditingContext.CreateContextItemManager*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -89,15 +92,16 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of the service manager to be returned from the <xref:System.Activities.Presentation.EditingContext.Services%2A> property.
+  remarks: The default implementation creates a <xref:System.Activities.Presentation.ServiceManager> that supports delayed activation of design editor managers through the declaration of a <xref:System.Activities.Presentation.SubscribeContextCallback> attribute on the design editor manager.
   syntax:
     content: protected virtual System.Activities.Presentation.ServiceManager CreateServiceManager ();
     parameters: []
     return:
       type: System.Activities.Presentation.ServiceManager
-      description: To be added.
+      description: A  object.
   overload: System.Activities.Presentation.EditingContext.CreateServiceManager*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -114,12 +118,12 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation
-  summary: To be added.
-  remarks: To be added.
+  summary: Immediately releases any unmanaged resources used by the object.
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.Activities.Presentation.EditingContext.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -136,15 +140,15 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation
-  summary: To be added.
-  remarks: To be added.
+  summary: Immediately releases the unmanaged resources used by the current  object.
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     if this object is being disposed of;  if the object is finalizing."
   overload: System.Activities.Presentation.EditingContext.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -161,13 +165,13 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the <xref:System.IDisposable.Dispose%2A> method is called or when the  object is finalized and collected by the garbage collector of the Microsoft .NET common language runtime.
   syntax:
     content: public event EventHandler Disposing;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -184,14 +188,15 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the local collection of context items stored by the current editing context.
+  remarks: The Items collection is for data that is shared between a host and the designer.  This data provides the mechanism needed to hook into subscription and change notification.
   syntax:
     content: public System.Activities.Presentation.ContextItemManager Items { get; }
     return:
       type: System.Activities.Presentation.ContextItemManager
-      description: To be added.
+      description: The  collection of  objects used in this editing context.
   overload: System.Activities.Presentation.EditingContext.Items*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -208,14 +213,15 @@ items:
   assemblies:
   - System.Activities.Presentation
   namespace: System.Activities.Presentation
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the service manager used in the current editing context.
+  remarks: Services represent functionality that is either provided by the host for the designer to use or that is used by the designer to make functionality available to all designers within the editor.
   syntax:
     content: public System.Activities.Presentation.ServiceManager Services { get; }
     return:
       type: System.Activities.Presentation.ServiceManager
-      description: To be added.
+      description: The  used in this editing context.
   overload: System.Activities.Presentation.EditingContext.Services*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -290,24 +296,12 @@ references:
   name: Items
   nameWithType: EditingContext.Items
   fullName: System.Activities.Presentation.EditingContext.Items
-- uid: System.Activities.Presentation.ContextItemManager
-  parent: System.Activities.Presentation
-  isExternal: false
-  name: ContextItemManager
-  nameWithType: ContextItemManager
-  fullName: System.Activities.Presentation.ContextItemManager
 - uid: System.Activities.Presentation.EditingContext.Services
   parent: System.Activities.Presentation.EditingContext
   isExternal: false
   name: Services
   nameWithType: EditingContext.Services
   fullName: System.Activities.Presentation.EditingContext.Services
-- uid: System.Activities.Presentation.ServiceManager
-  parent: System.Activities.Presentation
-  isExternal: false
-  name: ServiceManager
-  nameWithType: ServiceManager
-  fullName: System.Activities.Presentation.ServiceManager
 - uid: System.Activities.Presentation.EditingContext.#ctor*
   parent: System.Activities.Presentation.EditingContext
   isExternal: false

@@ -16,8 +16,10 @@ items:
   nameWithType: HttpListenerContext
   fullName: System.Net.HttpListenerContext
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides access to the request and response objects used by the  class. This class cannot be inherited.
+  remarks: "This class provides the information related to a client's Hypertext Transfer Protocol (HTTP) request being processed by an <xref:System.Net.HttpListener> object. This class also has methods that allow an <xref:System.Net.HttpListener> object to accept a WebSocket connection.  \n  \n The <xref:System.Net.HttpListener.GetContext%2A> method returns instances of the HttpListenerContext class. To get the object that represents the client request, use the <xref:System.Net.HttpListenerContext.Request%2A> property. To get the object that represents the response that will be sent to the client by the <xref:System.Net.HttpListener>, use the <xref:System.Net.HttpListenerContext.Response%2A> property. To get user information about the client sending the request, such as its login name and whether it has been authenticated, you can query the properties in the <xref:System.Security.Principal.IPrincipal> object returned by the <xref:System.Net.HttpListenerContext.User%2A> property.  \n  \n Closing an HttpListenerContext object sends the response to the client and frees any resources used by the HttpListenerContext. Aborting an HttpListenerContext object discards the response to the client if it has not already been sent, and frees any resources used by the HttpListenerContext. After closing or aborting an HttpListenerContext object, you cannot reference its methods or properties. If you do so, you will receive an <xref:System.ObjectDisposedException> exception."
+  example:
+  - "The following code example displays the user information for a client request.  \n  \n [!code-cs[Net_Listener_Basic#8](../../add/codesnippet/CSharp/t-system.net.httplistene_0_1.cs)]"
   syntax:
     content: public sealed class HttpListenerContext
   inheritance:
@@ -40,18 +42,25 @@ items:
   assemblies:
   - System
   namespace: System.Net
-  summary: To be added.
-  remarks: To be added.
+  summary: Accept a WebSocket connection as an asynchronous operation.
+  remarks: "This operation will not block. The returned <xref:System.Threading.Tasks.Task%601> object will complete after the WebSocket connection has been accepted.  \n  \n The size of the receive buffer is 16,385 bytes. The WebSocket keep-alive interval is set to the default value of 30,000 (30 seconds)."
   syntax:
     content: public System.Threading.Tasks.Task<System.Net.WebSockets.HttpListenerWebSocketContext> AcceptWebSocketAsync (string subProtocol);
     parameters:
     - id: subProtocol
       type: System.String
-      description: To be added.
+      description: The supported WebSocket sub-protocol.
     return:
       type: System.Threading.Tasks.Task{System.Net.WebSockets.HttpListenerWebSocketContext}
-      description: To be added.
+      description: "Returns <xref:System.Threading.Tasks.Task%601>.  \n  \n The task object representing the asynchronous operation. The <xref:System.Threading.Tasks.Task%601.Result%2A> property on the task object returns an  object."
   overload: System.Net.HttpListenerContext.AcceptWebSocketAsync*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    subProtocol is an empty string  \n  \n -or-  \n  \n subProtocol contains illegal characters."
+  - type: System.Net.WebSockets.WebSocketException
+    commentId: T:System.Net.WebSockets.WebSocketException
+    description: An error occurred when sending the response to complete the WebSocket handshake.
   platform:
   - net-11
   - net-20
@@ -68,21 +77,31 @@ items:
   assemblies:
   - System
   namespace: System.Net
-  summary: To be added.
-  remarks: To be added.
+  summary: Accept a WebSocket connection specifying the supported WebSocket sub-protocol  and WebSocket keep-alive interval as an asynchronous operation.
+  remarks: "This operation will not block. The returned <xref:System.Threading.Tasks.Task%601> object will complete after the WebSocket connection has been accepted.  \n  \n The size of the receive buffer is 16,385 bytes."
   syntax:
     content: public System.Threading.Tasks.Task<System.Net.WebSockets.HttpListenerWebSocketContext> AcceptWebSocketAsync (string subProtocol, TimeSpan keepAliveInterval);
     parameters:
     - id: subProtocol
       type: System.String
-      description: To be added.
+      description: The supported WebSocket sub-protocol.
     - id: keepAliveInterval
       type: System.TimeSpan
-      description: To be added.
+      description: The WebSocket protocol keep-alive interval in milliseconds.
     return:
       type: System.Threading.Tasks.Task{System.Net.WebSockets.HttpListenerWebSocketContext}
-      description: To be added.
+      description: "Returns <xref:System.Threading.Tasks.Task%601>.  \n  \n The task object representing the asynchronous operation. The <xref:System.Threading.Tasks.Task%601.Result%2A> property on the task object returns an  object."
   overload: System.Net.HttpListenerContext.AcceptWebSocketAsync*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    subProtocol is an empty string  \n  \n -or-  \n  \n subProtocol contains illegal characters."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    keepAliveInterval is too small."
+  - type: System.Net.WebSockets.WebSocketException
+    commentId: T:System.Net.WebSockets.WebSocketException
+    description: An error occurred when sending the response to complete the WebSocket handshake.
   platform:
   - net-11
   - net-20
@@ -99,24 +118,34 @@ items:
   assemblies:
   - System
   namespace: System.Net
-  summary: To be added.
-  remarks: To be added.
+  summary: Accept a WebSocket connection specifying the supported WebSocket sub-protocol, receive buffer size, and WebSocket keep-alive interval as an asynchronous operation.
+  remarks: This operation will not block. The returned <xref:System.Threading.Tasks.Task%601> > object will complete after the WebSocket connection has been accepted.
   syntax:
     content: public System.Threading.Tasks.Task<System.Net.WebSockets.HttpListenerWebSocketContext> AcceptWebSocketAsync (string subProtocol, int receiveBufferSize, TimeSpan keepAliveInterval);
     parameters:
     - id: subProtocol
       type: System.String
-      description: To be added.
+      description: The supported WebSocket sub-protocol.
     - id: receiveBufferSize
       type: System.Int32
-      description: To be added.
+      description: The receive buffer size in bytes.
     - id: keepAliveInterval
       type: System.TimeSpan
-      description: To be added.
+      description: The WebSocket protocol keep-alive interval in milliseconds.
     return:
       type: System.Threading.Tasks.Task{System.Net.WebSockets.HttpListenerWebSocketContext}
-      description: To be added.
+      description: "Returns <xref:System.Threading.Tasks.Task%601>.  \n  \n The task object representing the asynchronous operation. The <xref:System.Threading.Tasks.Task%601.Result%2A> property on the task object returns an  object."
   overload: System.Net.HttpListenerContext.AcceptWebSocketAsync*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    subProtocol is an empty string  \n  \n -or-  \n  \n subProtocol contains illegal characters."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    keepAliveInterval is too small.  \n  \n -or-  \n  \n receiveBufferSize is less than 16 bytes  \n  \n -or-  \n  \n receiveBufferSize is greater than 64K bytes."
+  - type: System.Net.WebSockets.WebSocketException
+    commentId: T:System.Net.WebSockets.WebSocketException
+    description: An error occurred when sending the response to complete the WebSocket handshake.
   platform:
   - net-11
   - net-20
@@ -133,27 +162,37 @@ items:
   assemblies:
   - System
   namespace: System.Net
-  summary: To be added.
-  remarks: To be added.
+  summary: Accept a WebSocket connection specifying the supported WebSocket sub-protocol, receive buffer size, WebSocket keep-alive interval, and the internal buffer as an asynchronous operation.
+  remarks: This operation will not block. The returned <xref:System.Threading.Tasks.Task%601> object will complete after the WebSocket connection has been accepted.
   syntax:
     content: public System.Threading.Tasks.Task<System.Net.WebSockets.HttpListenerWebSocketContext> AcceptWebSocketAsync (string subProtocol, int receiveBufferSize, TimeSpan keepAliveInterval, ArraySegment<byte> internalBuffer);
     parameters:
     - id: subProtocol
       type: System.String
-      description: To be added.
+      description: The supported WebSocket sub-protocol.
     - id: receiveBufferSize
       type: System.Int32
-      description: To be added.
+      description: The receive buffer size in bytes.
     - id: keepAliveInterval
       type: System.TimeSpan
-      description: To be added.
+      description: The WebSocket protocol keep-alive interval in milliseconds.
     - id: internalBuffer
       type: System.ArraySegment{System.Byte}
-      description: To be added.
+      description: An internal buffer to use for this operation.
     return:
       type: System.Threading.Tasks.Task{System.Net.WebSockets.HttpListenerWebSocketContext}
-      description: To be added.
+      description: "Returns <xref:System.Threading.Tasks.Task%601>.  \n  \n The task object representing the asynchronous operation. The <xref:System.Threading.Tasks.Task%601.Result%2A> property on the task object returns an  object."
   overload: System.Net.HttpListenerContext.AcceptWebSocketAsync*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    subProtocol is an empty string  \n  \n -or-  \n  \n subProtocol contains illegal characters."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    keepAliveInterval is too small.  \n  \n -or-  \n  \n receiveBufferSize is less than 16 bytes  \n  \n -or-  \n  \n receiveBufferSize is greater than 64K bytes."
+  - type: System.Net.WebSockets.WebSocketException
+    commentId: T:System.Net.WebSockets.WebSocketException
+    description: An error occurred when sending the response to complete the WebSocket handshake.
   platform:
   - net-11
   - net-20
@@ -170,14 +209,17 @@ items:
   assemblies:
   - System
   namespace: System.Net
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  that represents a client's request for a resource.
+  remarks: If you close this <xref:System.Net.HttpListenerContext>, it will send the response to the client, close the <xref:System.Net.HttpListenerResponse> that contains the response, and close the <xref:System.Net.HttpListenerRequest> object returned by this property.
+  example:
+  - "The following code example demonstrates calling this method. The `listener` variable holds an <xref:System.Net.HttpListener> object.  \n  \n [!code-cs[Net_Listener_Basic#3](../../add/codesnippet/CSharp/p-system.net.httplistene_16_1.cs)]"
   syntax:
     content: public System.Net.HttpListenerRequest Request { get; }
     return:
       type: System.Net.HttpListenerRequest
-      description: To be added.
+      description: An  object that represents the client request.
   overload: System.Net.HttpListenerContext.Request*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -194,14 +236,17 @@ items:
   assemblies:
   - System
   namespace: System.Net
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object that will be sent to the client in response to the client's request.
+  remarks: Your application configures the response by setting properties in the <xref:System.Net.HttpListenerResponse> object returned by this property. After configuring the response, you send it to the client by closing the response, or by closing this <xref:System.Net.HttpListenerContext> object.
+  example:
+  - "The following code example demonstrates getting the response to a client's request and adding the response body.  \n  \n [!code-cs[Net_Listener_Basic#3](../../add/codesnippet/CSharp/p-system.net.httplistene_35_1.cs)]"
   syntax:
     content: public System.Net.HttpListenerResponse Response { get; }
     return:
       type: System.Net.HttpListenerResponse
-      description: To be added.
+      description: An  object used to send a response back to the client.
   overload: System.Net.HttpListenerContext.Response*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -218,14 +263,17 @@ items:
   assemblies:
   - System
   namespace: System.Net
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets an object used to obtain identity, authentication information, and security roles for the client whose request is represented by this  object.
+  remarks: "An <xref:System.Net.HttpListener> indicates that it requires authentication using the <xref:System.Net.HttpListener.AuthenticationSchemes%2A> property or by specifying an <xref:System.Net.AuthenticationSchemeSelector> delegate using the <xref:System.Net.HttpListener.AuthenticationSchemeSelectorDelegate%2A> property.  \n  \n To determine the client's login name and authentication information, check the <xref:System.Security.Principal.IPrincipal.Identity%2A?displayProperty=fullName> property in the object returned by this property."
+  example:
+  - "The following code example demonstrates accessing identity and authentication information about the client, and returning it to the client in the response.  \n  \n [!code-cs[Net_Listener_Basic#8](../../add/codesnippet/CSharp/p-system.net.httplistene_19_1.cs)]"
   syntax:
     content: public System.Security.Principal.IPrincipal User { get; }
     return:
       type: System.Security.Principal.IPrincipal
-      description: To be added.
+      description: An <xref:System.Security.Principal.IPrincipal> object that describes the client, or  if the  that supplied this  does not require authentication.
   overload: System.Net.HttpListenerContext.User*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -246,6 +294,21 @@ references:
   name: Task<HttpListenerWebSocketContext>
   nameWithType: Task<HttpListenerWebSocketContext>
   fullName: System.Threading.Tasks.Task<System.Net.WebSockets.HttpListenerWebSocketContext>
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    nameWithType: Task
+    fullName: Task<System.Net.WebSockets.HttpListenerWebSocketContext>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Net.WebSockets.HttpListenerWebSocketContext
+    name: HttpListenerWebSocketContext
+    nameWithType: HttpListenerWebSocketContext
+    fullName: HttpListenerWebSocketContext
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.String
   parent: System
   isExternal: true
@@ -258,18 +321,6 @@ references:
   name: AcceptWebSocketAsync(String,TimeSpan)
   nameWithType: HttpListenerContext.AcceptWebSocketAsync(String,TimeSpan)
   fullName: System.Net.HttpListenerContext.AcceptWebSocketAsync(String,TimeSpan)
-- uid: System.Threading.Tasks.Task{System.Net.WebSockets.HttpListenerWebSocketContext}
-  parent: System.Threading.Tasks
-  isExternal: true
-  name: Task<HttpListenerWebSocketContext>
-  nameWithType: Task<HttpListenerWebSocketContext>
-  fullName: System.Threading.Tasks.Task<System.Net.WebSockets.HttpListenerWebSocketContext>
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.TimeSpan
   parent: System
   isExternal: true
@@ -282,66 +333,39 @@ references:
   name: AcceptWebSocketAsync(String,Int32,TimeSpan)
   nameWithType: HttpListenerContext.AcceptWebSocketAsync(String,Int32,TimeSpan)
   fullName: System.Net.HttpListenerContext.AcceptWebSocketAsync(String,Int32,TimeSpan)
-- uid: System.Threading.Tasks.Task{System.Net.WebSockets.HttpListenerWebSocketContext}
-  parent: System.Threading.Tasks
-  isExternal: true
-  name: Task<HttpListenerWebSocketContext>
-  nameWithType: Task<HttpListenerWebSocketContext>
-  fullName: System.Threading.Tasks.Task<System.Net.WebSockets.HttpListenerWebSocketContext>
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Int32
   parent: System
   isExternal: true
   name: Int32
   nameWithType: Int32
   fullName: System.Int32
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.Net.HttpListenerContext.AcceptWebSocketAsync(System.String,System.Int32,System.TimeSpan,System.ArraySegment{System.Byte})
   parent: System.Net.HttpListenerContext
   isExternal: false
   name: AcceptWebSocketAsync(String,Int32,TimeSpan,ArraySegment<Byte>)
   nameWithType: HttpListenerContext.AcceptWebSocketAsync(String,Int32,TimeSpan,ArraySegment<Byte>)
   fullName: System.Net.HttpListenerContext.AcceptWebSocketAsync(String,Int32,TimeSpan,ArraySegment<Byte>)
-- uid: System.Threading.Tasks.Task{System.Net.WebSockets.HttpListenerWebSocketContext}
-  parent: System.Threading.Tasks
-  isExternal: true
-  name: Task<HttpListenerWebSocketContext>
-  nameWithType: Task<HttpListenerWebSocketContext>
-  fullName: System.Threading.Tasks.Task<System.Net.WebSockets.HttpListenerWebSocketContext>
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.TimeSpan
-  parent: System
-  isExternal: true
-  name: TimeSpan
-  nameWithType: TimeSpan
-  fullName: System.TimeSpan
 - uid: System.ArraySegment{System.Byte}
   parent: System
   isExternal: true
   name: ArraySegment<Byte>
   nameWithType: ArraySegment<Byte>
   fullName: System.ArraySegment<System.Byte>
+  spec.csharp:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: ArraySegment<System.Byte>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Net.HttpListenerContext.Request
   parent: System.Net.HttpListenerContext
   isExternal: false

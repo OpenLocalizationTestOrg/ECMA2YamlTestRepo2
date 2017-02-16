@@ -14,8 +14,8 @@ items:
   nameWithType: NameReferenceConverter
   fullName: System.Windows.Markup.NameReferenceConverter
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides type conversion to convert a string name into an object reference to the object with that name, or to return the name of an object from the object graph.
+  remarks: "This class provides a type converter wrapper around two services.  \n  \n The <xref:System.Windows.Markup.NameReferenceConverter.ConvertFrom%2A> implementation uses <xref:System.Xaml.IXamlNameResolver> service from context to perform the resolution of an object by name in XAML. This is part of the relevant XAML reader and XAML writer implementations in .NET Framework XAML Services. Proper function of this converter requires that the <xref:System.Xaml.IXamlNameResolver> service is available from service context.  \n  \n The <xref:System.Windows.Markup.NameReferenceConverter.ConvertTo%2A> implementation uses <xref:System.Xaml.IXamlNameProvider> service from context to perform the resolution of a reference name for an object during save/serialization. This is part of the relevant reader and writer implementations and their context. Proper function of this converter requires that there be an underlying <xref:System.Xaml.IXamlNameProvider> service available.  \n  \n This type converter implementation is atypical for the <xref:System.ComponentModel.TypeConverter> base type because it is not scoped to a discrete conversion type. It can potentially convert any object to and from a referencing name so long as that object could have a name assigned to it in XAML, and the supporting context has the necessary services to return results.  \n  \n As part of general services support, the System.Xaml base implementation of <xref:System.Xaml.XamlObjectWriter> and <xref:System.Xaml.XamlXmlWriter> provide <xref:System.Xaml.IXamlNameProvider> and <xref:System.Xaml.IXamlNameResolver> services for use by NameReferenceConverter. The name basis for these services uses either `x:Name` or a <xref:System.Windows.Markup.RuntimeNamePropertyAttribute> attributed alias property."
   syntax:
     content: 'public class NameReferenceConverter : System.ComponentModel.TypeConverter'
   inheritance:
@@ -73,12 +73,12 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public NameReferenceConverter ();
     parameters: []
   overload: System.Windows.Markup.NameReferenceConverter.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -95,21 +95,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns whether this converter can convert an object of one type to another object.
+  remarks: This implementation can only process a `sourceType` of <xref:System.String>. Other types return `false`.
   syntax:
     content: public override bool CanConvertFrom (System.ComponentModel.ITypeDescriptorContext context, Type sourceType);
     parameters:
     - id: context
       type: System.ComponentModel.ITypeDescriptorContext
-      description: To be added.
+      description: An  that provides a format context.
     - id: sourceType
       type: System.Type
-      description: To be added.
+      description: A <xref:System.Type> that represents the type you want to convert from.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if this converter can perform the conversion; otherwise, .
   overload: System.Windows.Markup.NameReferenceConverter.CanConvertFrom*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -126,21 +127,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether the converter can convert an object to the specified destination type.
+  remarks: "A `destinationType` that references the <xref:System.String> type returns `true`; all other `destinationType` values return `false`.  \n  \n This method returns false if `context` is `null`, or if <xref:System.Xaml.IXamlNameProvider> cannot be obtained as a service from `context`."
   syntax:
     content: public override bool CanConvertTo (System.ComponentModel.ITypeDescriptorContext context, Type destinationType);
     parameters:
     - id: context
       type: System.ComponentModel.ITypeDescriptorContext
-      description: To be added.
+      description: An  that provides a format context.
     - id: destinationType
       type: System.Type
-      description: To be added.
+      description: The type to convert to.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the converter can perform the conversion; otherwise, .
   overload: System.Windows.Markup.NameReferenceConverter.CanConvertTo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -157,24 +159,31 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Converts the provided object to another object, using the specified context and culture information.
+  remarks: Only a <xref:System.String> input provides a conversion result.
   syntax:
     content: public override object ConvertFrom (System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value);
     parameters:
     - id: context
       type: System.ComponentModel.ITypeDescriptorContext
-      description: To be added.
+      description: An  that provides a format context.
     - id: culture
       type: System.Globalization.CultureInfo
-      description: To be added.
+      description: The <xref:System.Globalization.CultureInfo> to use as the current culture.
     - id: value
       type: System.Object
-      description: To be added.
+      description: The reference name string to convert.
     return:
       type: System.Object
-      description: To be added.
+      description: The returned object, which is potentially any object that is type-mapped in the relevant backing assemblies and capable of being declared in XAML with a XAML name reference.
   overload: System.Windows.Markup.NameReferenceConverter.ConvertFrom*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    value is a null string or empty string.  \n  \n -or-  \n  \n  service is missing or invalid."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    context is ."
   platform:
   - net-11
   - net-20
@@ -191,27 +200,33 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Windows.Markup
-  summary: To be added.
-  remarks: To be added.
+  summary: Converts an object to the specified type. This is intended to return XAML reference names for objects in an object graph.
   syntax:
     content: public override object ConvertTo (System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType);
     parameters:
     - id: context
       type: System.ComponentModel.ITypeDescriptorContext
-      description: To be added.
+      description: An  that provides a format context.
     - id: culture
       type: System.Globalization.CultureInfo
-      description: To be added.
+      description: The <xref:System.Globalization.CultureInfo> to use as the current culture.
     - id: value
       type: System.Object
-      description: To be added.
+      description: The object to retrieve the reference name for.
     - id: destinationType
       type: System.Type
-      description: To be added.
+      description: The type to return. You should always reference the <xref:System.String> type.
     return:
       type: System.Object
-      description: To be added.
+      description: The reference name of the input value object.
   overload: System.Windows.Markup.NameReferenceConverter.ConvertTo*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n     service is missing or invalid."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    context is ."
   platform:
   - net-11
   - net-20
@@ -256,24 +271,6 @@ references:
   name: CanConvertTo(ITypeDescriptorContext,Type)
   nameWithType: NameReferenceConverter.CanConvertTo(ITypeDescriptorContext,Type)
   fullName: System.Windows.Markup.NameReferenceConverter.CanConvertTo(ITypeDescriptorContext,Type)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.ComponentModel.ITypeDescriptorContext
-  parent: System.ComponentModel
-  isExternal: false
-  name: ITypeDescriptorContext
-  nameWithType: ITypeDescriptorContext
-  fullName: System.ComponentModel.ITypeDescriptorContext
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Windows.Markup.NameReferenceConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)
   parent: System.Windows.Markup.NameReferenceConverter
   isExternal: false
@@ -286,60 +283,18 @@ references:
   name: Object
   nameWithType: Object
   fullName: System.Object
-- uid: System.ComponentModel.ITypeDescriptorContext
-  parent: System.ComponentModel
-  isExternal: false
-  name: ITypeDescriptorContext
-  nameWithType: ITypeDescriptorContext
-  fullName: System.ComponentModel.ITypeDescriptorContext
 - uid: System.Globalization.CultureInfo
   parent: System.Globalization
   isExternal: true
   name: CultureInfo
   nameWithType: CultureInfo
   fullName: System.Globalization.CultureInfo
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Markup.NameReferenceConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object,System.Type)
   parent: System.Windows.Markup.NameReferenceConverter
   isExternal: false
   name: ConvertTo(ITypeDescriptorContext,CultureInfo,Object,Type)
   nameWithType: NameReferenceConverter.ConvertTo(ITypeDescriptorContext,CultureInfo,Object,Type)
   fullName: System.Windows.Markup.NameReferenceConverter.ConvertTo(ITypeDescriptorContext,CultureInfo,Object,Type)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.ComponentModel.ITypeDescriptorContext
-  parent: System.ComponentModel
-  isExternal: false
-  name: ITypeDescriptorContext
-  nameWithType: ITypeDescriptorContext
-  fullName: System.ComponentModel.ITypeDescriptorContext
-- uid: System.Globalization.CultureInfo
-  parent: System.Globalization
-  isExternal: true
-  name: CultureInfo
-  nameWithType: CultureInfo
-  fullName: System.Globalization.CultureInfo
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Windows.Markup.NameReferenceConverter.#ctor*
   parent: System.Windows.Markup.NameReferenceConverter
   isExternal: false

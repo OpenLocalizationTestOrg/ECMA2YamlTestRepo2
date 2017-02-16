@@ -18,8 +18,8 @@ items:
   nameWithType: ContractBase
   fullName: System.AddIn.Pipeline.ContractBase
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a default implementation of  members.
+  remarks: Contracts define the types and methods used by the host and the add-in. All contracts must derive from <xref:System.AddIn.Contract.IContract>. This class provides the default implementation of <xref:System.AddIn.Contract.IContract> members.
   syntax:
     content: 'public class ContractBase : MarshalByRefObject, System.AddIn.Contract.IContract, System.Runtime.Remoting.Lifetime.ISponsor'
   inheritance:
@@ -49,12 +49,12 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public ContractBase ();
     parameters: []
   overload: System.AddIn.Pipeline.ContractBase.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -71,15 +71,18 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains a lifetime token.
   syntax:
     content: public int AcquireLifetimeToken ();
     parameters: []
     return:
       type: System.Int32
-      description: To be added.
+      description: A random number that identifies a token.
   overload: System.AddIn.Pipeline.ContractBase.AcquireLifetimeToken*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: All previously acquired tokens have been revoked.  No further tokens are available.
   platform:
   - net-11
   - net-20
@@ -96,15 +99,15 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the hash code for the current  object.
   syntax:
     content: public virtual int GetRemoteHashCode ();
     parameters: []
     return:
       type: System.Int32
-      description: To be added.
+      description: A hash code for the current  object.
   overload: System.AddIn.Pipeline.ContractBase.GetRemoteHashCode*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -121,12 +124,13 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in an add-in-side adapter, releases native resources held by the adapter.
+  remarks: This method is called by the system when all the lifetime tokens that have been acquired from the current <xref:System.AddIn.Pipeline.ContractBase> instance have been revoked. Use this method to clean up any native resources held by the adapter, and to signal to the adapted views that they should do the same.
   syntax:
     content: protected virtual void OnFinalRevoke ();
     parameters: []
   overload: System.AddIn.Pipeline.ContractBase.OnFinalRevoke*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -143,18 +147,22 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Reflects over the instance of a contract and returns the  pointer if the current object implements that contract.
+  remarks: This method can be overridden.
   syntax:
     content: public virtual System.AddIn.Contract.IContract QueryContract (string contractIdentifier);
     parameters:
     - id: contractIdentifier
       type: System.String
-      description: To be added.
+      description: The full name of the contract, including its assembly name.
     return:
       type: System.AddIn.Contract.IContract
-      description: To be added.
+      description: The  pointer to an  interface, or  if the contract is not implemented.
   overload: System.AddIn.Pipeline.ContractBase.QueryContract*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    contractIdentifier is ."
   platform:
   - net-11
   - net-20
@@ -171,18 +179,18 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Compares an object with a remote object for equality.
   syntax:
     content: public virtual bool RemoteEquals (System.AddIn.Contract.IContract contract);
     parameters:
     - id: contract
       type: System.AddIn.Contract.IContract
-      description: To be added.
+      description: The object to test for equality with the remote object.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the object is equal to the remote object; otherwise, .
   overload: System.AddIn.Pipeline.ContractBase.RemoteEquals*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -199,15 +207,15 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a string that identifies a remote object.
   syntax:
     content: public virtual string RemoteToString ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: A string that identifies the remote object.
   overload: System.AddIn.Pipeline.ContractBase.RemoteToString*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -224,18 +232,21 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Requests a sponsoring client to renew the lease for the specified object.
   syntax:
     content: public TimeSpan Renewal (System.Runtime.Remoting.Lifetime.ILease lease);
     parameters:
     - id: lease
       type: System.Runtime.Remoting.Lifetime.ILease
-      description: To be added.
+      description: The lifetime lease object that is used by the remoting lifetime service.
     return:
       type: System.TimeSpan
-      description: To be added.
+      description: The renewed lease.
   overload: System.AddIn.Pipeline.ContractBase.Renewal*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    lease is ."
   platform:
   - net-11
   - net-20
@@ -252,15 +263,19 @@ items:
   assemblies:
   - System.AddIn
   namespace: System.AddIn.Pipeline
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the specified token from the list of outstanding lifetime tokens.
+  remarks: If the token is not in the list of outstanding lifetime tokens, this method throws an <xref:System.InvalidOperationException>.
   syntax:
     content: public void RevokeLifetimeToken (int token);
     parameters:
     - id: token
       type: System.Int32
-      description: To be added.
+      description: The token number.
   overload: System.AddIn.Pipeline.ContractBase.RevokeLifetimeToken*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    token is not found in the list of outstanding lifetime tokens."
   platform:
   - net-11
   - net-20
@@ -293,12 +308,6 @@ references:
   name: GetRemoteHashCode()
   nameWithType: ContractBase.GetRemoteHashCode()
   fullName: System.AddIn.Pipeline.ContractBase.GetRemoteHashCode()
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.AddIn.Pipeline.ContractBase.OnFinalRevoke
   parent: System.AddIn.Pipeline.ContractBase
   isExternal: false
@@ -335,24 +344,12 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.AddIn.Contract.IContract
-  parent: System.AddIn.Contract
-  isExternal: false
-  name: IContract
-  nameWithType: IContract
-  fullName: System.AddIn.Contract.IContract
 - uid: System.AddIn.Pipeline.ContractBase.RemoteToString
   parent: System.AddIn.Pipeline.ContractBase
   isExternal: false
   name: RemoteToString()
   nameWithType: ContractBase.RemoteToString()
   fullName: System.AddIn.Pipeline.ContractBase.RemoteToString()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.AddIn.Pipeline.ContractBase.Renewal(System.Runtime.Remoting.Lifetime.ILease)
   parent: System.AddIn.Pipeline.ContractBase
   isExternal: false
@@ -377,12 +374,6 @@ references:
   name: RevokeLifetimeToken(Int32)
   nameWithType: ContractBase.RevokeLifetimeToken(Int32)
   fullName: System.AddIn.Pipeline.ContractBase.RevokeLifetimeToken(Int32)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.AddIn.Pipeline.ContractBase.#ctor*
   parent: System.AddIn.Pipeline.ContractBase
   isExternal: false

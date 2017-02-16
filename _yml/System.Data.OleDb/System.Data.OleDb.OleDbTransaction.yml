@@ -17,8 +17,8 @@ items:
   nameWithType: OleDbTransaction
   fullName: System.Data.OleDb.OleDbTransaction
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents an SQL transaction to be made at a data source. This class cannot be inherited.
+  remarks: The application creates an OleDbTransaction object by calling <xref:System.Data.OleDb.OleDbConnection.BeginTransaction%2A> on the <xref:System.Data.OleDb.OleDbConnection> object. All subsequent operations associated with the transaction (for example, committing or aborting the transaction), are performed on the OleDbTransaction object.
   syntax:
     content: 'public sealed class OleDbTransaction : System.Data.Common.DbTransaction'
   inheritance:
@@ -49,15 +49,19 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Initiates a nested database transaction.
+  remarks: The new transaction is nested within the current transaction.
   syntax:
     content: public System.Data.OleDb.OleDbTransaction Begin ();
     parameters: []
     return:
       type: System.Data.OleDb.OleDbTransaction
-      description: To be added.
+      description: A nested database transaction.
   overload: System.Data.OleDb.OleDbTransaction.Begin*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: Nested transactions are not supported.
   platform:
   - net-11
   - net-20
@@ -74,18 +78,22 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Initiates a nested database transaction and specifies the isolation level to use for the new transaction.
+  remarks: The new transaction is nested within the current transaction.
   syntax:
     content: public System.Data.OleDb.OleDbTransaction Begin (System.Data.IsolationLevel isolevel);
     parameters:
     - id: isolevel
       type: System.Data.IsolationLevel
-      description: To be added.
+      description: The isolation level to use for the transaction.
     return:
       type: System.Data.OleDb.OleDbTransaction
-      description: To be added.
+      description: A nested database transaction.
   overload: System.Data.OleDb.OleDbTransaction.Begin*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: Nested transactions are not supported.
   platform:
   - net-11
   - net-20
@@ -102,12 +110,21 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Commits the database transaction.
+  remarks: ''
+  example:
+  - "The following example creates an <xref:System.Data.OleDb.OleDbConnection> and an <xref:System.Data.OleDb.OleDbTransaction>. It also demonstrates how to use the <xref:System.Data.OleDb.OleDbConnection.BeginTransaction%2A>, a Commit, and <xref:System.Data.OleDb.OleDbTransaction.Rollback%2A> methods.  \n  \n [!code-cs[Classic WebData OleDbConnection.BeginTransaction1 Example#1](../../add/codesnippet/CSharp/m-system.data.oledb.oled_13_1.cs)]\n [!code-vb[Classic WebData OleDbConnection.BeginTransaction1 Example#1](../../add/codesnippet/VisualBasic/m-system.data.oledb.oled_13_1.vb)]"
   syntax:
     content: public override void Commit ();
     parameters: []
   overload: System.Data.OleDb.OleDbTransaction.Commit*
+  exceptions:
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: An error occurred while trying to commit the transaction.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The transaction has already been committed or rolled back.  \n  \n -or-  \n  \n The connection is broken."
   platform:
   - net-11
   - net-20
@@ -124,14 +141,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object associated with the transaction, or  if the transaction is no longer valid.
+  remarks: A single application may have multiple database connections, each with zero or more transactions. This property lets you determine the connection object associated with a particular transaction created by <xref:System.Data.OleDb.OleDbConnection.BeginTransaction%2A>.
   syntax:
     content: public System.Data.OleDb.OleDbConnection Connection { get; }
     return:
       type: System.Data.OleDb.OleDbConnection
-      description: To be added.
+      description: The  object associated with the transaction.
   overload: System.Data.OleDb.OleDbTransaction.Connection*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -148,14 +166,13 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override System.Data.Common.DbConnection DbConnection { get; }
     return:
       type: System.Data.Common.DbConnection
       description: To be added.
   overload: System.Data.OleDb.OleDbTransaction.DbConnection*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -172,8 +189,6 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
@@ -181,6 +196,7 @@ items:
       type: System.Boolean
       description: To be added.
   overload: System.Data.OleDb.OleDbTransaction.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -197,14 +213,15 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies the  for this transaction.
+  remarks: Parallel transactions are not supported. Therefore, the <xref:System.Data.IsolationLevel> applies to the whole transaction.
   syntax:
     content: public override System.Data.IsolationLevel IsolationLevel { get; }
     return:
       type: System.Data.IsolationLevel
-      description: To be added.
+      description: The  for this transaction. The default is .
   overload: System.Data.OleDb.OleDbTransaction.IsolationLevel*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -221,12 +238,21 @@ items:
   assemblies:
   - System.Data
   namespace: System.Data.OleDb
-  summary: To be added.
-  remarks: To be added.
+  summary: Rolls back a transaction from a pending state.
+  remarks: The transaction can only be rolled back from a pending state (after <xref:System.Data.OleDb.OleDbConnection.BeginTransaction%2A> has been called, but before <xref:System.Data.OleDb.OleDbTransaction.Commit%2A> is called). The transaction will be rolled back in the event it is disposed before `Commit` or `Rollback` is called.
+  example:
+  - "The following example creates an <xref:System.Data.OleDb.OleDbConnection> and an <xref:System.Data.OleDb.OleDbTransaction>. It also demonstrates how to use the <xref:System.Data.OleDb.OleDbConnection.BeginTransaction%2A>, a <xref:System.Data.OleDb.OleDbTransaction.Commit%2A>, and Rollback methods.  \n  \n [!code-cs[Classic WebData OleDbConnection.BeginTransaction1 Example#1](../../add/codesnippet/CSharp/m-system.data.oledb.oled_10_1.cs)]\n [!code-vb[Classic WebData OleDbConnection.BeginTransaction1 Example#1](../../add/codesnippet/VisualBasic/m-system.data.oledb.oled_10_1.vb)]"
   syntax:
     content: public override void Rollback ();
     parameters: []
   overload: System.Data.OleDb.OleDbTransaction.Rollback*
+  exceptions:
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: An error occurred while trying to commit the transaction.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The transaction has already been committed or rolled back.  \n  \n -or-  \n  \n The connection is broken."
   platform:
   - net-11
   - net-20
@@ -253,12 +279,6 @@ references:
   name: Begin(IsolationLevel)
   nameWithType: OleDbTransaction.Begin(IsolationLevel)
   fullName: System.Data.OleDb.OleDbTransaction.Begin(IsolationLevel)
-- uid: System.Data.OleDb.OleDbTransaction
-  parent: System.Data.OleDb
-  isExternal: false
-  name: OleDbTransaction
-  nameWithType: OleDbTransaction
-  fullName: System.Data.OleDb.OleDbTransaction
 - uid: System.Data.IsolationLevel
   parent: System.Data
   isExternal: false
@@ -313,12 +333,6 @@ references:
   name: IsolationLevel
   nameWithType: OleDbTransaction.IsolationLevel
   fullName: System.Data.OleDb.OleDbTransaction.IsolationLevel
-- uid: System.Data.IsolationLevel
-  parent: System.Data
-  isExternal: false
-  name: IsolationLevel
-  nameWithType: IsolationLevel
-  fullName: System.Data.IsolationLevel
 - uid: System.Data.OleDb.OleDbTransaction.Rollback
   parent: System.Data.OleDb.OleDbTransaction
   isExternal: false

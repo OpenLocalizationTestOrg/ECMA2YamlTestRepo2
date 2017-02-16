@@ -15,8 +15,7 @@ items:
   nameWithType: ITaskFactory
   fullName: Microsoft.Build.Framework.ITaskFactory
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Interface that a task factory Instance should implement.
   syntax:
     content: public interface ITaskFactory
   implements: []
@@ -36,15 +35,15 @@ items:
   assemblies:
   - Microsoft.Build.Framework
   namespace: Microsoft.Build.Framework
-  summary: To be added.
-  remarks: To be added.
+  summary: Cleans up any context or state that may have been built up for a given task.
   syntax:
     content: public void CleanupTask (Microsoft.Build.Framework.ITask task);
     parameters:
     - id: task
       type: Microsoft.Build.Framework.ITask
-      description: To be added.
+      description: The task to clean up.
   overload: Microsoft.Build.Framework.ITaskFactory.CleanupTask*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -61,18 +60,18 @@ items:
   assemblies:
   - Microsoft.Build.Framework
   namespace: Microsoft.Build.Framework
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of the task to be used in a batch. The task factory logging host will log messages in the context of the task.
   syntax:
     content: public Microsoft.Build.Framework.ITask CreateTask (Microsoft.Build.Framework.IBuildEngine taskFactoryLoggingHost);
     parameters:
     - id: taskFactoryLoggingHost
       type: Microsoft.Build.Framework.IBuildEngine
-      description: To be added.
+      description: The logging host for the task factory.
     return:
       type: Microsoft.Build.Framework.ITask
-      description: To be added.
+      description: Returns an instance of the task to be used in a batch.
   overload: Microsoft.Build.Framework.ITaskFactory.CreateTask*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -89,14 +88,14 @@ items:
   assemblies:
   - Microsoft.Build.Framework
   namespace: Microsoft.Build.Framework
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the name of the factory.
   syntax:
     content: public string FactoryName { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The name of the factory.
   overload: Microsoft.Build.Framework.ITaskFactory.FactoryName*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -113,15 +112,15 @@ items:
   assemblies:
   - Microsoft.Build.Framework
   namespace: Microsoft.Build.Framework
-  summary: To be added.
-  remarks: To be added.
+  summary: Get the descriptions for all the task's parameters.
   syntax:
     content: public Microsoft.Build.Framework.TaskPropertyInfo[] GetTaskParameters ();
     parameters: []
     return:
       type: Microsoft.Build.Framework.TaskPropertyInfo[]
-      description: To be added.
+      description: A non-null array of property descriptions.
   overload: Microsoft.Build.Framework.ITaskFactory.GetTaskParameters*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -138,27 +137,28 @@ items:
   assemblies:
   - Microsoft.Build.Framework
   namespace: Microsoft.Build.Framework
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes this factory for instantiating tasks with a particular inline task block.
+  remarks: "The MSBuild engine calls this method to initialize the factory. After initialization, the factory can be asked whether or not task names can be created by the factory.  \n  \n The `taskFactoryLoggingHost` will log messages in the context of the target where the task is first used."
   syntax:
     content: public bool Initialize (string taskName, System.Collections.Generic.IDictionary<string,Microsoft.Build.Framework.TaskPropertyInfo> parameterGroup, string taskBody, Microsoft.Build.Framework.IBuildEngine taskFactoryLoggingHost);
     parameters:
     - id: taskName
       type: System.String
-      description: To be added.
+      description: Name of the task.
     - id: parameterGroup
       type: System.Collections.Generic.IDictionary{System.String,Microsoft.Build.Framework.TaskPropertyInfo}
-      description: To be added.
+      description: The parameter group.
     - id: taskBody
       type: System.String
-      description: To be added.
+      description: The task body.
     - id: taskFactoryLoggingHost
       type: Microsoft.Build.Framework.IBuildEngine
-      description: To be added.
+      description: The task factory logging host.
     return:
       type: System.Boolean
-      description: To be added.
+      description: A value indicating whether initialization was successful.
   overload: Microsoft.Build.Framework.ITaskFactory.Initialize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -175,14 +175,14 @@ items:
   assemblies:
   - Microsoft.Build.Framework
   namespace: Microsoft.Build.Framework
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type of the task this factory will instantiate.
   syntax:
     content: public Type TaskType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: The type of task.
   overload: Microsoft.Build.Framework.ITaskFactory.TaskType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -206,12 +206,6 @@ references:
   name: CreateTask(IBuildEngine)
   nameWithType: ITaskFactory.CreateTask(IBuildEngine)
   fullName: Microsoft.Build.Framework.ITaskFactory.CreateTask(IBuildEngine)
-- uid: Microsoft.Build.Framework.ITask
-  parent: Microsoft.Build.Framework
-  isExternal: false
-  name: ITask
-  nameWithType: ITask
-  fullName: Microsoft.Build.Framework.ITask
 - uid: Microsoft.Build.Framework.IBuildEngine
   parent: Microsoft.Build.Framework
   isExternal: false
@@ -236,12 +230,20 @@ references:
   name: GetTaskParameters()
   nameWithType: ITaskFactory.GetTaskParameters()
   fullName: Microsoft.Build.Framework.ITaskFactory.GetTaskParameters()
-- uid: Microsoft.Build.Framework.TaskPropertyInfo
+- uid: Microsoft.Build.Framework.TaskPropertyInfo[]
   parent: Microsoft.Build.Framework
   isExternal: false
   name: TaskPropertyInfo
   nameWithType: TaskPropertyInfo
   fullName: Microsoft.Build.Framework.TaskPropertyInfo[]
+  spec.csharp:
+  - uid: Microsoft.Build.Framework.TaskPropertyInfo
+    name: TaskPropertyInfo
+    nameWithType: TaskPropertyInfo
+    fullName: TaskPropertyInfo[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: Microsoft.Build.Framework.ITaskFactory.Initialize(System.String,System.Collections.Generic.IDictionary{System.String,Microsoft.Build.Framework.TaskPropertyInfo},System.String,Microsoft.Build.Framework.IBuildEngine)
   parent: Microsoft.Build.Framework.ITaskFactory
   isExternal: false
@@ -254,30 +256,34 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Collections.Generic.IDictionary{System.String,Microsoft.Build.Framework.TaskPropertyInfo}
   parent: System.Collections.Generic
   isExternal: true
   name: IDictionary<String,TaskPropertyInfo>
   nameWithType: IDictionary<String,TaskPropertyInfo>
   fullName: System.Collections.Generic.IDictionary<System.String,Microsoft.Build.Framework.TaskPropertyInfo>
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: Microsoft.Build.Framework.IBuildEngine
-  parent: Microsoft.Build.Framework
-  isExternal: false
-  name: IBuildEngine
-  nameWithType: IBuildEngine
-  fullName: Microsoft.Build.Framework.IBuildEngine
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.String,Microsoft.Build.Framework.TaskPropertyInfo>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: Microsoft.Build.Framework.TaskPropertyInfo
+    name: TaskPropertyInfo
+    nameWithType: TaskPropertyInfo
+    fullName: TaskPropertyInfo
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: Microsoft.Build.Framework.ITaskFactory.TaskType
   parent: Microsoft.Build.Framework.ITaskFactory
   isExternal: false

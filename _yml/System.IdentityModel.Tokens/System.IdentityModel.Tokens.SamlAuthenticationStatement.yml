@@ -22,8 +22,8 @@ items:
   nameWithType: SamlAuthenticationStatement
   fullName: System.IdentityModel.Tokens.SamlAuthenticationStatement
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents a claim for a  security token that asserts that the subject was authenticated by a particular means at a particular time.
+  remarks: <xref:System.IdentityModel.Tokens.SamlSecurityToken> security tokens specify their claims using SAML assertions, which can specify when the subject was authenticated. The claims in a SAML assertion are represented by SAML statements. The SAML specification defines a set of SAML statement types and one of them is a SamlAuthenticationStatement. A SamlAuthenticationStatement asserts that the statement's subject was authenticated by a particular means at a particular time.
   syntax:
     content: 'public class SamlAuthenticationStatement : System.IdentityModel.Tokens.SamlSubjectStatement'
   inheritance:
@@ -51,12 +51,12 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public SamlAuthenticationStatement ();
     parameters: []
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -73,30 +73,34 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified authentication details.
+  remarks: "The set of authentication methods is extensible; however the following table contains the set of authentication methods defined in the SAML specification.  \n  \n|Authentication method|URI|  \n|---------------------------|---------|  \n|Password|urn:oasis:names:tc:SAML:1.0:am:password|  \n|Kerberos|urn:ietf:rfc:1510|  \n|Secure Remote Password (SRP)|urn:ietf:rfc:2945|  \n|Hardware Token|URI:urn:oasis:names:tc:SAML:1.0:am:HardwareToken|  \n|SSL/TLS Certificate Based Client Authentication|urn:ietf:rfc:2246|  \n|PGP Public Key|urn:oasis:names:tc:SAML:1.0:am:PGP|  \n|SPKI Public Key|urn:oasis:names:tc:SAML:1.0:am:SPKI|  \n|XKMS Public Key|urn:oasis:names:tc:SAML:1.0:am:XKMS|  \n|XML Digital Signature|urn:ietf:rfc:3075|  \n|Unspecified|urn:oasis:names:tc:SAML:1.0:am:unspecified|  \n  \n When the `authenticationMethod` parameter is `null`, the authentication method is set to `urn:oasis:names:tc:SAML:1.0:am:unspecified`."
   syntax:
     content: public SamlAuthenticationStatement (System.IdentityModel.Tokens.SamlSubject samlSubject, string authenticationMethod, DateTime authenticationInstant, string dnsAddress, string ipAddress, System.Collections.Generic.IEnumerable<System.IdentityModel.Tokens.SamlAuthorityBinding> authorityBindings);
     parameters:
     - id: samlSubject
       type: System.IdentityModel.Tokens.SamlSubject
-      description: To be added.
+      description: A  that represents the subject of the claim.
     - id: authenticationMethod
       type: System.String
-      description: To be added.
+      description: A URI reference that specifies how the subject was authenticated.
     - id: authenticationInstant
       type: System.DateTime
-      description: To be added.
+      description: A <xref:System.DateTime> that specifies the instant in time at which the subject was authenticated.
     - id: dnsAddress
       type: System.String
-      description: To be added.
+      description: The DNS domain name in which the computer that authenticated the subject resides.
     - id: ipAddress
       type: System.String
-      description: To be added.
+      description: The IP address of the computer that authenticated the subject.
     - id: authorityBindings
       type: System.Collections.Generic.IEnumerable{System.IdentityModel.Tokens.SamlAuthorityBinding}
-      description: To be added.
+      description: An <xref:System.Collections.Generic.IEnumerable%601> of type  that contains additional information about the subject.
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.#ctor*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    authorityBindings contains a member that is ."
   platform:
   - net-11
   - net-20
@@ -113,15 +117,19 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a claim based on the properties of this instance to the specified collection of claims.
+  remarks: The AddClaimsToList method adds a claim to the `claims` parameter based on the <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthenticationInstant%2A>, <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthenticationMethod%2A>, <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthorityBindings%2A>, <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.ClaimType%2A>, <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.DnsAddress%2A>, <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.IPAddress%2A>, and properties.
   syntax:
     content: protected override void AddClaimsToList (System.Collections.Generic.IList<System.IdentityModel.Claims.Claim> claims);
     parameters:
     - id: claims
       type: System.Collections.Generic.IList{System.IdentityModel.Claims.Claim}
-      description: To be added.
+      description: An <xref:System.Collections.Generic.IList%601> of type  that contains the set of claims to add to.
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.AddClaimsToList*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    claims is ."
   platform:
   - net-11
   - net-20
@@ -138,14 +146,15 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the instant in time at which the subject was authenticated.
+  remarks: "The time is stored in Coordinated Universal Time (UTC).  \n  \n The AuthenticationInstant property corresponds to the `AuthenticationInstant` attribute of the `<AuthenticationStatement>` element that is defined in the Assertions and Protocol for the OASIS Security Assertion Markup Language (SAML) specification."
   syntax:
     content: public DateTime AuthenticationInstant { get; set; }
     return:
       type: System.DateTime
-      description: To be added.
+      description: "A <xref:System.DateTime> that specifies the instant in time at which the subject was authenticated.  \n  \n  Exception type  \n  \n  Condition  \n  \n  <xref:System.InvalidOperationException>  \n  \n  The AuthenticationInstant property is set and the <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.IsReadOnly%2A> property is ."
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthenticationInstant*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -162,14 +171,18 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the method used to authenticate the subject.
+  remarks: "The set of authentication methods is extensible; however the following table contains the set of authentication methods defined in the SAML specification.  \n  \n|Authentication method|URI|  \n|---------------------------|---------|  \n|Password|urn:oasis:names:tc:SAML:1.0:am:password|  \n|Kerberos|urn:ietf:rfc:1510|  \n|Secure Remote Password (SRP)|urn:ietf:rfc:2945|  \n|Hardware Token|URI:urn:oasis:names:tc:SAML:1.0:am:HardwareToken|  \n|SSL/TLS Certificate Based Client Authentication|urn:ietf:rfc:2246|  \n|PGP Public Key|urn:oasis:names:tc:SAML:1.0:am:PGP|  \n|SPKI Public Key|urn:oasis:names:tc:SAML:1.0:am:SPKI|  \n|XKMS Public Key|urn:oasis:names:tc:SAML:1.0:am:XKMS|  \n|XML Digital Signature|urn:ietf:rfc:3075|  \n|Unspecified|urn:oasis:names:tc:SAML:1.0:am:unspecified|  \n  \n When the AuthenticationMethod property is set to `null`, the authentication method is set to `urn:oasis:names:tc:SAML:1.0:am:unspecified`.  \n  \n The AuthenticationMethod property corresponds to the `AuthenticationMethod` attribute of the `<AuthenticationStatement>` element that is defined in the Assertions and Protocol for the OASIS Security Assertion Markup Language (SAML) specification."
   syntax:
     content: public string AuthenticationMethod { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The method used to authenticate the subject. The default value is .
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthenticationMethod*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The AuthenticationMethod property is set and the <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.IsReadOnly%2A> property is .
   platform:
   - net-11
   - net-20
@@ -186,14 +199,15 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets additional information about the subject.
+  remarks: The AuthorityBindings property corresponds to a set of `<AuthorityBinding>` child elements for an `<AuthenticationStatement>` element that is defined in the Assertions and Protocol for the OASIS Security Assertion Markup Language (SAML) specification.
   syntax:
     content: public System.Collections.Generic.IList<System.IdentityModel.Tokens.SamlAuthorityBinding> AuthorityBindings { get; }
     return:
       type: System.Collections.Generic.IList{System.IdentityModel.Tokens.SamlAuthorityBinding}
-      description: To be added.
+      description: An <xref:System.Collections.Generic.IList%601> of type  that contains additional information about the subject.
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthorityBindings*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -210,14 +224,14 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type of security claim.
   syntax:
     content: public static string ClaimType { get; }
     return:
       type: System.String
-      description: To be added.
+      description: A  that specifies the type of security claim. Always `http://schemas.microsoft.com/mb/2005/09/ClaimType/SamlAuthentication`.
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.ClaimType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -234,14 +248,18 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the DNS domain name in which the computer that authenticated the subject resides.
+  remarks: The DnsAddress property corresponds to the `DNSAddress` attribute of the `<SubjectLocality>` element that is defined in the Assertions and Protocol for the OASIS Security Assertion Markup Language (SAML) specification.
   syntax:
     content: public string DnsAddress { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The DNS domain name in which the computer that authenticated the subject resides.
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.DnsAddress*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The DnsAddress property is set and the <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.IsReadOnly%2A> property is .
   platform:
   - net-11
   - net-20
@@ -258,14 +276,15 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the IP address of the computer that authenticated the subject.
+  remarks: The IPAddress property corresponds to the `IPAddress` attribute of the `<SubjectLocality>` element that is defined in the Assertions and Protocol for the OASIS Security Assertion Markup Language (SAML) specification.
   syntax:
     content: public string IPAddress { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The IP address of the computer that authenticated the subject.
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.IPAddress*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -282,14 +301,15 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether the properties of this instance are read-only.
+  remarks: To make this instance of the <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement> class read-only, call the <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.MakeReadOnly%2A> method.
   syntax:
     content: public override bool IsReadOnly { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the properties of this instance are read-only; otherwise, . The default is .
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.IsReadOnly*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -306,12 +326,13 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Causes this instance to be read-only.
+  remarks: When the MakeReadOnly method is called, the <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.IsReadOnly%2A> property is set to `true` and properties of this instance can no longer be set.
   syntax:
     content: public override void MakeReadOnly ();
     parameters: []
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.MakeReadOnly*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -328,24 +349,31 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Reads the SAML authentication statement from the specified XML reader.
+  remarks: The ReadXml method sets the <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthenticationInstant%2A>, <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthenticationMethod%2A>, <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthorityBindings%2A>, <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.DnsAddress%2A>, <xref:System.IdentityModel.Tokens.SamlAuthenticationStatement.IPAddress%2A>, and properties.
   syntax:
     content: public override void ReadXml (System.Xml.XmlDictionaryReader reader, System.IdentityModel.Tokens.SamlSerializer samlSerializer, System.IdentityModel.Selectors.SecurityTokenSerializer keyInfoSerializer, System.IdentityModel.Selectors.SecurityTokenResolver outOfBandTokenResolver);
     parameters:
     - id: reader
       type: System.Xml.XmlDictionaryReader
-      description: To be added.
+      description: A <xref:System.Xml.XmlDictionaryReader> to read the SAML authentication statement.
     - id: samlSerializer
       type: System.IdentityModel.Tokens.SamlSerializer
-      description: To be added.
+      description: A  that is capable of reading XML elements in the SAML authentication statement that is defined in the SAML specification.
     - id: keyInfoSerializer
       type: System.IdentityModel.Selectors.SecurityTokenSerializer
-      description: To be added.
+      description: A  that reads the  clause of the digital signature.
     - id: outOfBandTokenResolver
       type: System.IdentityModel.Selectors.SecurityTokenResolver
-      description: To be added.
+      description: A  that determines the security token that created the digital signature.
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.ReadXml*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    reader is   \n  \n -or-  \n  \n samlSerializer is "
+  - type: System.IdentityModel.Tokens.SecurityTokenException
+    commentId: T:System.IdentityModel.Tokens.SecurityTokenException
+    description: "\n    reader refers to an XML element that does not contain the  and  attributes.  \n  \n -or-  \n  \n reader refers to an XML element that does not have a  child element."
   platform:
   - net-11
   - net-20
@@ -362,21 +390,24 @@ items:
   assemblies:
   - System.IdentityModel
   namespace: System.IdentityModel.Tokens
-  summary: To be added.
-  remarks: To be added.
+  summary: Writes the SAML authentication statement into the specified XML serializer.
   syntax:
     content: public override void WriteXml (System.Xml.XmlDictionaryWriter writer, System.IdentityModel.Tokens.SamlSerializer samlSerializer, System.IdentityModel.Selectors.SecurityTokenSerializer keyInfoSerializer);
     parameters:
     - id: writer
       type: System.Xml.XmlDictionaryWriter
-      description: To be added.
+      description: A <xref:System.Xml.XmlDictionaryWriter> to write the SAML authentication statement.
     - id: samlSerializer
       type: System.IdentityModel.Tokens.SamlSerializer
-      description: To be added.
+      description: A  that is capable of writing XML elements in a SAML assertion.
     - id: keyInfoSerializer
       type: System.IdentityModel.Selectors.SecurityTokenSerializer
-      description: To be added.
+      description: A  that is capable of writing  clauses.
   overload: System.IdentityModel.Tokens.SamlAuthenticationStatement.WriteXml*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    writer is   \n  \n -or-  \n  \n samlSerializer is ."
   platform:
   - net-11
   - net-20
@@ -415,24 +446,27 @@ references:
   name: DateTime
   nameWithType: DateTime
   fullName: System.DateTime
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Collections.Generic.IEnumerable{System.IdentityModel.Tokens.SamlAuthorityBinding}
   parent: System.Collections.Generic
   isExternal: true
   name: IEnumerable<SamlAuthorityBinding>
   nameWithType: IEnumerable<SamlAuthorityBinding>
   fullName: System.Collections.Generic.IEnumerable<System.IdentityModel.Tokens.SamlAuthorityBinding>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.IdentityModel.Tokens.SamlAuthorityBinding>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.IdentityModel.Tokens.SamlAuthorityBinding
+    name: SamlAuthorityBinding
+    nameWithType: SamlAuthorityBinding
+    fullName: SamlAuthorityBinding
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.IdentityModel.Tokens.SamlAuthenticationStatement.AddClaimsToList(System.Collections.Generic.IList{System.IdentityModel.Claims.Claim})
   parent: System.IdentityModel.Tokens.SamlAuthenticationStatement
   isExternal: false
@@ -445,30 +479,33 @@ references:
   name: IList<Claim>
   nameWithType: IList<Claim>
   fullName: System.Collections.Generic.IList<System.IdentityModel.Claims.Claim>
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: IList<System.IdentityModel.Claims.Claim>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.IdentityModel.Claims.Claim
+    name: Claim
+    nameWithType: Claim
+    fullName: Claim
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthenticationInstant
   parent: System.IdentityModel.Tokens.SamlAuthenticationStatement
   isExternal: false
   name: AuthenticationInstant
   nameWithType: SamlAuthenticationStatement.AuthenticationInstant
   fullName: System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthenticationInstant
-- uid: System.DateTime
-  parent: System
-  isExternal: true
-  name: DateTime
-  nameWithType: DateTime
-  fullName: System.DateTime
 - uid: System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthenticationMethod
   parent: System.IdentityModel.Tokens.SamlAuthenticationStatement
   isExternal: false
   name: AuthenticationMethod
   nameWithType: SamlAuthenticationStatement.AuthenticationMethod
   fullName: System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthenticationMethod
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Tokens.SamlAuthenticationStatement.AuthorityBindings
   parent: System.IdentityModel.Tokens.SamlAuthenticationStatement
   isExternal: false
@@ -481,42 +518,39 @@ references:
   name: IList<SamlAuthorityBinding>
   nameWithType: IList<SamlAuthorityBinding>
   fullName: System.Collections.Generic.IList<System.IdentityModel.Tokens.SamlAuthorityBinding>
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: IList<System.IdentityModel.Tokens.SamlAuthorityBinding>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.IdentityModel.Tokens.SamlAuthorityBinding
+    name: SamlAuthorityBinding
+    nameWithType: SamlAuthorityBinding
+    fullName: SamlAuthorityBinding
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.IdentityModel.Tokens.SamlAuthenticationStatement.ClaimType
   parent: System.IdentityModel.Tokens.SamlAuthenticationStatement
   isExternal: false
   name: ClaimType
   nameWithType: SamlAuthenticationStatement.ClaimType
   fullName: System.IdentityModel.Tokens.SamlAuthenticationStatement.ClaimType
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Tokens.SamlAuthenticationStatement.DnsAddress
   parent: System.IdentityModel.Tokens.SamlAuthenticationStatement
   isExternal: false
   name: DnsAddress
   nameWithType: SamlAuthenticationStatement.DnsAddress
   fullName: System.IdentityModel.Tokens.SamlAuthenticationStatement.DnsAddress
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Tokens.SamlAuthenticationStatement.IPAddress
   parent: System.IdentityModel.Tokens.SamlAuthenticationStatement
   isExternal: false
   name: IPAddress
   nameWithType: SamlAuthenticationStatement.IPAddress
   fullName: System.IdentityModel.Tokens.SamlAuthenticationStatement.IPAddress
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IdentityModel.Tokens.SamlAuthenticationStatement.IsReadOnly
   parent: System.IdentityModel.Tokens.SamlAuthenticationStatement
   isExternal: false
@@ -577,18 +611,6 @@ references:
   name: XmlDictionaryWriter
   nameWithType: XmlDictionaryWriter
   fullName: System.Xml.XmlDictionaryWriter
-- uid: System.IdentityModel.Tokens.SamlSerializer
-  parent: System.IdentityModel.Tokens
-  isExternal: false
-  name: SamlSerializer
-  nameWithType: SamlSerializer
-  fullName: System.IdentityModel.Tokens.SamlSerializer
-- uid: System.IdentityModel.Selectors.SecurityTokenSerializer
-  parent: System.IdentityModel.Selectors
-  isExternal: false
-  name: SecurityTokenSerializer
-  nameWithType: SecurityTokenSerializer
-  fullName: System.IdentityModel.Selectors.SecurityTokenSerializer
 - uid: System.IdentityModel.Tokens.SamlAuthenticationStatement.#ctor*
   parent: System.IdentityModel.Tokens.SamlAuthenticationStatement
   isExternal: false

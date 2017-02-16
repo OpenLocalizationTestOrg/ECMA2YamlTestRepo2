@@ -17,8 +17,8 @@ items:
   nameWithType: PrintTicketConverter
   fullName: System.Printing.Interop.PrintTicketConverter
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Converts managed  objects to unmanaged Graphics Device Interface (GDI) [DEVMODE](http://go.microsoft.com/fwlink/?LinkId=89844) structures, and vice versa.
+  remarks: None of the methods of this class will validate the <xref:System.Printing.PrintTicket>. To validate it, use <xref:System.Printing.PrintQueue.MergeAndValidatePrintTicket%2A>.
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(false)]
@@ -45,18 +45,28 @@ items:
   assemblies:
   - ReachFramework
   namespace: System.Printing.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class for the specified printer.
+  remarks: For more information on the DEVMODE structure, see [DEVMODE](http://msdn.microsoft.com/library/windows/desktop/dd183565).
   syntax:
     content: public PrintTicketConverter (string deviceName, int clientPrintSchemaVersion);
     parameters:
     - id: deviceName
       type: System.String
-      description: To be added.
+      description: The name of the printer that is bound to the new  instance.
     - id: clientPrintSchemaVersion
       type: System.Int32
-      description: To be added.
+      description: The Print Schema version to use in the  and DEVMODE conversion.
   overload: System.Printing.Interop.PrintTicketConverter.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    deviceName is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "\n    clientPrintSchemaVersion is 0 or less."
+  - type: System.Printing.PrintQueueException
+    commentId: T:System.Printing.PrintQueueException
+    description: The converter was unable to bind to deviceName.
   platform:
   - net-11
   - net-20
@@ -73,18 +83,31 @@ items:
   assemblies:
   - ReachFramework
   namespace: System.Printing.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Converts the specified [DEVMODE](http://go.microsoft.com/fwlink/?LinkId=89844) structure to a managed code .
+  remarks: "For more information on the DEVMODE structure, see [DEVMODE](http://msdn.microsoft.com/library/windows/desktop/dd183565).  \n  \n The scope of the returned <xref:System.Printing.PrintTicket> is the entire print job.  \n  \n This method does not validate the <xref:System.Printing.PrintTicket>. To validate it, use <xref:System.Printing.PrintQueue.MergeAndValidatePrintTicket%2A>."
   syntax:
     content: public System.Printing.PrintTicket ConvertDevModeToPrintTicket (byte[] devMode);
     parameters:
     - id: devMode
       type: System.Byte[]
-      description: To be added.
+      description: A <xref:System.Byte> array that contains the DEVMODE structure.
     return:
       type: System.Printing.PrintTicket
-      description: To be added.
+      description: The new managed .
   overload: System.Printing.Interop.PrintTicketConverter.ConvertDevModeToPrintTicket*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: This  is already disposed.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The value of devMode is .
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The content of devMode is not well-formed.
+  - type: System.Printing.PrintQueueException
+    commentId: T:System.Printing.PrintQueueException
+    description: The conversion failed.
   platform:
   - net-11
   - net-20
@@ -101,21 +124,37 @@ items:
   assemblies:
   - ReachFramework
   namespace: System.Printing.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Converts the specified [DEVMODE](http://go.microsoft.com/fwlink/?LinkId=89844) structure to a managed code  that has the specified scope.
+  remarks: "This method does not validate the <xref:System.Printing.PrintTicket>. To validate it, use <xref:System.Printing.PrintQueue.MergeAndValidatePrintTicket%2A>.  \n  \n For more information on the DEVMODE structure, see [DEVMODE](http://msdn.microsoft.com/library/windows/desktop/dd183565)."
   syntax:
     content: public System.Printing.PrintTicket ConvertDevModeToPrintTicket (byte[] devMode, System.Printing.PrintTicketScope scope);
     parameters:
     - id: devMode
       type: System.Byte[]
-      description: To be added.
+      description: A <xref:System.Byte> buffer containing the DEVMODE structure to convert.
     - id: scope
       type: System.Printing.PrintTicketScope
-      description: To be added.
+      description: A  value that specifies whether the new  applies to a page, a document, or an entire print job.
     return:
       type: System.Printing.PrintTicket
-      description: To be added.
+      description: The new .
   overload: System.Printing.Interop.PrintTicketConverter.ConvertDevModeToPrintTicket*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: This  is already disposed.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The value of devMode is null ( in Visual Basic).
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The content of devMode is not well-formed.
+  - type: System.Printing.PrintQueueException
+    commentId: T:System.Printing.PrintQueueException
+    description: The conversion failed.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The scope is not a valid  value.
   platform:
   - net-11
   - net-20
@@ -132,21 +171,37 @@ items:
   assemblies:
   - ReachFramework
   namespace: System.Printing.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Converts the specified managed  to an unmanaged [DEVMODE](http://go.microsoft.com/fwlink/?LinkId=89844) structure that is based on the [DEVMODE](http://go.microsoft.com/fwlink/?LinkId=89844) structure identified by the .
+  remarks: "The scope of the <xref:System.Printing.PrintTicket> parameter must be the entire print job.  \n  \n This method does not validate the <xref:System.Printing.PrintTicket>. To validate it, use <xref:System.Printing.PrintQueue.MergeAndValidatePrintTicket%2A>.  \n  \n For more information on the DEVMODE structure, see [DEVMODE](http://msdn.microsoft.com/library/windows/desktop/dd183565)."
   syntax:
     content: public byte[] ConvertPrintTicketToDevMode (System.Printing.PrintTicket printTicket, System.Printing.Interop.BaseDevModeType baseType);
     parameters:
     - id: printTicket
       type: System.Printing.PrintTicket
-      description: To be added.
+      description: The  to convert.
     - id: baseType
       type: System.Printing.Interop.BaseDevModeType
-      description: To be added.
+      description: A value that identifies whether to use the user default or printer default DEVMODE as the base DEVMODE.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: A <xref:System.Byte> array that contains the new [DEVMODE](http://go.microsoft.com/fwlink/?LinkId=89844) structure.
   overload: System.Printing.Interop.PrintTicketConverter.ConvertPrintTicketToDevMode*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: This  is already disposed.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The value of printTicket is null ( in Visual Basic).
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The content of printTicket is not well-formed.
+  - type: System.Printing.PrintQueueException
+    commentId: T:System.Printing.PrintQueueException
+    description: The conversion failed.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The baseType is not a valid  value.
   platform:
   - net-11
   - net-20
@@ -163,24 +218,40 @@ items:
   assemblies:
   - ReachFramework
   namespace: System.Printing.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Converts the specified managed code  with the specified scope, into an unmanaged [DEVMODE](http://go.microsoft.com/fwlink/?LinkId=89844) structure that is based on the [DEVMODE](http://go.microsoft.com/fwlink/?LinkId=89844) structure identified by the .
+  remarks: "This method does not validate the <xref:System.Printing.PrintTicket>. To validate it, use <xref:System.Printing.PrintQueue.MergeAndValidatePrintTicket%2A>.  \n  \n For more information on the DEVMODE structure, see [DEVMODE](http://msdn.microsoft.com/library/windows/desktop/dd183565)."
   syntax:
     content: public byte[] ConvertPrintTicketToDevMode (System.Printing.PrintTicket printTicket, System.Printing.Interop.BaseDevModeType baseType, System.Printing.PrintTicketScope scope);
     parameters:
     - id: printTicket
       type: System.Printing.PrintTicket
-      description: To be added.
+      description: The  to convert.
     - id: baseType
       type: System.Printing.Interop.BaseDevModeType
-      description: To be added.
+      description: A value that identifies whether to use the user default or printer default DEVMODE as the base DEVMODE.
     - id: scope
       type: System.Printing.PrintTicketScope
-      description: To be added.
+      description: A  value that specifies whether the conversion of the  should be done at the scope of a page, a document, or an entire print job.
     return:
       type: System.Byte[]
-      description: To be added.
+      description: A <xref:System.Byte> buffer that represents the new [DEVMODE](http://go.microsoft.com/fwlink/?LinkId=89844) structure.
   overload: System.Printing.Interop.PrintTicketConverter.ConvertPrintTicketToDevMode*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: This  is already disposed.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The value of printTicket is null ( in Visual Basic).
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The content of printTicket is not well-formed.
+  - type: System.Printing.PrintQueueException
+    commentId: T:System.Printing.PrintQueueException
+    description: The conversion failed.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The baseType is not a valid  value.  \n  \n -or-  \n  \n The scope is not a valid  value."
   platform:
   - net-11
   - net-20
@@ -197,12 +268,12 @@ items:
   assemblies:
   - ReachFramework
   namespace: System.Printing.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the resources used by the .
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.Printing.Interop.PrintTicketConverter.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -219,14 +290,14 @@ items:
   assemblies:
   - ReachFramework
   namespace: System.Printing.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the maximum [Print Schema](http://go.microsoft.com/fwlink/?LinkId=186397) version that  can support.
   syntax:
     content: public static int MaxPrintSchemaVersion { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The maximum [Print Schema](http://go.microsoft.com/fwlink/?LinkId=186397) version that  can support.
   overload: System.Printing.Interop.PrintTicketConverter.MaxPrintSchemaVersion*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -244,12 +315,13 @@ items:
   assemblies:
   - ReachFramework
   namespace: System.Printing.Interop
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases all resources used by the current instance of the  class.
+  remarks: "Call `Dispose` when you are finished using the <xref:System.Printing.Interop.PrintTicketConverter>. The `Dispose` method leaves the <xref:System.Printing.Interop.PrintTicketConverter> in an unusable state. After calling `Dispose`, you must release all references to the <xref:System.Printing.Interop.PrintTicketConverter> so the garbage collector can reclaim the memory that the <xref:System.Printing.Interop.PrintTicketConverter> was occupying.  \n  \n For more information, see [Cleaning Up Unmanaged Resources](../Topic/Cleaning%20Up%20Unmanaged%20Resources.md) and [Implementing a Dispose Method](../Topic/Implementing%20a%20Dispose%20Method.md).  \n  \n> [!NOTE]\n>  Always call `Dispose` before you release your last reference to the <xref:System.Printing.Interop.PrintTicketConverter>. Otherwise, the resources it is using will not be freed until the garbage collector calls the <xref:System.Printing.Interop.PrintTicketConverter> object's `Finalize` method."
   syntax:
     content: void IDisposable.Dispose ();
     parameters: []
   overload: System.Printing.Interop.PrintTicketConverter.System#IDisposable#Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -288,30 +360,26 @@ references:
   name: PrintTicket
   nameWithType: PrintTicket
   fullName: System.Printing.PrintTicket
-- uid: System.Byte
+- uid: System.Byte[]
   parent: System
   isExternal: true
   name: Byte
   nameWithType: Byte
   fullName: System.Byte[]
+  spec.csharp:
+  - uid: System.Byte
+    name: Byte
+    nameWithType: Byte
+    fullName: Byte[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Printing.Interop.PrintTicketConverter.ConvertDevModeToPrintTicket(System.Byte[],System.Printing.PrintTicketScope)
   parent: System.Printing.Interop.PrintTicketConverter
   isExternal: false
   name: ConvertDevModeToPrintTicket(Byte[],PrintTicketScope)
   nameWithType: PrintTicketConverter.ConvertDevModeToPrintTicket(Byte[],PrintTicketScope)
   fullName: System.Printing.Interop.PrintTicketConverter.ConvertDevModeToPrintTicket(Byte[],PrintTicketScope)
-- uid: System.Printing.PrintTicket
-  parent: System.Printing
-  isExternal: false
-  name: PrintTicket
-  nameWithType: PrintTicket
-  fullName: System.Printing.PrintTicket
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
 - uid: System.Printing.PrintTicketScope
   parent: System.Printing
   isExternal: false
@@ -324,18 +392,6 @@ references:
   name: ConvertPrintTicketToDevMode(PrintTicket,BaseDevModeType)
   nameWithType: PrintTicketConverter.ConvertPrintTicketToDevMode(PrintTicket,BaseDevModeType)
   fullName: System.Printing.Interop.PrintTicketConverter.ConvertPrintTicketToDevMode(PrintTicket,BaseDevModeType)
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Printing.PrintTicket
-  parent: System.Printing
-  isExternal: false
-  name: PrintTicket
-  nameWithType: PrintTicket
-  fullName: System.Printing.PrintTicket
 - uid: System.Printing.Interop.BaseDevModeType
   parent: System.Printing.Interop
   isExternal: false
@@ -348,30 +404,6 @@ references:
   name: ConvertPrintTicketToDevMode(PrintTicket,BaseDevModeType,PrintTicketScope)
   nameWithType: PrintTicketConverter.ConvertPrintTicketToDevMode(PrintTicket,BaseDevModeType,PrintTicketScope)
   fullName: System.Printing.Interop.PrintTicketConverter.ConvertPrintTicketToDevMode(PrintTicket,BaseDevModeType,PrintTicketScope)
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte[]
-- uid: System.Printing.PrintTicket
-  parent: System.Printing
-  isExternal: false
-  name: PrintTicket
-  nameWithType: PrintTicket
-  fullName: System.Printing.PrintTicket
-- uid: System.Printing.Interop.BaseDevModeType
-  parent: System.Printing.Interop
-  isExternal: false
-  name: BaseDevModeType
-  nameWithType: BaseDevModeType
-  fullName: System.Printing.Interop.BaseDevModeType
-- uid: System.Printing.PrintTicketScope
-  parent: System.Printing
-  isExternal: false
-  name: PrintTicketScope
-  nameWithType: PrintTicketScope
-  fullName: System.Printing.PrintTicketScope
 - uid: System.Printing.Interop.PrintTicketConverter.Dispose
   parent: System.Printing.Interop.PrintTicketConverter
   isExternal: false
@@ -384,12 +416,6 @@ references:
   name: MaxPrintSchemaVersion
   nameWithType: PrintTicketConverter.MaxPrintSchemaVersion
   fullName: System.Printing.Interop.PrintTicketConverter.MaxPrintSchemaVersion
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Printing.Interop.PrintTicketConverter.System#IDisposable#Dispose
   parent: System.Printing.Interop.PrintTicketConverter
   isExternal: false

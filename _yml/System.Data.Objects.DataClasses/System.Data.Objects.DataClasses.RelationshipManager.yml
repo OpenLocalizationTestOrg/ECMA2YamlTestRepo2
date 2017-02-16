@@ -18,8 +18,10 @@ items:
   nameWithType: RelationshipManager
   fullName: System.Data.Objects.DataClasses.RelationshipManager
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Used to track relationships between objects in the object context.
+  remarks: RelationshipManager is used to track relationships between objects in an object context. There is one instance of the RelationshipManager class for each relationship tracked in the object context. Relationships are defined by associations in a conceptual model. For more information, see [Association Element (CSDL)](http://msdn.microsoft.com/en-us/c305169a-8af7-432f-9ba7-800a163aed41).
+  example:
+  - "The example in this topic is based on the [AdventureWorks Sales Model](http://msdn.microsoft.com/en-us/f16cd988-673f-4376-b034-129ca93c7832). The example adds new `SalesOrderHeader` entities to the `Contact` entity. Then it gets all related ends from the `Contact` entity and displays the relationship name, source role name, and target role name for each related end.  \n  \n [!code-vb[DP ObjectServices Concepts#IRelatedEnd](../../add/codesnippet/VisualBasic/objectservicesconceptsvb/Source.vb#irelatedend)]\n [!code-cs[DP ObjectServices Concepts#IRelatedEnd](../../add/codesnippet/CSharp/objectservicesconceptscs/Source.cs#irelatedend)]"
   syntax:
     content: public class RelationshipManager
   inheritance:
@@ -42,18 +44,19 @@ items:
   assemblies:
   - System.Data.Entity
   namespace: System.Data.Objects.DataClasses
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new  object.
+  remarks: The Create method is used by objects that implement <xref:System.Data.Objects.DataClasses.IEntityWithRelationships>. When Object Services requests the <xref:System.Data.Objects.DataClasses.RelationshipManager> property of an object that implements <xref:System.Data.Objects.DataClasses.IEntityWithRelationships>, the Create method is called if the relationship manager does not already exist for the object.
   syntax:
     content: public static System.Data.Objects.DataClasses.RelationshipManager Create (System.Data.Objects.DataClasses.IEntityWithRelationships owner);
     parameters:
     - id: owner
       type: System.Data.Objects.DataClasses.IEntityWithRelationships
-      description: To be added.
+      description: Reference to the entity that is calling this method.
     return:
       type: System.Data.Objects.DataClasses.RelationshipManager
-      description: To be added.
+      description: The requested .
   overload: System.Data.Objects.DataClasses.RelationshipManager.Create*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -70,15 +73,18 @@ items:
   assemblies:
   - System.Data.Entity
   namespace: System.Data.Objects.DataClasses
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns an enumeration of all the related ends managed by the relationship manager.
+  remarks: The GetAllRelatedEnds method returns an enumeration of <xref:System.Data.Objects.DataClasses.EntityCollection%601> and <xref:System.Data.Objects.DataClasses.EntityReference%601> objects. <xref:System.Data.Objects.DataClasses.EntityCollection%601> and <xref:System.Data.Objects.DataClasses.EntityReference%601> are concrete types that derive from <xref:System.Data.Objects.DataClasses.RelatedEnd>. The <xref:System.Data.Objects.DataClasses.RelatedEnd> abstract class implements the <xref:System.Data.Objects.DataClasses.IRelatedEnd> interface.
+  example:
+  - "The example in this topic is based on the [AdventureWorks Sales Model](http://msdn.microsoft.com/en-us/f16cd988-673f-4376-b034-129ca93c7832). The example adds new `SalesOrderHeader` entities to the `Contact` entity. Then it gets all related ends from the `Contact` entity and displays relationship name, source role name, and target role name for each related end,  \n  \n [!code-vb[DP ObjectServices Concepts#IRelatedEnd](../../add/codesnippet/VisualBasic/objectservicesconceptsvb/Source.vb#irelatedend)]\n [!code-cs[DP ObjectServices Concepts#IRelatedEnd](../../add/codesnippet/CSharp/objectservicesconceptscs/Source.cs#irelatedend)]"
   syntax:
     content: public System.Collections.Generic.IEnumerable<System.Data.Objects.DataClasses.IRelatedEnd> GetAllRelatedEnds ();
     parameters: []
     return:
       type: System.Collections.Generic.IEnumerable{System.Data.Objects.DataClasses.IRelatedEnd}
-      description: To be added.
+      description: An <xref:System.Collections.Generic.IEnumerable%601> of objects that implement . An empty enumeration is returned when the relationships have not yet been populated.
   overload: System.Data.Objects.DataClasses.RelationshipManager.GetAllRelatedEnds*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -95,8 +101,6 @@ items:
   assemblies:
   - System.Data.Entity
   namespace: System.Data.Objects.DataClasses
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: 'public System.Data.Objects.DataClasses.EntityCollection<TTargetEntity> GetRelatedCollection<TTargetEntity> (string relationshipName, string targetRoleName) where TTargetEntity : class;'
     parameters:
@@ -110,6 +114,7 @@ items:
       type: System.Data.Objects.DataClasses.EntityCollection{TTargetEntity}
       description: To be added.
   overload: System.Data.Objects.DataClasses.RelationshipManager.GetRelatedCollection<TTargetEntity>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -126,21 +131,31 @@ items:
   assemblies:
   - System.Data.Entity
   namespace: System.Data.Objects.DataClasses
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns either an <xref:System.Data.Objects.DataClasses.EntityCollection%601> or <xref:System.Data.Objects.DataClasses.EntityReference%601> of the correct type for the specified target role in a relationship.
+  remarks: "This method is intended to be used in scenarios where the user does not have full metadata, including the static type information for both ends of the relationship. This metadata is specified in the <xref:System.Data.Objects.DataClasses.EdmRelationshipAttribute> object on each entity type in the relationship, so the metadata system can retrieve it based on the supplied relationship name and target role name.  \n  \n The relationship name should not be namespace qualified. An error occurs when you prepend the namespace to the relationship name."
   syntax:
     content: public System.Data.Objects.DataClasses.IRelatedEnd GetRelatedEnd (string relationshipName, string targetRoleName);
     parameters:
     - id: relationshipName
       type: System.String
-      description: To be added.
+      description: Name of the relationship in which `targetRoleName` is defined. The relationship name is not namespace qualified.
     - id: targetRoleName
       type: System.String
-      description: To be added.
+      description: Target role to use to retrieve the other end of `relationshipName`.
     return:
       type: System.Data.Objects.DataClasses.IRelatedEnd
-      description: To be added.
+      description: representing the <xref:System.Data.Objects.DataClasses.EntityCollection%601> or <xref:System.Data.Objects.DataClasses.EntityReference%601> that was retrieved.
   overload: System.Data.Objects.DataClasses.RelationshipManager.GetRelatedEnd*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    relationshipName or targetRoleName is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The source type does not match the type of the owner.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    targetRoleName is invalid.  \n  \n -or-  \n  \n Unable to find the relationship type in the metadata."
   platform:
   - net-11
   - net-20
@@ -157,8 +172,6 @@ items:
   assemblies:
   - System.Data.Entity
   namespace: System.Data.Objects.DataClasses
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: 'public System.Data.Objects.DataClasses.EntityReference<TTargetEntity> GetRelatedReference<TTargetEntity> (string relationshipName, string targetRoleName) where TTargetEntity : class;'
     parameters:
@@ -172,6 +185,7 @@ items:
       type: System.Data.Objects.DataClasses.EntityReference{TTargetEntity}
       description: To be added.
   overload: System.Data.Objects.DataClasses.RelationshipManager.GetRelatedReference<TTargetEntity>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -188,8 +202,6 @@ items:
   assemblies:
   - System.Data.Entity
   namespace: System.Data.Objects.DataClasses
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: 'public void InitializeRelatedCollection<TTargetEntity> (string relationshipName, string targetRoleName, System.Data.Objects.DataClasses.EntityCollection<TTargetEntity> entityCollection) where TTargetEntity : class;'
     parameters:
@@ -203,6 +215,7 @@ items:
       type: System.Data.Objects.DataClasses.EntityCollection{TTargetEntity}
       description: To be added.
   overload: System.Data.Objects.DataClasses.RelationshipManager.InitializeRelatedCollection<TTargetEntity>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -219,8 +232,6 @@ items:
   assemblies:
   - System.Data.Entity
   namespace: System.Data.Objects.DataClasses
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: 'public void InitializeRelatedReference<TTargetEntity> (string relationshipName, string targetRoleName, System.Data.Objects.DataClasses.EntityReference<TTargetEntity> entityReference) where TTargetEntity : class;'
     parameters:
@@ -234,6 +245,7 @@ items:
       type: System.Data.Objects.DataClasses.EntityReference{TTargetEntity}
       description: To be added.
   overload: System.Data.Objects.DataClasses.RelationshipManager.InitializeRelatedReference<TTargetEntity>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -250,15 +262,15 @@ items:
   assemblies:
   - System.Data.Entity
   namespace: System.Data.Objects.DataClasses
-  summary: To be added.
-  remarks: To be added.
+  summary: Used internally to deserialize entity objects along with the  instances.
   syntax:
     content: public void OnDeserialized (System.Runtime.Serialization.StreamingContext context);
     parameters:
     - id: context
       type: System.Runtime.Serialization.StreamingContext
-      description: To be added.
+      description: The serialized stream.
   overload: System.Data.Objects.DataClasses.RelationshipManager.OnDeserialized*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -275,15 +287,16 @@ items:
   assemblies:
   - System.Data.Entity
   namespace: System.Data.Objects.DataClasses
-  summary: To be added.
-  remarks: To be added.
+  summary: Called by Object Services to prepare an  for binary serialization with a serialized relationship.
+  remarks: Serialization of relationships is only supported for binary serialization. Complete object graphs, including relationships, is not supported for Windows Communication Foundation and XML serialization. For more information, see [Serializing Objects](http://msdn.microsoft.com/en-us/06c77f9b-5b2e-4c78-b3e3-8c148ba0ea99).
   syntax:
     content: public void OnSerializing (System.Runtime.Serialization.StreamingContext context);
     parameters:
     - id: context
       type: System.Runtime.Serialization.StreamingContext
-      description: To be added.
+      description: Describes the source and destination of a given serialized stream, and provides an additional caller-defined context.
   overload: System.Data.Objects.DataClasses.RelationshipManager.OnSerializing*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -322,6 +335,21 @@ references:
   name: IEnumerable<IRelatedEnd>
   nameWithType: IEnumerable<IRelatedEnd>
   fullName: System.Collections.Generic.IEnumerable<System.Data.Objects.DataClasses.IRelatedEnd>
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    nameWithType: IEnumerable
+    fullName: IEnumerable<System.Data.Objects.DataClasses.IRelatedEnd>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Data.Objects.DataClasses.IRelatedEnd
+    name: IRelatedEnd
+    nameWithType: IRelatedEnd
+    fullName: IRelatedEnd
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Data.Objects.DataClasses.RelationshipManager.GetRelatedCollection``1(System.String,System.String)
   parent: System.Data.Objects.DataClasses.RelationshipManager
   isExternal: false
@@ -334,12 +362,21 @@ references:
   name: EntityCollection<TTargetEntity>
   nameWithType: EntityCollection<TTargetEntity>
   fullName: System.Data.Objects.DataClasses.EntityCollection<TTargetEntity>
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
+  spec.csharp:
+  - uid: System.Data.Objects.DataClasses.EntityCollection`1
+    name: EntityCollection
+    nameWithType: EntityCollection
+    fullName: EntityCollection<TTargetEntity>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: TTargetEntity
+    name: TTargetEntity
+    nameWithType: TTargetEntity
+    fullName: TTargetEntity
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.String
   parent: System
   isExternal: true
@@ -358,18 +395,6 @@ references:
   name: IRelatedEnd
   nameWithType: IRelatedEnd
   fullName: System.Data.Objects.DataClasses.IRelatedEnd
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Data.Objects.DataClasses.RelationshipManager.GetRelatedReference``1(System.String,System.String)
   parent: System.Data.Objects.DataClasses.RelationshipManager
   isExternal: false
@@ -382,66 +407,33 @@ references:
   name: EntityReference<TTargetEntity>
   nameWithType: EntityReference<TTargetEntity>
   fullName: System.Data.Objects.DataClasses.EntityReference<TTargetEntity>
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
+  spec.csharp:
+  - uid: System.Data.Objects.DataClasses.EntityReference`1
+    name: EntityReference
+    nameWithType: EntityReference
+    fullName: EntityReference<TTargetEntity>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: TTargetEntity
+    name: TTargetEntity
+    nameWithType: TTargetEntity
+    fullName: TTargetEntity
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Data.Objects.DataClasses.RelationshipManager.InitializeRelatedCollection``1(System.String,System.String,System.Data.Objects.DataClasses.EntityCollection{``0})
   parent: System.Data.Objects.DataClasses.RelationshipManager
   isExternal: false
   name: InitializeRelatedCollection(String,String,EntityCollection<TTargetEntity>)
   nameWithType: RelationshipManager.InitializeRelatedCollection(String,String,EntityCollection<TTargetEntity>)
   fullName: System.Data.Objects.DataClasses.RelationshipManager.InitializeRelatedCollection(String,String,EntityCollection<TTargetEntity>)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Data.Objects.DataClasses.EntityCollection{TTargetEntity}
-  parent: System.Data.Objects.DataClasses
-  isExternal: false
-  name: EntityCollection<TTargetEntity>
-  nameWithType: EntityCollection<TTargetEntity>
-  fullName: System.Data.Objects.DataClasses.EntityCollection<TTargetEntity>
 - uid: System.Data.Objects.DataClasses.RelationshipManager.InitializeRelatedReference``1(System.String,System.String,System.Data.Objects.DataClasses.EntityReference{``0})
   parent: System.Data.Objects.DataClasses.RelationshipManager
   isExternal: false
   name: InitializeRelatedReference(String,String,EntityReference<TTargetEntity>)
   nameWithType: RelationshipManager.InitializeRelatedReference(String,String,EntityReference<TTargetEntity>)
   fullName: System.Data.Objects.DataClasses.RelationshipManager.InitializeRelatedReference(String,String,EntityReference<TTargetEntity>)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Data.Objects.DataClasses.EntityReference{TTargetEntity}
-  parent: System.Data.Objects.DataClasses
-  isExternal: false
-  name: EntityReference<TTargetEntity>
-  nameWithType: EntityReference<TTargetEntity>
-  fullName: System.Data.Objects.DataClasses.EntityReference<TTargetEntity>
 - uid: System.Data.Objects.DataClasses.RelationshipManager.OnDeserialized(System.Runtime.Serialization.StreamingContext)
   parent: System.Data.Objects.DataClasses.RelationshipManager
   isExternal: false
@@ -460,12 +452,6 @@ references:
   name: OnSerializing(StreamingContext)
   nameWithType: RelationshipManager.OnSerializing(StreamingContext)
   fullName: System.Data.Objects.DataClasses.RelationshipManager.OnSerializing(StreamingContext)
-- uid: System.Runtime.Serialization.StreamingContext
-  parent: System.Runtime.Serialization
-  isExternal: true
-  name: StreamingContext
-  nameWithType: StreamingContext
-  fullName: System.Runtime.Serialization.StreamingContext
 - uid: System.Data.Objects.DataClasses.RelationshipManager.Create*
   parent: System.Data.Objects.DataClasses.RelationshipManager
   isExternal: false

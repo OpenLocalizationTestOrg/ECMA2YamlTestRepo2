@@ -22,8 +22,10 @@ items:
   nameWithType: MetadataSection
   fullName: System.ServiceModel.Description.MetadataSection
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents XML metadata or references to XML metadata.
+  remarks: "The MetadataSection class conforms to the definition of the `wsx:Metadata/wsx:MetadataSection` element in the WS-Metadata Exchange specification and contains XML metadata or references to XML metadata.  \n  \n A MetadataSection object contains one dialect of metadata in XML form (such as a Web Services Description Language or WSDL file). You can add a MetadataSection to a collection of XML metadata represented by a <xref:System.ServiceModel.Description.MetadataSet> object. Much of the [!INCLUDE[indigo1](../../add/includes/indigo1-md.md)] metadata system, such as the <xref:System.ServiceModel.Description.MetadataExchangeClient> class, use the <xref:System.ServiceModel.Description.MetadataSet> class to import or export service metadata in XML form.  \n  \n For example, to export [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)] contract or endpoint objects to a <xref:System.ServiceModel.Description.MetadataSet> object that contains the equivalent metadata in XML form, call the appropriate Export methods on the <xref:System.ServiceModel.Description.WsdlExporter> class, passing either <xref:System.ServiceModel.Description.ContractDescription> or <xref:System.ServiceModel.Description.ServiceEndpoint> objects, and then call the <xref:System.ServiceModel.Description.WsdlExporter.GetGeneratedMetadata%2A> method.  \n  \n To import XML-based metadata from a <xref:System.ServiceModel.Description.MetadataSet> object into [!INCLUDE[indigo2](../../add/includes/indigo2-md.md)]<xref:System.ServiceModel.Description.ContractDescription>, <xref:System.ServiceModel.Description.ServiceEndpoint>, and <xref:System.ServiceModel.Channels.Binding> objects, pass a <xref:System.ServiceModel.Description.MetadataSet> object to the constructor of the <xref:System.ServiceModel.Description.WsdlImporter> class and call one of the import methods."
+  example:
+  - "The following code example shows how to retrieve the MetadataSection objects from a <xref:System.ServiceModel.Description.MetadataResolver?displayProperty=fullName> and iterate through them to write the <xref:System.ServiceModel.Description.MetadataSection.Identifier%2A> and <xref:System.ServiceModel.Description.MetadataSection.Dialect%2A> properties to the console.  \n  \n [!code-cs[MetadataResolver#3](../../add/codesnippet/CSharp/metadataresolver.client/client.cs#3)]"
   syntax:
     content: >-
       [System.Xml.Serialization.XmlRoot(ElementName="MetadataSection", Namespace="http://schemas.xmlsoap.org/ws/2004/09/mex")]
@@ -49,12 +51,12 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with no dialect, identifier, or XML metadata.
   syntax:
     content: public MetadataSection ();
     parameters: []
   overload: System.ServiceModel.Description.MetadataSection.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -71,21 +73,22 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified dialect, identifier, and XML metadata.
+  remarks: Use the MetadataSection constructor to specify the metadata to be included in this <xref:System.ServiceModel.Description.MetadataSection>, its dialect and its identifier. The metadata object must be serializable using the <xref:System.Xml.Serialization.XmlSerializer> class so that the <xref:System.ServiceModel.Description.MetadataSection> object can be serialized. If it is not serializable, an exception is thrown when the object is serialized. Use a <xref:System.ServiceModel.Description.MetadataLocation> or <xref:System.ServiceModel.Description.MetadataReference> object for the `metadata` parameter if you want to include a reference to the metadata instead of the metadata itself.
   syntax:
     content: public MetadataSection (string dialect, string identifier, object metadata);
     parameters:
     - id: dialect
       type: System.String
-      description: To be added.
+      description: The dialect of the metadata.
     - id: identifier
       type: System.String
-      description: To be added.
+      description: An identifier for the metadata.
     - id: metadata
       type: System.Object
-      description: To be added.
+      description: The XML metadata.
   overload: System.ServiceModel.Description.MetadataSection.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -102,14 +105,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of XML attributes that you can use to add or remove attributes extensions to the metadata.
+  remarks: "Use the Attributes property to add or remove attribute extensions.  \n  \n> [!NOTE]\n>  The dialect and identifier attributes are not included in this collection."
   syntax:
     content: public System.Collections.ObjectModel.Collection<System.Xml.XmlAttribute> Attributes { get; }
     return:
       type: System.Collections.ObjectModel.Collection{System.Xml.XmlAttribute}
-      description: To be added.
+      description: The collection of XML attributes for the . The default collection is empty.
   overload: System.ServiceModel.Description.MetadataSection.Attributes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -126,21 +130,28 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a  from the specified policy information.
+  remarks: Use CreateFromPolicy method to create a <xref:System.ServiceModel.Description.MetadataSection> for a WS-Policy policy expression. The <xref:System.ServiceModel.Description.MetadataSection.Dialect%2A> property is set to <xref:System.ServiceModel.Description.MetadataSection.PolicyDialect%2A> and the `identifier` is assigned to the <xref:System.ServiceModel.Description.MetadataSection.Identifier%2A> property. The recommend identifier is the `wsp:Name` attribute for the policy expression.
   syntax:
     content: public static System.ServiceModel.Description.MetadataSection CreateFromPolicy (System.Xml.XmlElement policy, string identifier);
     parameters:
     - id: policy
       type: System.Xml.XmlElement
-      description: To be added.
+      description: An XML representation of a policy as defined in WS-Policy.
     - id: identifier
       type: System.String
-      description: To be added.
+      description: An identifier for the policy.
     return:
       type: System.ServiceModel.Description.MetadataSection
-      description: To be added.
+      description: A  that contains the specified policy expression with the specified identifier.
   overload: System.ServiceModel.Description.MetadataSection.CreateFromPolicy*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The XML element is not a policy element.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The policy is .
   platform:
   - net-11
   - net-20
@@ -157,18 +168,22 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a  from the specified <xref:System.Xml.Schema.XmlSchema?displayProperty=fullName> object.
+  remarks: Use this static factory method to quickly create a <xref:System.ServiceModel.Description.MetadataSection> for a XML Schema document. The <xref:System.ServiceModel.Description.MetadataSection.Dialect%2A> property is assigned the value of <xref:System.ServiceModel.Description.MetadataSection.XmlSchemaDialect%2A> and the <xref:System.ServiceModel.Description.MetadataSection.Identifier%2A> property is assigned the value of the target namespace of the XML Schema document.
   syntax:
     content: public static System.ServiceModel.Description.MetadataSection CreateFromSchema (System.Xml.Schema.XmlSchema schema);
     parameters:
     - id: schema
       type: System.Xml.Schema.XmlSchema
-      description: To be added.
+      description: An XML Schema document.
     return:
       type: System.ServiceModel.Description.MetadataSection
-      description: To be added.
+      description: A  containing the specified XML schema.
   overload: System.ServiceModel.Description.MetadataSection.CreateFromSchema*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The schema is .
   platform:
   - net-11
   - net-20
@@ -185,18 +200,22 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a  that contains the specified .
+  remarks: Use this static factory method to quickly create a <xref:System.ServiceModel.Description.MetadataSection> for a WSDL document. The <xref:System.ServiceModel.Description.MetadataSection.Dialect%2A> property is assigned the value of <xref:System.ServiceModel.Description.MetadataSection.ServiceDescriptionDialect%2A> and the <xref:System.ServiceModel.Description.MetadataSection.Identifier%2A> property is assigned the value of the target namespace of the WSDL document.
   syntax:
     content: public static System.ServiceModel.Description.MetadataSection CreateFromServiceDescription (System.Web.Services.Description.ServiceDescription serviceDescription);
     parameters:
     - id: serviceDescription
       type: System.Web.Services.Description.ServiceDescription
-      description: To be added.
+      description: The  used to create a  object.
     return:
       type: System.ServiceModel.Description.MetadataSection
-      description: To be added.
+      description: A  that contains the specified .
   overload: System.ServiceModel.Description.MetadataSection.CreateFromServiceDescription*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The serviceDescription is .
   platform:
   - net-11
   - net-20
@@ -213,14 +232,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates the type of metadata.
+  remarks: "The dialect indicates the type of metadata in this <xref:System.ServiceModel.Description.MetadataSection>. The dialect strings with supported object models are:  \n  \n-   <xref:System.ServiceModel.Description.MetadataSection.MetadataExchangeDialect%2A>  \n  \n-   <xref:System.ServiceModel.Description.MetadataSection.PolicyDialect%2A>  \n  \n-   <xref:System.ServiceModel.Description.MetadataSection.ServiceDescriptionDialect%2A>  \n  \n-   <xref:System.ServiceModel.Description.MetadataSection.XmlSchemaDialect%2A>"
+  example:
+  - "The following code example shows how to retrieve the <xref:System.ServiceModel.Description.MetadataSection> objects from a <xref:System.ServiceModel.Description.MetadataResolver?displayProperty=fullName> and iterate through them to write the <xref:System.ServiceModel.Description.MetadataSection.Identifier%2A> and Dialect properties to the console.  \n  \n [!code-cs[MetadataResolver#3](../../add/codesnippet/CSharp/metadataresolver.client/client.cs#3)]"
   syntax:
     content: public string Dialect { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The dialect for the metadata. The default is .
   overload: System.ServiceModel.Description.MetadataSection.Dialect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -237,14 +259,17 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets an identifier for the metadata.
+  remarks: The identifier for the metadata in this <xref:System.ServiceModel.Description.MetadataSection>. The value depends on the type of metadata.
+  example:
+  - "The following code example shows how to retrieve the <xref:System.ServiceModel.Description.MetadataSection> objects from a <xref:System.ServiceModel.Description.MetadataResolver?displayProperty=fullName> and iterate through them to write the Identifier and <xref:System.ServiceModel.Description.MetadataSection.Dialect%2A> properties to the console.  \n  \n [!code-cs[MetadataResolver#3](../../add/codesnippet/CSharp/metadataresolver.client/client.cs#3)]"
   syntax:
     content: public string Identifier { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The identifier for the metadata. The default is .
   overload: System.ServiceModel.Description.MetadataSection.Identifier*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -261,14 +286,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the contained metadata object.
+  remarks: "Use the Metadata property to access or modify the metadata content contained in the <xref:System.ServiceModel.Description.MetadataSection>. The metadata object can be <xref:System.ServiceModel.Description.MetadataReference> or a <xref:System.ServiceModel.Description.MetadataLocation> as a reference to the metadata content. When a <xref:System.ServiceModel.Description.MetadataSection> is deserialized, the type of the metadata object is determined from the XML content. The following table describes the possible return values.  \n  \n|Type of XML metadata|Returned type|  \n|--------------------------|-------------------|  \n|WSDL document|<xref:System.Web.Services.Description.ServiceDescription?displayProperty=fullName>|  \n|XML Schema|<xref:System.Xml.Schema.XmlSchema?displayProperty=fullName>|  \n|Metadata reference|<xref:System.ServiceModel.Description.MetadataReference?displayProperty=fullName>|  \n|Metadata location|<xref:System.ServiceModel.Description.MetadataLocation?displayProperty=fullName>|  \n|Policy, and all other XML content|<xref:System.Xml.XmlElement?displayProperty=fullName>|"
   syntax:
     content: public object Metadata { get; set; }
     return:
       type: System.Object
-      description: To be added.
+      description: The metadata contents for this .
   overload: System.ServiceModel.Description.MetadataSection.Metadata*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -285,14 +311,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Contains the value of the metadata exchange dialect.
+  remarks: The dialect for a WS-Metadata Exchange document.
   syntax:
     content: public static string MetadataExchangeDialect { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The dialect for a WS-Metadata Exchange document.
   overload: System.ServiceModel.Description.MetadataSection.MetadataExchangeDialect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -309,14 +336,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Contains the value of the WS-Policy dialect.
+  remarks: The dialect for a WS-Policy policy expression.
   syntax:
     content: public static string PolicyDialect { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The dialect for a WS-Policy policy expression.
   overload: System.ServiceModel.Description.MetadataSection.PolicyDialect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -333,14 +361,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Contains the value of the Web Services Description Language (WSDL) dialect.
+  remarks: The dialect.
   syntax:
     content: public static string ServiceDescriptionDialect { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The dialect for a WSDL document.
   overload: System.ServiceModel.Description.MetadataSection.ServiceDescriptionDialect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -357,14 +386,15 @@ items:
   assemblies:
   - System.ServiceModel
   namespace: System.ServiceModel.Description
-  summary: To be added.
-  remarks: To be added.
+  summary: Contains the value of the XML Schema dialect.
+  remarks: The dialect for an XML Schema document.
   syntax:
     content: public static string XmlSchemaDialect { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The dialect for an XML Schema document.
   overload: System.ServiceModel.Description.MetadataSection.XmlSchemaDialect*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -391,18 +421,6 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ServiceModel.Description.MetadataSection.Attributes
   parent: System.ServiceModel.Description.MetadataSection
   isExternal: false
@@ -415,6 +433,21 @@ references:
   name: Collection<XmlAttribute>
   nameWithType: Collection<XmlAttribute>
   fullName: System.Collections.ObjectModel.Collection<System.Xml.XmlAttribute>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.Collection`1
+    name: Collection
+    nameWithType: Collection
+    fullName: Collection<System.Xml.XmlAttribute>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Xml.XmlAttribute
+    name: XmlAttribute
+    nameWithType: XmlAttribute
+    fullName: XmlAttribute
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.ServiceModel.Description.MetadataSection.CreateFromPolicy(System.Xml.XmlElement,System.String)
   parent: System.ServiceModel.Description.MetadataSection
   isExternal: false
@@ -433,24 +466,12 @@ references:
   name: XmlElement
   nameWithType: XmlElement
   fullName: System.Xml.XmlElement
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceModel.Description.MetadataSection.CreateFromSchema(System.Xml.Schema.XmlSchema)
   parent: System.ServiceModel.Description.MetadataSection
   isExternal: false
   name: CreateFromSchema(XmlSchema)
   nameWithType: MetadataSection.CreateFromSchema(XmlSchema)
   fullName: System.ServiceModel.Description.MetadataSection.CreateFromSchema(XmlSchema)
-- uid: System.ServiceModel.Description.MetadataSection
-  parent: System.ServiceModel.Description
-  isExternal: false
-  name: MetadataSection
-  nameWithType: MetadataSection
-  fullName: System.ServiceModel.Description.MetadataSection
 - uid: System.Xml.Schema.XmlSchema
   parent: System.Xml.Schema
   isExternal: true
@@ -463,12 +484,6 @@ references:
   name: CreateFromServiceDescription(ServiceDescription)
   nameWithType: MetadataSection.CreateFromServiceDescription(ServiceDescription)
   fullName: System.ServiceModel.Description.MetadataSection.CreateFromServiceDescription(ServiceDescription)
-- uid: System.ServiceModel.Description.MetadataSection
-  parent: System.ServiceModel.Description
-  isExternal: false
-  name: MetadataSection
-  nameWithType: MetadataSection
-  fullName: System.ServiceModel.Description.MetadataSection
 - uid: System.Web.Services.Description.ServiceDescription
   parent: System.Web.Services.Description
   isExternal: false
@@ -481,84 +496,42 @@ references:
   name: Dialect
   nameWithType: MetadataSection.Dialect
   fullName: System.ServiceModel.Description.MetadataSection.Dialect
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceModel.Description.MetadataSection.Identifier
   parent: System.ServiceModel.Description.MetadataSection
   isExternal: false
   name: Identifier
   nameWithType: MetadataSection.Identifier
   fullName: System.ServiceModel.Description.MetadataSection.Identifier
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceModel.Description.MetadataSection.Metadata
   parent: System.ServiceModel.Description.MetadataSection
   isExternal: false
   name: Metadata
   nameWithType: MetadataSection.Metadata
   fullName: System.ServiceModel.Description.MetadataSection.Metadata
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ServiceModel.Description.MetadataSection.MetadataExchangeDialect
   parent: System.ServiceModel.Description.MetadataSection
   isExternal: false
   name: MetadataExchangeDialect
   nameWithType: MetadataSection.MetadataExchangeDialect
   fullName: System.ServiceModel.Description.MetadataSection.MetadataExchangeDialect
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceModel.Description.MetadataSection.PolicyDialect
   parent: System.ServiceModel.Description.MetadataSection
   isExternal: false
   name: PolicyDialect
   nameWithType: MetadataSection.PolicyDialect
   fullName: System.ServiceModel.Description.MetadataSection.PolicyDialect
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceModel.Description.MetadataSection.ServiceDescriptionDialect
   parent: System.ServiceModel.Description.MetadataSection
   isExternal: false
   name: ServiceDescriptionDialect
   nameWithType: MetadataSection.ServiceDescriptionDialect
   fullName: System.ServiceModel.Description.MetadataSection.ServiceDescriptionDialect
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceModel.Description.MetadataSection.XmlSchemaDialect
   parent: System.ServiceModel.Description.MetadataSection
   isExternal: false
   name: XmlSchemaDialect
   nameWithType: MetadataSection.XmlSchemaDialect
   fullName: System.ServiceModel.Description.MetadataSection.XmlSchemaDialect
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ServiceModel.Description.MetadataSection.#ctor*
   parent: System.ServiceModel.Description.MetadataSection
   isExternal: false

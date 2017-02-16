@@ -15,8 +15,8 @@ items:
   nameWithType: DataServiceQuery
   fullName: System.Data.Services.Client.DataServiceQuery
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: An abstract class that represents a single query request to [!INCLUDE[ssAstoria](../../add/includes/ssastoria-md.md)].
+  remarks: No public constructors are defined on this class. Object instances are created by using <xref:System.Data.Services.Client.DataServiceContext.CreateQuery%2A> or <xref:System.Data.Services.Client.DataServiceContext.CreateQuery%2A> on the <xref:System.Data.Services.Client.DataServiceContext> class.
   syntax:
     content: 'public abstract class DataServiceQuery : System.Data.Services.Client.DataServiceRequest, System.Collections.IEnumerable, System.Linq.IQueryable'
   inheritance:
@@ -45,21 +45,22 @@ items:
   assemblies:
   - System.Data.Services.Client
   namespace: System.Data.Services.Client
-  summary: To be added.
-  remarks: To be added.
+  summary: Asynchronously sends a request to execute the data service query.
+  remarks: "The returned <xref:System.IAsyncResult> object is used to determine when the asynchronous operation has completed. For more information, see [Asynchronous Operations](../Topic/Asynchronous%20Operations%20\\(WCF%20Data%20Services\\).md).  \n  \n The BeginExecute method uses the same semantics as the <xref:System.Data.Services.Client.DataServiceQuery.Execute%2A> method, however BeginExecute asynchronously sends the request so that the call does not block processing while waiting for the results from the service. According to the standard begin-end asynchronous pattern, the provided callback is invoked when query results are retrieved."
   syntax:
     content: public IAsyncResult BeginExecute (AsyncCallback callback, object state);
     parameters:
     - id: callback
       type: System.AsyncCallback
-      description: To be added.
+      description: Delegate to invoke when results are available for client consumption.
     - id: state
       type: System.Object
-      description: To be added.
+      description: User-defined state object passed to the callback.
     return:
       type: System.IAsyncResult
-      description: To be added.
+      description: An <xref:System.IAsyncResult> object that is used to track the status of the asynchronous operation.
   overload: System.Data.Services.Client.DataServiceQuery.BeginExecute*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -76,18 +77,21 @@ items:
   assemblies:
   - System.Data.Services.Client
   namespace: System.Data.Services.Client
-  summary: To be added.
-  remarks: To be added.
+  summary: Called to complete the asynchronous operation of executing a data service query.
   syntax:
     content: public System.Collections.IEnumerable EndExecute (IAsyncResult asyncResult);
     parameters:
     - id: asyncResult
       type: System.IAsyncResult
-      description: To be added.
+      description: The result from the <xref:System.Data.Services.Client.DataServiceQuery.BeginExecute%2A> operation that contains the query results.
     return:
       type: System.Collections.IEnumerable
-      description: To be added.
+      description: An <xref:System.Collections.Generic.IEnumerable%601> that contains the results of the query operation.
   overload: System.Data.Services.Client.DataServiceQuery.EndExecute*
+  exceptions:
+  - type: System.Data.Services.Client.DataServiceQueryException
+    commentId: T:System.Data.Services.Client.DataServiceQueryException
+    description: 'When the data service returns an HTTP 404: Resource Not Found error.'
   platform:
   - net-11
   - net-20
@@ -104,15 +108,19 @@ items:
   assemblies:
   - System.Data.Services.Client
   namespace: System.Data.Services.Client
-  summary: To be added.
-  remarks: To be added.
+  summary: Executes the query against the data service.
+  remarks: "The Execute method is used to execute the given data service query.  \n  \n The Execute method generates an HTTP GET request that is set to the data service."
   syntax:
     content: public System.Collections.IEnumerable Execute ();
     parameters: []
     return:
       type: System.Collections.IEnumerable
-      description: To be added.
+      description: An <xref:System.Collections.Generic.IEnumerable%601> that contains the results of the query operation.
   overload: System.Data.Services.Client.DataServiceQuery.Execute*
+  exceptions:
+  - type: System.Data.Services.Client.DataServiceQueryException
+    commentId: T:System.Data.Services.Client.DataServiceQueryException
+    description: 'When the data service returns an HTTP 404: Resource Not Found error.'
   platform:
   - net-11
   - net-20
@@ -129,14 +137,14 @@ items:
   assemblies:
   - System.Data.Services.Client
   namespace: System.Data.Services.Client
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents an expression that contains the query to the data service.
   syntax:
     content: public abstract System.Linq.Expressions.Expression Expression { get; }
     return:
       type: System.Linq.Expressions.Expression
-      description: To be added.
+      description: An <xref:System.Linq.Expressions.Expression> object that represents the query.
   overload: System.Data.Services.Client.DataServiceQuery.Expression*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -153,14 +161,14 @@ items:
   assemblies:
   - System.Data.Services.Client
   namespace: System.Data.Services.Client
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents the query provider instance.
   syntax:
     content: public abstract System.Linq.IQueryProvider Provider { get; }
     return:
       type: System.Linq.IQueryProvider
-      description: To be added.
+      description: An <xref:System.Linq.IQueryProvider> representing the data source provider.
   overload: System.Data.Services.Client.DataServiceQuery.Provider*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -178,15 +186,16 @@ items:
   assemblies:
   - System.Data.Services.Client
   namespace: System.Data.Services.Client
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the <xref:System.Collections.IEnumerator> object that can be used to iterate through the collection returned by the query.
+  remarks: Enumerators can be used to read the data in the collection, but they cannot be used to modify the underlying collection.
   syntax:
     content: System.Collections.IEnumerator IEnumerable.GetEnumerator ();
     parameters: []
     return:
       type: System.Collections.IEnumerator
-      description: To be added.
+      description: An enumerator over the query results.
   overload: System.Data.Services.Client.DataServiceQuery.System#Collections#IEnumerable#GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -231,24 +240,12 @@ references:
   name: IEnumerable
   nameWithType: IEnumerable
   fullName: System.Collections.IEnumerable
-- uid: System.IAsyncResult
-  parent: System
-  isExternal: true
-  name: IAsyncResult
-  nameWithType: IAsyncResult
-  fullName: System.IAsyncResult
 - uid: System.Data.Services.Client.DataServiceQuery.Execute
   parent: System.Data.Services.Client.DataServiceQuery
   isExternal: false
   name: Execute()
   nameWithType: DataServiceQuery.Execute()
   fullName: System.Data.Services.Client.DataServiceQuery.Execute()
-- uid: System.Collections.IEnumerable
-  parent: System.Collections
-  isExternal: true
-  name: IEnumerable
-  nameWithType: IEnumerable
-  fullName: System.Collections.IEnumerable
 - uid: System.Data.Services.Client.DataServiceQuery.Expression
   parent: System.Data.Services.Client.DataServiceQuery
   isExternal: false

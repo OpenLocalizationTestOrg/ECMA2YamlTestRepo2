@@ -15,8 +15,10 @@ items:
   nameWithType: MobileCapabilities
   fullName: System.Web.Mobile.MobileCapabilities
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a single source for accessing capability information about a client device and for performing queries against device capabilities. For information about how to develop ASP.NET mobile applications, see the [www.asp.net/mobile](http://go.microsoft.com/fwlink/?LinkID=182900) Web site.
+  remarks: "The MobileCapabilities class extends the <xref:System.Web.HttpBrowserCapabilities> class. The MobileCapabilities class offers a large number of read-only properties that provide type-safe access to the Browser object's capabilities dictionary.  \n  \n You can use the Browser property of the <xref:System.Web.HttpRequest> object to point to an instance of a MobileCapabilities object, which can then be used to read the capabilities of the requesting browser and device."
+  example:
+  - "During the page load, the MobileCapabilities object obtains the capabilities through the <xref:System.Web.Configuration.HttpCapabilitiesBase.Browser%2A> property as previously discussed. The <xref:System.Web.Configuration.HttpCapabilitiesBase.PreferredRenderingMime%2A> and the <xref:System.Web.Configuration.HttpCapabilitiesBase.ScreenCharactersWidth%2A> properties of the MobileCapabilities object report back to the browser by setting properties on the <xref:System.Web.HttpResponse> object and also by programmatically setting the `Text` property of certain controls on the page.  \n  \n```c#  \n<%@ Page Inherits=\"System.Web.UI.MobileControls.MobilePage\"   \n    Language=\"c#\" %>  \n<script language=\"c#\" runat=\"server\">  \npublic void Page_Load(Object sender, EventArgs e)  \n{  \n    System.Web.Mobile.MobileCapabilities currentCapabilities;  \n    MobileCapabilities currentCapabilities =   \n        (MobileCapabilities)Request.Browser;  \n    // Programatically find the mobile capabilities without using   \n    // DeviceSpecific Filters.  \n    if(currentCapabilities.PreferredRenderingMIME==\"text/html\")  \n    {  \n        Label2.Text = \"You are using an html supported device.\";  \n    }  \n    else if(currentCapabilities.PreferredRenderingMIME ==   \n        \"text/vnd.wap.wml\")  \n    {  \n        Label2.Text = \"You are using a wml supported device.\";  \n    }  \n    Label1.Text = \"Screen Width (chars): \" +   \n        currentCapabilities.ScreenCharactersWidth;  \n }  \n </script>  \n <Mobile:Form runat=\"server\" id=frmTemplate >  \n      <mobile:label ID=\"Label1\" runat=\"server\" />  \n      <mobile:label ID=\"Label2\" runat=\"server\" />  \n </Mobile:Form>  \n```"
   syntax:
     content: >-
       [System.Obsolete("The System.Web.Mobile.dll assembly has been deprecated and should no longer be used. For information about how to develop ASP.NET mobile applications, see http://go.microsoft.com/fwlink/?LinkId=157231.")]
@@ -168,12 +170,12 @@ items:
   assemblies:
   - System.Web.Mobile
   namespace: System.Web.Mobile
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of the  class. This API is obsolete. For information about how to develop ASP.NET mobile applications, see the [www.asp.net/mobile](http://go.microsoft.com/fwlink/?LinkID=182900) Web site.
   syntax:
     content: public MobileCapabilities ();
     parameters: []
   overload: System.Web.Mobile.MobileCapabilities.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -190,21 +192,28 @@ items:
   assemblies:
   - System.Web.Mobile
   namespace: System.Web.Mobile
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a uniform way to evaluate device capabilities. This method is used internally by ASP.NET to implement various device-selection criteria expressed in the syntax of the controls. For example, this method is used to choose among [\
+  remarks: Applications can use the HasCapability method programmatically when they gather device-specific information. If the `capabilityName` parameter specifies a device evaluation method, the `optionalArgument` parameter is passed to this method. If the `capabilityName` parameter specifies a property name or item in the capabilities dictionary, the HasCapability method checks whether the property or item is equal to the `optionalArgument` parameter.
   syntax:
     content: public bool HasCapability (string delegateName, string optionalParameter);
     parameters:
     - id: delegateName
       type: System.String
-      description: To be added.
+      description: The device evaluation method, property name, or item in the capabilities collection.
     - id: optionalParameter
       type: System.String
-      description: To be added.
+      description: The optional argument.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the device has the specified capability; otherwise, .
   overload: System.Web.Mobile.MobileCapabilities.HasCapability*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: A capabilityName parameter is not found as a device-filter name specified in the configuration file, as a  property, or as an item in the  Item collection.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    delegateName is  or empty."
   platform:
   - net-11
   - net-20
@@ -221,13 +230,14 @@ items:
   assemblies:
   - System.Web.Mobile
   namespace: System.Web.Mobile
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the source identifier to use for compact HTML 1.0. This field is read-only. This API is obsolete. For information about how to develop ASP.NET mobile applications, see the [www.asp.net/mobile](http://go.microsoft.com/fwlink/?LinkID=182900) Web site.
+  remarks: Used by an adapter to assign the rendering type for the device.
   syntax:
     content: public static readonly string PreferredRenderingTypeChtml10;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -244,13 +254,14 @@ items:
   assemblies:
   - System.Web.Mobile
   namespace: System.Web.Mobile
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the source identifier to use for HTML 3.2. This field is read-only. This API is obsolete. For information about how to develop ASP.NET mobile applications, see the [www.asp.net/mobile](http://go.microsoft.com/fwlink/?LinkID=182900) Web site.
+  remarks: Used by the adapter to assign the rendering type for the device.
   syntax:
     content: public static readonly string PreferredRenderingTypeHtml32;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -267,13 +278,14 @@ items:
   assemblies:
   - System.Web.Mobile
   namespace: System.Web.Mobile
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the source identifier to use for WML 1.1. This field is read-only. This API is obsolete. For information about how to develop ASP.NET mobile applications, see the [www.asp.net/mobile](http://go.microsoft.com/fwlink/?LinkID=182900) Web site.
+  remarks: Used by the adapter to assign the rendering type for the device.
   syntax:
     content: public static readonly string PreferredRenderingTypeWml11;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -290,13 +302,14 @@ items:
   assemblies:
   - System.Web.Mobile
   namespace: System.Web.Mobile
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the source identifier to use for WML 1.2. This field is read-only. This API is obsolete. For information about how to develop ASP.NET mobile applications, see the [www.asp.net/mobile](http://go.microsoft.com/fwlink/?LinkID=182900) Web site.
+  remarks: Used by the adapter to assign the rendering type for the device.
   syntax:
     content: public static readonly string PreferredRenderingTypeWml12;
     return:
       type: System.String
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -329,60 +342,30 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Mobile.MobileCapabilities.PreferredRenderingTypeChtml10
   parent: System.Web.Mobile.MobileCapabilities
   isExternal: false
   name: PreferredRenderingTypeChtml10
   nameWithType: MobileCapabilities.PreferredRenderingTypeChtml10
   fullName: System.Web.Mobile.MobileCapabilities.PreferredRenderingTypeChtml10
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Mobile.MobileCapabilities.PreferredRenderingTypeHtml32
   parent: System.Web.Mobile.MobileCapabilities
   isExternal: false
   name: PreferredRenderingTypeHtml32
   nameWithType: MobileCapabilities.PreferredRenderingTypeHtml32
   fullName: System.Web.Mobile.MobileCapabilities.PreferredRenderingTypeHtml32
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Mobile.MobileCapabilities.PreferredRenderingTypeWml11
   parent: System.Web.Mobile.MobileCapabilities
   isExternal: false
   name: PreferredRenderingTypeWml11
   nameWithType: MobileCapabilities.PreferredRenderingTypeWml11
   fullName: System.Web.Mobile.MobileCapabilities.PreferredRenderingTypeWml11
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Mobile.MobileCapabilities.PreferredRenderingTypeWml12
   parent: System.Web.Mobile.MobileCapabilities
   isExternal: false
   name: PreferredRenderingTypeWml12
   nameWithType: MobileCapabilities.PreferredRenderingTypeWml12
   fullName: System.Web.Mobile.MobileCapabilities.PreferredRenderingTypeWml12
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.Mobile.MobileCapabilities.#ctor*
   parent: System.Web.Mobile.MobileCapabilities
   isExternal: false

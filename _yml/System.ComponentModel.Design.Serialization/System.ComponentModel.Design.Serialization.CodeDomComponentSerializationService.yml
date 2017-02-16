@@ -20,8 +20,8 @@ items:
   nameWithType: CodeDomComponentSerializationService
   fullName: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes a set of components into a serialization store.
+  remarks: "The CodeDomComponentSerializationService class serializes a set of components or serializable objects into a serialization store. The store can then be deserialized at a later time. The CodeDomComponentSerializationService class differs from other serialization schemes in that the serialization format is opaque, and it allows for partial serialization of objects. For example, you can choose to serialize only selected properties for an object.  \n  \n The base class, <xref:System.ComponentModel.Design.Serialization.ComponentSerializationService>, replaces the <xref:System.ComponentModel.Design.Serialization.IDesignerSerializationService> interface from the .NET Framework version 1.0, although the latter is retained for backward compatibility. The CodeDomComponentSerializationService class does not implement the <xref:System.ComponentModel.Design.Serialization.IDesignerSerializationService> interface, but if you query for <xref:System.ComponentModel.Design.Serialization.IDesignerSerializationService>, the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader> provides a bridge implementation to ensure backward compatibility."
   syntax:
     content: 'public sealed class CodeDomComponentSerializationService : System.ComponentModel.Design.Serialization.ComponentSerializationService'
   inheritance:
@@ -47,12 +47,12 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public CodeDomComponentSerializationService ();
     parameters: []
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -69,15 +69,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the given service provider to resolve services.
   syntax:
     content: public CodeDomComponentSerializationService (IServiceProvider provider);
     parameters:
     - id: provider
       type: System.IServiceProvider
-      description: To be added.
+      description: An <xref:System.IServiceProvider> to use for resolving services.
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -94,15 +94,16 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new .
+  remarks: The serialization store can be passed to any of the <xref:System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Serialize%2A> methods to build up serialization state for a group of objects.
   syntax:
     content: public override System.ComponentModel.Design.Serialization.SerializationStore CreateStore ();
     parameters: []
     return:
       type: System.ComponentModel.Design.Serialization.SerializationStore
-      description: To be added.
+      description: A new serialization store.
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -119,18 +120,24 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Deserializes the given store to produce a collection of objects.
   syntax:
     content: public override System.Collections.ICollection Deserialize (System.ComponentModel.Design.Serialization.SerializationStore store);
     parameters:
     - id: store
       type: System.ComponentModel.Design.Serialization.SerializationStore
-      description: To be added.
+      description: The  from which objects will be deserialized.
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: A collection of deserialized components.
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    store is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    store is not a supported type of serialization store. Use a store returned by <xref:System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore%2A>."
   platform:
   - net-11
   - net-20
@@ -147,21 +154,28 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Deserializes the given store and populates the given  with deserialized  objects.
+  remarks: Created objects that implement the <xref:System.ComponentModel.IComponent> interface will be added to the `container` parameter.
   syntax:
     content: public override System.Collections.ICollection Deserialize (System.ComponentModel.Design.Serialization.SerializationStore store, System.ComponentModel.IContainer container);
     parameters:
     - id: store
       type: System.ComponentModel.Design.Serialization.SerializationStore
-      description: To be added.
+      description: The  from which objects will be deserialized.
     - id: container
       type: System.ComponentModel.IContainer
-      description: To be added.
+      description: A container to which  objects will be added.
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: A collection of deserialized components.
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    store or container is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    store is not a supported type of serialization store. Use a store returned by <xref:System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore%2A>."
   platform:
   - net-11
   - net-20
@@ -178,24 +192,31 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Deserializes the given  to the given container, optionally applying default property values.
+  remarks: The DeserializeTo method deserializes the given store, but rather than producing new objects, the data in the store is applied to an existing set of objects that are taken from the `container` parameter. As a result, the caller can create in advance an object however it sees fit. If an object has deserialization state and the object is not named in the set of existing objects, a new object will be created. If that object also implements <xref:System.ComponentModel.IComponent>, it will be added to the given container. Objects in the container must have names and types that match objects in the serialization store in order for an existing object to be used.
   syntax:
     content: public override void DeserializeTo (System.ComponentModel.Design.Serialization.SerializationStore store, System.ComponentModel.IContainer container, bool validateRecycledTypes, bool applyDefaults);
     parameters:
     - id: store
       type: System.ComponentModel.Design.Serialization.SerializationStore
-      description: To be added.
+      description: The  from which the objects will be deserialized.
     - id: container
       type: System.ComponentModel.IContainer
-      description: To be added.
+      description: A container of objects to which data will be applied.
     - id: validateRecycledTypes
       type: System.Boolean
-      description: To be added.
+      description: "\n     to validate the recycled type; otherwise, ."
     - id: applyDefaults
       type: System.Boolean
-      description: To be added.
+      description: "\n     to apply default property values; otherwise, ."
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.DeserializeTo*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    store or container is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    store is not a supported type of serialization store. Use a store returned by <xref:System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore%2A>."
   platform:
   - net-11
   - net-20
@@ -212,18 +233,25 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Loads a  from the given stream.
+  remarks: You can use the returned store to deserialize objects by passing it to the various <xref:System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize%2A> methods.
   syntax:
     content: public override System.ComponentModel.Design.Serialization.SerializationStore LoadStore (System.IO.Stream stream);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: The stream from which to load the .
     return:
       type: System.ComponentModel.Design.Serialization.SerializationStore
-      description: To be added.
+      description: The loaded .
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.LoadStore*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    stream is ."
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: "\n    stream supports seeking, but its length is 0."
   platform:
   - net-11
   - net-20
@@ -240,18 +268,25 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes the given object to the given .
+  remarks: The `store` parameter can be used to serialize more than one object by calling this method once for each object.
   syntax:
     content: public override void Serialize (System.ComponentModel.Design.Serialization.SerializationStore store, object value);
     parameters:
     - id: store
       type: System.ComponentModel.Design.Serialization.SerializationStore
-      description: To be added.
+      description: The  to which `value` will be serialized.
     - id: value
       type: System.Object
-      description: To be added.
+      description: The object to serialize.
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Serialize*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    store or value is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    store is closed, or store is not a supported type of serialization store. Use a store returned by <xref:System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore%2A>."
   platform:
   - net-11
   - net-20
@@ -268,18 +303,25 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes the given object, accounting for default property values.
+  remarks: The store can be used to serialize more than one object by calling this method more than once.
   syntax:
     content: public override void SerializeAbsolute (System.ComponentModel.Design.Serialization.SerializationStore store, object value);
     parameters:
     - id: store
       type: System.ComponentModel.Design.Serialization.SerializationStore
-      description: To be added.
+      description: The  to which `value` will be serialized.
     - id: value
       type: System.Object
-      description: To be added.
+      description: The object to serialize.
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeAbsolute*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    store or value is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    store is closed, or store is not a supported type of serialization store. Use a store returned by <xref:System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore%2A>."
   platform:
   - net-11
   - net-20
@@ -296,21 +338,28 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes the given member on the given object.
+  remarks: This method can be invoked multiple times for the same object to build up a list of serialized members within the serialization store. The member generally has to be a property or an event.
   syntax:
     content: public override void SerializeMember (System.ComponentModel.Design.Serialization.SerializationStore store, object owningObject, System.ComponentModel.MemberDescriptor member);
     parameters:
     - id: store
       type: System.ComponentModel.Design.Serialization.SerializationStore
-      description: To be added.
+      description: The  to which `member` will be serialized.
     - id: owningObject
       type: System.Object
-      description: To be added.
+      description: The object that owns the `member`.
     - id: member
       type: System.ComponentModel.MemberDescriptor
-      description: To be added.
+      description: The given member.
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMember*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    store, owningObject, or member is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    store is closed, or store is not a supported type of serialization store. Use a store returned by <xref:System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore%2A>."
   platform:
   - net-11
   - net-20
@@ -327,21 +376,28 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes the given member on the given object, but also serializes the member if it contains the default property value.
+  remarks: For some members, containing the default property value and setting the same value back to the member are different concepts. For example, if a property inherits its value from a parent object if no local value is set, setting the value back to the property may not be what is desired. The SerializeMemberAbsolute method takes this into account and would clear the state of the property in this case.
   syntax:
     content: public override void SerializeMemberAbsolute (System.ComponentModel.Design.Serialization.SerializationStore store, object owningObject, System.ComponentModel.MemberDescriptor member);
     parameters:
     - id: store
       type: System.ComponentModel.Design.Serialization.SerializationStore
-      description: To be added.
+      description: The  to which `member` will be serialized.
     - id: owningObject
       type: System.Object
-      description: To be added.
+      description: The object that owns the `member`.
     - id: member
       type: System.ComponentModel.MemberDescriptor
-      description: To be added.
+      description: The given member.
   overload: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMemberAbsolute*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    store, owningObject, or member is ."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    store is closed, or store is not a supported type of serialization store. Use a store returned by <xref:System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore%2A>."
   platform:
   - net-11
   - net-20
@@ -392,30 +448,12 @@ references:
   name: ICollection
   nameWithType: ICollection
   fullName: System.Collections.ICollection
-- uid: System.ComponentModel.Design.Serialization.SerializationStore
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: SerializationStore
-  nameWithType: SerializationStore
-  fullName: System.ComponentModel.Design.Serialization.SerializationStore
 - uid: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize(System.ComponentModel.Design.Serialization.SerializationStore,System.ComponentModel.IContainer)
   parent: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService
   isExternal: false
   name: Deserialize(SerializationStore,IContainer)
   nameWithType: CodeDomComponentSerializationService.Deserialize(SerializationStore,IContainer)
   fullName: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize(SerializationStore,IContainer)
-- uid: System.Collections.ICollection
-  parent: System.Collections
-  isExternal: true
-  name: ICollection
-  nameWithType: ICollection
-  fullName: System.Collections.ICollection
-- uid: System.ComponentModel.Design.Serialization.SerializationStore
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: SerializationStore
-  nameWithType: SerializationStore
-  fullName: System.ComponentModel.Design.Serialization.SerializationStore
 - uid: System.ComponentModel.IContainer
   parent: System.ComponentModel
   isExternal: false
@@ -428,24 +466,6 @@ references:
   name: DeserializeTo(SerializationStore,IContainer,Boolean,Boolean)
   nameWithType: CodeDomComponentSerializationService.DeserializeTo(SerializationStore,IContainer,Boolean,Boolean)
   fullName: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.DeserializeTo(SerializationStore,IContainer,Boolean,Boolean)
-- uid: System.ComponentModel.Design.Serialization.SerializationStore
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: SerializationStore
-  nameWithType: SerializationStore
-  fullName: System.ComponentModel.Design.Serialization.SerializationStore
-- uid: System.ComponentModel.IContainer
-  parent: System.ComponentModel
-  isExternal: false
-  name: IContainer
-  nameWithType: IContainer
-  fullName: System.ComponentModel.IContainer
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -458,12 +478,6 @@ references:
   name: LoadStore(Stream)
   nameWithType: CodeDomComponentSerializationService.LoadStore(Stream)
   fullName: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.LoadStore(Stream)
-- uid: System.ComponentModel.Design.Serialization.SerializationStore
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: SerializationStore
-  nameWithType: SerializationStore
-  fullName: System.ComponentModel.Design.Serialization.SerializationStore
 - uid: System.IO.Stream
   parent: System.IO
   isExternal: true
@@ -476,12 +490,6 @@ references:
   name: Serialize(SerializationStore,Object)
   nameWithType: CodeDomComponentSerializationService.Serialize(SerializationStore,Object)
   fullName: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Serialize(SerializationStore,Object)
-- uid: System.ComponentModel.Design.Serialization.SerializationStore
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: SerializationStore
-  nameWithType: SerializationStore
-  fullName: System.ComponentModel.Design.Serialization.SerializationStore
 - uid: System.Object
   parent: System
   isExternal: true
@@ -494,36 +502,12 @@ references:
   name: SerializeAbsolute(SerializationStore,Object)
   nameWithType: CodeDomComponentSerializationService.SerializeAbsolute(SerializationStore,Object)
   fullName: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeAbsolute(SerializationStore,Object)
-- uid: System.ComponentModel.Design.Serialization.SerializationStore
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: SerializationStore
-  nameWithType: SerializationStore
-  fullName: System.ComponentModel.Design.Serialization.SerializationStore
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMember(System.ComponentModel.Design.Serialization.SerializationStore,System.Object,System.ComponentModel.MemberDescriptor)
   parent: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService
   isExternal: false
   name: SerializeMember(SerializationStore,Object,MemberDescriptor)
   nameWithType: CodeDomComponentSerializationService.SerializeMember(SerializationStore,Object,MemberDescriptor)
   fullName: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMember(SerializationStore,Object,MemberDescriptor)
-- uid: System.ComponentModel.Design.Serialization.SerializationStore
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: SerializationStore
-  nameWithType: SerializationStore
-  fullName: System.ComponentModel.Design.Serialization.SerializationStore
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ComponentModel.MemberDescriptor
   parent: System.ComponentModel
   isExternal: false
@@ -536,24 +520,6 @@ references:
   name: SerializeMemberAbsolute(SerializationStore,Object,MemberDescriptor)
   nameWithType: CodeDomComponentSerializationService.SerializeMemberAbsolute(SerializationStore,Object,MemberDescriptor)
   fullName: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMemberAbsolute(SerializationStore,Object,MemberDescriptor)
-- uid: System.ComponentModel.Design.Serialization.SerializationStore
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: SerializationStore
-  nameWithType: SerializationStore
-  fullName: System.ComponentModel.Design.Serialization.SerializationStore
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.ComponentModel.MemberDescriptor
-  parent: System.ComponentModel
-  isExternal: false
-  name: MemberDescriptor
-  nameWithType: MemberDescriptor
-  fullName: System.ComponentModel.MemberDescriptor
 - uid: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.#ctor*
   parent: System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService
   isExternal: false

@@ -21,8 +21,10 @@ items:
   nameWithType: NativeWindow
   fullName: System.Windows.Forms.NativeWindow
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a low-level encapsulation of a window handle and a window procedure.
+  remarks: "This class automatically manages window class creation and registration.  \n  \n A window is not eligible for garbage collection when it is associated with a window handle. To ensure proper garbage collection, handles must either be destroyed manually using <xref:System.Windows.Forms.NativeWindow.DestroyHandle%2A> or released using <xref:System.Windows.Forms.NativeWindow.ReleaseHandle%2A>.  \n  \n> [!NOTE]\n>  The <xref:System.Windows.Forms.NativeWindow.ReleaseHandle%2A> method is called when the WM_NCDESTROY message is processed. This means there are cases in which when you do not need to manually call <xref:System.Windows.Forms.NativeWindow.ReleaseHandle%2A>, but it is good practice to do so.  \n  \n The NativeWindow class provides the following properties and methods to manage handles: <xref:System.Windows.Forms.NativeWindow.Handle%2A>, <xref:System.Windows.Forms.NativeWindow.CreateHandle%2A>, <xref:System.Windows.Forms.NativeWindow.AssignHandle%2A>, <xref:System.Windows.Forms.NativeWindow.DestroyHandle%2A>, and <xref:System.Windows.Forms.NativeWindow.ReleaseHandle%2A>."
+  example:
+  - "The following code example demonstrates intercepting operating system window messages in a window procedure, and creating a window with a specific operating system window class name. The example creates two classes that inherit from NativeWindow that accomplish this.  \n  \n The `MyNativeWindowListener` class hooks into the window procedure of the form passed into the constructor, and overrides the <xref:System.Windows.Forms.NativeWindow.WndProc%2A> method to intercept the `WM_ACTIVATEAPP` window message. The class demonstrates the usage of the <xref:System.Windows.Forms.NativeWindow.AssignHandle%2A> and <xref:System.Windows.Forms.NativeWindow.ReleaseHandle%2A> methods to identify the window handle the NativeWindow will use. The handle is assign based upon the <xref:System.Windows.Forms.Control.HandleCreated?displayProperty=fullName> and <xref:System.Windows.Forms.Control.HandleDestroyed?displayProperty=fullName> events. When the `WM_ACTIVATEAPP` window message is received, the class calls the `form1``ApplicationActivated` method.  \n  \n The `MyNativeWindow` class creates a new window with the <xref:System.Windows.Forms.CreateParams.ClassName%2A> set to `BUTTON`. The class demonstrates using the <xref:System.Windows.Forms.NativeWindow.CreateHandle%2A> method and overriding the <xref:System.Windows.Forms.NativeWindow.WndProc%2A> method to intercept window messages that are received.  \n  \n [!code-cpp[NativeWindow#1](../../add/codesnippet/CPP/t-system.windows.forms.n_0_1.cpp)]\n [!code-cs[NativeWindow#1](../../add/codesnippet/CSharp/t-system.windows.forms.n_0_1.cs)]\n [!code-vb[NativeWindow#1](../../add/codesnippet/VisualBasic/t-system.windows.forms.n_0_1.vb)]"
   syntax:
     content: 'public class NativeWindow : MarshalByRefObject, System.Windows.Forms.IWin32Window'
   inheritance:
@@ -51,12 +53,13 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes an instance of the  class.
+  remarks: This is the default NativeWindow constructor provided by the compiler. The <xref:System.Windows.Forms.NativeWindow> class also has a static constructor that initializes application domain-wide message handlers and hash tables.
   syntax:
     content: public NativeWindow ();
     parameters: []
   overload: System.Windows.Forms.NativeWindow.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -73,15 +76,24 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Assigns a handle to this window.
+  remarks: "<xref:System.Windows.Forms.NativeWindow.WndProc%2A> intercepts window messages sent to the `handle` parameter. Use <xref:System.Windows.Forms.NativeWindow.ReleaseHandle%2A> to reset the handle's window procedure to the default window procedure.  \n  \n The AssignHandle method calls the <xref:System.Windows.Forms.NativeWindow.OnHandleChange%2A> method to indicate that the value of the <xref:System.Windows.Forms.NativeWindow.Handle%2A> property has changed.  \n  \n> [!NOTE]\n>  The handle to assign cannot be in a different application process."
+  example:
+  - "The following code example demonstrates intercepting operating system window messages in a window procedure. The example creates a class that inherits from <xref:System.Windows.Forms.NativeWindow> to accomplish this.  \n  \n The `MyNativeWindowListener` class hooks into the window procedure of the form passed into the constructor, and overrides the <xref:System.Windows.Forms.NativeWindow.WndProc%2A> method to intercepts the `WM_ACTIVATEAPP` window message. The class demonstrates the use of the AssignHandle and <xref:System.Windows.Forms.NativeWindow.ReleaseHandle%2A> methods to identify which window handle the <xref:System.Windows.Forms.NativeWindow> will use. The handle is assigned based upon the <xref:System.Windows.Forms.Control.HandleCreated?displayProperty=fullName> and <xref:System.Windows.Forms.Control.HandleDestroyed?displayProperty=fullName> events. When the `WM_ACTIVATEAPP` window message is received, the class calls the `form1``ApplicationActivated` method.  \n  \n This code is an excerpt from the example shown in the <xref:System.Windows.Forms.NativeWindow> class overview. Some code is not shown for the purpose of brevity. See <xref:System.Windows.Forms.NativeWindow> for the whole code listing.  \n  \n [!code-cpp[NativeWindow#2](../../add/codesnippet/CPP/m-system.windows.forms.n_4_1.cpp)]\n [!code-cs[NativeWindow#2](../../add/codesnippet/CSharp/m-system.windows.forms.n_4_1.cs)]\n [!code-vb[NativeWindow#2](../../add/codesnippet/VisualBasic/m-system.windows.forms.n_4_1.vb)]"
   syntax:
     content: public void AssignHandle (IntPtr handle);
     parameters:
     - id: handle
       type: System.IntPtr
-      description: To be added.
+      description: The handle to assign to this window.
   overload: System.Windows.Forms.NativeWindow.AssignHandle*
+  exceptions:
+  - type: System.Exception
+    commentId: T:System.Exception
+    description: This window already has a handle.
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: The windows procedure for the associated native window could not be retrieved.
   platform:
   - net-11
   - net-20
@@ -98,15 +110,27 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a window and its handle with the specified creation parameters.
+  remarks: "The `cp` parameter specifies the values that are passed to the native Win32 `CreateWindowEx` method to create a window and its handle.  \n  \n When the <xref:System.Windows.Forms.CreateParams.ClassName%2A> field is not `null`, the newly created window handle inherits from the specified class. For example, if <xref:System.Windows.Forms.CreateParams.ClassName%2A> is set to `BUTTON`, the newly created window is based on the Win32 `BUTTON` window class. The <xref:System.Windows.Forms.CreateParams.Param%2A> property of the <xref:System.Windows.Forms.CreateParams.ClassName%2A> object must either be `null` or reference an instance of a class that was declared as a structure.  \n  \n This code is an excerpt from the example shown in the <xref:System.Windows.Forms.NativeWindow> class overview. Some code is not shown for the purpose of brevity. See <xref:System.Windows.Forms.NativeWindow> for the whole code listing.  \n  \n> [!NOTE]\n>  The class name provided is registered with the operating system."
+  example:
+  - "The following code example demonstrates creating a window with a specific operating system window class name. The example creates a class that inherits from <xref:System.Windows.Forms.NativeWindow> to accomplish this.  \n  \n The `MyNativeWindow` class creates a new window with the <xref:System.Windows.Forms.CreateParams.ClassName%2A> set to `BUTTON`. This creates a Win32 button window. The location and size of the button is set, along with specifying additional window styles. The class demonstrates how to use the CreateHandle method and override the <xref:System.Windows.Forms.NativeWindow.WndProc%2A> method to intercept window messages that are received. Although the example looks for the WM_ACTIVATEAPP message, this can be replaced in a real program with window messages specific to the type created.  \n  \n> [!NOTE]\n>  Some control types send their window messages to the window parent instead of the window. See the Windows Platform SDK for more information.  \n  \n [!code-cpp[NativeWindow#3](../../add/codesnippet/CPP/4bc4c996-2177-4901-b43d-_1.cpp)]\n [!code-cs[NativeWindow#3](../../add/codesnippet/CSharp/4bc4c996-2177-4901-b43d-_1.cs)]\n [!code-vb[NativeWindow#3](../../add/codesnippet/VisualBasic/4bc4c996-2177-4901-b43d-_1.vb)]"
   syntax:
     content: public virtual void CreateHandle (System.Windows.Forms.CreateParams cp);
     parameters:
     - id: cp
       type: System.Windows.Forms.CreateParams
-      description: To be added.
+      description: A  that specifies the creation parameters for this window.
   overload: System.Windows.Forms.NativeWindow.CreateHandle*
+  exceptions:
+  - type: System.OutOfMemoryException
+    commentId: T:System.OutOfMemoryException
+    description: The operating system ran out of resources when trying to create the native window.
+  - type: System.ComponentModel.Win32Exception
+    commentId: T:System.ComponentModel.Win32Exception
+    description: The native Win32 API could not create the specified window.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The handle of the current native window is already assigned; in explanation, the <xref:System.Windows.Forms.NativeWindow.Handle%2A> property is not equal to <xref:System.IntPtr.Zero>.
   platform:
   - net-11
   - net-20
@@ -123,15 +147,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Invokes the default window procedure associated with this window.
+  remarks: "Typically, you only call the DefWndProc method when you are intercepting window messages and would like the default window procedure to handle the message. DefWndProc should not be called to send a window message to the window; call the Win32 `SendMessage` function instead.  \n  \n It is an error to call DefWndProc when the <xref:System.Windows.Forms.NativeWindow.Handle%2A> property is 0."
   syntax:
     content: public void DefWndProc (ref System.Windows.Forms.Message m);
     parameters:
     - id: m
       type: System.Windows.Forms.Message
-      description: To be added.
+      description: The message that is currently being processed.
   overload: System.Windows.Forms.NativeWindow.DefWndProc*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -148,12 +173,13 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Destroys the window and its handle.
+  remarks: "This method destroys the window associated with the <xref:System.Windows.Forms.NativeWindow.Handle%2A>, sets the <xref:System.Windows.Forms.NativeWindow.Handle%2A> property to 0, and calls the <xref:System.Windows.Forms.NativeWindow.OnHandleChange%2A> method to reflect the change. Typically, you only call DestroyHandle when you are done with the native window.  \n  \n> [!NOTE]\n>  The <xref:System.Windows.Forms.NativeWindow> class automatically will destroy the associated window and release its resources in response to a WM_DESTROY message."
   syntax:
     content: public virtual void DestroyHandle ();
     parameters: []
   overload: System.Windows.Forms.NativeWindow.DestroyHandle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -170,12 +196,13 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the resources associated with this window.
+  remarks: The Finalize method removes the Win32 derived class associated with the current <xref:System.Windows.Forms.NativeWindow> instance, releases the handle, and posts a WM_CLOSE message to the associated window.
   syntax:
     content: ~NativeWindow ();
     parameters: []
   overload: System.Windows.Forms.NativeWindow.Finalize*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -192,18 +219,19 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves the window associated with the specified handle.
+  remarks: If you receive a handle from another method, use this method to retrieve the window associated with the handle. The handle must already be owned by another <xref:System.Windows.Forms.NativeWindow> in the current process; otherwise, `null` is returned.
   syntax:
     content: public static System.Windows.Forms.NativeWindow FromHandle (IntPtr handle);
     parameters:
     - id: handle
       type: System.IntPtr
-      description: To be added.
+      description: A handle to a window.
     return:
       type: System.Windows.Forms.NativeWindow
-      description: To be added.
+      description: The  associated with the specified handle. This method returns  when the handle does not have an associated window.
   overload: System.Windows.Forms.NativeWindow.FromHandle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -220,14 +248,17 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the handle for this window.
+  remarks: Use this method when calling Windows API methods that require a handle for a window or control.
+  example:
+  - "The following code example demonstrates creating a window with a specific operating system window class name. The example creates a class that inherits from <xref:System.Windows.Forms.NativeWindow> to accomplish this. The example also demonstrates overriding the <xref:System.Windows.Forms.NativeWindow.OnHandleChange%2A> method to be notified when the Handle changes.  \n  \n The `MyNativeWindow` class creates a new window with the <xref:System.Windows.Forms.CreateParams.ClassName%2A> set to BUTTON. This creates a Win32 button window. The location and size of the button is set, along with specifying additional window styles. The class demonstrates how to use the <xref:System.Windows.Forms.NativeWindow.CreateHandle%2A> method and override the <xref:System.Windows.Forms.NativeWindow.WndProc%2A> method to intercept window messages that are received. Although the example looks for the WM_ACTIVATEAPP message, this could be replaced in a real program with window messages specific to the type created.  \n  \n> [!NOTE]\n>  Some control types send their window messages to the window parent instead of the window. See the Windows Platform SDK for more information.  \n  \n [!code-cpp[NativeWindow#3](../../add/codesnippet/CPP/p-system.windows.forms.n_14_1.cpp)]\n [!code-cs[NativeWindow#3](../../add/codesnippet/CSharp/p-system.windows.forms.n_14_1.cs)]\n [!code-vb[NativeWindow#3](../../add/codesnippet/VisualBasic/p-system.windows.forms.n_14_1.vb)]"
   syntax:
     content: public IntPtr Handle { get; }
     return:
       type: System.IntPtr
-      description: To be added.
+      description: If successful, an <xref:System.IntPtr> representing the handle to the associated native Win32 window; otherwise, 0 if no handle is associated with the window.
   overload: System.Windows.Forms.NativeWindow.Handle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -244,12 +275,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies a notification method that is called when the handle for a window is changed.
+  remarks: This method is invoked when the value of the <xref:System.Windows.Forms.NativeWindow.Handle%2A> property has changed.
+  example:
+  - "The following code example demonstrates creating a window with a specific operating system window class name. The example creates a class that inherits from <xref:System.Windows.Forms.NativeWindow> to accomplish this. The example also demonstrates overriding the OnHandleChange method to be notified when the <xref:System.Windows.Forms.NativeWindow.Handle%2A> changes.  \n  \n The `MyNativeWindow` class creates a new window with the <xref:System.Windows.Forms.CreateParams.ClassName%2A> set to `BUTTON`. This creates a Win32 button window. The location and size of the button is set, along with specifying additional window styles. The class demonstrates how to use the <xref:System.Windows.Forms.NativeWindow.CreateHandle%2A> method and override the <xref:System.Windows.Forms.NativeWindow.WndProc%2A> method to intercept window messages that are received. Although the example looks for the WM_ACTIVATEAPP message, this can be replaced in a real program with window messages specific to the type created.  \n  \n This code is an excerpt from the example shown in the <xref:System.Windows.Forms.NativeWindow> class overview. Some code is not shown for the purpose of brevity. See <xref:System.Windows.Forms.NativeWindow> for the whole code listing.  \n  \n> [!NOTE]\n>  Some control types send their window messages to the window parent instead of the window. See the Windows Platform SDK for more information.  \n  \n [!code-cpp[NativeWindow#3](../../add/codesnippet/CPP/m-system.windows.forms.n_1_1.cpp)]\n [!code-cs[NativeWindow#3](../../add/codesnippet/CSharp/m-system.windows.forms.n_1_1.cs)]\n [!code-vb[NativeWindow#3](../../add/codesnippet/VisualBasic/m-system.windows.forms.n_1_1.vb)]"
   syntax:
     content: protected virtual void OnHandleChange ();
     parameters: []
   overload: System.Windows.Forms.NativeWindow.OnHandleChange*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -266,15 +300,16 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, manages an unhandled thread exception.
+  remarks: Typically, <xref:System.Windows.Forms.Application.OnThreadException%2A> handles thread exceptions.
   syntax:
     content: protected virtual void OnThreadException (Exception e);
     parameters:
     - id: e
       type: System.Exception
-      description: To be added.
+      description: An <xref:System.Exception> that specifies the unhandled thread exception.
   overload: System.Windows.Forms.NativeWindow.OnThreadException*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -291,12 +326,15 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the handle associated with this window.
+  remarks: "This method does not destroy the window handle. Instead, it sets the handle's window procedure to the default window procedure. It sets the <xref:System.Windows.Forms.NativeWindow.Handle%2A> property to 0 and calls <xref:System.Windows.Forms.NativeWindow.OnHandleChange%2A> to reflect the change.  \n  \n A window automatically calls this method if it receives a native Win32 WM_NCDESTROY message, indicating that Windows has destroyed the handle."
+  example:
+  - "The following code example demonstrates intercepting operating system window messages in a window procedure. The example creates a class that inherits from <xref:System.Windows.Forms.NativeWindow> to accomplish this.  \n  \n The `MyNativeWindowListener` class hooks into the window procedure of the form passed into the constructor, and overrides the <xref:System.Windows.Forms.NativeWindow.WndProc%2A> method to intercepts the `WM_ACTIVATEAPP` window message. The class demonstrates the use of the <xref:System.Windows.Forms.NativeWindow.AssignHandle%2A> and ReleaseHandle methods to identify the window handle the <xref:System.Windows.Forms.NativeWindow> will use. The handle is assign based upon the <xref:System.Windows.Forms.Control.HandleCreated?displayProperty=fullName> and <xref:System.Windows.Forms.Control.HandleDestroyed?displayProperty=fullName> events. When the `WM_ACTIVATEAPP` window message is received, the class calls the `form1``ApplicationActivated` method.  \n  \n This code is an excerpt from the example shown in the <xref:System.Windows.Forms.NativeWindow> class overview. Some code is not shown for the purpose of brevity. See <xref:System.Windows.Forms.NativeWindow> for the whole code listing.  \n  \n [!code-cpp[NativeWindow#2](../../add/codesnippet/CPP/m-system.windows.forms.n_0_1.cpp)]\n [!code-cs[NativeWindow#2](../../add/codesnippet/CSharp/m-system.windows.forms.n_0_1.cs)]\n [!code-vb[NativeWindow#2](../../add/codesnippet/VisualBasic/m-system.windows.forms.n_0_1.vb)]"
   syntax:
     content: public virtual void ReleaseHandle ();
     parameters: []
   overload: System.Windows.Forms.NativeWindow.ReleaseHandle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -313,15 +351,18 @@ items:
   assemblies:
   - System.Windows.Forms
   namespace: System.Windows.Forms
-  summary: To be added.
-  remarks: To be added.
+  summary: Invokes the default window procedure associated with this window.
+  remarks: This method is called when a window message is sent to the handle of the window.
+  example:
+  - "The following code example demonstrates intercepting operating system window messages in a window procedure. The example creates a class that inherits from <xref:System.Windows.Forms.NativeWindow> to accomplish this.  \n  \n The `MyNativeWindowListener` class hooks into the window procedure of the form passed into the constructor, and overrides the WndProc method to intercept the `WM_ACTIVATEAPP` window message. The class demonstrates the use of the <xref:System.Windows.Forms.NativeWindow.AssignHandle%2A> and <xref:System.Windows.Forms.NativeWindow.ReleaseHandle%2A> methods to identify the window handle the <xref:System.Windows.Forms.NativeWindow> will use. The handle is assigned based upon the <xref:System.Windows.Forms.Control.HandleCreated?displayProperty=fullName> and <xref:System.Windows.Forms.Control.HandleDestroyed?displayProperty=fullName> events. When the `WM_ACTIVATEAPP` window message is received, the class calls the `form1``ApplicationActivated` method.  \n  \n This code is an excerpt from the example shown in the <xref:System.Windows.Forms.NativeWindow> class overview. Some code is not shown for the purpose of brevity. See <xref:System.Windows.Forms.NativeWindow> for the whole code listing.  \n  \n [!code-cpp[NativeWindow#2](../../add/codesnippet/CPP/m-system.windows.forms.n_3_1.cpp)]\n [!code-cs[NativeWindow#2](../../add/codesnippet/CSharp/m-system.windows.forms.n_3_1.cs)]\n [!code-vb[NativeWindow#2](../../add/codesnippet/VisualBasic/m-system.windows.forms.n_3_1.vb)]"
   syntax:
     content: protected virtual void WndProc (ref System.Windows.Forms.Message m);
     parameters:
     - id: m
       type: System.Windows.Forms.Message
-      description: To be added.
+      description: A  that is associated with the current Windows message.
   overload: System.Windows.Forms.NativeWindow.WndProc*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -396,24 +437,12 @@ references:
   name: NativeWindow
   nameWithType: NativeWindow
   fullName: System.Windows.Forms.NativeWindow
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.Windows.Forms.NativeWindow.Handle
   parent: System.Windows.Forms.NativeWindow
   isExternal: false
   name: Handle
   nameWithType: NativeWindow.Handle
   fullName: System.Windows.Forms.NativeWindow.Handle
-- uid: System.IntPtr
-  parent: System
-  isExternal: true
-  name: IntPtr
-  nameWithType: IntPtr
-  fullName: System.IntPtr
 - uid: System.Windows.Forms.NativeWindow.OnHandleChange
   parent: System.Windows.Forms.NativeWindow
   isExternal: false
@@ -444,12 +473,6 @@ references:
   name: WndProc(Message)
   nameWithType: NativeWindow.WndProc(Message)
   fullName: System.Windows.Forms.NativeWindow.WndProc(Message)
-- uid: System.Windows.Forms.Message
-  parent: System.Windows.Forms
-  isExternal: false
-  name: Message
-  nameWithType: Message
-  fullName: System.Windows.Forms.Message
 - uid: System.Windows.Forms.NativeWindow.#ctor*
   parent: System.Windows.Forms.NativeWindow
   isExternal: false

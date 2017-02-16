@@ -14,8 +14,48 @@
     </Interface>
   </Interfaces>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Represents the binding element that can produce the sending and receiving channels required for a reliable session between endpoints.</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Provides sessions and optionally provides ordered message delivery. This implemented session can cross SOAP and transport intermediaries.  
+  
+ Each binding element represents a processing step when sending or receiving messages. At runtime, binding elements create the channel factories and listeners that are necessary to build outgoing and incoming channel stacks required to send and receive messages. The ReliableSessionBindingElement provides an optional layer in the stack that can establish a reliable session between endpoints and configure the behavior of this session.  
+  
+ The ReliableSessionBindingElement is provided on the standard bindings in the following table.  
+  
+|Binding|Default|  
+|-------------|-------------|  
+|<xref:System.ServiceModel.NetTcpBinding>|Off|  
+|<xref:System.ServiceModel.WSHttpBinding>|Off|  
+|<xref:System.ServiceModel.WSDualHttpBinding>|On (required)|  
+  
+   
+  
+## Examples  
+ The ReliableSessionBindingElement can be added to any custom binding. This is done using the following configuration elements.  
+  
+```  
+<bindings>  
+    <customBinding>  
+        <binding configurationName=”ReliabilityHTTP”>  
+            <reliableSession/>  
+        </binding>  
+    </customBinding>  
+</bindings>  
+```  
+  
+ The following sample code demonstrates how to use ReliableSessionBindingElement in code.  
+  
+ [!code-vb[S_Imperative#1](../../add/codesnippet/VisualBasic/t-system.servicemodel.ch_0_1.vb)]
+ [!code-cs[S_Imperative#1](../../add/codesnippet/CSharp/t-system.servicemodel.ch_0_1.cs)]  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe />
+    <returns />
+    <value />
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -27,8 +67,11 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Initializes a new instance of the <see cref="T:System.ServiceModel.Channels.ReliableSessionBindingElement" /> class.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -42,9 +85,13 @@
         <Parameter Name="ordered" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="ordered">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="ordered">
+          <see langword="true" /> if messages must be delivered in the order in which they are sent; otherwise, <see langword="false" />. The default value is <see langword="true" />.</param>
+        <summary>Initializes a new instance of the <see cref="T:System.ServiceModel.Channels.ReliableSessionBindingElement" /> class that specifies whether message delivery must preserve the order in which messages are sent.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
     <Member MemberName="AcknowledgementInterval">
@@ -63,9 +110,21 @@
         <ReturnType>System.TimeSpan</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the interval of time that a destination waits before sending an acknowledgment to the message source on reliable channels that are created by the factory.</summary>
+        <value>The &lt;xref:System.TimeSpan&gt; that specifies the interval of time that a service waits until sending an acknowledgment to the message source. The default value is 2 seconds.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The destination that receives messages on a reliable channel groups the acknowledgments for these messages together into a single message to reduce network traffic and to increase information density on messages. Grouping scales better as traffic increases. It does not attempt to send an acknowledgment for every message it receives as soon as possible, but rather waits for an interval of time, groups together the acknowledgments that have arrived during that interval, and then sends them all together. The first message that is received is the exception; it is acknowledged as soon as it is delivered. Also, if reliable sessions are used with single HTTP connections, as is the case for example with the <xref:System.ServiceModel.WSHttpBinding> but not <xref:System.ServiceModel.WSDualHttpBinding>, then this setting is not used.  
+  
+ The value that is set with the AcknowledgementInterval property is a recommendation to the infrastructure and not a hard limit.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">The value set is less than or equal to zero.</exception>
+        <threadsafe />
+        <returns>The &lt;xref:System.TimeSpan&gt; that specifies the interval of time that a service waits until sending an acknowledgment to the message source. The default value is 2 seconds.</returns>
       </Docs>
     </Member>
     <Member MemberName="BuildChannelFactory&lt;TChannel&gt;">
@@ -186,9 +245,11 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <summary>Creates a copy of the current reliable session binding element.</summary>
+        <returns>A &lt;xref:System.ServiceModel.Channels.BindingElement&gt; that is a clone of the current binding element.</returns>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <value>A &lt;xref:System.ServiceModel.Channels.BindingElement&gt; that is a clone of the current binding element.</value>
       </Docs>
     </Member>
     <Member MemberName="FlowControlEnabled">
@@ -207,9 +268,20 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets a value that indicates whether the reliable session has flow control enabled.</summary>
+        <value>
+          <see langword="true" /> if the reliable session has flow control enabled; otherwise, <see langword="false" />. The default is <see langword="true" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Flow control is a mechanism that reliable sessions implement to ensure that senders do not send more messages than a receiver can handle. Receivers have a buffer of messages that is used to accommodate message bursts and out-of-order messages. Receivers advertise to senders the amount of space that remains in this buffer in each of their acknowledgements. Senders can use this information to stop sending new messages whenever the receiver has no buffer space left.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>
+          <see langword="true" /> if the reliable session has flow control enabled; otherwise, <see langword="false" />. The default is <see langword="true" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="GetProperty&lt;T&gt;">
@@ -256,9 +328,21 @@
         <ReturnType>System.TimeSpan</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets an interval of time that a service remains inactive before closing.</summary>
+        <value>The &lt;xref:System.TimeSpan&gt; that specifies the interval of time that a service remains inactive before closing. The default value is 10 minutes.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Activity on a channel is defined as receiving an application or infrastructure message. The inactivity timeout parameter controls the maximum amount of time to keep an inactive session alive. If more than InactivityTimeout time interval passes with no activity, the session is aborted by the infrastructure and the channel faults. The reliable session is torn down unilaterally.  
+  
+ If the sending application has no messages to send then the reliable session is normally not faulted because of inactivity; instead a keep-alive mechanism keeps the session active indefinitely. Note that the dispatcher can independently abort the reliable session if no application messages are sent or received. Thus, the inactivity timeout typically expires if network conditions are such that no messages are received or if there is a failure on the sender.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">The value set is less than or equal to zero or greater than either &lt;xref:System.Int32.MaxValue&gt; or &lt;xref:System.TimeSpan.MaxValue&gt;.</exception>
+        <threadsafe />
+        <returns>The &lt;xref:System.TimeSpan&gt; that specifies the interval of time that a service remains inactive before closing. The default value is 10 minutes.</returns>
       </Docs>
     </Member>
     <Member MemberName="MaxPendingChannels">
@@ -277,9 +361,21 @@
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the largest number of channels that can be pending during the reliable session.</summary>
+        <value>The largest number of channels that can be pending. The default value is 4.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Channels are pending when they are waiting to be accepted. Once that limit is reached, no channels are created and put in pending mode until this number goes down (by accepting pending channels). This is a limit for each listener.  
+  
+ When the threshold is reached and a remote application tries to establish a new reliable session, the request is denied and the open operation that prompted this faults.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">The value set is less than or equal to zero or greater than 16384.</exception>
+        <threadsafe />
+        <returns>The largest number of channels that can be pending. The default value is 4.</returns>
       </Docs>
     </Member>
     <Member MemberName="MaxRetryCount">
@@ -298,9 +394,23 @@
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the maximum number of times that a message attempts to be transferred during the reliable session.</summary>
+        <value>The maximum number of times that a message attempts to be re-sent. The minimum value is 1; the maximum is &lt;xref:System.Int32&gt;; and the default value is 8.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ A message is considered to be transferred if its delivery at the recipient has been acknowledged by the recipient.  
+  
+ If an acknowledgment has not been received within a certain amount of time for a message that has been transmitted, the infrastructure automatically retransmits the message. The infrastructure tries to send the message for, at most, a MaxRetryCount number of times. Not receiving an acknowledgment before this limit is reached is considered a fatal communication failure and causes the channel faulted event to be raised.  
+  
+ The infrastructure uses an exponential back-off algorithm to determine when to retransmit, based on a computed average round-trip time. The initial retry time is computed based on the measured roundtrip time of establishing the session. The retransmission algorithm doubles the delay with every attempt, which results in approximately 8.5 minutes passing between the first transmission attempt and the last retransmission attempt. The time for the first retransmission attempt is adjusted according to the calculated round-trip time and the resulting stretch of time that those attempts take varies accordingly. This allows the retransmission time to dynamically adapt to varying network conditions.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">The value set is less than or equal to zero.</exception>
+        <threadsafe />
+        <returns>The maximum number of times that a message attempts to be re-sent. The minimum value is 1; the maximum is &lt;xref:System.Int32&gt;; and the default value is 8.</returns>
       </Docs>
     </Member>
     <Member MemberName="MaxTransferWindowSize">
@@ -319,9 +429,23 @@
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the largest number of messages that can exist in either the send buffer or the receive buffer.</summary>
+        <value>The largest number of messages that can be buffered. The minimum value is 1; the maximum value is 4096; and the default value is 32.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ The value of the MaxTransferWindowSize property can be set on both the sender and the receiver. This value is included in the binding policy of the WSDL, so if you use the [ServiceModel Metadata Utility Tool (Svcutil.exe)](../Topic/ServiceModel%20Metadata%20Utility%20Tool%20\(Svcutil.exe\).md) to construct your client, it has the same value. Otherwise this value is whatever you set it to be on the client.  
+  
+ When this limit is reached on the sender, additional calls to send are blocked. When this limit is reached on the receiver, new messages that arrive on the underlying channel are not accepted.  
+  
+ A reliable session uses a windowing protocol to help improve network utilization. The amount of buffering required is directly derived from the size of the transmission window. When tuning this value, note that the optimal transmission window is related to the bandwidth and the latency in a straight-forward way. The ideal maximum window size is the bandwidth times the latency. Anything smaller yields less than 100% network utilization; anything larger is just wasted space.  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">The value set is less than or equal to one or greater than 4096.</exception>
+        <threadsafe />
+        <returns>The largest number of messages that can be buffered. The minimum value is 1; the maximum value is 4096; and the default value is 32.</returns>
       </Docs>
     </Member>
     <Member MemberName="Ordered">
@@ -340,9 +464,20 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets a value that indicates whether message delivery must preserve the order in which messages are sent.</summary>
+        <value>
+          <see langword="true" /> if messages must be delivered in the order in which they are sent; otherwise, <see langword="false" />. The default is <see langword="false" />.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ To get messages dispatched in order, you also must set the <xref:System.ServiceModel.ConcurrencyMode> to <xref:System.ServiceModel.ConcurrencyMode>.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>
+          <see langword="true" /> if messages must be delivered in the order in which they are sent; otherwise, <see langword="false" />. The default is <see langword="false" />.</returns>
       </Docs>
     </Member>
     <Member MemberName="ReliableMessagingVersion">
@@ -361,9 +496,18 @@
         <ReturnType>System.ServiceModel.ReliableMessagingVersion</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the version of WS-ReliableMessaging specified by the binding element.</summary>
+        <value>An instance derived from <see cref="T:System.ServiceModel.ReliableMessagingVersion" /> that represents the version of the WS-ReliableMessaging protocol used by the configuration element.</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ There are currently two versions of the WS-ReliableMessaging protocol supported by [!INCLUDE[indigo1](../../add/includes/indigo1-md.md)]: WS-ReliableMessaging1.1 and WS-ReliableMessagingFebruary2005. The default version is WS-ReliableMessagingFebruary2005.  
+  
+ ]]></format>
+        </remarks>
+        <threadsafe />
+        <returns>An instance derived from <see cref="T:System.ServiceModel.ReliableMessagingVersion" /> that represents the version of the WS-ReliableMessaging protocol used by the configuration element.</returns>
       </Docs>
     </Member>
     <Member MemberName="System.ServiceModel.Description.IPolicyExportExtension.ExportPolicy">
@@ -381,10 +525,13 @@
         <Parameter Name="context" Type="System.ServiceModel.Description.PolicyConversionContext" />
       </Parameters>
       <Docs>
-        <param name="exporter">To be added.</param>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="exporter">The <see cref="T:System.ServiceModel.Description.MetadataExporter" /> that exports the binding information in the reliable session binding element to the WSDL elements.</param>
+        <param name="context">The <see cref="T:System.ServiceModel.Description.PolicyConversionContext" /> that provides the mapping from exported WSDL elements to the endpoint description.</param>
+        <summary>Maps the information contained in the reliable session binding element into the WSDL elements that enable a remote endpoint to access the service with a reliable session.</summary>
         <remarks>To be added.</remarks>
+        <threadsafe />
+        <returns />
+        <value />
       </Docs>
     </Member>
   </Members>

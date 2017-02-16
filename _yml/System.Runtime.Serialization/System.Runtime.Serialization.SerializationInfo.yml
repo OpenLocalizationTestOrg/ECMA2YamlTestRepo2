@@ -51,8 +51,10 @@ items:
   nameWithType: SerializationInfo
   fullName: System.Runtime.Serialization.SerializationInfo
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Stores all the data needed to serialize or deserialize an object. This class cannot be inherited.
+  remarks: "This class is used by objects with custom serialization behavior. The <xref:System.Runtime.Serialization.ISerializable.GetObjectData%2A> method on either <xref:System.Runtime.Serialization.ISerializable> or <xref:System.Runtime.Serialization.ISerializationSurrogate> populates the SerializationInfo store with the name, type, and value of each piece of information it wants to serialize. During deserialization, the appropriate function can extract this information.  \n  \n Objects are added to the SerializationInfo store at serialization time using the <xref:System.Runtime.Serialization.SerializationInfo.AddValue%2A> methods and extracted from the SerializationInfo store at deserialization using the <xref:System.Runtime.Serialization.SerializationInfo.GetValue%2A> methods.  \n  \n For more information about customizing serialization, see [Custom Serialization](../Topic/Custom%20Serialization.md)."
+  example:
+  - "The following code example demonstrates the SerializationInfo for custom serialization and deserialization of various values.  \n  \n [!code-cpp[ISerializable Interface Example#1](../../add/codesnippet/CPP/t-system.runtime.seriali_18_1.cpp)]\n [!code-cs[ISerializable Interface Example#1](../../add/codesnippet/CSharp/t-system.runtime.seriali_18_1.cs)]\n [!code-vb[ISerializable Interface Example#1](../../add/codesnippet/VisualBasic/t-system.runtime.seriali_18_1.vb)]"
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -78,18 +80,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new instance of the  class.
+  remarks: The <xref:System.Runtime.Serialization.IFormatterConverter> passed as the `converter` parameter converts data from its internal representation to the form the user requested. The internal representation of the data within the <xref:System.Runtime.Serialization.SerializationInfo> depends on the formatter that created it.
   syntax:
     content: public SerializationInfo (Type type, System.Runtime.Serialization.IFormatterConverter converter);
     parameters:
     - id: type
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the object to serialize.
     - id: converter
       type: System.Runtime.Serialization.IFormatterConverter
-      description: To be added.
+      description: The  used during deserialization.
   overload: System.Runtime.Serialization.SerializationInfo.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    type or converter is ."
   platform:
   - net-11
   - net-20
@@ -106,21 +112,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public SerializationInfo (Type type, System.Runtime.Serialization.IFormatterConverter converter, bool requireSameTokenInPartialTrust);
     parameters:
     - id: type
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the object to serialize.
     - id: converter
       type: System.Runtime.Serialization.IFormatterConverter
-      description: To be added.
+      description: The  used during deserialization.
     - id: requireSameTokenInPartialTrust
       type: System.Boolean
-      description: To be added.
+      description: Indicates whether the object requires same token in partial trust.
   overload: System.Runtime.Serialization.SerializationInfo.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -137,18 +143,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a Boolean value into the  store.
+  remarks: "If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown. For example:  \n  \n```c#  \nvoid ISerializable.GetObject(SerializationInfo info, StreamingContext context)  \n{  \n   // This will not cause an exception to be thrown.  \n   info.AddValue(\"ABC\", true);  \n   info.AddValue(\"abc\", false);  \n   // However, this will cause the SerializationException to be thrown.  \n   info.AddValue(\"XYZ\", true);  \n   info.AddValue(\"XYZ\", false);  \n}  \n```  \n  \n```vb#  \nPrivate Sub GetObjectData(ByVal info As SerializationInfo, _  \nByVal context As StreamingContext)  \n   ' This will not cause an exception to be thrown.  \n   info.AddValue(\"ABC\", \"upper case\")  \n   info.AddValue(\"abc\", \"lower case\")  \n   ' However, this will cause the SerializationException to be thrown.  \n   info.AddValue(\"XYZ\", \"same case\")  \n   info.AddValue(\"XYZ\", \"same case\")  \nEnd Sub  \n```"
   syntax:
     content: public void AddValue (string name, bool value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Boolean
-      description: To be added.
+      description: The Boolean value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -165,18 +178,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds an 8-bit unsigned integer value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, byte value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Byte
-      description: To be added.
+      description: The byte value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -193,18 +213,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a Unicode character value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, char value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Char
-      description: To be added.
+      description: The character value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -221,18 +248,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a <xref:System.DateTime> value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, DateTime value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.DateTime
-      description: To be added.
+      description: The <xref:System.DateTime> value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -249,18 +283,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a decimal value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, decimal value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Decimal
-      description: To be added.
+      description: The decimal value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: If The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: If a value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -277,18 +318,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a double-precision floating-point value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, double value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Double
-      description: To be added.
+      description: The double value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -305,18 +353,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a 16-bit signed integer value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, short value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Int16
-      description: To be added.
+      description: The  value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -333,18 +388,30 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a 32-bit signed integer value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
+  example:
+  - >-
+    [!code-cpp[ISerializable Interface Example#1](../../add/codesnippet/CPP/b3789dd4-8567-4492-a19c-_1.cpp)]
+     [!code-cs[ISerializable Interface Example#1](../../add/codesnippet/CSharp/b3789dd4-8567-4492-a19c-_1.cs)]
+     [!code-vb[ISerializable Interface Example#1](../../add/codesnippet/VisualBasic/b3789dd4-8567-4492-a19c-_1.vb)]
   syntax:
     content: public void AddValue (string name, int value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Int32
-      description: To be added.
+      description: The  value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -361,18 +428,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a 64-bit signed integer value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, long value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Int64
-      description: To be added.
+      description: The Int64 value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -389,18 +463,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds the specified object into the  store, where it is associated with a specified name.
+  remarks: "The object contained in the `value` parameter is serialized as the type returned by `value`.  \n  \n If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown."
   syntax:
     content: public void AddValue (string name, object value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Object
-      description: To be added.
+      description: The value to be serialized. Any children of this object will automatically be serialized.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -417,18 +498,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds an 8-bit signed integer value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, sbyte value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.SByte
-      description: To be added.
+      description: The  value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -445,18 +533,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a single-precision floating-point value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, float value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Single
-      description: To be added.
+      description: The single value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -473,18 +568,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a 16-bit unsigned integer value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, ushort value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.UInt16
-      description: To be added.
+      description: The  value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -501,18 +603,27 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a 32-bit unsigned integer value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
+  example:
+  - "The following example uses the <xref:System.Runtime.Serialization.SerializationInfo.AddValue%2A> method to customize the serialization of a type. The code adds a string and an integer to an instance of the <xref:System.Runtime.Serialization.SerializationInfo> class in the <xref:System.Runtime.Serialization.ISerializable.GetObjectData%2A> method of the <xref:System.Runtime.Serialization.ISerializable> interface. The code also uses the <xref:System.Runtime.Serialization.SerializationInfo.GetValue%2A> method to retrieve values from the <xref:System.Runtime.Serialization.SerializationInfo>.  \n  \n [!code-cs[ISerializable_GetObjectData#0](../../add/codesnippet/CSharp/44ffdfaa-67f2-436c-9c0d-_1.cs)]\n [!code-vb[ISerializable_GetObjectData#0](../../add/codesnippet/VisualBasic/44ffdfaa-67f2-436c-9c0d-_1.vb)]"
   syntax:
     content: public void AddValue (string name, uint value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.UInt32
-      description: To be added.
+      description: The  value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -529,18 +640,25 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a 64-bit unsigned integer value into the  store.
+  remarks: If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown.
   syntax:
     content: public void AddValue (string name, ulong value);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.UInt64
-      description: To be added.
+      description: The  value to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The name parameter is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -557,21 +675,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a value into the  store, where value is associated with name and is serialized as being of <xref:System.Type>type.
+  remarks: "The assigned type is always the type of the object, or one of its parents.  \n  \n If two values are added with names that differ only by case, no exception will be thrown, which is not a recommended practice. However, adding two values with the exact same name will cause the <xref:System.Runtime.Serialization.SerializationException> to be thrown."
   syntax:
     content: public void AddValue (string name, object value, Type type);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to associate with the value, so it can be deserialized later.
     - id: value
       type: System.Object
-      description: To be added.
+      description: The value to be serialized. Any children of this object will automatically be serialized.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> to associate with the current object. This parameter must always be the type of the object itself or of one of its base classes.
   overload: System.Runtime.Serialization.SerializationInfo.AddValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: If name or type is .
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: A value has already been associated with name.
   platform:
   - net-11
   - net-20
@@ -588,14 +713,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the assembly name of the type to serialize during serialization only.
+  remarks: "The AssemblyName is the same as the value returned by <xref:System.Reflection.Assembly.FullName%2A> property of the assembly of the containing type. This is the assembly name that the formatter uses when serializing type information for this object.  \n  \n The assembly name contains the name of the assembly, version, culture, and some security information about the object.  \n  \n Users who are changing the type being serialized (for example, to send a proxy for a particular type) will set the value of this property.  \n  \n> [!CAUTION]\n>  Do not use this property during deserialization because the value of this property is undefined."
   syntax:
     content: public string AssemblyName { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The full name of the assembly of the type to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.AssemblyName*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The value the property is set to is .
   platform:
   - net-11
   - net-20
@@ -612,14 +741,18 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the full name of the <xref:System.Type> to serialize.
+  remarks: "The FullTypeName is the same as what would be returned by calling the <xref:System.Type.FullName%2A> on <xref:System.Type>. This is the type name the formatter uses when serializing type information for this object.  \n  \n Users who are changing the type to serialize (for example, to send a proxy for a particular type) will want to set the value of this property.  \n  \n> [!CAUTION]\n>  Do not use this property during deserialization because the value of this property is undefined."
   syntax:
     content: public string FullTypeName { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: The full name of the type to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.FullTypeName*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The value this property is set to is .
   platform:
   - net-11
   - net-20
@@ -636,18 +769,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a Boolean value from the  store.
+  remarks: If the value is a Boolean, or can be converted to one, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public bool GetBoolean (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.Boolean
-      description: To be added.
+      description: The Boolean value associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetBoolean*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a Boolean value.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -664,18 +807,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves an 8-bit unsigned integer value from the  store.
+  remarks: If the value is an 8-bit unsigned integer, or can be converted to one, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public byte GetByte (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.Byte
-      description: To be added.
+      description: The 8-bit unsigned integer associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetByte*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to an 8-bit unsigned integer.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -692,18 +845,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a Unicode character value from the  store.
+  remarks: If the value is a Unicode character, or can be converted to one, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public char GetChar (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.Char
-      description: To be added.
+      description: The Unicode character associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetChar*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a Unicode character.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -720,18 +883,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a <xref:System.DateTime> value from the  store.
+  remarks: If the value is a <xref:System.DateTime>, or can be converted to a <xref:System.DateTime>, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public DateTime GetDateTime (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.DateTime
-      description: To be added.
+      description: The <xref:System.DateTime> value associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetDateTime*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a <xref:System.DateTime> value.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -748,18 +921,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a decimal value from the  store.
+  remarks: If the value is a decimal, or can be converted to a decimal, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public decimal GetDecimal (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.Decimal
-      description: To be added.
+      description: A decimal value from the .
   overload: System.Runtime.Serialization.SerializationInfo.GetDecimal*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a decimal.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -776,18 +959,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a double-precision floating-point value from the  store.
+  remarks: If the value is a double, or can be converted to a double, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public double GetDouble (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.Double
-      description: To be added.
+      description: The double-precision floating-point value associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetDouble*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a double-precision floating-point value.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -804,15 +997,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a  used to iterate through the name-value pairs in the  store.
+  remarks: This function will most often be used by formatters that need to enumerate through the values before writing them out to the stream.
   syntax:
     content: public System.Runtime.Serialization.SerializationInfoEnumerator GetEnumerator ();
     parameters: []
     return:
       type: System.Runtime.Serialization.SerializationInfoEnumerator
-      description: To be added.
+      description: A  for parsing the name-value pairs contained in the  store.
   overload: System.Runtime.Serialization.SerializationInfo.GetEnumerator*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -829,18 +1023,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a 16-bit signed integer value from the  store.
+  remarks: If the value is a 16-bit signed integer, or can be converted to one, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public short GetInt16 (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.Int16
-      description: To be added.
+      description: The 16-bit signed integer associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetInt16*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a 16-bit signed integer.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -857,18 +1061,33 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a 32-bit signed integer value from the  store.
+  remarks: If the value is a 32-bit signed integer, or can be converted to one, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
+  example:
+  - >-
+    [!code-cpp[ISerializable Interface Example#1](../../add/codesnippet/CPP/m-system.runtime.seriali_2_1.cpp)]
+     [!code-cs[ISerializable Interface Example#1](../../add/codesnippet/CSharp/m-system.runtime.seriali_2_1.cs)]
+     [!code-vb[ISerializable Interface Example#1](../../add/codesnippet/VisualBasic/m-system.runtime.seriali_2_1.vb)]
   syntax:
     content: public int GetInt32 (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the value to retrieve.
     return:
       type: System.Int32
-      description: To be added.
+      description: The 32-bit signed integer associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetInt32*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a 32-bit signed integer.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -885,18 +1104,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a 64-bit signed integer value from the  store.
+  remarks: If the value is a 64-bit signed integer, or can be converted to one, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public long GetInt64 (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.Int64
-      description: To be added.
+      description: The 64-bit signed integer associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetInt64*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a 64-bit signed integer.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -913,18 +1142,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves an 8-bit signed integer value from the  store.
+  remarks: If the value is an `Int8`, or can be converted to an `Int8`, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public sbyte GetSByte (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.SByte
-      description: To be added.
+      description: The 8-bit signed integer associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetSByte*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to an 8-bit signed integer.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -941,18 +1180,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a single-precision floating-point value from the  store.
+  remarks: If the value is a single-precision floating-point number, or can be converted to one, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public float GetSingle (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name of the value to retrieve.
     return:
       type: System.Single
-      description: To be added.
+      description: The single-precision floating-point value associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetSingle*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a single-precision floating-point value.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -969,18 +1218,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a <xref:System.String> value from the  store.
+  remarks: If the value is a <xref:System.String>, or can be converted to a <xref:System.String>, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public string GetString (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.String
-      description: To be added.
+      description: The <xref:System.String> associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetString*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a <xref:System.String>.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -997,18 +1256,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a 16-bit unsigned integer value from the  store.
+  remarks: If the value is a 16-bit unsigned integer, or can be converted to one, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public ushort GetUInt16 (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.UInt16
-      description: To be added.
+      description: The 16-bit unsigned integer associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetUInt16*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a 16-bit unsigned integer.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -1025,18 +1294,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a 32-bit unsigned integer value from the  store.
+  remarks: If the value is a 32-bit signed integer, or can be converted to one, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public uint GetUInt32 (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.UInt32
-      description: To be added.
+      description: The 32-bit unsigned integer associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetUInt32*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a 32-bit unsigned integer.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -1053,18 +1332,28 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a 64-bit unsigned integer value from the  store.
+  remarks: If the value is a 64-bit unsigned integer, or can be converted to one, that value is returned; otherwise, a <xref:System.InvalidCastException> is thrown. All conversions are done by the <xref:System.Runtime.Serialization.IFormatterConverter> associated with this <xref:System.Runtime.Serialization.SerializationInfo>.
   syntax:
     content: public ulong GetUInt64 (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     return:
       type: System.UInt64
-      description: To be added.
+      description: The 64-bit unsigned integer associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetUInt64*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to a 64-bit unsigned integer.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -1081,21 +1370,33 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Retrieves a value from the  store.
+  remarks: "If the data stored in the <xref:System.Runtime.Serialization.SerializationInfo> is of the type requested (or one of its derived classes), that value is returned directly. Otherwise, <xref:System.Runtime.Serialization.IFormatterConverter.Convert%2A?displayProperty=fullName> is called to convert it to the appropriate type.  \n  \n The value returned by the GetValue method can always be safely cast to the type specified in the `type` parameter."
+  example:
+  - "The following code example demonstrates the use of the GetValue method:  \n  \n [!code-vb[Classic SerializationInfo.GetValue Example#1](../../add/codesnippet/VisualBasic/a88aeee3-6425-4869-aee2-_1.vb)]\n [!code-cs[Classic SerializationInfo.GetValue Example#1](../../add/codesnippet/CSharp/a88aeee3-6425-4869-aee2-_1.cs)]\n [!code-cpp[Classic SerializationInfo.GetValue Example#1](../../add/codesnippet/CPP/a88aeee3-6425-4869-aee2-_1.cpp)]"
   syntax:
     content: public object GetValue (string name, Type type);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name associated with the value to retrieve.
     - id: type
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the value to retrieve. If the stored value cannot be converted to this type, the system will throw a <xref:System.InvalidCastException>.
     return:
       type: System.Object
-      description: To be added.
+      description: The object of the specified <xref:System.Type> associated with name.
   overload: System.Runtime.Serialization.SerializationInfo.GetValue*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name or type is ."
+  - type: System.InvalidCastException
+    commentId: T:System.InvalidCastException
+    description: The value associated with name cannot be converted to type.
+  - type: System.Runtime.Serialization.SerializationException
+    commentId: T:System.Runtime.Serialization.SerializationException
+    description: An element with the specified name is not found in the current instance.
   platform:
   - net-11
   - net-20
@@ -1112,14 +1413,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets whether the assembly name has been explicitly set.
   syntax:
     content: public bool IsAssemblyNameSetExplicit { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the assembly name has been explicitly set; otherwise .
   overload: System.Runtime.Serialization.SerializationInfo.IsAssemblyNameSetExplicit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1136,14 +1437,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets whether the full type name has been explicitly set.
   syntax:
     content: public bool IsFullTypeNameSetExplicit { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the full type name has been explicitly set; otherwise .
   overload: System.Runtime.Serialization.SerializationInfo.IsFullTypeNameSetExplicit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1160,14 +1461,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the number of members that have been added to the  store.
   syntax:
     content: public int MemberCount { get; }
     return:
       type: System.Int32
-      description: To be added.
+      description: The number of members that have been added to the current .
   overload: System.Runtime.Serialization.SerializationInfo.MemberCount*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1184,14 +1485,14 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the type of the object to be serialized.
   syntax:
     content: public Type ObjectType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: The type of the object being serialized.
   overload: System.Runtime.Serialization.SerializationInfo.ObjectType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -1208,15 +1509,24 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets the <xref:System.Type> of the object to serialize.
+  remarks: The <xref:System.Runtime.Serialization.Formatter> is responsible for setting the <xref:System.Type> of the <xref:System.Runtime.Serialization.SerializationInfo> instance before passing it to <xref:System.Runtime.Serialization.ISerializable.GetObjectData%2A>. However, users who want to send proxies for their objects will need to change the type represented by this <xref:System.Runtime.Serialization.SerializationInfo> instance. Using the SetType method is equivalent to setting both the <xref:System.Runtime.Serialization.SerializationInfo.FullTypeName%2A> and the <xref:System.Runtime.Serialization.SerializationInfo.AssemblyName%2A>.
+  example:
+  - >-
+    [!code-cs[IObjectReference Interface Example#1](../../add/codesnippet/CSharp/m-system.runtime.seriali_6_1.cs)]
+     [!code-cpp[IObjectReference Interface Example#1](../../add/codesnippet/CPP/m-system.runtime.seriali_6_1.cpp)]
+     [!code-vb[IObjectReference Interface Example#1](../../add/codesnippet/VisualBasic/m-system.runtime.seriali_6_1.vb)]
   syntax:
     content: public void SetType (Type type);
     parameters:
     - id: type
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the object to serialize.
   overload: System.Runtime.Serialization.SerializationInfo.SetType*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The type parameter is .
   platform:
   - net-11
   - net-20
@@ -1249,18 +1559,6 @@ references:
   name: SerializationInfo(Type,IFormatterConverter,Boolean)
   nameWithType: SerializationInfo.SerializationInfo(Type,IFormatterConverter,Boolean)
   fullName: System.Runtime.Serialization.SerializationInfo.SerializationInfo(Type,IFormatterConverter,Boolean)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
-- uid: System.Runtime.Serialization.IFormatterConverter
-  parent: System.Runtime.Serialization
-  isExternal: false
-  name: IFormatterConverter
-  nameWithType: IFormatterConverter
-  fullName: System.Runtime.Serialization.IFormatterConverter
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -1279,24 +1577,12 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Runtime.Serialization.SerializationInfo.AddValue(System.String,System.Byte)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: AddValue(String,Byte)
   nameWithType: SerializationInfo.AddValue(String,Byte)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,Byte)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Byte
   parent: System
   isExternal: true
@@ -1309,12 +1595,6 @@ references:
   name: AddValue(String,Char)
   nameWithType: SerializationInfo.AddValue(String,Char)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,Char)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Char
   parent: System
   isExternal: true
@@ -1327,12 +1607,6 @@ references:
   name: AddValue(String,DateTime)
   nameWithType: SerializationInfo.AddValue(String,DateTime)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,DateTime)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.DateTime
   parent: System
   isExternal: true
@@ -1345,12 +1619,6 @@ references:
   name: AddValue(String,Decimal)
   nameWithType: SerializationInfo.AddValue(String,Decimal)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,Decimal)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Decimal
   parent: System
   isExternal: true
@@ -1363,12 +1631,6 @@ references:
   name: AddValue(String,Double)
   nameWithType: SerializationInfo.AddValue(String,Double)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,Double)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Double
   parent: System
   isExternal: true
@@ -1381,12 +1643,6 @@ references:
   name: AddValue(String,Int16)
   nameWithType: SerializationInfo.AddValue(String,Int16)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,Int16)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Int16
   parent: System
   isExternal: true
@@ -1399,12 +1655,6 @@ references:
   name: AddValue(String,Int32)
   nameWithType: SerializationInfo.AddValue(String,Int32)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,Int32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Int32
   parent: System
   isExternal: true
@@ -1417,12 +1667,6 @@ references:
   name: AddValue(String,Int64)
   nameWithType: SerializationInfo.AddValue(String,Int64)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,Int64)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Int64
   parent: System
   isExternal: true
@@ -1435,30 +1679,12 @@ references:
   name: AddValue(String,Object)
   nameWithType: SerializationInfo.AddValue(String,Object)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,Object)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Runtime.Serialization.SerializationInfo.AddValue(System.String,System.SByte)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: AddValue(String,SByte)
   nameWithType: SerializationInfo.AddValue(String,SByte)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,SByte)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.SByte
   parent: System
   isExternal: true
@@ -1471,12 +1697,6 @@ references:
   name: AddValue(String,Single)
   nameWithType: SerializationInfo.AddValue(String,Single)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,Single)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Single
   parent: System
   isExternal: true
@@ -1489,12 +1709,6 @@ references:
   name: AddValue(String,UInt16)
   nameWithType: SerializationInfo.AddValue(String,UInt16)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,UInt16)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.UInt16
   parent: System
   isExternal: true
@@ -1507,12 +1721,6 @@ references:
   name: AddValue(String,UInt32)
   nameWithType: SerializationInfo.AddValue(String,UInt32)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,UInt32)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.UInt32
   parent: System
   isExternal: true
@@ -1525,12 +1733,6 @@ references:
   name: AddValue(String,UInt64)
   nameWithType: SerializationInfo.AddValue(String,UInt64)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,UInt64)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.UInt64
   parent: System
   isExternal: true
@@ -1543,156 +1745,54 @@ references:
   name: AddValue(String,Object,Type)
   nameWithType: SerializationInfo.AddValue(String,Object,Type)
   fullName: System.Runtime.Serialization.SerializationInfo.AddValue(String,Object,Type)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Runtime.Serialization.SerializationInfo.AssemblyName
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: AssemblyName
   nameWithType: SerializationInfo.AssemblyName
   fullName: System.Runtime.Serialization.SerializationInfo.AssemblyName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.FullTypeName
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: FullTypeName
   nameWithType: SerializationInfo.FullTypeName
   fullName: System.Runtime.Serialization.SerializationInfo.FullTypeName
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetBoolean(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetBoolean(String)
   nameWithType: SerializationInfo.GetBoolean(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetBoolean(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetByte(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetByte(String)
   nameWithType: SerializationInfo.GetByte(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetByte(String)
-- uid: System.Byte
-  parent: System
-  isExternal: true
-  name: Byte
-  nameWithType: Byte
-  fullName: System.Byte
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetChar(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetChar(String)
   nameWithType: SerializationInfo.GetChar(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetChar(String)
-- uid: System.Char
-  parent: System
-  isExternal: true
-  name: Char
-  nameWithType: Char
-  fullName: System.Char
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetDateTime(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetDateTime(String)
   nameWithType: SerializationInfo.GetDateTime(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetDateTime(String)
-- uid: System.DateTime
-  parent: System
-  isExternal: true
-  name: DateTime
-  nameWithType: DateTime
-  fullName: System.DateTime
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetDecimal(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetDecimal(String)
   nameWithType: SerializationInfo.GetDecimal(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetDecimal(String)
-- uid: System.Decimal
-  parent: System
-  isExternal: true
-  name: Decimal
-  nameWithType: Decimal
-  fullName: System.Decimal
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetDouble(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetDouble(String)
   nameWithType: SerializationInfo.GetDouble(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetDouble(String)
-- uid: System.Double
-  parent: System
-  isExternal: true
-  name: Double
-  nameWithType: Double
-  fullName: System.Double
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetEnumerator
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
@@ -1711,246 +1811,90 @@ references:
   name: GetInt16(String)
   nameWithType: SerializationInfo.GetInt16(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetInt16(String)
-- uid: System.Int16
-  parent: System
-  isExternal: true
-  name: Int16
-  nameWithType: Int16
-  fullName: System.Int16
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetInt32(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetInt32(String)
   nameWithType: SerializationInfo.GetInt32(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetInt32(String)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetInt64(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetInt64(String)
   nameWithType: SerializationInfo.GetInt64(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetInt64(String)
-- uid: System.Int64
-  parent: System
-  isExternal: true
-  name: Int64
-  nameWithType: Int64
-  fullName: System.Int64
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetSByte(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetSByte(String)
   nameWithType: SerializationInfo.GetSByte(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetSByte(String)
-- uid: System.SByte
-  parent: System
-  isExternal: true
-  name: SByte
-  nameWithType: SByte
-  fullName: System.SByte
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetSingle(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetSingle(String)
   nameWithType: SerializationInfo.GetSingle(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetSingle(String)
-- uid: System.Single
-  parent: System
-  isExternal: true
-  name: Single
-  nameWithType: Single
-  fullName: System.Single
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetString(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetString(String)
   nameWithType: SerializationInfo.GetString(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetString(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetUInt16(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetUInt16(String)
   nameWithType: SerializationInfo.GetUInt16(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetUInt16(String)
-- uid: System.UInt16
-  parent: System
-  isExternal: true
-  name: UInt16
-  nameWithType: UInt16
-  fullName: System.UInt16
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetUInt32(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetUInt32(String)
   nameWithType: SerializationInfo.GetUInt32(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetUInt32(String)
-- uid: System.UInt32
-  parent: System
-  isExternal: true
-  name: UInt32
-  nameWithType: UInt32
-  fullName: System.UInt32
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetUInt64(System.String)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetUInt64(String)
   nameWithType: SerializationInfo.GetUInt64(String)
   fullName: System.Runtime.Serialization.SerializationInfo.GetUInt64(String)
-- uid: System.UInt64
-  parent: System
-  isExternal: true
-  name: UInt64
-  nameWithType: UInt64
-  fullName: System.UInt64
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Runtime.Serialization.SerializationInfo.GetValue(System.String,System.Type)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: GetValue(String,Type)
   nameWithType: SerializationInfo.GetValue(String,Type)
   fullName: System.Runtime.Serialization.SerializationInfo.GetValue(String,Type)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Runtime.Serialization.SerializationInfo.IsAssemblyNameSetExplicit
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: IsAssemblyNameSetExplicit
   nameWithType: SerializationInfo.IsAssemblyNameSetExplicit
   fullName: System.Runtime.Serialization.SerializationInfo.IsAssemblyNameSetExplicit
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Runtime.Serialization.SerializationInfo.IsFullTypeNameSetExplicit
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: IsFullTypeNameSetExplicit
   nameWithType: SerializationInfo.IsFullTypeNameSetExplicit
   fullName: System.Runtime.Serialization.SerializationInfo.IsFullTypeNameSetExplicit
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Runtime.Serialization.SerializationInfo.MemberCount
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: MemberCount
   nameWithType: SerializationInfo.MemberCount
   fullName: System.Runtime.Serialization.SerializationInfo.MemberCount
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
 - uid: System.Runtime.Serialization.SerializationInfo.ObjectType
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: ObjectType
   nameWithType: SerializationInfo.ObjectType
   fullName: System.Runtime.Serialization.SerializationInfo.ObjectType
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Runtime.Serialization.SerializationInfo.SetType(System.Type)
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false
   name: SetType(Type)
   nameWithType: SerializationInfo.SetType(Type)
   fullName: System.Runtime.Serialization.SerializationInfo.SetType(Type)
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Runtime.Serialization.SerializationInfo.#ctor*
   parent: System.Runtime.Serialization.SerializationInfo
   isExternal: false

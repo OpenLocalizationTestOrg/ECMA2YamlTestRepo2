@@ -18,8 +18,8 @@ items:
   nameWithType: IWindowProvider
   fullName: System.Windows.Automation.Provider.IWindowProvider
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Exposes methods and properties to support UI Automation client access to controls that provide fundamental window-based functionality within a traditional [!INCLUDE[TLA#tla_gui](../../add/includes/tlasharptla-gui-md.md)].
+  remarks: Implemented on a UI Automation provider that must support the <xref:System.Windows.Automation.WindowPattern> control pattern.
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -46,12 +46,19 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Attempts to close the window.
+  remarks: "Close must return immediately without blocking.  \n  \n Close raises the <xref:System.Windows.Automation.WindowPatternIdentifiers.WindowClosedEvent> event. If possible, the event should be raised after the control has completed its associated action.  \n  \n When called on a split pane control, this method will close the pane and remove the associated split. This method might also close all other panes, depending on implementation."
   syntax:
     content: public void Close ();
     parameters: []
   overload: System.Windows.Automation.Provider.IWindowProvider.Close*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: When the control is unable to perform the requested action.
+  - type: System.Windows.Automation.ElementNotAvailableException
+    commentId: T:System.Windows.Automation.ElementNotAvailableException
+    description: When the target element is no longer available (for example, the window has closed).
   platform:
   - net-11
   - net-20
@@ -68,14 +75,14 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the interaction state of the window.
   syntax:
     content: public System.Windows.Automation.WindowInteractionState InteractionState { get; }
     return:
       type: System.Windows.Automation.WindowInteractionState
-      description: To be added.
+      description: The  of the control.
   overload: System.Windows.Automation.Provider.IWindowProvider.InteractionState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -92,14 +99,14 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that specifies whether the window is modal.
   syntax:
     content: public bool IsModal { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the window is modal; otherwise .
   overload: System.Windows.Automation.Provider.IWindowProvider.IsModal*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -116,14 +123,14 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that specifies whether the window is the topmost element in the z-order.
   syntax:
     content: public bool IsTopmost { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the window is topmost; otherwise .
   overload: System.Windows.Automation.Provider.IWindowProvider.IsTopmost*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -140,14 +147,14 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that specifies whether the window can be maximized.
   syntax:
     content: public bool Maximizable { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the window can be maximized; otherwise .
   overload: System.Windows.Automation.Provider.IWindowProvider.Maximizable*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -164,14 +171,14 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that specifies whether the window can be minimized.
   syntax:
     content: public bool Minimizable { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the window can be minimized; otherwise .
   overload: System.Windows.Automation.Provider.IWindowProvider.Minimizable*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -188,15 +195,18 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Changes the visual state of the window. For example, minimizes or maximizes it.
   syntax:
     content: public void SetVisualState (System.Windows.Automation.WindowVisualState state);
     parameters:
     - id: state
       type: System.Windows.Automation.WindowVisualState
-      description: To be added.
+      description: The requested visual state of the window.
   overload: System.Windows.Automation.Provider.IWindowProvider.SetVisualState*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: When the control does not support the requested behavior.
   platform:
   - net-11
   - net-20
@@ -213,14 +223,14 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the visual state of the window.
   syntax:
     content: public System.Windows.Automation.WindowVisualState VisualState { get; }
     return:
       type: System.Windows.Automation.WindowVisualState
-      description: To be added.
+      description: The visual state of the window.
   overload: System.Windows.Automation.Provider.IWindowProvider.VisualState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -237,18 +247,22 @@ items:
   assemblies:
   - UIAutomationProvider
   namespace: System.Windows.Automation.Provider
-  summary: To be added.
-  remarks: To be added.
+  summary: Causes the calling code to block for the specified time or until the associated process enters an idle state, whichever completes first.
+  remarks: "This method is typically used in conjunction with the handling of a <xref:System.Windows.Automation.WindowPatternIdentifiers.WindowOpenedEvent>.  \n  \n The implementation is dependent on the underlying application framework; therefore this method might return some time after the window is ready for user input. The calling code should not rely on this method to ascertain exactly when the window has become idle."
   syntax:
     content: public bool WaitForInputIdle (int milliseconds);
     parameters:
     - id: milliseconds
       type: System.Int32
-      description: To be added.
+      description: The amount of time, in milliseconds, to wait for the associated process to become idle. The maximum is <xref:System.Int32>.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the window has entered the idle state;  if the timeout occurred.
   overload: System.Windows.Automation.Provider.IWindowProvider.WaitForInputIdle*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: When the parameter passed in is not a valid number.
   platform:
   - net-11
   - net-20
@@ -290,36 +304,18 @@ references:
   name: IsTopmost
   nameWithType: IWindowProvider.IsTopmost
   fullName: System.Windows.Automation.Provider.IWindowProvider.IsTopmost
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Automation.Provider.IWindowProvider.Maximizable
   parent: System.Windows.Automation.Provider.IWindowProvider
   isExternal: false
   name: Maximizable
   nameWithType: IWindowProvider.Maximizable
   fullName: System.Windows.Automation.Provider.IWindowProvider.Maximizable
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Automation.Provider.IWindowProvider.Minimizable
   parent: System.Windows.Automation.Provider.IWindowProvider
   isExternal: false
   name: Minimizable
   nameWithType: IWindowProvider.Minimizable
   fullName: System.Windows.Automation.Provider.IWindowProvider.Minimizable
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Automation.Provider.IWindowProvider.SetVisualState(System.Windows.Automation.WindowVisualState)
   parent: System.Windows.Automation.Provider.IWindowProvider
   isExternal: false
@@ -338,24 +334,12 @@ references:
   name: VisualState
   nameWithType: IWindowProvider.VisualState
   fullName: System.Windows.Automation.Provider.IWindowProvider.VisualState
-- uid: System.Windows.Automation.WindowVisualState
-  parent: System.Windows.Automation
-  isExternal: false
-  name: WindowVisualState
-  nameWithType: WindowVisualState
-  fullName: System.Windows.Automation.WindowVisualState
 - uid: System.Windows.Automation.Provider.IWindowProvider.WaitForInputIdle(System.Int32)
   parent: System.Windows.Automation.Provider.IWindowProvider
   isExternal: false
   name: WaitForInputIdle(Int32)
   nameWithType: IWindowProvider.WaitForInputIdle(Int32)
   fullName: System.Windows.Automation.Provider.IWindowProvider.WaitForInputIdle(Int32)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Int32
   parent: System
   isExternal: true

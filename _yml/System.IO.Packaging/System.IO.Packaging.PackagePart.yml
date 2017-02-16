@@ -28,8 +28,8 @@ items:
   nameWithType: PackagePart
   fullName: System.IO.Packaging.PackagePart
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a base class for parts stored in a .  This class is abstract.
+  remarks: "A PackagePart consists of three basic elements:  \n  \n|Access|Description|  \n|------------|-----------------|  \n|<xref:System.IO.Packaging.PackagePart.Uri%2A>|The [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] of the part.|  \n|<xref:System.IO.Packaging.PackagePart.ContentType%2A>|The [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] type of the content stream.|  \n|<xref:System.IO.Packaging.PackagePart.GetStream%2A>|The content data stream of the part.|"
   syntax:
     content: public abstract class PackagePart
   inheritance:
@@ -52,18 +52,22 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a specified parent <xref:System.IO.Packaging.PackagePart.Package%2A> and part [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)].
+  remarks: "`partUri` must be valid <xref:System.IO.Packaging.PackagePart> [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] formed in accordance with the [RFC 3986](http://tools.ietf.org/html/rfc3986) *Uniform Resource Identifier (URI) Generic Syntax* specification and the [Open Packaging Conventions](http://go.microsoft.com/fwlink/?LinkID=71255) specification.  \n  \n Use this constructor when the <xref:System.IO.Packaging.PackagePart.ContentType%2A> of the part is not immediately known and will be set later when <xref:System.IO.Packaging.Package.CreatePart%2A> is called.  \n  \n By default, the <xref:System.IO.Packaging.PackagePart.CompressionOption%2A> property of the part is initialized to <xref:System.IO.Packaging.CompressionOption>."
   syntax:
     content: protected PackagePart (System.IO.Packaging.Package package, Uri partUri);
     parameters:
     - id: package
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The parent  of the part.
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] of the part, relative to the parent  root.
   overload: System.IO.Packaging.PackagePart.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    package or partUri is ."
   platform:
   - net-11
   - net-20
@@ -80,21 +84,28 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a specified parent <xref:System.IO.Packaging.PackagePart.Package%2A>, part [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)], and [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] content type.
+  remarks: "`partUri` must be valid <xref:System.IO.Packaging.PackagePart> [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] formed in accordance with the [RFC 3986](http://tools.ietf.org/html/rfc3986) *Uniform Resource Identifier (URI) Generic Syntax* specification and the [Open Packaging Conventions](http://go.microsoft.com/fwlink/?LinkID=71255) specification.  \n  \n By default, the <xref:System.IO.Packaging.PackagePart.CompressionOption%2A> property of the part is initialized to <xref:System.IO.Packaging.CompressionOption>.  \n  \n `contentType` must be a [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] type formed in accordance with the [RFC 2616](http://www.w3.org/Protocols/rfc2616/rfc2616.html) *Hypertext Transfer Protocol - HTTP*, Section 3.7.  The following table shows an example of the content [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] types used in [!INCLUDE[TLA#tla_xps](../../add/includes/tlasharptla-xps-md.md)] documents.  \n  \n|Description|Content Type|  \n|-----------------|------------------|  \n|Font|application/vnd.ms-opentype|  \n|ICC profile|application/vnd.ms-color.iccprofile|  \n|JPEG image|image/jpeg|  \n|Obfuscated font|application/vnd.ms-package.obfuscated-opentype|  \n|PNG image|image/png|  \n|PrintTicket|application/vnd.ms-printing.printticket+xml|  \n|TIFF image|image/tiff|  \n|Windows Media Photo image|image/vnd.ms-photo|"
   syntax:
     content: protected PackagePart (System.IO.Packaging.Package package, Uri partUri, string contentType);
     parameters:
     - id: package
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The parent  of the part.
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] of the part, relative to the parent  root.
     - id: contentType
       type: System.String
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] content type of the part data stream.
   overload: System.IO.Packaging.PackagePart.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    package or partUri is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    partUri is not a valid  [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)]."
   platform:
   - net-11
   - net-20
@@ -111,24 +122,34 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a specified parent <xref:System.IO.Packaging.PackagePart.Package%2A>, part [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)], [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] content type, and .
+  remarks: "`partUri` must be valid <xref:System.IO.Packaging.PackagePart> [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] formed in accordance with the [RFC 3986](http://tools.ietf.org/html/rfc3986) *Uniform Resource Identifier (URI) Generic Syntax* specification and the [Open Packaging Conventions](http://go.microsoft.com/fwlink/?LinkID=71255) specification.  \n  \n `contentType` must be a [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] type formed in accordance with the [RFC 2616](http://www.w3.org/Protocols/rfc2616/rfc2616.html) *Hypertext Transfer Protocol - HTTP*, Section 3.7.  The following table shows an example of the content [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] types used in [!INCLUDE[TLA#tla_xps](../../add/includes/tlasharptla-xps-md.md)] documents.  \n  \n|Description|Content Type|  \n|-----------------|------------------|  \n|Font|application/vnd.ms-opentype|  \n|ICC profile|application/vnd.ms-color.iccprofile|  \n|JPEG image|image/jpeg|  \n|Obfuscated font|application/vnd.ms-package.obfuscated-opentype|  \n|PNG image|image/png|  \n|PrintTicket|application/vnd.ms-printing.printticket+xml|  \n|TIFF image|image/tiff|  \n|Windows Media Photo image|image/vnd.ms-photo|"
   syntax:
     content: protected PackagePart (System.IO.Packaging.Package package, Uri partUri, string contentType, System.IO.Packaging.CompressionOption compressionOption);
     parameters:
     - id: package
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The parent  of the part.
     - id: partUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] of the part, relative to the parent  root.
     - id: contentType
       type: System.String
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] content type of the part's data stream.
     - id: compressionOption
       type: System.IO.Packaging.CompressionOption
-      description: To be added.
+      description: The compression option of the part data stream.
   overload: System.IO.Packaging.PackagePart.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    package or partUri is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    partUri is not a valid  [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)]."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The compressionOption value is not valid.
   platform:
   - net-11
   - net-20
@@ -145,14 +166,18 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the compression option of the part content stream.
+  remarks: "CompressionOption is a read-only property that can be accessed only when the parent <xref:System.IO.Packaging.Package> is open.  \n  \n The CompressionOption property is automatically set by the <xref:System.IO.Packaging.PackagePart.%23ctor%2A> constructor.  After it is set by the constructor, the CompressionOption cannot be changed."
   syntax:
     content: public System.IO.Packaging.CompressionOption CompressionOption { get; }
     return:
       type: System.IO.Packaging.CompressionOption
-      description: To be added.
+      description: The compression option of the part content stream.
   overload: System.IO.Packaging.PackagePart.CompressionOption*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
   platform:
   - net-11
   - net-20
@@ -169,14 +194,18 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] type of the content stream.
+  remarks: "ContentType is a read-only property that can be accessed only when the parent <xref:System.IO.Packaging.Package> is open.  \n  \n The ContentType property is automatically set by the <xref:System.IO.Packaging.PackagePart.%23ctor%2A> constructor.  After it is set by the constructor, the ContentType cannot be changed.  \n  \n The ContentType property is a [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] type formed in accordance with the [RFC 2616](http://www.w3.org/Protocols/rfc2616/rfc2616.html) *Hypertext Transfer Protocol - HTTP*, Section 3.7.  The following table shows an example of the content [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] types used in [!INCLUDE[TLA#tla_xps](../../add/includes/tlasharptla-xps-md.md)] documents.  \n  \n|Description|Content Type|  \n|-----------------|------------------|  \n|Font|application/vnd.ms-opentype|  \n|ICC profile|application/vnd.ms-color.iccprofile|  \n|JPEG image|image/jpeg|  \n|Obfuscated font|application/vnd.ms-package.obfuscated-opentype|  \n|PNG image|image/png|  \n|PrintTicket|application/vnd.ms-printing.printticket+xml|  \n|TIFF image|image/tiff|  \n|Windows Media Photo image|image/vnd.ms-photo|"
   syntax:
     content: public string ContentType { get; }
     return:
       type: System.String
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] type of the content data stream for the part.
   overload: System.IO.Packaging.PackagePart.ContentType*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).  \n  \n -or-  \n  \n The string returned by the derived class <xref:System.IO.Packaging.PackagePart.GetContentTypeCore%2A> method is empty."
   platform:
   - net-11
   - net-20
@@ -193,24 +222,40 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a part-level relationship between this  to a specified target  or external resource.
+  remarks: "A part-level relationship defines an association between this part and a target part or resource.  A part-level relationship can be one of two forms.  \n  \n-   Between a source <xref:System.IO.Packaging.PackagePart> to a target <xref:System.IO.Packaging.PackagePart> inside the <xref:System.IO.Packaging.Package>.  \n  \n-   Between a source <xref:System.IO.Packaging.PackagePart> to a target resource outside the package.  \n  \n In a part-relationship the source part is considered the \"owner\" of the relationship.  When the source part is deleted, all the relationships owned by the part are also deleted.  The process of creating or deleting the relationship does not physically alter the target part or resource in any way.  \n  \n The CreateRelationship method does not physically change either the source part, or the target part or resource in any way.  \n  \n The target of a relationship cannot be another relationship.  \n  \n If `targetMode` is specified as <xref:System.IO.Packaging.TargetMode>, `targetUri` must be a relative URI that is formed in accordance with the [RFC 3986](http://tools.ietf.org/html/rfc3986) *Uniform Resource Identifier (URI) Generic Syntax* specification.  The internal relative URI can be either an absolute path that starts with a forward slash (\"/\") character such as \"/page1.xaml\" or \"/images/picture4.jpg\", or a relative path such as \"../imagespicture1.jpg\" that resolves against the package root (\"/\") as the base URI.  \n  \n If `targetMode` is specified as <xref:System.IO.Packaging.TargetMode>, `targetUri` can be either an absolute or relative URI formed in accordance with the [RFC 3986](http://tools.ietf.org/html/rfc3986) *Uniform Resource Identifier (URI) Generic Syntax* specification.  \"http://www.microsoft.com/page2.xml\" is an example of an absolute URI that references an external target resource \"page2.xml\".  \"images/picture1.jpg\" is an example of a relative URI that also references an external target resource \"1.jpg\" but which resolves against the URI of the package itself.  \n  \n `relationshipType` must be a [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] that is formed according to the [RFC 3986](http://tools.ietf.org/html/rfc3986) *Uniform Resource Identifier (URI) Generic Syntax* specification.  Different package types can define different part-level relationship types.  The following table shows the part-level `relationshipType` URIs defined for documents that conform to the *Open XML Paper Specification (XPS)*.  \n  \n|XPS Document Part-Level Relationship|Relationship Type URI|  \n|-------------------------------------------|---------------------------|  \n|Digital Signature Definitions|[http://schemas.microsoft.com/xps/2005/06/signature-definitions](http://schemas.microsoft.com/xps/2005/06/signature-definitions)|  \n|DiscardControl|http://schemas.microsoft.com/xps/2005/06/discard-control|  \n|DocumentStructure|http://schemas.microsoft.com/xps/2005/06/documentstructure|  \n|PrintTicket|http://schemas.microsoft.com/xps/2005/06/printticket|  \n|Required Resource|http://schemas.microsoft.com/xps/2005/06/required-resource|  \n|Restricted Font|http://schemas.microsoft.com/xps/2005/06/restricted-font|  \n|StartPart|http://schemas.microsoft.com/xps/2005/06/fixedrepresentation|  \n|StoryFragments|http://schemas.microsoft.com/xps/2005/06/storyfragments|  \n  \n For more information about package relationships see section 1.3 of the *Open Packaging Conventions (OPC)* specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255).  \n  \n For more information about XPS documents see the *Open XML Paper Specification (XPS)* available for download at [http://go.microsoft.com/fwlink/?LinkID=67000](http://go.microsoft.com/fwlink/?LinkID=67000)."
   syntax:
     content: public System.IO.Packaging.PackageRelationship CreateRelationship (Uri targetUri, System.IO.Packaging.TargetMode targetMode, string relationshipType);
     parameters:
     - id: targetUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] of the target part.
     - id: targetMode
       type: System.IO.Packaging.TargetMode
-      description: To be added.
+      description: One of the enumeration values. For example,  if the target part is inside the ; or  if the target is a resource outside the .
     - id: relationshipType
       type: System.String
-      description: To be added.
+      description: The role of the relationship.
     return:
       type: System.IO.Packaging.PackageRelationship
-      description: To be added.
+      description: The part-level relationship between this  to the target  or external resource.
   overload: System.IO.Packaging.PackagePart.CreateRelationship*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    targetUri or relationshipType is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The targetMode parameter is not a valid  enumeration value.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The part identified by the targetUri is a relationship (the target of a relationship cannot be another relationship).  \n  \n -or-  \n  \n targetMode is specified as  but targetUri is an absolute external [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)]."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is read-only (a new relationship cannot be added).
   platform:
   - net-11
   - net-20
@@ -227,27 +272,46 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a part-level relationship between this  to a specified target  or external resource.
+  remarks: "A part-level relationship defines an association between this part and a target part or resource.  A part-level relationship can be one of two forms.  \n  \n-   Between a source <xref:System.IO.Packaging.PackagePart> to a target <xref:System.IO.Packaging.PackagePart> inside the <xref:System.IO.Packaging.Package>.  \n  \n-   Between a source <xref:System.IO.Packaging.PackagePart> to a target resource outside the package.  \n  \n In a part-relationship the source part is considered the \"owner\" of the relationship.  When the source part is deleted, all the relationships owned by the part are also deleted.  The process of creating or deleting the relationship does not physically alter the target part or resource in any way.  \n  \n `id` must be a valid XML identifier.  The `id` type is xsd:ID and must follow the naming conventions prescribed in the *XML Schema Part 2: Datatypes* specification (see [http://www.w3.org/TR/xmlschema-2/#ID](http://www.w3.org/TR/xmlschema-2/)).  \n  \n The CreateRelationship method does not physically change either the source part, or the target part or resource in any way.  \n  \n The target of a relationship cannot be another relationship.  \n  \n If `targetMode` is specified as <xref:System.IO.Packaging.TargetMode>, `targetUri` must be a relative URI that is formed in accordance with the [RFC 3986](http://tools.ietf.org/html/rfc3986) *Uniform Resource Identifier (URI) Generic Syntax* specification.  The internal relative URI can be either an absolute path that starts with a forward slash (\"/\") character such as \"/page1.xaml\" or \"/images/picture4.jpg\", or a relative path such as \"../imagespicture1.jpg\" that resolves against the package root (\"/\") as the base URI.  \n  \n If `targetMode` is specified as <xref:System.IO.Packaging.TargetMode>, `targetUri` can be either an absolute or relative URI formed in accordance with the [RFC 3986](http://tools.ietf.org/html/rfc3986) *Uniform Resource Identifier (URI) Generic Syntax* specification.  \"http://www.microsoft.com/page2.xml\" is an example of an absolute URI that references an external target resource \"page2.xml\".  \"images/picture1.jpg\" is an example of a relative URI that also references an external target resource \"1.jpg\" but which resolves against the URI of the package itself.  \n  \n `relationshipType` must be a [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] that is formed according to the [RFC 3986](http://tools.ietf.org/html/rfc3986) *Uniform Resource Identifier (URI) Generic Syntax* specification.  Different package types can define different part-level relationship types.  The following table shows the part-level `relationshipType` URIs defined for documents that conform to the *Open XML Paper Specification (XPS)*.  \n  \n|XPS Document Part-Level Relationship|Relationship Type URI|  \n|-------------------------------------------|---------------------------|  \n|Digital Signature Definitions|http://schemas.microsoft.com/xps/2005/06/signature-definitions|  \n|DiscardControl|http://schemas.microsoft.com/xps/2005/06/discard-control|  \n|DocumentStructure|http://schemas.microsoft.com/xps/2005/06/documentstructure|  \n|PrintTicket|http://schemas.microsoft.com/xps/2005/06/printticket|  \n|Required Resource|http://schemas.microsoft.com/xps/2005/06/required-resource|  \n|Restricted Font|http://schemas.microsoft.com/xps/2005/06/restricted-font|  \n|StartPart|http://schemas.microsoft.com/xps/2005/06/fixedrepresentation|  \n|StoryFragments|http://schemas.microsoft.com/xps/2005/06/storyfragments|  \n  \n For more information about package relationships see section 1.3 of the *Open Packaging Conventions (OPC)* specification available for download at [http://go.microsoft.com/fwlink/?LinkID=71255](http://go.microsoft.com/fwlink/?LinkID=71255).  \n  \n For more information about XPS documents see the *Open XML Paper Specification (XPS)* available for download at [http://go.microsoft.com/fwlink/?LinkID=67000](http://go.microsoft.com/fwlink/?LinkID=67000)."
   syntax:
     content: public System.IO.Packaging.PackageRelationship CreateRelationship (Uri targetUri, System.IO.Packaging.TargetMode targetMode, string relationshipType, string id);
     parameters:
     - id: targetUri
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] of the target part.
     - id: targetMode
       type: System.IO.Packaging.TargetMode
-      description: To be added.
+      description: One of the enumeration values. For example,  if the target part is inside the ; or  if the target is a resource outside the .
     - id: relationshipType
       type: System.String
-      description: To be added.
+      description: The role of the relationship.
     - id: id
       type: System.String
-      description: To be added.
+      description: A unique ID for the relationship.
     return:
       type: System.IO.Packaging.PackageRelationship
-      description: To be added.
+      description: The part-level relationship between this  to the target  or external resource.
   overload: System.IO.Packaging.PackagePart.CreateRelationship*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    targetUri or relationshipType is ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The targetMode parameter is not a valid  enumeration value.
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The part identified by the targetUri is a relationship (the target of a relationship cannot be another relationship).  \n  \n -or-  \n  \n targetMode is specified as  but targetUri is an absolute external [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)]."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is read-only (a new relationship cannot be added).
+  - type: System.Xml.XmlException
+    commentId: T:System.Xml.XmlException
+    description: "\n    id is not a valid XML identifier.  \n  \n -or-  \n  \n A part with the specified id already exists."
   platform:
   - net-11
   - net-20
@@ -264,15 +328,28 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Deletes a specified part-level .
+  remarks: "`id` must be a valid XML identifier.  The `id` type is xsd:ID and must follow the naming conventions prescribed in the *XML Schema Part 2: Datatypes* specification (see [http://www.w3.org/TR/xmlschema-2/#ID](http://www.w3.org/TR/xmlschema-2/)).  \n  \n If the specified `id` does not match the <xref:System.IO.Packaging.PackageRelationship.Id%2A> for any of the relationships that are owned by this part, no relationship is deleted and no exception is thrown.  \n  \n Other than deleting the specified relationship, the DeleteRelationship method does not physically change either this part or the target part."
   syntax:
     content: public void DeleteRelationship (string id);
     parameters:
     - id: id
       type: System.String
-      description: To be added.
+      description: The <xref:System.IO.Packaging.PackageRelationship.Id%2A> of the relationship to delete.
   overload: System.IO.Packaging.PackagePart.DeleteRelationship*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    id is ."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is read-only (relationships cannot be deleted).
+  - type: System.Xml.XmlException
+    commentId: T:System.Xml.XmlException
+    description: "\n    id is not a valid XML identifier."
   platform:
   - net-11
   - net-20
@@ -289,15 +366,19 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, returns the [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] type of the part content.
+  remarks: "GetContentTypeCore is a virtual method of the <xref:System.IO.Packaging.PackagePart> abstract base class. Implement this method only in derived types where the value for the content type cannot be provided at the time of construction, or if calculating the content type value is a nontrivial or costly operation. The return value must be a valid [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] content type.  \n  \n Derived classes can call GetContentTypeCore to initialize the <xref:System.IO.Packaging.PackagePart.ContentType%2A> property of the derived class to a default value.  After the <xref:System.IO.Packaging.PackagePart.ContentType%2A> property has been set it cannot be changed."
   syntax:
     content: protected virtual string GetContentTypeCore ();
     parameters: []
     return:
       type: System.String
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_mime](../../add/includes/tla2sharptla-mime-md.md)] type of the part content.
   overload: System.IO.Packaging.PackagePart.GetContentTypeCore*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The derived class does not provide an override implementation required for the GetContentTypeCore method.
   platform:
   - net-11
   - net-20
@@ -314,18 +395,34 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the relationship that has a specified <xref:System.IO.Packaging.PackageRelationship.Id%2A>.
+  remarks: "`id` must be a valid XML identifier.  The `id` type is xsd:ID and must follow the naming conventions prescribed in the *XML Schema Part 2: Datatypes* specification (see [http://www.w3.org/TR/xmlschema-2/#ID](http://www.w3.org/TR/xmlschema-2/)).  \n  \n You can use the <xref:System.IO.Packaging.PackagePart.RelationshipExists%2A> method to determine if a relationship with a specified <xref:System.IO.Packaging.PackageRelationship.Id%2A> is owned by this part."
   syntax:
     content: public System.IO.Packaging.PackageRelationship GetRelationship (string id);
     parameters:
     - id: id
       type: System.String
-      description: To be added.
+      description: The <xref:System.IO.Packaging.PackageRelationship.Id%2A> of the relationship to return.
     return:
       type: System.IO.Packaging.PackageRelationship
-      description: To be added.
+      description: The relationship that matches the specified id.
   overload: System.IO.Packaging.PackagePart.GetRelationship*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    id is ."
+  - type: System.Xml.XmlException
+    commentId: T:System.Xml.XmlException
+    description: "\n    id is not a valid XML identifier."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    relationshipType is an empty string."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called).  \n  \n -or-  \n  \n A relationship with the specified id does not exist in the package."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only (relationship information cannot be read).
   platform:
   - net-11
   - net-20
@@ -342,15 +439,22 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a collection of all the relationships that are owned by this part.
+  remarks: The returned collection is never `null`; however, the collection might contain zero elements if the part does not define any relationships.
   syntax:
     content: public System.IO.Packaging.PackageRelationshipCollection GetRelationships ();
     parameters: []
     return:
       type: System.IO.Packaging.PackageRelationshipCollection
-      description: To be added.
+      description: A collection of all the relationships that are owned by the part.
   overload: System.IO.Packaging.PackagePart.GetRelationships*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only (relationship information cannot be read).
   platform:
   - net-11
   - net-20
@@ -367,18 +471,31 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a collection of the relationships that match a specified <xref:System.IO.Packaging.PackageRelationship.RelationshipType%2A>.
+  remarks: "The returned collection is never `null`; however, the collection might contain zero elements if no relationships match the specified `relationshipType` that is defined for the part.  \n  \n Any leading or trailing spaces in the `relationshipType` string are automatically trimmed."
   syntax:
     content: public System.IO.Packaging.PackageRelationshipCollection GetRelationshipsByType (string relationshipType);
     parameters:
     - id: relationshipType
       type: System.String
-      description: To be added.
+      description: The <xref:System.IO.Packaging.PackageRelationship.RelationshipType%2A> of the relationships to locate and return in the collection.
     return:
       type: System.IO.Packaging.PackageRelationshipCollection
-      description: To be added.
+      description: A collection of the relationships that match the specified relationshipType.
   overload: System.IO.Packaging.PackagePart.GetRelationshipsByType*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    relationshipType is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    relationshipType is an empty string."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only (relationship information cannot be read).
   platform:
   - net-11
   - net-20
@@ -395,15 +512,22 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the part content data stream.
+  remarks: "This method opens the content stream with <xref:System.IO.FileMode> of <xref:System.IO.FileMode> and <xref:System.IO.FileAccess> permissions that are the same as the parent <xref:System.IO.Packaging.Package>.  \n  \n The overload <xref:System.IO.Packaging.PackagePart.GetStream%2A> method allows you to set a specific <xref:System.IO.FileMode>."
   syntax:
     content: public System.IO.Stream GetStream ();
     parameters: []
     return:
       type: System.IO.Stream
-      description: To be added.
+      description: The content data stream for the part.
   overload: System.IO.Packaging.PackagePart.GetStream*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The stream object returned by the <xref:System.IO.Packaging.PackagePart.GetStreamCore%2A> method of the derived subclass is .
   platform:
   - net-11
   - net-20
@@ -420,18 +544,28 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the content stream opened in a specified I/O .
+  remarks: The <xref:System.IO.FileAccess> permissions of the returned content stream are the same as the permissions of the parent <xref:System.IO.Packaging.Package>.
   syntax:
     content: public System.IO.Stream GetStream (System.IO.FileMode mode);
     parameters:
     - id: mode
       type: System.IO.FileMode
-      description: To be added.
+      description: The I/O mode in which to open the content stream.
     return:
       type: System.IO.Stream
-      description: To be added.
+      description: The content stream of the part.
   overload: System.IO.Packaging.PackagePart.GetStream*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The mode parameter is not a valid  enumeration value.
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: "The mode parameter is not compatible with the package and part stream.  \n  \n -or-  \n  \n The stream object returned by the <xref:System.IO.Packaging.PackagePart.GetStreamCore%2A> method of the derived subclass is ."
   platform:
   - net-11
   - net-20
@@ -448,21 +582,30 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the part content stream opened with a specified  and .
   syntax:
     content: public System.IO.Stream GetStream (System.IO.FileMode mode, System.IO.FileAccess access);
     parameters:
     - id: mode
       type: System.IO.FileMode
-      description: To be added.
+      description: The I/O mode in which to open the content stream.
     - id: access
       type: System.IO.FileAccess
-      description: To be added.
+      description: The access permissions to use in opening the content stream.
     return:
       type: System.IO.Stream
-      description: To be added.
+      description: The content stream for the part.
   overload: System.IO.Packaging.PackagePart.GetStream*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: "The mode parameter is not a valid  enumeration value.  \n  \n -or-  \n  \n The access parameter is not a valid  enumeration value."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: "\n    mode or access is not compatible with the package and part stream.  \n  \n -or-  \n  \n The access parameter is specified as  but the mode parameter requires write access.  ( values of , , , and  require  or  access.)  \n  \n -or-  \n  \n The stream object returned by the <xref:System.IO.Packaging.PackagePart.GetStreamCore%2A> method of the derived subclass is ."
   platform:
   - net-11
   - net-20
@@ -479,21 +622,22 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: When overridden in a derived class, returns the part content stream opened with a specified  and .
+  remarks: Applications should not call GetStreamCore directly, but instead should call <xref:System.IO.Packaging.PackagePart.GetStream%2A>.
   syntax:
     content: protected abstract System.IO.Stream GetStreamCore (System.IO.FileMode mode, System.IO.FileAccess access);
     parameters:
     - id: mode
       type: System.IO.FileMode
-      description: To be added.
+      description: The I/O mode in which to open the content stream.
     - id: access
       type: System.IO.FileAccess
-      description: To be added.
+      description: The access permissions to use in opening the content stream.
     return:
       type: System.IO.Stream
-      description: To be added.
+      description: The content data stream of the part.
   overload: System.IO.Packaging.PackagePart.GetStreamCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -510,14 +654,18 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the parent  of the part.
+  remarks: "Package is a read-only property that can be accessed only when the parent <xref:System.IO.Packaging.Package> is open.  \n  \n The Package property is automatically set by the <xref:System.IO.Packaging.PackagePart.%23ctor%2A> constructor.  After it is set by the constructor, the parent Package for the part cannot be changed."
   syntax:
     content: public System.IO.Packaging.Package Package { get; }
     return:
       type: System.IO.Packaging.Package
-      description: To be added.
+      description: The parent package of the part.
   overload: System.IO.Packaging.PackagePart.Package*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The Package is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
   platform:
   - net-11
   - net-20
@@ -534,18 +682,31 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value that indicates whether this part owns a relationship with a specified <xref:System.IO.Packaging.PackageRelationship.Id%2A>.
+  remarks: '`id` must be a valid XML identifier.  The `id` type is xsd:ID and must follow the naming conventions prescribed in the *XML Schema Part 2: Datatypes* specification (see [http://www.w3.org/TR/xmlschema-2/#ID](http://www.w3.org/TR/xmlschema-2/)).'
   syntax:
     content: public bool RelationshipExists (string id);
     parameters:
     - id: id
       type: System.String
-      description: To be added.
+      description: The <xref:System.IO.Packaging.PackageRelationship.Id%2A> of the relationship to check for.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if this part owns a relationship with the specified id; otherwise, .
   overload: System.IO.Packaging.PackagePart.RelationshipExists*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    id is ."
+  - type: System.Xml.XmlException
+    commentId: T:System.Xml.XmlException
+    description: "\n    id is not a valid XML identifier."
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
+  - type: System.IO.IOException
+    commentId: T:System.IO.IOException
+    description: The package is write-only (relationship information cannot be read).
   platform:
   - net-11
   - net-20
@@ -562,14 +723,18 @@ items:
   assemblies:
   - WindowsBase
   namespace: System.IO.Packaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] of the part.
+  remarks: "Uri is a read-only property that can be accessed only when the parent <xref:System.IO.Packaging.Package> is open.  \n  \n The Uri property is automatically set by the <xref:System.IO.Packaging.PackagePart.%23ctor%2A> constructor.  After it is set by the constructor, the Uri of the part cannot be changed."
   syntax:
     content: public Uri Uri { get; }
     return:
       type: System.Uri
-      description: To be added.
+      description: The [!INCLUDE[TLA2#tla_uri](../../add/includes/tla2sharptla-uri-md.md)] of the part relative to the package root.
   overload: System.IO.Packaging.PackagePart.Uri*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "The part has been deleted.  \n  \n -or-  \n  \n The <xref:System.IO.Packaging.PackagePart.Package%2A> is not open (<xref:System.IO.Packaging.Package.Dispose%2A> or <xref:System.IO.Packaging.Package.Close%2A> has been called)."
   platform:
   - net-11
   - net-20
@@ -602,18 +767,6 @@ references:
   name: PackagePart(Package,Uri,String)
   nameWithType: PackagePart.PackagePart(Package,Uri,String)
   fullName: System.IO.Packaging.PackagePart.PackagePart(Package,Uri,String)
-- uid: System.IO.Packaging.Package
-  parent: System.IO.Packaging
-  isExternal: false
-  name: Package
-  nameWithType: Package
-  fullName: System.IO.Packaging.Package
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.String
   parent: System
   isExternal: true
@@ -626,24 +779,6 @@ references:
   name: PackagePart(Package,Uri,String,CompressionOption)
   nameWithType: PackagePart.PackagePart(Package,Uri,String,CompressionOption)
   fullName: System.IO.Packaging.PackagePart.PackagePart(Package,Uri,String,CompressionOption)
-- uid: System.IO.Packaging.Package
-  parent: System.IO.Packaging
-  isExternal: false
-  name: Package
-  nameWithType: Package
-  fullName: System.IO.Packaging.Package
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.CompressionOption
   parent: System.IO.Packaging
   isExternal: false
@@ -656,24 +791,12 @@ references:
   name: CompressionOption
   nameWithType: PackagePart.CompressionOption
   fullName: System.IO.Packaging.PackagePart.CompressionOption
-- uid: System.IO.Packaging.CompressionOption
-  parent: System.IO.Packaging
-  isExternal: false
-  name: CompressionOption
-  nameWithType: CompressionOption
-  fullName: System.IO.Packaging.CompressionOption
 - uid: System.IO.Packaging.PackagePart.ContentType
   parent: System.IO.Packaging.PackagePart
   isExternal: false
   name: ContentType
   nameWithType: PackagePart.ContentType
   fullName: System.IO.Packaging.PackagePart.ContentType
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.PackagePart.CreateRelationship(System.Uri,System.IO.Packaging.TargetMode,System.String)
   parent: System.IO.Packaging.PackagePart
   isExternal: false
@@ -686,102 +809,36 @@ references:
   name: PackageRelationship
   nameWithType: PackageRelationship
   fullName: System.IO.Packaging.PackageRelationship
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.IO.Packaging.TargetMode
   parent: System.IO.Packaging
   isExternal: false
   name: TargetMode
   nameWithType: TargetMode
   fullName: System.IO.Packaging.TargetMode
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.PackagePart.CreateRelationship(System.Uri,System.IO.Packaging.TargetMode,System.String,System.String)
   parent: System.IO.Packaging.PackagePart
   isExternal: false
   name: CreateRelationship(Uri,TargetMode,String,String)
   nameWithType: PackagePart.CreateRelationship(Uri,TargetMode,String,String)
   fullName: System.IO.Packaging.PackagePart.CreateRelationship(Uri,TargetMode,String,String)
-- uid: System.IO.Packaging.PackageRelationship
-  parent: System.IO.Packaging
-  isExternal: false
-  name: PackageRelationship
-  nameWithType: PackageRelationship
-  fullName: System.IO.Packaging.PackageRelationship
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
-- uid: System.IO.Packaging.TargetMode
-  parent: System.IO.Packaging
-  isExternal: false
-  name: TargetMode
-  nameWithType: TargetMode
-  fullName: System.IO.Packaging.TargetMode
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.PackagePart.DeleteRelationship(System.String)
   parent: System.IO.Packaging.PackagePart
   isExternal: false
   name: DeleteRelationship(String)
   nameWithType: PackagePart.DeleteRelationship(String)
   fullName: System.IO.Packaging.PackagePart.DeleteRelationship(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.PackagePart.GetContentTypeCore
   parent: System.IO.Packaging.PackagePart
   isExternal: false
   name: GetContentTypeCore()
   nameWithType: PackagePart.GetContentTypeCore()
   fullName: System.IO.Packaging.PackagePart.GetContentTypeCore()
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.PackagePart.GetRelationship(System.String)
   parent: System.IO.Packaging.PackagePart
   isExternal: false
   name: GetRelationship(String)
   nameWithType: PackagePart.GetRelationship(String)
   fullName: System.IO.Packaging.PackagePart.GetRelationship(String)
-- uid: System.IO.Packaging.PackageRelationship
-  parent: System.IO.Packaging
-  isExternal: false
-  name: PackageRelationship
-  nameWithType: PackageRelationship
-  fullName: System.IO.Packaging.PackageRelationship
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.PackagePart.GetRelationships
   parent: System.IO.Packaging.PackagePart
   isExternal: false
@@ -800,18 +857,6 @@ references:
   name: GetRelationshipsByType(String)
   nameWithType: PackagePart.GetRelationshipsByType(String)
   fullName: System.IO.Packaging.PackagePart.GetRelationshipsByType(String)
-- uid: System.IO.Packaging.PackageRelationshipCollection
-  parent: System.IO.Packaging
-  isExternal: false
-  name: PackageRelationshipCollection
-  nameWithType: PackageRelationshipCollection
-  fullName: System.IO.Packaging.PackageRelationshipCollection
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.PackagePart.GetStream
   parent: System.IO.Packaging.PackagePart
   isExternal: false
@@ -830,12 +875,6 @@ references:
   name: GetStream(FileMode)
   nameWithType: PackagePart.GetStream(FileMode)
   fullName: System.IO.Packaging.PackagePart.GetStream(FileMode)
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
 - uid: System.IO.FileMode
   parent: System.IO
   isExternal: false
@@ -848,18 +887,6 @@ references:
   name: GetStream(FileMode,FileAccess)
   nameWithType: PackagePart.GetStream(FileMode,FileAccess)
   fullName: System.IO.Packaging.PackagePart.GetStream(FileMode,FileAccess)
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
 - uid: System.IO.FileAccess
   parent: System.IO
   isExternal: false
@@ -872,36 +899,12 @@ references:
   name: GetStreamCore(FileMode,FileAccess)
   nameWithType: PackagePart.GetStreamCore(FileMode,FileAccess)
   fullName: System.IO.Packaging.PackagePart.GetStreamCore(FileMode,FileAccess)
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
-- uid: System.IO.FileMode
-  parent: System.IO
-  isExternal: false
-  name: FileMode
-  nameWithType: FileMode
-  fullName: System.IO.FileMode
-- uid: System.IO.FileAccess
-  parent: System.IO
-  isExternal: false
-  name: FileAccess
-  nameWithType: FileAccess
-  fullName: System.IO.FileAccess
 - uid: System.IO.Packaging.PackagePart.Package
   parent: System.IO.Packaging.PackagePart
   isExternal: false
   name: Package
   nameWithType: PackagePart.Package
   fullName: System.IO.Packaging.PackagePart.Package
-- uid: System.IO.Packaging.Package
-  parent: System.IO.Packaging
-  isExternal: false
-  name: Package
-  nameWithType: Package
-  fullName: System.IO.Packaging.Package
 - uid: System.IO.Packaging.PackagePart.RelationshipExists(System.String)
   parent: System.IO.Packaging.PackagePart
   isExternal: false
@@ -914,24 +917,12 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.IO.Packaging.PackagePart.Uri
   parent: System.IO.Packaging.PackagePart
   isExternal: false
   name: Uri
   nameWithType: PackagePart.Uri
   fullName: System.IO.Packaging.PackagePart.Uri
-- uid: System.Uri
-  parent: System
-  isExternal: true
-  name: Uri
-  nameWithType: Uri
-  fullName: System.Uri
 - uid: System.IO.Packaging.PackagePart.#ctor*
   parent: System.IO.Packaging.PackagePart
   isExternal: false

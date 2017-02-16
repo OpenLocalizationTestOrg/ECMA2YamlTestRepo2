@@ -19,8 +19,10 @@ items:
   nameWithType: BitmapEncoder
   fullName: System.Windows.Media.Imaging.BitmapEncoder
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Encodes a collection of  objects to an image stream.
+  remarks: "A derived codec may also provide support for specialized encoding properties, which are used to determine how a bitmap is encoded. For example, a codec may support specialized compression routines or interlacing of an encoded image.  \n  \n You can specify multiple frames for any derived encoder, even if the bitmap format only supports one frame. In this case, only the first frame is saved.  \n  \n The collection of frames can be encoded one at a time to any number of file streams.  \n  \n Encoding does not work in partial trust. See [WPF Partial Trust Security](../Topic/WPF%20Partial%20Trust%20Security.md) for information on partial trust."
+  example:
+  - "The following example demonstrates how to use the derived <xref:System.Windows.Media.Imaging.TiffBitmapEncoder> class to encode an image.  \n  \n [!code-vb[bitmapframeexample#3](../../add/codesnippet/VisualBasic/BitmapFrame/BitmapFrame.vb#3)]\n [!code-cs[bitmapframeexample#3](../../add/codesnippet/CSharp/BitmapFrame/BitmapFrame.cs#3)]"
   syntax:
     content: 'public abstract class BitmapEncoder : System.Windows.Threading.DispatcherObject'
   inheritance:
@@ -47,12 +49,12 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media.Imaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: protected BitmapEncoder ();
     parameters: []
   overload: System.Windows.Media.Imaging.BitmapEncoder.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -69,14 +71,17 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media.Imaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets information that describes this codec.
+  remarks: A <xref:System.Windows.Media.Imaging.BitmapCodecInfo> implementation is required for every codec.
+  example:
+  - "The following example shows how to read information from a <xref:System.Windows.Media.Imaging.BitmapCodecInfo> object and send it to a string.  \n  \n [!code-vb[bitmapframeexample#3](../../add/codesnippet/VisualBasic/BitmapFrame/BitmapFrame.vb#3)]\n [!code-cs[bitmapframeexample#3](../../add/codesnippet/CSharp/BitmapFrame/BitmapFrame.cs#3)]"
   syntax:
     content: public virtual System.Windows.Media.Imaging.BitmapCodecInfo CodecInfo { get; }
     return:
       type: System.Windows.Media.Imaging.BitmapCodecInfo
-      description: To be added.
+      description: An instance of .
   overload: System.Windows.Media.Imaging.BitmapEncoder.CodecInfo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -93,14 +98,20 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media.Imaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that represents the color profile that is associated with this encoder.
   syntax:
     content: public virtual System.Collections.ObjectModel.ReadOnlyCollection<System.Windows.Media.ColorContext> ColorContexts { get; set; }
     return:
       type: System.Collections.ObjectModel.ReadOnlyCollection{System.Windows.Media.ColorContext}
-      description: To be added.
+      description: The collection of  objects that represents the color profiles that this encoder uses.
   overload: System.Windows.Media.Imaging.BitmapEncoder.ColorContexts*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The encoder does not support color profiles.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The  value that is passed to the encoder is .
   platform:
   - net-11
   - net-20
@@ -117,18 +128,22 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media.Imaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a  from a <xref:System.Guid> that identifies the desired bitmap format.
+  remarks: This method is provided for extensibility purposes only. Codec authors must generate their own <xref:System.Guid> to identify their newly created encoder. Use the derived <xref:System.Windows.Media.Imaging.BitmapEncoder> classes, such as the <xref:System.Windows.Media.Imaging.BmpBitmapEncoder> class, to create an encoder for a built in codec.
   syntax:
     content: public static System.Windows.Media.Imaging.BitmapEncoder Create (Guid containerFormat);
     parameters:
     - id: containerFormat
       type: System.Guid
-      description: To be added.
+      description: Identifies the desired bitmap encoding format.
     return:
       type: System.Windows.Media.Imaging.BitmapEncoder
-      description: To be added.
+      description: A  that can encode to the specified containerFormat.
   overload: System.Windows.Media.Imaging.BitmapEncoder.Create*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The containerFormat is .
   platform:
   - net-11
   - net-20
@@ -145,14 +160,20 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media.Imaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the individual frames within an image.
+  remarks: "Only [!INCLUDE[TLA#tla_tiff](../../add/includes/tlasharptla-tiff-md.md)], [!INCLUDE[TLA#tla_gif](../../add/includes/tlasharptla-gif-md.md)], and [!INCLUDE[TLA#tla_wdp](../../add/includes/tlasharptla-wdp-md.md)] images support more than one frame. Attempts to add additional frames to formats that do not support them will result in only the first frame being encoded.  \n  \n<a name=\"xamlTextUsage_Frames\"></a>   \n## XAML Text Usage  \n You cannot use this property in [!INCLUDE[TLA#tla_xaml](../../add/includes/tlasharptla-xaml-md.md)]."
+  example:
+  - "The following example shows how to add a frame to an encoder.  \n  \n [!code-vb[bitmapframeexample#3](../../add/codesnippet/VisualBasic/BitmapFrame/BitmapFrame.vb#3)]\n [!code-cs[bitmapframeexample#3](../../add/codesnippet/CSharp/BitmapFrame/BitmapFrame.cs#3)]"
   syntax:
     content: public virtual System.Collections.Generic.IList<System.Windows.Media.Imaging.BitmapFrame> Frames { get; set; }
     return:
       type: System.Collections.Generic.IList{System.Windows.Media.Imaging.BitmapFrame}
-      description: To be added.
+      description: A collection of  objects within the image.
   overload: System.Windows.Media.Imaging.BitmapEncoder.Frames*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The  value that is passed to the encoder is .
   platform:
   - net-11
   - net-20
@@ -169,14 +190,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media.Imaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the metadata that will be associated with this bitmap during encoding.
+  remarks: Bitmap images support and store metadata differently. For more information about the metadata types that are supported for each bitmap, see the <xref:System.Windows.Media.Imaging.BitmapMetadata> class.
   syntax:
     content: public virtual System.Windows.Media.Imaging.BitmapMetadata Metadata { get; set; }
     return:
       type: System.Windows.Media.Imaging.BitmapMetadata
-      description: To be added.
+      description: An instance of .
   overload: System.Windows.Media.Imaging.BitmapEncoder.Metadata*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The encoder does not support global metadata.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: An attempt is made to write metadata in an incompatible format.
   platform:
   - net-11
   - net-20
@@ -193,14 +221,20 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media.Imaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that represents the  of an encoded bitmap.
+  remarks: Only [!INCLUDE[TLA#tla_tiff](../../add/includes/tlasharptla-tiff-md.md)] and [!INCLUDE[TLA#tla_gif](../../add/includes/tlasharptla-gif-md.md)] images (and some older, non-standard [!INCLUDE[TLA#tla_bmp](../../add/includes/tlasharptla-bmp-md.md)] images) support palettes.
+  example:
+  - "The following example demonstrates how to apply a custom palette to a [!INCLUDE[TLA#tla_tiff](../../add/includes/tlasharptla-tiff-md.md)] image and subsequently encode it.  \n  \n [!code-vb[bitmapframeexample#1](../../add/codesnippet/VisualBasic/BitmapFrame/BitmapFrame.vb#1)]\n [!code-cs[bitmapframeexample#1](../../add/codesnippet/CSharp/BitmapFrame/BitmapFrame.cs#1)]"
   syntax:
     content: public virtual System.Windows.Media.Imaging.BitmapPalette Palette { get; set; }
     return:
       type: System.Windows.Media.Imaging.BitmapPalette
-      description: To be added.
+      description: An instance of .
   overload: System.Windows.Media.Imaging.BitmapEncoder.Palette*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The  value that is passed to the encoder is .
   platform:
   - net-11
   - net-20
@@ -217,14 +251,20 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media.Imaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a  that represents the global preview of a bitmap, if there is one.
   syntax:
     content: public virtual System.Windows.Media.Imaging.BitmapSource Preview { get; set; }
     return:
       type: System.Windows.Media.Imaging.BitmapSource
-      description: To be added.
+      description: A  that represents the preview of a bitmap.
   overload: System.Windows.Media.Imaging.BitmapEncoder.Preview*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The bitmap does not support preview.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The value is set to .
   platform:
   - net-11
   - net-20
@@ -241,15 +281,24 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media.Imaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Encodes a bitmap image to a specified <xref:System.IO.Stream>.
+  remarks: In the context of this [!INCLUDE[TLA#tla_api](../../add/includes/tlasharptla-api-md.md)], "save" and "encode" are synonymous.
+  example:
+  - "The following example demonstrates how to save a bitmap image to a file stream by using the derived <xref:System.Windows.Media.Imaging.TiffBitmapEncoder> class.  \n  \n [!code-vb[bitmapframeexample#3](../../add/codesnippet/VisualBasic/BitmapFrame/BitmapFrame.vb#3)]\n [!code-cs[bitmapframeexample#3](../../add/codesnippet/CSharp/BitmapFrame/BitmapFrame.cs#3)]"
   syntax:
     content: public virtual void Save (System.IO.Stream stream);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: Identifies the file stream that this bitmap is encoded to.
   overload: System.Windows.Media.Imaging.BitmapEncoder.Save*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The bitmap has already been encoded.
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The <xref:System.Windows.Media.Imaging.BitmapEncoder.Frames%2A> count is less than or equal to zero.
   platform:
   - net-11
   - net-20
@@ -266,14 +315,20 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Media.Imaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a  that represents the global embedded thumbnail.
   syntax:
     content: public virtual System.Windows.Media.Imaging.BitmapSource Thumbnail { get; set; }
     return:
       type: System.Windows.Media.Imaging.BitmapSource
-      description: To be added.
+      description: A  that represents the thumbnail of the bitmap.
   overload: System.Windows.Media.Imaging.BitmapEncoder.Thumbnail*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The bitmap does not support thumbnails.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The value is set to .
   platform:
   - net-11
   - net-20
@@ -312,6 +367,21 @@ references:
   name: ReadOnlyCollection<ColorContext>
   nameWithType: ReadOnlyCollection<ColorContext>
   fullName: System.Collections.ObjectModel.ReadOnlyCollection<System.Windows.Media.ColorContext>
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ReadOnlyCollection`1
+    name: ReadOnlyCollection
+    nameWithType: ReadOnlyCollection
+    fullName: ReadOnlyCollection<System.Windows.Media.ColorContext>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Windows.Media.ColorContext
+    name: ColorContext
+    nameWithType: ColorContext
+    fullName: ColorContext
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Media.Imaging.BitmapEncoder.Create(System.Guid)
   parent: System.Windows.Media.Imaging.BitmapEncoder
   isExternal: false
@@ -342,6 +412,21 @@ references:
   name: IList<BitmapFrame>
   nameWithType: IList<BitmapFrame>
   fullName: System.Collections.Generic.IList<System.Windows.Media.Imaging.BitmapFrame>
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: IList<System.Windows.Media.Imaging.BitmapFrame>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Windows.Media.Imaging.BitmapFrame
+    name: BitmapFrame
+    nameWithType: BitmapFrame
+    fullName: BitmapFrame
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Media.Imaging.BitmapEncoder.Metadata
   parent: System.Windows.Media.Imaging.BitmapEncoder
   isExternal: false
@@ -396,12 +481,6 @@ references:
   name: Thumbnail
   nameWithType: BitmapEncoder.Thumbnail
   fullName: System.Windows.Media.Imaging.BitmapEncoder.Thumbnail
-- uid: System.Windows.Media.Imaging.BitmapSource
-  parent: System.Windows.Media.Imaging
-  isExternal: false
-  name: BitmapSource
-  nameWithType: BitmapSource
-  fullName: System.Windows.Media.Imaging.BitmapSource
 - uid: System.Windows.Media.Imaging.BitmapEncoder.#ctor*
   parent: System.Windows.Media.Imaging.BitmapEncoder
   isExternal: false

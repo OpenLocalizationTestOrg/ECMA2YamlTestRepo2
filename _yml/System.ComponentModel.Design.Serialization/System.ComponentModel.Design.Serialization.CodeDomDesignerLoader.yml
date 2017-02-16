@@ -28,8 +28,8 @@ items:
   nameWithType: CodeDomDesignerLoader
   fullName: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides the base class for implementing a CodeDOM-based designer loader.
+  remarks: CodeDomDesignerLoader is an abstract class that provides a full designer loader based on the Code Document Object Model (CodeDOM). You provide the CodeDOM parser and generator, and a type resolution service.
   syntax:
     content: >-
       [System.Security.SecurityCritical]
@@ -75,12 +75,12 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: protected CodeDomDesignerLoader ();
     parameters: []
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -97,14 +97,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the CodeDomProvider this designer loader will use.
+  remarks: The designer loader does not parse or generate code from the returned CodeDomProvider, but it does use the provider to obtain an <xref:System.CodeDom.Compiler.ICodeGenerator> that it can use to validate identifiers in the name-creation service. The designer loader will also check the CodeDomProvider to see if it implements the <xref:System.ComponentModel.Design.Serialization.ICodeDomDesignerReload> interface. For more information on parsing or generating code, see the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Parse%2A> and <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Write%2A> methods.
   syntax:
     content: protected abstract System.CodeDom.Compiler.CodeDomProvider CodeDomProvider { get; }
     return:
       type: System.CodeDom.Compiler.CodeDomProvider
-      description: To be added.
+      description: The CodeDomProvider this designer loader will use
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomProvider*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -121,12 +122,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the resources used by the  class.
+  remarks: "The Dispose method removes services added by the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Initialize%2A> method.  \n  \n Call Dispose when you are finished using the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader>. The Dispose method leaves the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader> in an unusable state. After calling Dispose, you must release all references to the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader> so the garbage collector can reclaim the memory that the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader> was occupying. For more information, see [Cleaning Up Unmanaged Resources](../Topic/Cleaning%20Up%20Unmanaged%20Resources.md) and [Implementing a Dispose Method](../Topic/Implementing%20a%20Dispose%20Method.md).  \n  \n> [!NOTE]\n>  Always call Dispose before you release your last reference to the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader>. Otherwise, the resources it is using will not be freed until the garbage collector calls the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader> object's `Finalize` method."
   syntax:
     content: public override void Dispose ();
     parameters: []
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -143,12 +145,16 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes services.
+  remarks: "The following table describes the replaceable services that the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader> adds to the service container.  \n  \n|Term|Definition|  \n|----------|----------------|  \n|<xref:System.ComponentModel.Design.Serialization.INameCreationService>|Provides semantics for creating names of objects. The service uses the CodeDOM provider’s <xref:System.CodeDom.Compiler.ICodeGenerator> interface to create names that are valid identifiers for the language. In addition, the name creation service supports empty names. Empty names should be interpreted as temporary local variables during serialization.|  \n|<xref:System.ComponentModel.Design.Serialization.IDesignerSerializationService>|Allows other objects to serialize a group of components into a binary object. This service is most often used by features such as copy and paste or undo and redo. The <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader> class provides a designer serialization service that is based on creating CodeDOM trees for objects.|  \n|<xref:System.ComponentModel.Design.Serialization.ComponentSerializationService>|This service replaces <xref:System.ComponentModel.Design.Serialization.IDesignerSerializationService> as a means to serialize components to a binary object.|  \n  \n For details on replaceable and non-replaceable services, see <xref:System.ComponentModel.Design.Serialization.BasicDesignerLoader>."
   syntax:
     content: protected override void Initialize ();
     parameters: []
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Initialize*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  has not been initialized, or the designer loader did not supply a type resolution service, which is required for CodeDom serialization.
   platform:
   - net-11
   - net-20
@@ -165,15 +171,22 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a value indicating whether a reload is required.
+  remarks: The IsReloadNeeded method checks for the presence of the <xref:System.ComponentModel.Design.Serialization.ICodeDomDesignerReload> interface on the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomProvider%2A>. The provider will reparse the CodeDOM tree and pass the resulting parse tree to the <xref:System.ComponentModel.Design.Serialization.ICodeDomDesignerReload.ShouldReloadDesigner%2A> method. If this method returns `false`, the designer will not be reloaded.
   syntax:
     content: protected override bool IsReloadNeeded ();
     parameters: []
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomProvider%2A> decides a reload is required; otherwise, .
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.IsReloadNeeded*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The language did not provide a code parser for this file; this file type may not support a designer.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The class can be designed, but it is not the first class in the file, or the designer could not be shown for this file because none of the classes within it can be designed.
   platform:
   - net-11
   - net-20
@@ -190,12 +203,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Notifies the designer loader that loading is about to begin.
+  remarks: For more information on the OnBeginLoad method, see <xref:System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnBeginLoad%2A?displayProperty=fullName>.
   syntax:
     content: protected override void OnBeginLoad ();
     parameters: []
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnBeginLoad*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -212,12 +226,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Notifies the designer loader that unloading is about to begin.
+  remarks: For more information on the OnBeginUnload method, see <xref:System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnBeginUnload%2A?displayProperty=fullName>.
   syntax:
     content: protected override void OnBeginUnload ();
     parameters: []
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnBeginUnload*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -234,21 +249,21 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Raises the  event.
   syntax:
     content: protected virtual void OnComponentRename (object component, string oldName, string newName);
     parameters:
     - id: component
       type: System.Object
-      description: To be added.
+      description: The component to rename.
     - id: oldName
       type: System.String
-      description: To be added.
+      description: The original name of the component.
     - id: newName
       type: System.String
-      description: To be added.
+      description: The new name of the component.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnComponentRename*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -265,18 +280,19 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Notifies the designer loader that loading is complete.
+  remarks: For more information on the OnEndLoad method, see <xref:System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnEndLoad%2A?displayProperty=fullName>.
   syntax:
     content: protected override void OnEndLoad (bool successful, System.Collections.ICollection errors);
     parameters:
     - id: successful
       type: System.Boolean
-      description: To be added.
+      description: "\n     to indicate that the load completed successfully; otherwise, ."
     - id: errors
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> of objects (usually exceptions) that were reported as errors.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndLoad*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -293,15 +309,16 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Parses the text or other persistent storage and returns a .
+  remarks: The Parse method is called when the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader> needs to parse the source code. The source code location and format must be specified by deriving classes.
   syntax:
     content: protected abstract System.CodeDom.CodeCompileUnit Parse ();
     parameters: []
     return:
       type: System.CodeDom.CodeCompileUnit
-      description: To be added.
+      description: A  resulting from a parse operation.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Parse*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -318,15 +335,22 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Requests serialization of the root component of the designer.
+  remarks: "The PerformFlush method obtains the root <xref:System.ComponentModel.Design.Serialization.CodeDomSerializer> for the root component of the designer and invokes the serializer to serialize the component. If the result of this operation is a <xref:System.CodeDom.CodeTypeDeclaration>, then PerformFlush integrates the <xref:System.CodeDom.CodeTypeDeclaration> with the existing CodeDOM tree. The result is the original CodeDOM tree with matching members and statements replaced. Finally, PerformFlush calls the abstract <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Write%2A> method to save this CodeDOM tree.  \n  \n If the serialization of the root designer component does not result in a <xref:System.CodeDom.CodeTypeDeclaration>, then PerformFlush does nothing further.  \n  \n> [!IMPORTANT]\n>  It is the responsibility of the caller to ensure that a CodeDOM originates from a trusted source. Accepting a CodeDOM object from an untrusted party could allow that party to run malicious code. When flushing a CodeDOM into a file, the framework will run code represented by the CodeDOM object and the serialized content of the object as provided."
   syntax:
     content: protected override void PerformFlush (System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager);
     parameters:
     - id: manager
       type: System.ComponentModel.Design.Serialization.IDesignerSerializationManager
-      description: To be added.
+      description: The  from which to request the serializer.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformFlush*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The language did not provide a code parser for this file; this file type may not support a designer.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The class can be designed, but it is not the first class in the file, or the designer could not be shown for this file because none of the classes within it can be designed.
   platform:
   - net-11
   - net-20
@@ -343,15 +367,22 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Parses code from a CodeDOM provider.
+  remarks: "The PerformLoad method obtains an <xref:System.CodeDom.Compiler.ICodeParser> from the CodeDOM provider and parses the code. PerformLoad locates the first class in the file, obtains a root <xref:System.ComponentModel.Design.Serialization.CodeDomSerializer> for the data type, and then invokes the serializer to deserialize the data type. PerformLoad assumes that this process will create all necessary components in the <xref:System.ComponentModel.IContainer> of the <xref:System.ComponentModel.Design.Serialization.BasicDesignerLoader.LoaderHost%2A> property. Finally, PerformLoad calls the <xref:System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentClassName%2A> method with the fully qualified name of the type it passed to the CodeDOM serializer.  \n  \n> [!IMPORTANT]\n>  It is the responsibility of the caller to ensure that a CodeDOM originates from a trusted source. Accepting a CodeDOM object from an untrusted party could allow that party to run malicious code. When loading a CodeDOM into the design surface, the framework will run code represented by the CodeDOM object and the serialized content of the object as provided."
   syntax:
     content: protected override void PerformLoad (System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager);
     parameters:
     - id: manager
       type: System.ComponentModel.Design.Serialization.IDesignerSerializationManager
-      description: To be added.
+      description: The  from which to request the serializer.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformLoad*
+  exceptions:
+  - type: System.NotSupportedException
+    commentId: T:System.NotSupportedException
+    description: The language did not provide a code parser for this file; this file type may not support a designer.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The class can be designed, but it is not the first class in the file, or the designer could not be shown for this file because none of the classes within it can be designed.
   platform:
   - net-11
   - net-20
@@ -369,18 +400,21 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Deserializes the specified serialization data object and returns a collection of objects represented by that data.
   syntax:
     content: System.Collections.ICollection IDesignerSerializationService.Deserialize (object serializationData);
     parameters:
     - id: serializationData
       type: System.Object
-      description: To be added.
+      description: An object consisting of serialized data.
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: A collection of objects represented by serializationData.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System#ComponentModel#Design#Serialization#IDesignerSerializationService#Deserialize*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    serializationData is not a ."
   platform:
   - net-11
   - net-20
@@ -398,18 +432,21 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Serializes the specified collection of objects and stores them in a serialization data object.
   syntax:
     content: object IDesignerSerializationService.Serialize (System.Collections.ICollection objects);
     parameters:
     - id: objects
       type: System.Collections.ICollection
-      description: To be added.
+      description: A collection of objects to serialize.
     return:
       type: System.Object
-      description: To be added.
+      description: An object that contains the serialized state of the specified collection of objects.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System#ComponentModel#Design#Serialization#IDesignerSerializationService#Serialize*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The  was not found.
   platform:
   - net-11
   - net-20
@@ -427,21 +464,24 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates a new name that is unique to all components in the specified container.
   syntax:
     content: string INameCreationService.CreateName (System.ComponentModel.IContainer container, Type dataType);
     parameters:
     - id: container
       type: System.ComponentModel.IContainer
-      description: To be added.
+      description: The container where the new object is added.
     - id: dataType
       type: System.Type
-      description: To be added.
+      description: The data type of the object that receives the name.
     return:
       type: System.String
-      description: To be added.
+      description: A unique name for the data type.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System#ComponentModel#Design#Serialization#INameCreationService#CreateName*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    dataType is ."
   platform:
   - net-11
   - net-20
@@ -459,18 +499,21 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the specified name is valid.
   syntax:
     content: bool INameCreationService.IsValidName (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to validate.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the name is valid; otherwise, .
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System#ComponentModel#Design#Serialization#INameCreationService#IsValidName*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
   platform:
   - net-11
   - net-20
@@ -488,15 +531,21 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the specified name is valid.
   syntax:
     content: void INameCreationService.ValidateName (string name);
     parameters:
     - id: name
       type: System.String
-      description: To be added.
+      description: The name to validate.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System#ComponentModel#Design#Serialization#INameCreationService#ValidateName*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    name is not a valid identifier, or there is already a component with the same name."
   platform:
   - net-11
   - net-20
@@ -513,14 +562,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type resolution service to be used with this designer loader.
+  remarks: The <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader> automatically adds this <xref:System.ComponentModel.Design.ITypeResolutionService> to the service container when the <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Initialize%2A> method is invoked. While the type resolution service is optional in many scenarios, it is required for code interpretation because source code contains type names, but no assembly references.
   syntax:
     content: protected abstract System.ComponentModel.Design.ITypeResolutionService TypeResolutionService { get; }
     return:
       type: System.ComponentModel.Design.ITypeResolutionService
-      description: To be added.
+      description: An  that the CodeDOM serializers will use when resolving types.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.TypeResolutionService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -537,15 +587,16 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design.Serialization
-  summary: To be added.
-  remarks: To be added.
+  summary: Writes compile-unit changes to persistent storage.
+  remarks: The Write method saves a <xref:System.CodeDom.CodeCompileUnit> to persistent storage. The deriving class is responsible for invoking the <xref:System.CodeDom.Compiler.ICodeGenerator> on the appropriate text writer to save the code. The <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader> ensures that the CodeDOM objects that are passed to Write are the same instances of objects that were retrieved from <xref:System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Parse%2A>, except in cases where the serialization process had to make changes to the code. This allows an optimized designer loader to store additional data in the <xref:System.CodeDom.CodeObject.UserData%2A> property of code elements. This data will be available during the Write method for any elements that were not replaced by the serialization process.
   syntax:
     content: protected abstract void Write (System.CodeDom.CodeCompileUnit unit);
     parameters:
     - id: unit
       type: System.CodeDom.CodeCompileUnit
-      description: To be added.
+      description: The  to be persisted.
   overload: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Write*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -626,24 +677,12 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndLoad(System.Boolean,System.Collections.ICollection)
   parent: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
   isExternal: false
   name: OnEndLoad(Boolean,ICollection)
   nameWithType: CodeDomDesignerLoader.OnEndLoad(Boolean,ICollection)
   fullName: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndLoad(Boolean,ICollection)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Collections.ICollection
   parent: System.Collections
   isExternal: true
@@ -680,60 +719,24 @@ references:
   name: PerformLoad(IDesignerSerializationManager)
   nameWithType: CodeDomDesignerLoader.PerformLoad(IDesignerSerializationManager)
   fullName: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformLoad(IDesignerSerializationManager)
-- uid: System.ComponentModel.Design.Serialization.IDesignerSerializationManager
-  parent: System.ComponentModel.Design.Serialization
-  isExternal: false
-  name: IDesignerSerializationManager
-  nameWithType: IDesignerSerializationManager
-  fullName: System.ComponentModel.Design.Serialization.IDesignerSerializationManager
 - uid: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System#ComponentModel#Design#Serialization#IDesignerSerializationService#Deserialize(System.Object)
   parent: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
   isExternal: false
   name: System.ComponentModel.Design.Serialization.IDesignerSerializationService.Deserialize(Object)
   nameWithType: CodeDomDesignerLoader.System.ComponentModel.Design.Serialization.IDesignerSerializationService.Deserialize(Object)
   fullName: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System.ComponentModel.Design.Serialization.IDesignerSerializationService.Deserialize(Object)
-- uid: System.Collections.ICollection
-  parent: System.Collections
-  isExternal: true
-  name: ICollection
-  nameWithType: ICollection
-  fullName: System.Collections.ICollection
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System#ComponentModel#Design#Serialization#IDesignerSerializationService#Serialize(System.Collections.ICollection)
   parent: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
   isExternal: false
   name: System.ComponentModel.Design.Serialization.IDesignerSerializationService.Serialize(ICollection)
   nameWithType: CodeDomDesignerLoader.System.ComponentModel.Design.Serialization.IDesignerSerializationService.Serialize(ICollection)
   fullName: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System.ComponentModel.Design.Serialization.IDesignerSerializationService.Serialize(ICollection)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Collections.ICollection
-  parent: System.Collections
-  isExternal: true
-  name: ICollection
-  nameWithType: ICollection
-  fullName: System.Collections.ICollection
 - uid: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System#ComponentModel#Design#Serialization#INameCreationService#CreateName(System.ComponentModel.IContainer,System.Type)
   parent: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
   isExternal: false
   name: System.ComponentModel.Design.Serialization.INameCreationService.CreateName(IContainer,Type)
   nameWithType: CodeDomDesignerLoader.System.ComponentModel.Design.Serialization.INameCreationService.CreateName(IContainer,Type)
   fullName: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System.ComponentModel.Design.Serialization.INameCreationService.CreateName(IContainer,Type)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ComponentModel.IContainer
   parent: System.ComponentModel
   isExternal: false
@@ -752,30 +755,12 @@ references:
   name: System.ComponentModel.Design.Serialization.INameCreationService.IsValidName(String)
   nameWithType: CodeDomDesignerLoader.System.ComponentModel.Design.Serialization.INameCreationService.IsValidName(String)
   fullName: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System.ComponentModel.Design.Serialization.INameCreationService.IsValidName(String)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System#ComponentModel#Design#Serialization#INameCreationService#ValidateName(System.String)
   parent: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
   isExternal: false
   name: System.ComponentModel.Design.Serialization.INameCreationService.ValidateName(String)
   nameWithType: CodeDomDesignerLoader.System.ComponentModel.Design.Serialization.INameCreationService.ValidateName(String)
   fullName: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.System.ComponentModel.Design.Serialization.INameCreationService.ValidateName(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.TypeResolutionService
   parent: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
   isExternal: false
@@ -794,12 +779,6 @@ references:
   name: Write(CodeCompileUnit)
   nameWithType: CodeDomDesignerLoader.Write(CodeCompileUnit)
   fullName: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Write(CodeCompileUnit)
-- uid: System.CodeDom.CodeCompileUnit
-  parent: System.CodeDom
-  isExternal: false
-  name: CodeCompileUnit
-  nameWithType: CodeCompileUnit
-  fullName: System.CodeDom.CodeCompileUnit
 - uid: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.#ctor*
   parent: System.ComponentModel.Design.Serialization.CodeDomDesignerLoader
   isExternal: false

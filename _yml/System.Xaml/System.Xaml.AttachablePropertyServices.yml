@@ -15,8 +15,8 @@ items:
   nameWithType: AttachablePropertyServices
   fullName: System.Xaml.AttachablePropertyServices
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides static helper methods that obtain values and accessor method information from an attachable property and that work with an attached property store.
+  remarks: "Most functionality in this class relies on an attached property store, which generally implements the <xref:System.Xaml.IAttachedPropertyStore> interface. However, parameters for passing the store into AttachablePropertyServices are not typed as the interface and are instead typed as `object`. This is because you can pass an arbitrary object, and in this case, an internal default attachable property store is used.  \n  \n Best practice for the arbitrary object is to pass the object that would otherwise be associated with the store. Do not pass `null` to indicate that you do not have an <xref:System.Xaml.IAttachedPropertyStore> to use. Passing `null` enters code paths that do nothing. Passing an object that is non-null, but evaluates as `null` on an attempted <xref:System.Xaml.IAttachedPropertyStore> cast, uses the default attachable property store."
   syntax:
     content: public static class AttachablePropertyServices
   inheritance:
@@ -39,21 +39,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Copies all attachable property/value pairs from a specified attachable property store and into a destination array.
+  remarks: Calling this method invokes an underlying <xref:System.Collections.Generic.ICollection%601.CopyTo%2A> implementation that is constrained with a key/value pair, which might be the source of exceptions that are not listed in this topic.
   syntax:
     content: public static void CopyPropertiesTo (object instance, System.Collections.Generic.KeyValuePair<System.Xaml.AttachableMemberIdentifier,object>[] array, int index);
     parameters:
     - id: instance
       type: System.Object
-      description: To be added.
+      description: A specific attachable property store that implements ; or any non-null object to access a static default attachable property store.
     - id: array
-      type: System.Collections.Generic.KeyValuePair{System.Xaml.AttachableMemberIdentifier,System.Object}
-      description: To be added.
+      type: System.Collections.Generic.KeyValuePair{System.Xaml.AttachableMemberIdentifier,System.Object}[]
+      description: The destination array. The array is a generic array, should be passed undimensioned, and should have components of  and .
     - id: index
       type: System.Int32
-      description: To be added.
+      description: The source index into which to copy.
   overload: System.Xaml.AttachablePropertyServices.CopyPropertiesTo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -70,18 +71,18 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the count of the attachable property entries that are in the specified store.
   syntax:
     content: public static int GetAttachedPropertyCount (object instance);
     parameters:
     - id: instance
       type: System.Object
-      description: To be added.
+      description: A specific attachable property store that implements ; or any non-null object to access a static default attachable property store.
     return:
       type: System.Int32
-      description: To be added.
+      description: The integer count of entries in the store.
   overload: System.Xaml.AttachablePropertyServices.GetAttachedPropertyCount*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -98,21 +99,22 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes the entry for the specified attachable property from the specified store.
+  remarks: Stores are per instance; therefore, in a store, the `name` value should be unambiguous.
   syntax:
     content: public static bool RemoveProperty (object instance, System.Xaml.AttachableMemberIdentifier name);
     parameters:
     - id: instance
       type: System.Object
-      description: To be added.
+      description: A specific attachable property store that implements ; or any non-null object to access a static default attachable property store.
     - id: name
       type: System.Xaml.AttachableMemberIdentifier
-      description: To be added.
+      description: The identifier for the attachable property entry to remove from the store.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if an attachable property entry for name was found in the store and removed from it; otherwise, .
   overload: System.Xaml.AttachablePropertyServices.RemoveProperty*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -129,21 +131,27 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Sets a value for the specified attachable property in the specified store.
   syntax:
     content: public static void SetProperty (object instance, System.Xaml.AttachableMemberIdentifier name, object value);
     parameters:
     - id: instance
       type: System.Object
-      description: To be added.
+      description: A specific attachable property store that implements ; or any non-null object to use a static default attachable property store.
     - id: name
       type: System.Xaml.AttachableMemberIdentifier
-      description: To be added.
+      description: The identifier of the attachable property entry for which to set a value.
     - id: value
       type: System.Object
-      description: To be added.
+      description: The value to set.
   overload: System.Xaml.AttachablePropertyServices.SetProperty*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: A value could not be set in the store.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    name is ."
   platform:
   - net-11
   - net-20
@@ -160,24 +168,24 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
+  summary: Attempts to get a value for the specified attachable property in the specified store. Does not throw an exception if the specific attachable property does not exist in the store.
   syntax:
     content: public static bool TryGetProperty (object instance, System.Xaml.AttachableMemberIdentifier name, out object value);
     parameters:
     - id: instance
       type: System.Object
-      description: To be added.
+      description: A specific attachable property store that implements ; or any non-null object to use a static default attachable property store.
     - id: name
       type: System.Xaml.AttachableMemberIdentifier
-      description: To be added.
+      description: The identifier of the attachable property entry for which to get a value.
     - id: value
       type: System.Object
-      description: To be added.
+      description: Out parameter. When this method returns, contains the destination object for the value if `name` exists in the store and has a value.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if an attachable property entry for name was found in the store and a value was posted to value; otherwise, .
   overload: System.Xaml.AttachablePropertyServices.TryGetProperty*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -194,8 +202,6 @@ items:
   assemblies:
   - System.Xaml
   namespace: System.Xaml
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: public static bool TryGetProperty<T> (object instance, System.Xaml.AttachableMemberIdentifier name, out T value);
     parameters:
@@ -212,6 +218,7 @@ items:
       type: System.Boolean
       description: To be added.
   overload: System.Xaml.AttachablePropertyServices.TryGetProperty<T>*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -226,18 +233,37 @@ references:
   name: CopyPropertiesTo(Object,KeyValuePair<AttachableMemberIdentifier,Object>,Int32)
   nameWithType: AttachablePropertyServices.CopyPropertiesTo(Object,KeyValuePair<AttachableMemberIdentifier,Object>,Int32)
   fullName: System.Xaml.AttachablePropertyServices.CopyPropertiesTo(Object,KeyValuePair<AttachableMemberIdentifier,Object>,Int32)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Collections.Generic.KeyValuePair{System.Xaml.AttachableMemberIdentifier,System.Object}
+- uid: System.Collections.Generic.KeyValuePair{System.Xaml.AttachableMemberIdentifier,System.Object}[]
   parent: System.Collections.Generic
   isExternal: true
   name: KeyValuePair<AttachableMemberIdentifier,Object>
   nameWithType: KeyValuePair<AttachableMemberIdentifier,Object>
   fullName: System.Collections.Generic.KeyValuePair<System.Xaml.AttachableMemberIdentifier,System.Object>[]
+  spec.csharp:
+  - uid: System.Collections.Generic.KeyValuePair`2
+    name: KeyValuePair
+    nameWithType: KeyValuePair
+    fullName: KeyValuePair<System.Xaml.AttachableMemberIdentifier,System.Object>[]
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Xaml.AttachableMemberIdentifier
+    name: AttachableMemberIdentifier
+    nameWithType: AttachableMemberIdentifier
+    fullName: AttachableMemberIdentifier
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: Object
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Int32
   parent: System
   isExternal: true
@@ -250,18 +276,6 @@ references:
   name: GetAttachedPropertyCount(Object)
   nameWithType: AttachablePropertyServices.GetAttachedPropertyCount(Object)
   fullName: System.Xaml.AttachablePropertyServices.GetAttachedPropertyCount(Object)
-- uid: System.Int32
-  parent: System
-  isExternal: true
-  name: Int32
-  nameWithType: Int32
-  fullName: System.Int32
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.AttachablePropertyServices.RemoveProperty(System.Object,System.Xaml.AttachableMemberIdentifier)
   parent: System.Xaml.AttachablePropertyServices
   isExternal: false
@@ -274,12 +288,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.AttachableMemberIdentifier
   parent: System.Xaml
   isExternal: false
@@ -292,80 +300,19 @@ references:
   name: SetProperty(Object,AttachableMemberIdentifier,Object)
   nameWithType: AttachablePropertyServices.SetProperty(Object,AttachableMemberIdentifier,Object)
   fullName: System.Xaml.AttachablePropertyServices.SetProperty(Object,AttachableMemberIdentifier,Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Xaml.AttachableMemberIdentifier
-  parent: System.Xaml
-  isExternal: false
-  name: AttachableMemberIdentifier
-  nameWithType: AttachableMemberIdentifier
-  fullName: System.Xaml.AttachableMemberIdentifier
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.AttachablePropertyServices.TryGetProperty(System.Object,System.Xaml.AttachableMemberIdentifier,System.Object@)
   parent: System.Xaml.AttachablePropertyServices
   isExternal: false
   name: TryGetProperty(Object,AttachableMemberIdentifier,Object)
   nameWithType: AttachablePropertyServices.TryGetProperty(Object,AttachableMemberIdentifier,Object)
   fullName: System.Xaml.AttachablePropertyServices.TryGetProperty(Object,AttachableMemberIdentifier,Object)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Xaml.AttachableMemberIdentifier
-  parent: System.Xaml
-  isExternal: false
-  name: AttachableMemberIdentifier
-  nameWithType: AttachableMemberIdentifier
-  fullName: System.Xaml.AttachableMemberIdentifier
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Xaml.AttachablePropertyServices.TryGetProperty``1(System.Object,System.Xaml.AttachableMemberIdentifier,``0@)
   parent: System.Xaml.AttachablePropertyServices
   isExternal: false
   name: TryGetProperty(Object,AttachableMemberIdentifier,T)
   nameWithType: AttachablePropertyServices.TryGetProperty(Object,AttachableMemberIdentifier,T)
   fullName: System.Xaml.AttachablePropertyServices.TryGetProperty(Object,AttachableMemberIdentifier,T)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
-- uid: System.Xaml.AttachableMemberIdentifier
-  parent: System.Xaml
-  isExternal: false
-  name: AttachableMemberIdentifier
-  nameWithType: AttachableMemberIdentifier
-  fullName: System.Xaml.AttachableMemberIdentifier
 - uid: T
-  parent: ''
   isExternal: true
   name: T
   nameWithType: T

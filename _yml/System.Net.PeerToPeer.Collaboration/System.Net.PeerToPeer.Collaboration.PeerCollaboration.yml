@@ -29,8 +29,8 @@ items:
   nameWithType: PeerCollaboration
   fullName: System.Net.PeerToPeer.Collaboration.PeerCollaboration
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Interacts with the Peer Collaboration infrastructure. Many of the core collaboration scenarios begin with this class.
+  remarks: "This class is a static class – it is sealed, abstract and does not have a public constructor. It is used to contain and manage application, object, and presence information for peers that have accepted invitations to a collaboration session. In terms of peers, objects, and applications, the PeerCollaboration class provides three accessors, one for each collection, as an interface or point of connectivity for whatever else is happening on the machine.  This class cannot be inherited; a compile-time error will occur if this sealed class is specified as the base class.  \n  \n Methods and properties in this class can be used to:  \n  \n-   Launch and manage collaborative applications  \n  \n-   Register and delete applications and collaboration objects (such as certificates, pictures, avatars, and text descriptions)  \n  \n-   Invite peers to collaboration sessions, including items such as scope and objects which will identify them over the Internet  \n  \n-   Allow peers to <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignIn%2A> and <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignOut%2A> of the collaboration infrastructure, manage lists of contacts, or publish their presence to each other  \n  \n-   Utilize <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration.SynchronizingObject%2A> properties and events to coordinate asynchronous application communication, especially for changes in name, presence, application, or other objects.  \n  \n \"Link-local cloud\", \"subnet of the calling peer\", and \"NearMe scope\" are synonymous terms. \"Internet scope\" and \"serverless presence\" are synonymous. The site-local <xref:System.Net.PeerToPeer.PnrpScope> has no equivalent in the collaboration namespace.  \n  \n The use of every method or property in this class requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the peer collaboration session begins."
   syntax:
     content: public static class PeerCollaboration
   inheritance:
@@ -53,14 +53,15 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  object that contains information needed when an application is started due to a collaboration request from a remote peer.
+  remarks: "This property is to be used by a collaboration-aware <xref:System.Net.PeerToPeer.Collaboration.PeerApplication> instance after it is started to determine whether it was started due to a collaboration request from a remote peer.  The calling application should inspect the <xref:System.Net.PeerToPeer.Collaboration.PeerApplicationLaunchInfo.Data%2A> and <xref:System.Net.PeerToPeer.Collaboration.PeerApplicationLaunchInfo.Message%2A> properties to get further information about the invitation request.  \n  \n Access to this property requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins."
   syntax:
     content: public static System.Net.PeerToPeer.Collaboration.PeerApplicationLaunchInfo ApplicationLaunchInfo { get; }
     return:
       type: System.Net.PeerToPeer.Collaboration.PeerApplicationLaunchInfo
-      description: To be added.
+      description: If the application was started due to an invitation, a  object that contains both information about the peer that sent the application invitation and the invitation itself is returned; otherwise,  is returned.  The default value for this property is .
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.ApplicationLaunchInfo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -77,14 +78,14 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the persistent store that contains all  objects for remote peers.
   syntax:
     content: public static System.Net.PeerToPeer.Collaboration.ContactManager ContactManager { get; }
     return:
       type: System.Net.PeerToPeer.Collaboration.ContactManager
-      description: To be added.
+      description: object that contains all peer contact objects for remote peers. The default value for this property is .
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.ContactManager*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -101,15 +102,22 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Deregisters a  associated with the calling peer.
+  remarks: "Peer objects are automatically deregistered (removed) from the Peer Collaboration infrastructure when a reference to the object is no longer valid.  If a caller does not maintain a reference to the object, it is deregistered from the Peer Collaboration infrastructure.  Alternatively, an object can be manually deregistered by using this method.  \n  \n Calling this method requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins."
   syntax:
     content: public static void DeleteObject (System.Net.PeerToPeer.Collaboration.PeerObject peerObject);
     parameters:
     - id: peerObject
       type: System.Net.PeerToPeer.Collaboration.PeerObject
-      description: To be added.
+      description: The  to deregister.
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.DeleteObject*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The peerObject parameter cannot be .
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: Unable to complete DeleteObject operation.
   platform:
   - net-11
   - net-20
@@ -126,15 +134,19 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets all  objects that are registered on the local machine.
+  remarks: "The caller is required to sign-in to the peer collaboration infrastructure via the <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignIn%2A> method prior to the use of this method.  \n  \n Access to this property requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins."
   syntax:
     content: public static System.Net.PeerToPeer.Collaboration.PeerApplicationCollection GetLocalRegisteredApplications ();
     parameters: []
     return:
       type: System.Net.PeerToPeer.Collaboration.PeerApplicationCollection
-      description: To be added.
+      description: A  that contains all applications that are registered on the local machine. If an application is not found, a collection of size zero (0) is returned.
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.GetLocalRegisteredApplications*
+  exceptions:
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: An invalid value was returned when this method attempted to enumerate the application registered to this peer. Please make sure that all applications have valid registry values.
   platform:
   - net-11
   - net-20
@@ -151,18 +163,25 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of all  objects that are registered on the local machine for the specified .
+  remarks: "The caller is required to sign-in to the Peer Collaboration infrastructure via the <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignIn%2A> method prior to the use of this method.  \n  \n Access to this method requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins."
   syntax:
     content: public static System.Net.PeerToPeer.Collaboration.PeerApplicationCollection GetLocalRegisteredApplications (System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType type);
     parameters:
     - id: type
       type: System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType
-      description: To be added.
+      description: "\n     to return for the specified application."
     return:
       type: System.Net.PeerToPeer.Collaboration.PeerApplicationCollection
-      description: To be added.
+      description: A  that contains all applications of the specified type that are registered on the local machine. If an application is not found, a collection of size zero (0) is returned.
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.GetLocalRegisteredApplications*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The type parameter is not set to a known value in the  enumeration.
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: An invalid value was returned when this method attempted to enumerate the application registered to this peer. Please make sure that all applications have valid registry values.
   platform:
   - net-11
   - net-20
@@ -179,15 +198,19 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Obtains all  instances registered by the calling peer with the  infrastructure on this machine.
+  remarks: Access to this property requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins.
   syntax:
     content: public static System.Net.PeerToPeer.Collaboration.PeerObjectCollection GetLocalSetObjects ();
     parameters: []
     return:
       type: System.Net.PeerToPeer.Collaboration.PeerObjectCollection
-      description: To be added.
+      description: "A  which contains all the  instances registered by the calling peer with the  infrastructure on the local machine.  \n  \n If registered  instances are not discovered on the local machine, a collection of size zero (0) is returned."
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.GetLocalSetObjects*
+  exceptions:
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: An invalid value was returned when this method attempted to enumerate all available  instances.
   platform:
   - net-11
   - net-20
@@ -204,15 +227,24 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a collection of all the  endpoints currently signed in on the network subnet of the calling peer.
+  remarks: "The return of a fully populated <xref:System.Net.PeerToPeer.Collaboration.PeerNearMeCollection> via this method can require an indeterminate amount of time after sign-in depending on network topology and latency.  \n  \n Calling this method requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins."
+  example:
+  - "The following code example illustrates how to retrieve PeersNearMe as a PeerNearMeCollection:  \n  \n [!code-cs[NCLPNRPContacts#2](../../add/codesnippet/CSharp/m-system.net.peertopeer._0_1.cs)]"
   syntax:
     content: public static System.Net.PeerToPeer.Collaboration.PeerNearMeCollection GetPeersNearMe ();
     parameters: []
     return:
       type: System.Net.PeerToPeer.Collaboration.PeerNearMeCollection
-      description: To be added.
+      description: "A  that contains all the  endpoints currently signed into the 'Near Me' scope.  \n  \n If peers are not discovered on the subnet, a collection of size zero (0) is returned."
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.GetPeersNearMe*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The peer is not signed in to the 'Near Me' scope.
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: An invalid value was returned when this method attempted to enumerate all known People Near Me endpoints.
   platform:
   - net-11
   - net-20
@@ -229,13 +261,13 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Raised when a  in the  for the local peer on the local host has changed.
   syntax:
     content: public static event EventHandler<System.Net.PeerToPeer.Collaboration.ApplicationChangedEventArgs> LocalApplicationChanged;
     return:
       type: System.EventHandler{System.Net.PeerToPeer.Collaboration.ApplicationChangedEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -252,14 +284,18 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the name of the  associated with the calling peer.
+  remarks: Access to this property requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins.
   syntax:
     content: public static string LocalEndPointName { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: <xref:System.String> that contains the name associated with the calling peer's endpoint (provided as the <xref:System.Net.PeerToPeer.Collaboration.PeerEndPoint.Name%2A> property). The default value for this property is .
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.LocalEndPointName*
+  exceptions:
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: Unable to set LocalEndPointName.
   platform:
   - net-11
   - net-20
@@ -276,13 +312,13 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Raised when the name of the  on the local host for the local peer has changed.
   syntax:
     content: public static event EventHandler<System.Net.PeerToPeer.Collaboration.NameChangedEventArgs> LocalNameChanged;
     return:
       type: System.EventHandler{System.Net.PeerToPeer.Collaboration.NameChangedEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -299,13 +335,13 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: A  in the  for the local peer on the local host has changed.
   syntax:
     content: public static event EventHandler<System.Net.PeerToPeer.Collaboration.ObjectChangedEventArgs> LocalObjectChanged;
     return:
       type: System.EventHandler{System.Net.PeerToPeer.Collaboration.ObjectChangedEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -322,13 +358,13 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: The  of the local peer on the local host has changed.
   syntax:
     content: public static event EventHandler<System.Net.PeerToPeer.Collaboration.PresenceChangedEventArgs> LocalPresenceChanged;
     return:
       type: System.EventHandler{System.Net.PeerToPeer.Collaboration.PresenceChangedEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -345,14 +381,21 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the presence for the calling peer within the  infrastructure.
+  remarks: Calling this method requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins.
   syntax:
     content: public static System.Net.PeerToPeer.Collaboration.PeerPresenceInfo LocalPresenceInfo { get; set; }
     return:
       type: System.Net.PeerToPeer.Collaboration.PeerPresenceInfo
-      description: To be added.
+      description: The  that contains presence information for the calling peer that has registered for a  session.
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.LocalPresenceInfo*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n     cannot specify "
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: "-    is offline  \n  \n-   Unable to set  "
   platform:
   - net-11
   - net-20
@@ -369,18 +412,33 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers the specified  for a collaboration session with the calling peer.
+  remarks: "The calling peer is required to sign in to the peer collaboration infrastructure with the <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignIn%2A> method prior to calling this method.  \n  \n Access to this method requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins."
+  example:
+  - "The following code example illustrates how to register an application with the Collaboration infrastructure:  \n  \n [!code-cs[NCLPNRPContacts#4](../../add/codesnippet/CSharp/25bfa09e-90d6-44cf-bb3a-_1.cs)]"
   syntax:
     content: public static void RegisterApplication (System.Net.PeerToPeer.Collaboration.PeerApplication application, System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType type);
     parameters:
     - id: application
       type: System.Net.PeerToPeer.Collaboration.PeerApplication
-      description: To be added.
+      description: The  for which to register the calling peer within the associated scope (global, local, and link-local).
     - id: type
       type: System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType
-      description: To be added.
+      description: The type of registration to perform.  The application may be registered for just the calling peer or for all peers using the machine.
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.RegisterApplication*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "-   The <xref:System.Net.PeerToPeer.Collaboration.PeerApplication.Path%2A> property on the  object passed to application is   \n  \n-   The peer application instance provided has the same globally unique <xref:System.Net.PeerToPeer.Collaboration.PeerApplication.Id%2A> as an application which is already registered.  The existing registration must be unregistered before a new application can be registered with the provided identifier."
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The application and type parameters cannot be .  Both parameters must be specified.
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The type parameter is not set to a known value in the  enumeration.
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: The RegisterApplication operation cannot be completed until the caller has signed-in to the infrastructure.
   platform:
   - net-11
   - net-20
@@ -397,15 +455,25 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Registers a  associated with the calling peer.
+  remarks: "This method allows the object to be queried by remote peers participating in the scope in which the object was registered. If the object was previously registered, this method updates its registration. If a registered object falls out of scope, it can be retrieved via the <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration.GetLocalSetObjects%2A> method.  \n  \n The size of the data portion of the <xref:System.Net.PeerToPeer.Collaboration.PeerObject> must be less than or equal to 16,384 bytes.  \n  \n Access to this method requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins."
   syntax:
     content: public static void SetObject (System.Net.PeerToPeer.Collaboration.PeerObject peerObject);
     parameters:
     - id: peerObject
       type: System.Net.PeerToPeer.Collaboration.PeerObject
-      description: To be added.
+      description: The  to register.
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SetObject*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: Object already registered
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "-    cannot be   \n  \n-    cannot be "
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: The SetObject operation could not be completed.
   platform:
   - net-11
   - net-20
@@ -422,15 +490,27 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Signs the peer into the collaboration infrastructure with the specified .
+  remarks: "Display names are not necessarily unique. Users should verify the identity of the person using the display name by e-mail, phone, or in person before accepting a collaboration invitation.  \n  \n This function signs the users into the Collaboration Infrastructure.  \n  \n Access to this method requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins."
+  example:
+  - "The following code example illustrates how to sign the users into the Collaboration infrastructure.  \n  \n [!code-cs[NCLPNRPContacts#1](../../add/codesnippet/CSharp/3623a8df-c46b-41ba-8f69-_1.cs)]"
   syntax:
     content: public static void SignIn (System.Net.PeerToPeer.Collaboration.PeerScope peerScope);
     parameters:
     - id: peerScope
       type: System.Net.PeerToPeer.Collaboration.PeerScope
-      description: To be added.
+      description: The scope the peer is using to join the  activity.
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignIn*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "\n    peerScope is set to ."
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The peerScope parameter contains an invalid enumeration value.
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: The SignIn operation could not be completed.
   platform:
   - net-11
   - net-20
@@ -447,14 +527,15 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the  to which the calling peer can publish presence, capability and object information.
+  remarks: "The peer host or host application may limit or differentiate peer participation in collaboration activities by using separate scopes.  \n  \n The calling peer should inspect the return value from this method to determine what further actions it can successfully perform."
   syntax:
     content: public static System.Net.PeerToPeer.Collaboration.PeerScope SignInScope { get; }
     return:
       type: System.Net.PeerToPeer.Collaboration.PeerScope
-      description: To be added.
+      description: object that specifies the scope in which the calling peer will participate. The default value for this property is .
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignInScope*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -471,15 +552,22 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Signs the peer out of the specified scope.
+  remarks: "This method is not an application-specific operation and signing out may affect other applications that may be currently running. If the user is not already signed into the specified scope calling this method results in a no-op.  \n  \n When a user signs out of People Near Me, their published information is deleted from the <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration> endpoint object set.  This includes <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration.LocalEndPointName%2A> and <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration.LocalPresenceInfo%2A>, in addition to any identifying objects registered by the calling peer into the collaboration infrastructure. Because this information is deleted, it is no longer available to either remote peers or a peer host for collaboration. From the perspective of the <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration> class, other sharing of the same information with trusted contacts is not relevant; use of the <xref:System.Net.PeerToPeer.Collaboration.PeerCollaboration> class does not affect other objects in which this information was persisted, such as a remote peer <xref:System.Net.PeerToPeer.Collaboration.ContactManager> object. Likewise, deleting a peer from the <xref:System.Net.PeerToPeer.Collaboration.ContactManager> does not affect its presence in a collaboration application; other contacts are still able to view its presence and collaborate with it.  \n  \n Calling this method requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins."
   syntax:
     content: public static void SignOut (System.Net.PeerToPeer.Collaboration.PeerScope peerScope);
     parameters:
     - id: peerScope
       type: System.Net.PeerToPeer.Collaboration.PeerScope
-      description: To be added.
+      description: Scope enumeration specified by .
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignOut*
+  exceptions:
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The peerScope parameter contains an invalid enumeration value.
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: The SignOut operation could not be completed.
   platform:
   - net-11
   - net-20
@@ -496,14 +584,14 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the event handler callback object for all event handlers.
   syntax:
     content: public static System.ComponentModel.ISynchronizeInvoke SynchronizingObject { get; set; }
     return:
       type: System.ComponentModel.ISynchronizeInvoke
-      description: To be added.
+      description: "An object with  implemented on it, to be used for application thread synchronization.  \n  \n The default value for this property is ."
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SynchronizingObject*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -520,18 +608,31 @@ items:
   assemblies:
   - System.Net
   namespace: System.Net.PeerToPeer.Collaboration
-  summary: To be added.
-  remarks: To be added.
+  summary: Deregisters the specified  from the  infrastructure.
+  remarks: "Deregistering a <xref:System.Net.PeerToPeer.Collaboration.PeerApplication> stops the calling peer from receiving collaboration invitations for it.  If the application being deregistered was not previously registered, this is a no-op.  \n  \n Calling this method requires a <xref:System.Security.Permissions.PermissionState> of <xref:System.Security.Permissions.PermissionState>. This state is created when the <xref:System.Net.PeerToPeer.Collaboration.Peer> collaboration session begins."
   syntax:
     content: public static void UnregisterApplication (System.Net.PeerToPeer.Collaboration.PeerApplication application, System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType type);
     parameters:
     - id: application
       type: System.Net.PeerToPeer.Collaboration.PeerApplication
-      description: To be added.
+      description: The  to deregister for the calling peer.
     - id: type
       type: System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType
-      description: To be added.
+      description: The type of deregistration to perform for either the calling peer or for all peers that exist on the machine.
   overload: System.Net.PeerToPeer.Collaboration.PeerCollaboration.UnregisterApplication*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The globally unique <xref:System.Net.PeerToPeer.Collaboration.PeerApplication.Id%2A> for the specified application does not exist or is empty.
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: 'The application or type parameter is set to '
+  - type: System.ArgumentOutOfRangeException
+    commentId: T:System.ArgumentOutOfRangeException
+    description: The type parameter is not set to a known value in .
+  - type: System.Net.PeerToPeer.PeerToPeerException
+    commentId: T:System.Net.PeerToPeer.PeerToPeerException
+    description: The  UnregisterApplication operation could not be completed.
   platform:
   - net-11
   - net-20
@@ -594,12 +695,6 @@ references:
   name: GetLocalRegisteredApplications(PeerApplicationRegistrationType)
   nameWithType: PeerCollaboration.GetLocalRegisteredApplications(PeerApplicationRegistrationType)
   fullName: System.Net.PeerToPeer.Collaboration.PeerCollaboration.GetLocalRegisteredApplications(PeerApplicationRegistrationType)
-- uid: System.Net.PeerToPeer.Collaboration.PeerApplicationCollection
-  parent: System.Net.PeerToPeer.Collaboration
-  isExternal: false
-  name: PeerApplicationCollection
-  nameWithType: PeerApplicationCollection
-  fullName: System.Net.PeerToPeer.Collaboration.PeerApplicationCollection
 - uid: System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType
   parent: System.Net.PeerToPeer.Collaboration
   isExternal: false
@@ -642,6 +737,21 @@ references:
   name: EventHandler<ApplicationChangedEventArgs>
   nameWithType: EventHandler<ApplicationChangedEventArgs>
   fullName: System.EventHandler<System.Net.PeerToPeer.Collaboration.ApplicationChangedEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Net.PeerToPeer.Collaboration.ApplicationChangedEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Net.PeerToPeer.Collaboration.ApplicationChangedEventArgs
+    name: ApplicationChangedEventArgs
+    nameWithType: ApplicationChangedEventArgs
+    fullName: ApplicationChangedEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Net.PeerToPeer.Collaboration.PeerCollaboration.LocalEndPointName
   parent: System.Net.PeerToPeer.Collaboration.PeerCollaboration
   isExternal: false
@@ -666,6 +776,21 @@ references:
   name: EventHandler<NameChangedEventArgs>
   nameWithType: EventHandler<NameChangedEventArgs>
   fullName: System.EventHandler<System.Net.PeerToPeer.Collaboration.NameChangedEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Net.PeerToPeer.Collaboration.NameChangedEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Net.PeerToPeer.Collaboration.NameChangedEventArgs
+    name: NameChangedEventArgs
+    nameWithType: NameChangedEventArgs
+    fullName: NameChangedEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Net.PeerToPeer.Collaboration.PeerCollaboration.LocalObjectChanged
   parent: System.Net.PeerToPeer.Collaboration.PeerCollaboration
   isExternal: false
@@ -678,6 +803,21 @@ references:
   name: EventHandler<ObjectChangedEventArgs>
   nameWithType: EventHandler<ObjectChangedEventArgs>
   fullName: System.EventHandler<System.Net.PeerToPeer.Collaboration.ObjectChangedEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Net.PeerToPeer.Collaboration.ObjectChangedEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Net.PeerToPeer.Collaboration.ObjectChangedEventArgs
+    name: ObjectChangedEventArgs
+    nameWithType: ObjectChangedEventArgs
+    fullName: ObjectChangedEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Net.PeerToPeer.Collaboration.PeerCollaboration.LocalPresenceChanged
   parent: System.Net.PeerToPeer.Collaboration.PeerCollaboration
   isExternal: false
@@ -690,6 +830,21 @@ references:
   name: EventHandler<PresenceChangedEventArgs>
   nameWithType: EventHandler<PresenceChangedEventArgs>
   fullName: System.EventHandler<System.Net.PeerToPeer.Collaboration.PresenceChangedEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Net.PeerToPeer.Collaboration.PresenceChangedEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Net.PeerToPeer.Collaboration.PresenceChangedEventArgs
+    name: PresenceChangedEventArgs
+    nameWithType: PresenceChangedEventArgs
+    fullName: PresenceChangedEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Net.PeerToPeer.Collaboration.PeerCollaboration.LocalPresenceInfo
   parent: System.Net.PeerToPeer.Collaboration.PeerCollaboration
   isExternal: false
@@ -714,24 +869,12 @@ references:
   name: PeerApplication
   nameWithType: PeerApplication
   fullName: System.Net.PeerToPeer.Collaboration.PeerApplication
-- uid: System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType
-  parent: System.Net.PeerToPeer.Collaboration
-  isExternal: false
-  name: PeerApplicationRegistrationType
-  nameWithType: PeerApplicationRegistrationType
-  fullName: System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType
 - uid: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SetObject(System.Net.PeerToPeer.Collaboration.PeerObject)
   parent: System.Net.PeerToPeer.Collaboration.PeerCollaboration
   isExternal: false
   name: SetObject(PeerObject)
   nameWithType: PeerCollaboration.SetObject(PeerObject)
   fullName: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SetObject(PeerObject)
-- uid: System.Net.PeerToPeer.Collaboration.PeerObject
-  parent: System.Net.PeerToPeer.Collaboration
-  isExternal: false
-  name: PeerObject
-  nameWithType: PeerObject
-  fullName: System.Net.PeerToPeer.Collaboration.PeerObject
 - uid: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignIn(System.Net.PeerToPeer.Collaboration.PeerScope)
   parent: System.Net.PeerToPeer.Collaboration.PeerCollaboration
   isExternal: false
@@ -750,24 +893,12 @@ references:
   name: SignInScope
   nameWithType: PeerCollaboration.SignInScope
   fullName: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignInScope
-- uid: System.Net.PeerToPeer.Collaboration.PeerScope
-  parent: System.Net.PeerToPeer.Collaboration
-  isExternal: false
-  name: PeerScope
-  nameWithType: PeerScope
-  fullName: System.Net.PeerToPeer.Collaboration.PeerScope
 - uid: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignOut(System.Net.PeerToPeer.Collaboration.PeerScope)
   parent: System.Net.PeerToPeer.Collaboration.PeerCollaboration
   isExternal: false
   name: SignOut(PeerScope)
   nameWithType: PeerCollaboration.SignOut(PeerScope)
   fullName: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SignOut(PeerScope)
-- uid: System.Net.PeerToPeer.Collaboration.PeerScope
-  parent: System.Net.PeerToPeer.Collaboration
-  isExternal: false
-  name: PeerScope
-  nameWithType: PeerScope
-  fullName: System.Net.PeerToPeer.Collaboration.PeerScope
 - uid: System.Net.PeerToPeer.Collaboration.PeerCollaboration.SynchronizingObject
   parent: System.Net.PeerToPeer.Collaboration.PeerCollaboration
   isExternal: false
@@ -786,18 +917,6 @@ references:
   name: UnregisterApplication(PeerApplication,PeerApplicationRegistrationType)
   nameWithType: PeerCollaboration.UnregisterApplication(PeerApplication,PeerApplicationRegistrationType)
   fullName: System.Net.PeerToPeer.Collaboration.PeerCollaboration.UnregisterApplication(PeerApplication,PeerApplicationRegistrationType)
-- uid: System.Net.PeerToPeer.Collaboration.PeerApplication
-  parent: System.Net.PeerToPeer.Collaboration
-  isExternal: false
-  name: PeerApplication
-  nameWithType: PeerApplication
-  fullName: System.Net.PeerToPeer.Collaboration.PeerApplication
-- uid: System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType
-  parent: System.Net.PeerToPeer.Collaboration
-  isExternal: false
-  name: PeerApplicationRegistrationType
-  nameWithType: PeerApplicationRegistrationType
-  fullName: System.Net.PeerToPeer.Collaboration.PeerApplicationRegistrationType
 - uid: System.Net.PeerToPeer.Collaboration.PeerCollaboration.ApplicationLaunchInfo*
   parent: System.Net.PeerToPeer.Collaboration.PeerCollaboration
   isExternal: false

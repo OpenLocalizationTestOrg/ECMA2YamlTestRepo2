@@ -12,8 +12,8 @@ items:
   nameWithType: IBuildEngine2
   fullName: Microsoft.Build.Framework.IBuildEngine2
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a way for task authors to use a subset of the functionality of the [!INCLUDE[vstecmsbuild](../../add/includes/vstecmsbuild-md.md)] engine.
+  remarks: IBuildEngine2 extends <xref:Microsoft.Build.Framework.IBuildEngine>, allowing you to build multiple project files in parallel on systems containing multiple processors, or processors with multiple cores.
   syntax:
     content: 'public interface IBuildEngine2 : Microsoft.Build.Framework.IBuildEngine'
   implements:
@@ -34,30 +34,31 @@ items:
   assemblies:
   - Microsoft.Build.Framework
   namespace: Microsoft.Build.Framework
-  summary: To be added.
-  remarks: To be added.
+  summary: Initiates a build of a project file. If the build is successful, the outputs of the specified targets are returned, if any exist.
+  remarks: "If no targets are specified, [!INCLUDE[vstecmsbuild](../../add/includes/vstecmsbuild-md.md)] builds the default targets of the project.  \n  \n Target outputs are returned as <xref:Microsoft.Build.Framework.ITaskItem> arrays indexed by target name."
   syntax:
     content: public bool BuildProjectFile (string projectFileName, string[] targetNames, System.Collections.IDictionary globalProperties, System.Collections.IDictionary targetOutputs, string toolsVersion);
     parameters:
     - id: projectFileName
       type: System.String
-      description: To be added.
+      description: The name of the project file to build.
     - id: targetNames
       type: System.String[]
-      description: To be added.
+      description: The names of the target in the project to build. Separate multiple targets with a semicolon (;).  values are acceptable.
     - id: globalProperties
       type: System.Collections.IDictionary
-      description: To be added.
+      description: An <xref:System.Collections.IDictionary> of additional global properties to apply to the project. The key and value must be  data types.
     - id: targetOutputs
       type: System.Collections.IDictionary
-      description: To be added.
+      description: The outputs of each specified target.  values are acceptable.
     - id: toolsVersion
       type: System.String
-      description: To be added.
+      description: Default value = "3.5." Specifies the Toolset version for the build to use.  values are acceptable.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the build was successful; otherwise, .
   overload: Microsoft.Build.Framework.IBuildEngine2.BuildProjectFile*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -74,36 +75,37 @@ items:
   assemblies:
   - Microsoft.Build.Framework
   namespace: Microsoft.Build.Framework
-  summary: To be added.
-  remarks: To be added.
+  summary: Allows tasks to initiate parallel builds of the specified project files on systems with multiple processors or multiple core processors. If the builds are successful, the outputs of the specified targets are returned, if any exist.
+  remarks: Both `targetNames` and `targetOutputs` accept `null` values. If no targets are specified, then the default targets are built. Target outputs are returned as <xref:Microsoft.Build.Framework.ITaskItem> arrays indexed by target name.
   syntax:
     content: public bool BuildProjectFilesInParallel (string[] projectFileNames, string[] targetNames, System.Collections.IDictionary[] globalProperties, System.Collections.IDictionary[] targetOutputsPerProject, string[] toolsVersion, bool useResultsCache, bool unloadProjectsOnCompletion);
     parameters:
     - id: projectFileNames
       type: System.String[]
-      description: To be added.
+      description: The names of the project files to build.
     - id: targetNames
       type: System.String[]
-      description: To be added.
+      description: The names of the targets in the project to build. Separate multiple targets with a semicolon (;).  values are acceptable.
     - id: globalProperties
       type: System.Collections.IDictionary[]
-      description: To be added.
+      description: An <xref:System.Collections.IDictionary> of additional global properties to apply to the project. The key and value must be  data types. Array entries can be .
     - id: targetOutputsPerProject
       type: System.Collections.IDictionary[]
-      description: To be added.
+      description: The outputs of each specified target.  values are acceptable.
     - id: toolsVersion
       type: System.String[]
-      description: To be added.
+      description: Default value = "3.5." Specifies the Toolset version for the build to use.  values are acceptable.
     - id: useResultsCache
       type: System.Boolean
-      description: To be added.
+      description: If , the operation runs only if the cache does not already contain the result. After the operation the result is stored in the cache.
     - id: unloadProjectsOnCompletion
       type: System.Boolean
-      description: To be added.
+      description: If  the project is unloaded once the operation completes.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the build succeeded,  if otherwise.
   overload: Microsoft.Build.Framework.IBuildEngine2.BuildProjectFilesInParallel*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -120,14 +122,15 @@ items:
   assemblies:
   - Microsoft.Build.Framework
   namespace: Microsoft.Build.Framework
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns whether the system is running in single- or multi-processor mode.
+  remarks: The build engine is in single-processor mode (`IsRunningMultipleNodes` = `false`) when it is initialized with the number of CPUs equal to 1 and the build engine is not a child engine. The build engine is in multi-processor mode (`IsRunningMultipleNodes` = `true`) when it is initialized with a number of CPUs greater than 1, or when the build engine is a child engine.
   syntax:
     content: public bool IsRunningMultipleNodes { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the system is running in multi-processor mode,  otherwise.
   overload: Microsoft.Build.Framework.IBuildEngine2.IsRunningMultipleNodes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -151,96 +154,52 @@ references:
   name: String
   nameWithType: String
   fullName: System.String
-- uid: System.String
+- uid: System.String[]
   parent: System
   isExternal: true
   name: String
   nameWithType: String
   fullName: System.String[]
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: System.Collections.IDictionary
   parent: System.Collections
   isExternal: true
   name: IDictionary
   nameWithType: IDictionary
   fullName: System.Collections.IDictionary
-- uid: System.Collections.IDictionary
-  parent: System.Collections
-  isExternal: true
-  name: IDictionary
-  nameWithType: IDictionary
-  fullName: System.Collections.IDictionary
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: Microsoft.Build.Framework.IBuildEngine2.BuildProjectFilesInParallel(System.String[],System.String[],System.Collections.IDictionary[],System.Collections.IDictionary[],System.String[],System.Boolean,System.Boolean)
   parent: Microsoft.Build.Framework.IBuildEngine2
   isExternal: false
   name: BuildProjectFilesInParallel(String[],String[],IDictionary[],IDictionary[],String[],Boolean,Boolean)
   nameWithType: IBuildEngine2.BuildProjectFilesInParallel(String[],String[],IDictionary[],IDictionary[],String[],Boolean,Boolean)
   fullName: Microsoft.Build.Framework.IBuildEngine2.BuildProjectFilesInParallel(String[],String[],IDictionary[],IDictionary[],String[],Boolean,Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
-- uid: System.Collections.IDictionary
+- uid: System.Collections.IDictionary[]
   parent: System.Collections
   isExternal: true
   name: IDictionary
   nameWithType: IDictionary
   fullName: System.Collections.IDictionary[]
-- uid: System.Collections.IDictionary
-  parent: System.Collections
-  isExternal: true
-  name: IDictionary
-  nameWithType: IDictionary
-  fullName: System.Collections.IDictionary[]
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String[]
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
+  spec.csharp:
+  - uid: System.Collections.IDictionary
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary[]
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
 - uid: Microsoft.Build.Framework.IBuildEngine2.IsRunningMultipleNodes
   parent: Microsoft.Build.Framework.IBuildEngine2
   isExternal: false
   name: IsRunningMultipleNodes
   nameWithType: IBuildEngine2.IsRunningMultipleNodes
   fullName: Microsoft.Build.Framework.IBuildEngine2.IsRunningMultipleNodes
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: Microsoft.Build.Framework.IBuildEngine2.BuildProjectFile*
   parent: Microsoft.Build.Framework.IBuildEngine2
   isExternal: false

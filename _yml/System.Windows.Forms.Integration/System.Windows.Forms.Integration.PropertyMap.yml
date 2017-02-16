@@ -25,8 +25,10 @@ items:
   nameWithType: PropertyMap
   fullName: System.Windows.Forms.Integration.PropertyMap
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a way to translate property values between [!INCLUDE[TLA#tla_winforms](../../add/includes/tlasharptla-winforms-md.md)] controls and [!INCLUDE[TLA#tla_winclient](../../add/includes/tlasharptla-winclient-md.md)] elements.
+  remarks: "Use the PropertyMap class to define translations between [!INCLUDE[TLA#tla_winforms](../../add/includes/tlasharptla-winforms-md.md)] properties and [!INCLUDE[TLA#tla_winclient](../../add/includes/tlasharptla-winclient-md.md)] properties in a hybrid application. The <xref:System.Windows.Forms.Integration.ElementHost.PropertyMap%2A?displayProperty=fullName> and <xref:System.Windows.Forms.Integration.WindowsFormsHost.PropertyMap%2A?displayProperty=fullName> properties on the <xref:System.Windows.Forms.Integration.ElementHost> and <xref:System.Windows.Forms.Integration.WindowsFormsHost> classes define mappings from one technology to the other.  \n  \n For more information, see [Walkthrough: Mapping Properties Using the ElementHost Control](https://msdn.microsoft.com/en-us/library/ms788740\\(v=vs.100\\).aspx) and [Walkthrough: Mapping Properties Using the WindowsFormsHost Element](https://msdn.microsoft.com/en-us/library/ms788729\\(v=vs.100\\).aspx)."
+  example:
+  - "The following code example shows how to add a mapping for the <xref:System.Windows.Forms.Control.Margin%2A> property to an <xref:System.Windows.Forms.Integration.ElementHost> control.  \n  \n [!code-cs[PropertyMappingWithElementHost#12](../../add/codesnippet/CSharp/PropertyMappingWithElementHost/Form1.cs#12)]\n [!code-vb[PropertyMappingWithElementHost#12](../../add/codesnippet/VisualBasic/PropertyMappingWithElementHost/Form1.vb#12)]  \n  \n The following code example shows how to replace the default mapping for the <xref:System.Windows.FrameworkElement.FlowDirection%2A> property on a <xref:System.Windows.Forms.Integration.WindowsFormsHost> control.  \n  \n [!code-cs[PropertyMappingWithWfh#12](../../add/codesnippet/CSharp/t-system.windows.forms.i_17_2.cs)]\n [!code-vb[PropertyMappingWithWfh#12](../../add/codesnippet/VisualBasic/t-system.windows.forms.i_17_2.vb)]"
   syntax:
     content: >-
       [System.Security.SecurityCritical]
@@ -52,12 +54,12 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public PropertyMap ();
     parameters: []
   overload: System.Windows.Forms.Integration.PropertyMap.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -74,15 +76,16 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with the given source object.
+  remarks: "`source` is the source of the properties which are translated by the <xref:System.Windows.Forms.Integration.PropertyMap>. The properties which are mapped in the <xref:System.Windows.Forms.Integration.PropertyMap> must exist on <xref:System.Windows.Forms.Integration.PropertyMap.SourceObject%2A>.  \n  \n <xref:System.Windows.Forms.Integration.PropertyTranslator> delegates are called using the current property values on <xref:System.Windows.Forms.Integration.PropertyMap.SourceObject%2A>."
   syntax:
     content: public PropertyMap (object source);
     parameters:
     - id: source
       type: System.Object
-      description: To be added.
+      description: The object which has the properties to be translated.
   overload: System.Windows.Forms.Integration.PropertyMap.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -99,18 +102,24 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a  delegate for the given property to the .
+  remarks: When setting, if no <xref:System.Windows.Forms.Integration.PropertyTranslator> exists for `propertyName`, the new delegate is added to the <xref:System.Windows.Forms.Integration.PropertyMap>. If a <xref:System.Windows.Forms.Integration.PropertyTranslator> already exists for `propertyName`, an <xref:System.InvalidOperationException> is raised.
+  example:
+  - "The following code example shows how to add a mapping for the <xref:System.Windows.Forms.Control.Margin%2A> property to an <xref:System.Windows.Forms.Integration.ElementHost> control.  \n  \n [!code-cs[PropertyMappingWithElementHost#12](../../add/codesnippet/CSharp/PropertyMappingWithElementHost/Form1.cs#12)]\n [!code-vb[PropertyMappingWithElementHost#12](../../add/codesnippet/VisualBasic/PropertyMappingWithElementHost/Form1.vb#12)]  \n  \n The following code example shows how to add a mapping for the <xref:System.Windows.UIElement.Clip%2A> property to a <xref:System.Windows.Forms.Integration.WindowsFormsHost> control.  \n  \n [!code-cs[PropertyMappingWithWfh#14](../../add/codesnippet/CSharp/6596649d-30e2-4978-84d0-_2.cs)]\n [!code-vb[PropertyMappingWithWfh#14](../../add/codesnippet/VisualBasic/6596649d-30e2-4978-84d0-_2.vb)]"
   syntax:
     content: public void Add (string propertyName, System.Windows.Forms.Integration.PropertyTranslator translator);
     parameters:
     - id: propertyName
       type: System.String
-      description: To be added.
+      description: The name of the property to map.
     - id: translator
       type: System.Windows.Forms.Integration.PropertyTranslator
-      description: To be added.
+      description: The  delegate which is called when `propertyName` changes.
   overload: System.Windows.Forms.Integration.PropertyMap.Add*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: "\n    propertyName has an existing mapping."
   platform:
   - net-11
   - net-20
@@ -127,15 +136,18 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Runs the property translator for the given property, based on the source object's current property value.
   syntax:
     content: public void Apply (string propertyName);
     parameters:
     - id: propertyName
       type: System.String
-      description: To be added.
+      description: The name of the property to translate.
   overload: System.Windows.Forms.Integration.PropertyMap.Apply*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The property given by propertyName does not exist on <xref:System.Windows.Forms.Integration.PropertyMap.SourceObject%2A>.
   platform:
   - net-11
   - net-20
@@ -152,12 +164,12 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Runs the property translator for each mapped property, based on the source object's current property values.
   syntax:
     content: public void ApplyAll ();
     parameters: []
   overload: System.Windows.Forms.Integration.PropertyMap.ApplyAll*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -174,12 +186,12 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes all property mappings.
   syntax:
     content: public void Clear ();
     parameters: []
   overload: System.Windows.Forms.Integration.PropertyMap.Clear*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -196,18 +208,18 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value indicating whether the given property is mapped.
   syntax:
     content: public bool Contains (string propertyName);
     parameters:
     - id: propertyName
       type: System.String
-      description: To be added.
+      description: The name of the property to search for.
     return:
       type: System.Boolean
-      description: To be added.
+      description: if propertyName exists in the property map; otherwise, .
   overload: System.Windows.Forms.Integration.PropertyMap.Contains*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -224,14 +236,15 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of property mappings which are defined by default.
+  remarks: For a list of default property mappings, see [Windows Forms and WPF Property Mapping](../Topic/Windows%20Forms%20and%20WPF%20Property%20Mapping.md).
   syntax:
     content: protected System.Collections.Generic.Dictionary<string,System.Windows.Forms.Integration.PropertyTranslator> DefaultTranslators { get; }
     return:
       type: System.Collections.Generic.Dictionary{System.String,System.Windows.Forms.Integration.PropertyTranslator}
-      description: To be added.
+      description: A <xref:System.Collections.Generic.Dictionary%602> which maps property names to corresponding  delegates.
   overload: System.Windows.Forms.Integration.PropertyMap.DefaultTranslators*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -248,18 +261,27 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the  delegate for the given property.
+  remarks: When setting, if no <xref:System.Windows.Forms.Integration.PropertyTranslator> exists for `propertyName`, the new delegate is added to the <xref:System.Windows.Forms.Integration.PropertyMap>. If a <xref:System.Windows.Forms.Integration.PropertyTranslator> already exists for `propertyName`, it is replaced.
+  example:
+  - "The following code example shows how to retrieve the <xref:System.Windows.Forms.Integration.PropertyTranslator> delegate for the <xref:System.Windows.Forms.Control.BackColor%2A> property of a <xref:System.Windows.Forms.Integration.ElementHost> control.  \n  \n [!code-cs[PropertyMappingWithElementHost#15](../../add/codesnippet/CSharp/PropertyMappingWithElementHost/Form1.cs#15)]\n [!code-vb[PropertyMappingWithElementHost#15](../../add/codesnippet/VisualBasic/PropertyMappingWithElementHost/Form1.vb#15)]  \n  \n The following code example shows how to retrieve the <xref:System.Windows.Forms.Integration.PropertyTranslator> delegate for the <xref:System.Windows.Controls.Control.Background%2A> property of a <xref:System.Windows.Forms.Integration.WindowsFormsHost> control.  \n  \n [!code-cs[PropertyMappingWithWfh#15](../../add/codesnippet/CSharp/p-system.windows.forms.i_8_2.cs)]\n [!code-vb[PropertyMappingWithWfh#15](../../add/codesnippet/VisualBasic/p-system.windows.forms.i_8_2.vb)]"
   syntax:
     content: public System.Windows.Forms.Integration.PropertyTranslator this[string propertyName] { get; set; }
     parameters:
     - id: propertyName
       type: System.String
-      description: To be added.
+      description: The name of the property to map.
     return:
       type: System.Windows.Forms.Integration.PropertyTranslator
-      description: To be added.
+      description: The  delegate corresponding to the property specified by propertyName.
   overload: System.Windows.Forms.Integration.PropertyMap.Item*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    propertyName is  or an empty string; the specified  delegate is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The property given by propertyName does not exist on <xref:System.Windows.Forms.Integration.PropertyMap.SourceObject%2A>.
   platform:
   - net-11
   - net-20
@@ -276,14 +298,14 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets an <xref:System.Collections.ICollection> object containing the property names in the  collection.
   syntax:
     content: public System.Collections.ICollection Keys { get; }
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> object containing the property names of the  collection.
   overload: System.Windows.Forms.Integration.PropertyMap.Keys*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -300,13 +322,14 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when an exception is raised by a property translator.
+  remarks: Handlers for the PropertyMappingError event can optionally raise the exception by setting the <xref:System.Windows.Forms.Integration.IntegrationExceptionEventArgs.ThrowException%2A> flag on the <xref:System.Windows.Forms.Integration.PropertyMappingExceptionEventArgs>.
   syntax:
     content: public event EventHandler<System.Windows.Forms.Integration.PropertyMappingExceptionEventArgs> PropertyMappingError;
     return:
       type: System.EventHandler{System.Windows.Forms.Integration.PropertyMappingExceptionEventArgs}
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -323,15 +346,21 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Deletes the given property from the mapping.
+  remarks: ''
+  example:
+  - "The following code example shows how to remove a mapping for the <xref:System.Windows.Forms.Control.Cursor%2A> property to an <xref:System.Windows.Forms.Integration.ElementHost> control.  \n  \n [!code-cs[PropertyMappingWithElementHost#13](../../add/codesnippet/CSharp/PropertyMappingWithElementHost/Form1.cs#13)]\n [!code-vb[PropertyMappingWithElementHost#13](../../add/codesnippet/VisualBasic/PropertyMappingWithElementHost/Form1.vb#13)]  \n  \n The following code example shows how to add a mapping for the <xref:System.Windows.FrameworkElement.Cursor%2A> property to a <xref:System.Windows.Forms.Integration.WindowsFormsHost> control.  \n  \n [!code-cs[PropertyMappingWithWfh#13](../../add/codesnippet/CSharp/m-system.windows.forms.i_16_2.cs)]\n [!code-vb[PropertyMappingWithWfh#13](../../add/codesnippet/VisualBasic/m-system.windows.forms.i_16_2.vb)]"
   syntax:
     content: public void Remove (string propertyName);
     parameters:
     - id: propertyName
       type: System.String
-      description: To be added.
+      description: The name of the property to remove.
   overload: System.Windows.Forms.Integration.PropertyMap.Remove*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    propertyName is ."
   platform:
   - net-11
   - net-20
@@ -348,15 +377,19 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Restores the default property mapping for the given property.
+  remarks: "The Reset method has the following effects on the <xref:System.Windows.Forms.Integration.PropertyMap>.  \n  \n-   A default property mapping that has been removed is restored.  \n  \n-   A property mapping that has been added is removed.  \n  \n-   A default property mapping that has been overridden is restored to its default value."
   syntax:
     content: public void Reset (string propertyName);
     parameters:
     - id: propertyName
       type: System.String
-      description: To be added.
+      description: The name of the property to restore.
   overload: System.Windows.Forms.Integration.PropertyMap.Reset*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    propertyName is ."
   platform:
   - net-11
   - net-20
@@ -373,12 +406,13 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Restores the default property mappings.
+  remarks: "The ResetAll method has the following effects on the <xref:System.Windows.Forms.Integration.PropertyMap>.  \n  \n-   Default property mappings that have been removed are restored.  \n  \n-   Property mappings that have been added are removed.  \n  \n-   Default property mappings that have been overridden are restored to their default values."
   syntax:
     content: public void ResetAll ();
     parameters: []
   overload: System.Windows.Forms.Integration.PropertyMap.ResetAll*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -395,14 +429,15 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the object which has the properties to be translated.
+  remarks: The properties which are mapped in the <xref:System.Windows.Forms.Integration.PropertyMap> must exist on SourceObject.
   syntax:
     content: protected object SourceObject { get; }
     return:
       type: System.Object
-      description: To be added.
+      description: The object which has the properties to be translated.
   overload: System.Windows.Forms.Integration.PropertyMap.SourceObject*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -419,14 +454,14 @@ items:
   assemblies:
   - WindowsFormsIntegration
   namespace: System.Windows.Forms.Integration
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets an <xref:System.Collections.ICollection> containing the property translators in the  collection.
   syntax:
     content: public System.Collections.ICollection Values { get; }
     return:
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> containing the property translators in the  collection.
   overload: System.Windows.Forms.Integration.PropertyMap.Values*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -447,12 +482,6 @@ references:
   name: PropertyMap(Object)
   nameWithType: PropertyMap.PropertyMap(Object)
   fullName: System.Windows.Forms.Integration.PropertyMap.PropertyMap(Object)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Forms.Integration.PropertyMap.Add(System.String,System.Windows.Forms.Integration.PropertyTranslator)
   parent: System.Windows.Forms.Integration.PropertyMap
   isExternal: false
@@ -477,12 +506,6 @@ references:
   name: Apply(String)
   nameWithType: PropertyMap.Apply(String)
   fullName: System.Windows.Forms.Integration.PropertyMap.Apply(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Integration.PropertyMap.ApplyAll
   parent: System.Windows.Forms.Integration.PropertyMap
   isExternal: false
@@ -507,12 +530,6 @@ references:
   name: Boolean
   nameWithType: Boolean
   fullName: System.Boolean
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Integration.PropertyMap.DefaultTranslators
   parent: System.Windows.Forms.Integration.PropertyMap
   isExternal: false
@@ -525,24 +542,34 @@ references:
   name: Dictionary<String,PropertyTranslator>
   nameWithType: Dictionary<String,PropertyTranslator>
   fullName: System.Collections.Generic.Dictionary<System.String,System.Windows.Forms.Integration.PropertyTranslator>
+  spec.csharp:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    nameWithType: Dictionary
+    fullName: Dictionary<System.String,System.Windows.Forms.Integration.PropertyTranslator>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: String
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Windows.Forms.Integration.PropertyTranslator
+    name: PropertyTranslator
+    nameWithType: PropertyTranslator
+    fullName: PropertyTranslator
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Forms.Integration.PropertyMap.Item(System.String)
   parent: System.Windows.Forms.Integration.PropertyMap
   isExternal: false
   name: Item(String)
   nameWithType: PropertyMap.Item(String)
   fullName: System.Windows.Forms.Integration.PropertyMap.Item(String)
-- uid: System.Windows.Forms.Integration.PropertyTranslator
-  parent: System.Windows.Forms.Integration
-  isExternal: false
-  name: PropertyTranslator
-  nameWithType: PropertyTranslator
-  fullName: System.Windows.Forms.Integration.PropertyTranslator
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Integration.PropertyMap.Keys
   parent: System.Windows.Forms.Integration.PropertyMap
   isExternal: false
@@ -567,30 +594,33 @@ references:
   name: EventHandler<PropertyMappingExceptionEventArgs>
   nameWithType: EventHandler<PropertyMappingExceptionEventArgs>
   fullName: System.EventHandler<System.Windows.Forms.Integration.PropertyMappingExceptionEventArgs>
+  spec.csharp:
+  - uid: System.EventHandler`1
+    name: EventHandler
+    nameWithType: EventHandler
+    fullName: EventHandler<System.Windows.Forms.Integration.PropertyMappingExceptionEventArgs>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Windows.Forms.Integration.PropertyMappingExceptionEventArgs
+    name: PropertyMappingExceptionEventArgs
+    nameWithType: PropertyMappingExceptionEventArgs
+    fullName: PropertyMappingExceptionEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Forms.Integration.PropertyMap.Remove(System.String)
   parent: System.Windows.Forms.Integration.PropertyMap
   isExternal: false
   name: Remove(String)
   nameWithType: PropertyMap.Remove(String)
   fullName: System.Windows.Forms.Integration.PropertyMap.Remove(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Integration.PropertyMap.Reset(System.String)
   parent: System.Windows.Forms.Integration.PropertyMap
   isExternal: false
   name: Reset(String)
   nameWithType: PropertyMap.Reset(String)
   fullName: System.Windows.Forms.Integration.PropertyMap.Reset(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Windows.Forms.Integration.PropertyMap.ResetAll
   parent: System.Windows.Forms.Integration.PropertyMap
   isExternal: false
@@ -603,24 +633,12 @@ references:
   name: SourceObject
   nameWithType: PropertyMap.SourceObject
   fullName: System.Windows.Forms.Integration.PropertyMap.SourceObject
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Windows.Forms.Integration.PropertyMap.Values
   parent: System.Windows.Forms.Integration.PropertyMap
   isExternal: false
   name: Values
   nameWithType: PropertyMap.Values
   fullName: System.Windows.Forms.Integration.PropertyMap.Values
-- uid: System.Collections.ICollection
-  parent: System.Collections
-  isExternal: true
-  name: ICollection
-  nameWithType: ICollection
-  fullName: System.Collections.ICollection
 - uid: System.Windows.Forms.Integration.PropertyMap.#ctor*
   parent: System.Windows.Forms.Integration.PropertyMap
   isExternal: false

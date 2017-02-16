@@ -33,8 +33,8 @@ items:
   nameWithType: ToolZone
   fullName: System.Web.UI.WebControls.WebParts.ToolZone
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Serves as the base class for a set of helper zones that appear only in certain associated page display modes.
+  remarks: "In the Web Parts control set, a zone is a region on a Web page that contains server controls, and provides modular layout with a consistent user interface (UI) for the contained controls.  \n  \n There are two general types of zone controls that derive from the base <xref:System.Web.UI.WebControls.WebParts.WebZone> class: <xref:System.Web.UI.WebControls.WebParts.WebPartZoneBase> zones and ToolZone zones. The <xref:System.Web.UI.WebControls.WebParts.WebPartZoneBase> zones contain server controls (which can be custom <xref:System.Web.UI.WebControls.WebParts.WebPart> controls, or other server controls including ASP.NET controls and user controls). These controls form the primary UI of a Web page and are visible in all the possible display modes, unless they are hidden programmatically or by a user.  \n  \n The ToolZone zones are special helper zones that appear only when a page is in certain display modes associated with the zone, and these zones also contain special server controls that enable users to modify the layout, appearance, properties, and content of Web pages from within a browser. Developers can inherit from the base ToolZone class, or any of the derived ToolZone zones, to create custom zones.  \n  \n The Web Parts control set contains three types of ToolZone zones, described in the following table.  \n  \n|Tool zone type|Description|  \n|--------------------|-----------------|  \n|<xref:System.Web.UI.WebControls.WebParts.EditorZone>|Contains controls used to edit <xref:System.Web.UI.WebControls.WebParts.WebPart> and server control properties on a page.|  \n|<xref:System.Web.UI.WebControls.WebParts.CatalogZone>|Contains <xref:System.Web.UI.WebControls.WebParts.CatalogPart> controls, which in turn contain <xref:System.Web.UI.WebControls.WebParts.WebPart> controls that users can add to a page.|  \n|<xref:System.Web.UI.WebControls.WebParts.ConnectionsZone>|Does not contain declarative markup elements; this zone is self-contained. At run time, it renders a special UI that enables users to manage connections between <xref:System.Web.UI.WebControls.WebParts.WebPart> controls.|  \n  \n The ToolZone base class provides methods and properties that are useful to derived zones. It contains <xref:System.Web.UI.WebControls.WebParts.ToolZone.RenderHeader%2A> and <xref:System.Web.UI.WebControls.WebParts.ToolZone.RenderFooter%2A> methods, which override the base methods from the <xref:System.Web.UI.WebControls.WebParts.WebZone> class, and render buttons and other UI attributes for the header and footer of a zone. There are also several members for handling verbs, which are common UI actions that users can perform in the various zones. Members related to handling verbs include: <xref:System.Web.UI.WebControls.WebParts.ToolZone.RenderVerb%2A>, <xref:System.Web.UI.WebControls.WebParts.ToolZone.RenderVerbs%2A>, and <xref:System.Web.UI.WebControls.WebParts.ToolZone.HeaderCloseVerb%2A>.  \n  \n The <xref:System.Web.UI.WebControls.WebParts.ToolZone.%23ctor%2A> contains two overloaded methods, which add <xref:System.Web.UI.WebControls.WebParts.WebPartDisplayMode> objects to the <xref:System.Web.UI.WebControls.WebParts.ToolZone.AssociatedDisplayModes%2A> collection. This collection of associated display modes determines which display modes are related to a particular type of zone (in other words, it determines in which display modes a zone is visible). The union of all associated display modes for all the ToolZone zones on a given Web page determines which display modes (besides the normal browse mode) are possible or supported on the page. The collection of supported display modes for a page is contained in the <xref:System.Web.UI.WebControls.WebParts.WebPartManager.SupportedDisplayModes%2A> property.  \n  \n> [!NOTE]\n>  At any given time, only one display mode can be active on a page. The currently active display mode is referenced in the <xref:System.Web.UI.WebControls.WebParts.WebPartManager.DisplayMode%2A> property.  \n  \n The ToolZone class also contains a number of style properties that contain style attributes for the various UI elements of a zone. Some ToolZone style properties include <xref:System.Web.UI.WebControls.WebParts.ToolZone.EditUIStyle%2A>, <xref:System.Web.UI.WebControls.WebParts.ToolZone.HeaderVerbStyle%2A>, <xref:System.Web.UI.WebControls.WebParts.ToolZone.InstructionTextStyle%2A>, and <xref:System.Web.UI.WebControls.WebParts.ToolZone.LabelStyle%2A>."
   syntax:
     content: 'public abstract class ToolZone : System.Web.UI.WebControls.WebParts.WebZone, System.Web.UI.IPostBackEventHandler'
   inheritance:
@@ -222,15 +222,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Associates a collection of  objects with a particular  zone, so that the zone can be displayed in the appropriate page display modes.
+  remarks: "The ToolZone constructor is used to associate a <xref:System.Web.UI.WebControls.WebParts.ToolZone> zone with one or more display modes. This enables the tool zone to be displayed in the associated display modes.  \n  \n> [!NOTE]\n>  In the implementation of <xref:System.Web.UI.WebControls.WebParts.ToolZone> zones provided by the Web Parts control set, each zone is associated with only one display mode. However, using this overload of the constructor, it is possible to associate a custom zone with multiple display modes."
   syntax:
     content: protected ToolZone (System.Collections.ICollection associatedDisplayModes);
     parameters:
     - id: associatedDisplayModes
       type: System.Collections.ICollection
-      description: To be added.
+      description: An <xref:System.Collections.ICollection> of  objects that determine when a zone can be displayed.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The associatedDisplayModes parameter is equal to  or 0.
   platform:
   - net-11
   - net-20
@@ -247,15 +251,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Associates a single  object with a particular  zone, so that the zone can be displayed in the appropriate page display mode.
+  remarks: The ToolZone constructor is used to associate a <xref:System.Web.UI.WebControls.WebParts.ToolZone> zone with a single display mode. This enables the tool zone to be displayed when a page enters that display mode. For example, a <xref:System.Web.UI.WebControls.WebParts.CatalogZone> control can be displayed only in <xref:System.Web.UI.WebControls.WebParts.WebPartManager.CatalogDisplayMode> mode.
   syntax:
     content: protected ToolZone (System.Web.UI.WebControls.WebParts.WebPartDisplayMode associatedDisplayMode);
     parameters:
     - id: associatedDisplayMode
       type: System.Web.UI.WebControls.WebParts.WebPartDisplayMode
-      description: To be added.
+      description: A  that determines when a zone can be displayed.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: The associatedDisplayMode parameter is equal to .
   platform:
   - net-11
   - net-20
@@ -272,14 +280,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the collection of  objects that are associated with a particular  zone.
+  remarks: "Each <xref:System.Web.UI.WebControls.WebParts.ToolZone> control has a special page display mode associated with it, as indicated in the following table.  \n  \n> [!NOTE]\n>  In the implementation of <xref:System.Web.UI.WebControls.WebParts.ToolZone> zones provided by the Web Parts control set, each zone is associated with only one display mode. However, using the <xref:System.Web.UI.WebControls.WebParts.ToolZone.%23ctor%28System.Collections.ICollection%29> you could associate a custom zone with multiple display modes.  \n  \n|Tool zone type|Associated display mode|  \n|--------------------|-----------------------------|  \n|<xref:System.Web.UI.WebControls.WebParts.EditorZone>|<xref:System.Web.UI.WebControls.WebParts.WebPartManager.EditDisplayMode>|  \n|<xref:System.Web.UI.WebControls.WebParts.CatalogZone>|<xref:System.Web.UI.WebControls.WebParts.WebPartManager.CatalogDisplayMode>|  \n|<xref:System.Web.UI.WebControls.WebParts.ConnectionsZone>|<xref:System.Web.UI.WebControls.WebParts.WebPartManager.ConnectDisplayMode>|  \n  \n The collection of associated display modes for each zone on a page is added to the <xref:System.Web.UI.WebControls.WebParts.WebPartManager.SupportedDisplayModes%2A> property, which determines the total set of possible display modes on a page."
   syntax:
     content: public System.Web.UI.WebControls.WebParts.WebPartDisplayModeCollection AssociatedDisplayModes { get; }
     return:
       type: System.Web.UI.WebControls.WebParts.WebPartDisplayModeCollection
-      description: To be added.
+      description: A  that contains  objects associated with a  control.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.AssociatedDisplayModes*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -296,12 +305,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a base method declaration that derived  controls can override to handle the details of closing a specialized zone.
   syntax:
     content: protected abstract void Close ();
     parameters: []
   overload: System.Web.UI.WebControls.WebParts.ToolZone.Close*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -318,14 +327,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a value that indicates whether a  control is currently displayed.
+  remarks: <xref:System.Web.UI.WebControls.WebParts.ToolZone> controls, by default, are not displayed when a Web Parts page loads. They appear only when the page is switched programmatically or by a user into a page display mode that is associated with a particular <xref:System.Web.UI.WebControls.WebParts.ToolZone> control.
   syntax:
     content: protected virtual bool Display { get; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the  is currently displayed; otherwise, . The default value is .
   overload: System.Web.UI.WebControls.WebParts.ToolZone.Display*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -342,14 +352,17 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the style attributes for the editable controls contained in a  control.
+  remarks: "The EditUIStyle property enables you to access style characteristics for the editable controls contained within a <xref:System.Web.UI.WebControls.WebParts.ToolZone> control. Editable controls are rendered by the derived <xref:System.Web.UI.WebControls.WebParts.ToolZone> zones, and include controls such as <xref:System.Web.UI.WebControls.TextBox>, <xref:System.Web.UI.WebControls.DropDownList>, and <xref:System.Web.UI.WebControls.CheckBox> controls that enable users to edit property values on <xref:System.Web.UI.WebControls.WebParts.WebPart> controls. The style characteristics contained in the EditUIStyle property apply to the editable controls, which together compose the editing user interface (UI) that appears to users.  \n  \n> [!NOTE]\n>  Even though the property is read-only, you can set the style attributes of the underlying <xref:System.Web.UI.WebControls.Style> object."
+  example:
+  - "The following code example shows how to use the EditUIStyle property with an inherited <xref:System.Web.UI.WebControls.WebParts.ToolZone> control. Specifically, it demonstrates how to change the EditUIStyle property for UI elements in an <xref:System.Web.UI.WebControls.WebParts.EditorZone> control.  \n  \n The first part of the code example is a user control that is referenced in the page, and enables you to switch the page to different display modes. For more information on display modes and enabling users to switch among them, see [Walkthrough: Changing Display Modes on a Web Parts Page](../Topic/Walkthrough:%20Changing%20Display%20Modes%20on%20a%20Web%20Parts%20Page.md).  \n  \n [!code-cs[WebParts_ToolZone_EditUIStyle#5](../../add/codesnippet/CSharp/p-system.web.ui.webcontr_240_1.ascx)]\n [!code-vb[WebParts_ToolZone_EditUIStyle#5](../../add/codesnippet/VisualBasic/p-system.web.ui.webcontr_240_1.ascx)]  \n  \n The second part of the code example is the Web page. The page contains an <xref:System.Web.UI.WebControls.WebParts.EditorZone> control, which inherits from the <xref:System.Web.UI.WebControls.WebParts.ToolZone> class. The `Button1_Click` method in the page sets the EditUIStyle property. Note that after the page loads, you must switch the page into edit mode to see the effects of the EditUIStyle property on the <xref:System.Web.UI.WebControls.WebParts.EditorZone> control's UI. As you click the button that says **Change Edit UI Font**, notice that the font of the editable controls in the zone changes.  \n  \n [!code-cs[WebParts_ToolZone_EditUIStyle#1](../../add/codesnippet/CSharp/p-system.web.ui.webcontr_240_2.aspx)]\n [!code-vb[WebParts_ToolZone_EditUIStyle#1](../../add/codesnippet/VisualBasic/p-system.web.ui.webcontr_240_2.aspx)]"
   syntax:
     content: public System.Web.UI.WebControls.Style EditUIStyle { get; }
     return:
       type: System.Web.UI.WebControls.Style
-      description: To be added.
+      description: A  that contains style attributes for editable controls within a  control.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.EditUIStyle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -366,14 +379,17 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a reference to the  object in the header of a  control that is used to close the control.
+  remarks: You can use the HeaderCloseVerb property programmatically or in the declarative markup of a Web page to specify various attributes for the verb that is used to close a <xref:System.Web.UI.WebControls.WebParts.ToolZone> control.
+  example:
+  - "The following code example shows how to use the HeaderCloseVerb property with an inherited <xref:System.Web.UI.WebControls.WebParts.ToolZone> control. The example shows how to enable and disable the close verb in the header of an <xref:System.Web.UI.WebControls.WebParts.EditorZone> control.  \n  \n The first part of the code example is a user control that is referenced in the page, and enables you to switch the page to different display modes. For more information on display modes and enabling users to switch among them, see [Walkthrough: Changing Display Modes on a Web Parts Page](../Topic/Walkthrough:%20Changing%20Display%20Modes%20on%20a%20Web%20Parts%20Page.md).  \n  \n [!code-cs[WebParts_ToolZone_HeaderCloseVerb#5](../../add/codesnippet/CSharp/p-system.web.ui.webcontr_344_1.ascx)]\n [!code-vb[WebParts_ToolZone_HeaderCloseVerb#5](../../add/codesnippet/VisualBasic/p-system.web.ui.webcontr_344_1.ascx)]  \n  \n The second part of the code example is the Web page. The page contains an <xref:System.Web.UI.WebControls.WebParts.EditorZone> control, which inherits from the <xref:System.Web.UI.WebControls.WebParts.ToolZone> class. The `Button1_Click` method in the page sets the HeaderCloseVerb property value.  \n  \n Note that after the page loads, you must switch the page into edit mode to see the effects of the code that uses the HeaderCloseVerb property on the <xref:System.Web.UI.WebControls.WebParts.EditorZone> control. As you click the **Enable/Disable Close Verb** button, the verb in the header of the zone should be alternately enabled and disabled.  \n  \n [!code-vb[WebParts_ToolZone_HeaderCloseVerb#1](../../add/codesnippet/VisualBasic/p-system.web.ui.webcontr_344_2.aspx)]\n [!code-cs[WebParts_ToolZone_HeaderCloseVerb#1](../../add/codesnippet/CSharp/p-system.web.ui.webcontr_344_2.aspx)]"
   syntax:
     content: public virtual System.Web.UI.WebControls.WebParts.WebPartVerb HeaderCloseVerb { get; }
     return:
       type: System.Web.UI.WebControls.WebParts.WebPartVerb
-      description: To be added.
+      description: The  used to close a  control.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.HeaderCloseVerb*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -390,14 +406,17 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the style attributes for all header verbs displayed in a  control.
+  remarks: The HeaderVerbStyle property, though it is read-only, enables you to get or set the style attributes of the underlying <xref:System.Web.UI.WebControls.Style> object for all the header verbs in a <xref:System.Web.UI.WebControls.WebParts.ToolZone> control.
+  example:
+  - "The following code example shows how to use the HeaderVerbStyle property with an inherited <xref:System.Web.UI.WebControls.WebParts.ToolZone> control. The example shows how to change the width of the border around an <xref:System.Web.UI.WebControls.WebParts.EditorZone> control by using this property.  \n  \n The first part of the code example is a user control that is referenced in the page, and enables you to switch the page to different display modes. For more information on display modes and enabling users to switch among them, see [Walkthrough: Changing Display Modes on a Web Parts Page](../Topic/Walkthrough:%20Changing%20Display%20Modes%20on%20a%20Web%20Parts%20Page.md).  \n  \n [!code-cs[WebParts_ToolZone_HeaderVerbStyle#5](../../add/codesnippet/CSharp/p-system.web.ui.webcontr_174_1.ascx)]\n [!code-vb[WebParts_ToolZone_HeaderVerbStyle#5](../../add/codesnippet/VisualBasic/p-system.web.ui.webcontr_174_1.ascx)]  \n  \n The second part of the code example is the Web page. The page contains an <xref:System.Web.UI.WebControls.WebParts.EditorZone> control, which inherits from the <xref:System.Web.UI.WebControls.WebParts.ToolZone> class. The `Button1_Click` method in the page sets the HeaderVerbStyle property value.  \n  \n Note that after the page loads, you must switch the page into edit mode to see the effects of the code that uses the <xref:System.Web.UI.WebControls.WebParts.ToolZone.HeaderCloseVerb%2A> property on the <xref:System.Web.UI.WebControls.WebParts.EditorZone> control. As you click the **Toggle Header Verb Border** button, the border width around the zone should change.  \n  \n [!code-vb[WebParts_ToolZone_HeaderVerbStyle#1](../../add/codesnippet/VisualBasic/p-system.web.ui.webcontr_174_2.aspx)]\n [!code-cs[WebParts_ToolZone_HeaderVerbStyle#1](../../add/codesnippet/CSharp/p-system.web.ui.webcontr_174_2.aspx)]"
   syntax:
     content: public System.Web.UI.WebControls.Style HeaderVerbStyle { get; }
     return:
       type: System.Web.UI.WebControls.Style
-      description: To be added.
+      description: A  that contains style attributes for header verbs within a .
   overload: System.Web.UI.WebControls.WebParts.ToolZone.HeaderVerbStyle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -414,14 +433,17 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the text in a  control that provides directions for end users.
+  remarks: "The InstructionText property is used to hold a set of instructions that are provided for end users when a particular <xref:System.Web.UI.WebControls.WebParts.ToolZone> control is displayed.  \n  \n The value of this property, when set, can be saved automatically to a resource file by using a designer tool. For more information, see <xref:System.ComponentModel.LocalizableAttribute> and [Globalization and Localization](../Topic/ASP.NET%20Globalization%20and%20Localization.md)."
+  example:
+  - "The following code example shows how to use the InstructionText property with an inherited <xref:System.Web.UI.WebControls.WebParts.ToolZone> control. The example shows how to change the value of the instruction text that appears in an <xref:System.Web.UI.WebControls.WebParts.EditorZone> control by using this property.  \n  \n The first part of the code example is a user control that is referenced in the page, and enables you to switch the page to different display modes. For more information on display modes and enabling users to switch among them, see [Walkthrough: Changing Display Modes on a Web Parts Page](../Topic/Walkthrough:%20Changing%20Display%20Modes%20on%20a%20Web%20Parts%20Page.md).  \n  \n [!code-cs[WebParts_ToolZone_Overview#5](../../add/codesnippet/CSharp/p-system.web.ui.webcontr_829_1.ascx)]\n [!code-vb[WebParts_ToolZone_Overview#5](../../add/codesnippet/VisualBasic/p-system.web.ui.webcontr_829_1.ascx)]  \n  \n The second part of the code example shows a partial class that contains the code to update the property programmatically in the `Button1_Click` method.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](../Topic/Script%20Exploits%20Overview.md).  \n  \n [!code-cs[WebParts_ToolZone_Overview#2](../../add/codesnippet/CSharp/p-system.web.ui.webcontr_829_2.cs)]\n [!code-vb[WebParts_ToolZone_Overview#2](../../add/codesnippet/VisualBasic/p-system.web.ui.webcontr_829_2.vb)]  \n  \n The third part of the code example shows a Web page that contains two inherited <xref:System.Web.UI.WebControls.WebParts.ToolZone> controls: a <xref:System.Web.UI.WebControls.WebParts.CatalogZone> control and an <xref:System.Web.UI.WebControls.WebParts.EditorZone> control. Each <xref:System.Web.UI.WebControls.WebParts.ToolZone> control sets some properties in the declarative markup of the page.  \n  \n> [!IMPORTANT]\n>  This example has a text box that accepts user input, which is a potential security threat. By default, ASP.NET Web pages validate that user input does not include script or HTML elements. For more information, see [Script Exploits Overview](../Topic/Script%20Exploits%20Overview.md).  \n  \n [!code-vb[WebParts_ToolZone_Overview#1](../../add/codesnippet/VisualBasic/p-system.web.ui.webcontr_829_3.aspx)]\n [!code-cs[WebParts_ToolZone_Overview#1](../../add/codesnippet/CSharp/p-system.web.ui.webcontr_829_3.aspx)]  \n  \n You can load the page in a browser and switch among the various page display modes to see how the different tool zones behave. Switch the page into edit mode, enter some text into the text box, and click **Update Edit Zone Text** to see the effect of programmatically updating the InstructionText property. The instruction text appears near the top of the zone."
   syntax:
     content: public virtual string InstructionText { get; set; }
     return:
       type: System.String
-      description: To be added.
+      description: A string that contains the directions for end users. A default value appropriate to specific tool zones is provided by derived  classes.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.InstructionText*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -438,14 +460,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the style attributes for the instruction text that appears at the top of a  control.
   syntax:
     content: public System.Web.UI.WebControls.Style InstructionTextStyle { get; }
     return:
       type: System.Web.UI.WebControls.Style
-      description: To be added.
+      description: A  that contains style attributes for the instruction text within a .
   overload: System.Web.UI.WebControls.WebParts.ToolZone.InstructionTextStyle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -462,14 +484,14 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the style attributes for the contents of the labels that appear alongside the editing controls within a  control. The derived  controls, such as  and , apply the styles to the labels.
   syntax:
     content: public System.Web.UI.WebControls.Style LabelStyle { get; }
     return:
       type: System.Web.UI.WebControls.Style
-      description: To be added.
+      description: A  that contains style attributes for the labels within a .
   overload: System.Web.UI.WebControls.WebParts.ToolZone.LabelStyle*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -486,15 +508,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Loads view state.
   syntax:
     content: protected override void LoadViewState (object savedState);
     parameters:
     - id: savedState
       type: System.Object
-      description: To be added.
+      description: The state to load.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.LoadViewState*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: The length of savedState, when converted to an object array, does not equal 7.
   platform:
   - net-11
   - net-20
@@ -511,18 +536,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a base method declaration that derived  controls can override to handle the details of changing page display modes for a specialized zone.
   syntax:
     content: protected virtual void OnDisplayModeChanged (object sender, System.Web.UI.WebControls.WebParts.WebPartDisplayModeEventArgs e);
     parameters:
     - id: sender
       type: System.Object
-      description: To be added.
+      description: An <xref:System.Object> that raises the OnDisplayModeChanged method.
     - id: e
       type: System.Web.UI.WebControls.WebParts.WebPartDisplayModeEventArgs
-      description: To be added.
+      description: A  that contains the event data.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.OnDisplayModeChanged*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -539,15 +564,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates specialized event handlers used by the  control on a Web page.
   syntax:
     content: protected override void OnInit (EventArgs e);
     parameters:
     - id: e
       type: System.EventArgs
-      description: To be added.
+      description: An <xref:System.EventArgs?displayProperty=fullName> that contains the event data.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.OnInit*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -564,18 +589,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a base method declaration that derived  controls can override to handle the event of changing which Web Parts control is selected within a specialized zone.
   syntax:
     content: protected virtual void OnSelectedWebPartChanged (object sender, System.Web.UI.WebControls.WebParts.WebPartEventArgs e);
     parameters:
     - id: sender
       type: System.Object
-      description: To be added.
+      description: An <xref:System.Object> that raises the OnSelectedWebPartChanged method.
     - id: e
       type: System.Web.UI.WebControls.WebParts.WebPartEventArgs
-      description: To be added.
+      description: A  that contains the event data.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.OnSelectedWebPartChanged*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -592,15 +617,16 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Calls the <xref:System.Web.UI.WebControls.WebParts.ToolZone.Close%2A> method for a  control when the control posts back to the server.
+  remarks: If a user clicks a close verb in a <xref:System.Web.UI.WebControls.WebParts.ToolZone> control, when the page passes the value of the `eventArgument` parameter to the RaisePostBackEvent method, the control then calls the <xref:System.Web.UI.WebControls.WebParts.ToolZone.Close%2A> method.
   syntax:
     content: protected virtual void RaisePostBackEvent (string eventArgument);
     parameters:
     - id: eventArgument
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> that contains the argument for the event.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.RaisePostBackEvent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -617,15 +643,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Overrides the base method to render verbs in the footer of a  control.
   syntax:
     content: protected override void RenderFooter (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: To be added.
+      description: An  that renders verbs in a zone's footer area.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.RenderFooter*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -642,15 +668,16 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Overrides the base method to provide specialized rendering for the header area required by  controls.
+  remarks: The RenderHeader method renders all the details for the header of a <xref:System.Web.UI.WebControls.WebParts.ToolZone> control, including style attributes, the table that contains the header, the actual contents, and a close verb.
   syntax:
     content: protected override void RenderHeader (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: To be added.
+      description: An  that renders the header section.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.RenderHeader*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -667,18 +694,19 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Renders an individual verb with a  control.
+  remarks: The RenderVerb method renders the user interface for a specific <xref:System.Web.UI.WebControls.WebParts.WebPartVerb> object in a zone. The method checks the value of the <xref:System.Web.UI.WebControls.WebParts.WebZone.VerbButtonType%2A> property and, based on that value, renders the verb as a button, a link, or a clickable image.
   syntax:
     content: protected virtual void RenderVerb (System.Web.UI.HtmlTextWriter writer, System.Web.UI.WebControls.WebParts.WebPartVerb verb);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: To be added.
+      description: An  that renders a single verb.
     - id: verb
       type: System.Web.UI.WebControls.WebParts.WebPartVerb
-      description: To be added.
+      description: The  to be rendered within a zone.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.RenderVerb*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -695,15 +723,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides a base method declaration that derived  controls can override to customize the rendering of the verbs within a specialized zone.
   syntax:
     content: protected virtual void RenderVerbs (System.Web.UI.HtmlTextWriter writer);
     parameters:
     - id: writer
       type: System.Web.UI.HtmlTextWriter
-      description: To be added.
+      description: An  that renders the verbs in a zone.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.RenderVerbs*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -720,15 +748,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Saves any view-state changes that have occurred after a page was posted back to the server.
   syntax:
     content: protected override object SaveViewState ();
     parameters: []
     return:
       type: System.Object
-      description: To be added.
+      description: Returns the zone control's current view state. If no view state is associated with the zone, this method returns null.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.SaveViewState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -746,15 +774,15 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Implements the <xref:System.Web.UI.IPostBackEventHandler.RaisePostBackEvent%2A> method.
   syntax:
     content: void IPostBackEventHandler.RaisePostBackEvent (string eventArgument);
     parameters:
     - id: eventArgument
       type: System.String
-      description: To be added.
+      description: A <xref:System.String> that contains the postback event data.
   overload: System.Web.UI.WebControls.WebParts.ToolZone.System#Web#UI#IPostBackEventHandler#RaisePostBackEvent*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -771,12 +799,12 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Tracks changes to a zone control's view state.
   syntax:
     content: protected override void TrackViewState ();
     parameters: []
   overload: System.Web.UI.WebControls.WebParts.ToolZone.TrackViewState*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -793,14 +821,18 @@ items:
   assemblies:
   - System.Web
   namespace: System.Web.UI.WebControls.WebParts
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether a server control is rendered as a user interface (UI) element on the page.
+  remarks: "The <xref:System.Web.UI.WebControls.WebParts.ToolZone> class overrides the base <xref:System.Web.UI.Control.Visible%2A> property to consider both the value of the base property and the value of the <xref:System.Web.UI.WebControls.WebParts.ToolZone.Display%2A> property. If both property values are set to `true`, then the Visible property returns a value of `true`, and the control is visible on the page. If either property value is `false`, the Visible property returns a value of `false`, and the control is not visible.  \n  \n> [!IMPORTANT]\n>  The Visible property can only be assigned at design time in a designer, such as the Microsoft Visual Studio designer. If you attempt to set the property programmatically, an exception is thrown.  \n  \n This property is not bindable in visual designers, but is bindable at runtime. For more information, see <xref:System.ComponentModel.BindableAttribute>."
   syntax:
     content: public override bool Visible { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the control is visible on the page; otherwise, .
   overload: System.Web.UI.WebControls.WebParts.ToolZone.Visible*
+  exceptions:
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: The caller attempts to set the property at run time.
   platform:
   - net-11
   - net-20
@@ -893,12 +925,6 @@ references:
   name: HeaderVerbStyle
   nameWithType: ToolZone.HeaderVerbStyle
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.HeaderVerbStyle
-- uid: System.Web.UI.WebControls.Style
-  parent: System.Web.UI.WebControls
-  isExternal: false
-  name: Style
-  nameWithType: Style
-  fullName: System.Web.UI.WebControls.Style
 - uid: System.Web.UI.WebControls.WebParts.ToolZone.InstructionText
   parent: System.Web.UI.WebControls.WebParts.ToolZone
   isExternal: false
@@ -917,24 +943,12 @@ references:
   name: InstructionTextStyle
   nameWithType: ToolZone.InstructionTextStyle
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.InstructionTextStyle
-- uid: System.Web.UI.WebControls.Style
-  parent: System.Web.UI.WebControls
-  isExternal: false
-  name: Style
-  nameWithType: Style
-  fullName: System.Web.UI.WebControls.Style
 - uid: System.Web.UI.WebControls.WebParts.ToolZone.LabelStyle
   parent: System.Web.UI.WebControls.WebParts.ToolZone
   isExternal: false
   name: LabelStyle
   nameWithType: ToolZone.LabelStyle
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.LabelStyle
-- uid: System.Web.UI.WebControls.Style
-  parent: System.Web.UI.WebControls
-  isExternal: false
-  name: Style
-  nameWithType: Style
-  fullName: System.Web.UI.WebControls.Style
 - uid: System.Web.UI.WebControls.WebParts.ToolZone.LoadViewState(System.Object)
   parent: System.Web.UI.WebControls.WebParts.ToolZone
   isExternal: false
@@ -953,12 +967,6 @@ references:
   name: OnDisplayModeChanged(Object,WebPartDisplayModeEventArgs)
   nameWithType: ToolZone.OnDisplayModeChanged(Object,WebPartDisplayModeEventArgs)
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.OnDisplayModeChanged(Object,WebPartDisplayModeEventArgs)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.WebControls.WebParts.WebPartDisplayModeEventArgs
   parent: System.Web.UI.WebControls.WebParts
   isExternal: false
@@ -983,12 +991,6 @@ references:
   name: OnSelectedWebPartChanged(Object,WebPartEventArgs)
   nameWithType: ToolZone.OnSelectedWebPartChanged(Object,WebPartEventArgs)
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.OnSelectedWebPartChanged(Object,WebPartEventArgs)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.WebControls.WebParts.WebPartEventArgs
   parent: System.Web.UI.WebControls.WebParts
   isExternal: false
@@ -1001,12 +1003,6 @@ references:
   name: RaisePostBackEvent(String)
   nameWithType: ToolZone.RaisePostBackEvent(String)
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.RaisePostBackEvent(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.WebControls.WebParts.ToolZone.RenderFooter(System.Web.UI.HtmlTextWriter)
   parent: System.Web.UI.WebControls.WebParts.ToolZone
   isExternal: false
@@ -1025,66 +1021,30 @@ references:
   name: RenderHeader(HtmlTextWriter)
   nameWithType: ToolZone.RenderHeader(HtmlTextWriter)
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.RenderHeader(HtmlTextWriter)
-- uid: System.Web.UI.HtmlTextWriter
-  parent: System.Web.UI
-  isExternal: false
-  name: HtmlTextWriter
-  nameWithType: HtmlTextWriter
-  fullName: System.Web.UI.HtmlTextWriter
 - uid: System.Web.UI.WebControls.WebParts.ToolZone.RenderVerb(System.Web.UI.HtmlTextWriter,System.Web.UI.WebControls.WebParts.WebPartVerb)
   parent: System.Web.UI.WebControls.WebParts.ToolZone
   isExternal: false
   name: RenderVerb(HtmlTextWriter,WebPartVerb)
   nameWithType: ToolZone.RenderVerb(HtmlTextWriter,WebPartVerb)
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.RenderVerb(HtmlTextWriter,WebPartVerb)
-- uid: System.Web.UI.HtmlTextWriter
-  parent: System.Web.UI
-  isExternal: false
-  name: HtmlTextWriter
-  nameWithType: HtmlTextWriter
-  fullName: System.Web.UI.HtmlTextWriter
-- uid: System.Web.UI.WebControls.WebParts.WebPartVerb
-  parent: System.Web.UI.WebControls.WebParts
-  isExternal: false
-  name: WebPartVerb
-  nameWithType: WebPartVerb
-  fullName: System.Web.UI.WebControls.WebParts.WebPartVerb
 - uid: System.Web.UI.WebControls.WebParts.ToolZone.RenderVerbs(System.Web.UI.HtmlTextWriter)
   parent: System.Web.UI.WebControls.WebParts.ToolZone
   isExternal: false
   name: RenderVerbs(HtmlTextWriter)
   nameWithType: ToolZone.RenderVerbs(HtmlTextWriter)
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.RenderVerbs(HtmlTextWriter)
-- uid: System.Web.UI.HtmlTextWriter
-  parent: System.Web.UI
-  isExternal: false
-  name: HtmlTextWriter
-  nameWithType: HtmlTextWriter
-  fullName: System.Web.UI.HtmlTextWriter
 - uid: System.Web.UI.WebControls.WebParts.ToolZone.SaveViewState
   parent: System.Web.UI.WebControls.WebParts.ToolZone
   isExternal: false
   name: SaveViewState()
   nameWithType: ToolZone.SaveViewState()
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.SaveViewState()
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Web.UI.WebControls.WebParts.ToolZone.System#Web#UI#IPostBackEventHandler#RaisePostBackEvent(System.String)
   parent: System.Web.UI.WebControls.WebParts.ToolZone
   isExternal: false
   name: System.Web.UI.IPostBackEventHandler.RaisePostBackEvent(String)
   nameWithType: ToolZone.System.Web.UI.IPostBackEventHandler.RaisePostBackEvent(String)
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.System.Web.UI.IPostBackEventHandler.RaisePostBackEvent(String)
-- uid: System.String
-  parent: System
-  isExternal: true
-  name: String
-  nameWithType: String
-  fullName: System.String
 - uid: System.Web.UI.WebControls.WebParts.ToolZone.TrackViewState
   parent: System.Web.UI.WebControls.WebParts.ToolZone
   isExternal: false
@@ -1097,12 +1057,6 @@ references:
   name: Visible
   nameWithType: ToolZone.Visible
   fullName: System.Web.UI.WebControls.WebParts.ToolZone.Visible
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Web.UI.WebControls.WebParts.ToolZone.#ctor*
   parent: System.Web.UI.WebControls.WebParts.ToolZone
   isExternal: false

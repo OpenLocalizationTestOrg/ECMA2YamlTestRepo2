@@ -23,8 +23,7 @@ items:
   nameWithType: XmlStreamStore
   fullName: System.Windows.Annotations.Storage.XmlStreamStore
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Represents an XML data store for writing and reading user annotations.
   syntax:
     content: 'public sealed class XmlStreamStore : System.Windows.Annotations.Storage.AnnotationStore'
   inheritance:
@@ -58,15 +57,16 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a specified I/O <xref:System.IO.Stream>.
+  remarks: '`stream` must be in valid XML format and comply with the [!INCLUDE[TLA#tla_caf](../../add/includes/tlasharptla-caf-md.md)] schema.'
   syntax:
     content: public XmlStreamStore (System.IO.Stream stream);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: The I/O stream for reading and writing user annotations.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -83,18 +83,28 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class with a specified I/O <xref:System.IO.Stream> and dictionary of known compatible namespaces.
+  remarks: "This XmlStreamStore constructor enables the registration of application-specific known namespaces.  \n  \n The `knownNamespace` dictionary defines application namespaces that are used when you store custom content as part of an annotation.  The dictionary key is the primary namespace known to the application program.  The namespace key is associated with a value list of older namespaces that are compatible with the \"key\" namespace.  When annotations are loaded all namespaces from this list will be replaced by the \"key\" namespace.  \n  \n `stream` must be in valid XML format and comply with the [Annotations Schema](../Topic/Annotations%20Schema.md)."
   syntax:
     content: public XmlStreamStore (System.IO.Stream stream, System.Collections.Generic.IDictionary<Uri,System.Collections.Generic.IList<Uri>> knownNamespaces);
     parameters:
     - id: stream
       type: System.IO.Stream
-      description: To be added.
+      description: The I/O stream for reading and writing user annotations.
     - id: knownNamespaces
       type: System.Collections.Generic.IDictionary{System.Uri,System.Collections.Generic.IList{System.Uri}}
-      description: To be added.
+      description: A dictionary with a list of known compatible namespaces.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    stream is ."
+  - type: System.Xml.XmlException
+    commentId: T:System.Xml.XmlException
+    description: "\n    stream contains invalid XML."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: "The knownNamespaces dictionary contains a duplicate namespace.  \n  \n -or-  \n  \n The knownNamespaces dictionary contains an element that has a  key."
   platform:
   - net-11
   - net-20
@@ -111,15 +121,28 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Adds a new  to the store.
+  remarks: When AddAnnotation is called, the <xref:System.Windows.Annotations.Annotation.Id%2A> of the <xref:System.Windows.Annotations.Annotation> is checked to see whether the <xref:System.Windows.Annotations.Annotation> already has been added to the store.  If the <xref:System.Windows.Annotations.Annotation> already has been added and is in the store an <xref:System.ArgumentException> error is thrown.
   syntax:
     content: public override void AddAnnotation (System.Windows.Annotations.Annotation newAnnotation);
     parameters:
     - id: newAnnotation
       type: System.Windows.Annotations.Annotation
-      description: To be added.
+      description: The annotation to add to the store.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.AddAnnotation*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    newAnnotation is ."
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: An  with the same <xref:System.Windows.Annotations.Annotation.Id%2A> already is in the store.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An I/O <xref:System.IO.Stream> has not been set for the store.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: <xref:System.Windows.Annotations.Storage.AnnotationStore.Dispose%2A> has been called on the store.
   platform:
   - net-11
   - net-20
@@ -136,14 +159,14 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets a value that indicates whether data in annotation buffers is to be written immediately to the physical data store.
   syntax:
     content: public override bool AutoFlush { get; set; }
     return:
       type: System.Boolean
-      description: To be added.
+      description: if data in annotation buffers is to be written immediately to the physical data store for each operation; otherwise,  if data in the annotation buffers is to be written when the application explicitly calls <xref:System.Windows.Annotations.Storage.XmlStreamStore.Flush%2A>.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.AutoFlush*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -160,18 +183,27 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Deletes the annotation with the specified <xref:System.Windows.Annotations.Annotation.Id%2A> from the store.
+  remarks: ''
+  example:
+  - "The following example shows use of the DeleteAnnotation and <xref:System.Windows.Annotations.Storage.XmlStreamStore.Flush%2A> methods.  \n  \n [!code-cs[DocumentSerialize#DocSerDelete](../../add/codesnippet/CSharp/DocumentSerialize/ThumbViewer.cs#docserdelete)]"
   syntax:
     content: public override System.Windows.Annotations.Annotation DeleteAnnotation (Guid annotationId);
     parameters:
     - id: annotationId
       type: System.Guid
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_guid](../../add/includes/tlasharptla-guid-md.md)] <xref:System.Windows.Annotations.Annotation.Id%2A> property of the annotation to be deleted.
     return:
       type: System.Windows.Annotations.Annotation
-      description: To be added.
+      description: The annotation that was deleted; otherwise,  if an annotation with the specified annotationId was not found in the store.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.DeleteAnnotation*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: <xref:System.Windows.Annotations.Storage.AnnotationStore.Dispose%2A> has been called on the store.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An I/O <xref:System.IO.Stream> has not been set for the store.
   platform:
   - net-11
   - net-20
@@ -188,8 +220,6 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override void Dispose (bool disposing);
     parameters:
@@ -197,6 +227,7 @@ items:
       type: System.Boolean
       description: To be added.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -213,12 +244,24 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Forces any annotation data retained in internal buffers to be written to the underlying storage device.
+  remarks: ''
+  example:
+  - "The following example shows how to use the Flush method when the application closes the <xref:System.Windows.Annotations.AnnotationService>.  \n  \n [!code-cs[DocViewerAnnotationsXps#StopAnnotations](../../add/codesnippet/CSharp/DocViewerAnnotationsXps/AnnotationsHelperXps.cs#stopannotations)]\n [!code-vb[DocViewerAnnotationsXps#StopAnnotations](../../add/codesnippet/VisualBasic/docviewerannotationsxps/annotationshelperxps.vb#stopannotations)]  \n  \n The following example shows use of the <xref:System.Windows.Annotations.Storage.XmlStreamStore.DeleteAnnotation%2A> and Flush methods.  \n  \n [!code-cs[DocumentSerialize#DocSerDelete](../../add/codesnippet/CSharp/DocumentSerialize/ThumbViewer.cs#docserdelete)]"
   syntax:
     content: public override void Flush ();
     parameters: []
   overload: System.Windows.Annotations.Storage.XmlStreamStore.Flush*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: <xref:System.Windows.Annotations.Storage.AnnotationStore.Dispose%2A> has been called on the store.
+  - type: System.InvalidOperationException
+    commentId: T:System.InvalidOperationException
+    description: An I/O <xref:System.IO.Stream> has not been set for the store.
+  - type: System.UnauthorizedAccessException
+    commentId: T:System.UnauthorizedAccessException
+    description: The store I/O <xref:System.IO.Stream> is read-only and cannot be accessed for output.
   platform:
   - net-11
   - net-20
@@ -235,18 +278,21 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns the annotation with the specified <xref:System.Windows.Annotations.Annotation.Id%2A> from the store.
   syntax:
     content: public override System.Windows.Annotations.Annotation GetAnnotation (Guid annotationId);
     parameters:
     - id: annotationId
       type: System.Guid
-      description: To be added.
+      description: The [!INCLUDE[TLA#tla_guid](../../add/includes/tlasharptla-guid-md.md)] <xref:System.Windows.Annotations.Annotation.Id%2A> property of the annotation to be returned.
     return:
       type: System.Windows.Annotations.Annotation
-      description: To be added.
+      description: The annotation with the given annotationId; otherwise,  if an annotation with the specified annotationId was not found in the store.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.GetAnnotation*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: <xref:System.Windows.Annotations.Storage.AnnotationStore.Dispose%2A> has been called on the store.
   platform:
   - net-11
   - net-20
@@ -263,15 +309,21 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a list of all the annotations in the store.
+  remarks: The GetAnnotations method will never return `null`; however the list may be empty if the store contains no annotations.
+  example:
+  - "The following example shows how to use the GetAnnotations method to determine whether there are any annotations in the store.  \n  \n [!code-cs[DocumentSerialize#DocSerCloseFile](../../add/codesnippet/CSharp/DocumentSerialize/ThumbViewer.cs#docserclosefile)]"
   syntax:
     content: public override System.Collections.Generic.IList<System.Windows.Annotations.Annotation> GetAnnotations ();
     parameters: []
     return:
       type: System.Collections.Generic.IList{System.Windows.Annotations.Annotation}
-      description: To be added.
+      description: The list of all annotations that are currently in the store.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.GetAnnotations*
+  exceptions:
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: <xref:System.Windows.Annotations.Storage.AnnotationStore.Dispose%2A> has been called on the store.
   platform:
   - net-11
   - net-20
@@ -288,18 +340,21 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a list of annotations that have <xref:System.Windows.Annotations.Annotation.Anchors%2A> with locators that begin with a matching  sequence.
+  remarks: This GetAnnotations method internally uses the <xref:System.Windows.Annotations.ContentLocator.StartsWith%2A> method of the <xref:System.Windows.Annotations.ContentLocator> class to search and match for the annotations to return.
+  example:
+  - "The following example shows how to use the <xref:System.Windows.Annotations.Storage.XmlStreamStore.GetAnnotations%2A> method to determine whether there are any annotations in the store.  \n  \n [!code-cs[DocumentSerialize#DocSerCloseFile](../../add/codesnippet/CSharp/DocumentSerialize/ThumbViewer.cs#docserclosefile)]"
   syntax:
     content: public override System.Collections.Generic.IList<System.Windows.Annotations.Annotation> GetAnnotations (System.Windows.Annotations.ContentLocator anchorLocator);
     parameters:
     - id: anchorLocator
       type: System.Windows.Annotations.ContentLocator
-      description: To be added.
+      description: The starting  sequence to return matching annotations for.
     return:
       type: System.Collections.Generic.IList{System.Windows.Annotations.Annotation}
-      description: To be added.
+      description: The list of annotations that have <xref:System.Windows.Annotations.Annotation.Anchors%2A> with locators that start and match the given anchorLocator; otherwise,  if no matching annotations were found.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.GetAnnotations*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -316,18 +371,19 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Returns a list of namespaces that are compatible as an input namespace.
+  remarks: "The `name` parameter works only for predefined [!INCLUDE[TLA#tla_caf](../../add/includes/tlasharptla-caf-md.md)] namespaces.  For any other namespace given in the `name` parameter GetWellKnownCompatibleNamespaces will return `null`, even those namespaces registered through the `knownNamespaces` parameter of the <xref:System.Windows.Annotations.Storage.XmlStreamStore.%23ctor%2A> constructor.  \n  \n The namespaces predefined by the [!INCLUDE[TLA2#tla_caf](../../add/includes/tla2sharptla-caf-md.md)] include the following:  \n  \n-   http://schemas.microsoft.com/windows/annotations/2003/11/core  \n  \n-   http://schemas.microsoft.com/windows/annotations/2003/11/base  \n  \n-   http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   syntax:
     content: public static System.Collections.Generic.IList<Uri> GetWellKnownCompatibleNamespaces (Uri name);
     parameters:
     - id: name
       type: System.Uri
-      description: To be added.
+      description: The starting URI sequence to return the list of namespaces for.
     return:
       type: System.Collections.Generic.IList{System.Uri}
-      description: To be added.
+      description: A list of compatible namespaces that match name; otherwise,  if there are no compatible namespaces found.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.GetWellKnownCompatibleNamespaces*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -344,14 +400,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a list of the namespaces that were ignored when the XML stream was loaded.
+  remarks: "The IgnoredNamespaces property will never return `null`, however the returned list can be empty if no namespaces are ignored.  \n  \n IgnoredNamespaces helps in XML markup compatibility when the program reads annotation content created by different versions of the [!INCLUDE[TLA#tla_caf](../../add/includes/tlasharptla-caf-md.md)].  When an older application is given annotation content created using a newer version of the [!INCLUDE[TLA2#tla_caf](../../add/includes/tla2sharptla-caf-md.md)], IgnoredNamespaces returns a list of the XML namespaces for elements and attributes not known to the older framework.  Unknown XML elements and attributes associated with newer namespaces are ignored when the annotation content is read and deserialized by the older application.  For more information see the *XML Markup Compatibility Specification* available at [http://go.microsoft.com/fwlink/?LinkId=73824](http://go.microsoft.com/fwlink/?LinkId=73824)."
   syntax:
     content: public System.Collections.Generic.IList<Uri> IgnoredNamespaces { get; }
     return:
       type: System.Collections.Generic.IList{System.Uri}
-      description: To be added.
+      description: The list of the namespaces that were ignored when the XML stream was loaded.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.IgnoredNamespaces*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -368,8 +425,6 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
   syntax:
     content: protected override void OnStoreContentChanged (System.Windows.Annotations.Storage.StoreContentChangedEventArgs e);
     parameters:
@@ -377,6 +432,7 @@ items:
       type: System.Windows.Annotations.Storage.StoreContentChangedEventArgs
       description: To be added.
   overload: System.Windows.Annotations.Storage.XmlStreamStore.OnStoreContentChanged*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -393,14 +449,15 @@ items:
   assemblies:
   - PresentationFramework
   namespace: System.Windows.Annotations.Storage
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a list of all namespaces that are predefined by the [!INCLUDE[TLA2#tla_caf](../../add/includes/tla2sharptla-caf-md.md)].
+  remarks: "The namespaces predefined by the [!INCLUDE[TLA2#tla_caf](../../add/includes/tla2sharptla-caf-md.md)] include the following:  \n  \n-   http://schemas.microsoft.com/windows/annotations/2003/11/core  \n  \n-   http://schemas.microsoft.com/windows/annotations/2003/11/base  \n  \n-   http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   syntax:
     content: public static System.Collections.Generic.IList<Uri> WellKnownNamespaces { get; }
     return:
       type: System.Collections.Generic.IList{System.Uri}
-      description: To be added.
+      description: The list of namespaces that are predefined by the [!INCLUDE[TLA#tla_caf](../../add/includes/tlasharptla-caf-md.md)].
   overload: System.Windows.Annotations.Storage.XmlStreamStore.WellKnownNamespaces*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -427,18 +484,44 @@ references:
   name: XmlStreamStore(Stream,IDictionary<Uri,IList<Uri>>)
   nameWithType: XmlStreamStore.XmlStreamStore(Stream,IDictionary<Uri,IList<Uri>>)
   fullName: System.Windows.Annotations.Storage.XmlStreamStore.XmlStreamStore(Stream,IDictionary<Uri,IList<Uri>>)
-- uid: System.IO.Stream
-  parent: System.IO
-  isExternal: true
-  name: Stream
-  nameWithType: Stream
-  fullName: System.IO.Stream
 - uid: System.Collections.Generic.IDictionary{System.Uri,System.Collections.Generic.IList{System.Uri}}
   parent: System.Collections.Generic
   isExternal: true
   name: IDictionary<Uri,IList<Uri>>
   nameWithType: IDictionary<Uri,IList<Uri>>
   fullName: System.Collections.Generic.IDictionary<System.Uri,System.Collections.Generic.IList<System.Uri>>
+  spec.csharp:
+  - uid: System.Collections.Generic.IDictionary`2
+    name: IDictionary
+    nameWithType: IDictionary
+    fullName: IDictionary<System.Uri,System.Collections.Generic.IList<System.Uri>>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Uri
+    name: Uri
+    nameWithType: Uri
+    fullName: Uri
+  - name: ','
+    nameWithType: ','
+    fullName: ','
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: IList<System.Uri>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Uri
+    name: Uri
+    nameWithType: Uri
+    fullName: Uri
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Annotations.Storage.XmlStreamStore.AddAnnotation(System.Windows.Annotations.Annotation)
   parent: System.Windows.Annotations.Storage.XmlStreamStore
   isExternal: false
@@ -469,12 +552,6 @@ references:
   name: DeleteAnnotation(Guid)
   nameWithType: XmlStreamStore.DeleteAnnotation(Guid)
   fullName: System.Windows.Annotations.Storage.XmlStreamStore.DeleteAnnotation(Guid)
-- uid: System.Windows.Annotations.Annotation
-  parent: System.Windows.Annotations
-  isExternal: false
-  name: Annotation
-  nameWithType: Annotation
-  fullName: System.Windows.Annotations.Annotation
 - uid: System.Guid
   parent: System
   isExternal: true
@@ -487,12 +564,6 @@ references:
   name: Dispose(Boolean)
   nameWithType: XmlStreamStore.Dispose(Boolean)
   fullName: System.Windows.Annotations.Storage.XmlStreamStore.Dispose(Boolean)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
 - uid: System.Windows.Annotations.Storage.XmlStreamStore.Flush
   parent: System.Windows.Annotations.Storage.XmlStreamStore
   isExternal: false
@@ -505,18 +576,6 @@ references:
   name: GetAnnotation(Guid)
   nameWithType: XmlStreamStore.GetAnnotation(Guid)
   fullName: System.Windows.Annotations.Storage.XmlStreamStore.GetAnnotation(Guid)
-- uid: System.Windows.Annotations.Annotation
-  parent: System.Windows.Annotations
-  isExternal: false
-  name: Annotation
-  nameWithType: Annotation
-  fullName: System.Windows.Annotations.Annotation
-- uid: System.Guid
-  parent: System
-  isExternal: true
-  name: Guid
-  nameWithType: Guid
-  fullName: System.Guid
 - uid: System.Windows.Annotations.Storage.XmlStreamStore.GetAnnotations
   parent: System.Windows.Annotations.Storage.XmlStreamStore
   isExternal: false
@@ -529,18 +588,27 @@ references:
   name: IList<Annotation>
   nameWithType: IList<Annotation>
   fullName: System.Collections.Generic.IList<System.Windows.Annotations.Annotation>
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: IList<System.Windows.Annotations.Annotation>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Windows.Annotations.Annotation
+    name: Annotation
+    nameWithType: Annotation
+    fullName: Annotation
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Windows.Annotations.Storage.XmlStreamStore.GetAnnotations(System.Windows.Annotations.ContentLocator)
   parent: System.Windows.Annotations.Storage.XmlStreamStore
   isExternal: false
   name: GetAnnotations(ContentLocator)
   nameWithType: XmlStreamStore.GetAnnotations(ContentLocator)
   fullName: System.Windows.Annotations.Storage.XmlStreamStore.GetAnnotations(ContentLocator)
-- uid: System.Collections.Generic.IList{System.Windows.Annotations.Annotation}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IList<Annotation>
-  nameWithType: IList<Annotation>
-  fullName: System.Collections.Generic.IList<System.Windows.Annotations.Annotation>
 - uid: System.Windows.Annotations.ContentLocator
   parent: System.Windows.Annotations
   isExternal: false
@@ -559,6 +627,21 @@ references:
   name: IList<Uri>
   nameWithType: IList<Uri>
   fullName: System.Collections.Generic.IList<System.Uri>
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: IList<System.Uri>
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Uri
+    name: Uri
+    nameWithType: Uri
+    fullName: Uri
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
 - uid: System.Uri
   parent: System
   isExternal: true
@@ -571,12 +654,6 @@ references:
   name: IgnoredNamespaces
   nameWithType: XmlStreamStore.IgnoredNamespaces
   fullName: System.Windows.Annotations.Storage.XmlStreamStore.IgnoredNamespaces
-- uid: System.Collections.Generic.IList{System.Uri}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IList<Uri>
-  nameWithType: IList<Uri>
-  fullName: System.Collections.Generic.IList<System.Uri>
 - uid: System.Windows.Annotations.Storage.XmlStreamStore.OnStoreContentChanged(System.Windows.Annotations.Storage.StoreContentChangedEventArgs)
   parent: System.Windows.Annotations.Storage.XmlStreamStore
   isExternal: false
@@ -595,12 +672,6 @@ references:
   name: WellKnownNamespaces
   nameWithType: XmlStreamStore.WellKnownNamespaces
   fullName: System.Windows.Annotations.Storage.XmlStreamStore.WellKnownNamespaces
-- uid: System.Collections.Generic.IList{System.Uri}
-  parent: System.Collections.Generic
-  isExternal: true
-  name: IList<Uri>
-  nameWithType: IList<Uri>
-  fullName: System.Collections.Generic.IList<System.Uri>
 - uid: System.Windows.Annotations.Storage.XmlStreamStore.#ctor*
   parent: System.Windows.Annotations.Storage.XmlStreamStore
   isExternal: false

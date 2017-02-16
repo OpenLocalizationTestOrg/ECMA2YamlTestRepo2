@@ -18,8 +18,10 @@ items:
   nameWithType: KeyBinding
   fullName: System.Windows.Input.KeyBinding
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Binds a  to a  (or another  <xref:System.Windows.Input.ICommand> implementation).
+  remarks: "A KeyBinding associates a <xref:System.Windows.Input.KeyGesture> with a <xref:System.Windows.Input.ICommand>, such as a <xref:System.Windows.Input.RoutedCommand>. <xref:System.Windows.Input.RoutedCommand> is the primary implementation of the <xref:System.Windows.Input.ICommand> interface for the [!INCLUDE[TLA2#tla_winclient](../Token/TLA2%23tla_winclient_md.md)] commanding system .  In general, when the <xref:System.Windows.Input.KeyGesture> is executed the command is invoked, although the command behavior is further influenced by command-specific factors such as the <xref:System.Windows.Input.CanExecuteRoutedEventArgs.CanExecute%2A> value.  For more information on commanding, see the [Commanding Overview](../Topic/Commanding%20Overview.md).  \n  \n With the exception of the function keys and the numeric keypad keys, a valid <xref:System.Windows.Input.KeyGesture> must contain exactly one <xref:System.Windows.Input.Key> and one or more <xref:System.Windows.Input.ModifierKeys>.  Function keys and numeric keypad keys do not require a modifier key in order to be a valid <xref:System.Windows.Input.KeyGesture>. It is possible to specify an invalid <xref:System.Windows.Input.KeyGesture> and a KeyBinding with an invalid associated gesture, either through [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)] or code. For instance, there is no validation that prevents creating and binding a <xref:System.Windows.Input.KeyGesture> that contains only a nonfunction key, or only modifiers but no key. Such a KeyBinding will never attempt to invoke its associated command.  \n  \n When defining a KeyBinding in [!INCLUDE[TLA#tla_xaml](../../add/includes/tlasharptla-xaml-md.md)] there are two ways to specify the <xref:System.Windows.Input.KeyGesture>. The first way to establish a KeyBinding in [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)] is to define the <xref:System.Windows.Input.KeyBinding.Gesture%2A> attribute of the KeyBinding element, which enables a syntax to specify keys and modifiers as a single string, for example \"CTRL+P\". The second way is to define the <xref:System.Windows.Input.KeyBinding.Key%2A> attribute and the <xref:System.Windows.Input.KeyBinding.Modifiers%2A> attributes of the KeyBinding element. Both ways of setting the <xref:System.Windows.Input.KeyGesture> are equivalent and modify the same underlying object, but there will be a conflict if both are used.  In the case when the <xref:System.Windows.Input.KeyBinding.Key%2A>, <xref:System.Windows.Input.KeyBinding.Modifiers%2A>, and the <xref:System.Windows.Input.KeyBinding.Gesture%2A> attributes are all set, the attribute which is defined last will be used for the <xref:System.Windows.Input.KeyGesture>. You can potentially have situations where for example a <xref:System.Windows.Input.KeyBinding.Key%2A> set last will overwrite just the Key component of a preceding Gesture but leave the Gesture's modifiers the same. In general, it is recommended that you use only the <xref:System.Windows.Input.KeyBinding.Gesture%2A> attribute from [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)]; this will avoid ambiguity, provides the most streamlined syntax, and provides the most straightforward representation for serialization.  \n  \n A KeyBinding can be defined on a specific object or at the class level by registering a <xref:System.Windows.Input.CommandManager.RegisterClassInputBinding%2A> on the <xref:System.Windows.Input.CommandManager> class. The most typical way to define a KeyBinding is within the control template, setting the <xref:System.Windows.UIElement.InputBindings%2A> property in [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)] by declaring one or more <xref:System.Windows.Input.MouseBinding> or KeyBinding elements."
+  example:
+  - "The following example creates a KeyBinding and adds it to the <xref:System.Windows.Input.InputBindingCollection> of the root window.  \n  \n [!code-xml[commandWithHandler#CommandHandlerKeyBinding](../../add/codesnippet/Xaml/commandWithHandler/Window1.xaml#commandhandlerkeybinding)]  \n  \n [!code-cs[CommandHandlerProcedural#CommandHandlerKeyBindingCodeBehind](../../add/codesnippet/CSharp/CommandHandlerProcedural/Window1.xaml.cs#commandhandlerkeybindingcodebehind)]\n [!code-vb[CommandHandlerProcedural#CommandHandlerKeyBindingCodeBehind](../../add/codesnippet/VisualBasic/commandhandlerprocedural/window1.xaml.vb#commandhandlerkeybindingcodebehind)]"
   syntax:
     content: 'public class KeyBinding : System.Windows.Input.InputBinding'
   inheritance:
@@ -92,12 +94,12 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public KeyBinding ();
     parameters: []
   overload: System.Windows.Input.KeyBinding.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -114,18 +116,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified <xref:System.Windows.Input.ICommand> and .
   syntax:
     content: public KeyBinding (System.Windows.Input.ICommand command, System.Windows.Input.KeyGesture gesture);
     parameters:
     - id: command
       type: System.Windows.Input.ICommand
-      description: To be added.
+      description: The command to associate with `gesture`.
     - id: gesture
       type: System.Windows.Input.KeyGesture
-      description: To be added.
+      description: The key combination to associate with `command`.
   overload: System.Windows.Input.KeyBinding.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    command or gesture is ."
   platform:
   - net-11
   - net-20
@@ -142,21 +147,21 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified <xref:System.Windows.Input.ICommand> and the specified  and  which will be converted into a .
   syntax:
     content: public KeyBinding (System.Windows.Input.ICommand command, System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifiers);
     parameters:
     - id: command
       type: System.Windows.Input.ICommand
-      description: To be added.
+      description: The command to invoke.
     - id: key
       type: System.Windows.Input.Key
-      description: To be added.
+      description: The key to be associated with `command`.
     - id: modifiers
       type: System.Windows.Input.ModifierKeys
-      description: To be added.
+      description: The modifiers to be associated with `command`.
   overload: System.Windows.Input.KeyBinding.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -173,15 +178,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of a .
   syntax:
     content: protected override System.Windows.Freezable CreateInstanceCore ();
     parameters: []
     return:
       type: System.Windows.Freezable
-      description: To be added.
+      description: The new object.
   overload: System.Windows.Input.KeyBinding.CreateInstanceCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -198,14 +203,20 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the gesture associated with this .
+  remarks: With the exception of the function keys and the numeric keypad keys, a <xref:System.Windows.Input.KeyGesture> must contain a <xref:System.Windows.Input.Key> and one or more <xref:System.Windows.Input.ModifierKeys>.
+  example:
+  - "The following example shows how to bind a <xref:System.Windows.Input.KeyGesture> to a <xref:System.Windows.Input.RoutedCommand> using a <xref:System.Windows.Input.KeyBinding> (the markup and code examples specify different keys but are otherwise equivalent).  \n  \n [!code-xml[commandWithHandler#CommandHandlerKeyBinding](../../add/codesnippet/Xaml/commandWithHandler/Window1.xaml#commandhandlerkeybinding)]  \n  \n [!code-cs[commandlibrarysnippets#KeyBindingWithKeyAndModifiers](../../add/codesnippet/CSharp/CommandLibarySnippets/Window1.xaml.cs#keybindingwithkeyandmodifiers)]\n [!code-vb[commandlibrarysnippets#KeyBindingWithKeyAndModifiers](../../add/codesnippet/VisualBasic/commandlibarysnippets/window1.xaml.vb#keybindingwithkeyandmodifiers)]"
   syntax:
     content: public override System.Windows.Input.InputGesture Gesture { get; set; }
     return:
       type: System.Windows.Input.InputGesture
-      description: To be added.
+      description: The key sequence. The default value is .
   overload: System.Windows.Input.KeyBinding.Gesture*
+  exceptions:
+  - type: System.ArgumentException
+    commentId: T:System.ArgumentException
+    description: the value gesture is being set to is not a .
   platform:
   - net-11
   - net-20
@@ -222,14 +233,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the  of the  associated with this .
+  remarks: "With the exception of the function keys and the numeric keypad keys, a <xref:System.Windows.Input.KeyGesture> must contain a <xref:System.Windows.Input.Key> and one or more <xref:System.Windows.Input.ModifierKeys>.  \n  \n When defining a <xref:System.Windows.Input.KeyBinding> in [!INCLUDE[TLA#tla_xaml](../../add/includes/tlasharptla-xaml-md.md)] there are two ways to specify the <xref:System.Windows.Input.KeyGesture>. The first way to establish a <xref:System.Windows.Input.KeyBinding> in [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)] is to define the <xref:System.Windows.Input.KeyBinding.Gesture%2A> attribute of the <xref:System.Windows.Input.KeyBinding> element, which enables a syntax to specify keys and modifiers as a single string, for example \"CTRL+P\". The second way is to define the Key attribute and the <xref:System.Windows.Input.KeyBinding.Modifiers%2A> attributes of the <xref:System.Windows.Input.KeyBinding> element. Both ways of setting the <xref:System.Windows.Input.KeyGesture> are equivalent and modify the same underlying object, but there will be a conflict if both are used.  In the case when the Key, <xref:System.Windows.Input.KeyBinding.Modifiers%2A>, and the <xref:System.Windows.Input.KeyBinding.Gesture%2A> attributes are all set, the attribute which is defined last will be used for the <xref:System.Windows.Input.KeyGesture>. You can potentially have situations where for example a Key set last will overwrite just the Key component of a preceding Gesture but leave the Gesture's modifiers the same. In general, it is recommended that you use only the <xref:System.Windows.Input.KeyBinding.Gesture%2A> attribute from [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)]; this will avoid ambiguity, provides the most streamlined syntax, and provides the most straightforward representation for serialization."
   syntax:
     content: public System.Windows.Input.Key Key { get; set; }
     return:
       type: System.Windows.Input.Key
-      description: To be added.
+      description: The key part of the . The default value is .
   overload: System.Windows.Input.KeyBinding.Key*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -246,13 +258,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Identifies the <xref:System.Windows.Input.KeyBinding.Key%2A> dependency property.
   syntax:
     content: public static readonly System.Windows.DependencyProperty KeyProperty;
     return:
       type: System.Windows.DependencyProperty
-      description: To be added.
+      description: The identifier for the <xref:System.Windows.Input.KeyBinding.Key%2A> dependency property.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -269,14 +281,15 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the  of the  associated with this .
+  remarks: "With the exception of the function keys and the numeric keypad keys, a <xref:System.Windows.Input.KeyGesture> must contain a <xref:System.Windows.Input.Key> and one or more <xref:System.Windows.Input.ModifierKeys>.  \n  \n When defining a <xref:System.Windows.Input.KeyBinding> in [!INCLUDE[TLA#tla_xaml](../../add/includes/tlasharptla-xaml-md.md)] there are two ways to specify the <xref:System.Windows.Input.KeyGesture>. The first way to establish a <xref:System.Windows.Input.KeyBinding> in [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)] is to define the <xref:System.Windows.Input.KeyBinding.Gesture%2A> attribute of the <xref:System.Windows.Input.KeyBinding> element, which enables a syntax to specify keys and modifiers as a single string, for example \"CTRL+P\". The second way is to define the <xref:System.Windows.Input.KeyBinding.Key%2A> attribute and the Modifiers attributes of the <xref:System.Windows.Input.KeyBinding> element. Both ways of setting the <xref:System.Windows.Input.KeyGesture> are equivalent and modify the same underlying object, but there will be a conflict if both are used.  In the case when the <xref:System.Windows.Input.KeyBinding.Key%2A>, Modifiers, and the <xref:System.Windows.Input.KeyBinding.Gesture%2A> attributes are all set, the attribute which is defined last will be used for the <xref:System.Windows.Input.KeyGesture>. You can potentially have situations where for example a <xref:System.Windows.Input.KeyBinding.Key%2A> set last will overwrite just the Key component of a preceding Gesture but leave the Gesture's modifiers the same. In general, it is recommended that you use only the <xref:System.Windows.Input.KeyBinding.Gesture%2A> attribute from [!INCLUDE[TLA2#tla_xaml](../../add/includes/tla2sharptla-xaml-md.md)]; this will avoid ambiguity, provides the most streamlined syntax, and provides the most straightforward representation for serialization.  \n  \n<a name=\"xamlAttributeUsage_Modifiers\"></a>   \n## XAML Attribute Usage  \n  \n```  \n<object Modifiers=\"oneOrMoreModifierKeys\"/>  \n  \n```  \n  \n<a name=\"xamlValues_Modifiers\"></a>   \n## XAML Values  \n *oneOrMoreModifierKeys*  \n One or more modifier keys, defined by the <xref:System.Windows.Input.ModifierKeys> enumeration, delimited with a \"+\" character."
   syntax:
     content: public System.Windows.Input.ModifierKeys Modifiers { get; set; }
     return:
       type: System.Windows.Input.ModifierKeys
-      description: To be added.
+      description: The modifier keys of the .  The default value is .
   overload: System.Windows.Input.KeyBinding.Modifiers*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -293,13 +306,13 @@ items:
   assemblies:
   - PresentationCore
   namespace: System.Windows.Input
-  summary: To be added.
-  remarks: To be added.
+  summary: Identifies the <xref:System.Windows.Input.KeyBinding.Modifiers%2A> dependency property.
   syntax:
     content: public static readonly System.Windows.DependencyProperty ModifiersProperty;
     return:
       type: System.Windows.DependencyProperty
-      description: To be added.
+      description: The identifier for the <xref:System.Windows.Input.KeyBinding.Modifiers%2A> dependency property.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -338,12 +351,6 @@ references:
   name: KeyBinding(ICommand,Key,ModifierKeys)
   nameWithType: KeyBinding.KeyBinding(ICommand,Key,ModifierKeys)
   fullName: System.Windows.Input.KeyBinding.KeyBinding(ICommand,Key,ModifierKeys)
-- uid: System.Windows.Input.ICommand
-  parent: System.Windows.Input
-  isExternal: true
-  name: ICommand
-  nameWithType: ICommand
-  fullName: System.Windows.Input.ICommand
 - uid: System.Windows.Input.Key
   parent: System.Windows.Input
   isExternal: false
@@ -386,12 +393,6 @@ references:
   name: Key
   nameWithType: KeyBinding.Key
   fullName: System.Windows.Input.KeyBinding.Key
-- uid: System.Windows.Input.Key
-  parent: System.Windows.Input
-  isExternal: false
-  name: Key
-  nameWithType: Key
-  fullName: System.Windows.Input.Key
 - uid: System.Windows.Input.KeyBinding.KeyProperty
   parent: System.Windows.Input.KeyBinding
   isExternal: false
@@ -410,24 +411,12 @@ references:
   name: Modifiers
   nameWithType: KeyBinding.Modifiers
   fullName: System.Windows.Input.KeyBinding.Modifiers
-- uid: System.Windows.Input.ModifierKeys
-  parent: System.Windows.Input
-  isExternal: false
-  name: ModifierKeys
-  nameWithType: ModifierKeys
-  fullName: System.Windows.Input.ModifierKeys
 - uid: System.Windows.Input.KeyBinding.ModifiersProperty
   parent: System.Windows.Input.KeyBinding
   isExternal: false
   name: ModifiersProperty
   nameWithType: KeyBinding.ModifiersProperty
   fullName: System.Windows.Input.KeyBinding.ModifiersProperty
-- uid: System.Windows.DependencyProperty
-  parent: System.Windows
-  isExternal: false
-  name: DependencyProperty
-  nameWithType: DependencyProperty
-  fullName: System.Windows.DependencyProperty
 - uid: System.Windows.Input.KeyBinding.#ctor*
   parent: System.Windows.Input.KeyBinding
   isExternal: false

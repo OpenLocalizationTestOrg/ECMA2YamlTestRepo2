@@ -14,8 +14,7 @@ items:
   nameWithType: IServerChannelSinkStack
   fullName: System.Runtime.Remoting.Channels.IServerChannelSinkStack
   type: Interface
-  summary: To be added.
-  remarks: To be added.
+  summary: Provides the stack functionality for a stack of server channel sinks.
   syntax:
     content: >-
       [System.Runtime.InteropServices.ComVisible(true)]
@@ -39,18 +38,21 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Pops the information associated with all the sinks from the sink stack up to and including the specified sink.
   syntax:
     content: public object Pop (System.Runtime.Remoting.Channels.IServerChannelSink sink);
     parameters:
     - id: sink
       type: System.Runtime.Remoting.Channels.IServerChannelSink
-      description: To be added.
+      description: The sink to remove and return from the sink stack.
     return:
       type: System.Object
-      description: To be added.
+      description: Information generated on the request side and associated with the specified sink.
   overload: System.Runtime.Remoting.Channels.IServerChannelSinkStack.Pop*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -67,18 +69,22 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Pushes the specified sink and information associated with it onto the sink stack.
+  remarks: The information generated on the request side and specified in the `state` parameter is returned in the `state` parameter of the <xref:System.Runtime.Remoting.Channels.IServerChannelSink.AsyncProcessResponse%2A> method on the corresponding sink.
   syntax:
     content: public void Push (System.Runtime.Remoting.Channels.IServerChannelSink sink, object state);
     parameters:
     - id: sink
       type: System.Runtime.Remoting.Channels.IServerChannelSink
-      description: To be added.
+      description: The sink to push onto the sink stack.
     - id: state
       type: System.Object
-      description: To be added.
+      description: Information generated on the request side that is needed on the response side.
   overload: System.Runtime.Remoting.Channels.IServerChannelSinkStack.Push*
+  exceptions:
+  - type: System.Security.SecurityException
+    commentId: T:System.Security.SecurityException
+    description: The immediate caller does not have infrastructure permission.
   platform:
   - net-11
   - net-20
@@ -95,15 +101,16 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Presents a callback delegate to handle a callback after a message has been dispatched asynchronously.
+  remarks: "The dispatched message represents a request method call on a remote object.  \n  \n The ServerCallback method is intended for use only by the .NET Framework remoting infrastructure."
   syntax:
     content: public void ServerCallback (IAsyncResult ar);
     parameters:
     - id: ar
       type: System.IAsyncResult
-      description: To be added.
+      description: The status and state of an asynchronous operation on a remote object.
   overload: System.Runtime.Remoting.Channels.IServerChannelSinkStack.ServerCallback*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -120,18 +127,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Stores a message sink and its associated state for later asynchronous processing.
+  remarks: The Store method is intended for use only by the .NET Framework remoting infrastructure.
   syntax:
     content: public void Store (System.Runtime.Remoting.Channels.IServerChannelSink sink, object state);
     parameters:
     - id: sink
       type: System.Runtime.Remoting.Channels.IServerChannelSink
-      description: To be added.
+      description: A server channel sink.
     - id: state
       type: System.Object
-      description: To be added.
+      description: The state associated with `sink`.
   overload: System.Runtime.Remoting.Channels.IServerChannelSinkStack.Store*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -148,18 +156,19 @@ items:
   assemblies:
   - mscorlib
   namespace: System.Runtime.Remoting.Channels
-  summary: To be added.
-  remarks: To be added.
+  summary: Stores a message sink and its associated state, and then dispatches a message asynchronously, using the sink just stored and any other stored sinks.
+  remarks: "The StoreAndDispatch method is intended for use only by the .NET Framework remoting infrastructure.  \n  \n Also, the method should only be called by a transport sink to complete an asynchronous dispatch."
   syntax:
     content: public void StoreAndDispatch (System.Runtime.Remoting.Channels.IServerChannelSink sink, object state);
     parameters:
     - id: sink
       type: System.Runtime.Remoting.Channels.IServerChannelSink
-      description: To be added.
+      description: A server channel sink.
     - id: state
       type: System.Object
-      description: To be added.
+      description: The state associated with `sink`.
   overload: System.Runtime.Remoting.Channels.IServerChannelSinkStack.StoreAndDispatch*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -189,18 +198,6 @@ references:
   name: Push(IServerChannelSink,Object)
   nameWithType: IServerChannelSinkStack.Push(IServerChannelSink,Object)
   fullName: System.Runtime.Remoting.Channels.IServerChannelSinkStack.Push(IServerChannelSink,Object)
-- uid: System.Runtime.Remoting.Channels.IServerChannelSink
-  parent: System.Runtime.Remoting.Channels
-  isExternal: false
-  name: IServerChannelSink
-  nameWithType: IServerChannelSink
-  fullName: System.Runtime.Remoting.Channels.IServerChannelSink
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Runtime.Remoting.Channels.IServerChannelSinkStack.ServerCallback(System.IAsyncResult)
   parent: System.Runtime.Remoting.Channels.IServerChannelSinkStack
   isExternal: false
@@ -219,36 +216,12 @@ references:
   name: Store(IServerChannelSink,Object)
   nameWithType: IServerChannelSinkStack.Store(IServerChannelSink,Object)
   fullName: System.Runtime.Remoting.Channels.IServerChannelSinkStack.Store(IServerChannelSink,Object)
-- uid: System.Runtime.Remoting.Channels.IServerChannelSink
-  parent: System.Runtime.Remoting.Channels
-  isExternal: false
-  name: IServerChannelSink
-  nameWithType: IServerChannelSink
-  fullName: System.Runtime.Remoting.Channels.IServerChannelSink
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Runtime.Remoting.Channels.IServerChannelSinkStack.StoreAndDispatch(System.Runtime.Remoting.Channels.IServerChannelSink,System.Object)
   parent: System.Runtime.Remoting.Channels.IServerChannelSinkStack
   isExternal: false
   name: StoreAndDispatch(IServerChannelSink,Object)
   nameWithType: IServerChannelSinkStack.StoreAndDispatch(IServerChannelSink,Object)
   fullName: System.Runtime.Remoting.Channels.IServerChannelSinkStack.StoreAndDispatch(IServerChannelSink,Object)
-- uid: System.Runtime.Remoting.Channels.IServerChannelSink
-  parent: System.Runtime.Remoting.Channels
-  isExternal: false
-  name: IServerChannelSink
-  nameWithType: IServerChannelSink
-  fullName: System.Runtime.Remoting.Channels.IServerChannelSink
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Runtime.Remoting.Channels.IServerChannelSinkStack.Pop*
   parent: System.Runtime.Remoting.Channels.IServerChannelSinkStack
   isExternal: false

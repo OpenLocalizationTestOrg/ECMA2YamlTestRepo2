@@ -24,8 +24,8 @@ items:
   nameWithType: DesignSurfaceManager
   fullName: System.ComponentModel.Design.DesignSurfaceManager
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Manages a collection of  objects.
+  remarks: "The DesignSurfaceManager class is designed to be a container of <xref:System.ComponentModel.Design.DesignSurface> objects. It provides common services that handle event routing between designers, property windows, and other global objects. Using DesignSurfaceManager is optional, but it is recommended if you intend to have several designer windows.  \n  \n The DesignSurfaceManager class provides several design-time services automatically. You can override each of these services by replacing them in the protected <xref:System.ComponentModel.Design.DesignSurfaceManager.ServiceContainer%2A> property. To replace a service, override the constructor, call base, and make any changes through the protected <xref:System.ComponentModel.Design.DesignSurfaceManager.ServiceContainer%2A> property. All services added to the service container that implement the <xref:System.IDisposable> interface are disposed when the design surface manager is disposed. The DesignSurfaceManager class provides the <xref:System.ComponentModel.Design.IDesignerEventService> interface as the default service. <xref:System.ComponentModel.Design.IDesignerEventService> provides a global eventing mechanism for designer events. With this mechanism, an application is informed when a designer becomes active. The service provides a collection of designers and a single place where global objects, such as the Properties window, can monitor selection change events."
   syntax:
     content: >-
       [System.Security.SecurityCritical]
@@ -53,12 +53,12 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public DesignSurfaceManager ();
     parameters: []
   overload: System.ComponentModel.Design.DesignSurfaceManager.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -75,15 +75,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class.
   syntax:
     content: public DesignSurfaceManager (IServiceProvider parentProvider);
     parameters:
     - id: parentProvider
       type: System.IServiceProvider
-      description: To be added.
+      description: A parent service provider. Service requests are forwarded to this provider if they cannot be resolved by the design surface manager.
   overload: System.ComponentModel.Design.DesignSurfaceManager.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -100,14 +100,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the active designer.
+  remarks: The ActiveDesignSurface property should be set by the designer's user interface whenever a designer becomes the active window. The default implementation of this property works with the default implementation of the <xref:System.ComponentModel.Design.IDesignerEventService> interface to notify interested parties that a new designer is now active. If you provide your own implementation of <xref:System.ComponentModel.Design.IDesignerEventService>, you should override this property to notify your service appropriately. This property can be set to `null`, indicating that no designer is active.
   syntax:
     content: public virtual System.ComponentModel.Design.DesignSurface ActiveDesignSurface { get; set; }
     return:
       type: System.ComponentModel.Design.DesignSurface
-      description: To be added.
+      description: The active designer.
   overload: System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -124,13 +125,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the currently active designer changes.
   syntax:
     content: public event System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler ActiveDesignSurfaceChanged;
     return:
       type: System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -147,15 +148,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of a design surface.
   syntax:
     content: public System.ComponentModel.Design.DesignSurface CreateDesignSurface ();
     parameters: []
     return:
       type: System.ComponentModel.Design.DesignSurface
-      description: To be added.
+      description: A new design surface instance.
   overload: System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -172,18 +173,22 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Creates an instance of a design surface.
+  remarks: "If you want to conveniently add additional per-designer services, use the `parentProvider` parameter to provide a service provider for this design surface. The CreateDesignSurface method creates a merged service provider that can satisfy service requests from both the given service provider as well as the <xref:System.ComponentModel.Design.DesignSurfaceManager> itself. The CreateDesignSurface method then passes this service provider into the <xref:System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore%2A> method.  \n  \n After <xref:System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore%2A> returns the design surface, the CreateDesignSurface method tries to obtain the <xref:System.ComponentModel.Design.IDesignerEventService>. If it is present, and if it is the instance of the service that <xref:System.ComponentModel.Design.DesignSurfaceManager> provided by default, the CreateDesignSurface method raises the <xref:System.ComponentModel.Design.IDesignerEventService.DesignerCreated> event."
   syntax:
     content: public System.ComponentModel.Design.DesignSurface CreateDesignSurface (IServiceProvider parentProvider);
     parameters:
     - id: parentProvider
       type: System.IServiceProvider
-      description: To be added.
+      description: A parent service provider. A new merged service provider will be created that will first ask this provider for a service, and then delegate any failures to the design surface manager object. This merged provider will be passed into the <xref:System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore%2A> method.
     return:
       type: System.ComponentModel.Design.DesignSurface
-      description: To be added.
+      description: A new design surface instance.
   overload: System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    parentProvider is ."
   platform:
   - net-11
   - net-20
@@ -200,18 +205,19 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Implementation that creates the design surface.
+  remarks: The CreateDesignSurfaceCore method is called by both <xref:System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface%2A> methods. It is the implementation that actually creates the design surface. The default implementation just returns a new <xref:System.ComponentModel.Design.DesignSurface>. You may override this method to provide a custom object that derives from the <xref:System.ComponentModel.Design.DesignSurface> class.
   syntax:
     content: protected virtual System.ComponentModel.Design.DesignSurface CreateDesignSurfaceCore (IServiceProvider parentProvider);
     parameters:
     - id: parentProvider
       type: System.IServiceProvider
-      description: To be added.
+      description: A service provider to pass to the design surface. This is either an instance of  or an object that implements <xref:System.IServiceProvider>, and represents a merge between the service provider of the  class and an externally passed provider.
     return:
       type: System.ComponentModel.Design.DesignSurface
-      description: To be added.
+      description: A new design surface instance.
   overload: System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -228,13 +234,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a designer is created.
   syntax:
     content: public event System.ComponentModel.Design.DesignSurfaceEventHandler DesignSurfaceCreated;
     return:
       type: System.ComponentModel.Design.DesignSurfaceEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -251,13 +257,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when a designer is disposed.
   syntax:
     content: public event System.ComponentModel.Design.DesignSurfaceEventHandler DesignSurfaceDisposed;
     return:
       type: System.ComponentModel.Design.DesignSurfaceEventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -274,14 +280,15 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a collection of design surfaces.
+  remarks: The DesignSurfaces property is implemented directly on top of <xref:System.ComponentModel.Design.IDesignerEventService>, so if you provide your own implementation of that service, this property uses your implementation.
   syntax:
     content: public System.ComponentModel.Design.DesignSurfaceCollection DesignSurfaces { get; }
     return:
       type: System.ComponentModel.Design.DesignSurfaceCollection
-      description: To be added.
+      description: A collection of design surfaces that are currently hosted by the design surface manager.
   overload: System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaces*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -298,12 +305,13 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the resources used by the .
+  remarks: "The public Dispose method follows the standard <xref:System.IDisposable> pattern. Calling this method destroys the design surface manager. It also disposes the service container, which causes all services that implement <xref:System.IDisposable> to also be disposed. The protected version of this method is `virtual` and follows the normal <xref:System.IDisposable> pattern.  \n  \n> [!NOTE]\n>  Because <xref:System.ComponentModel.Design.DesignSurfaceManager> does not have any native code to clean up, it does not have a finalizer that calls <xref:System.ComponentModel.Design.DesignSurfaceManager.Dispose%2A>. If you need to call <xref:System.ComponentModel.Design.DesignSurfaceManager.Dispose%2A>, you must add a finalizer yourself."
   syntax:
     content: public void Dispose ();
     parameters: []
   overload: System.ComponentModel.Design.DesignSurfaceManager.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -320,15 +328,16 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Releases the unmanaged resources used by the  and optionally releases the managed resources.
+  remarks: "The public <xref:System.ComponentModel.Design.DesignSurfaceManager.Dispose%2A> method follows the standard <xref:System.IDisposable> pattern. Calling this method destroys the design surface manager. It also disposes the service container, which causes all services that implement <xref:System.IDisposable> to also be disposed. The protected version of this method is `virtual` and follows the normal <xref:System.IDisposable> pattern.  \n  \n> [!NOTE]\n>  Because <xref:System.ComponentModel.Design.DesignSurfaceManager> does not have any native code to clean up, it does not have a finalizer that calls Dispose. If you need to call Dispose, you must add a finalizer yourself.  \n  \n This method is called by the public `Dispose()`method and the <xref:System.Object.Finalize%2A> method. `Dispose()` invokes the protected `Dispose(Boolean)` method with the `disposing` parameter set to `true`. <xref:System.Object.Finalize%2A> invokes `Dispose` with `disposing` set to `false`.  \n  \n When the `disposing` parameter is true, this method releases all resources held by any managed objects that this <xref:System.ComponentModel.Design.DesignSurfaceManager> references. This method invokes the `Dispose()` method of each referenced object."
   syntax:
     content: protected virtual void Dispose (bool disposing);
     parameters:
     - id: disposing
       type: System.Boolean
-      description: To be added.
+      description: "\n     to release both managed and unmanaged resources;  to release only unmanaged resources."
   overload: System.ComponentModel.Design.DesignSurfaceManager.Dispose*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -345,18 +354,19 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets a service in the design surface manager’s service container.
+  remarks: The GetService method forwards to any service provider that was given to the design surface manager at construction time.
   syntax:
     content: public object GetService (Type serviceType);
     parameters:
     - id: serviceType
       type: System.Type
-      description: To be added.
+      description: The service type to retrieve.
     return:
       type: System.Object
-      description: To be added.
+      description: An object that implements, or is a derived class of, the given service type; otherwise,  if the service does not exist in the service container.
   overload: System.ComponentModel.Design.DesignSurfaceManager.GetService*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -373,13 +383,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Occurs when the global selection changes.
+  remarks: This event is raised when the active designer's selection of component set changes. This is mapped through the <xref:System.ComponentModel.Design.IDesignerEventService> interface.
   syntax:
     content: public event EventHandler SelectionChanged;
     return:
       type: System.EventHandler
       description: To be added.
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -396,14 +407,14 @@ items:
   assemblies:
   - System.Design
   namespace: System.ComponentModel.Design
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the design surface manager's ServiceContainer.
   syntax:
     content: protected System.ComponentModel.Design.ServiceContainer ServiceContainer { get; }
     return:
       type: System.ComponentModel.Design.ServiceContainer
-      description: To be added.
+      description: The design surface manager's ServiceContainer.
   overload: System.ComponentModel.Design.DesignSurfaceManager.ServiceContainer*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -460,48 +471,18 @@ references:
   name: CreateDesignSurface()
   nameWithType: DesignSurfaceManager.CreateDesignSurface()
   fullName: System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface()
-- uid: System.ComponentModel.Design.DesignSurface
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: DesignSurface
-  nameWithType: DesignSurface
-  fullName: System.ComponentModel.Design.DesignSurface
 - uid: System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface(System.IServiceProvider)
   parent: System.ComponentModel.Design.DesignSurfaceManager
   isExternal: false
   name: CreateDesignSurface(IServiceProvider)
   nameWithType: DesignSurfaceManager.CreateDesignSurface(IServiceProvider)
   fullName: System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface(IServiceProvider)
-- uid: System.ComponentModel.Design.DesignSurface
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: DesignSurface
-  nameWithType: DesignSurface
-  fullName: System.ComponentModel.Design.DesignSurface
-- uid: System.IServiceProvider
-  parent: System
-  isExternal: true
-  name: IServiceProvider
-  nameWithType: IServiceProvider
-  fullName: System.IServiceProvider
 - uid: System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore(System.IServiceProvider)
   parent: System.ComponentModel.Design.DesignSurfaceManager
   isExternal: false
   name: CreateDesignSurfaceCore(IServiceProvider)
   nameWithType: DesignSurfaceManager.CreateDesignSurfaceCore(IServiceProvider)
   fullName: System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore(IServiceProvider)
-- uid: System.ComponentModel.Design.DesignSurface
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: DesignSurface
-  nameWithType: DesignSurface
-  fullName: System.ComponentModel.Design.DesignSurface
-- uid: System.IServiceProvider
-  parent: System
-  isExternal: true
-  name: IServiceProvider
-  nameWithType: IServiceProvider
-  fullName: System.IServiceProvider
 - uid: System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceCreated
   parent: System.ComponentModel.Design.DesignSurfaceManager
   isExternal: false
@@ -520,12 +501,6 @@ references:
   name: DesignSurfaceDisposed
   nameWithType: DesignSurfaceManager.DesignSurfaceDisposed
   fullName: System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceDisposed
-- uid: System.ComponentModel.Design.DesignSurfaceEventHandler
-  parent: System.ComponentModel.Design
-  isExternal: false
-  name: DesignSurfaceEventHandler
-  nameWithType: DesignSurfaceEventHandler
-  fullName: System.ComponentModel.Design.DesignSurfaceEventHandler
 - uid: System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaces
   parent: System.ComponentModel.Design.DesignSurfaceManager
   isExternal: false
@@ -562,12 +537,6 @@ references:
   name: GetService(Type)
   nameWithType: DesignSurfaceManager.GetService(Type)
   fullName: System.ComponentModel.Design.DesignSurfaceManager.GetService(Type)
-- uid: System.Object
-  parent: System
-  isExternal: true
-  name: Object
-  nameWithType: Object
-  fullName: System.Object
 - uid: System.Type
   parent: System
   isExternal: true

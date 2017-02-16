@@ -12,8 +12,8 @@ items:
   nameWithType: MessageQueueAccessControlEntry
   fullName: System.Messaging.MessageQueueAccessControlEntry
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Specifies access rights for a trustee (user, group, or computer) to perform Message Queuing tasks.
+  remarks: "Use the MessageQueueAccessControlEntry class to specify rights to apply to a trustee. These rights include peeking, receiving, or sending messages; viewing or modifying queue properties or permissions; and deleting queues. The <xref:System.Messaging.MessageQueue> class's <xref:System.Messaging.MessageQueue.SetPermissions%2A> method provides overloads for passing an instance of this class directly into the method, or adding it to an instance of <xref:System.Messaging.AccessControlList> so that you can add rights for more than one trustee at a time. The new access right is appended to the end of the queue's discretionary access control list (DACL), which identifies the users and groups that can access the queue.  \n  \n There are some exceptions to this generalization about where the new right is added and its effects. For more information, see <xref:System.Messaging>.  \n  \n An overload of the <xref:System.Messaging.MessageQueueAccessControlEntry.%23ctor%2A> constructor allows you specify a <xref:System.Messaging.AccessControlEntryType> member to indicate whether to allow or deny rights to the trustee. The order in which rights are allowed or denied in the resource's DACL affects whether the trustee has the specified rights. For example, if rights have already been granted to the trustee and you later add an entry that denies them, the system finds the granted rights first, so the user is granted rights you might have intended they be denied. You can use two entry types to override this behavior: `Set` and `Revoke`. For more information about controlling the way in which access rights are determined, see the <xref:System.Messaging.AccessControlEntryType> enumeration topic.  \n  \n The MessageQueueAccessControlEntry class is associated with security based on access control lists (ACLs), which you can use to give users access to the Message Queuing system itself. This is different from code access security, which is implemented through the <xref:System.Messaging.MessageQueuePermission> and related classes. Message Queuing code access security defines queue-specific operations or queue access that an application might require which is subject to security control; it does not represent a right for the application to perform these operations or receive access in and of itself. See the topic [&#91;\\<topic://cpconcodeaccesssecurity>&#93;](http://msdn.microsoft.com/en-us/23a20143-241d-4fe5-9d9f-3933fd594c03) for more information about code access security.  \n  \n To set message queue permissions for a trustee, create a new instance of the <xref:System.Messaging.AccessControlEntry.Trustee%2A> class and pass it into an overload of the M:System.Messaging.MessageQueueAccessControlEntry.#ctor?qualifyHint=False&autoUpgrade=True constructor. Specify the message queue access rights either by passing an instance of T:System.Messaging.MessageQueueAccessRights?qualifyHint=False&autoUpgrade=True into the constructor or by setting the P:System.Messaging.MessageQueueAccessControlEntry.MessageQueueAccessRights?qualifyHint=False&autoUpgrade=True property on an existing MessageQueueAccessControlEntry instance.  \n  \n You can then pass the MessageQueueAccessControlEntry instance directly to the M:System.Messaging.MessageQueue.SetPermissions(System.String,System.Messaging.MessageQueueAccessRights)?qualifyHint=True&autoUpgrade=True method, or alternately add the entry to an instance of T:System.Messaging.AccessControlList?qualifyHint=False&autoUpgrade=True before calling M:System.Messaging.MessageQueue.SetPermissions(System.String,System.Messaging.MessageQueueAccessRights)?qualifyHint=False&autoUpgrade=True."
   syntax:
     content: 'public class MessageQueueAccessControlEntry : System.Messaging.AccessControlEntry'
   inheritance:
@@ -42,18 +42,19 @@ items:
   assemblies:
   - System.Messaging
   namespace: System.Messaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class, granting the specified Message Queuing access rights to the specified trustee.
+  remarks: "Use this overload of the constructor to grant rights to the specified trustee. The rights you specify in the `rights` parameter are a bitwise combination of members of the <xref:System.Messaging.MessageQueueAccessRights> bitflag, which includes such rights as receiving messages, deleting queues, and setting queue properties. The constructor uses the rights you pass in to set this instance's <xref:System.Messaging.MessageQueueAccessControlEntry.MessageQueueAccessRights%2A> property.  \n  \n Pass this instance of <xref:System.Messaging.MessageQueueAccessControlEntry> directly into an overload of the <xref:System.Messaging.MessageQueue.SetPermissions%2A> method to grant rights only to this trustee, or add this instance to a <xref:System.Messaging.AccessControlList> before calling <xref:System.Messaging.MessageQueue.SetPermissions%2A> to grant or deny rights to multiple trustees at once."
   syntax:
     content: public MessageQueueAccessControlEntry (System.Messaging.Trustee trustee, System.Messaging.MessageQueueAccessRights rights);
     parameters:
     - id: trustee
       type: System.Messaging.Trustee
-      description: To be added.
+      description: A  that specifies a user, group, computer, domain, or alias.
     - id: rights
       type: System.Messaging.MessageQueueAccessRights
-      description: To be added.
+      description: A bitwise combination of the  values which defines the combination of rights to grant to the trustee.
   overload: System.Messaging.MessageQueueAccessControlEntry.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -70,21 +71,22 @@ items:
   assemblies:
   - System.Messaging
   namespace: System.Messaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class, with the specified trustee and Message Queuing access rights. The type of access (such as  or ) is defined by the entry type you pass in.
+  remarks: "Use this overload of the constructor to grant or deny rights to the specified trustee. The rights you specify in the `rights` parameter are a bitwise combination of members of the <xref:System.Messaging.MessageQueueAccessRights> bitflag, which includes such rights as receiving messages, deleting queues, and setting queue properties. The constructor uses the rights you pass in to set this instance's <xref:System.Messaging.MessageQueueAccessControlEntry.MessageQueueAccessRights%2A> property.  \n  \n For more information about granting or denying rights, see the <xref:System.Messaging.AccessControlEntryType> topic. For two members, `Allow` and `Deny`, there may be preexisting and possibly contradictory access rights, so the order in which the rights appear in the queue's discretionary access control list (DACL) affects whether the right is ultimately granted. Two other members, `Set` and `Revoke`, overwrite any existing rights. Use the member whose behavior is applicable to your application.  \n  \n Pass this instance of <xref:System.Messaging.MessageQueueAccessControlEntry> directly into an overload of the <xref:System.Messaging.MessageQueue.SetPermissions%2A> method to grant or deny rights only to this trustee, or add this instance to a <xref:System.Messaging.AccessControlList> before calling <xref:System.Messaging.MessageQueue.SetPermissions%2A> to grant or deny rights to multiple trustees at once."
   syntax:
     content: public MessageQueueAccessControlEntry (System.Messaging.Trustee trustee, System.Messaging.MessageQueueAccessRights rights, System.Messaging.AccessControlEntryType entryType);
     parameters:
     - id: trustee
       type: System.Messaging.Trustee
-      description: To be added.
+      description: A  that specifies a user, group, computer, domain, or alias.
     - id: rights
       type: System.Messaging.MessageQueueAccessRights
-      description: To be added.
+      description: A bitwise combination of the  values which defines the combination of rights to grant to the trustee.
     - id: entryType
       type: System.Messaging.AccessControlEntryType
-      description: To be added.
+      description: One of the  values, which specifies whether to allow, deny, set or revoke the specified rights.
   overload: System.Messaging.MessageQueueAccessControlEntry.#ctor*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -101,14 +103,15 @@ items:
   assemblies:
   - System.Messaging
   namespace: System.Messaging
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets or sets the set of Message Queuing-specific rights to apply to the trustee.
+  remarks: The MessageQueueAccessRights property enables you to specify Message Queuing object-specific rights such as receiving, peeking, or writing messages, or setting queue properties. The value of this property is set by the M:System.Messaging.MessageQueueAccessControlEntry.#ctor?qualifyHint=False&autoUpgrade=True constructor, but you can change it at any time before using this instance of T:System.Messaging.MessageQueueAccessControlEntry?qualifyHint=False&autoUpgrade=True in a call to M:System.Messaging.MessageQueue.SetPermissions(System.String,System.Messaging.MessageQueueAccessRights)?qualifyHint=True&autoUpgrade=True.
   syntax:
     content: public System.Messaging.MessageQueueAccessRights MessageQueueAccessRights { get; set; }
     return:
       type: System.Messaging.MessageQueueAccessRights
-      description: To be added.
+      description: A bitwise combination of the  members. The default is defined by the rights parameter passed into the constructor.
   overload: System.Messaging.MessageQueueAccessControlEntry.MessageQueueAccessRights*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -141,18 +144,6 @@ references:
   name: MessageQueueAccessControlEntry(Trustee,MessageQueueAccessRights,AccessControlEntryType)
   nameWithType: MessageQueueAccessControlEntry.MessageQueueAccessControlEntry(Trustee,MessageQueueAccessRights,AccessControlEntryType)
   fullName: System.Messaging.MessageQueueAccessControlEntry.MessageQueueAccessControlEntry(Trustee,MessageQueueAccessRights,AccessControlEntryType)
-- uid: System.Messaging.Trustee
-  parent: System.Messaging
-  isExternal: false
-  name: Trustee
-  nameWithType: Trustee
-  fullName: System.Messaging.Trustee
-- uid: System.Messaging.MessageQueueAccessRights
-  parent: System.Messaging
-  isExternal: false
-  name: MessageQueueAccessRights
-  nameWithType: MessageQueueAccessRights
-  fullName: System.Messaging.MessageQueueAccessRights
 - uid: System.Messaging.AccessControlEntryType
   parent: System.Messaging
   isExternal: false
@@ -165,12 +156,6 @@ references:
   name: MessageQueueAccessRights
   nameWithType: MessageQueueAccessControlEntry.MessageQueueAccessRights
   fullName: System.Messaging.MessageQueueAccessControlEntry.MessageQueueAccessRights
-- uid: System.Messaging.MessageQueueAccessRights
-  parent: System.Messaging
-  isExternal: false
-  name: MessageQueueAccessRights
-  nameWithType: MessageQueueAccessRights
-  fullName: System.Messaging.MessageQueueAccessRights
 - uid: System.Messaging.MessageQueueAccessControlEntry.#ctor*
   parent: System.Messaging.MessageQueueAccessControlEntry
   isExternal: false

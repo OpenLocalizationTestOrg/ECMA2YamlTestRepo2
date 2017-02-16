@@ -16,8 +16,10 @@ items:
   nameWithType: RuleValidation
   fullName: System.Workflow.Activities.Rules.RuleValidation
   type: Class
-  summary: To be added.
-  remarks: To be added.
+  summary: Validates expression conditions.
+  remarks: ''
+  example:
+  - "The following code creates an invalid condition. It then attempts to validate the condition, and displays any errors that result.  \n  \n```c#  \n// Create an invalid condition (\"abc\" < true).  \nCodeBinaryOperatorExpression invalidCompare = new CodeBinaryOperatorExpression();  \ninvalidCompare.Left = new CodePrimitiveExpression(\"abc\");  \ninvalidCompare.Operator = CodeBinaryOperatorType.LessThan;  \ninvalidCompare.Right = new CodePrimitiveExpression(true);  \nRuleExpressionCondition condition = new RuleExpressionCondition();  \ncondition.Expression = invalidCompare;  \n  \n// Create a validator for this condition.  \n// We are not using \"this\" in the condition, so the type is not used.  \nRuleValidation validation = new RuleValidation(this.GetType(), null);  \n  \n// See whether the condition validates.  \nif (!condition.Validate(validation))  \n{  \n    // There were errors, so display them.  \n    foreach (ValidationError error in validation.Errors)  \n    {  \n        Console.WriteLine(error.ErrorText);  \n    }  \n}  \n  \n```  \n  \n Running this code produces the following error:  \n  \n```  \nRelational operator \"LessThan\" cannot be used on operands of types \"string\" and \"bool\".  \n```"
   syntax:
     content: public class RuleValidation
   inheritance:
@@ -40,18 +42,21 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the <xref:System.Type> of the .
   syntax:
     content: public RuleValidation (Type thisType, System.Workflow.ComponentModel.Compiler.ITypeProvider typeProvider);
     parameters:
     - id: thisType
       type: System.Type
-      description: To be added.
+      description: The type of the object that this  or  will be executed against. Normally it is the workflow, but it can be any valid type.
     - id: typeProvider
       type: System.Workflow.ComponentModel.Compiler.ITypeProvider
-      description: To be added.
+      description: An optional  implementation that is used to determine what <xref:System.Type>s are available in the condition. If one is not specified, only types in the assembly specified by the activity and any assemblies it references are available.
   overload: System.Workflow.Activities.Rules.RuleValidation.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    thisType is a null reference ( in Visual Basic)."
   platform:
   - net-11
   - net-20
@@ -68,21 +73,25 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: To be added.
-  remarks: To be added.
+  summary: Initializes a new instance of the  class using the specified  and the type provider.
+  remarks: This constructor is used at design time.
   syntax:
     content: public RuleValidation (System.Workflow.ComponentModel.Activity activity, System.Workflow.ComponentModel.Compiler.ITypeProvider typeProvider, bool checkStaticType);
     parameters:
     - id: activity
       type: System.Workflow.ComponentModel.Activity
-      description: To be added.
+      description: The  in which context the  or  is run. In most cases, this will be the workflow object.
     - id: typeProvider
       type: System.Workflow.ComponentModel.Compiler.ITypeProvider
-      description: To be added.
+      description: An optional  implementation that is used to determine what <xref:System.Type>s are available in the condition. If one is not specified, only types in the assembly specified by the activity and any assemblies it references are available.
     - id: checkStaticType
       type: System.Boolean
-      description: To be added.
+      description: If , the types used by any  or  that are validated with this object must be in the restricted list of types allowed.
   overload: System.Workflow.Activities.Rules.RuleValidation.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    activity is a null reference ( in Visual Basic)."
   platform:
   - net-11
   - net-20
@@ -99,14 +108,14 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the errors associated with the .
   syntax:
     content: public System.Workflow.ComponentModel.Compiler.ValidationErrorCollection Errors { get; }
     return:
       type: System.Workflow.ComponentModel.Compiler.ValidationErrorCollection
-      description: To be added.
+      description: The  that contains the  objects created during rule validation.
   overload: System.Workflow.Activities.Rules.RuleValidation.Errors*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -123,18 +132,18 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: To be added.
-  remarks: To be added.
+  summary: Determines the type of the code expression.
   syntax:
     content: public System.Workflow.Activities.Rules.RuleExpressionInfo ExpressionInfo (System.CodeDom.CodeExpression expression);
     parameters:
     - id: expression
       type: System.CodeDom.CodeExpression
-      description: To be added.
+      description: The  to evaluate.
     return:
       type: System.Workflow.Activities.Rules.RuleExpressionInfo
-      description: To be added.
+      description: The  for the object. This identifies the type of the object.
   overload: System.Workflow.Activities.Rules.RuleValidation.ExpressionInfo*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -151,12 +160,12 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: To be added.
-  remarks: To be added.
+  summary: Removes and returns the parent expressions at the top of the .
   syntax:
     content: public void PopParentExpression ();
     parameters: []
   overload: System.Workflow.Activities.Rules.RuleValidation.PopParentExpression*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -173,18 +182,22 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: To be added.
-  remarks: To be added.
+  summary: Inserts an object at the top of the .
+  remarks: If the `newParent` is already part of the parent <xref:System.CodeDom.CodeExpression> objects, a new <xref:System.Workflow.ComponentModel.Compiler.ValidationError> is created.
   syntax:
     content: public bool PushParentExpression (System.CodeDom.CodeExpression newParent);
     parameters:
     - id: newParent
       type: System.CodeDom.CodeExpression
-      description: To be added.
+      description: The  to add to the .
     return:
       type: System.Boolean
-      description: To be added.
+      description: if the newParent was added to the stack; otherwise, .
   overload: System.Workflow.Activities.Rules.RuleValidation.PushParentExpression*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: "\n    newParent is a null reference ( in Visual Basic)."
   platform:
   - net-11
   - net-20
@@ -201,14 +214,14 @@ items:
   assemblies:
   - System.Workflow.Activities
   namespace: System.Workflow.Activities.Rules
-  summary: To be added.
-  remarks: To be added.
+  summary: Gets the type of object.
   syntax:
     content: public Type ThisType { get; }
     return:
       type: System.Type
-      description: To be added.
+      description: The <xref:System.Type> of the object.
   overload: System.Workflow.Activities.Rules.RuleValidation.ThisType*
+  exceptions: []
   platform:
   - net-11
   - net-20
@@ -247,12 +260,6 @@ references:
   name: Activity
   nameWithType: Activity
   fullName: System.Workflow.ComponentModel.Activity
-- uid: System.Workflow.ComponentModel.Compiler.ITypeProvider
-  parent: System.Workflow.ComponentModel.Compiler
-  isExternal: false
-  name: ITypeProvider
-  nameWithType: ITypeProvider
-  fullName: System.Workflow.ComponentModel.Compiler.ITypeProvider
 - uid: System.Boolean
   parent: System
   isExternal: true
@@ -301,30 +308,12 @@ references:
   name: PushParentExpression(CodeExpression)
   nameWithType: RuleValidation.PushParentExpression(CodeExpression)
   fullName: System.Workflow.Activities.Rules.RuleValidation.PushParentExpression(CodeExpression)
-- uid: System.Boolean
-  parent: System
-  isExternal: true
-  name: Boolean
-  nameWithType: Boolean
-  fullName: System.Boolean
-- uid: System.CodeDom.CodeExpression
-  parent: System.CodeDom
-  isExternal: false
-  name: CodeExpression
-  nameWithType: CodeExpression
-  fullName: System.CodeDom.CodeExpression
 - uid: System.Workflow.Activities.Rules.RuleValidation.ThisType
   parent: System.Workflow.Activities.Rules.RuleValidation
   isExternal: false
   name: ThisType
   nameWithType: RuleValidation.ThisType
   fullName: System.Workflow.Activities.Rules.RuleValidation.ThisType
-- uid: System.Type
-  parent: System
-  isExternal: true
-  name: Type
-  nameWithType: Type
-  fullName: System.Type
 - uid: System.Workflow.Activities.Rules.RuleValidation.#ctor*
   parent: System.Workflow.Activities.Rules.RuleValidation
   isExternal: false
