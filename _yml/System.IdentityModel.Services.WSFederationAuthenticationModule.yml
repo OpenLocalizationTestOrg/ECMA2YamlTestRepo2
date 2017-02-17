@@ -104,7 +104,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Called by constructors in derived classes to initialize the  class.
+  summary: Called by constructors in derived classes to initialize the <see cref="T:System.IdentityModel.Services.WSFederationAuthenticationModule"></see> class.
   syntax:
     content: public WSFederationAuthenticationModule ();
     parameters: []
@@ -508,7 +508,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Gets a string that should be persisted with the session cookie in the <xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A?displayProperty=fullName> property.
+  summary: Gets a string that should be persisted with the session cookie in the &lt;xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A?displayProperty=fullName&gt; property.
   remarks: "The GetSessionTokenContext method is called from the request processing pipeline when processing a WS-Federation sign-in response message to get the value to store in the <xref:System.IdentityModel.Tokens.SessionSecurityToken.Context%2A?displayProperty=fullName> property inside the session cookie.  \n  \n You can override this method to provide an application-specific value to be stored in the cookie. WSFAM does not expose any methods to retrieve the value from the cookie. You must provide the logic in your application to read the value back from the cookie if it is needed."
   syntax:
     content: protected virtual string GetSessionTokenContext ();
@@ -537,7 +537,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Reads a  object from the form POST represented by the specified HTTP request.
+  summary: Reads a <see cref="T:System.IdentityModel.Services.SignInResponseMessage"></see> object from the form POST represented by the specified HTTP request.
   remarks: Called from the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.GetSecurityToken%28System.Web.HttpRequestBase%29?displayProperty=fullName> method in the request processing pipeline to get a sign-in response message from the form POST contained in the HTTP request.
   syntax:
     content: public virtual System.IdentityModel.Services.SignInResponseMessage GetSignInResponseMessage (System.Web.HttpRequestBase request);
@@ -730,7 +730,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Initializes the module properties based on the configuration specified by the <xref:System.IdentityModel.Services.HttpModuleBase.FederationConfiguration%2A> property of the module.
+  summary: Initializes the module properties based on the configuration specified by the &lt;xref:System.IdentityModel.Services.HttpModuleBase.FederationConfiguration%2A&gt; property of the module.
   remarks: "Module properties are initialized using the equivalent properties of the <xref:System.IdentityModel.Services.Configuration.WsFederationConfiguration> object specified by the <xref:System.IdentityModel.Services.Configuration.FederationConfiguration.WsFederationConfiguration%2A?displayProperty=fullName> property.  \n  \n You can specify settings in a configuration file through the [\\<wsFederation>](../Topic/%3CwsFederation%3E.md) element."
   syntax:
     content: protected override void InitializePropertiesFromConfiguration ();
@@ -813,7 +813,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Handles the  event from the [!INCLUDE[vstecasp](~/add/includes/vstecasp-md.md)] pipeline.
+  summary: Handles the <see cref="E:System.Web.HttpApplication.AuthenticateRequest"></see> event from the [!INCLUDE[vstecasp](~/add/includes/vstecasp-md.md)] pipeline.
   remarks: "The OnAuthenticateRequest method implements the WS-Federation request processing pipeline. It is added to the <xref:System.Web.HttpApplication.AuthenticateRequest?displayProperty=fullName> event in the [!INCLUDE[vstecasp](~/add/includes/vstecasp-md.md)] pipeline by the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.InitializeModule%2A> method.  \n  \n The method performs the following:  \n  \n1.  Calls the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.CanReadSignInResponse%28System.Web.HttpRequestBase%29> method to determine whether a WS-Federation sign-in response message (\"wsignin1.0\") has been received. If the response is a WS-Federation sign-out clean-up request (\"wsignoutcleanup1.0\"), <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.CanReadSignInResponse%28System.Web.HttpRequestBase%29> processes the message, terminates the request and redirects the client according to the WS-Federation parameters in the request. If the message is not a sign-in response or a sign-out clean-up request, the module just returns; otherwise it performs the following steps to process the sign-in response.  \n  \n2.  Calls the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.GetSecurityToken%28System.Web.HttpRequestBase%29> method to deserialize a <xref:System.IdentityModel.Tokens.SecurityToken> object from the request.  \n  \n3.  Raises the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SecurityTokenReceived> event. You can cancel further processing or modify the received security token in a handler for this event. A handler is typically used to modify the <xref:System.IdentityModel.Tokens.SecurityToken.ValidFrom%2A?displayProperty=fullName> or <xref:System.IdentityModel.Tokens.SecurityToken.ValidTo%2A?displayProperty=fullName> properties.  \n  \n4.  Validates the security token and creates a <xref:System.Security.Claims.ClaimsPrincipal> object from the claims in the security token.  \n  \n5.  Raises the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SecurityTokenValidated> event. You can cancel further processing or modify the claims principal in a handler for this event.  \n  \n6.  Uses the configured session authentication module (SAM) to create a <xref:System.IdentityModel.Tokens.SessionSecurityToken> object. (The configured SAM is the <xref:System.IdentityModel.Services.SessionAuthenticationModule> object returned by the <xref:System.IdentityModel.Services.FederatedAuthentication.SessionAuthenticationModule%2A?displayProperty=fullName> property.) The session token is created by using the claims principal returned in step 5. The <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidFrom%2A?displayProperty=fullName> and <xref:System.IdentityModel.Tokens.SessionSecurityToken.ValidTo%2A?displayProperty=fullName> properties are set by using the <xref:System.IdentityModel.Tokens.SecurityToken.ValidFrom%2A> and <xref:System.IdentityModel.Tokens.SecurityToken.ValidTo%2A> properties of the <xref:System.IdentityModel.Tokens.SecurityToken> returned in step 3 and are validated against the current time and the token lifetime specified by either the <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.DefaultTokenLifetime%2A> or the <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler.TokenLifetime%2A> property of the <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> object in the token handler collection being used by WSFAM. The token lifetime on the session token handler can be specified in configuration through the [\\<sessionTokenRequirement>](../Topic/%3CsessionTokenRequirement%3E.md) element. Note: The <xref:System.IdentityModel.Services.CookieHandler.PersistentSessionLifetime%2A> property on the cookie handler configured for the SAM is not used.  \n  \n7.  Calls the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SetPrincipalAndWriteSessionToken%2A> method with the session token to write the session cookie. The <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SetPrincipalAndWriteSessionToken%2A> method first raises the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SessionSecurityTokenCreated> event. You can change properties on the session token or change whether the cookie should be persisted in a handler for this event. After the event is raised, the method then writes the cookie using the SAM.  \n  \n    > [!NOTE]\n    >  The <xref:System.IdentityModel.Tokens.SessionSecurityTokenHandler> set in configuration is not used to write the cookie.  \n  \n8.  Calls the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.OnSignedIn%2A> method to raise the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SignedIn> event.  \n  \n9. Calls the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.GetReturnUrlFromResponse%2A> method to get the RP page to which to redirect the client. By default, this method reads the return URL from the wctx parameter in the sign-in response. For more information about how WSFAM stores the return URL, see the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.CreateSignInRequest%2A> method."
   syntax:
     content: protected virtual void OnAuthenticateRequest (object sender, EventArgs args);
@@ -842,7 +842,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Raises the  event.
+  summary: Raises the <see cref="E:System.IdentityModel.Services.WSFederationAuthenticationModule.AuthorizationFailed"></see> event.
   remarks: "Called from the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.OnEndRequest%2A> event-handler delegate when authorization has failed.  \n  \n Initializes the <xref:System.IdentityModel.Services.AuthorizationFailedEventArgs.RedirectToIdentityProvider%2A?displayProperty=fullName> property before raising the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.AuthorizationFailed> event to prevent circular redirects if the user has already been authenticated. If the user is already authenticated, the property is initialized to `false` to prevent redirects; otherwise, it is initialized to `true`."
   syntax:
     content: protected virtual void OnAuthorizationFailed (System.IdentityModel.Services.AuthorizationFailedEventArgs e);
@@ -868,7 +868,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Handles the  event from the [!INCLUDE[vstecasp](~/add/includes/vstecasp-md.md)] pipeline.
+  summary: Handles the <see cref="E:System.Web.HttpApplication.EndRequest"></see> event from the [!INCLUDE[vstecasp](~/add/includes/vstecasp-md.md)] pipeline.
   remarks: The event is ignored unless the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.PassiveRedirectEnabled%2A> property is `true`.
   syntax:
     content: protected virtual void OnEndRequest (object sender, EventArgs args);
@@ -897,7 +897,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Handles the  event from the [!INCLUDE[vstecasp](~/add/includes/vstecasp-md.md)] pipeline.
+  summary: Handles the <see cref="E:System.Web.HttpApplication.PostAuthenticateRequest"></see> event from the [!INCLUDE[vstecasp](~/add/includes/vstecasp-md.md)] pipeline.
   remarks: By default, this is an empty handler.
   syntax:
     content: protected virtual void OnPostAuthenticateRequest (object sender, EventArgs e);
@@ -926,7 +926,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Raises the  event.
+  summary: Raises the <see cref="E:System.IdentityModel.Services.WSFederationAuthenticationModule.RedirectingToIdentityProvider"></see> event.
   syntax:
     content: protected virtual void OnRedirectingToIdentityProvider (System.IdentityModel.Services.RedirectingToIdentityProviderEventArgs e);
     parameters:
@@ -951,7 +951,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Raises the  event.
+  summary: Raises the <see cref="E:System.IdentityModel.Services.WSFederationAuthenticationModule.SessionSecurityTokenCreated"></see> event.
   syntax:
     content: protected virtual void OnSessionSecurityTokenCreated (System.IdentityModel.Services.SessionSecurityTokenCreatedEventArgs args);
     parameters:
@@ -976,7 +976,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Raises the  event.
+  summary: Raises the <see cref="E:System.IdentityModel.Services.WSFederationAuthenticationModule.SignedIn"></see> event.
   syntax:
     content: protected virtual void OnSignedIn (EventArgs args);
     parameters:
@@ -1001,7 +1001,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Raises the  event.
+  summary: Raises the <see cref="E:System.IdentityModel.Services.WSFederationAuthenticationModule.SignedOut"></see> event.
   remarks: Called from the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SignOut%28System.Boolean%29?displayProperty=fullName> method just after the session is deleted.
   syntax:
     content: protected virtual void OnSignedOut (EventArgs args);
@@ -1027,7 +1027,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Raises the  event.
+  summary: Raises the <see cref="E:System.IdentityModel.Services.WSFederationAuthenticationModule.SignInError"></see> event.
   syntax:
     content: protected virtual void OnSignInError (System.IdentityModel.Services.ErrorEventArgs args);
     parameters:
@@ -1052,7 +1052,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Raises the  event.
+  summary: Raises the <see cref="E:System.IdentityModel.Services.WSFederationAuthenticationModule.SigningOut"></see> event.
   remarks: Called from the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SignOut%28System.Boolean%29?displayProperty=fullName> method just before the session is deleted.
   syntax:
     content: protected virtual void OnSigningOut (System.IdentityModel.Services.SigningOutEventArgs args);
@@ -1078,7 +1078,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Raises the  event.
+  summary: Raises the <see cref="E:System.IdentityModel.Services.WSFederationAuthenticationModule.SignOutError"></see> event.
   remarks: Called from the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SignOut%28System.Boolean%29?displayProperty=fullName> method if an exception occurs during processing.
   syntax:
     content: protected virtual void OnSignOutError (System.IdentityModel.Services.ErrorEventArgs args);
@@ -1110,7 +1110,7 @@ items:
     content: public bool PassiveRedirectEnabled { get; set; }
     return:
       type: System.Boolean
-      description: to enable redirects; otherwise, .
+      description: <xref uid="langword_csharp_true" name="true" href=""></xref> to enable redirects; otherwise, <xref uid="langword_csharp_false" name="false" href=""></xref>.
   overload: System.IdentityModel.Services.WSFederationAuthenticationModule.PassiveRedirectEnabled*
   exceptions: []
   platform:
@@ -1135,7 +1135,7 @@ items:
     content: public bool PersistentCookiesOnPassiveRedirects { get; set; }
     return:
       type: System.Boolean
-      description: to issue a persistent session cookie; otherwise, .
+      description: <xref uid="langword_csharp_true" name="true" href=""></xref> to issue a persistent session cookie; otherwise, <xref uid="langword_csharp_false" name="false" href=""></xref>.
   overload: System.IdentityModel.Services.WSFederationAuthenticationModule.PersistentCookiesOnPassiveRedirects*
   exceptions: []
   platform:
@@ -1233,7 +1233,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Redirects the user to the security token service (STS) specified by the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Issuer%2A> property to obtain a security token using the WS-Federation protocol.
+  summary: Redirects the user to the security token service (STS) specified by the &lt;xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Issuer%2A&gt; property to obtain a security token using the WS-Federation protocol.
   remarks: "The RedirectToIdentityProvider method is called from the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.SignIn%2A> method when the request is issued from a web page presented by the relying party (RP) or from the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.OnEndRequest%2A> event-handler delegate to perform a passive redirect to the identity provider on authorization failure.  \n  \n The parameters passed to the method are used to create the wctx message parameter. The only significant parameter is the `returnUrl` parameter. This specifies the URL that the RP should direct the browser to following successful authentication. It should not be confused with the wreply message parameter, which is specified by the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Reply%2A> property and which provides the address at the RP to which the security token service (STS) should direct its response.  \n  \n The method performs the following:  \n  \n1.  Invokes the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.VerifyProperties%2A> method to ensure that a valid sign-in request can be issued by the module.  \n  \n2.  Invokes the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.CreateSignInRequest%2A> method to create the sign-in request from the properties configured on the module.  \n  \n3.  Invokes the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.OnRedirectingToIdentityProvider%2A> method to raise the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.RedirectingToIdentityProvider> event. You can cancel the redirect or modify the sign-in request message in the event handler for this event."
   syntax:
     content: public virtual void RedirectToIdentityProvider (string uniqueId, string returnUrl, bool persist);
@@ -1302,7 +1302,7 @@ items:
     content: public string Request { get; set; }
     return:
       type: System.String
-      description: The token issuance request expressed as a  element.
+      description: The token issuance request expressed as a <xref uid="langword_csharp_&lt;wst:RequestSecurityToken&gt;" name="&lt;wst:RequestSecurityToken&gt;" href=""></xref> element.
   overload: System.IdentityModel.Services.WSFederationAuthenticationModule.Request*
   exceptions: []
   platform:
@@ -1327,7 +1327,7 @@ items:
     content: public string RequestPtr { get; set; }
     return:
       type: System.String
-      description: A URL that specifies the location of the token issuance request expressed as a  element
+      description: A URL that specifies the location of the token issuance request expressed as a <xref uid="langword_csharp_&lt;wst:RequestSecurityToken&gt;" name="&lt;wst:RequestSecurityToken&gt;" href=""></xref> element
   overload: System.IdentityModel.Services.WSFederationAuthenticationModule.RequestPtr*
   exceptions:
   - type: System.ArgumentException
@@ -1354,7 +1354,7 @@ items:
     content: public bool RequireHttps { get; set; }
     return:
       type: System.Boolean
-      description: if communication with the STS must be secured using HTTPS; otherwise, .
+      description: <xref uid="langword_csharp_true" name="true" href=""></xref> if communication with the STS must be secured using HTTPS; otherwise, <xref uid="langword_csharp_false" name="false" href=""></xref>.
   overload: System.IdentityModel.Services.WSFederationAuthenticationModule.RequireHttps*
   exceptions: []
   platform:
@@ -1875,7 +1875,7 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Verifies that the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Issuer%2A> and <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Realm%2A> properties are non-empty, and, that, if the <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.RequireHttps%2A> property is , that the URIs specified for <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Issuer%2A> and <xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Realm%2A> are HTTPS-compliant.
+  summary: Verifies that the &lt;xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Issuer%2A&gt; and &lt;xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Realm%2A&gt; properties are non-empty, and, that, if the &lt;xref:System.IdentityModel.Services.WSFederationAuthenticationModule.RequireHttps%2A&gt; property is <xref uid="langword_csharp_true" name="true" href=""></xref>, that the URIs specified for &lt;xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Issuer%2A&gt; and &lt;xref:System.IdentityModel.Services.WSFederationAuthenticationModule.Realm%2A&gt; are HTTPS-compliant.
   syntax:
     content: public void VerifyProperties ();
     parameters: []
@@ -1900,12 +1900,12 @@ items:
   assemblies:
   - System.IdentityModel.Services
   namespace: System.IdentityModel.Services
-  summary: Gets or sets the <xref:System.Xml.XmlDictionaryReaderQuotas> object to use when deserializing WS-Federation sign-in response messages to get the token issued by the security token service (STS).
+  summary: Gets or sets the &lt;xref:System.Xml.XmlDictionaryReaderQuotas&gt; object to use when deserializing WS-Federation sign-in response messages to get the token issued by the security token service (STS).
   syntax:
     content: public System.Xml.XmlDictionaryReaderQuotas XmlDictionaryReaderQuotas { get; set; }
     return:
       type: System.Xml.XmlDictionaryReaderQuotas
-      description: The <xref:System.Xml.XmlDictionaryReaderQuotas> object to use when deserializing WS-Federation sign-in response messages to get the token issued by the security token service (STS).
+      description: The &lt;xref:System.Xml.XmlDictionaryReaderQuotas&gt; object to use when deserializing WS-Federation sign-in response messages to get the token issued by the security token service (STS).
   overload: System.IdentityModel.Services.WSFederationAuthenticationModule.XmlDictionaryReaderQuotas*
   exceptions:
   - type: System.ArgumentNullException

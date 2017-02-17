@@ -17,7 +17,7 @@ items:
   nameWithType: TtsEngineAction
   fullName: System.Speech.Synthesis.TtsEngine.TtsEngineAction
   type: Enum
-  summary: Specifies the Speech Synthesis Markup Language (SSML) action to be taken in rendering a given .
+  summary: Specifies the Speech Synthesis Markup Language (SSML) action to be taken in rendering a given <xref uid="langword_csharp_TextFragment" name="TextFragment" href=""></xref>.
   remarks: "TtsEngineAction represents requests for servicing a <xref:System.Speech.Synthesis.TtsEngine.TextFragment>. The actions correspond closely to elements in the SSML specification and are implemented on the text returned by the <xref:System.Speech.Synthesis.TtsEngine.TextFragment.TextToSpeak%2A> property on a <xref:System.Speech.Synthesis.TtsEngine.TextFragment>.  \n  \n The TtsEngineAction value associated with a <xref:System.Speech.Synthesis.TtsEngine.TextFragment> is returned by the <xref:System.Speech.Synthesis.TtsEngine.TextFragment.State%2A> property.  \n  \n Processing of the TtsEngineAction value returned by the <xref:System.Speech.Synthesis.TtsEngine.TextFragment.State%2A> property is handled by a speech synthesizes implementation of the <xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml.Speak%2A> method on a class derived from <xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml>."
   example:
   - "The example below is part of a custom speech synthesis implementation inheriting from <xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml>, and using the use of <xref:System.Speech.Synthesis.TtsEngine.TextFragment>, <xref:System.Speech.Synthesis.TtsEngine.FragmentState>, and <xref:System.Speech.Synthesis.TtsEngine.TtsEventId>  \n  \n The implementation of <xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml.Speak%2A>  \n  \n1.  Receives an array of <xref:System.Speech.Synthesis.TtsEngine.TextFragment> instances and creates a new array of <xref:System.Speech.Synthesis.TtsEngine.TextFragment> instances to be passed to the `Speak` method on an underlying synthesis engine.  \n  \n2.  If the TtsEngineAction enumeration value by found from the <xref:System.Speech.Synthesis.TtsEngine.FragmentState.Action%2A> property on the <xref:System.Speech.Synthesis.TtsEngine.FragmentState> returned by the <xref:System.Speech.Synthesis.TtsEngine.TextFragment.State%2A> property of each <xref:System.Speech.Synthesis.TtsEngine.TextFragment> instance is Speak, the implementation  \n  \n    -   Translates Americanism to Britishisms in the text to be spoken.  \n  \n    -   If the <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A> property on the <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite> interfaces provided to the implementation support the <xref:System.Speech.Synthesis.TtsEngine.TtsEventId> event type, an event to drive a synthesizer progress meter is created.  \n  \n3.  A speech rendering engine is then called with the modified <xref:System.Speech.Synthesis.TtsEngine.TextFragment> array.  \n  \n```  \nprivate const int WordBoundaryFlag = 1 << (int)TtsEventId.WordBoundary;  \nprivate readonly char[] spaces = new char[] { ' ', '\\t', '\\r', '\\n' };  \ninternal struct UsVsUk  \n{  \n  internal string UK;  \n  internal string US;  \n}  \n  \noverride public void Speak (TextFragment [] frags, IntPtr wfx, ITtsEngineSite site)  \n{  \n  TextFragment [] newFrags=new TextFragment[frags.Length];  \n  \n  for (int i=0;i<frags.Length;i++){  \n    newFrags[i].State=frags[i].State;  \n    //truncate  \n    newFrags[i].TextToSpeak = frags[i].TextToSpeak.Substring(frags[i].TextOffset,  \n                               frags[i].TextLength);  \n    newFrags[i].TextLength = newFrags[i].TextToSpeak.Length;  \n    newFrags[i].TextOffset = 0;  \n    if (newFrags[i].State.Action == TtsEngineAction.Speak) {  \n      //Us to UK conversion  \n      foreach (UsVsUk term in TransList) {  \n      newFrags[i].TextToSpeak.Replace(term.US, term.UK);  \n      }  \n      //Generate progress meter events if supported  \n      if ((site.EventInterest & WordBoundaryFlag) != 0) {  \n      string[] subs = newFrags[i].TextToSpeak.Split(spaces);  \n  \n      foreach (string s in subs) {  \n        int offset = newFrags[i].TextOffset;  \n        SpeechEventInfo spEvent = new SpeechEventInfo((Int16)TtsEventId.WordBoundary,   \n                (Int16)EventParameterType.Undefined,   \n                 s.Length, new IntPtr(offset));  \n        offset += s.Length;  \n        if (s.Trim().Length > 0) {  \n          SpeechEventInfo[] events = new SpeechEventInfo[1];  \n          events[0] = spEvent;  \n          site.AddEvents(events, 1);  \n        }  \n      }  \n      }  \n    }  \n  }  \n  \n  _baseSynthesize.Speak(newFrags, wfx, site);  \n  \n}  \n```"
@@ -41,7 +41,7 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: Indicates that  is to be used as the contents of a bookmark.
+  summary: Indicates that <see cref="T:System.Speech.Synthesis.TtsEngine.TextFragment"></see> is to be used as the contents of a bookmark.
   remarks: Corresponds to the `<mark>` XML tag in the SSML specification.
   syntax:
     content: Bookmark
@@ -89,7 +89,7 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: Requests that input  text be interpreted as phonemes.
+  summary: Requests that input <see cref="T:System.Speech.Synthesis.TtsEngine.TextFragment"></see> text be interpreted as phonemes.
   remarks: "Exact pronunciation is specified by the <xref:System.Speech.Synthesis.TtsEngine.FragmentState.Phoneme%2A> member of the <xref:System.Speech.Synthesis.TtsEngine.FragmentState> object returned by the <xref:System.Speech.Synthesis.TtsEngine.TextFragment.State%2A> property on <xref:System.Speech.Synthesis.TtsEngine.TextFragment> instances.  \n  \n Corresponds to the `<Phoneme>` XML tag in the SSML specification."
   syntax:
     content: Pronounce
@@ -113,7 +113,7 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: Indicates that a  contains no text to be rendered as speech.
+  summary: Indicates that a <see cref="T:System.Speech.Synthesis.TtsEngine.TextFragment"></see> contains no text to be rendered as speech.
   remarks: "Duration of the silence is specified by the <xref:System.Speech.Synthesis.TtsEngine.FragmentState.Duration%2A> member of the he <xref:System.Speech.Synthesis.TtsEngine.FragmentState> object returned by the <xref:System.Speech.Synthesis.TtsEngine.TextFragment.State%2A> property on <xref:System.Speech.Synthesis.TtsEngine.TextFragment> instances.  \n  \n Corresponds to the `<Silence>` XML tag in the SSML specification."
   syntax:
     content: Silence
@@ -137,7 +137,7 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: Requests that the associated  should be processed and spoken.
+  summary: Requests that the associated <see cref="T:System.Speech.Synthesis.TtsEngine.TextFragment"></see> should be processed and spoken.
   remarks: "This is the default value of TtsEngineAction for a <xref:System.Speech.Synthesis.TtsEngine.TextFragment>,  \n  \n Corresponds to the `<speak>` XML tag in the SSML specification"
   syntax:
     content: Speak
@@ -161,7 +161,7 @@ items:
   assemblies:
   - System.Speech
   namespace: System.Speech.Synthesis.TtsEngine
-  summary: Indicates that text values provided by a  through its <xref:System.Speech.Synthesis.TtsEngine.TextFragment.TextToSpeak%2A> property are to be synthesize as individual characters.
+  summary: Indicates that text values provided by a <see cref="T:System.Speech.Synthesis.TtsEngine.TextFragment"></see> through its &lt;xref:System.Speech.Synthesis.TtsEngine.TextFragment.TextToSpeak%2A&gt; property are to be synthesize as individual characters.
   remarks: "This rendering includes punctuation, other than white space, as well as alphanumeric text.  \n  \n For example thee associated text fragment \"word!\" should be synthsized into \"w o r d exclamation point\"."
   syntax:
     content: SpellOut
