@@ -105,7 +105,7 @@ items:
   summary: Represents the table drawn by the  control at run time.
   remarks: "The <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control displays data in the form of a grid. The DataGridTableStyle is a class that represents the drawn grid only. This grid should not be confused with the <xref:System.Data.DataTable> class, which is a possible source of data for the grid. Instead, the DataGridTableStyle strictly represents the grid as it is painted in the control. Therefore, through the DataGridTableStyle you can control the appearance of the grid for each <xref:System.Data.DataTable>. To specify which DataGridTableStyle is used when displaying data from a particular <xref:System.Data.DataTable>, set the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> to the <xref:System.Data.DataTable.TableName%2A> of a <xref:System.Data.DataTable>.  \n  \n The <xref:System.Windows.Forms.GridTableStylesCollection> retrieved through the <xref:System.Windows.Forms.DataGrid.TableStyles%2A> property contains all the DataGridTableStyle objects used by a <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control. The collection can contain as many DataGridTableStyle objects as you need, however the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> of each must be unique. At run time, this allows you to substitute a different DataGridTableStyle for the same data, depending on the user's preference. To do this:  \n  \n1.  Populate the <xref:System.Windows.Forms.GridTableStylesCollection> with DataGridTableStyle objects. If a DataGridTableStyle exists in the <xref:System.Windows.Forms.GridTableStylesCollection> whose <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> property value equals the <xref:System.Data.DataTable> object's <xref:System.Data.DataTable.TableName%2A> property, the <xref:System.Data.DataTable> is displayed with this DataGridTableStyle. If no DataGridTableStyle exists with a matching <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A>, the <xref:System.Data.DataTable> is displayed with the default style for data grid tables.  \n  \n2.  When a different grid style is needed, use the `Item` property to select the appropriate DataGridTableStyle (pass the <xref:System.Data.DataTable.TableName%2A> to the <xref:System.Windows.Forms.GridTableStylesCollection.Item%2A> property) and set the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> of the returned object to a new value.  \n  \n3.  Use the <xref:System.Windows.Forms.GridTableStylesCollection.Item%2A> property to select the desired DataGridTableStyle, and set its <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> to the <xref:System.Data.DataTable.TableName%2A> of the <xref:System.Data.DataTable>.  \n  \n> [!CAUTION]\n>  Always create <xref:System.Windows.Forms.DataGridColumnStyle> objects and add them to the <xref:System.Windows.Forms.GridColumnStylesCollection> before adding DataGridTableStyle objects to the <xref:System.Windows.Forms.GridTableStylesCollection>. When you add an empty DataGridTableStyle with a valid <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> value to the collection, <xref:System.Windows.Forms.DataGridColumnStyle> objects are automatically generated for you. Consequently, an exception will be thrown if you try to add new <xref:System.Windows.Forms.DataGridColumnStyle> objects with duplicate <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> values to the <xref:System.Windows.Forms.GridColumnStylesCollection>.  \n  \n To determine which DataGridTableStyle is currently displayed, use the <xref:System.Windows.Forms.DataGrid.DataSource%2A> and <xref:System.Windows.Forms.DataGrid.DataMember%2A> properties of the <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> to return a <xref:System.Windows.Forms.CurrencyManager>. If the data source implements the <xref:System.ComponentModel.ITypedList> interface, you can use the <xref:System.ComponentModel.ITypedList.GetListName%2A> method to return the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> of the current table. This is shown in the C# code below:  \n  \n```  \nprivate void PrintCurrentListName(DataGrid myDataGrid){  \n CurrencyManager myCM = (CurrencyManager)  \n BindingContext[myDataGrid.DataSource, myDataGrid.DataMember];  \n IList myList = myCM.List;  \n ITypedList thisList = (ITypedList) myList;  \n Console.WriteLine(thisList.GetListName(null));  \n}  \n```  \n  \n If the <xref:System.Data.DataSet> contains <xref:System.Data.DataTable> objects related through <xref:System.Data.DataRelation> objects, and the currently displayed <xref:System.Data.DataTable> is a child table, the <xref:System.Windows.Forms.DataGrid.DataMember%2A> will return a string in the form of TableName.RelationName (in the simplest case). If the <xref:System.Data.DataTable> is further down in the hierarchy, the string will consist of the parent table's name followed by the necessary <xref:System.Data.DataRelation.RelationName%2A> values required to reach the table's level. For example, imagine three <xref:System.Data.DataTable> objects in a hierarchical relationship named (top to bottom) `Regions`, `Customers`, and `Orders`, and two <xref:System.Data.DataRelation> objects named `RegionsToCustomers` and `CustomersToOrders`, the <xref:System.Windows.Forms.DataGrid.DataMember%2A> property will return \"Regions.RegionsToCustomers.CustomersToOrders\". However, the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> will then be \"Orders\".  \n  \n The collection of DataGridTableStyle objects is returned through the <xref:System.Windows.Forms.DataGrid.TableStyles%2A> property of the <xref:System.Windows.Forms.DataGrid?displayProperty=fullName>.  \n  \n When a DataGridTableStyle is displayed, the settings for the DataGridTableStyle will override the settings for the <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control. If a value is not set for a particular DataGridTableStyle property, the <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control's value will be used instead. The following list shows the <xref:System.Windows.Forms.DataGridColumnStyle> properties that can be set to override <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control properties:  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.AllowSorting%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.AlternatingBackColor%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.BackColor%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.ColumnHeadersVisible%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.ForeColor%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.GridLineColor%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.GridLineStyle%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.HeaderBackColor%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.HeaderFont%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.HeaderForeColor%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.LinkColor%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.PreferredColumnWidth%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.PreferredRowHeight%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.ReadOnly%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.RowHeadersVisible%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.RowHeaderWidth%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.SelectionBackColor%2A>  \n  \n-   <xref:System.Windows.Forms.DataGridTableStyle.SelectionForeColor%2A>  \n  \n To bind the <xref:System.Windows.Forms.DataGrid> to a strongly typed array of objects, the object type must contain public properties. To create a DataGridTableStyle that displays the array, set the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A?displayProperty=fullName> property to `typename` where `typename` is replaced by the name of the object type. Also note that the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> property is case-sensitive; the type name must be matched exactly. See the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> property for an example.  \n  \n You can also bind the <xref:System.Windows.Forms.DataGrid> to an <xref:System.Collections.ArrayList>. A feature of the <xref:System.Collections.ArrayList> is that it can contain objects of multiple types, but the <xref:System.Windows.Forms.DataGrid> can only bind to such a list when all items in the list are of the same type as the first item. This means that all objects must either be of the same type, or they must inherit from the same class as the first item in the list. For example, if the first item in a list is a <xref:System.Windows.Forms.Control>, the second item could be a <xref:System.Windows.Forms.TextBox> (which inherits from <xref:System.Windows.Forms.Control>). If, on the other hand, the first item is a <xref:System.Windows.Forms.TextBox>, the second object cannot be a <xref:System.Windows.Forms.Control>. Further, the <xref:System.Collections.ArrayList> must have items in it when it is bound and the objects in the DataGridTableStyle must contain public properties. An empty <xref:System.Collections.ArrayList> will result in an empty grid. When binding to an <xref:System.Collections.ArrayList>, set the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> of the DataGridTableStyle to \"ArrayList\" (the type name)."
   example:
-  - "The following code example creates two DataGridTableStyle instances and sets the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> of each object to the <xref:System.Data.DataTable.TableName%2A> of a <xref:System.Data.DataTable> in a <xref:System.Data.DataSet>. The example then adds <xref:System.Windows.Forms.DataGridColumnStyle> objects to the <xref:System.Windows.Forms.GridColumnStylesCollection> of each DataGridTableStyle. For an example that runs, see the <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> example.  \n  \n [!code-cs[Classic DataGridTableStyle Example#1](../../add/codesnippet/CSharp/t-system.windows.forms.d_25_1.cs)]\n [!code-vb[Classic DataGridTableStyle Example#1](../../add/codesnippet/VisualBasic/t-system.windows.forms.d_25_1.vb)]\n [!code-cpp[Classic DataGridTableStyle Example#1](../../add/codesnippet/CPP/t-system.windows.forms.d_25_1.cpp)]"
+  - "The following code example creates two DataGridTableStyle instances and sets the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> of each object to the <xref:System.Data.DataTable.TableName%2A> of a <xref:System.Data.DataTable> in a <xref:System.Data.DataSet>. The example then adds <xref:System.Windows.Forms.DataGridColumnStyle> objects to the <xref:System.Windows.Forms.GridColumnStylesCollection> of each DataGridTableStyle. For an example that runs, see the <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> example.  \n  \n [!code-cs[Classic DataGridTableStyle Example#1](~/add/codesnippet/CSharp/t-system.windows.forms.d_25_1.cs)]\n [!code-vb[Classic DataGridTableStyle Example#1](~/add/codesnippet/VisualBasic/t-system.windows.forms.d_25_1.vb)]\n [!code-cpp[Classic DataGridTableStyle Example#1](~/add/codesnippet/CPP/t-system.windows.forms.d_25_1.cpp)]"
   syntax:
     content: >-
       [System.ComponentModel.DesignTimeVisible(false)]
@@ -152,7 +152,7 @@ items:
   summary: Initializes a new instance of the  class.
   remarks: ''
   example:
-  - "The following code example creates a new <xref:System.Windows.Forms.DataGridTableStyle> and adds it to the <xref:System.Windows.Forms.GridTableStylesCollection>.  \n  \n [!code-cpp[Classic DataGridTableStyle.DataGridTableStyle Example#1](../../add/codesnippet/CPP/m-system.windows.forms.d_36_1.cpp)]\n [!code-cs[Classic DataGridTableStyle.DataGridTableStyle Example#1](../../add/codesnippet/CSharp/m-system.windows.forms.d_36_1.cs)]\n [!code-vb[Classic DataGridTableStyle.DataGridTableStyle Example#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_36_1.vb)]"
+  - "The following code example creates a new <xref:System.Windows.Forms.DataGridTableStyle> and adds it to the <xref:System.Windows.Forms.GridTableStylesCollection>.  \n  \n [!code-cpp[Classic DataGridTableStyle.DataGridTableStyle Example#1](~/add/codesnippet/CPP/m-system.windows.forms.d_36_1.cpp)]\n [!code-cs[Classic DataGridTableStyle.DataGridTableStyle Example#1](~/add/codesnippet/CSharp/m-system.windows.forms.d_36_1.cs)]\n [!code-vb[Classic DataGridTableStyle.DataGridTableStyle Example#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_36_1.vb)]"
   syntax:
     content: public DataGridTableStyle ();
     parameters: []
@@ -177,7 +177,7 @@ items:
   summary: Initializes a new instance of the  class using the specified value to determine whether the grid table is the default style.
   remarks: ''
   example:
-  - "The following code example creates a new <xref:System.Windows.Forms.DataGridTableStyle> and adds it to the <xref:System.Windows.Forms.GridTableStylesCollection>.  \n  \n [!code-cpp[Classic DataGridTableStyle.DataGridTableStyle Example#1](../../add/codesnippet/CPP/m-system.windows.forms.d_32_1.cpp)]\n [!code-cs[Classic DataGridTableStyle.DataGridTableStyle Example#1](../../add/codesnippet/CSharp/m-system.windows.forms.d_32_1.cs)]\n [!code-vb[Classic DataGridTableStyle.DataGridTableStyle Example#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_32_1.vb)]"
+  - "The following code example creates a new <xref:System.Windows.Forms.DataGridTableStyle> and adds it to the <xref:System.Windows.Forms.GridTableStylesCollection>.  \n  \n [!code-cpp[Classic DataGridTableStyle.DataGridTableStyle Example#1](~/add/codesnippet/CPP/m-system.windows.forms.d_32_1.cpp)]\n [!code-cs[Classic DataGridTableStyle.DataGridTableStyle Example#1](~/add/codesnippet/CSharp/m-system.windows.forms.d_32_1.cs)]\n [!code-vb[Classic DataGridTableStyle.DataGridTableStyle Example#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_32_1.vb)]"
   syntax:
     content: public DataGridTableStyle (bool isDefaultTableStyle);
     parameters:
@@ -205,7 +205,7 @@ items:
   summary: Initializes a new instance of the  class with the specified .
   remarks: ''
   example:
-  - "The following code example creates a new <xref:System.Windows.Forms.DataGridTableStyle> using a <xref:System.Windows.Forms.CurrencyManager> for a <xref:System.Data.DataTable>.  \n  \n [!code-cpp[Classic DataGridTableStyle.DataGridTableStyle2 Example#1](../../add/codesnippet/CPP/6664725b-15b1-4da2-8a4a-_1.cpp)]\n [!code-cs[Classic DataGridTableStyle.DataGridTableStyle2 Example#1](../../add/codesnippet/CSharp/6664725b-15b1-4da2-8a4a-_1.cs)]\n [!code-vb[Classic DataGridTableStyle.DataGridTableStyle2 Example#1](../../add/codesnippet/VisualBasic/6664725b-15b1-4da2-8a4a-_1.vb)]"
+  - "The following code example creates a new <xref:System.Windows.Forms.DataGridTableStyle> using a <xref:System.Windows.Forms.CurrencyManager> for a <xref:System.Data.DataTable>.  \n  \n [!code-cpp[Classic DataGridTableStyle.DataGridTableStyle2 Example#1](~/add/codesnippet/CPP/6664725b-15b1-4da2-8a4a-_1.cpp)]\n [!code-cs[Classic DataGridTableStyle.DataGridTableStyle2 Example#1](~/add/codesnippet/CSharp/6664725b-15b1-4da2-8a4a-_1.cs)]\n [!code-vb[Classic DataGridTableStyle.DataGridTableStyle2 Example#1](~/add/codesnippet/VisualBasic/6664725b-15b1-4da2-8a4a-_1.vb)]"
   syntax:
     content: public DataGridTableStyle (System.Windows.Forms.CurrencyManager listManager);
     parameters:
@@ -233,7 +233,7 @@ items:
   summary: Indicates whether sorting is allowed on the grid table when this  is used.
   remarks: "When the AllowSorting property is set to `true`, a triangle appears in each column header indicating the direction of the sort. The user can click on any column header to sort the grid by that column. Clicking the column a second time changes the direction of the sort.  \n  \n This property overrides the <xref:System.Windows.Forms.DataGrid.AllowSorting%2A?displayProperty=fullName> property."
   example:
-  - "The following code example allows you to toggle sorting availability on a <xref:System.Windows.Forms.DataGrid> by clicking a button and the current sorting status is displayed in a label. This example requires that you have a <xref:System.Windows.Forms.DataGrid> with a <xref:System.Data.DataSet?displayProperty=fullName> that contains some data, a <xref:System.Windows.Forms.Button> and a <xref:System.Windows.Forms.Label> on a <xref:System.Windows.Forms.Form>.  \n  \n [!code-cpp[DataGridTableStyle_Sample2#1](../../add/codesnippet/CPP/p-system.windows.forms.d_25_1.cpp)]\n [!code-cs[DataGridTableStyle_Sample2#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_25_1.cs)]\n [!code-vb[DataGridTableStyle_Sample2#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_25_1.vb)]"
+  - "The following code example allows you to toggle sorting availability on a <xref:System.Windows.Forms.DataGrid> by clicking a button and the current sorting status is displayed in a label. This example requires that you have a <xref:System.Windows.Forms.DataGrid> with a <xref:System.Data.DataSet?displayProperty=fullName> that contains some data, a <xref:System.Windows.Forms.Button> and a <xref:System.Windows.Forms.Label> on a <xref:System.Windows.Forms.Form>.  \n  \n [!code-cpp[DataGridTableStyle_Sample2#1](~/add/codesnippet/CPP/p-system.windows.forms.d_25_1.cpp)]\n [!code-cs[DataGridTableStyle_Sample2#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_25_1.cs)]\n [!code-vb[DataGridTableStyle_Sample2#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_25_1.vb)]"
   syntax:
     content: public bool AllowSorting { get; set; }
     return:
@@ -260,7 +260,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.AllowSorting%2A> property value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example allows you to toggle sorting availability on a <xref:System.Windows.Forms.DataGrid> by clicking a button and the current sorting status is displayed in a label. This example requires that you have a <xref:System.Windows.Forms.DataGrid> with a <xref:System.Data.DataSet?displayProperty=fullName> that contains some data, a <xref:System.Windows.Forms.Button> and a <xref:System.Windows.Forms.Label> on a <xref:System.Windows.Forms.Form>.  \n  \n [!code-cpp[DataGridTableStyle_Sample2#1](../../add/codesnippet/CPP/e-system.windows.forms.d_131_1.cpp)]\n [!code-cs[DataGridTableStyle_Sample2#1](../../add/codesnippet/CSharp/e-system.windows.forms.d_131_1.cs)]\n [!code-vb[DataGridTableStyle_Sample2#1](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_131_1.vb)]"
+  - "The following code example allows you to toggle sorting availability on a <xref:System.Windows.Forms.DataGrid> by clicking a button and the current sorting status is displayed in a label. This example requires that you have a <xref:System.Windows.Forms.DataGrid> with a <xref:System.Data.DataSet?displayProperty=fullName> that contains some data, a <xref:System.Windows.Forms.Button> and a <xref:System.Windows.Forms.Label> on a <xref:System.Windows.Forms.Form>.  \n  \n [!code-cpp[DataGridTableStyle_Sample2#1](~/add/codesnippet/CPP/e-system.windows.forms.d_131_1.cpp)]\n [!code-cs[DataGridTableStyle_Sample2#1](~/add/codesnippet/CSharp/e-system.windows.forms.d_131_1.cs)]\n [!code-vb[DataGridTableStyle_Sample2#1](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_131_1.vb)]"
   syntax:
     content: public event EventHandler AllowSortingChanged;
     return:
@@ -286,7 +286,7 @@ items:
   summary: Gets or sets the background color of odd-numbered rows of the grid.
   remarks: ''
   example:
-  - "The following code example creates an instance of <xref:System.Windows.Forms.DataGridTableStyle> and sets the <xref:System.Windows.Forms.DataGridTableStyle.BackColor%2A> and AlternatingBackColor properties to new values. The example requires that you have a <xref:System.Windows.Forms.DataGrid> with a <xref:System.Data.DataSet?displayProperty=fullName> that contains some data, and a <xref:System.Windows.Forms.Button> on a <xref:System.Windows.Forms.Form>.  \n  \n [!code-cs[DataGridTableStyle_sample5#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_360_1.cs)]\n [!code-vb[DataGridTableStyle_sample5#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_360_1.vb)]\n [!code-cpp[DataGridTableStyle_sample5#1](../../add/codesnippet/CPP/p-system.windows.forms.d_360_1.cpp)]"
+  - "The following code example creates an instance of <xref:System.Windows.Forms.DataGridTableStyle> and sets the <xref:System.Windows.Forms.DataGridTableStyle.BackColor%2A> and AlternatingBackColor properties to new values. The example requires that you have a <xref:System.Windows.Forms.DataGrid> with a <xref:System.Data.DataSet?displayProperty=fullName> that contains some data, and a <xref:System.Windows.Forms.Button> on a <xref:System.Windows.Forms.Form>.  \n  \n [!code-cs[DataGridTableStyle_sample5#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_360_1.cs)]\n [!code-vb[DataGridTableStyle_sample5#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_360_1.vb)]\n [!code-cpp[DataGridTableStyle_sample5#1](~/add/codesnippet/CPP/p-system.windows.forms.d_360_1.cpp)]"
   syntax:
     content: public System.Drawing.Color AlternatingBackColor { get; set; }
     return:
@@ -313,7 +313,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.AlternatingBackColor%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the AlternatingBackColorChanged event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a project that contains an instance of type <xref:System.Windows.Forms.DataGridTableStyle> named `DataGridTableStyle1`. Then ensure that the event handler is associated with the AlternatingBackColorChanged event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#221](../../add/codesnippet/CSharp/e-system.windows.forms.d_12_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#221](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_12_1.vb)]"
+  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the AlternatingBackColorChanged event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a project that contains an instance of type <xref:System.Windows.Forms.DataGridTableStyle> named `DataGridTableStyle1`. Then ensure that the event handler is associated with the AlternatingBackColorChanged event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#221](~/add/codesnippet/CSharp/e-system.windows.forms.d_12_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#221](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_12_1.vb)]"
   syntax:
     content: public event EventHandler AlternatingBackColorChanged;
     return:
@@ -339,7 +339,7 @@ items:
   summary: Gets or sets the background color of even-numbered rows of the grid.
   remarks: The <xref:System.Windows.Forms.DataGridTableStyle.AlternatingBackColor%2A> property can also be set to create a ledger-like appearance.
   example:
-  - "The following code example creates an instance of <xref:System.Windows.Forms.DataGridTableStyle> and sets the BackColor and <xref:System.Windows.Forms.DataGridTableStyle.AlternatingBackColor%2A> properties to new values. The example requires that you have a <xref:System.Windows.Forms.DataGrid> with a <xref:System.Data.DataSet?displayProperty=fullName> that contains some data, and a <xref:System.Windows.Forms.Button> on a <xref:System.Windows.Forms.Form>.  \n  \n [!code-cs[DataGridTableStyle_sample5#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_321_1.cs)]\n [!code-vb[DataGridTableStyle_sample5#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_321_1.vb)]\n [!code-cpp[DataGridTableStyle_sample5#1](../../add/codesnippet/CPP/p-system.windows.forms.d_321_1.cpp)]"
+  - "The following code example creates an instance of <xref:System.Windows.Forms.DataGridTableStyle> and sets the BackColor and <xref:System.Windows.Forms.DataGridTableStyle.AlternatingBackColor%2A> properties to new values. The example requires that you have a <xref:System.Windows.Forms.DataGrid> with a <xref:System.Data.DataSet?displayProperty=fullName> that contains some data, and a <xref:System.Windows.Forms.Button> on a <xref:System.Windows.Forms.Form>.  \n  \n [!code-cs[DataGridTableStyle_sample5#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_321_1.cs)]\n [!code-vb[DataGridTableStyle_sample5#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_321_1.vb)]\n [!code-cpp[DataGridTableStyle_sample5#1](~/add/codesnippet/CPP/p-system.windows.forms.d_321_1.cpp)]"
   syntax:
     content: public System.Drawing.Color BackColor { get; set; }
     return:
@@ -366,7 +366,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.BackColor%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the BackColorChanged event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a project that contains an instance of type <xref:System.Windows.Forms.DataGridTableStyle> named `DataGridTableStyle1`. Then ensure that the event handler is associated with the BackColorChanged event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#222](../../add/codesnippet/CSharp/e-system.windows.forms.d_141_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#222](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_141_1.vb)]"
+  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the BackColorChanged event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a project that contains an instance of type <xref:System.Windows.Forms.DataGridTableStyle> named `DataGridTableStyle1`. Then ensure that the event handler is associated with the BackColorChanged event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#222](~/add/codesnippet/CSharp/e-system.windows.forms.d_141_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#222](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_141_1.vb)]"
   syntax:
     content: public event EventHandler BackColorChanged;
     return:
@@ -392,7 +392,7 @@ items:
   summary: Requests an edit operation.
   remarks: "The BeginEdit method is intended to notify the <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control when the user has begun an editing operation. When the control is in edit mode, multiple edits can be made and the constraints will be temporarily unenforced.  \n  \n Call the <xref:System.Windows.Forms.DataGridTableStyle.EndEdit%2A> method to quit the edit mode."
   example:
-  - "The following code example calls the BeginEdit method on the current <xref:System.Windows.Forms.DataGridTableStyle> in a <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control.  \n  \n [!code-cpp[Classic DataGridTableStyle.BeginEdit Example#1](../../add/codesnippet/CPP/b9c87dfa-7ead-4e85-b82d-_1.cpp)]\n [!code-cs[Classic DataGridTableStyle.BeginEdit Example#1](../../add/codesnippet/CSharp/b9c87dfa-7ead-4e85-b82d-_1.cs)]\n [!code-vb[Classic DataGridTableStyle.BeginEdit Example#1](../../add/codesnippet/VisualBasic/b9c87dfa-7ead-4e85-b82d-_1.vb)]"
+  - "The following code example calls the BeginEdit method on the current <xref:System.Windows.Forms.DataGridTableStyle> in a <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control.  \n  \n [!code-cpp[Classic DataGridTableStyle.BeginEdit Example#1](~/add/codesnippet/CPP/b9c87dfa-7ead-4e85-b82d-_1.cpp)]\n [!code-cs[Classic DataGridTableStyle.BeginEdit Example#1](~/add/codesnippet/CSharp/b9c87dfa-7ead-4e85-b82d-_1.cs)]\n [!code-vb[Classic DataGridTableStyle.BeginEdit Example#1](~/add/codesnippet/VisualBasic/b9c87dfa-7ead-4e85-b82d-_1.vb)]"
   syntax:
     content: public bool BeginEdit (System.Windows.Forms.DataGridColumnStyle gridColumn, int rowNumber);
     parameters:
@@ -404,7 +404,7 @@ items:
       description: The number of the edited row.
     return:
       type: System.Boolean
-      description: ', if the operation succeeds; otherwise, .'
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.BeginEdit*
   exceptions: []
   platform:
@@ -426,7 +426,7 @@ items:
   summary: Gets or sets a value indicating whether column headers are visible.
   remarks: To set header caption text, use the <xref:System.Windows.Forms.DataGridColumnStyle.HeaderText%2A> property of the <xref:System.Windows.Forms.DataGridColumnStyle> class.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample3#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_242_1.cs)]\n [!code-vb[DataGridTableStyle_Sample3#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_242_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample3#1](../../add/codesnippet/CPP/p-system.windows.forms.d_242_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample3#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_242_1.cs)]\n [!code-vb[DataGridTableStyle_Sample3#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_242_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample3#1](~/add/codesnippet/CPP/p-system.windows.forms.d_242_1.cpp)]"
   syntax:
     content: public bool ColumnHeadersVisible { get; set; }
     return:
@@ -453,7 +453,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.ColumnHeadersVisible%2A> value changes.
   remarks: "To set the caption text for each column in a grid, set the <xref:System.Windows.Forms.DataGridColumnStyle.HeaderText%2A> property of the <xref:System.Windows.Forms.DataGridColumnStyle> class.  \n  \n For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md)."
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample3#2](../../add/codesnippet/CSharp/e-system.windows.forms.d_147_1.cs)]\n [!code-vb[DataGridTableStyle_Sample3#2](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_147_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample3#2](../../add/codesnippet/CPP/e-system.windows.forms.d_147_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample3#2](~/add/codesnippet/CSharp/e-system.windows.forms.d_147_1.cs)]\n [!code-vb[DataGridTableStyle_Sample3#2](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_147_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample3#2](~/add/codesnippet/CPP/e-system.windows.forms.d_147_1.cpp)]"
   syntax:
     content: public event EventHandler ColumnHeadersVisibleChanged;
     return:
@@ -485,7 +485,7 @@ items:
       description: The  used to create the column style object.
     return:
       type: System.Windows.Forms.DataGridColumnStyle
-      description: The newly created .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.CreateGridColumn*
   exceptions: []
   platform:
@@ -516,7 +516,7 @@ items:
       description: Specifies whether the  is a default column style. This parameter is read-only.
     return:
       type: System.Windows.Forms.DataGridColumnStyle
-      description: The newly created .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.CreateGridColumn*
   exceptions: []
   platform:
@@ -538,7 +538,7 @@ items:
   summary: Gets or sets the  control for the drawn table.
   remarks: "The <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control displays data in the form of a grid. The <xref:System.Windows.Forms.DataGridTableStyle> is an object that represents the drawn grid. The <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> property returns a reference to the control that is displaying the grid.  \n  \n The DataGrid property is set when a <xref:System.Windows.Forms.DataGridTableStyle> is added to a <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control's <xref:System.Windows.Forms.GridTableStylesCollection>. You should not try to set this property unless you are overriding it and creating a designer for a user control that incorporates the <xref:System.Windows.Forms.DataGrid> control."
   example:
-  - "The following code example prints the <xref:System.Windows.Forms.DataGrid.CurrentCell%2A> of the <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> displaying a <xref:System.Windows.Forms.DataGridTableStyle>.  \n  \n [!code-cs[Classic DataGridTableStyle.DataGrid Example#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_223_1.cs)]\n [!code-cpp[Classic DataGridTableStyle.DataGrid Example#1](../../add/codesnippet/CPP/p-system.windows.forms.d_223_1.cpp)]\n [!code-vb[Classic DataGridTableStyle.DataGrid Example#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_223_1.vb)]"
+  - "The following code example prints the <xref:System.Windows.Forms.DataGrid.CurrentCell%2A> of the <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> displaying a <xref:System.Windows.Forms.DataGridTableStyle>.  \n  \n [!code-cs[Classic DataGridTableStyle.DataGrid Example#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_223_1.cs)]\n [!code-cpp[Classic DataGridTableStyle.DataGrid Example#1](~/add/codesnippet/CPP/p-system.windows.forms.d_223_1.cpp)]\n [!code-vb[Classic DataGridTableStyle.DataGrid Example#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_223_1.vb)]"
   syntax:
     content: public virtual System.Windows.Forms.DataGrid DataGrid { get; set; }
     return:
@@ -614,7 +614,7 @@ items:
   summary: Requests an end to an edit operation.
   remarks: Similar to the <xref:System.Windows.Forms.DataGridTableStyle.BeginEdit%2A> method, the EndEdit method is intended to notify the <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> when an edit operation is ending.
   example:
-  - "The following code example calls the <xref:System.Windows.Forms.DataGridTableStyle.BeginEdit%2A> method on the current <xref:System.Windows.Forms.DataGridTableStyle> in a <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control.  \n  \n [!code-cpp[Classic DataGridTableStyle.EndEdit Example#1](../../add/codesnippet/CPP/eb830448-c8b8-4607-acc3-_1.cpp)]\n [!code-vb[Classic DataGridTableStyle.EndEdit Example#1](../../add/codesnippet/VisualBasic/eb830448-c8b8-4607-acc3-_1.vb)]\n [!code-cs[Classic DataGridTableStyle.EndEdit Example#1](../../add/codesnippet/CSharp/eb830448-c8b8-4607-acc3-_1.cs)]"
+  - "The following code example calls the <xref:System.Windows.Forms.DataGridTableStyle.BeginEdit%2A> method on the current <xref:System.Windows.Forms.DataGridTableStyle> in a <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control.  \n  \n [!code-cpp[Classic DataGridTableStyle.EndEdit Example#1](~/add/codesnippet/CPP/eb830448-c8b8-4607-acc3-_1.cpp)]\n [!code-vb[Classic DataGridTableStyle.EndEdit Example#1](~/add/codesnippet/VisualBasic/eb830448-c8b8-4607-acc3-_1.vb)]\n [!code-cs[Classic DataGridTableStyle.EndEdit Example#1](~/add/codesnippet/CSharp/eb830448-c8b8-4607-acc3-_1.cs)]"
   syntax:
     content: public bool EndEdit (System.Windows.Forms.DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort);
     parameters:
@@ -629,7 +629,7 @@ items:
       description: A value indicating whether the operation should be stopped;  if it should stop; otherwise, .
     return:
       type: System.Boolean
-      description: if the edit operation ends successfully; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.EndEdit*
   exceptions: []
   platform:
@@ -651,7 +651,7 @@ items:
   summary: Gets or sets the foreground color of the grid table.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_ForeColor#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_238_1.cs)]\n [!code-vb[DataGridTableStyle_ForeColor#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_238_1.vb)]\n [!code-cpp[DataGridTableStyle_ForeColor#1](../../add/codesnippet/CPP/p-system.windows.forms.d_238_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_ForeColor#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_238_1.cs)]\n [!code-vb[DataGridTableStyle_ForeColor#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_238_1.vb)]\n [!code-cpp[DataGridTableStyle_ForeColor#1](~/add/codesnippet/CPP/p-system.windows.forms.d_238_1.cpp)]"
   syntax:
     content: public System.Drawing.Color ForeColor { get; set; }
     return:
@@ -678,7 +678,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.ForeColor%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the ForeColorChanged event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a project that contains an instance of type <xref:System.Windows.Forms.DataGridTableStyle> named `DataGridTableStyle1`. Then ensure that the event handler is associated with the ForeColorChanged event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#223](../../add/codesnippet/CSharp/e-system.windows.forms.d_62_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#223](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_62_1.vb)]"
+  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the ForeColorChanged event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a project that contains an instance of type <xref:System.Windows.Forms.DataGridTableStyle> named `DataGridTableStyle1`. Then ensure that the event handler is associated with the ForeColorChanged event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#223](~/add/codesnippet/CSharp/e-system.windows.forms.d_62_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#223](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_62_1.vb)]"
   syntax:
     content: public event EventHandler ForeColorChanged;
     return:
@@ -704,7 +704,7 @@ items:
   summary: Gets the collection of columns drawn for this table.
   remarks: "The <xref:System.Windows.Forms.GridColumnStylesCollection> returned by the GridColumnStyles property allows you to create a customized set of column styles. For each <xref:System.Data.DataColumn> in a <xref:System.Data.DataTable>, set the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> of a <xref:System.Windows.Forms.DataGridColumnStyle> to the <xref:System.Data.DataColumn.ColumnName%2A>. That column style will automatically be used when this <xref:System.Windows.Forms.DataGridTableStyle> is displayed.  \n  \n If you create a <xref:System.Windows.Forms.DataGridTableStyle> without adding any <xref:System.Windows.Forms.DataGridColumnStyle> objects to the <xref:System.Windows.Forms.GridColumnStylesCollection>, a collection of <xref:System.Windows.Forms.DataGridColumnStyle> objects will be created automatically when a <xref:System.Windows.Forms.DataGridTableStyle> with a valid <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> is added to the <xref:System.Windows.Forms.GridTableStylesCollection>. An exception will be thrown if you attempt to add <xref:System.Windows.Forms.DataGridColumnStyle> objects with duplicate <xref:System.Windows.Forms.DataGridColumnStyle.MappingName%2A> values to the collection."
   example:
-  - "The following code example gets the <xref:System.Windows.Forms.GridColumnStylesCollection> of a <xref:System.Windows.Forms.DataGridTableStyle> and prints each object's header.  \n  \n [!code-cs[Classic DataGridTableStyle.GridColumnStyles Example#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_293_1.cs)]\n [!code-cpp[Classic DataGridTableStyle.GridColumnStyles Example#1](../../add/codesnippet/CPP/p-system.windows.forms.d_293_1.cpp)]\n [!code-vb[Classic DataGridTableStyle.GridColumnStyles Example#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_293_1.vb)]"
+  - "The following code example gets the <xref:System.Windows.Forms.GridColumnStylesCollection> of a <xref:System.Windows.Forms.DataGridTableStyle> and prints each object's header.  \n  \n [!code-cs[Classic DataGridTableStyle.GridColumnStyles Example#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_293_1.cs)]\n [!code-cpp[Classic DataGridTableStyle.GridColumnStyles Example#1](~/add/codesnippet/CPP/p-system.windows.forms.d_293_1.cpp)]\n [!code-vb[Classic DataGridTableStyle.GridColumnStyles Example#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_293_1.vb)]"
   syntax:
     content: public virtual System.Windows.Forms.GridColumnStylesCollection GridColumnStyles { get; }
     return:
@@ -731,7 +731,7 @@ items:
   summary: Gets or sets the color of grid lines.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_sample5#2](../../add/codesnippet/CSharp/p-system.windows.forms.d_181_1.cs)]\n [!code-vb[DataGridTableStyle_sample5#2](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_181_1.vb)]\n [!code-cpp[DataGridTableStyle_sample5#2](../../add/codesnippet/CPP/p-system.windows.forms.d_181_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_sample5#2](~/add/codesnippet/CSharp/p-system.windows.forms.d_181_1.cs)]\n [!code-vb[DataGridTableStyle_sample5#2](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_181_1.vb)]\n [!code-cpp[DataGridTableStyle_sample5#2](~/add/codesnippet/CPP/p-system.windows.forms.d_181_1.cpp)]"
   syntax:
     content: public System.Drawing.Color GridLineColor { get; set; }
     return:
@@ -758,7 +758,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.GridLineColor%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_sample5#3](../../add/codesnippet/CSharp/e-system.windows.forms.d_121_1.cs)]\n [!code-vb[DataGridTableStyle_sample5#3](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_121_1.vb)]\n [!code-cpp[DataGridTableStyle_sample5#3](../../add/codesnippet/CPP/e-system.windows.forms.d_121_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_sample5#3](~/add/codesnippet/CSharp/e-system.windows.forms.d_121_1.cs)]\n [!code-vb[DataGridTableStyle_sample5#3](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_121_1.vb)]\n [!code-cpp[DataGridTableStyle_sample5#3](~/add/codesnippet/CPP/e-system.windows.forms.d_121_1.cpp)]"
   syntax:
     content: public event EventHandler GridLineColorChanged;
     return:
@@ -808,7 +808,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.GridLineStyle%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_sample1#2](../../add/codesnippet/CSharp/e-system.windows.forms.d_107_1.cs)]\n [!code-vb[DataGridTableStyle_sample1#2](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_107_1.vb)]\n [!code-cpp[DataGridTableStyle_sample1#2](../../add/codesnippet/CPP/e-system.windows.forms.d_107_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_sample1#2](~/add/codesnippet/CSharp/e-system.windows.forms.d_107_1.cs)]\n [!code-vb[DataGridTableStyle_sample1#2](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_107_1.vb)]\n [!code-cpp[DataGridTableStyle_sample1#2](~/add/codesnippet/CPP/e-system.windows.forms.d_107_1.cpp)]"
   syntax:
     content: public event EventHandler GridLineStyleChanged;
     return:
@@ -834,7 +834,7 @@ items:
   summary: Gets or sets the background color of headers.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_Header_4#4](../../add/codesnippet/CPP/p-system.windows.forms.d_95_1.cpp)]\n [!code-cs[DataGridTableStyle_Header_4#4](../../add/codesnippet/CSharp/p-system.windows.forms.d_95_1.cs)]\n [!code-vb[DataGridTableStyle_Header_4#4](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_95_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_Header_4#4](~/add/codesnippet/CPP/p-system.windows.forms.d_95_1.cpp)]\n [!code-cs[DataGridTableStyle_Header_4#4](~/add/codesnippet/CSharp/p-system.windows.forms.d_95_1.cs)]\n [!code-vb[DataGridTableStyle_Header_4#4](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_95_1.vb)]"
   syntax:
     content: public System.Drawing.Color HeaderBackColor { get; set; }
     return:
@@ -861,7 +861,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.HeaderBackColor%2A> value changes.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_Header_4#3](../../add/codesnippet/CPP/e-system.windows.forms.d_79_1.cpp)]\n [!code-cs[DataGridTableStyle_Header_4#3](../../add/codesnippet/CSharp/e-system.windows.forms.d_79_1.cs)]\n [!code-vb[DataGridTableStyle_Header_4#3](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_79_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_Header_4#3](~/add/codesnippet/CPP/e-system.windows.forms.d_79_1.cpp)]\n [!code-cs[DataGridTableStyle_Header_4#3](~/add/codesnippet/CSharp/e-system.windows.forms.d_79_1.cs)]\n [!code-vb[DataGridTableStyle_Header_4#3](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_79_1.vb)]"
   syntax:
     content: public event EventHandler HeaderBackColorChanged;
     return:
@@ -887,7 +887,7 @@ items:
   summary: Gets or sets the font used for header captions.
   remarks: To set header caption text, use the <xref:System.Windows.Forms.DataGridColumnStyle.HeaderText%2A> property of the <xref:System.Windows.Forms.DataGridColumnStyle> class.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample#2](../../add/codesnippet/CSharp/p-system.windows.forms.d_329_1.cs)]\n [!code-vb[DataGridTableStyle_Sample#2](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_329_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample#2](../../add/codesnippet/CPP/p-system.windows.forms.d_329_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample#2](~/add/codesnippet/CSharp/p-system.windows.forms.d_329_1.cs)]\n [!code-vb[DataGridTableStyle_Sample#2](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_329_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample#2](~/add/codesnippet/CPP/p-system.windows.forms.d_329_1.cpp)]"
   syntax:
     content: public System.Drawing.Font HeaderFont { get; set; }
     return:
@@ -914,7 +914,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.HeaderFont%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample#4](../../add/codesnippet/CSharp/e-system.windows.forms.d_114_1.cs)]\n [!code-vb[DataGridTableStyle_Sample#4](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_114_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample#4](../../add/codesnippet/CPP/e-system.windows.forms.d_114_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample#4](~/add/codesnippet/CSharp/e-system.windows.forms.d_114_1.cs)]\n [!code-vb[DataGridTableStyle_Sample#4](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_114_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample#4](~/add/codesnippet/CPP/e-system.windows.forms.d_114_1.cpp)]"
   syntax:
     content: public event EventHandler HeaderFontChanged;
     return:
@@ -940,7 +940,7 @@ items:
   summary: Gets or sets the foreground color of headers.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_Header_4#2](../../add/codesnippet/CPP/p-system.windows.forms.d_101_1.cpp)]\n [!code-cs[DataGridTableStyle_Header_4#2](../../add/codesnippet/CSharp/p-system.windows.forms.d_101_1.cs)]\n [!code-vb[DataGridTableStyle_Header_4#2](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_101_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_Header_4#2](~/add/codesnippet/CPP/p-system.windows.forms.d_101_1.cpp)]\n [!code-cs[DataGridTableStyle_Header_4#2](~/add/codesnippet/CSharp/p-system.windows.forms.d_101_1.cs)]\n [!code-vb[DataGridTableStyle_Header_4#2](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_101_1.vb)]"
   syntax:
     content: public System.Drawing.Color HeaderForeColor { get; set; }
     return:
@@ -967,7 +967,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.HeaderForeColor%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_Header_4#1](../../add/codesnippet/CPP/e-system.windows.forms.d_169_1.cpp)]\n [!code-cs[DataGridTableStyle_Header_4#1](../../add/codesnippet/CSharp/e-system.windows.forms.d_169_1.cs)]\n [!code-vb[DataGridTableStyle_Header_4#1](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_169_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_Header_4#1](~/add/codesnippet/CPP/e-system.windows.forms.d_169_1.cpp)]\n [!code-cs[DataGridTableStyle_Header_4#1](~/add/codesnippet/CSharp/e-system.windows.forms.d_169_1.cs)]\n [!code-vb[DataGridTableStyle_Header_4#1](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_169_1.vb)]"
   syntax:
     content: public event EventHandler HeaderForeColorChanged;
     return:
@@ -993,7 +993,7 @@ items:
   summary: Gets or sets the color of link text.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_193_1.cs)]\n [!code-vb[DataGridTableStyle_Sample#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_193_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample#1](../../add/codesnippet/CPP/p-system.windows.forms.d_193_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_193_1.cs)]\n [!code-vb[DataGridTableStyle_Sample#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_193_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample#1](~/add/codesnippet/CPP/p-system.windows.forms.d_193_1.cpp)]"
   syntax:
     content: public System.Drawing.Color LinkColor { get; set; }
     return:
@@ -1020,7 +1020,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.LinkColor%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample#3](../../add/codesnippet/CSharp/e-system.windows.forms.d_101_1.cs)]\n [!code-vb[DataGridTableStyle_Sample#3](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_101_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample#3](../../add/codesnippet/CPP/e-system.windows.forms.d_101_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_Sample#3](~/add/codesnippet/CSharp/e-system.windows.forms.d_101_1.cs)]\n [!code-vb[DataGridTableStyle_Sample#3](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_101_1.vb)]\n [!code-cpp[DataGridTableStyle_Sample#3](~/add/codesnippet/CPP/e-system.windows.forms.d_101_1.cpp)]"
   syntax:
     content: public event EventHandler LinkColorChanged;
     return:
@@ -1094,7 +1094,7 @@ items:
   summary: Gets or sets the name used to map this table to a specific data source.
   remarks: "To bind the <xref:System.Windows.Forms.DataGrid> to a strongly typed array of objects, the object type must contain public properties. To create a <xref:System.Windows.Forms.DataGridTableStyle> that displays the array, set the MappingName property to `typename` where `typename` is replaced by the name of the object type. Also note that the MappingName property is case-sensitive; the type name must be matched exactly. See the MappingName property for an example.  \n  \n You can also bind the <xref:System.Windows.Forms.DataGrid> to an <xref:System.Collections.ArrayList>. A feature of the <xref:System.Collections.ArrayList> is that it can contain objects of multiple types, but the <xref:System.Windows.Forms.DataGrid> can only bind to such a list when all items in the list are of the same type as the first item. This means that all objects must either be of the same type, or they must inherit from the same class as the first item in the list. For example, if the first item in a list is a <xref:System.Windows.Forms.Control>, the second item could be a <xref:System.Windows.Forms.TextBox> (which inherits from <xref:System.Windows.Forms.Control>). If, on the other hand, the first item is a <xref:System.Windows.Forms.TextBox>, the second object cannot be a <xref:System.Windows.Forms.Control>. Further, the <xref:System.Collections.ArrayList> must have items in it when it is bound. An empty <xref:System.Collections.ArrayList> will result in an empty grid. When binding to an <xref:System.Collections.ArrayList>, set the MappingName of the <xref:System.Windows.Forms.DataGridTableStyle> to \"ArrayList\" (the type name).  \n  \n The default is the name of the list managed by the <xref:System.Windows.Forms.CurrencyManager> for this grid. The <xref:System.Windows.Forms.CurrencyManager> for the <xref:System.Windows.Forms.DataGridTableStyle> is set using the <xref:System.Windows.Forms.DataGridTableStyle.%23ctor%2A> constructor.  \n  \n The <xref:System.Windows.Forms.DataGridTableStyle.MappingNameChanged> event occurs when the MappingName value changes."
   example:
-  - "The following code example creates an array of `Widget` objects and binds a <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control to the array. The code then creates a <xref:System.Windows.Forms.DataGridTableStyle> and sets the MappingName to the name of the class plus brackets.  \n  \n [!code-cpp[DataGridTable.MappingName Example#1](../../add/codesnippet/CPP/p-system.windows.forms.d_187_1.cpp)]\n [!code-cs[DataGridTable.MappingName Example#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_187_1.cs)]\n [!code-vb[DataGridTable.MappingName Example#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_187_1.vb)]"
+  - "The following code example creates an array of `Widget` objects and binds a <xref:System.Windows.Forms.DataGrid?displayProperty=fullName> control to the array. The code then creates a <xref:System.Windows.Forms.DataGridTableStyle> and sets the MappingName to the name of the class plus brackets.  \n  \n [!code-cpp[DataGridTable.MappingName Example#1](~/add/codesnippet/CPP/p-system.windows.forms.d_187_1.cpp)]\n [!code-cs[DataGridTable.MappingName Example#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_187_1.cs)]\n [!code-vb[DataGridTable.MappingName Example#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_187_1.vb)]"
   syntax:
     content: public string MappingName { get; set; }
     return:
@@ -1121,7 +1121,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.MappingName%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_sample1#1](../../add/codesnippet/CSharp/e-system.windows.forms.d_21_1.cs)]\n [!code-vb[DataGridTableStyle_sample1#1](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_21_1.vb)]\n [!code-cpp[DataGridTableStyle_sample1#1](../../add/codesnippet/CPP/e-system.windows.forms.d_21_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_sample1#1](~/add/codesnippet/CSharp/e-system.windows.forms.d_21_1.cs)]\n [!code-vb[DataGridTableStyle_sample1#1](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_21_1.vb)]\n [!code-cpp[DataGridTableStyle_sample1#1](~/add/codesnippet/CPP/e-system.windows.forms.d_21_1.cpp)]"
   syntax:
     content: public event EventHandler MappingNameChanged;
     return:
@@ -1667,7 +1667,7 @@ items:
   summary: Gets or sets the width used to create columns when a new grid is displayed.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_PreferredColumnWidth#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_45_1.cs)]\n [!code-cpp[DataGridTableStyle_PreferredColumnWidth#1](../../add/codesnippet/CPP/p-system.windows.forms.d_45_1.cpp)]\n [!code-vb[DataGridTableStyle_PreferredColumnWidth#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_45_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_PreferredColumnWidth#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_45_1.cs)]\n [!code-cpp[DataGridTableStyle_PreferredColumnWidth#1](~/add/codesnippet/CPP/p-system.windows.forms.d_45_1.cpp)]\n [!code-vb[DataGridTableStyle_PreferredColumnWidth#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_45_1.vb)]"
   syntax:
     content: public int PreferredColumnWidth { get; set; }
     return:
@@ -1694,7 +1694,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.PreferredColumnWidth%2A> property value changes.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the PreferredColumnWidthChanged event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a project that contains an instance of type <xref:System.Windows.Forms.DataGridTableStyle> named `DataGridTableStyle1`. Then ensure that the event handler is associated with the PreferredColumnWidthChanged event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#231](../../add/codesnippet/CSharp/e-system.windows.forms.d_26_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#231](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_26_1.vb)]"
+  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the PreferredColumnWidthChanged event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a project that contains an instance of type <xref:System.Windows.Forms.DataGridTableStyle> named `DataGridTableStyle1`. Then ensure that the event handler is associated with the PreferredColumnWidthChanged event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#231](~/add/codesnippet/CSharp/e-system.windows.forms.d_26_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#231](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_26_1.vb)]"
   syntax:
     content: public event EventHandler PreferredColumnWidthChanged;
     return:
@@ -1720,7 +1720,7 @@ items:
   summary: Gets or sets the height used to create a row when a new grid is displayed.
   remarks: The preferred height is the minimum height needed to accommodate the displayed text with the assigned <xref:System.Windows.Forms.DataGridTableStyle.HeaderFont%2A>. A row will not be created with a height less than the specified value. If the font size requires it, however, the row height may be greater than the specified value.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_PreferredRowHeight#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_49_1.cs)]\n [!code-cpp[DataGridTableStyle_PreferredRowHeight#1](../../add/codesnippet/CPP/p-system.windows.forms.d_49_1.cpp)]\n [!code-vb[DataGridTableStyle_PreferredRowHeight#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_49_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_PreferredRowHeight#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_49_1.cs)]\n [!code-cpp[DataGridTableStyle_PreferredRowHeight#1](~/add/codesnippet/CPP/p-system.windows.forms.d_49_1.cpp)]\n [!code-vb[DataGridTableStyle_PreferredRowHeight#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_49_1.vb)]"
   syntax:
     content: public int PreferredRowHeight { get; set; }
     return:
@@ -1747,7 +1747,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.PreferredRowHeight%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_PreferredRowHeightChanged#1](../../add/codesnippet/CSharp/e-system.windows.forms.d_59_1.cs)]\n [!code-vb[DataGridTableStyle_PreferredRowHeightChanged#1](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_59_1.vb)]\n [!code-cpp[DataGridTableStyle_PreferredRowHeightChanged#1](../../add/codesnippet/CPP/e-system.windows.forms.d_59_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_PreferredRowHeightChanged#1](~/add/codesnippet/CSharp/e-system.windows.forms.d_59_1.cs)]\n [!code-vb[DataGridTableStyle_PreferredRowHeightChanged#1](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_59_1.vb)]\n [!code-cpp[DataGridTableStyle_PreferredRowHeightChanged#1](~/add/codesnippet/CPP/e-system.windows.forms.d_59_1.cpp)]"
   syntax:
     content: public event EventHandler PreferredRowHeightChanged;
     return:
@@ -1773,7 +1773,7 @@ items:
   summary: Gets or sets a value indicating whether columns can be edited.
   remarks: "You can also specify whether individual columns within the table are editable by setting the <xref:System.Windows.Forms.DataGridColumnStyle> class's <xref:System.Windows.Forms.DataGridColumnStyle.ReadOnly%2A?displayProperty=fullName> property to an appropriate value, `true` or `false`.  \n  \n Alternatively, to ensure that the data is not edited, you can set the <xref:System.Data.DataColumn> class's <xref:System.Data.DataColumn.ReadOnly%2A> property to `true`."
   example:
-  - "The following code example returns the ReadOnly property for each <xref:System.Windows.Forms.DataGridTableStyle> in a <xref:System.Windows.Forms.GridTableStylesCollection>.  \n  \n [!code-cpp[Classic DataGridTableStyle.ReadOnly Example#1](../../add/codesnippet/CPP/p-system.windows.forms.d_184_1.cpp)]\n [!code-vb[Classic DataGridTableStyle.ReadOnly Example#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_184_1.vb)]\n [!code-cs[Classic DataGridTableStyle.ReadOnly Example#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_184_1.cs)]"
+  - "The following code example returns the ReadOnly property for each <xref:System.Windows.Forms.DataGridTableStyle> in a <xref:System.Windows.Forms.GridTableStylesCollection>.  \n  \n [!code-cpp[Classic DataGridTableStyle.ReadOnly Example#1](~/add/codesnippet/CPP/p-system.windows.forms.d_184_1.cpp)]\n [!code-vb[Classic DataGridTableStyle.ReadOnly Example#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_184_1.vb)]\n [!code-cs[Classic DataGridTableStyle.ReadOnly Example#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_184_1.cs)]"
   syntax:
     content: public virtual bool ReadOnly { get; set; }
     return:
@@ -1800,7 +1800,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.ReadOnly%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_ReadOnlyChanged#1](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_73_1.vb)]\n [!code-cpp[DataGridTableStyle_ReadOnlyChanged#1](../../add/codesnippet/CPP/e-system.windows.forms.d_73_1.cpp)]\n [!code-cs[DataGridTableStyle_ReadOnlyChanged#1](../../add/codesnippet/CSharp/e-system.windows.forms.d_73_1.cs)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_ReadOnlyChanged#1](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_73_1.vb)]\n [!code-cpp[DataGridTableStyle_ReadOnlyChanged#1](~/add/codesnippet/CPP/e-system.windows.forms.d_73_1.cpp)]\n [!code-cs[DataGridTableStyle_ReadOnlyChanged#1](~/add/codesnippet/CSharp/e-system.windows.forms.d_73_1.cs)]"
   syntax:
     content: public event EventHandler ReadOnlyChanged;
     return:
@@ -1826,7 +1826,7 @@ items:
   summary: Resets the <xref:System.Windows.Forms.DataGridTableStyle.AlternatingBackColor%2A> property to its default value.
   remarks: You typically use this method if you are either creating a designer for the <xref:System.Windows.Forms.DataGridTableStyle> or creating your own control incorporating the <xref:System.Windows.Forms.DataGridTableStyle>. You can use the <xref:System.Windows.Forms.DataGridTableStyle.ShouldSerializeAlternatingBackColor%2A> method to determine whether the property value has changed from its default.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_ResetAlternatingBackcolor#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_70_1.vb)]\n [!code-cs[DataGridTableStyle_ResetAlternatingBackcolor#1](../../add/codesnippet/CSharp/m-system.windows.forms.d_70_1.cs)]\n [!code-cpp[DataGridTableStyle_ResetAlternatingBackcolor#1](../../add/codesnippet/CPP/m-system.windows.forms.d_70_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_ResetAlternatingBackcolor#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_70_1.vb)]\n [!code-cs[DataGridTableStyle_ResetAlternatingBackcolor#1](~/add/codesnippet/CSharp/m-system.windows.forms.d_70_1.cs)]\n [!code-cpp[DataGridTableStyle_ResetAlternatingBackcolor#1](~/add/codesnippet/CPP/m-system.windows.forms.d_70_1.cpp)]"
   syntax:
     content: public void ResetAlternatingBackColor ();
     parameters: []
@@ -1851,7 +1851,7 @@ items:
   summary: Resets the <xref:System.Windows.Forms.DataGridTableStyle.BackColor%2A> property to its default value.
   remarks: You typically use this method if you are either creating a designer for the <xref:System.Windows.Forms.DataGridTableStyle> or creating your own control incorporating the <xref:System.Windows.Forms.DataGridTableStyle>.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_ResetBackColor#1](../../add/codesnippet/CPP/m-system.windows.forms.d_73_1.cpp)]\n [!code-vb[DataGridTableStyle_ResetBackColor#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_73_1.vb)]\n [!code-cs[DataGridTableStyle_ResetBackColor#1](../../add/codesnippet/CSharp/m-system.windows.forms.d_73_1.cs)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_ResetBackColor#1](~/add/codesnippet/CPP/m-system.windows.forms.d_73_1.cpp)]\n [!code-vb[DataGridTableStyle_ResetBackColor#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_73_1.vb)]\n [!code-cs[DataGridTableStyle_ResetBackColor#1](~/add/codesnippet/CSharp/m-system.windows.forms.d_73_1.cs)]"
   syntax:
     content: public void ResetBackColor ();
     parameters: []
@@ -1876,7 +1876,7 @@ items:
   summary: Resets the <xref:System.Windows.Forms.DataGridTableStyle.ForeColor%2A> property to its default value.
   remarks: You typically use this method if you are either creating a designer for the <xref:System.Windows.Forms.DataGridTableStyle> or creating your own control incorporating the <xref:System.Windows.Forms.DataGridTableStyle>. You can use the <xref:System.Windows.Forms.DataGridTableStyle.ShouldSerializeForeColor%2A> method to determine whether the property value has changed from its default.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_ResetForeColor#1](../../add/codesnippet/CSharp/m-system.windows.forms.d_23_1.cs)]\n [!code-vb[DataGridTableStyle_ResetForeColor#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_23_1.vb)]\n [!code-cpp[DataGridTableStyle_ResetForeColor#1](../../add/codesnippet/CPP/m-system.windows.forms.d_23_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_ResetForeColor#1](~/add/codesnippet/CSharp/m-system.windows.forms.d_23_1.cs)]\n [!code-vb[DataGridTableStyle_ResetForeColor#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_23_1.vb)]\n [!code-cpp[DataGridTableStyle_ResetForeColor#1](~/add/codesnippet/CPP/m-system.windows.forms.d_23_1.cpp)]"
   syntax:
     content: public void ResetForeColor ();
     parameters: []
@@ -1901,7 +1901,7 @@ items:
   summary: Resets the <xref:System.Windows.Forms.DataGridTableStyle.GridLineColor%2A> property to its default value.
   remarks: You typically use this method if you are either creating a designer for the <xref:System.Windows.Forms.DataGridTableStyle> or creating your own control incorporating the <xref:System.Windows.Forms.DataGridTableStyle>. You can use the <xref:System.Windows.Forms.DataGridTableStyle.ShouldSerializeGridLineColor%2A> method to determine whether the property value has changed from its default.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_ResetGridLineColor#1](../../add/codesnippet/CSharp/m-system.windows.forms.d_71_1.cs)]\n [!code-vb[DataGridTableStyle_ResetGridLineColor#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_71_1.vb)]\n [!code-cpp[DataGridTableStyle_ResetGridLineColor#1](../../add/codesnippet/CPP/m-system.windows.forms.d_71_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_ResetGridLineColor#1](~/add/codesnippet/CSharp/m-system.windows.forms.d_71_1.cs)]\n [!code-vb[DataGridTableStyle_ResetGridLineColor#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_71_1.vb)]\n [!code-cpp[DataGridTableStyle_ResetGridLineColor#1](~/add/codesnippet/CPP/m-system.windows.forms.d_71_1.cpp)]"
   syntax:
     content: public void ResetGridLineColor ();
     parameters: []
@@ -1926,7 +1926,7 @@ items:
   summary: Resets the <xref:System.Windows.Forms.DataGridTableStyle.HeaderBackColor%2A> property to its default value.
   remarks: You typically use this method if you are either creating a designer for the <xref:System.Windows.Forms.DataGridTableStyle> or creating your own control incorporating the <xref:System.Windows.Forms.DataGridTableStyle>. You can use the <xref:System.Windows.Forms.DataGridTableStyle.ShouldSerializeHeaderBackColor%2A> method to determine whether the property value has changed from its default.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_ResetHeaderBackColor#1](../../add/codesnippet/CPP/m-system.windows.forms.d_7_1.cpp)]\n [!code-cs[DataGridTableStyle_ResetHeaderBackColor#1](../../add/codesnippet/CSharp/m-system.windows.forms.d_7_1.cs)]\n [!code-vb[DataGridTableStyle_ResetHeaderBackColor#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_7_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_ResetHeaderBackColor#1](~/add/codesnippet/CPP/m-system.windows.forms.d_7_1.cpp)]\n [!code-cs[DataGridTableStyle_ResetHeaderBackColor#1](~/add/codesnippet/CSharp/m-system.windows.forms.d_7_1.cs)]\n [!code-vb[DataGridTableStyle_ResetHeaderBackColor#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_7_1.vb)]"
   syntax:
     content: public void ResetHeaderBackColor ();
     parameters: []
@@ -1951,7 +1951,7 @@ items:
   summary: Resets the <xref:System.Windows.Forms.DataGridTableStyle.HeaderFont%2A> property to its default value.
   remarks: You typically use this method if you are either creating a designer for the <xref:System.Windows.Forms.DataGridTableStyle> or creating your own control incorporating the <xref:System.Windows.Forms.DataGridTableStyle>.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_ResetHeaderFont1#1](../../add/codesnippet/CPP/m-system.windows.forms.d_8_1.cpp)]\n [!code-cs[DataGridTableStyle_ResetHeaderFont1#1](../../add/codesnippet/CSharp/m-system.windows.forms.d_8_1.cs)]\n [!code-vb[DataGridTableStyle_ResetHeaderFont1#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_8_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_ResetHeaderFont1#1](~/add/codesnippet/CPP/m-system.windows.forms.d_8_1.cpp)]\n [!code-cs[DataGridTableStyle_ResetHeaderFont1#1](~/add/codesnippet/CSharp/m-system.windows.forms.d_8_1.cs)]\n [!code-vb[DataGridTableStyle_ResetHeaderFont1#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_8_1.vb)]"
   syntax:
     content: public void ResetHeaderFont ();
     parameters: []
@@ -1976,7 +1976,7 @@ items:
   summary: Resets the <xref:System.Windows.Forms.DataGridTableStyle.HeaderForeColor%2A> property to its default value.
   remarks: You typically use this method if you are either creating a designer for the <xref:System.Windows.Forms.DataGridTableStyle> or creating your own control incorporating the <xref:System.Windows.Forms.DataGridTableStyle>. You can use the <xref:System.Windows.Forms.DataGridTableStyle.ShouldSerializeHeaderForeColor%2A> method to determine whether the property value has changed from its default.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_ResetHeaderForeColor#1](../../add/codesnippet/CSharp/m-system.windows.forms.d_60_1.cs)]\n [!code-cpp[DataGridTableStyle_ResetHeaderForeColor#1](../../add/codesnippet/CPP/m-system.windows.forms.d_60_1.cpp)]\n [!code-vb[DataGridTableStyle_ResetHeaderForeColor#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_60_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_ResetHeaderForeColor#1](~/add/codesnippet/CSharp/m-system.windows.forms.d_60_1.cs)]\n [!code-cpp[DataGridTableStyle_ResetHeaderForeColor#1](~/add/codesnippet/CPP/m-system.windows.forms.d_60_1.cpp)]\n [!code-vb[DataGridTableStyle_ResetHeaderForeColor#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_60_1.vb)]"
   syntax:
     content: public void ResetHeaderForeColor ();
     parameters: []
@@ -2001,7 +2001,7 @@ items:
   summary: Resets the <xref:System.Windows.Forms.DataGridTableStyle.LinkColor%2A> property to its default value.
   remarks: You typically use this method if you are either creating a designer for the <xref:System.Windows.Forms.DataGridTableStyle> or creating your own control incorporating the <xref:System.Windows.Forms.DataGridTableStyle>. You can use the <xref:System.Windows.Forms.DataGridTableStyle.ShouldSerializeLinkColor%2A> method to determine whether the property value has changed from its default.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_ResetLinkColor#1](../../add/codesnippet/CPP/m-system.windows.forms.d_3_1.cpp)]\n [!code-cs[DataGridTableStyle_ResetLinkColor#1](../../add/codesnippet/CSharp/m-system.windows.forms.d_3_1.cs)]\n [!code-vb[DataGridTableStyle_ResetLinkColor#1](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_3_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_ResetLinkColor#1](~/add/codesnippet/CPP/m-system.windows.forms.d_3_1.cpp)]\n [!code-cs[DataGridTableStyle_ResetLinkColor#1](~/add/codesnippet/CSharp/m-system.windows.forms.d_3_1.cs)]\n [!code-vb[DataGridTableStyle_ResetLinkColor#1](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_3_1.vb)]"
   syntax:
     content: public void ResetLinkColor ();
     parameters: []
@@ -2072,7 +2072,7 @@ items:
   summary: Resets the <xref:System.Windows.Forms.DataGridTableStyle.SelectionForeColor%2A> property to its default value.
   remarks: You typically use this method if you are either creating a designer for the <xref:System.Windows.Forms.DataGridTableStyle> or creating your own control incorporating the <xref:System.Windows.Forms.DataGridTableStyle>. You can use the <xref:System.Windows.Forms.DataGridTableStyle.ShouldSerializeSelectionForeColor%2A> method to determine whether the property value has changed from its default.
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_SelectionForeColor#2](../../add/codesnippet/VisualBasic/m-system.windows.forms.d_78_1.vb)]\n [!code-cs[DataGridTableStyle_SelectionForeColor#2](../../add/codesnippet/CSharp/m-system.windows.forms.d_78_1.cs)]\n [!code-cpp[DataGridTableStyle_SelectionForeColor#2](../../add/codesnippet/CPP/m-system.windows.forms.d_78_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_SelectionForeColor#2](~/add/codesnippet/VisualBasic/m-system.windows.forms.d_78_1.vb)]\n [!code-cs[DataGridTableStyle_SelectionForeColor#2](~/add/codesnippet/CSharp/m-system.windows.forms.d_78_1.cs)]\n [!code-cpp[DataGridTableStyle_SelectionForeColor#2](~/add/codesnippet/CPP/m-system.windows.forms.d_78_1.cpp)]"
   syntax:
     content: public void ResetSelectionForeColor ();
     parameters: []
@@ -2097,7 +2097,7 @@ items:
   summary: Gets or sets a value indicating whether row headers are visible.
   remarks: "When row headers are visible, a plus sign is displayed in each row header if the underlying <xref:System.Data.DataTable> has a related child table.  \n  \n This property will not function until you add <xref:System.Windows.Forms.DataGridTableStyle> objects to the <xref:System.Windows.Forms.GridTableStylesCollection>. Until then, setting this property will have no effect."
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_RowHeadersVisibleChanged#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_368_1.cs)]\n [!code-cpp[DataGridTableStyle_RowHeadersVisibleChanged#1](../../add/codesnippet/CPP/p-system.windows.forms.d_368_1.cpp)]\n [!code-vb[DataGridTableStyle_RowHeadersVisibleChanged#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_368_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_RowHeadersVisibleChanged#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_368_1.cs)]\n [!code-cpp[DataGridTableStyle_RowHeadersVisibleChanged#1](~/add/codesnippet/CPP/p-system.windows.forms.d_368_1.cpp)]\n [!code-vb[DataGridTableStyle_RowHeadersVisibleChanged#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_368_1.vb)]"
   syntax:
     content: public bool RowHeadersVisible { get; set; }
     return:
@@ -2124,7 +2124,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.RowHeadersVisible%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_RowHeadersVisibleChanged#2](../../add/codesnippet/CSharp/e-system.windows.forms.d_43_1.cs)]\n [!code-cpp[DataGridTableStyle_RowHeadersVisibleChanged#2](../../add/codesnippet/CPP/e-system.windows.forms.d_43_1.cpp)]\n [!code-vb[DataGridTableStyle_RowHeadersVisibleChanged#2](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_43_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cs[DataGridTableStyle_RowHeadersVisibleChanged#2](~/add/codesnippet/CSharp/e-system.windows.forms.d_43_1.cs)]\n [!code-cpp[DataGridTableStyle_RowHeadersVisibleChanged#2](~/add/codesnippet/CPP/e-system.windows.forms.d_43_1.cpp)]\n [!code-vb[DataGridTableStyle_RowHeadersVisibleChanged#2](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_43_1.vb)]"
   syntax:
     content: public event EventHandler RowHeadersVisibleChanged;
     return:
@@ -2150,7 +2150,7 @@ items:
   summary: Gets or sets the width of row headers.
   remarks: "When row headers are visible a plus sign is displayed in each row header if the underlying data has a related child table.  \n  \n This property will not function until you add <xref:System.Windows.Forms.DataGridTableStyle> objects to the <xref:System.Windows.Forms.GridTableStylesCollection>. Until then, setting this property will have no effect."
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_RowHeaderWidth#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_159_1.vb)]\n [!code-cpp[DataGridTableStyle_RowHeaderWidth#1](../../add/codesnippet/CPP/p-system.windows.forms.d_159_1.cpp)]\n [!code-cs[DataGridTableStyle_RowHeaderWidth#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_159_1.cs)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_RowHeaderWidth#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_159_1.vb)]\n [!code-cpp[DataGridTableStyle_RowHeaderWidth#1](~/add/codesnippet/CPP/p-system.windows.forms.d_159_1.cpp)]\n [!code-cs[DataGridTableStyle_RowHeaderWidth#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_159_1.cs)]"
   syntax:
     content: public int RowHeaderWidth { get; set; }
     return:
@@ -2177,7 +2177,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.RowHeaderWidth%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_RowHeaderWidth#2](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_52_1.vb)]\n [!code-cpp[DataGridTableStyle_RowHeaderWidth#2](../../add/codesnippet/CPP/e-system.windows.forms.d_52_1.cpp)]\n [!code-cs[DataGridTableStyle_RowHeaderWidth#2](../../add/codesnippet/CSharp/e-system.windows.forms.d_52_1.cs)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_RowHeaderWidth#2](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_52_1.vb)]\n [!code-cpp[DataGridTableStyle_RowHeaderWidth#2](~/add/codesnippet/CPP/e-system.windows.forms.d_52_1.cpp)]\n [!code-cs[DataGridTableStyle_RowHeaderWidth#2](~/add/codesnippet/CSharp/e-system.windows.forms.d_52_1.cs)]"
   syntax:
     content: public event EventHandler RowHeaderWidthChanged;
     return:
@@ -2203,7 +2203,7 @@ items:
   summary: Gets or sets the background color of selected cells.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_SelectionBackColor#2](../../add/codesnippet/CPP/p-system.windows.forms.d_96_1.cpp)]\n [!code-cs[DataGridTableStyle_SelectionBackColor#2](../../add/codesnippet/CSharp/p-system.windows.forms.d_96_1.cs)]\n [!code-vb[DataGridTableStyle_SelectionBackColor#2](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_96_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_SelectionBackColor#2](~/add/codesnippet/CPP/p-system.windows.forms.d_96_1.cpp)]\n [!code-cs[DataGridTableStyle_SelectionBackColor#2](~/add/codesnippet/CSharp/p-system.windows.forms.d_96_1.cs)]\n [!code-vb[DataGridTableStyle_SelectionBackColor#2](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_96_1.vb)]"
   syntax:
     content: public System.Drawing.Color SelectionBackColor { get; set; }
     return:
@@ -2230,7 +2230,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.SelectionBackColor%2A> value changes.
   remarks: For more information about handling events, see [Events](../Topic/Handling%20and%20Raising%20Events.md).
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_SelectionBackColor#1](../../add/codesnippet/CPP/e-system.windows.forms.d_78_1.cpp)]\n [!code-cs[DataGridTableStyle_SelectionBackColor#1](../../add/codesnippet/CSharp/e-system.windows.forms.d_78_1.cs)]\n [!code-vb[DataGridTableStyle_SelectionBackColor#1](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_78_1.vb)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-cpp[DataGridTableStyle_SelectionBackColor#1](~/add/codesnippet/CPP/e-system.windows.forms.d_78_1.cpp)]\n [!code-cs[DataGridTableStyle_SelectionBackColor#1](~/add/codesnippet/CSharp/e-system.windows.forms.d_78_1.cs)]\n [!code-vb[DataGridTableStyle_SelectionBackColor#1](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_78_1.vb)]"
   syntax:
     content: public event EventHandler SelectionBackColorChanged;
     return:
@@ -2256,7 +2256,7 @@ items:
   summary: Gets or sets the foreground color of selected cells.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_SelectionForeColor#1](../../add/codesnippet/VisualBasic/p-system.windows.forms.d_412_1.vb)]\n [!code-cs[DataGridTableStyle_SelectionForeColor#1](../../add/codesnippet/CSharp/p-system.windows.forms.d_412_1.cs)]\n [!code-cpp[DataGridTableStyle_SelectionForeColor#1](../../add/codesnippet/CPP/p-system.windows.forms.d_412_1.cpp)]"
+  - "The following code example demonstrates the use of this member.  \n  \n [!code-vb[DataGridTableStyle_SelectionForeColor#1](~/add/codesnippet/VisualBasic/p-system.windows.forms.d_412_1.vb)]\n [!code-cs[DataGridTableStyle_SelectionForeColor#1](~/add/codesnippet/CSharp/p-system.windows.forms.d_412_1.cs)]\n [!code-cpp[DataGridTableStyle_SelectionForeColor#1](~/add/codesnippet/CPP/p-system.windows.forms.d_412_1.cpp)]"
   syntax:
     content: public System.Drawing.Color SelectionForeColor { get; set; }
     return:
@@ -2283,7 +2283,7 @@ items:
   summary: Occurs when the <xref:System.Windows.Forms.DataGridTableStyle.SelectionForeColor%2A> value changes.
   remarks: ''
   example:
-  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the SelectionForeColorChanged event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a project that contains an instance of type <xref:System.Windows.Forms.DataGridTableStyle> named `DataGridTableStyle1`. Then ensure that the event handler is associated with the SelectionForeColorChanged event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#237](../../add/codesnippet/CSharp/e-system.windows.forms.d_70_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#237](../../add/codesnippet/VisualBasic/e-system.windows.forms.d_70_1.vb)]"
+  - "The following code example demonstrates the use of this member. In the example, an event handler reports on the occurrence of the SelectionForeColorChanged event. This report helps you to learn when the event occurs and can assist you in debugging. To report on multiple events or on events that occur frequently, consider replacing <xref:System.Windows.Forms.MessageBox.Show%2A?displayProperty=fullName> with <xref:System.Console.WriteLine%2A?displayProperty=fullName> or appending the message to a multiline <xref:System.Windows.Forms.TextBox>.  \n  \n To run the example code, paste it into a project that contains an instance of type <xref:System.Windows.Forms.DataGridTableStyle> named `DataGridTableStyle1`. Then ensure that the event handler is associated with the SelectionForeColorChanged event.  \n  \n [!code-cs[System.Windows.Forms.EventExamples#237](~/add/codesnippet/CSharp/e-system.windows.forms.d_70_1.cs)]\n [!code-vb[System.Windows.Forms.EventExamples#237](~/add/codesnippet/VisualBasic/e-system.windows.forms.d_70_1.vb)]"
   syntax:
     content: public event EventHandler SelectionForeColorChanged;
     return:
@@ -2313,7 +2313,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializeAlternatingBackColor*
   exceptions: []
   platform:
@@ -2339,7 +2339,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializeBackColor*
   exceptions: []
   platform:
@@ -2365,7 +2365,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializeForeColor*
   exceptions: []
   platform:
@@ -2391,7 +2391,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializeGridLineColor*
   exceptions: []
   platform:
@@ -2417,7 +2417,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializeHeaderBackColor*
   exceptions: []
   platform:
@@ -2443,7 +2443,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializeHeaderForeColor*
   exceptions: []
   platform:
@@ -2469,7 +2469,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializeLinkColor*
   exceptions: []
   platform:
@@ -2495,7 +2495,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializeLinkHoverColor*
   exceptions: []
   platform:
@@ -2521,7 +2521,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializePreferredRowHeight*
   exceptions: []
   platform:
@@ -2547,7 +2547,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializeSelectionBackColor*
   exceptions: []
   platform:
@@ -2573,7 +2573,7 @@ items:
     parameters: []
     return:
       type: System.Boolean
-      description: if the property value has changed from its default; otherwise, .
+      description: To be added.
   overload: System.Windows.Forms.DataGridTableStyle.ShouldSerializeSelectionForeColor*
   exceptions: []
   platform:

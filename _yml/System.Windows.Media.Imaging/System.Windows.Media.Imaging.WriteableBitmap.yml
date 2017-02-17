@@ -32,7 +32,7 @@ items:
   summary: Provides a  that can be written to and updated.
   remarks: "Use the WriteableBitmap class to update and render a bitmap on a per-frame basis. This is useful for generating algorithmic content, such as a fractal image, and for data visualization, such as a music visualizer.  \n  \n The WriteableBitmap class uses two buffers. The *back buffer* is allocated in system memory and accumulates content that is not currently displayed. The *front buffer* is allocated in system memory and contains the content that is currently displayed. The rendering system copies the front buffer to video memory for display.  \n  \n Two threads use these buffers. The *user interface (UI) thread* generates the UI but does not present it to the screen. The UI thread responds to user input, timers, and other events. An application can have multiple UI threads. The *render thread* composes and renders changes from the UI thread. There is only one render thread per application.  \n  \n The UI thread writes content to the back buffer. The render thread reads content from the front buffer and copies it to video memory. Changes to the back buffer are tracked with changed rectangular regions.  \n  \n Call one of the <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> overloads to update and display content in the back buffer automatically.  \n  \n For greater control over updates, and for multi-threaded access to the back buffer, use the following workflow.  \n  \n1.  Call the <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> method to reserve the back buffer for updates.  \n  \n2.  Obtain a pointer to the back buffer by accessing the <xref:System.Windows.Media.Imaging.WriteableBitmap.BackBuffer%2A> property.  \n  \n3.  Write changes to the back buffer. Other threads may write changes to the back buffer when the WriteableBitmap is locked.  \n  \n4.  Call the <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> method to indicate areas that have changed.  \n  \n5.  Call the <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> method to release the back buffer and allow presentation to the screen.  \n  \n When updates are sent to the rendering thread, the rendering thread copies the changed rectangles from the back buffer to the front buffer. The rendering system controls this exchange to avoid deadlocks and redraw artifacts, such as \"tearing\"."
   example:
-  - "The following example demonstrates how a WriteableBitmap can be used as the source of an <xref:System.Windows.Controls.Image> to draw pixels when the mouse moves.  \n  \n [!code-cs[WriteableBitmap2#WriteableBitmapFullPage](../../add/codesnippet/CSharp/WriteableBitmapDemo/Program.cs#writeablebitmapfullpage)]"
+  - "The following example demonstrates how a WriteableBitmap can be used as the source of an <xref:System.Windows.Controls.Image> to draw pixels when the mouse moves.  \n  \n [!code-cs[WriteableBitmap2#WriteableBitmapFullPage](~/add/codesnippet/CSharp/WriteableBitmapDemo/Program.cs#writeablebitmapfullpage)]"
   syntax:
     content: 'public sealed class WriteableBitmap : System.Windows.Media.Imaging.BitmapSource'
   inheritance:
@@ -195,7 +195,7 @@ items:
   summary: Specifies the area of the bitmap that changed.
   remarks: "Call the AddDirtyRect method to indicate changes your code has made to the back buffer.  \n  \n When you call this method multiple times, the changed areas are accumulated in a sufficient, but not necessarily minimal, representation. For efficiency, only the areas that are marked as dirty are guaranteed to be copied forward to the front buffer. However, any portion of the bitmap may be copied forward, so you must ensure that the entire back buffer is always valid.  \n  \n Call the AddDirtyRect method only between calls to the <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> and <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> methods, as described in the <xref:System.Windows.Media.Imaging.WriteableBitmap> class remarks."
   example:
-  - "The following code example shows how to specify the area of the back buffer that changed by using the AddDirtyRect method.  \n  \n [!code-cs[WriteableBitmap2#2](../../add/codesnippet/CSharp/WriteableBitmapDemo/Program.cs#2)]"
+  - "The following code example shows how to specify the area of the back buffer that changed by using the AddDirtyRect method.  \n  \n [!code-cs[WriteableBitmap2#2](~/add/codesnippet/CSharp/WriteableBitmapDemo/Program.cs#2)]"
   syntax:
     content: public void AddDirtyRect (System.Windows.Int32Rect dirtyRect);
     parameters:
@@ -282,7 +282,7 @@ items:
     parameters: []
     return:
       type: System.Windows.Media.Imaging.WriteableBitmap
-      description: A modifiable clone of the current object. The cloned object's <xref:System.Windows.Freezable.IsFrozen%2A> property will be  even if the source's <xref:System.Windows.Freezable.IsFrozen%2A> property was
+      description: To be added.
   overload: System.Windows.Media.Imaging.WriteableBitmap.Clone*
   exceptions: []
   platform:
@@ -332,7 +332,7 @@ items:
     parameters: []
     return:
       type: System.Windows.Media.Imaging.WriteableBitmap
-      description: A modifiable clone of the current object. The cloned object's <xref:System.Windows.Freezable.IsFrozen%2A> property will be  even if the source's <xref:System.Windows.Freezable.IsFrozen%2A> property was .
+      description: To be added.
   overload: System.Windows.Media.Imaging.WriteableBitmap.CloneCurrentValue*
   exceptions: []
   platform:
@@ -477,7 +477,7 @@ items:
   summary: Reserves the back buffer for updates.
   remarks: "The Lock method increments the lock count. When a <xref:System.Windows.Media.Imaging.WriteableBitmap> is locked, the rendering system does not send updates until the <xref:System.Windows.Media.Imaging.WriteableBitmap> is fully unlocked by calls to the <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A> method.  \n  \n You can use the Lock method to support multi-threaded implementations. In these scenarios, the UI thread locks the bitmap and exposes the back buffer to other threads. When the worker thread has finished a frame, the UI thread adds changed rectangles and unlocks the buffer.  \n  \n The UI thread can block when the render thread acquires a lock on the back buffer to copy it forward to the front buffer. If the latency from this block is too long, use the <xref:System.Windows.Media.Imaging.WriteableBitmap.TryLock%2A> method to wait for a short time and then unblock the UI thread to perform other tasks while the back buffer is locked."
   example:
-  - "The following code example shows how to reserve the back buffer by using the Lock method.  \n  \n [!code-cs[WriteableBitmap2#2](../../add/codesnippet/CSharp/WriteableBitmapDemo/Program.cs#2)]"
+  - "The following code example shows how to reserve the back buffer by using the Lock method.  \n  \n [!code-cs[WriteableBitmap2#2](~/add/codesnippet/CSharp/WriteableBitmapDemo/Program.cs#2)]"
   syntax:
     content: public void Lock ();
     parameters: []
@@ -509,7 +509,7 @@ items:
       description: A  that represents the length of time to wait. A value of 0 returns immediately. A value of <xref:System.Windows.Duration.Forever%2A> blocks indefinitely.
     return:
       type: System.Boolean
-      description: if the lock was acquired; otherwise, .
+      description: To be added.
   overload: System.Windows.Media.Imaging.WriteableBitmap.TryLock*
   exceptions:
   - type: System.ArgumentOutOfRangeException
@@ -534,7 +534,7 @@ items:
   summary: Releases the back buffer to make it available for display.
   remarks: The Unlock method decrements the lock count. When the lock count reaches 0, a render pass is requested if the <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A> method has been called.
   example:
-  - "The following code example shows how to release the back buffer by using the Unlock method.  \n  \n [!code-cs[WriteableBitmap2#2](../../add/codesnippet/CSharp/WriteableBitmapDemo/Program.cs#2)]"
+  - "The following code example shows how to release the back buffer by using the Unlock method.  \n  \n [!code-cs[WriteableBitmap2#2](~/add/codesnippet/CSharp/WriteableBitmapDemo/Program.cs#2)]"
   syntax:
     content: public void Unlock ();
     parameters: []
@@ -564,16 +564,16 @@ items:
     parameters:
     - id: sourceRect
       type: System.Windows.Int32Rect
-      description: To be added.
+      description: The rectangle of the  to update.
     - id: pixels
       type: System.Array
-      description: To be added.
+      description: The pixel array used to update the bitmap.
     - id: stride
       type: System.Int32
-      description: To be added.
+      description: The stride of the update region in `pixels`.
     - id: offset
       type: System.Int32
-      description: To be added.
+      description: The input buffer offset.
   overload: System.Windows.Media.Imaging.WriteableBitmap.WritePixels*
   exceptions: []
   platform:
@@ -597,16 +597,16 @@ items:
     parameters:
     - id: sourceRect
       type: System.Windows.Int32Rect
-      description: To be added.
+      description: The rectangle of the  to update.
     - id: buffer
       type: System.IntPtr
-      description: To be added.
+      description: The input buffer used to update the bitmap.
     - id: bufferSize
       type: System.Int32
-      description: To be added.
+      description: The size of the input buffer.
     - id: stride
       type: System.Int32
-      description: To be added.
+      description: The stride of the update region in `buffer`.
   overload: System.Windows.Media.Imaging.WriteableBitmap.WritePixels*
   exceptions: []
   platform:
@@ -630,19 +630,19 @@ items:
     parameters:
     - id: sourceRect
       type: System.Windows.Int32Rect
-      description: To be added.
+      description: The rectangle in `sourceBuffer` to copy.
     - id: sourceBuffer
       type: System.Array
-      description: To be added.
+      description: The input buffer used to update the bitmap.
     - id: sourceBufferStride
       type: System.Int32
-      description: To be added.
+      description: The stride of the input buffer, in bytes.
     - id: destinationX
       type: System.Int32
-      description: To be added.
+      description: The destination x-coordinate of the left-most pixel in the back buffer.
     - id: destinationY
       type: System.Int32
-      description: To be added.
+      description: The destination y-coordinate of the top-most pixel in the back buffer.
   overload: System.Windows.Media.Imaging.WriteableBitmap.WritePixels*
   exceptions: []
   platform:
@@ -666,22 +666,22 @@ items:
     parameters:
     - id: sourceRect
       type: System.Windows.Int32Rect
-      description: To be added.
+      description: The rectangle in `sourceBuffer` to copy.
     - id: sourceBuffer
       type: System.IntPtr
-      description: To be added.
+      description: The input buffer used to update the bitmap.
     - id: sourceBufferSize
       type: System.Int32
-      description: To be added.
+      description: The size of the input buffer.
     - id: sourceBufferStride
       type: System.Int32
-      description: To be added.
+      description: The stride of the input buffer, in bytes.
     - id: destinationX
       type: System.Int32
-      description: To be added.
+      description: The destination x-coordinate of the left-most pixel in the back buffer.
     - id: destinationY
       type: System.Int32
-      description: To be added.
+      description: The destination y-coordinate of the top-most pixel in the back buffer.
   overload: System.Windows.Media.Imaging.WriteableBitmap.WritePixels*
   exceptions: []
   platform:
