@@ -1,0 +1,4 @@
+---
+uid: System.Data.Common.CommandTrees.ExpressionBuilder.Spatial.SpatialEdmFunctions.SpatialBuffer(System.Data.Common.CommandTrees.DbExpression,System.Data.Common.CommandTrees.DbExpression)
+internalonly: False
+---

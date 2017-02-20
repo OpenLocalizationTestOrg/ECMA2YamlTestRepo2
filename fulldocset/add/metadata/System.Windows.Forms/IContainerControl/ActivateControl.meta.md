@@ -1,0 +1,4 @@
+---
+uid: System.Windows.Forms.IContainerControl.ActivateControl(System.Windows.Forms.Control)
+internalonly: False
+---
