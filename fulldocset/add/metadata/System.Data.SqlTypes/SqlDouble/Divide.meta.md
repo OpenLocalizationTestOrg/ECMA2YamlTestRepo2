@@ -1,4 +1,0 @@
----
-uid: System.Data.SqlTypes.SqlDouble.Divide(System.Data.SqlTypes.SqlDouble,System.Data.SqlTypes.SqlDouble)
-internalonly: False
----

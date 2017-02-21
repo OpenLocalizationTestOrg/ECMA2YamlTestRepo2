@@ -1,4 +1,0 @@
----
-uid: System.Web.UI.WebControls.DetailsViewUpdateEventHandler
-internalonly: False
----

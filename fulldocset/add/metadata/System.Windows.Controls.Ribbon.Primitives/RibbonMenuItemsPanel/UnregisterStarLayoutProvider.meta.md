@@ -1,4 +1,0 @@
----
-uid: System.Windows.Controls.Ribbon.Primitives.RibbonMenuItemsPanel.UnregisterStarLayoutProvider(System.Windows.Controls.Ribbon.Primitives.IProvideStarLayoutInfoBase)
-internalonly: False
----

@@ -1,4 +1,0 @@
----
-uid: System.Windows.Baml2006.Baml2006Reader.System#Xaml#IXamlLineInfo#LinePosition
-internalonly: False
----
