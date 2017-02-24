@@ -18,7 +18,7 @@
  To create an STS you must derive from the SecurityTokenService class. In your custom class you must, at a minimum, override the <xref:System.IdentityModel.SecurityTokenService.GetScope%2A> and <xref:System.IdentityModel.SecurityTokenService.GetOutputClaimsIdentity%2A> methods. With these overrides, the STS created using the default implementation of all the other methods defined in the class is capable of issuing security tokens in response to security token requests (RST). That is, the Issue binding defined in the WS-Trust specification is implemented. This binding is implemented in the <xref:System.IdentityModel.SecurityTokenService.Issue%2A> method. None of the other WS-Trust bindings (Renew, Cancel, and Validate) are implemented in the default case and an appropriate fault is returned to the caller if an RST that corresponds to one of these bindings is encountered. You can, of course, override the appropriate methods (<xref:System.IdentityModel.SecurityTokenService.Renew%2A>, <xref:System.IdentityModel.SecurityTokenService.Cancel%2A>, and <xref:System.IdentityModel.SecurityTokenService.Validate%2A>) to implement these bindings in your STS.  
   
 > [!IMPORTANT]
->  Implementing a production-ready STS entails careful planning and considerable resources to mitigate the potential security risks inherent in exposing such a service. Most developers using Windows Identity Foundation (WIF) will be developing applications that outsource identity management to an STS, rather than developing an STS itself. WIF provides a Visual Studio extension, the Identity and Access Tool for Visual Studio 2012, to help developers test solutions in the development environment. This tool includes an STS, `LocalSTS`, that you can configure to serve specific claims to the application that you are developing. For more information about the Identity and Access tool, see [Identity and Access Tool for Visual Studio 2012](../Topic/Identity%20and%20Access%20Tool%20for%20Visual%20Studio%202012.md). In some scenarios, `LocalSTS` may not provide the functionality necessary to adequately test your application; for example, in a scenario that involves developing a custom token handler for use by an application. In these cases, you can derive from SecurityTokenService to create one or more simple STSs that can be deployed in your development environment and that can be used to test such features in your application. The rest of this section focuses on the methods exposed by the SecurityTokenService class that enable you to implement a simple STS and extend the token issuance pipeline.  
+>  Implementing a production-ready STS entails careful planning and considerable resources to mitigate the potential security risks inherent in exposing such a service. Most developers using Windows Identity Foundation (WIF) will be developing applications that outsource identity management to an STS, rather than developing an STS itself. WIF provides a Visual Studio extension, the Identity and Access Tool for Visual Studio 2012, to help developers test solutions in the development environment. This tool includes an STS, `LocalSTS`, that you can configure to serve specific claims to the application that you are developing. For more information about the Identity and Access tool, see [Identity and Access Tool for Visual Studio 2012](~/add/includes/ajax-current-ext-md.md). In some scenarios, `LocalSTS` may not provide the functionality necessary to adequately test your application; for example, in a scenario that involves developing a custom token handler for use by an application. In these cases, you can derive from SecurityTokenService to create one or more simple STSs that can be deployed in your development environment and that can be used to test such features in your application. The rest of this section focuses on the methods exposed by the SecurityTokenService class that enable you to implement a simple STS and extend the token issuance pipeline.  
   
  The following list provides a brief overview of the methods of primary importance to the developer for use in a test or development environment.  
   
@@ -33,13 +33,13 @@
    
   
 ## Examples  
- The code examples that are used in the SecurityTokenService topics are taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT) and it includes an implementation of a passive STS that is capable of serving an SWT token. For an example of how to implement an active STS, you can see the `Federation Metadata` sample. For information about these samples and other samples available for WIF and about where to download them, see [WIF Code Sample Index](../Topic/WIF%20Code%20Sample%20Index.md). The following code shows the implementation of a passive STS using the SecurityTokenService class.  
+ The code examples that are used in the SecurityTokenService topics are taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT) and it includes an implementation of a passive STS that is capable of serving an SWT token. For an example of how to implement an active STS, you can see the `Federation Metadata` sample. For information about these samples and other samples available for WIF and about where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md). The following code shows the implementation of a passive STS using the SecurityTokenService class.  
   
- [!code-cs[WIFCustomTokenSTS#3](~/add/codesnippet/CSharp/passivests/customsecuritytokenservice.cs#3)]  
+ [!code-cs[WIFCustomTokenSTS#3](~/add/codesnippet/csharp/passivests/customsecuritytokenservice.cs#3)]  
   
  The following code shows how to invoke a custom passive STS to process a WS-Federation request by calling the <xref:System.IdentityModel.Services.FederatedPassiveSecurityTokenServiceOperations.ProcessRequest%28System.Web.HttpRequest%2CSystem.Security.Claims.ClaimsPrincipal%2CSystem.IdentityModel.SecurityTokenService%2CSystem.Web.HttpResponse%29?displayProperty=fullName> method from the code behind in the `default.aspx.cs` file.  
   
- [!code-cs[WIFCustomTokenSTS#1](~/add/codesnippet/CSharp/passivests/default.aspx.cs#1)]  
+ [!code-cs[WIFCustomTokenSTS#1](~/add/codesnippet/csharp/passivests/default.aspx.cs#1)]  
   
  ]]></format>
     </remarks>
@@ -94,7 +94,7 @@
         <param name="callback">The &lt;xref:System.AsyncCallback&gt; delegate that receives notification of the completion of the asynchronous cancel operation.</param>
         <param name="state">An object that contains state information associated with the asynchronous cancel operation.</param>
         <summary>When overridden in a derived class, begins an asynchronous WS-Trust Cancel request.</summary>
-        <returns>To be added.</returns>
+        <returns>The &lt;xref:System.IAsyncResult&gt; that references the asynchronous cancel operation.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -130,7 +130,7 @@
         <param name="callback">The &lt;xref:System.AsyncCallback&gt; delegate that receives notification of the completion of the asynchronous operation.</param>
         <param name="state">An object that contains state information associated with the asynchronous operation.</param>
         <summary>When overridden in a derived class, begins an asynchronous call to the &lt;xref:System.IdentityModel.SecurityTokenService.GetOutputClaimsIdentity%2A&gt; method.</summary>
-        <returns>To be added.</returns>
+        <returns>The &lt;xref:System.IAsyncResult&gt; that references the asynchronous operation.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -164,7 +164,7 @@
         <param name="callback">The &lt;xref:System.AsyncCallback&gt; delegate that receives notification of the completion of the asynchronous operation.</param>
         <param name="state">An object that contains state information associated with the asynchronous operation.</param>
         <summary>When overridden in a derived class, begins an asynchronous call for the &lt;xref:System.IdentityModel.SecurityTokenService.GetScope%2A&gt; method.</summary>
-        <returns>To be added.</returns>
+        <returns>The &lt;xref:System.IAsyncResult&gt; that references the asynchronous cancel operation.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -198,7 +198,7 @@
         <param name="callback">The &lt;xref:System.AsyncCallback&gt; delegate that receives notification of the completion of the asynchronous issue operation.</param>
         <param name="state">An object that contains state information associated with the asynchronous issue operation.</param>
         <summary>When overridden in a derived class, begins an asynchronous WS-Trust Issue request.</summary>
-        <returns>To be added.</returns>
+        <returns>The &lt;xref:System.IAsyncResult&gt; that references the asynchronous issue operation.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -232,7 +232,7 @@
         <param name="callback">The &lt;xref:System.AsyncCallback&gt; delegate that receives notification of the completion of the asynchronous renew operation.</param>
         <param name="state">An object that contains state information associated with the asynchronous renew operation.</param>
         <summary>When overridden in a derived class, begins an asynchronous WS-Trust Renew request.</summary>
-        <returns>To be added.</returns>
+        <returns>The &lt;xref:System.IAsyncResult&gt; that references the asynchronous renew operation.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -266,7 +266,7 @@
         <param name="callback">The &lt;xref:System.AsyncCallback&gt; delegate that receives notification of the completion of the asynchronous validate operation.</param>
         <param name="state">An object that contains state information associated with the asynchronous validate operation.</param>
         <summary>When overridden in a derived class, begins an asynchronous WS-Trust Validate request.</summary>
-        <returns>To be added.</returns>
+        <returns>The &lt;xref:System.IAsyncResult&gt; that references the asynchronous validate operation.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -296,7 +296,7 @@
         <param name="principal">A <see cref="T:System.Security.Claims.ClaimsPrincipal" /> that represents the identity of the token requestor.</param>
         <param name="request">A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityToken" /> that represents the security token request. This includes the request message as well as other client related information such as authorization context.</param>
         <summary>When overridden in a derived class, processes a WS-Trust Cancel request.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse" /> that represents the RSTR to return to the caller.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -326,7 +326,7 @@
         <param name="request">The incoming token request.</param>
         <param name="scope">The &lt;xref:System.IdentityModel.SecurityTokenService.Scope%2A&gt; object returned from &lt;xref:System.IdentityModel.SecurityTokenService.GetScope%2A&gt;.</param>
         <summary>Creates an instance of a &lt;xref:System.IdentityModel.SecurityTokenService.SecurityTokenDescriptor%2A&gt;.</summary>
-        <returns>To be added.</returns>
+        <returns>The &lt;xref:System.IdentityModel.SecurityTokenService.SecurityTokenDescriptor%2A&gt;.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -360,7 +360,7 @@
       <Docs>
         <param name="result">The &lt;xref:System.IAsyncResult&gt; that is returned by a call to the &lt;xref:System.IdentityModel.SecurityTokenService.BeginCancel%2A&gt; method.</param>
         <summary>When overridden in a derived class, completes the asynchronous WS-Trust Cancel request.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse" /> that represents the RSTR to return to the caller.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -388,7 +388,7 @@
       <Docs>
         <param name="result">The &lt;xref:System.IAsyncResult&gt; that is returned by a call to the &lt;xref:System.IdentityModel.SecurityTokenService.BeginGetOutputClaimsIdentity%2A&gt; method.</param>
         <summary>When overridden in a derived class, completes the asynchronous call to the &lt;xref:System.IdentityModel.SecurityTokenService.BeginGetOutputClaimsIdentity%2A&gt; method.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.Security.Claims.ClaimsIdentity" /> that contains the collection of claims that will be placed in the issued security token.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -416,7 +416,7 @@
       <Docs>
         <param name="result">The &lt;xref:System.IAsyncResult&gt; that is returned by a call to the &lt;xref:System.IdentityModel.SecurityTokenService.BeginGetScope%2A&gt; method.</param>
         <summary>When overridden in a derived class, completes the asynchronous call to the &lt;xref:System.IdentityModel.SecurityTokenService.BeginGetScope%2A&gt; method.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Scope" /> that encapsulates the relying party (RP) information associated with the request (RST) specified in the call to the &lt;xref:System.IdentityModel.SecurityTokenService.BeginGetScope%2A&gt; method.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -444,7 +444,7 @@
       <Docs>
         <param name="result">The &lt;xref:System.IAsyncResult&gt; that is returned by a call to the &lt;xref:System.IdentityModel.SecurityTokenService.BeginIssue%2A&gt; method.</param>
         <summary>When overridden in a derived class, completes the asynchronous WS-Trust Issue request.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse" /> that represents the RSTR to return to the caller.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -472,7 +472,7 @@
       <Docs>
         <param name="result">The &lt;xref:System.IAsyncResult&gt; that is returned by a call to the &lt;xref:System.IdentityModel.SecurityTokenService.BeginRenew%2A&gt; method.</param>
         <summary>When overridden in a derived class, completes the asynchronous WS-Trust Renew request.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse" /> that represents the RSTR to return to the caller.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -500,7 +500,7 @@
       <Docs>
         <param name="result">The &lt;xref:System.IAsyncResult&gt; that is returned by a call to the &lt;xref:System.IdentityModel.SecurityTokenService.BeginValidate%2A&gt; method.</param>
         <summary>When overridden in a derived class, completes the asynchronous WS-Trust Validate request.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse" /> that represents the RSTR to return to the caller.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -525,7 +525,7 @@
       <Parameters />
       <Docs>
         <summary>Gets the name of the security token service (STS).</summary>
-        <returns>To be added.</returns>
+        <returns>The issuer name.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -559,7 +559,7 @@
         <param name="request">A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityToken" /> that represents the security token request. This includes the request message as well as other client related information such as authorization context.</param>
         <param name="scope">The <see cref="T:System.IdentityModel.Scope" /> that contains information about the relying party associated with the request. This is the <see cref="T:System.IdentityModel.Scope" /> object that was returned by the &lt;xref:System.IdentityModel.SecurityTokenService.GetScope%2A&gt; method.</param>
         <summary>When overridden in a derived class, this method returns a collection of output subjects to be included in the issued token.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.Security.Claims.ClaimsIdentity" /> that contains the collection of claims that will be placed in the issued security token.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -573,9 +573,9 @@
    
   
 ## Examples  
- The code example that is used in this topic is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT) and it includes an implementation of a passive STS that is capable of serving an SWT token. For an example of how to implement an active STS, you can see the `Federation Metadata` sample. For information about these samples and other samples available for WIF and about where to download them, see [WIF Code Sample Index](../Topic/WIF%20Code%20Sample%20Index.md). The following code shows how to override the GetOutputClaimsIdentity method to return claims for your STS. In this example, the Request Security Token (RST) message is ignored and a collection of claims based on the user as authenticated at the STS is returned.  
+ The code example that is used in this topic is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT) and it includes an implementation of a passive STS that is capable of serving an SWT token. For an example of how to implement an active STS, you can see the `Federation Metadata` sample. For information about these samples and other samples available for WIF and about where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md). The following code shows how to override the GetOutputClaimsIdentity method to return claims for your STS. In this example, the Request Security Token (RST) message is ignored and a collection of claims based on the user as authenticated at the STS is returned.  
   
- [!code-cs[WIFCustomTokenSTS#6](~/add/codesnippet/CSharp/passivests/customsecuritytokenservice.cs#6)]  
+ [!code-cs[WIFCustomTokenSTS#6](~/add/codesnippet/csharp/passivests/customsecuritytokenservice.cs#6)]  
   
  ]]></format>
         </remarks>
@@ -600,7 +600,7 @@
         <param name="request">A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityToken" /> that represents the incoming token request (RST).</param>
         <param name="scope">The <see cref="T:System.IdentityModel.Scope" /> instance that encapsulates information about the relying party.</param>
         <summary>Gets the proof token to be included in the response (RSTR).</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Tokens.ProofDescriptor" /> that represents the newly created proof descriptor. The proof descriptor can be an asymmetric proof descriptor, a symmetric proof descriptor, or <see langword="null" /> in the bearer token case.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -636,7 +636,7 @@
       <Docs>
         <param name="request">A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityToken" /> that represents the incoming token request (RST).</param>
         <summary>Gets the requestor's proof encrypting credentials.</summary>
-        <returns>To be added.</returns>
+        <returns>An <see cref="T:System.IdentityModel.Tokens.EncryptingCredentials" /> object that represents the requestor’s encrypting credentials.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -670,7 +670,7 @@
         <param name="request">The RST that contains the token request.</param>
         <param name="tokenDescriptor">The token descriptor that contains the information to use for the issued token.</param>
         <summary>Creates the response (RSTR) that contains the issued token by using the specified request (RST) and security token descriptor.</summary>
-        <returns>To be added.</returns>
+        <returns>The response (RSTR) or <see langword="null" /> if a response cannot be created from the specified request and token descriptor. The default implementation returns <see langword="null" /> if the <paramref name="tokenDescriptor" /> parameter is <see langword="null" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -709,7 +709,7 @@
         <param name="principal">A <see cref="T:System.Security.Claims.ClaimsPrincipal" /> that represents the client making the request.</param>
         <param name="request">A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityToken" /> that represents the incoming request (RST).</param>
         <summary>Gets a <see cref="T:System.IdentityModel.Scope" /> object that contains information about the relying party (RP) associated with the specified request (RST). You must override this method in your implementation of the <see cref="T:System.IdentityModel.SecurityTokenService" /> class.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Scope" /> that encapsulates the RP information associated with the request.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -730,13 +730,13 @@
    
   
 ## Examples  
- The code example that is used in this topic is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT) and it includes an implementation of a passive STS that is capable of serving an SWT token. For an example of how to implement an active STS, you can see the `Federation Metadata` sample. For information about these samples and other samples available for WIF and about where to download them, see [WIF Code Sample Index](../Topic/WIF%20Code%20Sample%20Index.md).  
+ The code example that is used in this topic is taken from the `Custom Token` sample. This sample provides custom classes that enable processing of Simple Web Tokens (SWT) and it includes an implementation of a passive STS that is capable of serving an SWT token. For an example of how to implement an active STS, you can see the `Federation Metadata` sample. For information about these samples and other samples available for WIF and about where to download them, see [WIF Code Sample Index](~/add/includes/ajax-current-ext-md.md).  
   
  The following code example shows an implementation of the GetScope method. This implementation verifies that the RP is recognized by the STS, validates the <xref:System.IdentityModel.Protocols.WSTrust.WSTrustMessage.ReplyTo%2A> address in the request and sets the <xref:System.IdentityModel.Scope.ReplyToAddress%2A?displayProperty=fullName> property accordingly, and sets the signing and encrypting credentials to use with the RP based on certificates that are hard-coded in the file.  
   
- [!code-cs[WIFCustomTokenSTS#4](~/add/codesnippet/CSharp/passivests/customsecuritytokenservice.cs#4)]  
-[!code-cs[WIFCustomTokenSTS#5](~/add/codesnippet/CSharp/passivests/customsecuritytokenservice.cs#5)]  
-[!code-cs[WIFCustomTokenSTS#7](~/add/codesnippet/CSharp/passivests/customsecuritytokenservice.cs#7)]  
+ [!code-cs[WIFCustomTokenSTS#4](~/add/codesnippet/csharp/passivests/customsecuritytokenservice.cs#4)]  
+[!code-cs[WIFCustomTokenSTS#5](~/add/codesnippet/csharp/passivests/customsecuritytokenservice.cs#5)]  
+[!code-cs[WIFCustomTokenSTS#7](~/add/codesnippet/csharp/passivests/customsecuritytokenservice.cs#7)]  
   
  ]]></format>
         </remarks>
@@ -759,7 +759,7 @@
       <Docs>
         <param name="requestedTokenType">A string that contains the requested token type URI.</param>
         <summary>Gets the appropriate security token handler for issuing a security token of the specified type.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Tokens.SecurityTokenHandler" /> that represents the token handler to be used for creating the issued security token. Returns <see langword="null" /> if the requested token type is not supported (there is no handler configured for the specified token type).</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -789,7 +789,7 @@
       <Docs>
         <param name="requestLifetime">A <see cref="T:System.IdentityModel.Protocols.WSTrust.Lifetime" /> that represents the requested lifetime.</param>
         <summary>Gets the lifetime for the issued token.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Protocols.WSTrust.Lifetime" /> that represents the granted lifetime.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -828,7 +828,7 @@
         <param name="principal">A <see cref="T:System.Security.Claims.ClaimsPrincipal" /> that represents the identity of the token requestor.</param>
         <param name="request">A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityToken" /> that represents the security token request. This includes the request message as well as other client related information such as authorization context.</param>
         <summary>Issues a security token.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse" /> that contains the issued security token.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -895,7 +895,7 @@
         <param name="principal">A <see cref="T:System.Security.Claims.ClaimsPrincipal" /> that represents the identity of the token requestor.</param>
         <param name="request">A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityToken" /> that represents the security token request. This includes the request message as well as other client related information such as authorization context.</param>
         <summary>When overridden in a derived class, processes a WS-Trust Renew request.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse" /> that represents the RSTR to return to the caller.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -994,7 +994,7 @@
         <param name="principal">A <see cref="T:System.Security.Claims.ClaimsPrincipal" /> that represents the identity of the token requestor.</param>
         <param name="request">A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityToken" /> that represents the security token request. This includes the request message as well as other client related information such as authorization context.</param>
         <summary>When overridden in a derived class, processes a WS-Trust Validate request.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.IdentityModel.Protocols.WSTrust.RequestSecurityTokenResponse" /> that represents the RSTR to return to the caller.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
