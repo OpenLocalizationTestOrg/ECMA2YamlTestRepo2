@@ -1152,7 +1152,7 @@ Namespace SampleApp
 				Return lg
 			End Function
 
-			#Region "Data members"
+			#Region "Data members2"
 			Private startPoint As Point
 			Private endPoint As Point
 			#End Region
@@ -1198,7 +1198,7 @@ Namespace SampleApp
 				Return retval
 			End Function
 
-			#Region "Data Members"
+			#Region "Data Members3"
 			Private center As Point
 			Private radiusx As Double
 			Private radiusy As Double
@@ -1251,7 +1251,7 @@ Namespace SampleApp
 
 			End Sub
 
-			#Region "Data Members"
+			#Region "Data Members4"
 			Private topleft As Point
 			Private width As Double
 			Private height As Double
@@ -1295,7 +1295,7 @@ Namespace SampleApp
 				controlPoints.Add(p3)
 			End Sub
 
-			#Region "Data Members"
+			#Region "Data Members5"
 			Private startpoint, p1, p2, p3 As Point
 			#End Region
 
@@ -1339,7 +1339,7 @@ Namespace SampleApp
 				controlPoints.Add(point)
 			End Sub
 
-			#Region "Data Members"
+			#Region "Data Members6"
 			Private startpoint, point As Point
 			Private size As Size
 			Private largearc As Boolean

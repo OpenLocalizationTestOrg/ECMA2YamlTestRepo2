@@ -28,7 +28,7 @@
  When you call the <xref:System.Windows.Interop.D3DImage.SetBackBuffer%28System.Windows.Interop.D3DResourceType%2CSystem.IntPtr%2CSystem.Boolean%29> overload with the `enableSoftwareFallback` parameter set to `true`, the rendering system retains its reference to the back buffer when the front buffer becomes unavailable, so there is no need to call <xref:System.Windows.Interop.D3DImage.SetBackBuffer%2A> when the front buffer is available again.  There may be situations where the user’s device becomes unavailable.  When that occurs, call <xref:System.Windows.Interop.D3DImage.SetBackBuffer%2A> to release WPF’s reference to the back buffer.  If you need to reset your device, call <xref:System.Windows.Interop.D3DImage.SetBackBuffer%2A> with the `backBuffer` parameter set to `null`, and then call <xref:System.Windows.Interop.D3DImage.SetBackBuffer%2A> again with `backBuffer` set to a valid Direct3D surface.  
   
 > [!NOTE]
->  Performance depends greatly on the settings of the Direct3D surface. For more information, see [Performance Considerations for Direct3D9 and WPF Interoperability](../Topic/Performance%20Considerations%20for%20Direct3D9%20and%20WPF%20Interoperability.md).  
+>  Performance depends greatly on the settings of the Direct3D surface. For more information, see [Performance Considerations for Direct3D9 and WPF Interoperability](~/add/includes/ajax-current-ext-md.md).  
   
 > [!NOTE]
 >  The D3DImage class does not display Direct3D content when WPF renders in software, such as over a Remote Desktop connection, unless you call <xref:System.Windows.Interop.D3DImage.SetBackBuffer%28System.Windows.Interop.D3DResourceType%2CSystem.IntPtr%2CSystem.Boolean%29> and specify `true` for the `enableSoftwareFallback` parameter.  
@@ -36,9 +36,9 @@
    
   
 ## Examples  
- The following code example shows how to declare a D3DImage in XAML. You must map the <xref:System.Windows.Interop> namespace, because it is not included in the default XAML namespaces. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](../Topic/Walkthrough:%20Hosting%20Direct3D9%20Content%20in%20WPF.md).  
+ The following code example shows how to declare a D3DImage in XAML. You must map the <xref:System.Windows.Interop> namespace, because it is not included in the default XAML namespaces. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](~/add/includes/ajax-current-ext-md.md).  
   
- [!code-xml[System.Windows.Interop.D3DImage#10](~/add/codesnippet/Xaml/d3dhost/window1.xaml#10)]  
+ [!code-xml[System.Windows.Interop.D3DImage#10](~/add/codesnippet/xaml/d3dhost/window1.xaml#10)]  
   
  ]]></format>
     </remarks>
@@ -122,13 +122,45 @@
       </Parameters>
       <Docs>
         <param name="dirtyRect">An <see cref="T:System.Windows.Int32Rect" /> that represents the area that changed.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Specifies the area of the back buffer that changed.</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Call the AddDirtyRect method to indicate changes your code has made to the back buffer. To be rendered, the changed area on the back buffer must have a corresponding changed area on the <xref:System.Windows.Interop.D3DImage>.  
+  
+ Call the <xref:System.Windows.Interop.D3DImage.SetBackBuffer%2A> and <xref:System.Windows.Interop.D3DImage.Lock%2A> methods before calling the AddDirtyRect method.  
+  
+ Call the <xref:System.Windows.Interop.D3DImage.Unlock%2A> method to copy the changed areas to the front buffer.  
+  
+> [!NOTE]
+>  After a few calls to the AddDirtyRect method, the changed areas are merged into a single area. This means you must have valid data outside of the changed areas.  
+  
+   
+  
+## Examples  
+ The following code example shows how to call the AddDirtyRect method to specify the changed region in the back buffer. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](~/add/includes/ajax-current-ext-md.md).  
+  
+ [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/csharp/d3dhost/window1.xaml.cs#3)]  
+  
+ ]]></format>
+        </remarks>
         <exception cref="T:System.InvalidOperationException">The bitmap has not been locked by a call to the &lt;xref:System.Windows.Interop.D3DImage.Lock%2A&gt; or &lt;xref:System.Windows.Interop.D3DImage.TryLock%2A&gt; methods.  
   
  -or-  
   
  The back buffer has not been assigned by a call to the &lt;xref:System.Windows.Interop.D3DImage.SetBackBuffer%2A&gt; method.</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException">One or more of the following conditions is true.  
+  
+ <paramref name="dirtyRect.X" /> &lt; 0  
+  
+ <paramref name="dirtyRect.Y" /> &lt; 0  
+  
+ <paramref name="dirtyRect.Width" /> &lt; 0 or <paramref name="dirtyRect.Width" /> &gt; &lt;xref:System.Windows.Interop.D3DImage.PixelWidth%2A&gt;  
+  
+ <paramref name="dirtyRect.Height" /> &lt; 0 or <paramref name="dirtyRect.Height" /> &gt; &lt;xref:System.Windows.Interop.D3DImage.PixelHeight%2A&gt;</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">for access to unmanaged resources. Security action: <see cref="T:System.Security.Permissions.SecurityAction" />. Associated enumeration: <see cref="T:System.Security.Permissions.SecurityPermissionFlag" /></permission>
+        <threadsafe />
       </Docs>
     </Member>
     <Member MemberName="Clone">
@@ -144,7 +176,7 @@
       <Parameters />
       <Docs>
         <summary>Creates a modifiable clone of this <see cref="T:System.Windows.Interop.D3DImage" /> object, making deep copies of this object's values. When copying dependency properties, this method copies resource references and data bindings (which may no longer resolve), but not animations or their current values.</summary>
-        <returns>To be added.</returns>
+        <returns>A modifiable clone of the current object. The cloned object's &lt;xref:System.Windows.Freezable.IsFrozen%2A&gt; property will be <see langword="false" /> even if the source's &lt;xref:System.Windows.Freezable.IsFrozen%2A&gt; property was <see langword="true." /></returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -191,7 +223,7 @@
       <Parameters />
       <Docs>
         <summary>Creates a modifiable clone of this <see cref="T:System.Windows.Interop.D3DImage" /> object, making deep copies of this object's current values. Resource references, data bindings, and animations are not copied, but their current values are copied.</summary>
-        <returns>To be added.</returns>
+        <returns>A modifiable clone of the current object. The cloned object's &lt;xref:System.Windows.Freezable.IsFrozen%2A&gt; property will be <see langword="false" /> even if the source's &lt;xref:System.Windows.Freezable.IsFrozen%2A&gt; property was <see langword="true" />.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -246,7 +278,7 @@
       <Parameters />
       <Docs>
         <summary>Creates a software copy of the <see cref="T:System.Windows.Interop.D3DImage" />.</summary>
-        <returns>To be added.</returns>
+        <returns>A <see cref="T:System.Windows.Media.Imaging.BitmapSource" /> that is a software copy of the current state of the back buffer; otherwise, <see langword="null" /> if the back buffer cannot be read.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -274,7 +306,7 @@
       <Parameters />
       <Docs>
         <summary>When implemented in a derived class, creates a new instance of the <see cref="T:System.Windows.Interop.D3DImage" /> derived class.</summary>
-        <returns>To be added.</returns>
+        <returns>The new instance.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -313,7 +345,7 @@
 ## Remarks  
  This method overrides <xref:System.Object.Finalize%2A>. Application code should not call this method; an object's `Finalize` method is automatically invoked during garbage collection, unless finalization by the garbage collector has been disabled by a call to the <xref:System.GC.SuppressFinalize%2A> method.  
   
- For more information, see [Finalize Methods and Destructors](http://msdn.microsoft.com/en-us/fd376774-1643-499b-869e-9546a3aeea70), [Cleaning Up Unmanaged Resources](../Topic/Cleaning%20Up%20Unmanaged%20Resources.md), and [Overriding the Finalize Method](http://msdn.microsoft.com/en-us/8026cb68-fe93-43fc-96c1-c09ad7d64cd3).  
+ For more information, see [Finalize Methods and Destructors](http://msdn.microsoft.com/en-us/fd376774-1643-499b-869e-9546a3aeea70), [Cleaning Up Unmanaged Resources](~/add/includes/ajax-current-ext-md.md), and [Overriding the Finalize Method](http://msdn.microsoft.com/en-us/8026cb68-fe93-43fc-96c1-c09ad7d64cd3).  
   
  ]]></format>
         </remarks>
@@ -337,7 +369,8 @@
       <Docs>
         <param name="isChecking">Has no effect.</param>
         <summary>Makes the <see cref="T:System.Windows.Interop.D3DImage" /> unmodifiable or determines whether it can be made unmodifiable.</summary>
-        <returns>To be added.</returns>
+        <returns>
+          <see langword="false" /> in all cases.</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -444,9 +477,9 @@
    
   
 ## Examples  
- The following code example shows how to check the IsFrontBufferAvailable property when rendering the composition target. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](../Topic/Walkthrough:%20Hosting%20Direct3D9%20Content%20in%20WPF.md).  
+ The following code example shows how to check the IsFrontBufferAvailable property when rendering the composition target. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](~/add/includes/ajax-current-ext-md.md).  
   
- [!code-cs[System.Windows.Interop.D3DImage#2](~/add/codesnippet/CSharp/d3dhost/window1.xaml.cs#2)]  
+ [!code-cs[System.Windows.Interop.D3DImage#2](~/add/codesnippet/csharp/d3dhost/window1.xaml.cs#2)]  
   
  ]]></format>
         </remarks>
@@ -517,9 +550,9 @@
    
   
 ## Examples  
- The following code example shows how to call the Lock method to enable updates to the back buffer. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](../Topic/Walkthrough:%20Hosting%20Direct3D9%20Content%20in%20WPF.md).  
+ The following code example shows how to call the Lock method to enable updates to the back buffer. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](~/add/includes/ajax-current-ext-md.md).  
   
- [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/CSharp/d3dhost/window1.xaml.cs#3)]  
+ [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/csharp/d3dhost/window1.xaml.cs#3)]  
   
  ]]></format>
         </remarks>
@@ -567,9 +600,9 @@
    
   
 ## Examples  
- The following code example shows how to use the PixelHeight property to specify the changed region in the back buffer. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](../Topic/Walkthrough:%20Hosting%20Direct3D9%20Content%20in%20WPF.md).  
+ The following code example shows how to use the PixelHeight property to specify the changed region in the back buffer. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](~/add/includes/ajax-current-ext-md.md).  
   
- [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/CSharp/d3dhost/window1.xaml.cs#3)]  
+ [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/csharp/d3dhost/window1.xaml.cs#3)]  
   
  ]]></format>
         </remarks>
@@ -598,9 +631,9 @@
    
   
 ## Examples  
- The following code example shows how to use the PixelWidth property to specify the changed region in the back buffer. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](../Topic/Walkthrough:%20Hosting%20Direct3D9%20Content%20in%20WPF.md).  
+ The following code example shows how to use the PixelWidth property to specify the changed region in the back buffer. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](~/add/includes/ajax-current-ext-md.md).  
   
- [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/CSharp/d3dhost/window1.xaml.cs#3)]  
+ [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/csharp/d3dhost/window1.xaml.cs#3)]  
   
  ]]></format>
         </remarks>
@@ -632,7 +665,7 @@
  Call the SetBackBuffer method to assign a Direct3D surface to the back buffer.  
   
 > [!NOTE]
->  Performance depends greatly on the settings of the Direct3D surface. For more information, see [Performance Considerations for Direct3D9 and WPF Interoperability](../Topic/Performance%20Considerations%20for%20Direct3D9%20and%20WPF%20Interoperability.md).  
+>  Performance depends greatly on the settings of the Direct3D surface. For more information, see [Performance Considerations for Direct3D9 and WPF Interoperability](~/add/includes/ajax-current-ext-md.md).  
   
  Calling the SetBackBuffer overload is identical to calling the <xref:System.Windows.Interop.D3DImage.SetBackBuffer%28System.Windows.Interop.D3DResourceType%2CSystem.IntPtr%2CSystem.Boolean%29> overload with the `enableSoftwareFallback` parameter set to `false`. When you call SetBackBuffer or call <xref:System.Windows.Interop.D3DImage.SetBackBuffer%28System.Windows.Interop.D3DResourceType%2CSystem.IntPtr%2CSystem.Boolean%29> with the `enableSoftwareFallback` parameter set to `false`, the rendering system releases its reference to the back buffer when front buffer becomes unavailable and nothing is displayed. When the front buffer is available again, the rendering system raises the <xref:System.Windows.Interop.D3DImage.IsFrontBufferAvailableChanged> event to notify your WPF application.  You can create an event handler for the <xref:System.Windows.Interop.D3DImage.IsFrontBufferAvailableChanged> event to restart rendering again with a valid Direct3D surface. To restart rendering, you must call SetBackBuffer.  
   
@@ -649,9 +682,9 @@
    
   
 ## Examples  
- The following code example shows how to call the SetBackBuffer method to assign a Direct3D surface. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](../Topic/Walkthrough:%20Hosting%20Direct3D9%20Content%20in%20WPF.md).  
+ The following code example shows how to call the SetBackBuffer method to assign a Direct3D surface. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](~/add/includes/ajax-current-ext-md.md).  
   
- [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/CSharp/d3dhost/window1.xaml.cs#3)]  
+ [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/csharp/d3dhost/window1.xaml.cs#3)]  
   
  ]]></format>
         </remarks>
@@ -728,7 +761,8 @@
       <Docs>
         <param name="timeout">The duration to wait for the lock to be acquired.</param>
         <summary>Attempts to lock the <see cref="T:System.Windows.Interop.D3DImage" /> and waits for the specified duration.</summary>
-        <returns>To be added.</returns>
+        <returns>
+          <see langword="true" /> if the lock was acquired; otherwise, <see langword="false" />.</returns>
         <remarks>To be added.</remarks>
         <exception cref="T:System.ArgumentOutOfRangeException">
           <paramref name="timeout" /> is set to &lt;xref:System.Windows.Duration.Automatic%2A&gt;.</exception>
@@ -763,9 +797,9 @@
    
   
 ## Examples  
- The following code example shows how to call the Unlock method to copy the updated back buffer to the front buffer. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](../Topic/Walkthrough:%20Hosting%20Direct3D9%20Content%20in%20WPF.md).  
+ The following code example shows how to call the Unlock method to copy the updated back buffer to the front buffer. For more information, see [Walkthrough: Hosting Direct3D9 Content in WPF](~/add/includes/ajax-current-ext-md.md).  
   
- [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/CSharp/d3dhost/window1.xaml.cs#3)]  
+ [!code-cs[System.Windows.Interop.D3DImage#3](~/add/codesnippet/csharp/d3dhost/window1.xaml.cs#3)]  
   
  ]]></format>
         </remarks>
